@@ -8,4 +8,5 @@ describe "Authentication Pages" do
 
 		it {should have_content("Sign In")}
     end
+ 
 end
