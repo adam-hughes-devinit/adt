@@ -1,0 +1,23 @@
+<h1>Listing oda_likes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @oda_likes.each do |oda_like| %>
+  <tr>
+    <td><%= oda_like.name %></td>
+    <td><%= link_to 'Show', oda_like %></td>
+    <td><%= link_to 'Edit', edit_oda_like_path(oda_like) %></td>
+    <td><%= link_to 'Destroy', oda_like, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Oda like', new_oda_like_path %>

@@ -4,7 +4,7 @@ describe "Static Pages" do
 
 	subject { page }
 	describe "Home page" do
-		before { visit '/static_pages/home'}
+		before { visit root_path }
 		it { should have_content("AidData MBDC")}
 	end
 end

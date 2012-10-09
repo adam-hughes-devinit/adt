@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "User pages" do
 
 	subject {page }
-
+ 
 	let(:user) {FactoryGirl.create(:user)}
 	
 	describe "view a user" do
@@ -14,7 +14,7 @@ describe "User pages" do
 
 	describe "signup" do
 		let(:submit) {"Create my account"}
-		before { visit '/signup' }
+		before { visit signup_path }
 
 		it { should have_content("Sign up!")}
 
@@ -35,6 +35,11 @@ describe "User pages" do
 			it "should create a user " do
 				expect { click_button submit }.to change(User, :count).by(1)
 			end
+
+			describe "after saving a user" do
+				it { should have_link ('Sign out')}
+			end
+			
 		end
 	end
 

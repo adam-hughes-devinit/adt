@@ -1,2 +1,7 @@
 <% provide(:title, "Sign in") %>
-<h1>Sign in</h1>
+<h1>Sign In</h1>
+<%= simple_form_for(:session, url: sessions_path, html: { class: "form-horizontal"} )  do |f| %>
+	<%= f.input :email, html: {class: "span6"} %>
+	<%= f.input :password, html: {class: "span6"} %>
+	<%= f.button :submit, "Sign in", class: "btn-primary" %>
+<% end %>

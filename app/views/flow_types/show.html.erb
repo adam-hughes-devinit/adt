@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @flow_type.name %>
+</p>
+
+<p>
+  <b>Iati code:</b>
+  <%= @flow_type.iati_code %>
+</p>
+
+<p>
+  <b>Aiddata code:</b>
+  <%= @flow_type.aiddata_code %>
+</p>
+
+<p>
+  <b>Oecd code:</b>
+  <%= @flow_type.oecd_code %>
+</p>
+
+
+<%= link_to 'Edit', edit_flow_type_path(@flow_type) %> |
+<%= link_to 'Back', flow_types_path %>

@@ -1,0 +1,2 @@
+module TiedsHelper
+end

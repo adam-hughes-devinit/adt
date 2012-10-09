@@ -1,0 +1,40 @@
+<% provide(:title, @project.title) %>
+<div class="row">
+	<div id="project-details" class="span10">
+		<h1><%= @project.title %> <%= "(Inactive)" if !@project.active %> </h1>
+		<p> 
+			<em>Donor:</em> NOT IMPLEMENTED | 
+			<em>Commitment Year:</em> <%= @project.year %> |
+			<em>Verified:</em> <%= @project.verified.name %> |
+			<em>Reference ID:</em> <%= @project.id %> 
+		</p>
+		<p><%= @project.description %> </p>
+		<p> <%= @project.capacity %> </p>
+	</div>
+</div>
+<div class="row">
+	<div id="project-dates" class="span5">
+		<ul>
+			<li>Start planned: <%= @project.start_planned.strftime("%d %B %Y") %></li>
+			<li>Start actual: <%= @project.start_actual.strftime("%d %B %Y") %></li>
+			<li>End planned: <%= @project.end_planned.strftime("%d %B %Y") %></li>
+			<li>End actual: <%= @project.end_actual.strftime("%d %B %Y") %></li>
+		</ul>
+	</div>
+	<div id="project-categories" class="span6">
+		<ul>
+			<li>ODA-Like: <%= @project.oda_like.name %>
+			<li>Sector: <%= @project.sector.name %></li>
+			<li>Sector comment: <%= @project.sector_comment %></li>
+			<li>Flow Type: <%= @project.flow_type.name %></li>
+			<li>Tied: <%= @project.tied.name %></li>
+			<li>Commercial: <%= @project.is_commercial %></li>
+		</ul>
+	</div>
+</div>
+
+
+
+
+
+

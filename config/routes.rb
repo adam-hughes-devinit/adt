@@ -1,5 +1,10 @@
 Adt::Application.routes.draw do
-  resources :users
+  resources :sectors
+
+  resources :projects
+
+
+  resources :users, :statuses, :verifieds, :oda_likes, :tieds, :flow_types
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: "static_pages#home"

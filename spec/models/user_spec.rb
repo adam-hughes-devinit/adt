@@ -1,10 +1,13 @@
 require 'spec_helper'
 
+
+
 describe User do
 	before  { @user = FactoryGirl.create(:user)}
 
 	subject {@user}
-	
+
+
     it { should respond_to(:name) }
 	it { should respond_to(:email) } 
 	it { should respond_to(:password_digest) }
@@ -12,7 +15,7 @@ describe User do
 	it { should respond_to(:password_confirmation) }
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:remember_token) }
-	it { should respond_to(:admin) }
+	#it { should respond_to(:admin) }
 
 
     describe "when password is not present" do  
@@ -30,11 +33,6 @@ describe User do
         it { should_not be_valid }
     end
 
-    describe "with invalid email" do
-        before {@user.email='abcdefg'}
-        it {should_not be_valid}
-    end
-	
 	describe "with a password that's too short" do
   		before { @user.password = @user.password_confirmation = "a" * 5 }
   		it { should be_invalid }
@@ -79,11 +77,11 @@ describe User do
 	describe "when email address is already taken" do 
 		before do
 			user_with_same_email = @user.dup
-      user_with_same_email.email = @user.email.upcase
+      		user_with_same_email.email = @user.email.upcase
 			user_with_same_email.save
 		end
 
-		it {should_not be_valid}
+		it {user_with_same_email.should_not be_valid}
 	end	
 
 	describe "remember token" do
