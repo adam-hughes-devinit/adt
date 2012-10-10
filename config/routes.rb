@@ -1,7 +1,9 @@
 Adt::Application.routes.draw do
+  resources :organizations
+
   resources :sectors
 
-  resources :projects
+  resources :projects, :countries
 
 
   resources :users, :statuses, :verifieds, :oda_likes, :tieds, :flow_types

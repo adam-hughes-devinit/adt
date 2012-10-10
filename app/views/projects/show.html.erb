@@ -1,34 +1,40 @@
 <% provide(:title, @project.title) %>
+<%   def or_blank(object)
+  	object.nil? ? '' : object
+  end
+   %>
 <div class="row">
 	<div id="project-details" class="span10">
 		<h1><%= @project.title %> <%= "(Inactive)" if !@project.active %> </h1>
 		<p> 
-			<em>Donor:</em> NOT IMPLEMENTED | 
-			<em>Commitment Year:</em> <%= @project.year %> |
-			<em>Verified:</em> <%= @project.verified.name %> |
-			<em>Reference ID:</em> <%= @project.id %> 
+			<b>Donor:</b> <%= @project.donor.nil? ? 'unspecified' : @project.donor.name %> | 
+			<b>Commitment Year:</b> <%= or_blank(@project.year) %> |
+			<b>Verified:</b> <%= @project.verified.nil? ? 'unspecified' : @project.verified.name %> |
+			<b>Reference ID:</b> <%= @project.id %> |
+			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : @project.owner.name %>
 		</p>
-		<p><%= @project.description %> </p>
-		<p> <%= @project.capacity %> </p>
+		<p><%= or_blank @project.description %> </p>
+		<p> <%= or_blank @project.capacity %> </p>
 	</div>
 </div>
 <div class="row">
 	<div id="project-dates" class="span5">
 		<ul>
-			<li>Start planned: <%= @project.start_planned.strftime("%d %B %Y") %></li>
-			<li>Start actual: <%= @project.start_actual.strftime("%d %B %Y") %></li>
-			<li>End planned: <%= @project.end_planned.strftime("%d %B %Y") %></li>
-			<li>End actual: <%= @project.end_actual.strftime("%d %B %Y") %></li>
+			<li><b>Start planned:</b> <%= @project.start_planned.nil? ? '' : @project.start_planned.strftime("%d %B %Y") %></li>
+			<li><b>Start actual:</b> <%= @project.start_actual.nil? ? '' : @project.start_actual.strftime("%d %B %Y") %></li>
+			<li><b>End planned:</b> <%= @project.end_planned.nil? ? '' : @project.end_planned.strftime("%d %B %Y") %></li>
+			<li><b>End actual:</b> <%= @project.end_actual.nil? ? '' : @project.end_actual.strftime("%d %B %Y") %></li>
 		</ul>
 	</div>
 	<div id="project-categories" class="span6">
 		<ul>
-			<li>ODA-Like: <%= @project.oda_like.name %>
-			<li>Sector: <%= @project.sector.name %></li>
-			<li>Sector comment: <%= @project.sector_comment %></li>
-			<li>Flow Type: <%= @project.flow_type.name %></li>
-			<li>Tied: <%= @project.tied.name %></li>
-			<li>Commercial: <%= @project.is_commercial %></li>
+			<li><b>ODA-Like:</b> <%= @project.oda_like.nil? ? '' : @project.oda_like.name %></li>
+			<li><b>Status:</b> <%= @project.status.nil? ? '' : @project.status.name %> </li>
+			<li><b>Sector:</b> <%= @project.sector.nil? ? '' :  @project.sector.name %></li>
+			<li><b>Sector comment:</b> <%= or_blank @project.sector_comment %></li>
+			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? '' :  @project.flow_type.name %></li>
+			<li><b>Tied:</b> <%= @project.tied.nil? ? '' : @project.tied.name %></li>
+			<li><b>Commercial:</b> <%=  @project.is_commercial %></li>
 		</ul>
 	</div>
 </div>

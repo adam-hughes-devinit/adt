@@ -1,9 +1,4 @@
-Factory.define :user do |user|
-  user.name                  "rmosolgo"
-  user.email                 "rmosolgo@aiddata.org"
-  user.password              "foobar"
-  user.password_confirmation "foobar"
-end
+
 
 
 Factory.define :status do |s|
@@ -31,6 +26,29 @@ Factory.define :tied do |t|
   t.iati_code 5
 end
 
+Factory.define :sector do |s|
+  s.name 'Education'
+end
+
+Factory.define :country do |c|
+  c.name "China"
+  c.iso3 'CHN'
+  c.iso2 'CN'
+end
+
+Factory.define :organization do |o|
+  o.name Faker::Company.name
+  o.description Faker::Company.catch_phrase
+end
+
+Factory.define :user do |user|
+  user.name                  "rmosolgo"
+  user.email                 "rmosolgo@aiddata.org"
+  user.password              "foobar"
+  user.password_confirmation "foobar"
+  user.owner FactoryGirl.create(:organization)
+end
+
 Factory.define :project do |project|
 
   project.title "Example project title"
@@ -48,4 +66,11 @@ Factory.define :project do |project|
   project.oda_like FactoryGirl.create(:oda_like)
   project.flow_type FactoryGirl.create(:flow_type)
   project.tied FactoryGirl.create(:tied)
+  project.sector FactoryGirl.create(:sector)
+
+  project.donor FactoryGirl.create(:country)
+  project.owner FactoryGirl.create(:organization)
+
 end
+
+

@@ -1,0 +1,30 @@
+<%= simple_form_for(@project, html: {class: "form-horizontal"}) do |f| %>
+	
+	<%= f.input :title %>
+	<%= f.association :donor, label: 'Donor country' %>
+	<%= f.input :year, hint: "Commitment year" %>
+	<%= f.input :description %>
+	<%= f.input :capacity %>
+	<%= f.association :verified %>
+
+	<%= f.input :start_planned %>
+	<%= f.input :start_actual %>
+	<%= f.input :end_planned %>
+	<%= f.input :end_actual %>
+
+
+
+	<%= f.association :sector %>
+	<%= f.input :sector_comment, hint: "If multisector, add details" %>
+	<%= f.input :is_commercial %>
+	<%= f.association :tied %>
+	<%= f.association :flow_type %>
+	<%= f.association :oda_like %>
+	<%= f.association :status %>
+
+	<%= f.input :active %>
+	<%= f.input :owner_id,  as: :hidden, hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
+
+	<%= f.button :submit, "Save" %>
+
+<% end %>

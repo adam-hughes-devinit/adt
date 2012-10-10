@@ -5,12 +5,12 @@ class Project < ActiveRecord::Base
   # belongs_to fields
   :status, :verified, :tied, :flow_type, :oda_like, :sector,
   #convoluted fields
-  :donor
-
+  :donor, :owner,
   # hidden fields
-  #:media_id, :oda_like_id, :owner_id, 
-  #:sector_id, :donor_id,  :flow_type_id, 
-  #:status_id, :tied_id,  :verified_id
+  :verified_id, :sector_id, :tied_id, :flow_type_id, 
+  :oda_like_id, :status_id, 
+  :donor_id, :owner_id
+
 
 
   validates :title, presence: true
@@ -22,9 +22,9 @@ class Project < ActiveRecord::Base
   belongs_to :oda_like  
   belongs_to :sector
 
+  belongs_to :donor, class_name: "Country"
+  belongs_to :owner, class_name: "Organization"
 
-  # has_one :owner, through: organization
-  # has_many :donor, foreign_key: "id", class_name: "Country"
   
 
 
@@ -37,5 +37,6 @@ class Project < ActiveRecord::Base
   # has_many :identifiers
   # has_many :classifications
   # has_many :followers
+
 
 end

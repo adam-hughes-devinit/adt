@@ -1,30 +1,17 @@
 namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
-    make_users
+
+    make_countries
+    make_organizations
     make_supporting_data
+    
+    make_users
     make_projects
+
   end
 end
 
-
-def make_users
-  admin = User.create!(name: "rmosolgo",
-               email: "rmosolgo@aiddata.org",
-               password: "foobar",
-               password_confirmation: "foobar")
-  #admin.toggle!(:admin)
-  
-  99.times do |n|
-    name  = Faker::Name.name
-    email = "example#{(n+1).to_s}@aiddata.org"
-    password  = "password"
-    User.create!(name: name,
-                 email: email,
-                 password: password,
-                 password_confirmation: password)
-  end
-end
 
 def make_supporting_data
   Status.create(name: 'Completed', iati_code: 5)
@@ -35,10 +22,48 @@ def make_supporting_data
   Sector.create(name: 'Education')
 end
 
+def make_countries
+  data =  [["China", "CHN"], ["Venezuela", "VNZ"], ["Cote D'Ivoire"]]
+  data.each do |d|
+    Country.create(name: d[0], iso3:d[1])
+  end
+
+end
+
+def make_organizations
+    Organization.create(name: 'AidData', description: 'Tracking Development Finance')
+  10.times do |o|
+    Organization.create(
+      name: Faker::Company.name,
+      description: Faker::Company.catch_phrase)
+  end
+end
+
+def make_users
+  admin = User.create!(name: "rmosolgo",
+               email: "rmosolgo@aiddata.org",
+               password: "foobar",
+               password_confirmation: "foobar",
+               owner: Organization.first )
+  #admin.toggle!(:admin)
+  
+  99.times do |n|
+    name  = Faker::Name.name
+    email = "example#{(n+1).to_s}@aiddata.org"
+    password  = "password"
+    User.create!(name: name,
+                 email: email,
+                 password: password,
+                 password_confirmation: password,
+                 owner: Organization.first)
+  end
+end
+
+
 def make_projects
   100.times do |p|
-    p = Project.new()
-    p.title = Faker::Company.bs
+    p = Project.new
+    p.title = Faker::Company.bs.capitalize
     p.description = Faker::Lorem.paragraph
     p.capacity = Faker::Lorem.sentence
     p.year = rand(2000..2011)
@@ -56,6 +81,9 @@ def make_projects
     p.flow_type = FlowType.first
     p.status = Status.first
     p.verified = Verified.first
+
+    p.donor = Country.first
+    p.owner = Organization.find_by_name('AidData')
 
     p.save
   end

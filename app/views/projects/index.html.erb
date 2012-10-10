@@ -1,0 +1,14 @@
+<% provide(:title, "View Projects") %>
+<h1>All projects</h1>
+
+<%= will_paginate %>
+
+<ul class="projects">
+
+    <% @projects.each do |project| %>
+    <li><%= link_to project.title, project_path(project) %> (<%= project.owner.nil? ? 'No owner' : project.owner.name %>) </li>
+    <% end %>
+
+<%= will_paginate %>
+
+</ul>

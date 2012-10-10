@@ -1,7 +1,9 @@
-class ProjectsController < ApplicationController
-	
+class ProjectsController < ApplicationController  
+before_filter :signed_in?, only: [:create, :new, :edit, :update, :destroy]
+before_filter :set_owner, only: [:create, :new]
+
   def index
-    @projects = Project.all
+    @projects = Project.paginate(page: params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -23,7 +25,7 @@ class ProjectsController < ApplicationController
   # GET /Projects/new
   # GET /Projects/new.json
   def new
-    @project = Project.new
+    @project = Project.new(owner: @new_owner)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -39,7 +41,7 @@ class ProjectsController < ApplicationController
   # POST /Projects
   # POST /Projects.json
   def create
-    @project = Project.new(params[:Project])
+    @project = Project.new(params[:project])
 
     respond_to do |format|
       if @project.save
@@ -58,7 +60,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     respond_to do |format|
-      if @project.update_attributes(params[:Project])
+      if @project.update_attributes(params[:project])
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
@@ -79,4 +81,9 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+    def set_owner
+      @new_owner = current_user.owner
+    end
 end
