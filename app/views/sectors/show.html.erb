@@ -1,15 +1,2 @@
-<p id="notice"><%= notice %></p>
+<%=  render 'shared/code', object: @sector, type: "Sector" %>
 
-<p>
-  <b>Name:</b>
-  <%= @sector.name %>
-</p>
-
-<p>
-  <b>Code:</b>
-  <%= @sector.code %>
-</p>
-
-
-<%= link_to 'Edit', edit_sector_path(@sector) %> |
-<%= link_to 'Back', sectors_path %>

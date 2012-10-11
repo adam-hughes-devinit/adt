@@ -1,0 +1,32 @@
+<% provide(:title, "Edit all #{type.pluralize}") %>
+<h1>Edit all <%= type %></h1>
+<!-- Table headings for each attribute !-->
+<table>
+	<thead>
+		<th style="width:0"></th>
+		<% objects.first.attributes.each_pair do |k, v| %>
+			<% if !["created_at", "updated_at", "id"].include? k %>
+				<th><b><%= k.capitalize %></b></th>
+			<% end %>
+		<% end %>
+	</thead>
+	<tbody>
+		<form>
+			<% objects.each do |o| %>
+		      <%= simple_fields_for(o) do |f| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+				  		<% if k=="id" %>
+				  		  	<td><%= f.input :id, as: :hidden %></td>		  	
+				  		<% elsif !["created_at", "updated_at", "id"].include? k %>
+							  <td><%= f.input k.to_sym, label: false, input_html: {name: '['+o.id.to_s+']'+'['+k+']'} %></td>
+					    <% end %>
+					<% end %>
+				  </tr>
+			  <% end %>  
+			 
+			<% end %>
+			<%= button_to "Save all", action: :update_all, method: :post %>
+		</form>
+	</tbody>
+</table>

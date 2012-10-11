@@ -3,15 +3,33 @@ require 'spec_helper'
 describe "Project pages" do
   let(:user) { FactoryGirl.create(:user) }
   let(:project) {FactoryGirl.create(:project)}
-  before do
-        visit signin_path
-        fill_in "Email", with: user.email 
-        fill_in "Password", with: user.password 
-        click_button "Sign in"
+  let(:country) {FactoryGirl.create(:country)}
+  let(:currency) {FactoryGirl.create(:currency)}
+  let(:organization) {FactoryGirl.create(:organization)}
+  let(:contact) {FactoryGirl.create(:contact)}
+  
+  subject {page}
+  
+  describe "should be impervious to un-signed-in users" do
+    before do 
+        visit edit_project_path(project)
+      end
+
+      it {should_not have_selector("button", text: "Save")}
   end
 
+  describe "Should be editable by signed-in users" do
+    before do
+          visit signin_path
+          fill_in "Email", with: user.email 
+          fill_in "Password", with: user.password 
+          click_button "Sign in"
+          visit edit_project_path(project)
+    end
 
-  subject {page}
+    it { should_not have_selector("button", text: "Save")}
+  end
+
 
   describe "view a project" do
     before {visit project_path(project)}
@@ -25,13 +43,17 @@ describe "Project pages" do
     it {should have_content(project.sector.name)}
     it {should have_content(project.flow_type.name)}
     it {should have_content(project.status.name)}
-
     it {should have_content(project.donor.name)}
-
   end
 
   describe "create a project " do
-    before {visit new_project_path}
+    before do
+          visit signin_path
+          fill_in "Email", with: user.email 
+          fill_in "Password", with: user.password 
+          click_button "Sign in"
+          visit new_project_path
+    end
 
     it {should have_content("Create a new project")}
     
@@ -40,36 +62,75 @@ describe "Project pages" do
     end
 
     describe "with valid information" do
-      before do 
+      before do
         fill_in "Title", with: "New project title"
-        fill_in "Donor country", with: "China"
+        select country.name, from: "Donor country"
         fill_in "Description", with: "New project description"
         fill_in "Year", with: "2001"
         fill_in "Capacity", with: "5 doctors"
         # fill_in "Start actual", with: 10.days.ago
-        fill_in "Verified", with: "Suspicious"
-        fill_in "Oda like", with: OdaLike.first
+        select "Suspicious", from: "Verified"
+        select "OOF-Like", from: "Oda like"
+        fill_in "Value", with: 5000
+        select Currency.first.name, from: "Currency"
+        select country.name, from: "Recipient country"
+        fill_in "Detail", with: "Cupcake City"
+        select Organization.first.name, from: "Organization"
+        fill_in "Contact name", with: "Hu Jintao"
+        fill_in "Contact position", with: "President"
       end
 
       it {should have_content(user.owner.name)}
 
-      it "it should save the project" do
-        expect {click_button "Save"}.to change(Project.count).by(1)
+      describe "the project data is saved" do
+        before {click_button "Save"}
+
+
+        it {should have_content(project.donor.name)}
+        it {should have_content("New project description")}
+        it {should have_content("Suspicious")}
+        it {should have_content(Organization.first.name)}
+        it {should have_content("Role: Unset")}
+
+        describe "should display the Currency ISO " do
+          it {should have_content(Currency.first.iso3)}
+        end
+        
+        describe "should show the Subnational " do
+          it {should have_content("Cupcake City")}
+        end
+
+        describe "should show the contact info " do
+          it {should have_content("Hu Jintao")}
+          it {should have_content("President")}
+        end
+
+        # test that the user who made it now owns it
+        it {should have_content(user.owner.name)}
       end
 
-    end
+      # I can't get this to work.
+      describe "editing the project" do
+        before do
+          click_link "Edit this project"
+        end
 
-    describe "the project data is saved" do
-      before {visit project_path(project)}
+        describe "should delete the transaction"  do
+          before do
+            click_link "Remove Transaction"
+            click_button "Save"
+          end
 
-      it {should have_content(project.donor.name)}
-      it {should have_content(project.description)}
-      it {should have_content(project.verified.name)}
+        it {should_not have_content(transaction.currency.iso3)}
+        end
 
-      # test that the user who made it now owns it
-      it {should have_content(user.owner.name)}
-    end    
+      end
+    end  
+
+    
+
+
+
 
   end
-
 end

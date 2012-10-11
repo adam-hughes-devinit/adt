@@ -23,16 +23,15 @@ def make_supporting_data
 end
 
 def make_countries
-  data =  [["China", "CHN"], ["Venezuela", "VNZ"], ["Cote D'Ivoire"]]
+  data =  [["China", "CHN"], ["Venezuela", "VNZ"], ["Cote D'Ivoire", "CIV"]]
   data.each do |d|
     Country.create(name: d[0], iso3:d[1])
   end
-
 end
 
 def make_organizations
     Organization.create(name: 'AidData', description: 'Tracking Development Finance')
-  10.times do |o|
+  10.times do
     Organization.create(
       name: Faker::Company.name,
       description: Faker::Company.catch_phrase)
@@ -58,6 +57,16 @@ def make_users
                  owner: Organization.first)
   end
 end
+
+def make_currencies
+  6.times do 
+    name = Faker::Lorem.words[0]
+    country = Faker::Address.country
+    c = Currency.create!(name: "#{country} #{name}", 
+                        iso3: name[0..2].upcase )
+  end
+end
+  
 
 
 def make_projects

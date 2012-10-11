@@ -1,0 +1,27 @@
+<% provide(:title, "View all #{type.pluralize}") %>
+<h1>View all <%= type %></h1>
+<!-- Table headings for each attribute !-->
+<% if objects.length > 0 %>
+<table class='code-index-table'>
+	<thead>
+		<% objects.first.attributes.each_pair do |k, v| %>
+				<th><b><%= k.capitalize %></b></th>
+		<% end %>
+		<th>Links</th>
+	</thead>
+	<tbody>
+			<% objects.each do |o| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+							  <td><%= v %></td>
+					<% end %>
+					<td> <%= link_to "View", o %> | <%= link_to "Edit", "/#{type.downcase.gsub(/\s/, '_')}/#{o.id}/edit" %> </td> 
+				  </tr>
+
+			<% end %>
+	</tbody>
+</table>
+<% end %>
+<br>
+<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+

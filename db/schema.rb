@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009211644) do
+ActiveRecord::Schema.define(:version => 20121011182240) do
+
+  create_table "contacts", :force => true do |t|
+    t.integer  "organization_id"
+    t.string   "name"
+    t.string   "position"
+    t.integer  "project_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "countries", :force => true do |t|
     t.string   "name"
@@ -24,11 +33,34 @@ ActiveRecord::Schema.define(:version => 20121009211644) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "currencies", :force => true do |t|
+    t.string   "name"
+    t.string   "iso3"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "document_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "flow_types", :force => true do |t|
     t.string   "name"
     t.integer  "iati_code"
     t.integer  "aiddata_code"
     t.integer  "oecd_code"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "geopoliticals", :force => true do |t|
+    t.integer  "recipient_id"
+    t.integer  "region_id"
+    t.integer  "project_id"
+    t.string   "subnational"
+    t.integer  "percent"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
@@ -44,6 +76,21 @@ ActiveRecord::Schema.define(:version => 20121009211644) do
     t.text     "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "origins", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "participating_organizations", :force => true do |t|
+    t.integer  "role_id"
+    t.integer  "project_id"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "origin_id"
   end
 
   create_table "projects", :force => true do |t|
@@ -71,11 +118,34 @@ ActiveRecord::Schema.define(:version => 20121009211644) do
     t.datetime "updated_at",                        :null => false
   end
 
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.integer  "iati_code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "sectors", :force => true do |t|
     t.string   "name"
     t.integer  "code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "source_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "sources", :force => true do |t|
+    t.integer  "source_type_id"
+    t.integer  "document_type_id"
+    t.string   "url"
+    t.date     "date"
+    t.integer  "project_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "statuses", :force => true do |t|
@@ -90,6 +160,15 @@ ActiveRecord::Schema.define(:version => 20121009211644) do
     t.integer  "iati_code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "transactions", :force => true do |t|
+    t.decimal  "value"
+    t.integer  "currency_id"
+    t.decimal  "usd_defl"
+    t.integer  "project_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "users", :force => true do |t|

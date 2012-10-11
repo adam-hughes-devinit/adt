@@ -1,5 +1,4 @@
 class ProjectsController < ApplicationController  
-before_filter :signed_in?, only: [:create, :new, :edit, :update, :destroy]
 before_filter :set_owner, only: [:create, :new]
 
   def index
@@ -26,6 +25,12 @@ before_filter :set_owner, only: [:create, :new]
   # GET /Projects/new.json
   def new
     @project = Project.new(owner: @new_owner)
+    @project.transactions.build
+    @project.geopoliticals.build
+    @project.participating_organizations.build
+    @project.contacts.build
+    @project.sources.build
+
 
     respond_to do |format|
       format.html # new.html.erb
@@ -84,6 +89,6 @@ before_filter :set_owner, only: [:create, :new]
 
   private
     def set_owner
-      @new_owner = current_user.owner
+      @new_owner = current_user.owner if signed_in?
     end
 end

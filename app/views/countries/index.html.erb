@@ -1,21 +1,2 @@
-<h1>Listing Countries</h1>
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @countries.each do |country| %>
-  <tr>
-    <td><%= country.name %></td>
-    <td></td>
-    <td><%= link_to 'Show', country %></td>
-  </tr>
-<% end %>
-</table>
-
+<%= render 'shared/code_index', objects: @countries, type: "Countries" %>
 <br />
-
-<%= link_to 'New country', new_country_path %>

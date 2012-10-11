@@ -1,0 +1,8 @@
+<div class='fields span4'>
+	<%= f.association :recipient, label: "Recipient country" %>
+	<%= f.input :subnational, label: "Detail" %>
+	<%= f.input :percent %>
+	<p>
+		<i><%= link_to_remove_fields "Remove Recipient", f %></i>
+	</p>
+</div>

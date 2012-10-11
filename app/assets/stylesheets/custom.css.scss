@@ -22,6 +22,7 @@ html {
 
 body {
   padding-top: 60px;
+  line-height: 14px;
 }
 
 section {
@@ -63,8 +64,7 @@ h2 {
   color: $grayLight;
 }
 p {
-  font-size: 1.1em;
-  line-height: 1.7em;
+  font-size: 1em;
 }
 
 
@@ -182,15 +182,33 @@ aside {
 
 /* forms */
 
+
 input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
-  padding: 10px;
+  padding: 2px;
   height: auto !important;
-  margin-bottom: 15px;
+  margin-bottom: 1px;
+  margin-top: 2px;
   @include box_sizing;
 }
 
+label {
+  font-weight: bold;
+}
+.help-block {
+  margin: 0 0 0 0!important;
+  color: #ccc;
+  font-style: italic;
+  display: inline;
+}
+
+.project-date{
+  select {
+    display:inline;
+    max-width:70px;
+  }
+}
 #error_explanation {
   ul {
   color: #f00;
@@ -204,45 +222,57 @@ input, textarea, select, .uneditable-input {
   @extend .error;
 }
 
-/* users index */
+/* Project Page */
 
-.users {
-  list-style: none;
-  margin: 0;
-  li {
-    overflow: auto;
-    padding: 10px 0;
-    border-top: 1px solid $grayLighter;
-    &:last-child {
-      border-bottom: 1px solid $grayLighter;
-    }
+.project-page {
+  line-height:16px;
+  h3 {
+    margin-bottom:8px;
+  }
+  ul, li {
+    list-style:none;
+    margin: 1 1 1 10;
+  }
+  .project-details {
+    margin-left:5px;
+  }
+
+}
+
+.project-accessory-fields, .project-box {
+  margin: 5px 5px 0px 5px;
+  padding: 10px;
+  border-top: 2px solid #e5e5e5;
+  h3 {
+    margin-bottom:5px;
   }
 }
 
-/* microposts */
 
-.microposts {
-  list-style: none;
-  margin: 10px 0 0 0;
 
-  li {
-    padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
+
+
+.edit-project-link {
+  float: right;
+  padding:5px;
+  border: 3px solid green;
+  background: lightgreen;
+}
+
+.unset-data {
+  font-style: italic;
+  font-size: 1em;
+  color: #bbb;
+}
+
+/* Codes CSS */
+
+.code-index-table {
+  th {
+  border: 5px solid white;
   }
-}
-.content {
-  display: block;
-}
-.timestamp {
-  color: $grayLight;
-}
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-aside {
-  textarea {
-    height: 100px;
-    margin-bottom: 5px;
+  td {
+    padding: 3px;
+    border-top: 1px solid #ddd;
   }
 }

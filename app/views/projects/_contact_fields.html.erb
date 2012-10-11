@@ -1,0 +1,8 @@
+<div class='fields span4'>
+	<%= f.input :name, label: "Contact name" %>
+	<%= f.input :position, label: "Contact position" %>
+	<%= f.association :organization %>
+	<p>
+		<i><%= link_to_remove_fields "Remove contact", f %></i>
+	</p>
+</div>

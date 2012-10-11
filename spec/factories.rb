@@ -1,6 +1,3 @@
-
-
-
 Factory.define :status do |s|
   s.name 'Cancelled'
   s.iati_code '5'
@@ -11,9 +8,9 @@ Factory.define :verified do |v|
 end
 
 Factory.define :oda_like do |o|
-  o.name 'OOF-like'
+  o.name 'OOF-Like'
 end
-
+ 
 Factory.define :flow_type do |f|
   f.name 'Grant'
   f.iati_code 1 #these are bogus numbers
@@ -31,9 +28,17 @@ Factory.define :sector do |s|
 end
 
 Factory.define :country do |c|
-  c.name "China"
-  c.iso3 'CHN'
-  c.iso2 'CN'
+  country_name = Faker::Address.country
+  c.name country_name
+  c.iso3 country_name[0..2].upcase
+end
+
+Factory.define :source_type do |s|
+  s.name 'Factiva'
+end
+
+Factory.define :document_type do |d|
+  d.name "International media report"
 end
 
 Factory.define :organization do |o|
@@ -41,12 +46,59 @@ Factory.define :organization do |o|
   o.description Faker::Company.catch_phrase
 end
 
+Factory.define :role do |r|
+  names = ["Implementing", "Funding", "Executing", "Accountable"]
+  r.name  names.sample
+  r.iati_code rand(1..5)
+end
+
+Factory.define :source do |s|
+  s.url 'www.cnn.com'
+  s.document_type FactoryGirl.create(:document_type)
+  s.source_type FactoryGirl.create(:source_type)
+  s.date 1.day.ago
+end
+
+
 Factory.define :user do |user|
   user.name                  "rmosolgo"
   user.email                 "rmosolgo@aiddata.org"
   user.password              "foobar"
   user.password_confirmation "foobar"
   user.owner FactoryGirl.create(:organization)
+end
+
+Factory.define :currency do |currency|
+  country_name = Faker::Address.country
+  currency_name = Faker::Lorem.words[0]
+  currency.name "#{country_name} #{currency_name.capitalize}"
+  currency.iso3 currency_name[0..2].upcase
+end
+
+Factory.define :contact do |c|
+  c.name "Hu Jintao"
+  c.position "President"
+  c.organization Organization.first
+end
+
+Factory.define :transaction do |transaction|
+  transaction.value rand(1000..10000000)
+  transaction.currency FactoryGirl.create(:currency)
+end
+
+
+Factory.define :geopolitical do |g|
+  subnational_city = Faker::Address.city
+  subnational_street = Faker::Address.street_name
+  subnational_field = subnational_street+', '+subnational_city
+  g.recipient FactoryGirl.create(:country)
+  g.subnational subnational_field
+  g.percent rand(0..50).round
+end
+
+Factory.define :participating_organization do |o|
+  o.role  FactoryGirl.create(:role)
+  o.organization  FactoryGirl.create(:organization)
 end
 
 Factory.define :project do |project|

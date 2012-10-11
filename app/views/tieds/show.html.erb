@@ -1,15 +1,2 @@
-<p id="notice"><%= notice %></p>
+<%=  render 'shared/code', object: @tied, type: "Tied" %>
 
-<p>
-  <b>Name:</b>
-  <%= @tied.name %>
-</p>
-
-<p>
-  <b>Iati code:</b>
-  <%= @tied.iati_code %>
-</p>
-
-
-<%= link_to 'Edit', edit_tied_path(@tied) %> |
-<%= link_to 'Back', tieds_path %>

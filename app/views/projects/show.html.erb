@@ -1,43 +1,5 @@
 <% provide(:title, @project.title) %>
-<%   def or_blank(object)
-  	object.nil? ? '' : object
-  end
-   %>
-<div class="row">
-	<div id="project-details" class="span10">
-		<h1><%= @project.title %> <%= "(Inactive)" if !@project.active %> </h1>
-		<p> 
-			<b>Donor:</b> <%= @project.donor.nil? ? 'unspecified' : @project.donor.name %> | 
-			<b>Commitment Year:</b> <%= or_blank(@project.year) %> |
-			<b>Verified:</b> <%= @project.verified.nil? ? 'unspecified' : @project.verified.name %> |
-			<b>Reference ID:</b> <%= @project.id %> |
-			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : @project.owner.name %>
-		</p>
-		<p><%= or_blank @project.description %> </p>
-		<p> <%= or_blank @project.capacity %> </p>
-	</div>
-</div>
-<div class="row">
-	<div id="project-dates" class="span5">
-		<ul>
-			<li><b>Start planned:</b> <%= @project.start_planned.nil? ? '' : @project.start_planned.strftime("%d %B %Y") %></li>
-			<li><b>Start actual:</b> <%= @project.start_actual.nil? ? '' : @project.start_actual.strftime("%d %B %Y") %></li>
-			<li><b>End planned:</b> <%= @project.end_planned.nil? ? '' : @project.end_planned.strftime("%d %B %Y") %></li>
-			<li><b>End actual:</b> <%= @project.end_actual.nil? ? '' : @project.end_actual.strftime("%d %B %Y") %></li>
-		</ul>
-	</div>
-	<div id="project-categories" class="span6">
-		<ul>
-			<li><b>ODA-Like:</b> <%= @project.oda_like.nil? ? '' : @project.oda_like.name %></li>
-			<li><b>Status:</b> <%= @project.status.nil? ? '' : @project.status.name %> </li>
-			<li><b>Sector:</b> <%= @project.sector.nil? ? '' :  @project.sector.name %></li>
-			<li><b>Sector comment:</b> <%= or_blank @project.sector_comment %></li>
-			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? '' :  @project.flow_type.name %></li>
-			<li><b>Tied:</b> <%= @project.tied.nil? ? '' : @project.tied.name %></li>
-			<li><b>Commercial:</b> <%=  @project.is_commercial %></li>
-		</ul>
-	</div>
-</div>
+<%= render 'project' %>
 
 
 

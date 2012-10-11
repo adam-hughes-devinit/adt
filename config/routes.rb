@@ -1,17 +1,17 @@
 Adt::Application.routes.draw do
-  resources :organizations
+  # codes
+  resources :roles, :countries, :sectors, :statuses, 
+  :verifieds, :oda_likes, :tieds, :flow_types, :origins, 
+  :source_types, :document_types
 
-  resources :sectors
+  # limited access
+  resources :projects, :users, :organizations
 
-  resources :projects, :countries
-
-
-  resources :users, :statuses, :verifieds, :oda_likes, :tieds, :flow_types
+  # special purpose
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: "static_pages#home"
 
-  #match '/signin' => 'users', as: :signin
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete

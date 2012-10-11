@@ -81,7 +81,7 @@ describe User do
 			user_with_same_email.save
 		end
 
-		it {user_with_same_email.should_not be_valid}
+		it {should_not be_valid}
 	end	
 
 	describe "remember token" do

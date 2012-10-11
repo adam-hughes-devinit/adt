@@ -1,0 +1,9 @@
+<div class='fields span4'>
+	<%= f.input :url %>
+	<%= f.association :source_type %>
+	<%= f.association :document_type %>
+	<%= f.input :date %>
+	<p>
+		<i><%= link_to_remove_fields "Remove Source", f %></i>
+	</p>
+</div>

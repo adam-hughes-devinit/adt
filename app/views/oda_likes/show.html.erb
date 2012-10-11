@@ -1,10 +1,2 @@
-<p id="notice"><%= notice %></p>
+<%=  render 'shared/code', object: @oda_like, type: "ODA Like" %>
 
-<p>
-  <b>Name:</b>
-  <%= @oda_like.name %>
-</p>
-
-
-<%= link_to 'Edit', edit_oda_like_path(@oda_like) %> |
-<%= link_to 'Back', oda_likes_path %>

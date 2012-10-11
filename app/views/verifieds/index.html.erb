@@ -1,23 +1,2 @@
-<h1>Listing verifieds</h1>
+<%= render 'shared/code_index', objects: @verifieds, type: "Verifieds" %>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @verifieds.each do |verified| %>
-  <tr>
-    <td><%= verified.name %></td>
-    <td><%= link_to 'Show', verified %></td>
-    <td><%= link_to 'Edit', edit_verified_path(verified) %></td>
-    <td><%= link_to 'Destroy', verified, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Verified', new_verified_path %>

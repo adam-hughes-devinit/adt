@@ -1,0 +1,7 @@
+<% provide(:title, "#{type}: #{object.name}") %>
+<h1><%= type %>: <%= object.name %> </h1>
+<% object.attributes.each_pair do |k, v| %>
+<p class='span12'><b><%= k.capitalize %>:</b> <%= v.to_s %> </p>
+<% end %>
+<p class='span12'> Referenced by <b><%= object.projects.count %> projects</b>. </p>
+<p><%= link_to "See All #{type.pluralize}", "/#{type.pluralize.downcase}" %></p>

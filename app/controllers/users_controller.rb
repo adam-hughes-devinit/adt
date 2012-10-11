@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+skip_before_filter :signed_in_user, only: [:new, :create]
   def new
   		@user=User.new
   end

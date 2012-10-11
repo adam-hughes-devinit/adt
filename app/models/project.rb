@@ -5,7 +5,11 @@ class Project < ActiveRecord::Base
   # belongs_to fields
   :status, :verified, :tied, :flow_type, :oda_like, :sector,
   #convoluted fields
-  :donor, :owner,
+  :donor, :owner, 
+  :transactions, :transactions_attributes,
+  :geopoliticals, :geopoliticals_attributes,
+  :participating_organizations, :participating_organizations_attributes,
+  :contacts, :contacts_attributes,
   # hidden fields
   :verified_id, :sector_id, :tied_id, :flow_type_id, 
   :oda_like_id, :status_id, 
@@ -25,18 +29,26 @@ class Project < ActiveRecord::Base
   belongs_to :donor, class_name: "Country"
   belongs_to :owner, class_name: "Organization"
 
+
+  # project accessories
+  has_many :geopoliticals, dependent: :destroy
+  accepts_nested_attributes_for :geopoliticals, allow_destroy: true
+
+  has_many :transactions, dependent: :destroy
+  accepts_nested_attributes_for :transactions, allow_destroy: true
   
+  has_many :contacts, dependent: :destroy  
+  accepts_nested_attributes_for :contacts, allow_destroy: true
 
+  has_many :sources, dependent: :destroy
+  accepts_nested_attributes_for :sources, allow_destroy: true
 
-
-  # has_many :geopoliticals
-  # has_many :transactions
-  # has_many :contacts
-  # has_many :documents
-  # has_many :participating_organizations
-  # has_many :identifiers
-  # has_many :classifications
-  # has_many :followers
-
+  has_many :participating_organizations, dependent: :destroy
+  accepts_nested_attributes_for :participating_organizations, allow_destroy: true
+  
+  # has_many :identifiers, dependent: :destroy
+  # has_many :classifications, dependent: :destroy
+  # has_many :followers, dependent: :destroy
+  
 
 end

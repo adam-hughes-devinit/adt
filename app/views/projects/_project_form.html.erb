@@ -1,30 +1,90 @@
 <%= simple_form_for(@project, html: {class: "form-horizontal"}) do |f| %>
-	
-	<%= f.input :title %>
-	<%= f.association :donor, label: 'Donor country' %>
-	<%= f.input :year, hint: "Commitment year" %>
-	<%= f.input :description %>
-	<%= f.input :capacity %>
-	<%= f.association :verified %>
+<div class="row">
+<h3>Project Info: </h3>
+	<%= f.input :owner_id, wrapper_html: {class: " span12"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
+	<%= f.input :title, wrapper_html: {class: "span10"} %>
+	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
+	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
+	<%= f.input :description, input_html: {rows: "6" }, wrapper_html: {class: "span10"} %>
+	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
+	<%= f.association :verified, wrapper_html: {class: "span5"} %>
+</div>
+<div class='row'>
+	<h3>Dates:</h3>
+	<%= f.input :start_planned, include_blank: true, input_html: {value: ''}, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :start_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :end_planned, include_blank: true, input_html: {value: '' }, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :end_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, wrapper_html: {class: "project-date span6"} %>
+</div>
 
-	<%= f.input :start_planned %>
-	<%= f.input :start_actual %>
-	<%= f.input :end_planned %>
-	<%= f.input :end_actual %>
+<div class='row'>
+	<h3>Details:</h3>
+	<%= f.association :sector, wrapper_html: {class: "span5"} %>
+	<%= f.input :sector_comment, wrapper_html: {class: " span5"}, hint: "If multisector, add details" %>
+	<%= f.input :is_commercial, wrapper_html: {class: " span5"} %>
+	<%= f.association :tied, wrapper_html: {class: " span5"} %>
+	<%= f.association :flow_type, wrapper_html: {class: " span5"} %>
+	<%= f.association :oda_like, wrapper_html: {class: " span5"} %>
+	<%= f.association :status, wrapper_html: {class: " span5"} %>
 
+	<%= f.input :active, wrapper_html: {class: " span12"} %>
 
-
-	<%= f.association :sector %>
-	<%= f.input :sector_comment, hint: "If multisector, add details" %>
-	<%= f.input :is_commercial %>
-	<%= f.association :tied %>
-	<%= f.association :flow_type %>
-	<%= f.association :oda_like %>
-	<%= f.association :status %>
-
-	<%= f.input :active %>
-	<%= f.input :owner_id,  as: :hidden, hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
-
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Transactions: </h3>
+	<div>
+		<%= f.simple_fields_for :transactions do |transaction_form| %>
+			<%= render 'transaction_fields', f: transaction_form %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Transaction", f, :transactions %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Geopolitical Data: </h3>
+	<div>
+		<%= f.simple_fields_for :geopoliticals do |geos| %>
+			<%= render 'geopolitical_fields', f: geos %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Recipient", f, :geopoliticals %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Participating Organizations: </h3>
+	<div>
+		<%= f.simple_fields_for :participating_organizations do |orgs| %>
+			<%= render 'participating_organization_fields', f: orgs %>
+		<% end %>
+		<b><%= link_to_add_fields "Add an Organization", f, :participating_organizations %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Participating Organizations: </h3>
+	<div>
+		<%= f.simple_fields_for :participating_organizations do |orgs| %>
+			<%= render 'participating_organization_fields', f: orgs %>
+		<% end %>
+		<b><%= link_to_add_fields "Add an Organization", f, :participating_organizations %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Contacts: </h3>
+	<div>
+		<%= f.simple_fields_for :contacts do |cons| %>
+			<%= render 'contact_fields', f:cons %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Contact", f, :contacts %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Sources: </h3>
+	<div>
+		<%= f.simple_fields_for :sources do |srcs| %>
+			<%= render 'source_fields', f: srcs %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Source", f, :sources %></b>
+	</div>
+</div>
+<div class='row'>
 	<%= f.button :submit, "Save" %>
-
+</div>
 <% end %>
