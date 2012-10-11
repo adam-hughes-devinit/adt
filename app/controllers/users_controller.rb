@@ -12,8 +12,7 @@ skip_before_filter :signed_in_user, only: [:new, :create]
   	@user = User.new(params[:user])
   	if @user.save
       sign_in @user
-  		flash[:success] = 'Welcome!'
-  		redirect_to @user
+      redirect_back_or user
   	else
   		render 'new'
   	end

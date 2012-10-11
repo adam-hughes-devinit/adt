@@ -2,7 +2,7 @@ Adt::Application.routes.draw do
   # codes
   resources :roles, :countries, :sectors, :statuses, 
   :verifieds, :oda_likes, :tieds, :flow_types, :origins, 
-  :source_types, :document_types
+  :source_types, :document_types, :organization_types
 
   # limited access
   resources :projects, :users, :organizations

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011182240) do
+ActiveRecord::Schema.define(:version => 20121011204616) do
 
   create_table "contacts", :force => true do |t|
     t.integer  "organization_id"
@@ -29,8 +29,11 @@ ActiveRecord::Schema.define(:version => 20121011182240) do
     t.string   "oecd_name"
     t.integer  "oecd_code"
     t.integer  "cow_code"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "un_code"
+    t.integer  "imf_code"
+    t.integer  "aiddata_code"
   end
 
   create_table "currencies", :force => true do |t|
@@ -71,11 +74,19 @@ ActiveRecord::Schema.define(:version => 20121011182240) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "organization_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "iati_code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "organization_type_id"
   end
 
   create_table "origins", :force => true do |t|

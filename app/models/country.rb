@@ -1,6 +1,7 @@
 class Country < ActiveRecord::Base
   
-  attr_accessible :cow_code, :iso2, :iso3, :name, :oecd_code, :oecd_name
+  attr_accessible :cow_code, :iso2, :iso3, :name,
+   :oecd_code, :oecd_name, :aiddata_code, :un_code, :imf_code
 
   validates :name, presence: true
   #validates :iso2, presence: true, uniqueness: true, length: {maximum: 2}
@@ -15,3 +16,4 @@ class Country < ActiveRecord::Base
 
 
 end
+ 

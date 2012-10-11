@@ -10,6 +10,7 @@ class Project < ActiveRecord::Base
   :geopoliticals, :geopoliticals_attributes,
   :participating_organizations, :participating_organizations_attributes,
   :contacts, :contacts_attributes,
+  :sources, :sources_attributes,
   # hidden fields
   :verified_id, :sector_id, :tied_id, :flow_type_id, 
   :oda_like_id, :status_id, 

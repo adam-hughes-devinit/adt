@@ -58,15 +58,6 @@
 	</div>
 </div>
 <div class='row project-accessory-fields'>
-	<h3>Participating Organizations: </h3>
-	<div>
-		<%= f.simple_fields_for :participating_organizations do |orgs| %>
-			<%= render 'participating_organization_fields', f: orgs %>
-		<% end %>
-		<b><%= link_to_add_fields "Add an Organization", f, :participating_organizations %></b>
-	</div>
-</div>
-<div class='row project-accessory-fields'>
 	<h3>Contacts: </h3>
 	<div>
 		<%= f.simple_fields_for :contacts do |cons| %>
