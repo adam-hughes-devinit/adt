@@ -2,7 +2,11 @@ class ProjectsController < ApplicationController
 before_filter :set_owner, only: [:create, :new]
 
   def index
-    @projects = Project.paginate(page: params[:page])
+    @search = Project.search do
+      fulltext params[:search]
+    end
+
+    @projects = @search.results.paginate(page: params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -86,6 +90,7 @@ before_filter :set_owner, only: [:create, :new]
       format.json { head :no_content }
     end
   end
+
 
   private
     def set_owner

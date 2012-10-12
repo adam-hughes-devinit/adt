@@ -51,5 +51,8 @@ class Project < ActiveRecord::Base
   # has_many :classifications, dependent: :destroy
   # has_many :followers, dependent: :destroy
   
-
+  
+  searchable do
+    text :title, :description
+  end
 end

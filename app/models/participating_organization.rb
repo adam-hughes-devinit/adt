@@ -1,6 +1,6 @@
 class ParticipatingOrganization < ActiveRecord::Base
   attr_accessible :organization_id, 
-  :role_id, :role, :origin_id, :origin, :project_id
+  :role_id, :role, :origin_id, :origin, :project_id, :organization
 
   belongs_to :organization
   belongs_to :role

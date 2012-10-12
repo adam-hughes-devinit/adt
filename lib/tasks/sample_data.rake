@@ -59,7 +59,7 @@ def make_projects
     2.times do
       p.contacts << Contact.new(
           name: Faker::Name.name,
-          position: Faker::Name.position,
+          position: Faker::Lorem.words[0],
           organization: Organization.all.sample
         )
 
@@ -96,6 +96,21 @@ end
 
 
 def make_data_from_mbdc
+  Currency.all.each {|a| a.destroy}
+  Country.all.each {|a| a.destroy}
+  Tied.all.each {|a| a.destroy}
+  Verified.all.each {|a| a.destroy}
+  Status.all.each {|a| a.destroy}
+  Sector.all.each {|a| a.destroy}
+  FlowType.all.each {|a| a.destroy}
+  DocumentType.all.each {|a| a.destroy}
+  OdaLike.all.each {|a| a.destroy}
+  SourceType.all.each {|a| a.destroy}
+  Role.all.each {|a| a.destroy}
+  Origin.all.each {|a| a.destroy}
+  OrganizationType.all.each {|a| a.destroy}
+  Organization.all.each {|a| a.destroy}
+
 Currency.create!(name: "Afghani", iso3: "AFN")
 Currency.create!(name: "Algerian Dinar", iso3: "DZD")
 Currency.create!(name: "Argentine Peso", iso3: "ARS")

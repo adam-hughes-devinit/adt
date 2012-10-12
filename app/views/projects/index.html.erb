@@ -1,6 +1,13 @@
 <% provide(:title, "View Projects") %>
 <h1>All projects</h1>
 
+<%= form_tag projects_path, method: :get do %>
+	<p>
+		<%= text_field_tag :search, params[:search] %>
+		<%= submit_tag, "Search", name: nil %>
+	</p>
+<% end %>
+
 <%= will_paginate %>
 
 <ul class="projects">

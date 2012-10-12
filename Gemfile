@@ -8,6 +8,8 @@ gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'simple_form'
+gem 'sunspot_solr'
+gem 'sunspot_rails', '1.3.0'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
