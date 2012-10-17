@@ -1,4 +1,5 @@
-<h1>Editing organization</h1>
+<% provide(:first_header, "Edit #{@organization.name}") %>
+<% provide(:title, "#{@organization.name}") %>
 
 <%= render 'form' %>
 

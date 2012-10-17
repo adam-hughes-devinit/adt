@@ -2,13 +2,21 @@ Adt::Application.routes.draw do
   # codes
   resources :roles, :countries, :sectors, :statuses, 
   :verifieds, :oda_likes, :tieds, :flow_types, :origins, 
-  :source_types, :document_types, :organization_types
+  :source_types, :document_types, :organization_types, :currencies
 
   # limited access
-  resources :projects, :users, :organizations
+  resources :projects, :organizations, :users
+
 
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
+  post '/users/:id/own/:owner_id', to: 'users#own'
+  post '/users/:id/disown', to: 'users#disown'
+
+  post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
+
+  # this is for easy use in the MBDC launch
+  match '/media/:media_id', to: 'projects#media', as: 'project_media'
 
   root to: "static_pages#home"
 

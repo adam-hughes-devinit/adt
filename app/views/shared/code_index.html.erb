@@ -1,11 +1,22 @@
-<% provide(:title, "View all #{type.pluralize}") %>
-<h1>View all <%= type %></h1>
+<% provide(:title, "#{type.pluralize.capitalize}") %>
+<% provide(:first_header, "View all #{type.pluralize.capitalize}") %>
+
+
+
+<% hidden_attributes = ["created_at", "updated_at", "id"] %>
+
+<div class="row">
+<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+</div>
 <!-- Table headings for each attribute !-->
 <% if objects.length > 0 %>
-<table class='code-index-table'>
+
+<table class='code-table'>
 	<thead>
 		<% objects.first.attributes.each_pair do |k, v| %>
+			<% if !hidden_attributes.include?(k) %>
 				<th><b><%= k.capitalize %></b></th>
+			<% end %>
 		<% end %>
 		<th>Links</th>
 	</thead>
@@ -13,9 +24,16 @@
 			<% objects.each do |o| %>
 				  <tr>
 				  	<% o.attributes.each_pair do |k, v| %>
+				  		<% if !hidden_attributes.include?(k) %>
 							  <td><%= v %></td>
+						<% end %>
 					<% end %>
-					<td> <%= link_to "View", o %> | <%= link_to "Edit", "/#{type.downcase.gsub(/\s/, '_')}/#{o.id}/edit" %> </td> 
+					<td> 
+						<%= link_to "View", o %>
+						<% if current_user.present? && current_user.admin? %>
+						  | <%= link_to "Edit", "/#{type.downcase.gsub(/\s/, '_')}/#{o.id}/edit" %> 
+						<% end %>
+					</td> 
 				  </tr>
 
 			<% end %>

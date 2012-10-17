@@ -1,0 +1,47 @@
+<% provide(:title, "Users") %>
+<% provide(:first_header, "All Users") %>
+
+<div class="row">
+<%= link_to "New User", new_user_path%>
+<div>
+<% hidden_fields = ["created_at", "updated_at", "id", "admin", "password_digest", "remember_token", "owner_id"] %>
+
+<table class='code-index-table'>
+	<thead>
+		<% @users.first.attributes.each_pair do |k, v| %>
+			<% if !hidden_fields.include?(k) %>
+				<th><b><%= k.capitalize %></b></th>
+			<% end %>
+		<% end %>
+		<th>Links</th>
+	</thead>
+	<tbody>
+			<% @users.each do |o| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+	  					<% if !hidden_fields.include?(k) %>
+							  <td><%= v %></td>
+						<% end %>
+					<% end %>
+					<td> 
+						<%= link_to "View", o %> 
+						<% if (current_user.admin? || current_user==o) && o.owner == current_user.owner %> 
+							 | <%= link_to"Edit", edit_user_path(o) %>
+						<% end %>
+						<% if current_user.admin? && o!=current_user && o.owner!=current_user.owner && o.owner.nil? %>
+							 | <%= link_to("Add to #{current_user.owner.name}", "/users/#{o.id}/own/#{current_user.owner.id}", method: :post) %>
+						<% end %>
+						<% if current_user.admin? && o!=current_user && o.owner==current_user.owner %>
+							 | <%= link_to("Remove from #{current_user.owner.name}", "/users/#{o.id}/disown", method: :post) %>
+						<% end %>
+					</td> 
+				  </tr>
+
+			<% end %>
+	</tbody>
+</table>
+
+<br>
+<%= link_to "New User", new_user_path%>
+
+ 

@@ -1,5 +1,7 @@
-<h1>Listing organizations</h1>
+<% provide(:first_header, "All Organizations") %>
+<% provide(:title, "Organizations") %>
 
+<%= link_to 'New Organization', new_organization_path %>
 <table>
   <tr>
     <th>Name</th>

@@ -57,10 +57,14 @@ class OrganizationsController < ApplicationController
   # PUT /organizations/1.json
   def update
     @organization = Organization.find(params[:id])
+    undo_link = view_context.link_to(
+        "Undo", "/versions/#{@organization.versions.last.id}/revert",
+         method: :post)
+    flash[:success] = "Organization updated. #{undo_link}"
 
     respond_to do |format|
       if @organization.update_attributes(params[:organization])
-        format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
+        format.html { redirect_to organizations_path }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

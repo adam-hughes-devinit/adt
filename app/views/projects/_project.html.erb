@@ -2,18 +2,23 @@
 
 <div class="project-page">
 <div class="row">
-	<div class="project-details span11">
-		<% if signed_in? && current_user.owner == @project.owner %>
+	<% if signed_in? && current_user.owner == @project.owner %>
+		<div class="project-details span11">	
 			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p>
-		<% end %>
-		<h1><%= @project.title %> <%= "(Inactive)" if !@project.active %> </h1>
-		<p style="text-align:center"> 
-			<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
-			<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %> |
-			<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
-			<b>Reference ID:</b> <%= @project.id %> |
-			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
-		</p>
+		</div>
+	<% end %>
+<div class= "project-box span10">
+	<%  if !@project.active %>
+		<h1 id="inactive-project">-- Inactive --</h1>
+	<% end %>
+	<p style="text-align:center"> 
+		<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
+		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %> |
+		<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
+		<b>Media ID:</b> <%= link_to @project.media_id, "/media/#{@project.media_id}" %> |
+		<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
+	</p>
+</div>
 		<div class="project-box span10">
 			<h3>Description:</h3>
 			<p class='project-description'><%= @project.description.blank? ? unset_data : @project.description %> </p>
@@ -49,9 +54,14 @@
 		<h3>Transactions:</h3>
 		<ul>
 			<% @project.transactions.each do |t| %>
-				<% if !t.currency.nil? %>
-				<li><%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %> </li>
-				<% end %>
+				<li class="project-transaction project-li">
+					<% if t.usd_defl.present? %>
+						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
+					<% end %>
+					<% if !t.currency.nil? %>
+					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %>)
+					<% end %>
+				</li>
 			<% end %>
 		</ul>
 	</div>
@@ -60,7 +70,8 @@
 		<ul>
 			<% @project.geopoliticals.each do |g| %>
 				<% if !g.recipient.nil? %>
-				<li><b><%= link_to g.recipient.name, g.recipient %></b> 
+				<li class="project-geopolitical project-li">
+					<b><%= link_to g.recipient.name, g.recipient %></b> 
 					<%= g.subnational.blank? ? '' : "(#{g.subnational})" %>
 					 <%= g.percent.blank? ? '' : " -- #{g.percent}%" %>
 				</li>
@@ -75,7 +86,8 @@
 		<ul>
 			<% @project.participating_organizations.each do |p| %>
 				<% if !p.organization.nil? %>
-					<li><b><%= link_to p.organization.name, p.organization %></b>, Role: <i><%= p.role.nil? ? unset_data : link_to(p.role.name, p.role) %></i> </li>
+					<li class="project-organization project-li">
+						<b><%= link_to p.organization.name, p.organization %></b>, Role: <i><%= p.role.nil? ? unset_data : link_to(p.role.name, p.role) %></i> </li>
 				<% end %>
 			<% end %>
 		</ul>
@@ -85,7 +97,7 @@
 		<ul>
 			<% @project.contacts.each do |c| %>
 				<% if !c.name.blank? %>
-					<li>
+					<li class="project-contact project-li">
 						<b><%= c.name.blank? ? "Name "+unset_data : c.name %></b> 
 						<%= c.position.blank? ? '' : ", #{c.position}" %> 
 						<%= c.organization.nil? ? '' : link_to(" (#{c.organization.name})", c.organization) %>
@@ -96,22 +108,20 @@
 	</div>
 </div>
 <div class='row'>
-	<div class="project-sources project-box span5">
+	<div class="project-sources project-box span10">
 		<h3>Sources:</h3>
 		<ul>
 			<% @project.sources.each do |s| %>
 				<% if !s.url.nil? %>
-					<% url_filler = s.url.length>11 ? "..." : "" %>
-					<li>
+					<li class="project-source project-li">
 						<b>
-							<%= link_to s.url[0..10]+url_filler, s.url, target: "_blank" %>
+							<%= link_to s.url, s.url, target: "_blank" %>
 						</b>
-						<%= s.date.blank? ? '' : " (#{s.date.strftime("%d %B %Y")}) " %>
-						<i>
-							<%= s.document_type.nil? ? '' : link_to(s.document_type.name, s.document_type) %>
-							<%= !s.source_type.nil? && !s.document_type.nil? ? ', ' : ' '%>
-							<%= s.source_type.nil? ? '' : link_to( "#{s.source_type.name}", s.source_type) %>
-						</i> 
+						<ul class="project-source-details">
+							<li>Date: <%= s.date.blank? ? unset_data : " #{s.date.strftime("%d %B %Y")} " %></li>
+							<li>Document type: <%= s.document_type.nil? ? unset_data : link_to(s.document_type.name, s.document_type) %></li>
+							<li>Source type: <%= s.source_type.nil? ? unset_data : link_to( s.source_type.name, s.source_type) %></li>
+						</ul>
 					</li>
 				<% end %>
 			<% end %>

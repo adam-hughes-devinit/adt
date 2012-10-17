@@ -13,14 +13,16 @@ $grayMediumLight: #eaeaea;
 /* universal */
 
 img {
-  max-height: 50px;
+  max-height:100%;
 }
+
 
 html {
   overflow-y: scroll;
 }
 
 body {
+  font-family: Tahoma, Arial, sans-serif;
   padding-top: 60px;
   line-height: 14px;
 }
@@ -41,7 +43,7 @@ textarea {
 
 }
 
-.center 
+
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {
@@ -84,8 +86,26 @@ p {
   color: #fff;
   text-decoration: none;
   }
+    img {
+    height:80px;
+    }
 }
 
+#background-image {
+  width:100%;
+  height:95px!important;
+  position:absolute;
+  z-index:-1;
+  left:0;
+  top:30px;
+  opacity:0.9;
+  filter:alpha(opacity=90); /* For IE8 and earlier */
+}
+
+#first_header{
+  text-shadow:1px 1px #cce;
+  color:#000;
+}
 
 /* footer */
 
@@ -98,6 +118,9 @@ footer {
   color: #555;
       &:hover { 
   color: #222;
+    }
+    img {
+    max-height:50px;
     }
   }
     small {
@@ -124,6 +147,9 @@ footer {
   @include box_sizing;
 }
 
+#africa-map {
+  background: #1B3970;
+}
 /* Sidebar*/
 aside {
   section {
@@ -222,7 +248,7 @@ label {
   @extend .error;
 }
 
-/* Project Page */
+/* Project Pages */
 
 .project-page {
   line-height:16px;
@@ -237,6 +263,10 @@ label {
     margin-left:5px;
   }
 
+  #inactive-project {
+    color: #942;
+  }
+
 }
 
 .project-accessory-fields, .project-box {
@@ -246,6 +276,22 @@ label {
   h3 {
     margin-bottom:5px;
   }
+}
+
+#project-facets  {
+  
+    h3 {
+      display:inline;
+    }
+    ul{ 
+      list-style:none;
+    }
+    li {
+      display:inline;
+      padding: 0 4px 0 4px;
+      margin: 4px 0 4px 0;
+      border-left: 2px solid #ccc;
+    }
 }
 
 
@@ -267,12 +313,20 @@ label {
 
 /* Codes CSS */
 
-.code-index-table {
+.code-table {
+  /*margin-left: auto;
+  margin-right: auto;*/
+  min-width:50%;
   th {
   border: 5px solid white;
+  text-align: center;
   }
   td {
-    padding: 3px;
+    padding: 3px 8px 2px 4px;
     border-top: 1px solid #ddd;
   }
+  td:first {
+    padding-left:15px;
+  }
 }
+

@@ -1,9 +1,5 @@
-<p id="notice"><%= notice %></p>
-
-
-  <h1>
-  <%= @organization.name %>
-  </h1>
+<% provide(:title, "#{@organization.name}") %>
+<% provide(:first_header, "#{@organization.name}") %>
 
 <p>
   <b>Description:</b>
@@ -12,7 +8,7 @@
 
 <p>
   <b>Type:</b>
-  <%= @organization.organization_type.name%>
+  <%= @organization.organization_type.name unless @organization.organization_type.nil? %>
 </p>
 
 <p>
@@ -21,6 +17,11 @@
   <%= pluralize(@organization.projects.count, "project") %>. 
   </b>
 </p>
-
+<p>
+Owns  
+  <b>
+  <%= pluralize(@organization.owned_projects.count, "project") %>. 
+  </b>
+</p>
 <%= link_to 'Edit', edit_organization_path(@organization) %> |
 <%= link_to 'Back', organizations_path %>

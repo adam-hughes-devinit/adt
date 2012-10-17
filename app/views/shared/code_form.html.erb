@@ -1,5 +1,6 @@
 <% provide(:title, "#{type}") %>
-<h1><%= type %>: <%= object.name %> </h1>
+<% provide(:first_header, "#{type}") %>
+
 <%= simple_form_for(object) do |f| %>
 	<% object.attributes.each_pair do |k, v| %>		  	
 	  		<% if !["created_at", "updated_at", "id"].include? k %>
@@ -10,5 +11,5 @@
 <% end %>
 
 <%= link_to 'Show', object %> |
-<%= link_to 'See All', "/#{type.pluralize.downcase}" %>
+<%= link_to 'See All', "/#{type.pluralize.downcase.gsub(/\s/, '_')}" %>
 

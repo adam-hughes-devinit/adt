@@ -48,7 +48,20 @@ module SessionsHelper
   def signed_in_user
     unless signed_in?
       store_location
-      redirect_to signin_url, notice: "Please sign in."
+      redirect_to signin_url, notice: "Please sign in or create an account."
+    end
+  end
+
+  def signed_in_and_same_owner
+    if current_user.present?
+      @user = User.find(params[:id])
+      unless @user.owner_id.nil? || (current_user.owner == @user.owner && signed_in?)
+        store_location
+        redirect_to users_path, notice: "You must be in the user's organization to see this page."
+      end
+    else
+        store_location
+        redirect_to users_path, notice: "You must be in the user's organization to see this page."
     end
   end
 

@@ -1,4 +1,55 @@
 <% provide(:title, @user.name) %>
+<% provide(:first_header, "User: #{@user.name}") %>
 
-<%= @user.name %>, <%= @user.email %> <br>
-Owner: <%= @user.owner.nil? ? 'None' : @user.owner.name %>
+<div class="row">
+<p>
+<b>Name:</b> <%= @user.name %> 
+</p>
+<p>
+<b>Email:</b> <%= @user.email %> 
+</p>
+<p>
+<b>Owner:</b> <%= @user.owner.nil? ? 'None' : @user.owner.name %>
+</p>
+</div>
+<div class="row">
+<hr class="row span8">
+<br>
+</div>
+<div class="row">
+<p><b>Most recent activity:</b> </p>
+<table class="code-table">
+	<thead>
+		<th>Action</th>
+		<th>Object Type</th>
+		<th>Object Name</th>
+		<th>Date/Time</th>
+	</thead>
+	<tbody>
+
+		<% i = 0 %>
+		<% while (i < 25 && @user.actions[i]) %>
+			<% this_action = @user.actions.order("created_at desc")[i] %>
+			<% i+=1 %>
+			<tr>
+				<td><%= this_action.event.capitalize %> </td>
+				<td>
+					<%= this_action.item_type %>
+				</td>
+				<td>
+					<% if this_action.item_type.constantize.find_by_id(this_action.item_id).present? %>
+
+					<% link_text = this_action.item_type == "Project" ? this_action.item_type.constantize.find_by_id(this_action.item_id).title : this_action.item_type.constantize.find_by_id(this_action.item_id).name %>
+
+						<%= link_to("#{link_text}", this_action.item_type.constantize.find_by_id(this_action.item_id)) %>
+					<% else %>
+						<i>Deleted</i>
+					<% end %>
+
+				</td>
+				<td><%= this_action.created_at.strftime("%l:%M%P, %d %B %Y") %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+</div>

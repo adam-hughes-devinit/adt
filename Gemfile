@@ -8,13 +8,15 @@ gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'simple_form'
-gem 'sunspot_solr'
-gem 'sunspot_rails', '1.3.0'
+gem 'paper_trail'
+gem 'sunspot_rails', "~> 2.0.0.pre.120925"
+gem 'sunspot_solr', "~> 2.0.0.pre.120925" # optional pre-packaged Solr distribution for use in development
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails', '2.11.0'
   #gem 'factory_girl_rails', '1.4.0'
+  gem 'progress_bar'
 end
 
 # Gems used only for assets and not required
