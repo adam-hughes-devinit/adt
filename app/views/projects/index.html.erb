@@ -2,58 +2,52 @@
 <% provide(:first_header, "View Projects") %>
 <% current_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
 <% joiner = current_url.index("?") ? "&" : "?" %>
+<% def active_or_inactive(project)
+	if !project.active 
+		"<span class='inactive-project-title'>#{project.title} (Inactive)</span>".html_safe
+	else
+		project.title
+	end
+end %>
+	
 
-<%= form_tag projects_path, method: :get do %>
-	<p>
-		<%= submit_tag "Search", name: nil, class: "btn" %>
-		<%= text_field_tag :search, params[:search], class: "span7" %>
-	</p>
-<% end %>
 
-<div id='project-facets'>	
-	<h3>Sectors</h3>
-	<ul>
-		<% for row in @search.facet(:sector_name).rows %>
-			<li>
-				<% if params[:sector_name].blank? %>
-					<%= link_to row.value, "#{current_url}#{joiner}sector_name=#{row.value}" %> (<%= row.count %>)
-				<% else %>
-					<b><%= row.value %></b> (<%= link_to "remove", "#{current_url.gsub(/sector_name=[^&]+&?/, '')}" %>) 
-				<% end %>
-			</li>
+
+<div class="row" id='project-facets'>	
+	<div class="span10">
+		<%= form_tag projects_path, method: :get do %>
+
+			<p> <b>Search: </b> 
+				<%= text_field_tag :search, params[:search], class: "span7" %>
+				<%= submit_tag "Submit", name: nil, class: "btn" %>
+			</p>
 		<% end %>
-	</ul>
-	<h3>Flow Type</h3>
-	<ul>
-		<% for row in @search.facet(:flow_type_name).rows %>
-			<li>
-				<% if params[:flow_type_name].blank? %>
-					<%= link_to row.value, "#{current_url}#{joiner}flow_type_name=#{row.value}" %> (<%= row.count %>)
-				<% else %>
-					<b><%= row.value %></b> (<%= link_to "remove", "#{current_url.gsub(/flow_type_name=[^&]+&?/, '')}"%>) 
-				<% end %>
-			</li>
+	</div>
+	<div class='span10'>
+		<p><b>Filters:</b></p>
+	</div>
+	<% first_half = (@facets.count/2).round %>
+	<div class='span5'>
+		<ol>
+		<% @facets[0..first_half].each do |f| %>
+			<%= render partial: 'facet_list', locals: {f: f, current_url: current_url, joiner: joiner} %>
 		<% end %>
-	</ul>	
-	<h3>Flow Class</h3>
-	<ul>
-		<% for row in @search.facet(:oda_like_name).rows %>
-			<li>
-				<% if params[:oda_like_name].blank? %>
-					<%= link_to row.value, "#{current_url}#{joiner}oda_like_name=#{row.value}" %> (<%= row.count %>)
-				<% else %>
-					<b><%= row.value %></b> (<%= link_to "remove", "#{current_url.gsub(/oda_like_name=[^&]+&?/, '')}"%>) 
-				<% end %>
-			</li>
+		</ol>
+	</div>
+	<div class='span5'>
+		<ol>
+		<% @facets[first_half+1..-1].each do |f| %>
+			<%= render partial: 'facet_list', locals: {f: f, current_url: current_url, joiner: joiner} %>
 		<% end %>
-	</ul>
+		</ol>
+	</div>
 
 </div>
-	
-<h3>Projects:</h3>
+<br>
+<h3><%= @search.total %> Projects:</h3>
 
 <%= will_paginate @projects %>
-<table class="projects">
+<table id="project-search-results">
 	<thead>
 		<tr>
 			<th>Donor</th>
@@ -70,16 +64,17 @@
 	    <% @projects.each do |p| %>
 	    	<tr>
 	    		<td><%= p.donor ? p.donor.name : 'Unset' %> </td>
-	    		<td><%= link_to p.title, p %></td> 
+	    		<td><%= link_to active_or_inactive(p), p %></td> 
 	    		<td><%= p.year %></td>
-	    		<td><%= p.recipient_country.join(', ') %></td>
+	    		<td><%= p.country_name.join(', ') %></td>
 	    		<td><%= p.usd_2009 %></td>
 	    		<% if current_user && current_user.owner %>
 		    		<td>
 		    			<% if p.owner %>
-	    					Owner: <%= link_to p.owner.name, p.owner %> |
 	    					<% if p.owner == current_user.owner %>
 	    						<%= link_to "Edit", edit_project_path(p) %>
+	    					<% else %>
+	    						Owner: <%= link_to p.owner.name, p.owner %> 
 	    					<% end %>
 	    				<% else %>
 	    					No owner 

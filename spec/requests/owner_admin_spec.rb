@@ -5,6 +5,7 @@ describe "Owner and admin system" do
 	let(:project){FactoryGirl.create(:project)}
 	let(:country){FactoryGirl.create(:country)}
 	let(:status){FactoryGirl.create(:status)}
+	let(:organization){FactoryGirl.create(:organization)}
 
 	edit_project_link_text = "Edit this project"
 	
@@ -18,7 +19,15 @@ describe "Owner and admin system" do
 		it {should have_link("Sign in")}
 		it {should_not have_link("Users")}
 
+		it {should have_link("Codes")}
+		it {should have_link("Projects")}
 		it {should_not have_link(edit_project_link_text)}
+
+		describe "should not be able to visit the edit project URL directly" do
+			before {visit edit_project_path(project)}
+			it {response.should redirect_to(projects_path)}
+		end
+
 	end
 
 	describe "unsigned visit to code page" do 
@@ -26,12 +35,41 @@ describe "Owner and admin system" do
 
 		it {should have_content(country.name)}
 		it {should_not have_content("Created_at")}
+		it {should_not have_content("Updated_at")}
 		it {should_not have_link("Edit")}
+
+		describe "Should not even be able to go to edit code URL" do
+			before { visit edit_country_path(country) }
+			it {response.should redirect_to(countries_path)}
+		end
+
 	end
 
 	describe "unsigned visit to code index " do
 		before {visit countries_path}
 		it {should_not have_link("Edit")}
+	end	
+
+
+	describe "unsigned visit to organization page" do 
+		before {visit organization_path(organization)}
+
+		it {should have_content(organization.name)}
+		it {should_not have_content("Created_at")}
+		it {should_not have_content("Updated_at")}
+		it {should_not have_link("Edit")}
+		it {should_not have_link("Destroy")}
+	end
+
+	describe "should not be able to visit the edit organization URL directly" do
+		before {visit edit_organization_path(organization}
+		it {response.should redirect_to(organizations_path)}
+	end
+
+	describe "unsigned visit to organization index " do
+		before {visit organizations_path}
+		it {should_not have_link("Edit")}
+		it {should_not have_link("Destroy")}
 	end
 
 	describe "unsigned visit to user page " do
@@ -53,13 +91,18 @@ describe "Owner and admin system" do
 			specify {response.should redirect_to(signin_path)}
 		end
 
+		describe "delete an organization" do
+			before { delete organization_path(organization)}
+			specify {response.should redirect_to(signin_path)}
+		end
+
 		describe "delete a project" do
 			before {delete project_path(project) }
 			specify {response.should redirect_to(signin_path)}
 		end
 	end
 
-	describe " sign in a non-owning user " do
+	describe "sign in a non-owning user " do
 		before do
 			visit signin_path
 			fill_in "Email", with: user.email
@@ -84,7 +127,7 @@ describe "Owner and admin system" do
 
 	end
 
-	describe " sign in an owning user" do
+	describe "sign in an owning user" do
 		before do 
 
 			project.update_attribute(:owner_id, user.owner.id)
@@ -109,12 +152,12 @@ describe "Owner and admin system" do
 				unowned_user = user.dup
 				unowned_user.name= "Unowned User"
 				unowned_user.email= "Unowneduser@aiddata.org"
-				unowned_user.owner = nil
+				unowned_user.owner_id = nil
 				unowned_user.save!
 				visit users_path
 			end
 
-			it {should have_content("#{User.last.name}")}
+			it {should have_content("#{unowned_user.name}")}
 			it {should_not have_link("Add to #{user.owner.name}")}
 		end
 
@@ -125,8 +168,8 @@ describe "Owner and admin system" do
 			end
 
 				it {user.should be_admin}
-				
 				it {should have_link("Add to #{user.owner.name}")}
+				it {should_not have_link("Remove from #{user.owner.name}")}
 
 				it "should add the user to the organization" do
 					expect { click_link "Add to #{user.owner.name}" }.to change(user.owner.users, :count).by(1)

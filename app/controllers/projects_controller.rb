@@ -4,14 +4,38 @@ before_filter :correct_owner?, only: [:edit]
 #before_filter :strip_tags_from_description, only: [:create, :update]
 
   def index
+
+
+
+      @facet_labels = ["Sector", "Flow Type", "Flow Class", "Is Commercial", "Active", "Recipient"]
+      @facets = facets = [
+        {sym: :sector_name, name: "Sector"},
+        {sym: :flow_type_name, name: "Flow Type"},
+        {sym: :oda_like_name, name: "Flow Class"},
+        {sym: :status_name, name:"Status"},
+        {sym: :tied_name, name:"Tied/Untied"},
+        {sym: :verified_name, name:"Verified/Unverified"},
+        {sym: :currency_name, name:"Reported Currency"},
+        {sym: :is_commercial_string, name: "Commericial Status"},
+        {sym: :active_string, name: "Active/Inactive"},
+        {sym: :country_name, name: "Recipient"},
+        {sym: :source_type_name, name: "Source Type"},
+        {sym: :document_type_name, name: "Document Type"},
+        {sym: :origin_name, name: "Organization Origin"},
+        {sym: :role_name, name: "Organization Role"},
+        {sym: :organization_type_name, name: "Organization Type"},
+        {sym: :organization_name, name: "Organization Name"},
+        {sym: :owner_name, name: "Record Owner"}
+      ].sort! { |a,b| a[:name] <=> b[:name] }
+
       @search = Project.search do
         fulltext params[:search]
-        facet :sector_name 
-        with :sector_name, params[:sector_name] if params[:sector_name].present?
-        facet :flow_type_name
-        with :flow_type_name, params[:flow_type_name] if params[:flow_type_name].present?
-        facet :oda_like_name
-        with :oda_like_name, params[:oda_like_name] if params[:oda_like_name].present?
+        facets.each do |f|
+          facet f[:sym]
+          with f[:sym], params[f[:sym]] if params[f[:sym]].present?
+        end
+
+
         paginate :page => params[:page] || 1, :per_page => params[:max] || 50
 
       end
@@ -21,8 +45,15 @@ before_filter :correct_owner?, only: [:edit]
     respond_to do |format|
       format.html # index.html.erb
       format.json do
-       @projects = Project.all
-       render json: @projects 
+       #@projects = Project.all
+       render json: @projects.as_json(
+          only: [:id,:year], 
+          methods: [:usd_2009],
+          include: [
+            {donor:{only: [:name]}}, 
+            {geopoliticals: {include: [recipient: {only: [:name, :iso2]}], only: [:percent]}}, 
+            {sector: {only: [:name]}}
+            ]) 
       end
     end
   end
@@ -169,9 +200,10 @@ before_filter :correct_owner?, only: [:edit]
     def strip_tags_from_description
       @project.description = view_context.strip_tags(@project.description)
       
-      if @project.title.blank?
-        @project.title = "Unset"
-      end
+      # hack when data uploading
+      # if @project.title.blank?
+      #   @project.title = "Unset"
+      # end
 
     end
 

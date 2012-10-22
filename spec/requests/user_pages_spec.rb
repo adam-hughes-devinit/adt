@@ -6,17 +6,24 @@ describe "User pages" do
  
 	let(:user) {FactoryGirl.create(:user)}
 	
-	describe "view a user" do
+	# Now, you have to be signed in to do this.
+	# describe "view a user" do
+	# 	before { visit user_path(user)}
+	# 	it {should have_content(user.name)}
+	# 	it {should have_content(user.email)}
+	# end
+
+	describe "attempt to view a user" do
 		before { visit user_path(user)}
-		it {should have_content(user.name)}
-		it {should have_content(user.email)}
+		it {should.redirect_to signin_path}
 	end
+
 
 	describe "signup" do
 		let(:submit) {"Create my account"}
 		before { visit signup_path }
 
-		it { should have_content("Sign up!")}
+		it { should have_content("Sign up")}
 
 		describe "with no information" do			
 			it "should not create a user" do

@@ -2,17 +2,34 @@
 <%= javascript_include_tag "http://d3js.org/d3.v2.js" %>
 <%= javascript_include_tag "collection.js" %>
 <script type="text/javascript">
-d3.json("projects.json", function(data) {
-// Data work
+
+
+data = [{"id":93,"year":2006,"usd_2009":"3378437.48","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CV","name":"Cape Verde"}}],"sector":{"name":"Health"}},{"id":137,"year":2006,"usd_2009":"467913591.36","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"EG","name":"Egypt"}}],"sector":{"name":"Manufacturing and Industry"}},{"id":207,"year":2008,"usd_2009":"4375276.87","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GW","name":"Guinea-Bissau"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":208,"year":2009,"usd_2009":"11586130.07","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GW","name":"Guinea-Bissau"}}],"sector":{"name":"Debt Relief"}},{"id":296,"year":2009,"usd_2009":"4177691.13","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MZ","name":"Mozambique"}}],"sector":{"name":"Military"}},{"id":367,"year":2009,"usd_2009":"2248990391.31","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"ET","name":"Ethiopia"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":489,"year":2007,"usd_2009":"2450358.88","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"SN","name":"Senegal"}}],"sector":{"name":"Military"}},{"id":523,"year":2007,"usd_2009":"3267145.17","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"SC","name":"Seychelles"}}],"sector":{"name":"Government and Social Services"}},{"id":611,"year":2008,"usd_2009":"59795450.53","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"LY","name":"Libya"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":622,"year":2010,"usd_2009":"295526240.59","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"ZA","name":"South Africa"}}],"sector":{"name":"Debt Relief"}},{"id":654,"year":2007,"usd_2009":"674665478.0700001","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CM","name":"Cameroon"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":672,"year":2007,"usd_2009":"16335725.86","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Multisector"}},{"id":818,"year":2011,"usd_2009":"69141115.51000001","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"TG","name":"Togo"}}],"sector":{"name":"Trade, Tourism, Banking and Financial Services"}},{"id":837,"year":2007,"usd_2009":"29404306.55","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Debt Relief"}},{"id":870,"year":2005,"usd_2009":"4210335.26","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"NE","name":"Niger"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":879,"year":2005,"usd_2009":"22657312.62","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CV","name":"Cape Verde"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1012,"year":2010,"usd_2009":"615679667.9","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CM","name":"Cameroon"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1042,"year":2004,"usd_2009":"2620960.4","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"DJ","name":"Djibouti"}}],"sector":{"name":"Multisector"}},{"id":1065,"year":2010,"usd_2009":"1231359335.8","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GQ","name":"Equatorial Guinea"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1073,"year":2008,"usd_2009":"656291530.17","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GA","name":"Gabon"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1074,"year":2009,"usd_2009":"13925637.1","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"DZ","name":"Algeria"}}],"sector":{"name":"Education"}},{"id":1117,"year":2010,"usd_2009":"83732434.83","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GA","name":"Gabon"}}],"sector":{"name":"Manufacturing and Industry"}},{"id":1123,"year":2007,"usd_2009":"29404306.55","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}]},{"id":1124,"year":2007,"usd_2009":"29404306.55","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Debt Relief"}},{"id":1125,"year":2006,"usd_2009":"1689218.74","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Multisector"}},{"id":1159,"year":2011,"usd_2009":"2304703.85","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Agriculture, Fishing and Forestry"}},{"id":1370,"year":2003,"usd_2009":"910110.5699999999","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MA","name":"Morocco"}}],"sector":{"name":"Multisector"}},{"id":1402,"year":2009,"usd_2009":"23673583.07","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"SN","name":"Senegal"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1403,"year":2009,"usd_2009":"47347166.13","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"SN","name":"Senegal"}}],"sector":{"name":"Government and Social Services"}},{"id":1410,"year":2008,"usd_2009":"685460042.62","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MR","name":"Mauritania"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1608,"year":2011,"usd_2009":"74027087.67","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GA","name":"Gabon"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1767,"year":2003,"usd_2009":"1601794.6","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"NE","name":"Niger"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1770,"year":2010,"usd_2009":"4925437.34","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MZ","name":"Mozambique"}}],"sector":{"name":"Military"}},{"id":1775,"year":2005,"usd_2009":"2319252.47","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"KM","name":"Comoros"}}],"sector":{"name":"Government and Social Services"}},{"id":1806,"year":2007,"usd_2009":"98014355.17","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CM","name":"Cameroon"}}],"sector":{"name":"Government and Social Services"}},{"id":1847,"year":2010,"usd_2009":"1231359.34","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MZ","name":"Mozambique"}}],"sector":{"name":"Military"}},{"id":1884,"year":2005,"usd_2009":"23192524.73","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"TG","name":"Togo"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1902,"year":2007,"usd_2009":"767779115.48","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MR","name":"Mauritania"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":1976,"year":2007,"usd_2009":"3103787.91","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GQ","name":"Equatorial Guinea"}}]},{"id":2007,"year":2012,"usd_2009":0,"donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"DZ","name":"Algeria"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":2022,"year":2002,"usd_2009":"51412200.95","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CI","name":"Cote D'Ivoire"}}],"sector":{"name":"Multisector"}},{"id":2146,"year":null,"usd_2009":0,"donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MZ","name":"Mozambique"}}],"sector":{"name":"Agriculture, Fishing and Forestry"}},{"id":2178,"year":2010,"usd_2009":"240115070.48","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"MU","name":"Mauritius"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":2396,"year":2010,"usd_2009":"14160632.36","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"SN","name":"Senegal"}}],"sector":{"name":"Manufacturing and Industry"}},{"id":2550,"year":2010,"usd_2009":"84623323.31","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GA","name":"Gabon"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":2712,"year":2005,"usd_2009":"7546490.74","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"NE","name":"Niger"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":2743,"year":2007,"usd_2009":"341416670.5","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"CM","name":"Cameroon"}}],"sector":{"name":"Government and Social Services"}},{"id":2990,"year":2009,"usd_2009":"1392563.71","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GW","name":"Guinea-Bissau"}}],"sector":{"name":"Food Aid (non-disaster)"}},{"id":3161,"year":2006,"usd_2009":"97130077.63","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"GQ","name":"Equatorial Guinea"}}],"sector":{"name":"Infrastructure, Energy and Mining"}},{"id":3204,"year":2002,"usd_2009":"227615835.13","donor":{"name":"China"},"geopoliticals":[{"percent":100,"recipient":{"iso2":"LY","name":"Libya"}}],"sector":{"name":"Infrastructure, Energy and Mining"}}]
+
+// data work
+
+map_data = d3.nest()
+  .key(function(d) {return d.recipient})
+  .rollup(function(data) {return {"value" : d3.sum(data, function(d) {return d.usd_2009})}})
+  .entries(data.map(function(d) {
+    d.recipient = d.geopoliticals.length>1 ?  "Africa, regional" : d.geopoliticals.length ==0 ? null : d.geopoliticals[0].recipient.iso2; return d}))
+
+var total_cdf_in_view = d3.sum(map_data, function(d) {return d.values.value})
 
 
 // Preparing the map
 var w = 800,
     h = w*(1),
     xy = d3.geo.mercator().scale(w*4.5).translate([100,300]),
-    path = d3.geo.path().projection(xy)
-
+    path = d3.geo.path().projection(xy),
+    c = d3.scale.linear().domain([0,1000000000,16000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
+    c_sector= d3.scale.category20c(),
+    money = d3.format("0,r"),
+    years = d3.range(2000,2012)  
     ;
+
+var pie = d3.layout.pie()
+   .value(function(d) {return d.value});
 	
 var vis = d3.select("#vis")
   .append("svg:svg")
@@ -36,12 +53,217 @@ var countries =  d3.select("#states")
       .attr("d", path)
       .attr("stroke-width", 1)
       .attr("stroke", "#333")
-      .attr("fill", "#f77" ) //function(d) {if (grants[d.id]) {return c(grants[d.id])} else { return "#777"}})
-      //.on("click", click)
-      //.on("mouseover", highlight)
-      // .on("mouseout",  unhighlight)
+      .attr("fill", function(d) {
+        // find the object that matches this country
+          array = map_data.filter(function(m) {
+                return m.key == d.id
+              })
+        // if its there, get its color 
+          if (array.length == 1)  {
+            return c(
+              array[0].values.value
+              )
+          } 
+            else { return "#777"}})
+      .on("click", click)
+      .on("mouseover", highlight)
+      .on("mouseout",  unhighlight)
       ;
 
+// Click 
+
+
+function click() {
+ // drop down the gray sheet
+vis.append('svg:rect')
+  .attr("id", "grayBox")
+  .attr('class', 'overlay')
+  .attr("height", h)
+  .attr("width", w)
+  .attr("fill", "#000")
+  .attr("opacity", 0)
+  .on("click", removeOverlay)
+.transition()
+  .duration(200)
+  .attr("opacity", .6)
+  ;
+  // get the country info
+  activeIso = this.id
+  activeName = $(this).attr("name")
+ console.log(activeIso +", "+ activeName)
+
+ // these are all the records for the active country:
+ activeCountryData = data.filter(function(d) {return d.recipient == activeIso})
+
+ // build year/sector data (for stack):
+    // this is going to hold one array for each sector that is present
+    stackLayers = []
+
+    // get all the present sectors
+    sectors = activeCountryData.map(function(d) {return d.sector.name}).getUnique()
+
+    // you have to have an entry for each year -- arrays have to be same length
+    sectors.forEach(function(sector) {
+      sectorLayer = []
+      // years is defined at the top -- range 2000 to 201x
+      years.forEach(function(year) {
+        pointData = activeCountryData.filter(function(d) {return d.year == year && d.sector.name == sector})
+        point = {x: year, y: d3.sum(pointData, function(d) {return d.usd_2009})}
+        sectorLayer.push(point)
+      })
+      stackLayers.push(sectorLayer)
+    })
+
+ yearSectorStack = d3.layout.stack()
+  (stackLayers)
+
+ // build sum data (for labels):
+ sectorSums = d3.nest() 
+  .key(function(d){return d.sector.name})
+  .rollup(function(data) { return { "value" : d3.sum(data, function(d) {return d.usd_2009}), "count" : d3.sum(data, function(d) {return d ? 1 : 0 })}})
+  .entries(activeCountryData)
+
+ // build percent of total cdf data (for pie):
+ percent_of_total = Math.round(((map_data.filter(function(d) {return d.key == activeIso }))[0].values.value/total_cdf_in_view)*1000)/10
+
+
+
+  // use the data to build scales
+  annual_amounts = []
+  yearSectorStack[0].forEach(function(d,i) {
+    annual_amount = 0
+    yearSectorStack.forEach(function(e) {
+      annual_amount += e[i].y
+    })
+    annual_amounts.push(annual_amount)
   })
+
+  annual_maximum = d3.max(annual_amounts)
+  //
+  // Still needs rounding
+  //
+
+
+  var sector_area_h = 400
+    sector_area_w = 400
+    sector_area_y = d3.scale.linear().domain([0,annual_maximum]).range([sector_area_h, 0])
+    sector_area_x = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,sector_area_w])
+
+  var sector_area = d3.svg.area()
+    .x(function(d) {return sector_area_x(d.x)})
+    .y0(function(d) {return sector_area_y(d.y0)})
+    .y1(function(d) {return sector_area_y(d.y + d.y0)})
+    .interpolate('monotone')
+
+  // paint the header and labels
+    // paint the header
+   vis.selectAll('#country_header')
+      .data([activeName])
+    .enter().append('svg:text')
+      .attr("id", "country_header")
+      .attr("class", "overlay")
+      .attr("x",350)
+      .attr("y", 70)
+      .text(String)
+      .attr("opacity", 0)
+      .attr("fill", '#222')
+      .attr("font", "Georgia")
+      .attr("font-weight", "bold")
+      .attr("font-size", "3em")
+    .transition()
+      .attr("opacity",1)
+      .duration(500)
+    .transition()
+      .duration(500)
+      .attr("fill", "#fff")
+      ;
+    // paint the labels
+      // a scale for equally-spaced sector labels
+      labelHeight = d3.scale.linear().domain([0,sectorSums.length]).range([80,h-50])
+
+      // add the labels
+      vis.selectAll('.sector_label')
+        .data(sectorSums)
+      .enter().append("foreignObject")
+        .attr("id", function(d,i) {return "sectorPath"+(sectorSums.length-(i+1))})
+        .attr("class", "overlay sector_label")
+        .attr("width", 550)
+        .attr("height", 120)
+        .attr("x", w - 300)
+        .attr("y", function(d,i) {return labelHeight(i)})
+        //.attr("text-anchor", "start")
+        //.on("mouseover", highlight)
+        //.on("mouseout", unhighlight)
+        .append('xhtml:body')
+          .style("color", function(d) {return c_sector(d.key)})
+          .style("background-color", "transparent")
+          .html(function(d) {return "<p style='font-size:14px;'><b>"+ d.key +"</b>:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$" +money(d.values.value)+ "</p>"})
+
+ // paint the area chart
+  // paint the labels
+  // paint the guides
+  // paint the areas
+  var sector_area_chart = 
+    vis.selectAll('.sector_area')
+        .data(yearSectorStack)
+      .enter().append('path')
+        .attr('class', 'sector_area overlay')
+        .attr("id", function(d,i) {return "sectorPath"+i})
+        .attr("fill", function(d, i) {return c_sector(sectorSums[i].key)})
+        .attr('d', sector_area)
+        .attr('transform', 'translate(0, 200)')
+
+ // paint the pie chart
+ 
+
+
+
+<% if Rails.env.development? %> 
+ // For development
+ console.log("sectorSums:")
+ console.log(sectorSums)
+ console.log("yearSectorStack:")
+ console.log(yearSectorStack)
+ console.log("percent_of_total")
+ console.log(percent_of_total)
+ console.log("annual_maximum")
+ console.log(annual_maximum)
+<% end %>
+
+}
+
+// Remove overlay
+
+function removeOverlay() {
+  d3.selectAll('.overlay')
+    .transition('opacity', 0)
+    .duration('300')
+    .remove()
+}
+// Highlight + Unhighlight
+
+function highlight() {
+  d3.select(this)
+  .transition()
+    .attr("stroke", "#ddd")
+}
+
+function unhighlight() {
+  d3.select(this)
+  .transition()
+    .attr("stroke",function() {return $(this).attr("name") ? "#333" : ""})
+}
+
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}
 
 </script>

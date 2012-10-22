@@ -17,7 +17,7 @@ describe "Project pages" do
 
       it {should_not have_selector("button", text: "Save")}
   end
-
+ 
   describe "Should be editable by signed-in users" do
     before do
           visit signin_path
@@ -112,6 +112,7 @@ describe "Project pages" do
       # I can't get this to work.
       describe "editing the project" do
         before do
+          visit project_path(project)
           click_link "Edit this project"
         end
 

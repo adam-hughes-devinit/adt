@@ -41,12 +41,12 @@ describe Project do
     it {should be_valid}
   end
 
-  describe "Should accept a contact"
+  describe "Should accept a contact" do
     before { project.contacts << contact}
     it {should be_valid}
   end
 
-  describe "Should accept a source"
+  describe "Should accept a source" do
     before { project.sources << source}
     it {should be_valid}
   end

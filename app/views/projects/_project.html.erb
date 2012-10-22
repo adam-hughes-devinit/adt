@@ -2,20 +2,25 @@
 
 <div class="project-page">
 <div class="row">
+	<%  if !@project.active %>
+		<h1 id="inactive-project">-- Inactive --</h1>
+	<% end %>
 	<% if signed_in? && current_user.owner == @project.owner %>
 		<div class="project-details span11">	
 			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p>
 		</div>
 	<% end %>
 <div class= "project-box span10">
-	<%  if !@project.active %>
-		<h1 id="inactive-project">-- Inactive --</h1>
-	<% end %>
+
 	<p style="text-align:center"> 
 		<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
 		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %> |
 		<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
-		<b>Media ID:</b> <%= link_to @project.media_id, "/media/#{@project.media_id}" %> |
+		<% if @project.media_id %>
+			<b>Media ID:</b> <%= link_to @project.media_id, "/media/#{@project.media_id}" %> |
+		<% else %>
+			<b>ID:</b> <%= link_to @project.id,  @project %> |
+		<% end %>
 		<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
 	</p>
 </div>

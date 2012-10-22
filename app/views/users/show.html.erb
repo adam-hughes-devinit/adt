@@ -2,15 +2,22 @@
 <% provide(:first_header, "User: #{@user.name}") %>
 
 <div class="row">
-<p>
-<b>Name:</b> <%= @user.name %> 
-</p>
-<p>
-<b>Email:</b> <%= @user.email %> 
-</p>
-<p>
-<b>Owner:</b> <%= @user.owner.nil? ? 'None' : @user.owner.name %>
-</p>
+<section>
+	<p>
+	<b>Name:</b> <%= @user.name %> 
+	</p>
+	<p>
+	<b>Email:</b> <%= @user.email %> 
+	</p>
+	<p>
+	<b>Owner:</b> <%= @user.owner.nil? ? 'None' : @user.owner.name %>
+	</p>
+</section>
+<section>
+	<% if signed_in? %>
+		<%= render partial: 'shared/follow_form', locals: {object: @user} %>
+	<% end %>
+</section>
 </div>
 <div class="row">
 <hr class="row span8">

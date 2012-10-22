@@ -1,9 +1,0 @@
-<% for row in @search.facet(@facet).rows %>
-	<li>
-		<% if params[@facet].blank? %>
-			<%= link_to row.value, @facet => row.value %> (<%= row.count %>)
-		<% else %>
-			<b><%= row.value %></b> (<%= link_to "remove", @facet => nil%>) 
-		<% end %>
-	</li>
-<% end %>

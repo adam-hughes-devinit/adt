@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121014213210) do
+ActiveRecord::Schema.define(:version => 20121019135511) do
 
   create_table "contacts", :force => true do |t|
     t.integer  "organization_id"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_index "contacts", ["project_id"], :name => "index_contacts_on_project_id"
 
   create_table "countries", :force => true do |t|
     t.string   "name"
@@ -35,6 +37,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.integer  "imf_code"
     t.integer  "aiddata_code"
   end
+
+  add_index "countries", ["id"], :name => "index_countries_on_id"
 
   create_table "currencies", :force => true do |t|
     t.string   "name"
@@ -58,6 +62,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at",   :null => false
   end
 
+  add_index "flow_types", ["id"], :name => "index_flow_types_on_id"
+
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"
     t.integer  "region_id"
@@ -68,11 +74,15 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at",   :null => false
   end
 
+  add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
+
   create_table "oda_likes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "oda_likes", ["id"], :name => "index_oda_likes_on_id"
 
   create_table "organization_types", :force => true do |t|
     t.string   "name"
@@ -89,6 +99,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.integer  "organization_type_id"
   end
 
+  add_index "organizations", ["id"], :name => "index_organizations_on_id"
+
   create_table "origins", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -103,6 +115,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at",      :null => false
     t.integer  "origin_id"
   end
+
+  add_index "participating_organizations", ["project_id"], :name => "index_participating_organizations_on_project_id"
 
   create_table "projects", :force => true do |t|
     t.string   "title"
@@ -129,6 +143,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at",                        :null => false
   end
 
+  add_index "projects", ["id"], :name => "index_projects_on_id"
+
   create_table "relationships", :force => true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -151,6 +167,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "sectors", ["id"], :name => "index_sectors_on_id"
+
   create_table "source_types", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -167,6 +185,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at",       :null => false
   end
 
+  add_index "sources", ["project_id"], :name => "index_sources_on_project_id"
+
   create_table "statuses", :force => true do |t|
     t.string   "name"
     t.integer  "iati_code"
@@ -174,12 +194,16 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "updated_at", :null => false
   end
 
+  add_index "statuses", ["id"], :name => "index_statuses_on_id"
+
   create_table "tieds", :force => true do |t|
     t.string   "name"
     t.integer  "iati_code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "tieds", ["id"], :name => "index_tieds_on_id"
 
   create_table "transactions", :force => true do |t|
     t.decimal  "value"
@@ -189,6 +213,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"
@@ -208,6 +234,8 @@ ActiveRecord::Schema.define(:version => 20121014213210) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "verifieds", ["id"], :name => "index_verifieds_on_id"
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false

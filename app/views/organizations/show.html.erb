@@ -14,7 +14,7 @@
 <p>
 	Participating in 
   <b>
-  <%= pluralize(@organization.projects.count, "project") %>. 
+  <%= link_to pluralize(@organization.projects.count, "project"), "/projects?organization_name=#{CGI.escape(@organization.name)}" %>. 
   </b>
 </p>
 <p>
@@ -23,5 +23,5 @@ Owns
   <%= pluralize(@organization.owned_projects.count, "project") %>. 
   </b>
 </p>
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
-<%= link_to 'Back', organizations_path %>
+<%= current_user && current_user.owner == Organization.find_by_name('AidData') ? link_to('Edit', edit_organization_path(@organization)) : '' %> |
+<%= link_to 'See all Organizations', organizations_path %>
