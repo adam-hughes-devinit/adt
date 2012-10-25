@@ -2,6 +2,10 @@
 <% provide(:first_header, "View Projects") %>
 <% current_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
 <% joiner = current_url.index("?") ? "&" : "?" %>
+<% def order_by_params(field)
+	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
+end
+%>
 <% def active_or_inactive(project)
 	if !project.active 
 		"<span class='inactive-project-title'>#{project.title} (Inactive)</span>".html_safe
@@ -10,9 +14,7 @@
 	end
 end %>
 	
-
-
-
+<h2>Search Parameters</h2>
 <div class="row" id='project-facets'>	
 	<div class="span10">
 		<%= form_tag projects_path, method: :get do %>
@@ -41,19 +43,22 @@ end %>
 		<% end %>
 		</ol>
 	</div>
-
 </div>
 <br>
-<h3><%= @search.total %> Projects:</h3>
-
-<%= will_paginate @projects %>
+<div class='row'>
+	<h2><%= @search.total %> Projects (<%= link_to "export as CSV", current_url.gsub(/projects/, 'projects.csv')%>)</h2>
+	<%= will_paginate @projects %>
+	
+</div>
+<br>
 <table id="project-search-results">
 	<thead>
-		<tr>
-			<th>Donor</th>
-			<th>Title</th>
-			<th>Year</th>
-			<th>Recipients</th>
+		<tr >
+			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/dir=[a-z]+/, '').gsub(/order_by=[a-z]/, '')}#{joiner}" %>
+			<th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}#{order_by_params("donor")}"  %></th>
+			<th><%= link_to "Title","#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  %></th>
+			<th><%= link_to "Year","#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  %></th>
+			<th><%= link_to "Recipients","#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  %></th>
 			<th>Amount (USD-2009)</th>
 			<% if current_user %>
 				<th>Links</th>
@@ -81,6 +86,8 @@ end %>
 	    				<% end %>
 
 	    			</td>
+	    		<% else %>
+	    		<td></td>
 	    		<% end %>
 	    	</tr>
 	    <% end %>

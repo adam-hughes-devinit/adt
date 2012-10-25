@@ -6,9 +6,12 @@
 <% hidden_attributes = ["created_at", "updated_at", "id"] %>
 
 <div class="row">
-<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+	<% end %>
 </div>
 <!-- Table headings for each attribute !-->
+<div class='row'>
 <% if objects.length > 0 %>
 
 <table class='code-table'>
@@ -41,5 +44,8 @@
 </table>
 <% end %>
 <br>
-<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+	<% end %>
+</div>
 

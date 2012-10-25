@@ -3,7 +3,7 @@
 		<%= link_to_function f[:name], "$(this).parent().next().slideToggle()"  %> (<%= @search.facet(f[:sym]).rows.length %>)
 	</li>
 	<ul class='facet-list'>
-		<% for row in @search.facet(f[:sym]).rows %>
+		<% for row in @search.facet(f[:sym]).rows.sort!{|a,b| a.value <=> b.value} %>
 			<li class='facet-list-item'>
 				<% if params[f[:sym]].blank? %>
 					<%= link_to row.value, "#{current_url}#{joiner}#{f[:sym].to_s.gsub(/\s/, '_')}=#{CGI.escape row.value}" %> (<%= row.count %>)
@@ -17,4 +17,4 @@
 	<li class='facet-header'> 
 		<b><%= f[:name] %>:</b> <%= @search.facet(f[:sym]).rows[0].value %> (<%= link_to "remove", "#{current_url.gsub(/#{f[:sym].to_s.gsub(/\s/, '_')}=[^&]+&?/, '')}" %>) 
 	</li>
-<% end %>
+<% end %> 

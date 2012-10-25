@@ -5,13 +5,15 @@
    </a>
 	  
 	<ul class="dropdown-menu">
-		
-		<% if current_user.present? && current_user.owner.present? %>
-			<li><%= link_to "Create new project", new_project_path %></li>
-		<% end %>
-
-		<li><%= link_to_function "Find by ID", 'get_project_id_for_search()' %></li>
 		<li><%= link_to "Search and Filter", projects_path %></li>
+    <li><%= link_to_function "Find by ID", 'id = prompt("ID:");if (id) {window.location = ("/projects/"+id)}' %></li>
+    
+    <% if current_user && current_user.owner == Organization.find_by_name("AidData") %>
+      <li><%= link_to_function "Edit by ID", 'id = prompt("ID:");if (id) {window.location = ("/projects/"+id+"/edit")}' %></li>
+    <% end %>
+    <% if current_user.present? && current_user.owner.present? %>
+      <li><%= link_to "Create new project", new_project_path %></li>
+    <% end %>
 	</ul>
 </li>
 <li id="fat-menu" class="dropdown">

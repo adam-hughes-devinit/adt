@@ -16,7 +16,8 @@
 //= require_tree .
 
 // Why did this become necessary?
-//	$('.dropdown-toggle').dropdown()  
+//	$('.dropdown-toggle').dropdown() 
+
 
 
 function remove_fields(link) {

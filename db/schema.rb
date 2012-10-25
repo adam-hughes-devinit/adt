@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121019135511) do
+ActiveRecord::Schema.define(:version => 20121024224708) do
+
+  create_table "comments", :force => true do |t|
+    t.text     "content"
+    t.integer  "project_id"
+    t.string   "name"
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "contacts", :force => true do |t|
     t.integer  "organization_id"
@@ -141,6 +150,10 @@ ActiveRecord::Schema.define(:version => 20121019135511) do
     t.integer  "media_id"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+    t.integer  "crs_sector"
+    t.boolean  "debt_uncertain", :default => false
+    t.boolean  "year_uncertain", :default => false
+    t.boolean  "line_of_credit", :default => false
   end
 
   add_index "projects", ["id"], :name => "index_projects_on_id"

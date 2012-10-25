@@ -133,5 +133,27 @@
 		</ul>
 	</div>
 </div>
+<div class='row project-box' id='comment-section'>
+<h2> Comments: </h2>
+	<% @project.comments.each do |c| %>
+		<div class='comment'>
+			<p class='comment-header'><%= distance_of_time_in_words_to_now(c.created_at) %> ago, <b><%= c.name.blank? ? 'Anonymous' : c.name %></b> said... </p>
+			<p class='comment-content'><%= c.content %>
+				<% if current_user && current_user.admin? %>
+					<br><br><i><%= link_to "Delete comment", c, method: :delete %></i>
+				<% end %>
+			</p>
+		</div>
+	<% end %>
+<h2> Add a comment: </h2>
+	<%= simple_form_for(@comment, method: :post, url: comments_path, html: {class: "span6"}) do |f| %>
+		<%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",  input_html: {style: "display:none;", value: @project.id} %>
+		<%= f.input :name %>
+		<%= f.input :email, hint: "For validation only -- not published, not shared." %>
+		<%= f.input :content, label: "Message", input_html: {rows: 5} %>
+		<%= f.button :submit, "Submit" %>
+	<% end %>
+
+</div>
 
 </div>

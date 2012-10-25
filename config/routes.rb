@@ -6,16 +6,17 @@ Adt::Application.routes.draw do
 
   # limited access
   resources :projects, :organizations, :users
-
-
+  resources :comments, only: [:create, :destroy, :show]
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
 
+  # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
-
+  get '/recent_activity', to: 'versions#index', as: 'versions'
+  
   # this is for easy use in the MBDC launch
   match '/media/:media_id', to: 'projects#media', as: 'project_media'
 

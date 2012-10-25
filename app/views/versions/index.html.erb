@@ -1,0 +1,4 @@
+<% provide(:title, "Recent Activity") %>
+<% provide(:first_header, "Recent Activity") %>
+<%= will_paginate @feed %>
+<%= render partial: 'shared/generate_feed_items', locals: {feed: @feed} %>

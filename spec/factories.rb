@@ -1,3 +1,10 @@
+Factory.define :comment do |c|
+  c.name 'Brad Parks'
+  c.email 'bparks@aiddata.org'
+  c.content 'Lorem ipsum'
+end
+
+
 Factory.define :status do |s|
   s.name 'Cancelled'
   s.iati_code '5'

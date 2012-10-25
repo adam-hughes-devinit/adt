@@ -1,0 +1,53 @@
+<% 
+# These helpers probably belong somewhere else. sorry!
+
+@project_accessory_objects = ['Transaction', 'Geopolitical', 'Source', 'ParticipatingOrganization', 'Contact']
+
+def get_agent(feed_item)
+	if feed_item.whodunnit
+	   User.find(feed_item.whodunnit).owner ? User.find(feed_item.whodunnit).owner : User.find(feed_item.whodunnit)
+	else 
+		Organization.new(name: "Anonymous")
+	end
+end 
+
+def get_name(feed_item, patient)
+	if feed_item.item_type == 'Project'
+		patient.title
+	elsif feed_item.item_type == 'Comment'
+		patient.content[0..15] + '...'
+	elsif @project_accessory_objects.include? feed_item.item_type
+		"Project: "+Project.find_by_id(patient.project_id).title
+	elsif patient.name
+		patient.name
+	else 
+		"(unnamed)"
+	end
+end	
+
+def get_path(feed_item, patient)
+	if @project_accessory_objects.include? feed_item.item_type
+		Project.find_by_id(patient.project_id)
+	else
+		patient
+	end
+end
+
+
+
+%>
+<ul>
+	<% feed.each do |f| %>
+		<% if patient = f.item_type.constantize.find_by_id(f.item_id) %>
+			<% 
+			agent = get_agent(f) 
+			verb = "#{f.event}d"
+			patient_link_text = get_name(f, patient) # see helper above
+			patient_path = get_path(f, patient) # see helper above
+			%>
+			<li>
+				<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= link_to patient_link_text, patient_path %>" (<%= distance_of_time_in_words_to_now(f.created_at) %> ago)
+			</li>
+		<% end %>
+	<% end %>
+</ul>

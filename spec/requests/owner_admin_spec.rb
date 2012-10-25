@@ -6,6 +6,7 @@ describe "Owner and admin system" do
 	let(:country){FactoryGirl.create(:country)}
 	let(:status){FactoryGirl.create(:status)}
 	let(:organization){FactoryGirl.create(:organization)}
+	let(:comment){FactoryGirl.build(:comment)}
 
 	edit_project_link_text = "Edit this project"
 	
@@ -15,6 +16,7 @@ describe "Owner and admin system" do
 		before do
 			visit project_path(project)
 		end
+
 
 		it {should have_link("Sign in")}
 		it {should_not have_link("Users")}
@@ -28,6 +30,17 @@ describe "Owner and admin system" do
 			it {response.should redirect_to(projects_path)}
 		end
 
+		describe "should be able to create a comment" do
+			before do
+				visit project_path(project)
+				fill_in "Name" , with: comment.name
+				fill_in "Email", with: comment.email
+				fill_in "Message", with: comment.content
+				click_button "Submit"
+			end
+
+			it {should have_content(comment.content)}
+		end
 	end
 
 	describe "unsigned visit to code page" do 
@@ -62,7 +75,7 @@ describe "Owner and admin system" do
 	end
 
 	describe "should not be able to visit the edit organization URL directly" do
-		before {visit edit_organization_path(organization}
+		before {visit edit_organization_path(organization)}
 		it {response.should redirect_to(organizations_path)}
 	end
 
@@ -112,11 +125,10 @@ describe "Owner and admin system" do
 
 		describe "signed visit to project page" do
 			before {visit project_path(project)}
-			
 			it {should_not have_link("Sign in")}
 			it {should have_link("Users")}
-			
 			it {should_not have_link(edit_project_link_text)}
+			it {should_not have_content("Delete comment")}
 		end
 
 		describe "visit to users page" do
@@ -129,9 +141,7 @@ describe "Owner and admin system" do
 
 	describe "sign in an owning user" do
 		before do 
-
 			project.update_attribute(:owner_id, user.owner.id)
-
 			visit signin_path
 			fill_in "Email", with: user.email
 			fill_in "Password", with: user.password
@@ -139,12 +149,15 @@ describe "Owner and admin system" do
 		end
 
 		describe "visit a project page" do
-			before { visit project_path(project)}
+			before do
+				visit project_path(project)
+			end
 
 			it {should have_content(user.owner.name)}
 			it {should_not have_link("Sign in")}
 			it {should have_link("Users")}
 			it {should have_link(edit_project_link_text)}
+
 		end
 
 		describe "visit to users page" do
@@ -167,18 +180,34 @@ describe "Owner and admin system" do
 				visit users_path
 			end
 
-				it {user.should be_admin}
-				it {should have_link("Add to #{user.owner.name}")}
-				it {should_not have_link("Remove from #{user.owner.name}")}
+			it {user.should be_admin}
+			it {should have_link("Add to #{user.owner.name}")}
+			it {should_not have_link("Remove from #{user.owner.name}")}
 
-				it "should add the user to the organization" do
-					expect { click_link "Add to #{user.owner.name}" }.to change(user.owner.users, :count).by(1)
+			it "should add the user to the organization" do
+				expect { click_link "Add to #{user.owner.name}" }.to change(user.owner.users, :count).by(1)
+			end
+		 	
+		 	describe "should show the new owner name " do
+			 	before { visit user_path(User.last) }
+			 	it {should have_content("#{user.owner.name}")}
+			end
+
+			describe "visit the project page" do
+				before do
+					project.comments << comment
+					project.save!
+					visit project_path(project)
 				end
-			 	
-			 	describe "should show the new owner name " do
-				 	before { visit user_path(User.last) }
-				 	it {should have_content("#{user.owner.name}")}
+
+				it {should have_content(comment.content)}
+				it {should have_content("Delete comment")}
+
+				describe "should be able to delete a project" do
+					before {click('Delete comment')}
+					it {should_not have_content(comment.content)}
 				end
+			end
 
 		end
 

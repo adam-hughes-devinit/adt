@@ -1,18 +1,7 @@
-<%
-cutoff = current_user.feed.length > 10 ? -10 : 0
-active_feed = current_user.feed.sort!{ |a,b| a[:created_at] <=> b[:created_at]}[cutoff..-1] 
-
-%>
-<ul>
-<% active_feed.each do |f| %>
-	<% 
-	agent = User.find(f.whodunnit).owner ? User.find(f.whodunnit).owner : User.find(f.whodunnit)  
-	patient = f.item_type.constantize.find(f.item_id)
-	verb = "#{f.event}d"
-	patient_link_text = f.item_type == 'Project' ? patient.title : patient.name 
-	%>
-	<li>
-		<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= link_to patient_link_text, patient %>" (<%= f.created_at.strftime("%l:%M%P, %d %B %Y") %>)
-	</li>
+<% if current_user %>
+	<% cutoff = @feed.length > 10 ? -10 : 0
+	active_feed = @feed.sort!{ |a,b| a[:created_at] <=> b[:created_at]}[cutoff..-1].reverse	%>
+	<%= render partial: 'shared/generate_feed_items', locals: {feed: active_feed} %>
+<% else %>
+	<p> <%= link_to "Sign in", signin_path %> or <%= link_to "sign up", signup_path %> to see recent activity.</p>
 <% end %>
-</ul>

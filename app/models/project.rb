@@ -16,6 +16,8 @@ class Project < ActiveRecord::Base
   :oda_like_id, :status_id, 
   :donor_id, :owner_id
    
+  has_many :comments, dependent: :destroy
+  accepts_nested_attributes_for :comments, allow_destroy: true
 
   default_scope order: "year"
 
@@ -68,6 +70,10 @@ class Project < ActiveRecord::Base
 
 
   belongs_to :donor, class_name: "Country"
+  def donor_name 
+    donor ? donor.name : nil
+  end
+
   belongs_to :owner, class_name: "Organization"
   def owner_name
     owner ? owner.name : nil
@@ -90,6 +96,10 @@ class Project < ActiveRecord::Base
         g.recipient ? g.recipient.name : 'Unset'
       end
   end
+  def recipient_condensed
+    country_name.count > 1 ? "Africa, regional" : country_name[0]
+  end
+  
   has_many :transactions, dependent: :destroy
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
   def usd_2009
@@ -141,7 +151,26 @@ class Project < ActiveRecord::Base
   # has_many :followers, dependent: :destroy
 
   searchable do 
-    text :title, :description, :capacity, :sector_comment
+    string :id # only for searching
+
+    text :title
+    string :title
+
+    text :description
+    text :capacity
+    text :sector_comment
+    
+    text :year
+    string :year
+
+    text :donor_name
+
+    text :comments do 
+      comments.map do |c|
+        ["#{c.name}",
+        "#{c.content}"]
+      end
+    end
 
     text :geopoliticals do
         geopoliticals.map do |g| 
@@ -198,10 +227,69 @@ class Project < ActiveRecord::Base
     string :organization_name, multiple: true
     string :role_name, multiple: true
     string :country_name, multiple: true
+    string :recipient_condensed
     string :active_string 
     string :is_commercial_string
   end
 
+  def self.to_csv
+    row_data = all.map do |project|
+        sources = {}
+        sources[:all] = project.sources.map{|s| "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }" }
+        sources[:factiva] = project.sources.map do |s| 
+          if s.source_type = SourceType.find_by_name("Factiva")
+            "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }"
+          end
+        end
+
+        agencies = {}
+        ["Funding", "Implementing"].map do |type|
+          agencies[type.to_sym] = project.participating_organizations.where("role_id = #{Role.find_by_name(type).id}").map do |a| 
+            if a.organization 
+              "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
+            end
+          end
+        end
+        ["Donor", "Recipient", "Other"].map do |origin|
+          agencies[origin.to_sym] = project.participating_organizations.where("origin_id = #{Origin.find_by_name(origin).id}").map do |a| 
+            if a.organization 
+              "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
+            end
+          end
+        end
+
+        row =
+          ["#{project.id}", "#{project.donor_name}", "#{project.title}", "#{project.year}", "#{project.description}",
+          "#{project.sector_name}", "#{project.sector_comment}", "#{project.status_name}", "not_implemented", "#{project.flow_type_name}",
+          "#{project.tied_name}", "not_implemented", "#{project.country_name.join(", ")}", "#{sources[:all].join("; ")}", "#{sources[:all].count}",
+          "#{agencies[:Funding].join('; ')}", "#{agencies[:Implementing].join("; ")}",
+          "#{agencies[:Donor].join("; ")}", "#{agencies[:Donor].count}", "#{agencies[:Recipient].join('; ')}", "#{agencies[:Recipient].count}",
+          "#{project.verified_name}", "not_implemented", "#{project.oda_like_name}", "not_implemented", "#{project.active_string}", "not_implemented",
+          "#{sources[:factiva].join("; ")}", "not_implemented", "not_implemented", "#{project.usd_2009}",
+          "#{project.start_actual ? project.start_actual.strftime("%d %B %Y") : ''}", "#{project.start_planned ?  project.start_planned.strftime("%d %B %Y") : ''}", 
+          "#{project.end_actual ? project.end_actual.strftime("%d %B %Y") : ''}", "#{project.end_planned ? project.end_planned.strftime("%d %B %Y"): '' }",
+          "#{project.country_name.count}", "#{project.recipient_condensed}", "#{project.is_commercial_string}", "not_implemented"  
+          ]
+      end
+
+    CSV.generate do |csv|
+      csv << 
+      # \uFEFF is a dumb hack for UTF-8 encoding in excel
+      ["\uFEFFproject_id", "donor", "title", "year", "description",
+        "sector", "sector_comment", "status", "status_code", "flow", 
+        "tied", "tied_code", "all recipients", "sources", "sources_count", 
+         "funding_agency", "implementing_agency", 
+         "donor_agency", "donor_agency_count", "recipient_agencies", "recipient_agencies_count",
+         "verified", "verified_code", "flow_class", "flow_class_code", "active", "active_code", 
+         "factiva_sources", "amount", "currency", "usd_defl",
+         "start_actual", "start_planned", 
+         "end_actual", "end_planned",
+         "recipient_count", "recipient_condensed", "is_commercial", "is_commercial_code"]
+      row_data.each do |row|
+        csv << row
+      end
+    end
+  end
 
 
 end

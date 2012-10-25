@@ -74,19 +74,23 @@ var countries =  d3.select("#states")
 
 
 function click() {
- // drop down the gray sheet
-vis.append('svg:rect')
-  .attr("id", "grayBox")
-  .attr('class', 'overlay')
-  .attr("height", h)
-  .attr("width", w)
-  .attr("fill", "#000")
-  .attr("opacity", 0)
-  .on("click", removeOverlay)
-.transition()
-  .duration(200)
-  .attr("opacity", .6)
-  ;
+  // prep a g for the overlay
+  overlay = vis.append('svg:g')
+      .attr('id', 'overlay-wrapper')
+      .attr('class', 'overlay')
+  // drop down the gray sheet
+  overlay.append('svg:rect')
+    .attr("id", "grayBox")
+    .attr('class', 'overlay')
+    .attr("height", h)
+    .attr("width", w)
+    .attr("fill", "#000")
+    .attr("opacity", 0)
+    .on("click", removeOverlay)
+  .transition()
+    .duration(200)
+    .attr("opacity", .6)
+    ;
   // get the country info
   activeIso = this.id
   activeName = $(this).attr("name")
@@ -138,10 +142,9 @@ vis.append('svg:rect')
     annual_amounts.push(annual_amount)
   })
 
-  annual_maximum = d3.max(annual_amounts)
-  //
-  // Still needs rounding
-  //
+    // in $5mil increments, and if less than $1mil, $1mil is the max
+  annual_maximum = Math.max(Math.round(d3.max(annual_amounts)/5000000)*5000000, 10000000)
+
 
 
   var sector_area_h = 400
@@ -155,63 +158,93 @@ vis.append('svg:rect')
     .y1(function(d) {return sector_area_y(d.y + d.y0)})
     .interpolate('monotone')
 
+
   // paint the header and labels
     // paint the header
-   vis.selectAll('#country_header')
-      .data([activeName])
-    .enter().append('svg:text')
-      .attr("id", "country_header")
-      .attr("class", "overlay")
-      .attr("x",350)
-      .attr("y", 70)
-      .text(String)
-      .attr("opacity", 0)
-      .attr("fill", '#222')
-      .attr("font", "Georgia")
-      .attr("font-weight", "bold")
-      .attr("font-size", "3em")
-    .transition()
-      .attr("opacity",1)
-      .duration(500)
-    .transition()
-      .duration(500)
-      .attr("fill", "#fff")
-      ;
+     overlay.selectAll('#country_header')
+        .data([activeName])
+      .enter().append('svg:text')
+        .attr("id", "country_header")
+        .attr("class", "overlay")
+        .attr("x",350)
+        .attr("y", 70)
+        .text(String)
+        .attr("opacity", 0)
+        .attr("fill", '#222')
+        .attr("font", "Georgia")
+        .attr("font-weight", "bold")
+        .attr("font-size", "3em")
+      .transition()
+        .attr("opacity",1)
+        .duration(500)
+      .transition()
+        .duration(500)
+        .attr("fill", "#fff")
+        ;
     // paint the labels
       // a scale for equally-spaced sector labels
-      labelHeight = d3.scale.linear().domain([0,sectorSums.length]).range([80,h-50])
+        labelHeight = d3.scale.linear().domain([0,sectorSums.length]).range([80,h-50])
 
       // add the labels
-      vis.selectAll('.sector_label')
-        .data(sectorSums)
-      .enter().append("foreignObject")
-        .attr("id", function(d,i) {return "sectorPath"+(sectorSums.length-(i+1))})
-        .attr("class", "overlay sector_label")
-        .attr("width", 550)
-        .attr("height", 120)
-        .attr("x", w - 300)
-        .attr("y", function(d,i) {return labelHeight(i)})
-        //.attr("text-anchor", "start")
-        //.on("mouseover", highlight)
-        //.on("mouseout", unhighlight)
-        .append('xhtml:body')
-          .style("color", function(d) {return c_sector(d.key)})
-          .style("background-color", "transparent")
-          .html(function(d) {return "<p style='font-size:14px;'><b>"+ d.key +"</b>:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$" +money(d.values.value)+ "</p>"})
+        overlay.selectAll('.sector_label')
+          .data(sectorSums)
+        .enter().append("foreignObject")
+          .attr("id", function(d,i) {return "sectorPath"+(sectorSums.length-(i+1))})
+          .attr("class", "overlay sector_label")
+          .attr("width", 550)
+          .attr("height", 120)
+          .attr("x", w - 300)
+          .attr("y", function(d,i) {return labelHeight(i)})
+          .append('xhtml:body')
+            .style("color", function(d) {return c_sector(d.key)})
+            .style("background-color", "transparent")
+            .html(function(d) {return "<p style='font-size:14px;'><a href='/projects?country_name="+activeName+"&sector_name="+d.key+"'><b>"+ d.key +"</b></a>:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$" +money(d.values.value)+ "</p>"})
 
  // paint the area chart
-  // paint the labels
-  // paint the guides
+  // hold it it a g
+  area_chart = overlay.append('svg:g')
+    .attr("id", "area_chart")
+    .attr('transform', 'translate(100,200)')
+
+  // paint the year labels
+  xAxis = d3.svg.axis()
+    .scale(sector_area_x)
+    .orient('bottom')
+    .tickFormat(d3.format("f")) 
+  area_chart.append("svg:g")
+    .attr('class', 'axis')
+    .call(xAxis)
+    .style('fill', '#ccc')
+    .attr('transform', 'translate(0,'+(sector_area_h+2)+')')
+    .attr("opacity", 0)
+
+
+  // paint the amount labels
+  yAxis = d3.svg.axis()
+    .scale(sector_area_y)
+    .orient('left')
+  area_chart.append("svg:g")
+    .attr('class', 'axis')
+    .call(yAxis)
+    .style('fill', '#ccc')
+    .attr("opacity", 0)
+
+  area_chart.selectAll('.axis')
+    .transition()
+      .delay(function(d,i) {return 50*i})
+      .attr("opacity", 1)
+
+  // paint the amount guides
   // paint the areas
-  var sector_area_chart = 
-    vis.selectAll('.sector_area')
-        .data(yearSectorStack)
-      .enter().append('path')
-        .attr('class', 'sector_area overlay')
-        .attr("id", function(d,i) {return "sectorPath"+i})
-        .attr("fill", function(d, i) {return c_sector(sectorSums[i].key)})
-        .attr('d', sector_area)
-        .attr('transform', 'translate(0, 200)')
+    var sector_area_chart = 
+      area_chart.selectAll('.sector_area')
+          .data(yearSectorStack)
+        .enter().append('path')
+          .attr('class', 'sector_area overlay')
+          .attr("id", function(d,i) {return "sectorPath"+i})
+          .attr("fill", function(d, i) {return c_sector(sectorSums[i].key)})
+          .attr('d', sector_area)
+
 
  // paint the pie chart
  
@@ -220,6 +253,8 @@ vis.append('svg:rect')
 
 <% if Rails.env.development? %> 
  // For development
+ console.log("activeCountryData:")
+ console.log(activeCountryData)
  console.log("sectorSums:")
  console.log(sectorSums)
  console.log("yearSectorStack:")

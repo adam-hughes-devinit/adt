@@ -7,6 +7,7 @@ describe "Project pages" do
   let(:currency) {FactoryGirl.create(:currency)}
   let(:organization) {FactoryGirl.create(:organization)}
   let(:contact) {FactoryGirl.create(:contact)}
+  let(:comment) {FactoryGirl.build(:comment)}
   
   subject {page}
   
@@ -44,6 +45,22 @@ describe "Project pages" do
     it {should have_content(project.flow_type.name)}
     it {should have_content(project.status.name)}
     it {should have_content(project.donor.name)}
+
+    it {should have_content("Add a comment")}
+
+    describe "leave a comment" do
+      before do
+        fill_in "Name", with: comment.name
+        fill_in "Email", with: comment.email
+        fill_in "Message", with: comment.content
+        click_button "Submit"
+      end
+
+      it {should have_content(comment.name)}
+      it {should have_content(comment.content)}
+      it {should_not have_content(comment.email)}
+    end
+
   end
 
   describe "create a project " do

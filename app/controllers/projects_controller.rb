@@ -3,50 +3,19 @@ before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit]
 #before_filter :strip_tags_from_description, only: [:create, :update]
 
+
   def index
+     
 
-
-
-      @facet_labels = ["Sector", "Flow Type", "Flow Class", "Is Commercial", "Active", "Recipient"]
-      @facets = facets = [
-        {sym: :sector_name, name: "Sector"},
-        {sym: :flow_type_name, name: "Flow Type"},
-        {sym: :oda_like_name, name: "Flow Class"},
-        {sym: :status_name, name:"Status"},
-        {sym: :tied_name, name:"Tied/Untied"},
-        {sym: :verified_name, name:"Verified/Unverified"},
-        {sym: :currency_name, name:"Reported Currency"},
-        {sym: :is_commercial_string, name: "Commericial Status"},
-        {sym: :active_string, name: "Active/Inactive"},
-        {sym: :country_name, name: "Recipient"},
-        {sym: :source_type_name, name: "Source Type"},
-        {sym: :document_type_name, name: "Document Type"},
-        {sym: :origin_name, name: "Organization Origin"},
-        {sym: :role_name, name: "Organization Role"},
-        {sym: :organization_type_name, name: "Organization Type"},
-        {sym: :organization_name, name: "Organization Name"},
-        {sym: :owner_name, name: "Record Owner"}
-      ].sort! { |a,b| a[:name] <=> b[:name] }
-
-      @search = Project.search do
-        fulltext params[:search]
-        facets.each do |f|
-          facet f[:sym]
-          with f[:sym], params[f[:sym]] if params[f[:sym]].present?
-        end
-
-
-        paginate :page => params[:page] || 1, :per_page => params[:max] || 50
-
-      end
-      
-      @projects = @search.results
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html do 
+        custom_search
+        render html: @projects
+      end
       format.json do
-       #@projects = Project.all
-       render json: @projects.as_json(
+        custom_search
+        render json: @projects.as_json(
           only: [:id,:year], 
           methods: [:usd_2009],
           include: [
@@ -55,6 +24,13 @@ before_filter :correct_owner?, only: [:edit]
             {sector: {only: [:name]}}
             ]) 
       end
+      format.csv do
+        params[:max] = Project.all.count
+        custom_search
+        @export_projects = Project.where("id in(?)", 
+          @projects.map{ |p| p.id})
+        send_data @export_projects.to_csv
+      end
     end
   end
 
@@ -62,6 +38,7 @@ before_filter :correct_owner?, only: [:edit]
   # GET /Projects/1.json
   def show
     @project = Project.find(params[:id])
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb
@@ -206,5 +183,45 @@ before_filter :correct_owner?, only: [:edit]
       # end
 
     end
+  
+  def custom_search(options = {})
+    options.reverse_merge! paginate: true
+
+     @facet_labels = ["Sector", "Flow Type", "Flow Class", "Is Commercial", "Active", "Recipient"]
+      @facets = facets = [
+        {sym: :sector_name, name: "Sector"},
+        {sym: :flow_type_name, name: "Flow Type"},
+        {sym: :oda_like_name, name: "Flow Class"},
+        {sym: :status_name, name:"Status"},
+        {sym: :tied_name, name:"Tied/Untied"},
+        {sym: :verified_name, name:"Verified/Unverified"},
+        {sym: :currency_name, name:"Reported Currency"},
+        {sym: :is_commercial_string, name: "Commericial Status"},
+        {sym: :active_string, name: "Active/Inactive"},
+        {sym: :country_name, name: "Recipient"},
+        {sym: :source_type_name, name: "Source Type"},
+        {sym: :document_type_name, name: "Document Type"},
+        {sym: :origin_name, name: "Organization Origin"},
+        {sym: :role_name, name: "Organization Role"},
+        {sym: :organization_type_name, name: "Organization Type"},
+        {sym: :organization_name, name: "Organization Name"},
+        {sym: :owner_name, name: "Record Owner"}
+      ].sort! { |a,b| a[:name] <=> b[:name] }
+      @search = Project.search do
+          fulltext params[:search]
+          facets.each do |f|
+            facet f[:sym]
+            with f[:sym], params[f[:sym]] if params[f[:sym]].present?
+          order_by((params[:order_by] ? params[:order_by].to_sym : :title), params[:dir] ? params[:dir].to_sym : :desc )
+      end
+      
+    
+      if options[:paginate]==true
+        paginate :page => params[:page] || 1, :per_page => params[:max] || 50
+      end
+    end
+    @projects = @search.results
+  end
+
 
 end

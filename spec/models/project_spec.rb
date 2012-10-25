@@ -8,6 +8,7 @@ describe Project do
   let(:participating_organization) {FactoryGirl.build(:participating_organization)}
   let(:contact) {FactoryGirl.build(:contact)}
   let(:source) {FactoryGirl.build(:source)}
+  let(:comment) {FactoryGirl.build(:comment)}
 
   subject {project}
 
@@ -25,6 +26,8 @@ describe Project do
   it { should respond_to :participating_organizations}
   it { should respond_to :contacts}
   it { should respond_to :sources}
+
+  it {should respond_to :comments}
 
   describe "should accept a transaction" do
     before {project.transactions << transaction }
@@ -48,6 +51,11 @@ describe Project do
 
   describe "Should accept a source" do
     before { project.sources << source}
+    it {should be_valid}
+  end
+
+  describe "Should accept a comment" do
+    before { project.comments << comment}
     it {should be_valid}
   end
 
