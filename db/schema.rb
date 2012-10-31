@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024224708) do
+ActiveRecord::Schema.define(:version => 20121025192329) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -223,8 +223,11 @@ ActiveRecord::Schema.define(:version => 20121024224708) do
     t.integer  "currency_id"
     t.decimal  "usd_defl"
     t.integer  "project_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.float    "deflator"
+    t.float    "exchange_rate"
+    t.datetime "deflated_at"
   end
 
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"

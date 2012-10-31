@@ -6,7 +6,8 @@
 	<%= f.input :title, wrapper_html: {class: "span10"} %>
 	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
 	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
-	<%= f.input :description, input_html: {rows: "6" }, wrapper_html: {class: "span10"} %>
+	<%= f.input :year_uncertain, label: "Year is uncertain", wrapper_html: { class: "span2"} %>
+	<%= f.input :description, input_html: {rows: "10" }, wrapper_html: {class: "span12"} %>
 	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
 	<%= f.association :verified, wrapper_html: {class: "span5"} %>
 </div>
@@ -20,9 +21,13 @@
 
 <div class='row'>
 	<h3>Details:</h3>
-	<%= f.association :sector, wrapper_html: {class: "span5"} %>
-	<%= f.input :sector_comment, wrapper_html: {class: " span5"}, hint: "If multisector, add details" %>
+	<%= f.association :sector, wrapper_html: {class: "span4"} %>
+	<%= f.input :sector_comment, wrapper_html: {class: " span4"}, hint: "If multisector, add details" %>
+	<%= f.input :crs_sector, wrapper_html: {class: " span4"}, hint: "3-digit CRS code" %>
+	<br>
 	<%= f.input :is_commercial, wrapper_html: {class: " span5"} %>
+	<%= f.input :line_of_credit,wrapper_html: {class: " span3"}, hint: "Is this project a line of credit?" %>
+	<%= f.input :debt_uncertain, wrapper_html: {class: "span4"} %>
 	<%= f.association :tied, wrapper_html: {class: " span5"} %>
 	<%= f.association :flow_type, wrapper_html: {class: " span5"} %>
 	<%= f.association :oda_like, wrapper_html: {class: " span5"} %>

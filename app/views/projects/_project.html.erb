@@ -14,7 +14,8 @@
 
 	<p style="text-align:center"> 
 		<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
-		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %> |
+		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %>
+			<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
 		<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
 		<% if @project.media_id %>
 			<b>Media ID:</b> <%= link_to @project.media_id, "/media/#{@project.media_id}" %> |
@@ -48,9 +49,13 @@
 			<li><b>Status:</b> <%= @project.status.nil? ? unset_data : link_to(@project.status.name, @project.status) %> </li>
 			<li><b>Sector:</b> <%= @project.sector.nil? ? unset_data :  link_to(@project.sector.name, @project.sector) %></li>
 			<li><b>Sector comment:</b> <%=  @project.sector_comment.blank? ? unset_data : @project.sector_comment %></li>
+			<li><b>Uncertain Debt Relief:</b> <%= @project.debt_uncertain %></li>
+			<li><b>CRS Sector:</b> <%= @project.crs_sector || unset_data %></li>
 			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? unset_data :  link_to(@project.flow_type.name, @project.flow_type) %></li>
 			<li><b>Tied:</b> <%= @project.tied.nil? ? unset_data : link_to(@project.tied.name, @project.tied) %></li>
 			<li><b>Commercial:</b> <%= @project.is_commercial %></li>
+			<li><b>Line of Credit:</b><%= @project.line_of_credit %></li>
+			
 		</ul>
 	</div>
 </div>

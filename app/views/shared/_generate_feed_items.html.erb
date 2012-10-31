@@ -15,7 +15,7 @@ def get_name(feed_item, patient)
 	if feed_item.item_type == 'Project'
 		patient.title
 	elsif feed_item.item_type == 'Comment'
-		patient.content[0..15] + '...'
+		patient.content[0..25] + '...'
 	elsif @project_accessory_objects.include? feed_item.item_type
 		"Project: "+Project.find_by_id(patient.project_id).title
 	elsif patient.name

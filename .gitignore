@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# Ignore development search engine
+/solr/data/development
+/solr/pids/development
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp

@@ -10,6 +10,7 @@ Adt::Application.routes.draw do
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
+  match '/aggregates/projects', to: 'aggregates#projects'
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
 
@@ -17,9 +18,6 @@ Adt::Application.routes.draw do
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
   get '/recent_activity', to: 'versions#index', as: 'versions'
   
-  # this is for easy use in the MBDC launch
-  match '/media/:media_id', to: 'projects#media', as: 'project_media'
-
   root to: "static_pages#home"
 
   match '/signup', to: 'users#new'

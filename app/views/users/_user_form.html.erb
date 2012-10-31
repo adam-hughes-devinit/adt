@@ -4,6 +4,7 @@
 	<%= f.input :email, input_html: { class: "span6" }, hint: "Email must be unique" %>
 	<%= f.input :password, input_html: {class: "span6"}, hint: "Must be longer than six characters" %>
 	<%= f.input :password_confirmation, input_html: { class: "span6"}, hint: 'Must match password' %>
-	<%= f.association :owner, label: "Organizational affiliation" %>
-	<%= f.button :submit, 'Create my account', class: "btn-primary" %>
+	<%= # f.association :owner, label: "Organizational affiliation" 
+	%>
+	<%= f.button :submit, @user.new_record? ? 'Create my account' : "Update user", class: "btn-primary" %>
 <% end %> 

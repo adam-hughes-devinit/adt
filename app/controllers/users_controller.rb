@@ -11,7 +11,37 @@ before_filter :signed_in_and_same_owner, only: [:show]
   end
 
   def show
-  	@user=User.find(params[:id])
+    @user=User.find(params[:id])
+    @feed = Version.where("whodunnit = ?", @user.id)
+  end  
+
+  def edit
+    @user=User.find(params[:id])
+  end
+
+  def update 
+    @user=User.find(params[:id])
+
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        format.html { redirect_to @user }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+
+    if @user.versions.scoped.last
+      undo_link = view_context.link_to( 
+      "Undo", revert_version_path(@user.versions.scoped.last
+      ),
+      method: :post)
+    else 
+      undo_link = ''
+    end
+
+      flash[:success] = "User updated. #{undo_link}"
   end
 
   def create

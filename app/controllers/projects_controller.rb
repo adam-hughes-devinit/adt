@@ -1,7 +1,6 @@
 class ProjectsController < ApplicationController  
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit]
-#before_filter :strip_tags_from_description, only: [:create, :update]
 
 
   def index
@@ -17,17 +16,17 @@ before_filter :correct_owner?, only: [:edit]
         custom_search
         render json: @projects.as_json(
           only: [:id,:year], 
-          methods: [:usd_2009],
+          methods: [:usd_2009, :sector_name],
           include: [
             {donor:{only: [:name]}}, 
-            {geopoliticals: {include: [recipient: {only: [:name, :iso2]}], only: [:percent]}}, 
-            {sector: {only: [:name]}}
+            {geopoliticals: {include: [recipient: {only: [:name, :iso2]}], only: [:percent]}}
             ]) 
       end
       format.csv do
         params[:max] = Project.all.count
         custom_search
-        @export_projects = Project.where("id in(?)", 
+        @export_projects = Project.includes(:transactions, :geopoliticals, :contacts, :sources, :participating_organizations)
+        .where("id in(?)", 
           @projects.map{ |p| p.id})
         send_data @export_projects.to_csv
       end
@@ -73,7 +72,6 @@ before_filter :correct_owner?, only: [:edit]
   def create
     @project = Project.new(params[:project])
     strip_tags_from_description
-    deflate_project_values(@project)
     
     respond_to do |format|
       if @project.save
@@ -92,7 +90,7 @@ before_filter :correct_owner?, only: [:edit]
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
-    deflate_project_values(@project)
+  
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
@@ -148,32 +146,6 @@ before_filter :correct_owner?, only: [:edit]
       @new_owner = current_user.owner if signed_in?
     end
 
-    def deflate_value(value,currency_iso3, yr, donor_iso3)
-      require 'open-uri'
-      deflator_query = "#{value.to_s}#{currency_iso3}#{yr}#{donor_iso3}"
-      deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}"
-      deflated_amount = open(deflator_url){|io| io.read}
-    end
-
-    def deflate_project_values(project)
-      if project.donor.present? && project.year.present? 
-        
-        donor_iso3 = project.donor.iso3 
-        year = project.year
-
-        project.transactions.each do |t|
-          if t.value.present? and t.value > 0 and t.currency.present?
-            deflated_amount = deflate_value(t.value, t.currency.iso3, year, donor_iso3)
-
-            t.usd_defl=deflated_amount.to_f
-          else
-            t.usd_defl=nil
-          end
-        end
-      end
-
-    end
-
     def strip_tags_from_description
       @project.description = view_context.strip_tags(@project.description)
       
@@ -205,7 +177,11 @@ before_filter :correct_owner?, only: [:edit]
         {sym: :role_name, name: "Organization Role"},
         {sym: :organization_type_name, name: "Organization Type"},
         {sym: :organization_name, name: "Organization Name"},
-        {sym: :owner_name, name: "Record Owner"}
+        {sym: :owner_name, name: "Record Owner"},
+        {sym: :line_of_credit_string, name: "Line of Credit"},
+        {sym: :crs_sector, name: "CRS Sector"},
+        {sym: :year_uncertain_string, name: "Year Uncertain"},
+        {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"}
       ].sort! { |a,b| a[:name] <=> b[:name] }
       @search = Project.search do
           fulltext params[:search]

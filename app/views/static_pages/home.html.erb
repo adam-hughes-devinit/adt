@@ -2,7 +2,7 @@
 <% provide(:first_header, "Chinese Development Finance") %>
 <div class="row">
 	<h2>Visualize</h2>
-	<%= render 'static_pages/map_js' %>
+	<%= render partial: 'static_pages/map_js', locals: {total_projects: @total_projects} %>
 </div>
 <div id='activity-feed' class="row">
 	<h2>Recent Activity</h2>

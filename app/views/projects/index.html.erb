@@ -20,6 +20,12 @@ end %>
 		<%= form_tag projects_path, method: :get do %>
 
 			<p> <b>Search: </b> 
+				<% @facets.each do |f| %>
+					<% if params[f[:sym]] %>
+						<%= hidden_field_tag f[:sym], params[f[:sym]] %>
+					<% end %>
+				<% end %>
+				
 				<%= text_field_tag :search, params[:search], class: "span7" %>
 				<%= submit_tag "Submit", name: nil, class: "btn" %>
 			</p>
@@ -46,7 +52,7 @@ end %>
 </div>
 <br>
 <div class='row'>
-	<h2><%= @search.total %> Projects (<%= link_to "export as CSV", current_url.gsub(/projects/, 'projects.csv')%>)</h2>
+	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", current_url.gsub(/projects/, 'projects.csv')%>)</h2>
 	<%= will_paginate @projects %>
 	
 </div>
@@ -54,12 +60,12 @@ end %>
 <table id="project-search-results">
 	<thead>
 		<tr >
-			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/dir=[a-z]+/, '').gsub(/order_by=[a-z]/, '')}#{joiner}" %>
+			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/&?\??dir=[a-z]+/, '').gsub(/&?\??order_by=[0-9a-z_]+/, '')}#{joiner}" %>
 			<th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}#{order_by_params("donor")}"  %></th>
 			<th><%= link_to "Title","#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  %></th>
 			<th><%= link_to "Year","#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  %></th>
 			<th><%= link_to "Recipients","#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  %></th>
-			<th>Amount (USD-2009)</th>
+			<th><%= link_to "Amount (USD-2009)","#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  %></th>
 			<% if current_user %>
 				<th>Links</th>
 			<% end %>

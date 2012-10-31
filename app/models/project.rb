@@ -1,7 +1,8 @@
 class Project < ActiveRecord::Base
   attr_accessible :title, :active, :capacity, :description, :year,
   :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment, 
-  :is_commercial, :media_id,
+  :is_commercial, :media_id, 
+  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector,
   # belongs_to fields
   :status, :verified, :tied, :flow_type, :oda_like, :sector,
   #convoluted fields
@@ -15,15 +16,16 @@ class Project < ActiveRecord::Base
   :verified_id, :sector_id, :tied_id, :flow_type_id, 
   :oda_like_id, :status_id, 
   :donor_id, :owner_id
-   
+  
+  before_save :deflate_values
+
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
-  default_scope order: "year"
 
   has_paper_trail
 
-  validates :title, presence: true
+  #validates :title, presence: true
 
   # I'm adding string methods for these codes for Sunspot Facets
   belongs_to :status
@@ -86,6 +88,18 @@ class Project < ActiveRecord::Base
 
   def is_commercial_string
     is_commercial? ? 'Commercial' : 'Not Commercial'
+  end
+
+  def year_uncertain_string
+    year_uncertain? ? "Year Uncertain" : "Year Certain"
+  end
+
+  def debt_uncertain_string
+    debt_uncertain ? "Debt Relief Uncertain" : "Not Uncertain"
+  end
+
+  def line_of_credit_string
+    line_of_credit ? "Line of Credit" : "Not Line of Credit"
   end
 
   # project accessories
@@ -152,6 +166,7 @@ class Project < ActiveRecord::Base
 
   searchable do 
     string :id # only for searching
+    float :usd_2009
 
     text :title
     string :title
@@ -230,6 +245,10 @@ class Project < ActiveRecord::Base
     string :recipient_condensed
     string :active_string 
     string :is_commercial_string
+    string :line_of_credit_string
+    string :debt_uncertain_string
+    string :year_uncertain_string
+    string :crs_sector
   end
 
   def self.to_csv
@@ -260,15 +279,17 @@ class Project < ActiveRecord::Base
 
         row =
           ["#{project.id}", "#{project.donor_name}", "#{project.title}", "#{project.year}", "#{project.description}",
-          "#{project.sector_name}", "#{project.sector_comment}", "#{project.status_name}", "not_implemented", "#{project.flow_type_name}",
-          "#{project.tied_name}", "not_implemented", "#{project.country_name.join(", ")}", "#{sources[:all].join("; ")}", "#{sources[:all].count}",
+          "#{project.sector_name}", "#{project.sector_comment}", "#{project.status_name}", "#{project.status ? project.status.iati_code : ''}", "#{project.flow_type_name}",
+          "#{project.tied_name}", "#{project.tied ? project.tied.iati_code : '' }", "#{project.country_name.join(", ")}", "#{sources[:all].join("; ")}", "#{sources[:all].count}",
           "#{agencies[:Funding].join('; ')}", "#{agencies[:Implementing].join("; ")}",
           "#{agencies[:Donor].join("; ")}", "#{agencies[:Donor].count}", "#{agencies[:Recipient].join('; ')}", "#{agencies[:Recipient].count}",
-          "#{project.verified_name}", "not_implemented", "#{project.oda_like_name}", "not_implemented", "#{project.active_string}", "not_implemented",
-          "#{sources[:factiva].join("; ")}", "not_implemented", "not_implemented", "#{project.usd_2009}",
+          "#{project.verified_name}", "#{project.verified ? project.verified.id : '' }", "#{project.oda_like_name}", "#{project.oda_like ? project.oda_like.id : '' }", "#{project.active_string}", "#{project.active ? 1 : 0}",
+          "#{sources[:factiva].join("; ")}", "#{project.transactions.map{|t| t.value}.join("; ")}", "#{project.transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}", 
+          "#{project.transactions.map{|t| t.deflator}.join("; ")}","#{project.transactions.map{|t| t.exchange_rate}.join("; ")}",
+          "#{project.usd_2009}",
           "#{project.start_actual ? project.start_actual.strftime("%d %B %Y") : ''}", "#{project.start_planned ?  project.start_planned.strftime("%d %B %Y") : ''}", 
           "#{project.end_actual ? project.end_actual.strftime("%d %B %Y") : ''}", "#{project.end_planned ? project.end_planned.strftime("%d %B %Y"): '' }",
-          "#{project.country_name.count}", "#{project.recipient_condensed}", "#{project.is_commercial_string}", "not_implemented"  
+          "#{project.country_name.count}", "#{project.recipient_condensed}", "#{project.is_commercial_string}", "#{project.is_commercial ? 1 : 0}"  
           ]
       end
 
@@ -281,7 +302,9 @@ class Project < ActiveRecord::Base
          "funding_agency", "implementing_agency", 
          "donor_agency", "donor_agency_count", "recipient_agencies", "recipient_agencies_count",
          "verified", "verified_code", "flow_class", "flow_class_code", "active", "active_code", 
-         "factiva_sources", "amount", "currency", "usd_defl",
+         "factiva_sources", "amount", "currency", 
+         "deflators_used", "exchange_rates_used",
+         "usd_defl",
          "start_actual", "start_planned", 
          "end_actual", "end_planned",
          "recipient_count", "recipient_condensed", "is_commercial", "is_commercial_code"]
@@ -291,5 +314,44 @@ class Project < ActiveRecord::Base
     end
   end
 
+
+
+   def deflate_values
+      if year && donor
+        donor_iso3 = donor.iso3
+        yr = year
+        transactions.each do |t|
+          if t.value && t.currency 
+            require 'open-uri'
+
+            deflator_query = "#{t.value.to_s}#{t.currency.iso3}#{yr}#{donor_iso3}"
+            deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
+            deflator_string = open(deflator_url){|io| io.read}
+            deflator_object = ActiveSupport::JSON.decode(deflator_string)
+            begin  
+              deflated_amount = deflator_object["deflated_amount"]
+              exchange_rate_used = deflator_object["exchange_rate"]
+              deflator_used = deflator_object["deflator"]
+              
+              t.usd_defl=deflated_amount.to_f
+              t.deflator= deflator_used
+              t.exchange_rate = exchange_rate_used
+              t.deflated_at = Time.now
+            rescue
+                t.usd_defl=nil
+                t.deflator=nil
+                t.exchange_rate=nil
+                t.deflated_at=nil
+            end
+
+          else
+                t.usd_defl=nil
+                t.deflator=nil
+                t.exchange_rate=nil
+                t.deflated_at=nil
+          end
+        end
+      end
+   end
 
 end

@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name, 
   :password, :password_confirmation,
   :owner, :owner_id, :admin
+  has_paper_trail
   
   has_secure_password
   before_save { |user| user.email = email.downcase }
