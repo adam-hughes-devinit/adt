@@ -24,6 +24,8 @@ Adt::Application.routes.draw do
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
 
+  match '/ajax', to: 'static_pages#ajax'
+  
   get "static_pages/vis"
 
   # The priority is based upon order of creation:

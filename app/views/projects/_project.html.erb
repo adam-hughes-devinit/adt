@@ -55,6 +55,7 @@
 			<li><b>Tied:</b> <%= @project.tied.nil? ? unset_data : link_to(@project.tied.name, @project.tied) %></li>
 			<li><b>Commercial:</b> <%= @project.is_commercial %></li>
 			<li><b>Line of Credit:</b><%= @project.line_of_credit %></li>
+			<li><b>Cofinanced:</b><%= @project.is_cofinanced %></li>
 			
 		</ul>
 	</div>
@@ -69,7 +70,8 @@
 						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
 					<% end %>
 					<% if !t.currency.nil? %>
-					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %>)
+					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 %>,
+					  	$<%= t.usd_current %> in <%= @project.year %><% end %>)
 					<% end %>
 				</li>
 			<% end %>

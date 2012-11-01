@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025192329) do
+ActiveRecord::Schema.define(:version => 20121101211033) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20121025192329) do
     t.boolean  "debt_uncertain", :default => false
     t.boolean  "year_uncertain", :default => false
     t.boolean  "line_of_credit", :default => false
+    t.boolean  "is_cofinanced",  :default => false
   end
 
   add_index "projects", ["id"], :name => "index_projects_on_id"
@@ -228,6 +229,7 @@ ActiveRecord::Schema.define(:version => 20121025192329) do
     t.float    "deflator"
     t.float    "exchange_rate"
     t.datetime "deflated_at"
+    t.float    "usd_current"
   end
 
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"

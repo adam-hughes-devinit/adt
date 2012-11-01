@@ -2,7 +2,7 @@ class Project < ActiveRecord::Base
   attr_accessible :title, :active, :capacity, :description, :year,
   :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment, 
   :is_commercial, :media_id, 
-  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector,
+  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, :is_cofinanced,
   # belongs_to fields
   :status, :verified, :tied, :flow_type, :oda_like, :sector,
   #convoluted fields
@@ -330,22 +330,28 @@ class Project < ActiveRecord::Base
             deflator_object = ActiveSupport::JSON.decode(deflator_string)
             begin  
               deflated_amount = deflator_object["deflated_amount"]
+              current_amount = deflator_object["current_amount"]
               exchange_rate_used = deflator_object["exchange_rate"]
               deflator_used = deflator_object["deflator"]
               
               t.usd_defl=deflated_amount.to_f
+              t.usd_current=current_amount.to_f
               t.deflator= deflator_used
               t.exchange_rate = exchange_rate_used
               t.deflated_at = Time.now
             rescue
+                
                 t.usd_defl=nil
+                t.usd_current=nil
                 t.deflator=nil
                 t.exchange_rate=nil
                 t.deflated_at=nil
+
             end
 
           else
                 t.usd_defl=nil
+                t.usd_current=nil
                 t.deflator=nil
                 t.exchange_rate=nil
                 t.deflated_at=nil

@@ -132,11 +132,11 @@ function click() {
  activeCountryData = []
   d3.json("/aggregates/projects?get=sector_name,year&recipient_iso2="+activeIso, function(json){
     activeCountryData = json
-    try_drawing_map()
+    try_drawing_overlay()
   }) 
 }
 
-function try_drawing_map() {
+function try_drawing_overlay() {
  if (activeCountryData.length == 0){
   return
 }
@@ -382,7 +382,13 @@ function try_drawing_map() {
     .duration(1000)
     .attrTween("d", tweenPie);
 
-
+// request related data, then draw the line chart
+conduit_root ='http://aiddataconduit.herokuapp.com/data'
+conduit_url = encodeURIComponent(conduit_root + '?data_type=GNI&attr1='+activeIso)
+console.log(conduit_url)
+d3.json('/ajax?url='+conduit_url, function(data) {
+  console.log(data)
+})
 
 <% if Rails.env.development? %> 
  // For development

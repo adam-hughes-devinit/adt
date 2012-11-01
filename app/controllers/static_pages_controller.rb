@@ -10,4 +10,12 @@ skip_before_filter :signed_in_user
 
   def vis
   end
+
+  def ajax
+  	require 'open-uri'
+  	CGI::unescape request_url = params[:url]
+  	@data = open(request_url){|io| io.read}
+  	render text: @data
+  end
+
 end
