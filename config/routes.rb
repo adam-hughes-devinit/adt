@@ -19,6 +19,7 @@ Adt::Application.routes.draw do
   get '/recent_activity', to: 'versions#index', as: 'versions'
   
   root to: "static_pages#home"
+  match '/china', to: "static_pages#home"
 
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'

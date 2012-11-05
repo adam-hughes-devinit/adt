@@ -4,7 +4,7 @@ class AggregatesController < ApplicationController
 		@valid_fields = [
 			{external: "donor", internal: "donors.iso3", group: "donors.iso3"},
 			{external: "year",  internal: "year", group: "year"},
-			{external: "sector_name", internal: "sectors.name", group: "sectors.name"},
+			{external: "sector_name", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name"},
 			{external: "recipient_name",   group: "recipient_name", internal: "recipient_name"},
 			{external: "recipient_iso2",   group: "recipient_iso2", internal: "recipient_iso2"},
 			{external: "recipient_iso3",   group: "recipient_iso3", internal: "recipient_iso3"}
@@ -37,6 +37,7 @@ class AggregatesController < ApplicationController
 	    if !@fields_to_get.blank?  	
 		    
 		    # ---------- I really tried to do it right, but couldn't get it! --------------
+		    #
 		    # @data = Project.find( :all,
 		    # 	select: "usd_defl as usd_2009, #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}",
 		    # 	group: "#{@fields_to_get.map{|f| f[:internal]}.join(', ')}",
@@ -47,7 +48,7 @@ class AggregatesController < ApplicationController
 		    # 	order: nil
 		    # 	    	)
 
-		 	sql = "select sum(usd_defl) as usd_2009, #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
+		 	sql = "select sum(usd_defl) as usd_2009, sum(usd_current) as usd_current, #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 		 			from (select projects.*,
 		 					(case when count(recipients.id) > 1 then 'Africa, regional' else recipients.name end) as recipient_name,
 		 					(case when count(recipients.id) > 1 then 'Africa, regional' else recipients.iso2 end) as recipient_iso2,
@@ -58,7 +59,7 @@ class AggregatesController < ApplicationController
 				 			group by projects.id
 				 			) p
 				 			
-		 				INNER JOIN sectors on p.sector_id = sectors.id
+		 				LEFT OUTER JOIN sectors on p.sector_id = sectors.id
 			 			INNER JOIN countries donors on p.donor_id = donors.id 
 			 			INNER JOIN transactions on p.id = transactions.project_id
 			 		where 
@@ -69,7 +70,7 @@ class AggregatesController < ApplicationController
 			@data = ActiveRecord::Base.connection.execute(sql)
 			
 		    render json: @data.as_json(
-		    	only: ["usd_2009"] +  @fields_to_get.map{|f| f[:external]}
+		    	only: ["usd_2009", "usd_current"] +  @fields_to_get.map{|f| f[:external]}
 		    	)
 		else	
 			render json: params

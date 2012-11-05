@@ -4,8 +4,6 @@ before_filter :correct_owner?, only: [:edit]
 
 
   def index
-     
-
 
     respond_to do |format|
       format.html do 
@@ -14,13 +12,7 @@ before_filter :correct_owner?, only: [:edit]
       end
       format.json do
         custom_search
-        render json: @projects.as_json(
-          only: [:id,:year], 
-          methods: [:usd_2009, :sector_name],
-          include: [
-            {donor:{only: [:name]}}, 
-            {geopoliticals: {include: [recipient: {only: [:name, :iso2]}], only: [:percent]}}
-            ]) 
+        render json: @projects
       end
       format.csv do
         params[:max] = Project.all.count
@@ -181,7 +173,8 @@ before_filter :correct_owner?, only: [:edit]
         {sym: :line_of_credit_string, name: "Line of Credit"},
         {sym: :crs_sector, name: "CRS Sector"},
         {sym: :year_uncertain_string, name: "Year Uncertain"},
-        {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"}
+        {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"},
+        {sym: :recipient_iso2, name: ""}
       ].sort! { |a,b| a[:name] <=> b[:name] }
       @search = Project.search do
           fulltext params[:search]

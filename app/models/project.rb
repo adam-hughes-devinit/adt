@@ -189,9 +189,11 @@ class Project < ActiveRecord::Base
 
     text :geopoliticals do
         geopoliticals.map do |g| 
-          ["#{g.subnational}",
-           "#{g.recipient ? g.recipient.name : ''}",
-           "#{g.recipient ? g.recipient.iso3 : '' }"]
+          if g
+            ["#{g.subnational}",
+             "#{g.recipient ? g.recipient.name : ''}",
+             "#{g.recipient ? g.recipient.iso3 : '' }"]
+        end
         end
     end
 
@@ -249,6 +251,16 @@ class Project < ActiveRecord::Base
     string :debt_uncertain_string
     string :year_uncertain_string
     string :crs_sector
+    string :recipient_iso2 do
+      if geopoliticals.count > 1
+        'Africa, regional' 
+      elsif geopoliticals.count == 1 && geopoliticals[0].recipient
+        geopoliticals[0].recipient.iso2 
+      else
+        'Unset'
+      end
+    end
+
   end
 
   def self.to_csv
@@ -360,4 +372,18 @@ class Project < ActiveRecord::Base
       end
    end
 
+   def as_json(options={})
+    super(
+          only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
+          methods: [:usd_2009, :donor_name,
+                    :sector_name, :flow_type_name, :oda_like_name, :status_name, :tied_name, :recipient_condensed
+                    ],
+          include: [
+            {geopoliticals: {include: [recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}], only: [:percent]}},
+            {transactions: {include: [currency: {only: [:name, :iso3]}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
+            {contacts: {only: [:name, :position], include: [organization: {only: [:name, :organization_type]}]}},
+            {sources: {only: [:url, :date], include: [source_type: {only: [:name]}, document_type: {only:[:name]}]}},
+            {participating_organizations: {only: [], include: [origin: {only: [:name]}, organization: {only: [:name, :organization_type]}, role: {only: [:name]}]}}
+            ]) 
+  end
 end

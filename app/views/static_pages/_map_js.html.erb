@@ -1,7 +1,5 @@
 <h2 id='counter'></h2>
 <div id="vis"></div>
-<%= javascript_include_tag "http://d3js.org/d3.v2.js" %>
-<%= javascript_include_tag "collection.js" %>
 <script type="text/javascript">
 // Preparing the map
 var w = 800,
@@ -17,6 +15,9 @@ var w = 800,
     project_data = [],
     total_cdf_in_view = 0 
     ;
+<% if Rails.env.development? %>
+var top_projects_data =[]
+<% end %>
 
 var pie = d3.layout.pie()
    .value(function(d) {return d.value});
@@ -38,11 +39,20 @@ var filter = vis.append("svg:defs")
 // Make the map -- but know that the data is changing
 var map = vis.append("svg:g")
     .attr("id", "states")
-  .attr("transform","translate(100,"+ w/8 + ")")
+  .attr("transform","translate(100,"+ w/7 + ")")
   ;
-  
+var ocean_outline = map.append("svg:path")
+      .attr("id", "ocean_outline")
+      .attr("d", ocean_outline_d)
+      .attr("stroke-width", 10)
+      .attr("stroke", "darkblue")
+      .style('fill', 'transparent')
+      .attr('transform', 'translate(-130, -'+((w/7)+14)+')')
+      .attr('filter', "url(#blur)")
+
+
 var countries =  d3.select("#states")
-    .selectAll("path")
+    .selectAll(".country")
       .data(collection.features)
   .enter().append("svg:path")
       .attr("class", "fuzz country")
@@ -57,11 +67,26 @@ var countries =  d3.select("#states")
       // add the listeners after load
       ;
 
-
+border_line_array = [
+  [0,0,0,h], [0,h,w,h], [w,h,w,0], [w,0,0,0]
+]
+var frame = vis.append('svg:g')
+      .attr('id', 'border_lines')
+      .selectAll('.border_line')
+      .data(border_line_array)
+  .enter().append('svg:line')
+    .attr('class', 'border_line')
+    .attr('x1',function(d) {return d[0]})
+    .attr('y1',function(d) {return d[1]})
+    .attr('x2',function(d) {return d[2]})
+    .attr('y2',function(d) {return d[3]})
+    .attr('stroke', '#eee')
+    .attr('stroke-width', 8)
+    .attr('filter', 'url(#blur)')
 
 map_data = d3.nest()
   .key(function(d) {return d.id})
-  .rollup(function(d) {return {"value" : null}})
+  .rollup(function(d) {return {"value" : null, "value_current": null}})
   .entries(collection.features)
 
 function map_data_item(iso2) {
@@ -81,6 +106,7 @@ function add_values_to_map() {
       item_delay = 20
       item_duration = 110
       map_item.values.value = d.usd_2009 
+      map_item.values.value_current = d.usd_current
       d3.select('#states #'+d.recipient_iso2)
 
                 .transition()
@@ -121,7 +147,9 @@ function recolor_and_add_listeners() {
 add_values_to_map()
 
 
-// Click 
+//                     ___....--- Click   //    //    //    // 
+// ***---______...--***                  //    //    //    //
+
 function click() {
 
   // get the country info
@@ -132,12 +160,8 @@ function click() {
  activeCountryData = []
   d3.json("/aggregates/projects?get=sector_name,year&recipient_iso2="+activeIso, function(json){
     activeCountryData = json
-    try_drawing_overlay()
-  }) 
-}
 
-function try_drawing_overlay() {
- if (activeCountryData.length == 0){
+if (activeCountryData.length == 0){
   return
 }
   d3.selectAll('.fuzz')
@@ -161,6 +185,14 @@ function try_drawing_overlay() {
     .duration(200)
     .attr("opacity", .6)
     ;
+
+    try_drawing_overlay()
+  }) 
+}
+
+
+function try_drawing_overlay() {
+
  // build year/sector data (for stack):
     // this is going to hold one array for each sector that is present
     stackLayers = []
@@ -211,7 +243,7 @@ function try_drawing_overlay() {
 
   var sector_area_h = 370
     sector_area_w = 370
-    sector_area_y = d3.scale.linear().domain([0,annual_maximum]).range([sector_area_h, 0])
+    sector_area_y = d3.scale.pow().domain([0,annual_maximum]).range([sector_area_h, 0])
     sector_area_x = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,sector_area_w])
 
   var sector_area = d3.svg.area()
@@ -259,32 +291,27 @@ function try_drawing_overlay() {
         label_height = d3.scale.linear().domain([0,sectorSums.length]).range([highest_label, lowest_label])
         label_increment = d3.min([label_height(1) - label_height(0), 35])
 
-      // a header 
-        overlay.append("svg:foreignObject")
-          .attr("height", 100)
-          .attr("width", 500)
+      // make a g to hold them
+      headers = overlay.append('svg:g')
+        .attr('id', 'headers')
+        .append("svg:foreignObject")
+          .attr("height", label_increment * (sectorSums.length+2))
+          .attr("width", 310)
           .attr("x", label_left_position-20)
           .attr("y", highest_label - 35)
           .append("xhtml:body")
+            .attr('id', 'sectors_body')
             .style("padding-top", 0)
             .style("background-color", "transparent")
-            .html("<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b><br><span style='font-size:12px'><i>Click to see projects</i></span></p></div>")
+      // get the body content, then load it
+      headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b><br><span style='font-size:12px'><i>Click to see projects</i></span></p></div>" 
 
-      // add the labels
-        overlay.selectAll('.sector_label')
-          .data(sectorSums)
-        .enter().append("foreignObject")
-          .attr("id", function(d,i) {return "sectorPath"+(sectorSums.length-(i+1))})
-          .attr("class", "overlay sector_label")
-          .attr("width", 550)
-          .attr("height", 30)
-          .attr("x", label_left_position)
-          .attr("y", function(d,i) {return highest_label + (label_increment*i)})
-          .append('xhtml:body')
-            .style("padding-top", 0)
-            .style("color", function(d) {return c_sector(d.key)})
-            .style("background-color", "transparent")
-            .html(function(d) {return "<a href='/projects?country_name="+activeName+"&sector_name="+d.key+"'><p style='font-size:14px;'><b>"+ d.key +"</b>:<br> -- $" +money(Math.round(d.values.value))+ "</p></a>"}) 
+      sectorSums.forEach(function(s) {
+        headers_html += "<p style='font-size:14px;color:"+c_sector(s.key)+"'><a href='/projects?country_name="+activeName+"&sector_name="+s.key+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ "</a></p>"
+      })
+
+      // load the headers 
+        headers.html(headers_html)
 
  // paint the area chart
   // hold it it a g
@@ -382,13 +409,57 @@ function try_drawing_overlay() {
     .duration(1000)
     .attrTween("d", tweenPie);
 
-// request related data, then draw the line chart
-conduit_root ='http://aiddataconduit.herokuapp.com/data'
-conduit_url = encodeURIComponent(conduit_root + '?data_type=GNI&attr1='+activeIso)
-console.log(conduit_url)
-d3.json('/ajax?url='+conduit_url, function(data) {
-  console.log(data)
-})
+// Drawing the line chart comparing CDF/GNI and ODA/GNI -- tough because requires ~current~ USD, not constant USD!
+  // request related data, then call a function to draw the line chart
+
+  worldbank_root = "http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
+    worldbank_gni_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "NY.GNP.ATLS.CD")
+    worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DT.ODA.ODAT.GN.ZS")
+    d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
+      d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_gni_data) {
+        d3.json('/aggregates/projects?get=year&recipient_iso2='+activeIso, function(cdf_data){
+          create_line_graph(cdf_data, gni_data, dacoda_gni_data)
+        })
+      })
+    })
+
+// Set targets, get the top x projects, then call a function to paint them
+  // set targets
+    // Top projects box target
+      top_projects_offset_x = 10
+      top_projects_offset_y = 620
+      top_projects_height = 170
+      top_projects_width  = 400
+
+      top_projects_group = overlay.append('svg:g')
+        .attr('id', 'top_projects')
+        .attr('transform', 'translate('+top_projects_offset_x+', '+top_projects_offset_y+')')
+        .append('svg:foreignObject')
+          .attr("id", "top_projects_body")
+          .attr("height", 40)
+          .attr("width", top_projects_width)
+          .style("background-color", "hsla(319, 0%, 100%, 0.5)")
+          .style("margin","0 0 0 0")
+          .style("padding","5px 5px 5px 5px")
+          .append("xhtml:body")
+            .attr('height', 40)
+            .style('background-color', 'transparent')
+            .style('color', 'black')
+            .html("<p><b>Loading top projects...</b></p>")
+
+
+  top_projects_number = 5
+  top_projects_path = '/projects.json?order_by=usd_2009&active_string=Active&max='+top_projects_number+'&recipient_iso2='+activeIso
+  c_projects = d3.scale.linear().domain([0, ((top_projects_number-1)/2), top_projects_number-1]).range(['#2A5C0B', '#55760f','#808f12'])
+
+  
+
+
+  d3.json(top_projects_path, function(top_projects_data){
+    plot_top_projects(top_projects_data)
+    create_top_projects_box(top_projects_data, "top_projects_body", top_projects_height)
+
+  })
 
 <% if Rails.env.development? %> 
  // For development
@@ -408,8 +479,207 @@ d3.json('/ajax?url='+conduit_url, function(data) {
 <% end %>
 
 }
+//Make the top projects list
+function create_top_projects_box(projects, target, height){
+  <% if Rails.env.development? %>
+  console.log("projects:")
+  console.log(projects)
+  <% end %>
+
+  body_html = "<p><b>Top projects in "+activeName+":</b></p><ul>"
+  projects.forEach(function(p, i) {
+    body_html += "<li style='color:"+c_projects(i)+"'><p style='color:black'><a href='/projects/"+p.id+"'>"+p.title+"</a> ("+(p.year ? p.year : "<i>no year</i>")+"), $"+money(p.usd_2009)+"</li>"
+  })
+  body_html +="</ul>"
+
+  foreign_object = d3.select('#'+target);
+
+  foreign_object
+    .transition()
+      .attr('height', 0)
+
+  foreign_object_jq = $('#'+target)
+  foreign_object_jq.children().remove()
+  foreign_object_jq.append('<xhtml:body>'+body_html+'</xhtml:body>')
+
+  foreign_object
+    .transition()
+      .attr('height', height)
 
 
+
+}
+
+function plot_top_projects(projects) {
+  sectors = sectorSums.map(function(s) {return s.key})
+  console.log("projects for plotting:")
+  console.log(projects)
+
+  function point_stack_height(project) {
+    // UH oh, what if there are 2 in the same year?
+    stack_object = yearSectorStack[sectors.indexOf(project.sector_name)][project.year-d3.min(years)]
+    return stack_object ? stack_object.y0 + stack_object.y : 0
+  }
+
+  project_points = area_chart.selectAll('.project_point')
+      .data(projects)
+    .enter().append('svg:circle')
+      .attr('cx', function(d) {console.log(d); return sector_area_x(d.year)})
+      .attr('cy', function(d) {return sector_area_y(point_stack_height(d))})
+      .attr('r', 4)
+      .attr('fill', function(d,i) {return c_projects(i)})
+      .attr('stroke', function(d) {return c_sector(d.sector_name)})
+      .attr('stroke-weight', 1)
+      .append('title')
+        .text(function(d) {return d.title})
+}
+
+
+// Make the line graph
+function create_line_graph(cdf_data,gni_data, dacoda_gni_data){
+<% if Rails.env.development? %>
+console.log("cdf, gni, and dacoda_gni data:")
+ console.log(cdf_data)
+ console.log(gni_data)
+ console.log(dacoda_gni_data)
+<% end %>
+
+ // prep the data
+    cdf_over_gni = []
+    dacoda_over_gni = []
+
+    years.forEach(function(d) {
+      cdf_point = cdf_data.filter(function(c) {return c.year == d})[0]
+      gni_point = gni_data[1].filter(function(c) {return c.date == d})[0]
+      dacoda_over_gni_point = dacoda_gni_data[1].filter(function(c) {return c.date == d})[0]
+
+      if (cdf_point&&gni_point&&gni_point.value) {
+        cdf_over_gni.push([d, 100*(cdf_point.usd_current/Number(gni_point.value))])
+      }
+
+      if (dacoda_over_gni_point&&dacoda_over_gni_point.value) {
+       dacoda_over_gni.push([d, Number(dacoda_over_gni_point.value)])
+      }
+
+    })
+
+    <% if Rails.env.development? %>
+    console.log(cdf_over_gni)
+    console.log(dacoda_over_gni)
+    <% end %>
+ 
+ // Set the constants
+ line_chart_height = 95
+ line_chart_width = 280
+ line_chart_offset_y = 640
+ line_chart_offset_x = w - line_chart_width - 50
+ line_text_margin = 33
+
+ annual_maximum_finance_over_gni = d3.max([d3.max(dacoda_over_gni, function(d) {return d[1]}), d3.max(cdf_over_gni, function(d) {return d[1]})])
+ line_percent_scale = d3.scale.linear().domain([0,(annual_maximum_finance_over_gni + (annual_maximum_finance_over_gni/10))]).range([line_chart_height, 0])
+ line_year_scale = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,line_chart_width])
+
+ // put it all in a g
+  line_chart=overlay.append('svg:g')
+    .attr('id', 'line_chart')
+    .attr('transform', 'translate('+line_chart_offset_x+', '+line_chart_offset_y+')') 
+  // background darker
+    line_chart.append('svg:rect')
+      .attr('x', -20)
+      .attr('y', -20)
+      .attr('height', line_chart_height + line_text_margin+25)
+      .attr('width', line_chart_width + 50)
+      .attr('stroke', 'transparent')
+      .style('fill', 'hsla(0, 0%, 10%, 0.5)')
+  // paint the year labels
+    line_xAxis = d3.svg.axis()
+      .scale(line_year_scale)
+      .orient('bottom')
+      .ticks(6)
+      .tickFormat(d3.format("f")) 
+    line_chart.append("svg:g")
+      .attr('class', 'axis')
+      .call(line_xAxis)
+      .style('fill', '#ccc')
+      .attr('transform', 'translate(0,'+(line_chart_height+2)+')')
+      .attr("opacity", 1)
+
+
+  // paint the percent labels
+    line_yAxis = d3.svg.axis()
+      .scale(line_percent_scale)
+      .ticks(4)
+      .orient('right')
+    line_chart.append("svg:g")
+      .attr('class', 'axis')
+      .call(line_yAxis)
+      .style('fill', '#ccc')
+      .attr('transform', 'translate('+line_chart_width+')')
+      .attr("opacity", 1)
+  // paint line labels
+    cdf_over_gni_color = '#FF9696'
+    dacoda_over_gni_color = '#ADE8FF'
+    line_chart.append('svg:text')
+      .text('Chinese Dev. Fin.')
+      .style('fill', cdf_over_gni_color)
+      .attr('text-anchor', 'bottom')
+      .attr('x', 30)
+      .attr('y', line_chart_height + line_text_margin)
+
+    line_chart.append('svg:text')
+      .text('DAC ODA')
+      .style('fill', dacoda_over_gni_color)
+      .attr('text-anchor', 'bottom')
+      .attr('x', 150)
+      .attr('y', line_chart_height + line_text_margin)
+
+  // paint the heading
+    line_chart.append('svg:text')
+      .text("Finance/GNI")
+      .style('fill', 'white')
+      .attr('text-anchor', 'top')
+      .attr('y', 0)
+      .attr('x', (line_chart_width/2)-(this.length/2))
+      .style('font-weight', 'bold')
+      .style('text-decoration', 'underline')
+
+  // paint sources
+    line_chart.append('svg:foreignObject')
+      .attr('x', -20)
+      .attr('y', line_chart_height + line_text_margin +5)
+      .attr('width', line_chart_width + 50)
+      .attr('height', 25)
+      .append('xhtml:body')
+        .style('padding', '2px 2px 2px 2px')
+        .style("background-color", "hsla(319, 0%, 100%, 0.5)")
+        .style('text-align', 'center')
+        .style('vertical-align', 'center')
+        .html('<p style="color:#333;"><b>Sources:</b> <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
+
+  // paint the lines
+  gni_line = d3.svg.line()
+    .x(function(d) { return line_year_scale(d[0]); })
+    .y(function(d) { return line_percent_scale(d[1]); });
+
+      gni_stroke_width = 3
+      gni_lines = line_chart.append('svg:g')
+          .attr('id', 'gni_lines')
+
+      gni_lines.append('svg:path')
+          .attr('class', 'gni_line')
+          .attr('d',gni_line(cdf_over_gni))
+          .style('stroke', cdf_over_gni_color)
+          .style('fill', 'transparent')
+          .attr('stroke-width', gni_stroke_width)
+
+      gni_lines.append('svg:path')
+          .attr('class', 'gni_line')
+          .attr('d',gni_line(dacoda_over_gni))
+          .style('stroke', dacoda_over_gni_color)
+          .style('fill', 'transparent')
+          .attr('stroke-width', gni_stroke_width)
+
+}
 
 // Remove overlay
 function removeOverlay() {
@@ -490,5 +760,5 @@ legend.append("svg:foreignObject")
   .attr("y", max_bar_height+2)
   .append("xhtml:body")
     .style("background-color", "transparent")
-    .html("<p style='color:white;'><b>Chinese Development Finance, 2000-2011<b><br><i>USD-2009</i> || <a style='color:#eee;'href='/projects'>See the Data</a></p>")
+    .html("<p style='color:black;'><b>Chinese Development Finance, 2000-2011<b><br><i>USD-2009</i> || <a style='color:#333;'href='/projects'>See the Data</a></p>")
 </script>

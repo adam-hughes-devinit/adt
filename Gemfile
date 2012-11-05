@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 ruby '1.9.3'
 gem 'rails', '3.2.8'
@@ -11,6 +11,7 @@ gem 'simple_form'
 gem 'paper_trail'
 gem 'sunspot_rails', "~> 2.0.0.pre.120925"
 gem 'sunspot_solr', "~> 2.0.0.pre.120925" # optional pre-packaged Solr distribution for use in development
+gem 'thin'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

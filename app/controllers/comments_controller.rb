@@ -4,10 +4,11 @@ skip_before_filter :signed_in_user, only: [:create]
 		@comment = Comment.new(params[:comment])
 		if @comment.save!
 			flash[:success] = "Comment added."
+			redirect_to :back
 		else
 			flash[:notice] = "Comment failed."
 		end
-		redirect_to :back
+		
 	end
 
 	def destroy

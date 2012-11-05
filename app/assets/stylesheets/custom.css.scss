@@ -108,7 +108,7 @@ p {
   }
 }
 
-/* footer */
+                                      /* footer */
 
 footer {
   margin-top: 45px;
@@ -121,7 +121,7 @@ footer {
   color: #222;
     }
     img {
-    max-height:50px;
+    max-height:100px;
     }
   }
     small {
@@ -151,19 +151,39 @@ footer {
                                         /* Visualization */
 
 #africa-map {
-  background: #1B3970;
+  background: transparent;
 }
 
-.overlay a {
+#sectors_body {
+  a {
   color: inherit;
   &:hover {
     color: #ccc;
+    }
   }
 }
+
+#top_projects_body{
+  color:black;
+  ul {
+ 
+  }
+  li {
+    margin-left:5px;
+  }
+  a {
+  color: darkblue;
+    &:hover {
+      color:#ccc;
+    }
+  }
+}
+
 .axis line, .axis path {
   fill:none;
-  stroke: #ccc;
+  stroke: #fff;
 }
+
 /* forms */
 
 

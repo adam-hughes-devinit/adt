@@ -17,11 +17,7 @@
 		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %>
 			<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
 		<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
-		<% if @project.media_id %>
-			<b>Media ID:</b> <%= link_to @project.media_id, "/media/#{@project.media_id}" %> |
-		<% else %>
-			<b>ID:</b> <%= link_to @project.id,  @project %> |
-		<% end %>
+		<b>ID:</b> <%= link_to @project.id,  @project %> |
 		<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
 	</p>
 </div>
@@ -70,8 +66,8 @@
 						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
 					<% end %>
 					<% if !t.currency.nil? %>
-					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 %>,
-					  	$<%= t.usd_current %> in <%= @project.year %><% end %>)
+					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>,
+					  	$<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
 					<% end %>
 				</li>
 			<% end %>

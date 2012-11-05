@@ -9,6 +9,8 @@ class Transaction < ActiveRecord::Base
 
   def round_value
   	self.value = self.value.round(2)
+  	self.usd_defl = self.usd_defl.round(2)
+  	self.usd_current = self.usd_current.round(2)
   end
 
 end
