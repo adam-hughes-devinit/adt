@@ -1,38 +1,46 @@
 <div id = "vis_controls" class="row">
 <%= form_for Project.new do |f| %>
-  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {}, {multiple: true, class: "span3 vis_input", id: "oda_like_input"}  %>
-  <%= f.select :verified, Verified.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "verified_input"}  %>  
-  <%= f.select :sector, Sector.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "sector_input"}  %>
-  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "flow_type_input"}  %>
+  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {include_blank: true}, {multiple: true, class: "span3 vis_input", id: "oda_like_input"}  %>
+  <%= f.select :verified, Verified.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "verified_input"}  %>  
+  <%= f.select :sector, Sector.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "sector_input"}  %>
+  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "flow_type_input"}  %>
 <% end %>
 </div>
 <div id="vis"></div>
 <script type="text/javascript">
 
 $('.vis_input').change(function() {
-active_params = gather_inputs()
+if (active_params = gather_inputs()){
 make_map_with_params(active_params)
+}
 })
 
 function gather_inputs () {
 
  oda_likes =[]
- $('#oda_like_input option:selected').each(function(d) {oda_likes.push($(this).text())})
+ $('#oda_like_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {oda_likes.push(t)}})
  verifieds =[]
- $('#verified_input option:selected').each(function(d) {verifieds.push($(this).text())})
+ $('#verified_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {verifieds.push(t)}})
  sectors =[]
- $('#sector_input option:selected').each(function(d) {sectors.push($(this).text())})
+ $('#sector_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {sectors.push(t)}})
  flow_types =[]
- $('#flow_type_input option:selected').each(function(d) {flow_types.push($(this).text())})
+ $('#flow_type_input option:selected').each(function(d) { t = $(this).text(); if (t.length > 0) {flow_types.push(t)}})
 
 
 input_params = {}
+
 oda_likes.length > 0 ? input_params.flow_class= oda_likes : null;
 verifieds.length > 0 ? input_params.verified= verifieds : null;
 sectors.length > 0 ? input_params.sector_name= sectors : null;
 flow_types.length > 0 ? input_params.flow_type= flow_types : null;
-
+delete active_params.recipient_iso2
+delete active_params.get
+if (input_params !=active_params ){
 return input_params
+}
+else {
+  return null
+}
 }
 // Preparing the map
 var w = 800,
