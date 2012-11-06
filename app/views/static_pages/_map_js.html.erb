@@ -1,19 +1,50 @@
-<h2 id='counter'></h2>
+<div id = "vis_controls" class="row">
+<%= form_for Project.new do |f| %>
+  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {}, {multiple: true, class: "span3 vis_input", id: "oda_like_input"}  %>
+  <%= f.select :verified, Verified.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "verified_input"}  %>  
+  <%= f.select :sector, Sector.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "sector_input"}  %>
+  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {}, {class: "span3 vis_input", multiple: true, id: "flow_type_input"}  %>
+<% end %>
+</div>
 <div id="vis"></div>
 <script type="text/javascript">
+
+$('.vis_input').change(function() {
+active_params = gather_inputs()
+make_map_with_params(active_params)
+})
+
+function gather_inputs () {
+
+ oda_likes =[]
+ $('#oda_like_input option:selected').each(function(d) {oda_likes.push($(this).text())})
+ verifieds =[]
+ $('#verified_input option:selected').each(function(d) {verifieds.push($(this).text())})
+ sectors =[]
+ $('#sector_input option:selected').each(function(d) {sectors.push($(this).text())})
+ flow_types =[]
+ $('#flow_type_input option:selected').each(function(d) {flow_types.push($(this).text())})
+
+
+input_params = {}
+oda_likes.length > 0 ? input_params.flow_class= oda_likes : null;
+verifieds.length > 0 ? input_params.verified= verifieds : null;
+sectors.length > 0 ? input_params.sector_name= sectors : null;
+flow_types.length > 0 ? input_params.flow_type= flow_types : null;
+
+return input_params
+}
 // Preparing the map
 var w = 800,
     h = w*(1),
-    total_projects = <%= total_projects %>
     xy = d3.geo.mercator().scale(w*4.5).translate([100,300]),
     path = d3.geo.path().projection(xy),
     c = d3.scale.linear().domain([0,8000000000,150000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
     c_sector= d3.scale.category20c(),
     money = d3.format("0,r"),
     years = d3.range(2000,2012), 
-    //eventually this will hold projects -- 
-    project_data = [],
-    total_cdf_in_view = 0 
+    total_cdf_in_view = 0, 
+    active_params = {}
     ;
 <% if Rails.env.development? %>
 var top_projects_data =[]
@@ -82,7 +113,6 @@ var frame = vis.append('svg:g')
     .attr('y2',function(d) {return d[3]})
     .attr('stroke', '#eee')
     .attr('stroke-width', 8)
-    .attr('filter', 'url(#blur)')
 
 map_data = d3.nest()
   .key(function(d) {return d.id})
@@ -97,55 +127,82 @@ function map_data_item(iso2) {
     return null}
 }
 
-function add_values_to_map() {
-  d3.json('/aggregates/projects?get=recipient_iso2', function(json){
-    json.forEach(function(d, i) {
-      map_item = map_data_item(d.recipient_iso2)
-      
-      if (map_item) {
-      item_delay = 20
-      item_duration = 110
-      map_item.values.value = d.usd_2009 
-      map_item.values.value_current = d.usd_current
-      d3.select('#states #'+d.recipient_iso2)
+function make_map_with_params(params) {
+  start = new Date
+  item_delay = 50
+  item_duration = 300
+  // 1. Fuzz over the map and remove listeners.
+  <% if Rails.env.development? %>
+  console.log("1. fuzz "+time_since(start))
+  <% end %>
 
-                .transition()
-                  .delay(function(d) {return item_delay*i})
-                  .duration(item_duration)
-                  .attr("fill",  c(map_item.values.value))
-          // total cdf in view
-          total_cdf_in_view+= d.usd_2009
-        }
+  fuzz()
+  d3.selectAll('.country')
+          .on("click", '')
+          .on("mouseover", '')
+          .on("mouseout", '')
+          .style('cursor', '')
+
+  // 2. Get country sums by params
+  <% if Rails.env.development? %>
+  console.log("2. Ajax call "+time_since(start))
+  <% end %>
+
+  post_params = params || {}
+  post_params.get = "recipient_iso2"
+  $.post('/aggregates/projects', post_params, function(json){
+    // 3. Change map_data + total_cdf_in_view
+    <% if Rails.env.development? %>
+    console.log("3. Change map_data + total_cdf_in_view " +time_since(start))
+    <% end %>
+    // 4. color 
+    <% if Rails.env.development? %>
+    console.log("4. color "+time_since(start))
+    <% end %>    
+    map_data.forEach(function(d,i) {
+      if (n = json.filter(function(j) {return j.recipient_iso2 == d.key})[0]) {
+        d.values.value = n.usd_2009
+        d.values.value_current = n.usd_current
+      }
+      else {
+        d.values.value = null
+        d.values.value_current = null
+      }
+
+
+      country = d3.select("#states #"+d.key)
+      color = d.values.value == null ? '#777' : c(d.values.value)
+      country.transition()
+          .duration(item_duration)
+          .delay(i*item_delay)
+          .attr('fill', color)
 
     })
-    d3.selectAll('.fuzz')
-     .transition()
-      .delay(item_delay * json.length + 2*(item_duration))
-      .attr("filter", "")
-      .each("end", recolor_and_add_listeners)
+
+    total_cdf_in_view = d3.sum(map_data, function(m) {return m.values.value})
+
+
+
+    // 5. unfuzz and re-add listeners
+    <% if Rails.env.development? %>
+    console.log("5. unfuzz + listeners "+time_since(start) )
+    <% end %>
+
+    //unfuzz((item_delay * json.length)+(item_duration), item_duration)
+    unfuzz((item_delay*map_data.length)+item_duration,item_duration)
+  <% if Rails.env.development? %>
+  console.log("End "+time_since(start))
+  <% end %>
+
   })
 }
 
-function recolor_and_add_listeners() {
-  country = d3.select(this);
-  data_item = map_data_item(this.id)
-  if (data_item && data_item.values.value) {
-  country
-      .transition()
-        .attr("fill",  c(data_item.values.value))
-
-  country
-    .on("click", click)
-    .on("mouseover", highlight)
-    .on("mouseout", unhighlight)
-    .attr("cursor", "pointer")
-
-  }
+function time_since(time) {
+  return new Date - time
 }
+make_map_with_params({})
 
-
-add_values_to_map()
-
+make_legend([100000000,500000000,10000000000,50000000000,100000000000,150000000000])
 
 //                     ___....--- Click   //    //    //    // 
 // ***---______...--***                  //    //    //    //
@@ -158,15 +215,9 @@ function click() {
 
  // these are all the records for the active country:
  activeCountryData = []
-  d3.json("/aggregates/projects?get=sector_name,year&recipient_iso2="+activeIso, function(json){
-    activeCountryData = json
 
-if (activeCountryData.length == 0){
-  return
-}
-  d3.selectAll('.fuzz')
-    .transition()
-      .attr("filter", "url(#blur)");
+ if (d3.select(this).attr('fill')!='#777') {
+  fuzz()
 
   // prep a g for the overlay
   overlay = vis.append('svg:g')
@@ -182,11 +233,24 @@ if (activeCountryData.length == 0){
     .attr("opacity", 0)
     .on("click", removeOverlay)
   .transition()
-    .duration(200)
+    .duration(600)
     .attr("opacity", .6)
     ;
+  }
 
+  active_params.get='sector_name,year'
+  active_params.recipient_iso2 = activeIso
+  $.post("/aggregates/projects",
+    active_params, function(json){
+    delete active_params.recipient_iso2
+    activeCountryData = json
+
+if (activeCountryData.length == 0){
+  removeOverlay()
+  }
+else {
     try_drawing_overlay()
+  }
   }) 
 }
 
@@ -410,6 +474,28 @@ function try_drawing_overlay() {
     .attrTween("d", tweenPie);
 
 // Drawing the line chart comparing CDF/GNI and ODA/GNI -- tough because requires ~current~ USD, not constant USD!
+  // set the scene
+     // Set the constants
+   line_chart_height = 95
+   line_chart_width = 280
+   line_chart_offset_y = 640
+   line_chart_offset_x = w - line_chart_width - 50
+   line_text_margin = 33
+
+   // put it all in a g
+    line_chart=overlay.append('svg:g')
+      .attr('id', 'line_chart')
+      .attr('transform', 'translate('+line_chart_offset_x+', '+line_chart_offset_y+')') 
+    // background darker
+      line_chart.append('svg:rect')
+        .attr('id', 'line_chart_background')
+        .attr('x', -20)
+        .attr('y', -20)
+        .attr('height', 40)
+        .attr('width', line_chart_width + 50)
+        .attr('stroke', 'transparent')
+        .style('fill', 'hsla(0, 0%, 10%, 0.5)')
+
   // request related data, then call a function to draw the line chart
 
   worldbank_root = "http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
@@ -537,6 +623,12 @@ function plot_top_projects(projects) {
 
 // Make the line graph
 function create_line_graph(cdf_data,gni_data, dacoda_gni_data){
+// constants were set before function call!
+    d3.select('#line_chart_background')
+    .transition()
+      .attr('height', line_chart_height + line_text_margin+25)
+
+
 <% if Rails.env.development? %>
 console.log("cdf, gni, and dacoda_gni data:")
  console.log(cdf_data)
@@ -549,7 +641,7 @@ console.log("cdf, gni, and dacoda_gni data:")
     dacoda_over_gni = []
 
     years.forEach(function(d) {
-      cdf_point = cdf_data.filter(function(c) {return c.year == d})[0]
+      cdf_point = ((cdf_data.filter(function(c) {return c.year == d})[0]) || {usd_current: 0})
       gni_point = gni_data[1].filter(function(c) {return c.date == d})[0]
       dacoda_over_gni_point = dacoda_gni_data[1].filter(function(c) {return c.date == d})[0]
 
@@ -568,29 +660,12 @@ console.log("cdf, gni, and dacoda_gni data:")
     console.log(dacoda_over_gni)
     <% end %>
  
- // Set the constants
- line_chart_height = 95
- line_chart_width = 280
- line_chart_offset_y = 640
- line_chart_offset_x = w - line_chart_width - 50
- line_text_margin = 33
+
 
  annual_maximum_finance_over_gni = d3.max([d3.max(dacoda_over_gni, function(d) {return d[1]}), d3.max(cdf_over_gni, function(d) {return d[1]})])
  line_percent_scale = d3.scale.linear().domain([0,(annual_maximum_finance_over_gni + (annual_maximum_finance_over_gni/10))]).range([line_chart_height, 0])
  line_year_scale = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,line_chart_width])
 
- // put it all in a g
-  line_chart=overlay.append('svg:g')
-    .attr('id', 'line_chart')
-    .attr('transform', 'translate('+line_chart_offset_x+', '+line_chart_offset_y+')') 
-  // background darker
-    line_chart.append('svg:rect')
-      .attr('x', -20)
-      .attr('y', -20)
-      .attr('height', line_chart_height + line_text_margin+25)
-      .attr('width', line_chart_width + 50)
-      .attr('stroke', 'transparent')
-      .style('fill', 'hsla(0, 0%, 10%, 0.5)')
   // paint the year labels
     line_xAxis = d3.svg.axis()
       .scale(line_year_scale)
@@ -690,10 +765,7 @@ function removeOverlay() {
     .duration(100)
     .remove()
 
-  d3.selectAll('.fuzz')
-    .transition()
-     .duration(100)
-     .attr("filter", "")
+    unfuzz(0, 100)
 }
 // Highlight + Unhighlight
 
@@ -709,6 +781,51 @@ function unhighlight() {
     .attr("stroke",function() {return $(this).attr("name") ? "#333" : ""})
 }
 
+
+function fuzz() {
+     d3.selectAll('.fuzz')
+    .transition()
+      .attr("filter", "url(#blur)");
+}
+function unfuzz (delay, duration) {
+  <% if Rails.env.development? %>
+  console.log("started unfuzzing "+time_since(start));
+  console.log({delay: delay, duration: duration})
+  <% end %>
+      d3.selectAll('.fuzz')
+     .transition()
+      .delay(delay || 100)
+      .duration(duration || 100)
+      .attr("filter", "")
+      .each("end", recolor_and_add_listeners)
+}
+function recolor_and_add_listeners() {
+  country = d3.select(this);
+  data_item = map_data_item(this.id)
+  if (data_item && data_item.values.value > 0) {
+    country
+      .on("click", click)
+      .on("mouseover", highlight)
+      .on("mouseout", unhighlight)
+      .style('cursor', 'pointer')
+        .transition()
+          .attr("fill",  c(data_item.values.value))
+
+  }
+  else {
+  country
+      .on("click", "")
+      .on("mouseover", "")
+      .on("mouseout", "")
+      .style('cursor', '')
+        .transition()
+          .attr("fill",  "#777")
+  }
+  <% if Rails.env.development? %>
+  data_item ? console.log("finished unfuzzing "+data_item.key+" "+time_since(start)) : null;
+  <% end %>
+}
+
 Array.prototype.getUnique = function(){
    var u = {}, a = [];
    for(var i = 0, l = this.length; i < l; ++i){
@@ -721,9 +838,9 @@ Array.prototype.getUnique = function(){
    return a;
 }
 
-   
+
+function make_legend(legendAmounts) {
 //---------------------------  LEGEND  ----------------------------------
-legendAmounts=[100000000,500000000,10000000000,50000000000,100000000000,150000000000]
 legend_bar_width = 18
 legend_bar_margin = 2
 min_bar_height = 60
@@ -761,4 +878,5 @@ legend.append("svg:foreignObject")
   .append("xhtml:body")
     .style("background-color", "transparent")
     .html("<p style='color:black;'><b>Chinese Development Finance, 2000-2011<b><br><i>USD-2009</i> || <a style='color:#333;'href='/projects'>See the Data</a></p>")
+}
 </script>

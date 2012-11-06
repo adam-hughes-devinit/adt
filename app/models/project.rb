@@ -328,6 +328,7 @@ class Project < ActiveRecord::Base
 
 
 
+
    def deflate_values
       if year && donor
         donor_iso3 = donor.iso3

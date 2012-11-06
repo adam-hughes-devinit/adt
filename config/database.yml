@@ -19,8 +19,10 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3 #postgres
-  #encoding: unicode
-  database: db/production.sqlite3 #wm_production
-  pool: 5
+  adapter: postgres
+  encoding: unicode
+  database: adt_production
+  username: adt_user
+  password: aiddata
+  pool: 500
   timeout: 5000
