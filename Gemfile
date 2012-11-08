@@ -9,8 +9,8 @@ gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'simple_form'
 gem 'paper_trail'
-gem 'sunspot_rails', "~> 2.0.0.pre.120925"
-gem 'sunspot_solr', "~> 2.0.0.pre.120925" # optional pre-packaged Solr distribution for use in development
+gem 'sunspot_rails', '~> 1.3.0'
+gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development
 gem 'thin'
 
 group :development, :test do

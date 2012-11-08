@@ -1,3 +1,4 @@
+
 <div id = "vis_controls" class="row">
 <%= form_for Project.new do |f| %>
   <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {include_blank: true}, {multiple: true, class: "span3 vis_input", id: "oda_like_input"}  %>
@@ -376,10 +377,10 @@ function try_drawing_overlay() {
             .style("padding-top", 0)
             .style("background-color", "transparent")
       // get the body content, then load it
-      headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b><br><span style='font-size:12px'><i>Click to see projects</i></span></p></div>" 
+      headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b></div>" 
 
       sectorSums.forEach(function(s) {
-        headers_html += "<p style='font-size:14px;color:"+c_sector(s.key)+"'><a href='/projects?country_name="+activeName+"&sector_name="+s.key+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ "</a></p>"
+        headers_html += "<p style='font-size:14px;color:"+c_sector(s.key)+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ " (<a style='color:#bbb' href='/projects?active_string=Active&country_name="+activeName+"&sector_name="+s.key+"'>"+s.values.count+" "+("project".pluralize(s.values.count))+"</a>)</p>"
       })
 
       // load the headers 
@@ -509,9 +510,10 @@ function try_drawing_overlay() {
   worldbank_root = "http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
     worldbank_gni_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "NY.GNP.ATLS.CD")
     worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DT.ODA.ODAT.GN.ZS")
+    cdf_path = '/aggregates/projects?get=year&recipient_iso2='+activeIso
     d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
       d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_gni_data) {
-        d3.json('/aggregates/projects?get=year&recipient_iso2='+activeIso, function(cdf_data){
+        d3.json(cdf_path, function(cdf_data){
           create_line_graph(cdf_data, gni_data, dacoda_gni_data)
         })
       })
@@ -737,7 +739,7 @@ console.log("cdf, gni, and dacoda_gni data:")
         .style("background-color", "hsla(319, 0%, 100%, 0.5)")
         .style('text-align', 'center')
         .style('vertical-align', 'center')
-        .html('<p style="color:#333;"><b>Sources:</b> <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
+        .html('<p style="color:#333;"><b>Sources: </b><a href="'+cdf_path+'">CDF</a>, <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
 
   // paint the lines
   gni_line = d3.svg.line()
@@ -844,6 +846,13 @@ Array.prototype.getUnique = function(){
       u[this[i]] = 1;
    }
    return a;
+}
+
+String.prototype.pluralize = function(count, plural)
+{
+  if (plural == null)
+    plural = this + 's';
+  return (count == 1 ? this : plural)
 }
 
 
