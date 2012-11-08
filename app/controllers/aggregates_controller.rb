@@ -69,9 +69,9 @@ class AggregatesController < ApplicationController
 
 		 	sql = "select sum(usd_defl) as usd_2009, sum(usd_current) as usd_current, #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 		 			from (select projects.*,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else recipients.name end) as recipient_name,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else recipients.iso2 end) as recipient_iso2,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else recipients.iso3 end) as recipient_iso3
+		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.name) end) as recipient_name,
+		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso2) end) as recipient_iso2,
+		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso3) end) as recipient_iso3
 		 					from projects 
 			 				INNER JOIN geopoliticals on projects.id = geopoliticals.project_id 
 				 			INNER JOIN countries recipients on geopoliticals.recipient_id = recipients.id

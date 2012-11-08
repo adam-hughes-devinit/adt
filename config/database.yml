@@ -19,7 +19,7 @@ test:
   timeout: 5000
 
 production:
-  adapter: postgres
+  adapter: postgresql
   encoding: unicode
   database: adt_production
   username: adt_user
