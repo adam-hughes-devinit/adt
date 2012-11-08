@@ -31,7 +31,7 @@
 						<% if current_user.admin? && o!=current_user && o.owner!=current_user.owner && o.owner.nil? %>
 							 | <%= link_to("Add to #{current_user.owner.name}", "/users/#{o.id}/own/#{current_user.owner.id}", method: :post) %>
 						<% end %>
-						<% if current_user.admin? && o!=current_user && o.owner==current_user.owner %>
+						<% if current_user.admin? && o!=current_user && current_user.owner && o.owner==current_user.owner %>
 							 | <%= link_to("Remove from #{current_user.owner.name}", "/users/#{o.id}/disown", method: :post) %>
 						<% end %>
 					</td> 
