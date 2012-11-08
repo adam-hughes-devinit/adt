@@ -9,7 +9,7 @@
 </div>
 <div id="vis"></div>
 <script type="text/javascript">
-
+$('#vis').css('text-align', 'center')
 $('.vis_input').change(function() {
 if (active_params = gather_inputs()){
 make_map_with_params(active_params)
@@ -44,16 +44,19 @@ else {
 }
 }
 // Preparing the map
-var w = 800,
+var w = 600,
     h = w*(1),
-    xy = d3.geo.mercator().scale(w*4.5).translate([100,300]),
+    xy = d3.geo.mercator().scale(w*4.5).translate([.125*w,.375*h]),
     path = d3.geo.path().projection(xy),
     c = d3.scale.linear().domain([0,8000000000,150000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
     c_sector= d3.scale.category20c(),
     money = d3.format("0,r"),
     years = d3.range(2000,2012), 
     total_cdf_in_view = 0, 
-    active_params = {}
+    active_params = {},
+    bigger_font_size = d3.max([(14/800)*w,13])
+    medium_font_size = d3.max([(12/800)*w,12])    
+    smaller_font_size = d3.max([(10/800)*w,10])
     ;
 <% if Rails.env.development? %>
 var top_projects_data =[]
@@ -87,7 +90,7 @@ var ocean_outline = map.append("svg:path")
       .attr("stroke-width", 10)
       .attr("stroke", "darkblue")
       .style('fill', 'transparent')
-      .attr('transform', 'translate(-130, -'+((w/7)+14)+')')
+      .attr('transform', 'scale('+(h/800)+') translate(-130, -'+((1.66/8)*h)+')')
       .attr('filter', "url(#blur)")
 
 
@@ -314,8 +317,8 @@ function try_drawing_overlay() {
 
 
 
-  var sector_area_h = 370
-    sector_area_w = 370
+  var sector_area_h = .4*w
+    sector_area_w = .4*w
     sector_area_y = d3.scale.pow().domain([0,annual_maximum]).range([sector_area_h, 0])
     sector_area_x = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,sector_area_w])
 
@@ -339,8 +342,8 @@ function try_drawing_overlay() {
       .enter().append('svg:text')
         .attr("id", "country_header")
         .attr("class", "overlay")
-        .attr("x",190)
-        .attr("y", 100)
+        .attr("x", w/4)
+        .attr("y", w/8)
         .text(String)
         .attr("opacity", 0)
         .attr("fill", '#222')
@@ -358,9 +361,9 @@ function try_drawing_overlay() {
 
 
       // a scale for equally-spaced sector labels
-        highest_label = 150
-        lowest_label = h-50
-        label_left_position = w - 300
+        highest_label = (3/16)*h
+        lowest_label = h-((1/16)*h)
+        label_left_position = (5/8)*w
         label_height = d3.scale.linear().domain([0,sectorSums.length]).range([highest_label, lowest_label])
         label_increment = d3.min([label_height(1) - label_height(0), 35])
 
@@ -369,7 +372,7 @@ function try_drawing_overlay() {
         .attr('id', 'headers')
         .append("svg:foreignObject")
           .attr("height", label_increment * (sectorSums.length+2))
-          .attr("width", 310)
+          .attr("width", (3/8)*w)
           .attr("x", label_left_position-20)
           .attr("y", highest_label - 35)
           .append("xhtml:body")
@@ -380,7 +383,7 @@ function try_drawing_overlay() {
       headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b></div>" 
 
       sectorSums.forEach(function(s) {
-        headers_html += "<p style='font-size:14px;color:"+c_sector(s.key)+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ " (<a style='color:#bbb' href='/projects?active_string=Active&country_name="+activeName+"&sector_name="+s.key+"'>"+s.values.count+" "+("project".pluralize(s.values.count))+"</a>)</p>"
+        headers_html += "<p style='text-align:left;font-size:"+bigger_font_size+"px;color:"+c_sector(s.key)+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ " (<a style='color:#bbb' href='/projects?active_string=Active&country_name="+activeName+"&sector_name="+s.key+"'>"+s.values.count+" "+("project".pluralize(s.values.count))+"</a>)</p>"
       })
 
       // load the headers 
@@ -390,7 +393,7 @@ function try_drawing_overlay() {
   // hold it it a g
   area_chart = overlay.append('svg:g')
     .attr("id", "area_chart")
-    .attr('transform', 'translate(100,200)')
+    .attr('transform', 'translate('+(.125*w)+','+(.25*h)+')')
 
   // paint the year labels
   xAxis = d3.svg.axis()
@@ -419,6 +422,7 @@ function try_drawing_overlay() {
     .transition()
       .delay(function(d,i) {return 50*i})
       .attr("opacity", 1)
+      .attr('font-size', smaller_font_size)
 
   // paint the areas
     var sector_area_chart = 
@@ -438,7 +442,7 @@ function try_drawing_overlay() {
   // prep the data and function
     var pie = d3.layout.pie().sort(d3.ascending),
         pie_data = [100-percent_of_total, percent_of_total],
-        pie_radius = 70,
+        pie_radius = 40,
         arc = d3.svg.arc().outerRadius(pie_radius)
           
           // tweenPie for pie chart
@@ -485,9 +489,9 @@ function try_drawing_overlay() {
 // Drawing the line chart comparing CDF/GNI and ODA/GNI -- tough because requires ~current~ USD, not constant USD!
   // set the scene
      // Set the constants
-   line_chart_height = 95
-   line_chart_width = 280
-   line_chart_offset_y = 640
+   line_chart_height = .12*w
+   line_chart_width = (280/800)*w
+   line_chart_offset_y = (640/800)*h
    line_chart_offset_x = w - line_chart_width - 50
    line_text_margin = 33
 
@@ -498,9 +502,9 @@ function try_drawing_overlay() {
     // background darker
       line_chart.append('svg:rect')
         .attr('id', 'line_chart_background')
-        .attr('x', -20)
-        .attr('y', -20)
-        .attr('height', 40)
+        .attr('x', -.025*w)
+        .attr('y', -.025*h)
+        .attr('height', (.2*w))
         .attr('width', line_chart_width + 50)
         .attr('stroke', 'transparent')
         .style('fill', 'hsla(0, 0%, 10%, 0.5)')
@@ -523,22 +527,22 @@ function try_drawing_overlay() {
   // set targets
     // Top projects box target
       top_projects_offset_x = 10
-      top_projects_offset_y = 620
-      top_projects_height = 170
-      top_projects_width  = 400
+      top_projects_offset_y = (62/80)*h
+      top_projects_height = (17/80)*h
+      top_projects_width  = .5*w
 
       top_projects_group = overlay.append('svg:g')
         .attr('id', 'top_projects')
         .attr('transform', 'translate('+top_projects_offset_x+', '+top_projects_offset_y+')')
         .append('svg:foreignObject')
           .attr("id", "top_projects_body")
-          .attr("height", 40)
+          .attr("height", .05*h)
           .attr("width", top_projects_width)
           .style("background-color", "hsla(319, 0%, 100%, 0.5)")
           .style("margin","0 0 0 0")
           .style("padding","5px 5px 5px 5px")
           .append("xhtml:body")
-            .attr('height', 40)
+            .attr('height', .05*h)
             .style('background-color', 'transparent')
             .style('color', 'black')
             .html("<p><b>Loading top projects...</b></p>")
@@ -582,11 +586,11 @@ function create_top_projects_box(projects, target, height){
   console.log(projects)
   <% end %>
 
-  body_html = "<p><b>Top projects in "+activeName+":</b></p><ul>"
+  body_html = "<div style='text-align:left;font-size:"+medium_font_size+";'><p><b>Top projects in "+activeName+":</b></p><ul>"
   projects.forEach(function(p, i) {
-    body_html += "<li style='color:"+c_projects(i)+"'><p style='color:black'><a href='/projects/"+p.id+"'>"+p.title+"</a> ("+(p.year ? p.year : "<i>no year</i>")+"), $"+money(p.usd_2009)+"</li>"
+    body_html += "<li style='color:"+c_projects(i)+"'><span style='color:black'><a href='/projects/"+p.id+"'>"+p.title+"</a> ("+(p.year ? p.year : "<i>no year</i>")+"), $"+money(p.usd_2009)+"</span></li>"
   })
-  body_html +="</ul>"
+  body_html +="</ul></div>"
 
   foreign_object = d3.select('#'+target);
 
@@ -708,14 +712,14 @@ console.log("cdf, gni, and dacoda_gni data:")
       .text('Chinese Dev. Fin.')
       .style('fill', cdf_over_gni_color)
       .attr('text-anchor', 'bottom')
-      .attr('x', 30)
+      .attr('x', (3/80)*w)
       .attr('y', line_chart_height + line_text_margin)
 
     line_chart.append('svg:text')
       .text('DAC ODA')
       .style('fill', dacoda_over_gni_color)
       .attr('text-anchor', 'bottom')
-      .attr('x', 150)
+      .attr('x', (15/80)*w)
       .attr('y', line_chart_height + line_text_margin)
 
   // paint the heading
@@ -730,16 +734,16 @@ console.log("cdf, gni, and dacoda_gni data:")
 
   // paint sources
     line_chart.append('svg:foreignObject')
-      .attr('x', -20)
+      .attr('x', -.025*w)
       .attr('y', line_chart_height + line_text_margin +5)
       .attr('width', line_chart_width + 50)
-      .attr('height', 25)
+      .attr('height', .025*h)
       .append('xhtml:body')
         .style('padding', '2px 2px 2px 2px')
         .style("background-color", "hsla(319, 0%, 100%, 0.5)")
         .style('text-align', 'center')
         .style('vertical-align', 'center')
-        .html('<p style="color:#333;"><b>Sources: </b><a href="'+cdf_path+'">CDF</a>, <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
+        .html('<p style="color:#333;font-size:'+medium_font_size+';"><b>Sources: </b><a href="'+cdf_path+'">CDF</a>, <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
 
   // paint the lines
   gni_line = d3.svg.line()
@@ -858,15 +862,15 @@ String.prototype.pluralize = function(count, plural)
 
 function make_legend(legendAmounts) {
 //---------------------------  LEGEND  ----------------------------------
-legend_bar_width = 18
+legend_bar_width = (18/800)*w
 legend_bar_margin = 2
-min_bar_height = 60
-bar_height_increment = 20
+min_bar_height = (6/80)*h
+bar_height_increment = (2/80)*h
 legend_font_size = 10
 max_bar_height = min_bar_height + (bar_height_increment * (legendAmounts.length-1))
 var legend = vis.append('g')
     .attr("id", "legend")
-    .attr("transform", "translate(70,500)")
+    .attr("transform", "translate("+(w/10)+","+((5/8)*h)+")")
     .attr("class", 'fuzz')
 var legendBars = legend.selectAll('rect')
     .data(legendAmounts)
@@ -896,4 +900,5 @@ legend.append("svg:foreignObject")
     .style("background-color", "transparent")
     .html("<p style='color:black;'><b>Chinese Development Finance, 2000-2011<b><br><i>USD-2009</i> || <a style='color:#333;'href='/projects'>See the Data</a></p>")
 }
+
 </script>
