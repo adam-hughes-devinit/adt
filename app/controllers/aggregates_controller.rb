@@ -87,8 +87,9 @@ class AggregatesController < ApplicationController
 			 			INNER JOIN transactions on p.id = transactions.project_id
 			 		where 
 			 		#{@filters.join(' and ')}
-					group by #{@fields_to_get.select{|f| f[:group] }.map{|f| f[:group]}.join(', ')} "
-			
+					group by #{@fields_to_get.select{|f| Rails.env.production? ? f[:internal] : f[:group] }.map{|f| Rails.env.production? ? f[:internal] : f[:group]}.join(', ')} "
+					
+					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
 			@data = ActiveRecord::Base.connection.execute(sql)
 			
 		    render json: @data.as_json(

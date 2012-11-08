@@ -1,10 +1,10 @@
 
-<div id = "vis_controls" class="row">
-<%= form_for Project.new do |f| %>
-  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {include_blank: true}, {multiple: true, class: "span3 vis_input", id: "oda_like_input"}  %>
-  <%= f.select :verified, Verified.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "verified_input"}  %>  
-  <%= f.select :sector, Sector.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "sector_input"}  %>
-  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {include_blank: true}, {class: "span3 vis_input", multiple: true, id: "flow_type_input"}  %>
+<div id = "vis_controls" class="row" style='text-align:center;'>
+<%= form_for Project.new, html: {class: ""} do |f| %>
+  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {prompt: "All Flow Classes", hint: "Flow Class"}, {multiple: true, class: "span2 vis_input", id: "oda_like_input"}  %>
+  <%= f.select :verified, Verified.all.collect {|o| o.name}, {prompt: "All Verified Levels"}, {class: "span2 vis_input", multiple: true, id: "verified_input"}  %>
+  <%= f.select :sector, Sector.all.collect {|o| o.name}, {prompt: "All Sectors"}, {class: "span2 vis_input", multiple: true, id: "sector_input"}  %>
+  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {prompt: "All Flow Types"}, {class: "span2 vis_input", multiple: true, id: "flow_type_input"}  %>
 <% end %>
 </div>
 <div id="vis"></div>
