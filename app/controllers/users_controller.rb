@@ -12,7 +12,7 @@ before_filter :signed_in_and_same_owner, only: [:show]
 
   def show
     @user=User.find(params[:id])
-    @feed = Version.where("whodunnit = ?", @user.id)
+    @feed = Version.where("whodunnit = ?", "#{@user.id}")
   end  
 
   def edit
