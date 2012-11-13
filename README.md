@@ -2,7 +2,7 @@
 ## Introduction
 ### Terminology
 
-URLs below will be given in reference to a root path, which is the "base" of the all the addresses in this application. The root path is currently wm.aiddata.org
+URLs below will be given in reference to a root path, which is the "base" of the all the addresses in this application. The root path is currently `wm.aiddata.org`.
 
 ### Scope
 
@@ -56,9 +56,11 @@ Data can be exported from the search results page. The link appears above the se
 ### Sign up, Sign in, Sign out
 
 Anyone may create an account from the sign-up path, `[root]/signup`, also available on the navbar. At the moment, there are three differences for users with accounts: 
+
 1) Their comments are associated with their accounts
 2) They can see "Recent Activity" on the home page
 3) Their "profile" pages include a list of their recent actions
+
 Users with accounts can sign in and sign out through links on the navbar.
 ### Users Belong to Organizations
 
@@ -72,7 +74,7 @@ This might seem like a strange behavior, but if we ever have an institutional pa
 
 ### Codes
 
-Codes are the various categorizations applied to project records and related data. For example sector, recipient country and flow class are codes. Codes can now be viewed from Navbar > Codes > (code name). Users who belong to AidData can edit, add and remove values for each code type. All users can see the code values, and by their individual pages, see which projects have that particular value. 
+Codes are the various categorizations applied to project records and related data. For example sector, recipient country and flow class are codes. Codes can now be viewed from Navbar > Codes > (code name). Users who belong to AidData can edit, add and remove values for each code type. All users can see the code values, and via their individual pages, see which projects have that particular value. 
 
 It’s not possible to create a new code type from the web interface, only change values for existing codes.
 
@@ -119,9 +121,13 @@ The filters may be a single value (eg., `&recipient_iso=KE`) or many values (eg.
 #### Response
 
 The response is an array of objects including aggregated USD-2009 by each field name. For example,     
-    /aggregates/projects?get=donor
+    
+	/aggregates/projects?get=donor
+	
 returns an array with one object: 
-    [{"usd_2009":419168261554.65955,"donor":"CHN"}]
+    
+	[{"usd_2009":419168261554.65955,"donor":"CHN"}]
+
 A more complicated request returns a more detailed dataset:
     /aggregates/projects?get=year,recipient_name
 which yields:
