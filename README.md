@@ -131,16 +131,22 @@ returns an array with one object:
 A more complicated request returns a more detailed dataset:
     /aggregates/projects?get=year,recipient_name
 which yields:
+
     [
     	{"usd_2009":1697245819.4,"year":2000,"recipient_name":"Africa, regional"},
     	{"usd_2009":15683908.9,"year":2000,"recipient_name":"Benin"},
     	{"usd_2009":16401473.36,"year":2000,"recipient_name":"Congo, Dem. Rep."} 
-    	…
+    	...
     ]
+	
 Here is an example of filtering:
+
     aggregates/projects?get=recipient_iso2&recipient_iso2=KE
+	
 which yields:
+
     [{"usd_2009":2368182328.74,"recipient_iso2":"KE"}]
+	
 #### Looking forward
 If the aggregate feed becomes a priority, it could be expanded to aggregate on more fields or filter on more fields. This document may become out of date if the implementation changes.
 
