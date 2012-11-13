@@ -1,4 +1,7 @@
 # China App User’s Guide
+* auto-gen TOC:
+{:toc}
+
 ## Introduction
 ### Terminology
 
@@ -57,18 +60,20 @@ Data can be exported from the search results page. The link appears above the se
 
 Anyone may create an account from the sign-up path, `[root]/signup`, also available on the navbar. At the moment, there are three differences for users with accounts: 
 
-1) Their comments are associated with their accounts
-2) They can see "Recent Activity" on the home page
-3) Their "profile" pages include a list of their recent actions
+- Their comments are associated with their accounts
+- They can see "Recent Activity" on the home page
+- Their "profile" pages include a list of their recent actions
 
 Users with accounts can sign in and sign out through links on the navbar.
 ### Users Belong to Organizations
 
 By default, users don’t have organizational owners. But, after a user creates an account, an admin from an organization (likely AidData) can add that user to his or her organization from the list of users, available from the navbar or at `[root]/users`. The admin can also remove that user from the organization. 
 Users who belong to an organization (likely AidData) can:
-1) edit projects which belong to their organization
-2) create projects which will belong to their organization
-3) see user "profiles" of other users in their organization (including recent activity)
+
+- edit projects which belong to their organization
+- create projects which will belong to their organization
+- see user "profiles" of other users in their organization (including recent activity)
+
 This might seem like a strange behavior, but if we ever have an institutional partner, we can easily graft them in by creating a new organization and giving one of their users admin priviledges.
 ## Codes and Deflators 
 
@@ -129,7 +134,9 @@ returns an array with one object:
 	[{"usd_2009":419168261554.65955,"donor":"CHN"}]
 
 A more complicated request returns a more detailed dataset:
+
     /aggregates/projects?get=year,recipient_name
+	
 which yields:
 
     [
