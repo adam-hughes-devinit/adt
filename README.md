@@ -1,3 +1,5 @@
+~toc~
+
 # China App User’s Guide
 ## Introduction
 ### Terminology
