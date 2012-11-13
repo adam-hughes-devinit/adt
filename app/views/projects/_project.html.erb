@@ -10,22 +10,21 @@
 			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p>
 		</div>
 	<% end %>
-<div class= "project-box span10">
+	<div class= "project-box span10">
 
-	<p style="text-align:center"> 
-		<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
-		<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %>
-			<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
-		<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
-		<b>ID:</b> <%= link_to @project.id,  @project %> |
-		<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
-	</p>
-</div>
-		<div class="project-box span10">
-			<h3>Description:</h3>
-			<p class='project-description'><%= @project.description.blank? ? unset_data : @project.description %> </p>
-			<p><b>Capacity:</b> <%= @project.capacity.blank? ? unset_data : @project.capacity %> </p>
-		</div>
+		<p style="text-align:center"> 
+			<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
+			<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %>
+				<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
+			<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
+			<b>ID:</b> <%= link_to @project.id,  @project %> |
+			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
+		</p>
+	</div>
+	<div class="project-box span10">
+		<h3>Description:</h3>
+		<p class='project-description'><%= @project.description.blank? ? unset_data : @project.description %> </p>
+		<p><b>Capacity:</b> <%= @project.capacity.blank? ? unset_data : @project.capacity %> </p>
 	</div>
 </div>
 <div class="row">
