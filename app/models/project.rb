@@ -347,8 +347,8 @@ class Project < ActiveRecord::Base
               exchange_rate_used = deflator_object["exchange_rate"]
               deflator_used = deflator_object["deflator"]
               
-              t.usd_defl=deflated_amount.to_f
-              t.usd_current=current_amount.to_f
+              t.usd_defl=deflated_amount.to_f.round(2)
+              t.usd_current=current_amount.to_f.round(2)
               t.deflator= deflator_used
               t.exchange_rate = exchange_rate_used
               t.deflated_at = Time.now
