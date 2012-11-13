@@ -154,12 +154,12 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.5-x86-mingw32)
-    sunspot (2.0.0.pre.120925)
+    sunspot (1.3.3)
       pr_geohash (~> 1.0)
       rsolr (~> 1.0.7)
-    sunspot_rails (2.0.0.pre.120925)
+    sunspot_rails (1.3.3)
       nokogiri
-      sunspot (= 2.0.0.pre.120925)
+      sunspot (= 1.3.3)
     sunspot_solr (2.0.0.pre.120925)
     thin (1.5.0)
       daemons (>= 1.0.9)
@@ -198,8 +198,8 @@ DEPENDENCIES
   sass-rails (= 3.2.5)
   simple_form
   sqlite3 (= 1.3.5)
-  sunspot_rails (~> 2.0.0.pre.120925)
-  sunspot_solr (~> 2.0.0.pre.120925)
+  sunspot_rails (~> 1.3.0)
+  sunspot_solr
   thin
   uglifier (= 1.2.3)
   will_paginate (= 3.0.3)

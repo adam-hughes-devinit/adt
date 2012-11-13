@@ -67,7 +67,8 @@ class AggregatesController < ApplicationController
 		    # 	order: nil
 		    # 	    	)
 
-		 	sql = "select sum(usd_defl) as usd_2009, sum(usd_current) as usd_current, #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
+		 	sql = "select sum(usd_defl) as usd_2009, sum(usd_current) as usd_current, count(*) as count,
+		 			#{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 		 			from (select projects.*,
 		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.name) end) as recipient_name,
 		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso2) end) as recipient_iso2,
@@ -93,7 +94,7 @@ class AggregatesController < ApplicationController
 			@data = ActiveRecord::Base.connection.execute(sql)
 			
 		    render json: @data.as_json(
-		    	only: ["usd_2009", "usd_current"] +  @fields_to_get.map{|f| f[:external]}
+		    	only: ["usd_2009", "usd_current", "count"] +  @fields_to_get.map{|f| f[:external]}
 		    	)
 		else	
 			render json: params

@@ -19,13 +19,13 @@ make_map_with_params(active_params)
 function gather_inputs () {
 
  oda_likes =[]
- $('#oda_like_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {oda_likes.push(t)}})
+ $('#oda_like_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {oda_likes.push(t)}})
  verifieds =[]
- $('#verified_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {verifieds.push(t)}})
+ $('#verified_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {verifieds.push(t)}})
  sectors =[]
- $('#sector_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0) {sectors.push(t)}})
+ $('#sector_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {sectors.push(t)}})
  flow_types =[]
- $('#flow_type_input option:selected').each(function(d) { t = $(this).text(); if (t.length > 0) {flow_types.push(t)}})
+ $('#flow_type_input option:selected').each(function(d) { t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {flow_types.push(t)}})
 
 
 input_params = {}
@@ -294,7 +294,7 @@ function try_drawing_overlay() {
  // build sum data (for labels):
  sectorSums = d3.nest() 
   .key(function(d){return d.sector_name})
-  .rollup(function(data) { return { "value" : d3.sum(data, function(d) {return d.usd_2009}), "count" : d3.sum(data, function(d) {return d ? 1 : 0 })}})
+  .rollup(function(data) { return { "value" : d3.sum(data, function(d) {return d.usd_2009}), "count" : d3.sum(data, function(d) {return d.count}) }})
   .entries(activeCountryData)
 
  // build percent of total cdf data (for pie):
