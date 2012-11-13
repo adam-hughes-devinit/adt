@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
 skip_before_filter :signed_in_user
   def home
   	@total_projects = Project.where("active = ?", true ).count
-  	@feed = Version.all
+  	@feed = Version.last(10)
   end
 
   def help
