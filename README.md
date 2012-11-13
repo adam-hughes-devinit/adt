@@ -1,7 +1,4 @@
 # China App User’s Guide
-* auto-gen TOC:
-{:toc}
-
 ## Introduction
 ### Terminology
 
