@@ -1,10 +1,10 @@
 
 <div id = "vis_controls" class="row" style='text-align:center;'>
 <%= form_for Project.new, html: {class: ""} do |f| %>
-  <%= f.select :oda_like, OdaLike.all.collect {|o| o.name}, {prompt: "All Flow Classes", hint: "Flow Class"}, {multiple: true, class: "span2 vis_input", id: "oda_like_input"}  %>
-  <%= f.select :verified, Verified.all.collect {|o| o.name}, {prompt: "All Verified Levels"}, {class: "span2 vis_input", multiple: true, id: "verified_input"}  %>
-  <%= f.select :sector, Sector.all.collect {|o| o.name}, {prompt: "All Sectors"}, {class: "span2 vis_input", multiple: true, id: "sector_input"}  %>
-  <%= f.select :flow_type, FlowType.all.collect {|o| o.name}, {prompt: "All Flow Types"}, {class: "span2 vis_input", multiple: true, id: "flow_type_input"}  %>
+  <%= f.select :oda_like, options_for_select(["All Flow Classes"] + OdaLike.all.collect {|o| o.name}, "All Flow Classes"), {}, {multiple: true, class: "span2 vis_input", id: "oda_like_input", selected_value: "All Flow Classes"}  %>
+  <%= f.select :verified, options_for_select(["All Verified Levels"] + Verified.all.collect {|o| o.name}, "All Verified Levels"), {}, {class: "span2 vis_input", multiple: true, id: "verified_input"}  %>
+  <%= f.select :sector, options_for_select(["All Sectors"] + Sector.all.collect {|o| o.name}, "All Sectors"), {},{class: "span2 vis_input", multiple: true, id: "sector_input"}  %>
+  <%= f.select :flow_type, options_for_select(["All Flow Types"] + FlowType.all.collect {|o| o.name}, "All Flow Types"), {}, {class: "span2 vis_input", multiple: true, id: "flow_type_input"}  %>
 <% end %>
 </div>
 <div id="vis"></div>
@@ -19,13 +19,13 @@ make_map_with_params(active_params)
 function gather_inputs () {
 
  oda_likes =[]
- $('#oda_like_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {oda_likes.push(t)}})
+ $('#oda_like_input option:selected').each(function(d) {t = $(this).text(); if (t.indexOf('All')!=0) {oda_likes.push(t)}})
  verifieds =[]
- $('#verified_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {verifieds.push(t)}})
+ $('#verified_input option:selected').each(function(d) {t = $(this).text(); if (t.indexOf('All')!=0) {verifieds.push(t)}})
  sectors =[]
- $('#sector_input option:selected').each(function(d) {t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {sectors.push(t)}})
+ $('#sector_input option:selected').each(function(d) {t = $(this).text(); if (t.indexOf('All')!=0) {sectors.push(t)}})
  flow_types =[]
- $('#flow_type_input option:selected').each(function(d) { t = $(this).text(); if (t.length > 0 || t.indexOf('All')!=-1) {flow_types.push(t)}})
+ $('#flow_type_input option:selected').each(function(d) { t = $(this).text(); if (t.indexOf('All')!=0) {flow_types.push(t)}})
 
 
 input_params = {}
