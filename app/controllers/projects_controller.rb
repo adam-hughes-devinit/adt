@@ -18,8 +18,14 @@ before_filter :correct_owner?, only: [:edit]
         params[:max] = Project.all.count
         custom_search
         @ids_for_export = @projects.map { |p| p.id }
-        @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
+        
+        if @ids_for_export.length = Project.all.count
+        	@csv_data = Cache.find(0).text # this is a chill hack -- id=0 holds all the text.
+        else	
+        	@csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
 ")			
+				end
+
 				@csv_header = "\uFEFF" + "\"project_id\", \"donor\", \"title\", \"year\", \"description\",\"sector\", \"sector_comment\", \"status\", \"status_code\", \"flow\",\"tied\", \"tied_code\", \"all recipients\", \"sources\", \"sources_count\",\"funding_agency\", \"implementing_agency\",\"donor_agency\", \"donor_agency_count\", \"recipient_agencies\", \"recipient_agencies_count\",\"verified\", \"verified_code\", \"flow_class\", \"flow_class_code\", \"active\", \"active_code\",\"factiva_sources\", \"amount\", \"currency\",\"deflators_used\", \"exchange_rates_used\",\"usd_defl\",\"start_actual\", \"start_planned\",\"end_actual\", \"end_planned\",\"recipient_count\", \"recipient_condensed\", \"is_commercial\", \"is_commercial_\"
 "
         send_data((@csv_header + @csv_data), filename: "AidData_China_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
