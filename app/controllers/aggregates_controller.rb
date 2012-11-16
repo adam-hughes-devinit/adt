@@ -67,7 +67,7 @@ class AggregatesController < ApplicationController
 		    # 	order: nil
 		    # 	    	)
 
-		 	sql = "select sum(usd_defl) as usd_2009, sum(usd_current) as usd_current, count(*) as count,
+		 	sql = "select sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current, count(*) as count,
 		 			#{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 		 			from (select projects.*,
 		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.name) end) as recipient_name,
@@ -85,7 +85,7 @@ class AggregatesController < ApplicationController
 		 				LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
 
 			 			INNER JOIN countries donors on p.donor_id = donors.id 
-			 			INNER JOIN transactions on p.id = transactions.project_id
+			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id
 			 		where 
 			 		#{@filters.join(' and ')}
 					group by #{@fields_to_get.select{|f| Rails.env.production? ? f[:internal] : f[:group] }.map{|f| Rails.env.production? ? f[:internal] : f[:group]}.join(', ')} "
