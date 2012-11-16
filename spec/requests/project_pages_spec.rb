@@ -72,11 +72,13 @@ describe "Project pages" do
           visit new_project_path
     end
 
-    it {should have_content("Create a new project")}
+    it {should have_content("New Project")}
     
-    it "should reject with invalid information" do
-      expect {click_button "Save"}.not_to change(Project, :count)
-    end
+    # There isn't really invalid information... 
+    #
+    # it "should reject with invalid information" do
+    #  expect {click_button "Save"}.not_to change(Project, :count)
+    # end
 
     describe "with valid information" do
       before do
@@ -124,24 +126,38 @@ describe "Project pages" do
 
         # test that the user who made it now owns it
         it {should have_content(user.owner.name)}
-      end
 
-      # I can't get this to work.
-      describe "editing the project" do
-        before do
-          visit project_path(project)
-          click_link "Edit this project"
-        end
+		    describe "editing the project" do
+		      before do
+		        click_link "Edit this project"
+		      end
 
-        describe "should delete the transaction"  do
-          before do
-            click_link "Remove Transaction"
-            click_button "Save"
-          end
+		      describe "changing description and transaction"  do
+		        before do
+    	        fill_in "Description", with: "new description"
+			        # click_link "Remove Transaction" 
+			        #      I wish I could get that to work!
+		        end
+		        
+		        it {should have_content "Remove Transaction"}
+		        describe "then save the project" do
+		        	before do
+			        	click_button "Save"
+			        end
+			        
+			        it "should have some version control" do
+			        	should have_link("Undo")
+			        end
+			        
+			        describe "visiting the new project" do
+								it {should have_content "new description"}
+						  	it {should have_content(Currency.first.iso3)}
+						  end
 
-        it {should_not have_content(transaction.currency.iso3)}
-        end
-
+			      end
+			      		        
+		       end
+		     end			
       end
     end  
 

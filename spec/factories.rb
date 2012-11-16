@@ -132,4 +132,10 @@ Factory.define :project do |project|
 
 end
 
+Factory.define :cache do |cache|
+	cache.id 1
+	cache.text FactoryGirl.create(:project).cache_text
+end
+	
+
 

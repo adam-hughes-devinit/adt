@@ -15,7 +15,7 @@ describe "User pages" do
 
 	describe "attempt to view a user" do
 		before { visit user_path(user)}
-		it {should.redirect_to signin_path}
+		it {should redirect_to signin_path}
 	end
 
 
@@ -44,7 +44,7 @@ describe "User pages" do
 			end
 
 			describe "after saving a user" do
-				it { should have_link ('Sign out')}
+				it { should have_link('Sign out')}
 			end
 			
 		end

@@ -44,13 +44,13 @@ else {
 }
 }
 // Preparing the map
-var w = 600,
+var w = 800,
     h = w*(1),
     xy = d3.geo.mercator().scale(w*4.5).translate([.125*w,.375*h]),
     path = d3.geo.path().projection(xy),
     c = d3.scale.linear().domain([0,8000000000,150000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
     c_sector= d3.scale.category20c(),
-    money = d3.format("0,r"),
+    money = d3.format("0,r")
     years = d3.range(2000,2012), 
     total_cdf_in_view = 0, 
     active_params = {},
@@ -90,7 +90,7 @@ var ocean_outline = map.append("svg:path")
       .attr("stroke-width", 10)
       .attr("stroke", "darkblue")
       .style('fill', 'transparent')
-      .attr('transform', 'scale('+(h/800)+') translate(-130, -'+((1.66/8)*h)+')')
+      .attr('transform', 'scale('+(h/800)+') translate(-130, -'+((1.255/8)*h)+')')
       .attr('filter', "url(#blur)")
 
 

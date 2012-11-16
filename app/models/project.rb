@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   attr_accessible :title, :active, :capacity, :description, :year,
-  :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment, 
+  :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,:cache!, :cache_text,
   :is_commercial, :media_id, 
   :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, :is_cofinanced,
   # belongs_to fields
@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
   :donor_id, :owner_id
   
   before_save :deflate_values
+  after_save :cache_this_project
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
@@ -263,6 +264,43 @@ class Project < ActiveRecord::Base
 
   end
 
+	def cache_this_project
+		cached_record = Cache.find_or_create_by_id(id)
+		cached_record.update_attribute(:text, cache_text)
+	end
+	
+	def cache!
+		cache_this_project
+	end
+	
+	def cache_text
+    project_sources = {}
+    project_sources[:all] = sources.map{|s| "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }" }
+    project_sources[:factiva] = sources.map do |s| 
+      if s.source_type = SourceType.find_by_name("Factiva")
+        "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }"
+      end
+    end
+
+    project_agencies = {}
+    ["Funding", "Implementing"].map do |type|
+      project_agencies[type.to_sym] = participating_organizations.where("role_id = #{Role.find_by_name(type).id}").map do |a| 
+        if a.organization 
+          "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
+        end
+      end
+    end
+    ["Donor", "Recipient", "Other"].map do |origin|
+      project_agencies[origin.to_sym] = participating_organizations.where("origin_id = #{Origin.find_by_name(origin).id}").map do |a| 
+        if a.organization 
+          "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
+        end
+      end
+    end
+
+    cache_text = "\"#{id}\",\"#{donor_name}\",\"#{title}\",\"#{year}\",\"#{description}\",\"#{sector_name}\",\"#{sector_comment}\",\"#{status_name}\",\"#{status ? status.iati_code : ''}\",\"#{flow_type_name}\",\"#{tied_name}\",\"#{tied ? tied.iati_code : '' }\",\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\",\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\",\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].count}\",\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].count}\",\"#{verified_name}\",\"#{verified ? verified.id : '' }\",\"#{oda_like_name}\",\"#{oda_like ? oda_like.id : '' }\",\"#{active_string}\",\"#{active ? 1 : 0}\",\"#{project_sources[:factiva].join("; ")}\",\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\",\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\",\"#{start_actual ? start_actual.strftime("%d %B %Y") : ''}\",\"#{start_planned ?  start_planned.strftime("%d %B %Y") : ''}\",\"#{end_actual ? end_actual.strftime("%d %B %Y") : ''}\",\"#{end_planned ? end_planned.strftime("%d %B %Y"): '' }\",\"#{country_name.count}\",\"#{recipient_condensed}\",\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 0}\""
+	end
+  
   def self.to_csv
     row_data = all.map do |project|
         sources = {}

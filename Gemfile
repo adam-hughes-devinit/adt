@@ -9,7 +9,7 @@ gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'simple_form'
 gem 'paper_trail'
-gem 'sunspot_rails', '~> 1.3.0'
+gem 'sunspot_rails'
 gem 'thin'
 
 group :development, :test do

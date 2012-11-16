@@ -2,7 +2,7 @@
 ## Introduction
 ### Terminology
 
-URLs below will be given in reference to a root path, which is the "base" of the all the addresses in this application. The root path is currently `wm.aiddata.org`.
+URLs below will be given in reference to a root path, which is the "base" of the all the addresses in this application. The root path is currently `china.aiddata.org`.
 
 ### Scope
 
