@@ -19,7 +19,7 @@ before_filter :correct_owner?, only: [:edit]
         custom_search
         @ids_for_export = @projects.map { |p| p.id }
         
-        if @ids_for_export.length = Project.all.count
+        if @ids_for_export.length == Project.all.count
         	@csv_data = Cache.find(0).text # this is a chill hack -- id=0 holds all the text.
         else	
         	@csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
