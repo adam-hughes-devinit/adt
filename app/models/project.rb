@@ -297,76 +297,13 @@ class Project < ActiveRecord::Base
         end
       end
     end
-
-    cache_text = "\"#{id}\",\"#{donor_name}\",\"#{title}\",\"#{year}\",\"#{description}\",\"#{sector_name}\",\"#{sector_comment}\",\"#{status_name}\",\"#{status ? status.iati_code : ''}\",\"#{flow_type_name}\",\"#{tied_name}\",\"#{tied ? tied.iati_code : '' }\",\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\",\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\",\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].count}\",\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].count}\",\"#{verified_name}\",\"#{verified ? verified.id : '' }\",\"#{oda_like_name}\",\"#{oda_like ? oda_like.id : '' }\",\"#{active_string}\",\"#{active ? 1 : 0}\",\"#{project_sources[:factiva].join("; ")}\",\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\",\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\",\"#{start_actual ? start_actual.strftime("%d %B %Y") : ''}\",\"#{start_planned ?  start_planned.strftime("%d %B %Y") : ''}\",\"#{end_actual ? end_actual.strftime("%d %B %Y") : ''}\",\"#{end_planned ? end_planned.strftime("%d %B %Y"): '' }\",\"#{country_name.count}\",\"#{recipient_condensed}\",\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 0}\""
+    
+    cached_recipients = []
+    geopoliticals.each {|g| g.recipient ? cached_recipients.push(g.recipient) : nil }	
+    
+    cache_text = "\"#{id}\",\"#{donor_name}\",\"#{title}\",\"#{year}\",\"#{year_uncertain}\",\"#{description}\",\"#{sector_name}\",\"#{sector_comment}\",\"#{crs_sector}\",\"#{status_name}\",\"#{status ? status.code : ''}\",\"#{flow_type_name}\",\"#{tied_name}\",\"#{tied ? tied.code : '' }\",\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\",\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\",\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].count}\",\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].count}\",\"#{verified_name}\",\"#{verified ? verified.code : '' }\",\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\",\"#{active_string}\",\"#{active ? 1 : 2}\",\"#{project_sources[:factiva].join("; ")}\",\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\",\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\",\"#{start_actual ? start_actual.strftime("%d %B %Y") : ''}\",\"#{start_planned ?  start_planned.strftime("%d %B %Y") : ''}\",\"#{end_actual ? end_actual.strftime("%d %B %Y") : ''}\",\"#{end_planned ? end_planned.strftime("%d %B %Y"): '' }\",\"#{country_name.count}\",\"#{recipient_condensed}\",\"#{cached_recipients.map(&:cow_code)}\",\"#{cached_recipients.map(&:oecd_code)}\",\"#{cached_recipients.map(&:oecd_name)}\",\"#{cached_recipients.map(&:iso3)}\",\"#{cached_recipients.map(&:iso2)}\",\"#{cached_recipients.map(&:un_code)}\",\"#{cached_recipients.map(&:imf_code)}\",\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 2}\",\",\"#{debt_uncertain}\",\"#{line_of_credit}\",\"#{is_cofinanced}\""
 	end
-  
-  def self.to_csv
-    row_data = all.map do |project|
-        sources = {}
-        sources[:all] = project.sources.map{|s| "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }" }
-        sources[:factiva] = project.sources.map do |s| 
-          if s.source_type = SourceType.find_by_name("Factiva")
-            "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }"
-          end
-        end
-
-        agencies = {}
-        ["Funding", "Implementing"].map do |type|
-          agencies[type.to_sym] = project.participating_organizations.where("role_id = #{Role.find_by_name(type).id}").map do |a| 
-            if a.organization 
-              "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
-            end
-          end
-        end
-        ["Donor", "Recipient", "Other"].map do |origin|
-          agencies[origin.to_sym] = project.participating_organizations.where("origin_id = #{Origin.find_by_name(origin).id}").map do |a| 
-            if a.organization 
-              "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
-            end
-          end
-        end
-
-        row =
-          ["#{project.id}", "#{project.donor_name}", "#{project.title}", "#{project.year}", "#{project.description}",
-          "#{project.sector_name}", "#{project.sector_comment}", "#{project.status_name}", "#{project.status ? project.status.iati_code : ''}", "#{project.flow_type_name}",
-          "#{project.tied_name}", "#{project.tied ? project.tied.iati_code : '' }", "#{project.country_name.join(", ")}", "#{sources[:all].join("; ")}", "#{sources[:all].count}",
-          "#{agencies[:Funding].join('; ')}", "#{agencies[:Implementing].join("; ")}",
-          "#{agencies[:Donor].join("; ")}", "#{agencies[:Donor].count}", "#{agencies[:Recipient].join('; ')}", "#{agencies[:Recipient].count}",
-          "#{project.verified_name}", "#{project.verified ? project.verified.id : '' }", "#{project.oda_like_name}", "#{project.oda_like ? project.oda_like.id : '' }", "#{project.active_string}", "#{project.active ? 1 : 0}",
-          "#{sources[:factiva].join("; ")}", "#{project.transactions.map{|t| t.value}.join("; ")}", "#{project.transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}", 
-          "#{project.transactions.map{|t| t.deflator}.join("; ")}","#{project.transactions.map{|t| t.exchange_rate}.join("; ")}",
-          "#{project.usd_2009}",
-          "#{project.start_actual ? project.start_actual.strftime("%d %B %Y") : ''}", "#{project.start_planned ?  project.start_planned.strftime("%d %B %Y") : ''}", 
-          "#{project.end_actual ? project.end_actual.strftime("%d %B %Y") : ''}", "#{project.end_planned ? project.end_planned.strftime("%d %B %Y"): '' }",
-          "#{project.country_name.count}", "#{project.recipient_condensed}", "#{project.is_commercial_string}", "#{project.is_commercial ? 1 : 0}"  
-          ]
-      end
-
-    CSV.generate do |csv|
-      csv << 
-      # \uFEFF is a dumb hack for UTF-8 encoding in excel
-      ["\uFEFFproject_id", "donor", "title", "year", "description",
-        "sector", "sector_comment", "status", "status_code", "flow", 
-        "tied", "tied_code", "all recipients", "sources", "sources_count", 
-         "funding_agency", "implementing_agency", 
-         "donor_agency", "donor_agency_count", "recipient_agencies", "recipient_agencies_count",
-         "verified", "verified_code", "flow_class", "flow_class_code", "active", "active_code", 
-         "factiva_sources", "amount", "currency", 
-         "deflators_used", "exchange_rates_used",
-         "usd_defl",
-         "start_actual", "start_planned", 
-         "end_actual", "end_planned",
-         "recipient_count", "recipient_condensed", "is_commercial", "is_commercial_code"]
-      row_data.each do |row|
-        csv << row
-      end
-    end
-  end
-
-
-
-
+ 
    def deflate_values
       if year && donor
         donor_iso3 = donor.iso3

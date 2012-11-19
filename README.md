@@ -1,4 +1,4 @@
-# China App User’s Guide
+# China App User's Guide
 ## Introduction
 ### Terminology
 
@@ -8,25 +8,25 @@ URLs below will be given in reference to a root path, which is the "base" of the
 
 This document is for transitioning from an internal data collection and management system for the media-based data collection project to a new application with improved security and stability. 
 
-## What’s the Same: Projects, Users
+## What's the Same: Projects, Users
 
 The central data object is still the project and it has the same components. It is still created and edited via form input. Projects are accessed by search-and-filter or directly by ID. 
 
-Authorized users may create and edit projects. Unauthorized users may view projects but not edit them. Users exist in a more formalized structure: they belong to organizations (in our case, AidData), and some are admins. When a user creates a project, it belongs to his or her organization. Users can only edit projects that belong to their organization. Admins have special privileges, notably: editing codes, adding and removing users from the organization and deleting comments. A user’s actions create log entries, visible on the user’s "profile." 
+Authorized users may create and edit projects. Unauthorized users may view projects but not edit them. Users exist in a more formalized structure: they belong to organizations (in our case, AidData), and some are admins. When a user creates a project, it belongs to his or her organization. Users can only edit projects that belong to their organization. Admins have special privileges, notably: editing codes, adding and removing users from the organization and deleting comments. A user's actions create log entries, visible on the user's "profile." 
 
-## What’s New: Codes, Comments, Organizations
+## What's New: Codes, Comments, Organizations
 Codes, which are supporting data for categorizing and tagging data records are now directly accessible to end users (with admin authorization). For example, to add a new sector, navigate to `[root]/sectors`. 
 
 Any page visitor may leave comments on project pages. Admins may delete these comments.
 
-As an experiment in data ownership and user domain, there is also an organization  element in the user model. For our purposes, it’s important to know that we can specify users who belong to AidData, and only those users have authorization over our projects. Should other organizations take interest in our projects, we can make them their own organizations, users and admins. 
+As an experiment in data ownership and user domain, there is also an organization  element in the user model. For our purposes, it's important to know that we can specify users who belong to AidData, and only those users have authorization over our projects. Should other organizations take interest in our projects, we can make them their own organizations, users and admins. 
 
 ## Projects
 
 Many user activities begin with projects. This section addresses how to create, find and manipulate projects.
 ### Find a Project
 
-A user may find projects by two methods. If the user knows the project’s ID number, the user may go directly to the project via Navbar > Projects > Find by ID. Alternatively, the user may type in the URL : `[root]/projects/[ID]`. 
+A user may find projects by two methods. If the user knows the projects ID number, the user may go directly to the project via Navbar > Projects > Find by ID. Alternatively, the user may type in the URL : `[root]/projects/[ID]`. 
 
 Users may also find projects by search-and-filter, which can be accessed via Navbar > Projects > Search and Filter or the URL `[root]/projects`. A user may enter a search query in the text input, then click search to return all matching projects. The search function covers all text fields in a project record, including accessory data such as contact name and subnational location detail. To filter the project list, a user may click one of the filters to see the available options, then click one of those options to show only projects which contain that value. In some cases, such as "recipient country", a project may have more than one value, so it will match more than one filter (eg, a project to Burundi and Rwanda will appear under a filter for Burundi and a filter for Rwanda). 
 
@@ -51,7 +51,11 @@ The create page is accessible via Navbar > Projects > Create a project. Note tha
 When a user creates a project, it is associated with the organization that owns that user. Users who belong to the same organization (eg, other AidData research assistants) may edit that project, but other users may not. (All users, even if they are anonymous, may view the project page.)
 ## Exporting Data
 
-Data can be exported from the search results page. The link appears above the search results. Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren’t listed here). The fields can only be changed by altering the source code -- sorry!
+Data can be exported from the search results page. The link appears above the search results. Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren't listed here). The fields can only be changed by altering the source code -- sorry!
+
+### Implementation details of export function
+Export data is stored in the caches table and controlled by the Cache model and Project model's `cache!` function. It was too slow to generate CSVs on the fly, so now, whenever a project is saved, its cache is updated also. Whenever a cache is saved, it also updates Cache Zero, which holds the _whole_ CSV. (So, when a user requests all projects, making a big select, we just give the one where project_id=0. I wonder if we'll add more specialized caches, like -1 for all active projects, etc.)
+ 
 ## Users
 ### Sign up, Sign in, Sign out
 
@@ -64,7 +68,7 @@ Anyone may create an account from the sign-up path, `[root]/signup`, also availa
 Users with accounts can sign in and sign out through links on the navbar.
 ### Users Belong to Organizations
 
-By default, users don’t have organizational owners. But, after a user creates an account, an admin from an organization (likely AidData) can add that user to his or her organization from the list of users, available from the navbar or at `[root]/users`. The admin can also remove that user from the organization. 
+By default, users don't have organizational owners. But, after a user creates an account, an admin from an organization (likely AidData) can add that user to his or her organization from the list of users, available from the navbar or at `[root]/users`. The admin can also remove that user from the organization. 
 Users who belong to an organization (likely AidData) can:
 
 - edit projects which belong to their organization
@@ -78,7 +82,7 @@ This might seem like a strange behavior, but if we ever have an institutional pa
 
 Codes are the various categorizations applied to project records and related data. For example sector, recipient country and flow class are codes. Codes can now be viewed from Navbar > Codes > (code name). Users who belong to AidData can edit, add and remove values for each code type. All users can see the code values, and via their individual pages, see which projects have that particular value. 
 
-It’s not possible to create a new code type from the web interface, only change values for existing codes.
+It's not possible to create a new code type from the web interface, only change values for existing codes.
 
 ### Deflators
 As before, deflation is handled by an external service, visible at `data.itpir.wm.edu/deflate`. There are plans to embed deflation metadata with the project table so that end users can see the values used and when they were employed.
@@ -92,7 +96,12 @@ Hopefully, comments will provide a feedback loop for data users to report errors
 Underneath the project platform there are several data feeds which could be useful for people making data visualizations. The EDs should decide if/why/how to make these public.
 
 ### Project Data Feed
-This is implemented and needs to be documented.
+The project data feed was implemented to feed "top projects" to the map visualization. It is available at /projects.json and takes exactly the same parameters as the search page. It defaults to 50 projects per page and only shows the first page of results unless the request includes `page` greater than 1. The number of projects per page can also be set by passing `max`. 
+
+
+The best way to learn the project API is to insert `.json` into the search page URL and see what you get. 
+
+
 ### Aggregate Data Feed
 The aggregate data feed was implemented for the map visualization. At first, it loaded by aggregating projects one-by-one, but it was far too slow.  The aggregate data feed allows the visualization to grab only the data it needs in a succinct format. Other tech-savvy users could get aggregate data this way and in the future, it could drive an aggregate exporter. 
 #### What it does

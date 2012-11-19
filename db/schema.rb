@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121116204426) do
+ActiveRecord::Schema.define(:version => 20121119222743) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20121116204426) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "code"
   end
 
   add_index "oda_likes", ["id"], :name => "index_oda_likes_on_id"
@@ -212,6 +213,7 @@ ActiveRecord::Schema.define(:version => 20121116204426) do
     t.integer  "iati_code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "code"
   end
 
   add_index "statuses", ["id"], :name => "index_statuses_on_id"
@@ -221,6 +223,7 @@ ActiveRecord::Schema.define(:version => 20121116204426) do
     t.integer  "iati_code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "code"
   end
 
   add_index "tieds", ["id"], :name => "index_tieds_on_id"
@@ -257,6 +260,7 @@ ActiveRecord::Schema.define(:version => 20121116204426) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "code"
   end
 
   add_index "verifieds", ["id"], :name => "index_verifieds_on_id"

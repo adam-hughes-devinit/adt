@@ -83,6 +83,7 @@ coalesce('oda_like: OdaLike.find_by_name("'||oda_like||'"), ', '' ) ||
 -- sector
 coalesce('sector: Sector.find_by_name("'||sector||'"), ', '' ) ||
 coalesce('sector_comment: "'||sector_comment||'", ', '') ||
+coalesce('crs_sector: "'||crs_sector||'", ', '') ||
 -- tied
 coalesce('tied: Tied.find_by_name("'||tied||'"), ', '' ) ||
 -- verified
@@ -93,10 +94,7 @@ coalesce('start_actual: "'||start_actual||'".to_date, ', '') ||
 coalesce('end_planned: "'||end_planned||'".to_date, ', '') ||
 coalesce('end_actual: "'||end_actual||'".to_date, ', '') ||
 	
-'donor: Country.find_by_name("China")) do |p|
-p.id = '||id||'
-p.save
-end' 
+'donor: Country.find_by_name("China")) { |p| p.id = '||id||'; p.save;}' 
 from mbdc_project
 left join (select id, sector, status, flow flow_type, oda_like, tied, verified from mbdc_full_view) extras using(id)
 where donor_id = 
@@ -194,6 +192,8 @@ select 'User.find_by_email("bfodonnell@email.wm.edu").toggle!(:admin)'
 union all
 select 'User.find_by_email("rmosolgo@aiddata.org").toggle!(:admin)'
 union all
-select 'User.create!(email: "bcparks@aiddata.org", name: "bcparks, owner: Organization.find_by_name("AidData"), password: "a1dd4t4", password_confirmation: "a1dd4t4", admin: true)'
+select 'User.create!(email: "bcparks@aiddata.org", name: "bcparks", owner: Organization.find_by_name("AidData"), password: "a1dd4t4", password_confirmation: "a1dd4t4", admin: true)'
+union all
+select 'User.create!(email: "afuchs@princeton.edu", name: "afuchs", owner: Organization.find_by_name("AidData"), password: "a1dd4t4", password_confirmation: "a1dd4t4", admin: true)'
 union all
 select 'end';
