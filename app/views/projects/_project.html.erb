@@ -40,7 +40,7 @@
 	<div class="project-categories project-box span5">
 		<h3>Details: </h3>
 		<ul>
-			<li><b>ODA-Like:</b> <%= @project.oda_like.nil? ? unset_data : link_to(@project.oda_like.name, @project.oda_like) %></li>
+			<li><b>Flow Class:</b> <%= @project.oda_like.nil? ? unset_data : link_to(@project.oda_like.name, @project.oda_like) %></li>
 			<li><b>Status:</b> <%= @project.status.nil? ? unset_data : link_to(@project.status.name, @project.status) %> </li>
 			<li><b>Sector:</b> <%= @project.sector.nil? ? unset_data :  link_to(@project.sector.name, @project.sector) %></li>
 			<li><b>Sector comment:</b> <%=  @project.sector_comment.blank? ? unset_data : @project.sector_comment %></li>
@@ -49,8 +49,8 @@
 			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? unset_data :  link_to(@project.flow_type.name, @project.flow_type) %></li>
 			<li><b>Tied:</b> <%= @project.tied.nil? ? unset_data : link_to(@project.tied.name, @project.tied) %></li>
 			<li><b>Commercial:</b> <%= @project.is_commercial %></li>
-			<li><b>Line of Credit:</b><%= @project.line_of_credit %></li>
-			<li><b>Cofinanced:</b><%= @project.is_cofinanced %></li>
+			<li><b>Line of Credit:</b> <%= @project.line_of_credit %></li>
+			<li><b>Cofinanced:</b> <%= @project.is_cofinanced %></li>
 			
 		</ul>
 	</div>

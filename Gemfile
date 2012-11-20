@@ -11,6 +11,7 @@ gem 'simple_form'
 gem 'paper_trail'
 gem 'sunspot_rails'
 gem 'thin'
+gem 'markdown-rails'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
