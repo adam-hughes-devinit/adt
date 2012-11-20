@@ -63,6 +63,12 @@ var w = 800,
 var top_projects_data =[]
 <% end %>
 
+function nicemoney(amount){
+if (amount<1000){return money(d3.round(amount,0))} else{
+    if (amount>=1000 && amount<1000000){return d3.round((amount/1000),0)+"K"} else{
+        if (amount>=1000000 && amount<1000000000){return d3.round((amount/1000000),1)+"M"} else{
+            if (amount>=1000000000){return money(d3.round((amount/1000000000),2))+"B"}}}}}
+
 var pie = d3.layout.pie()
    .value(function(d) {return d.value});
 
@@ -384,7 +390,7 @@ function try_drawing_overlay() {
       headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b></div>" 
 
       sectorSums.forEach(function(s) {
-        headers_html += "<p style='text-align:left;font-size:"+bigger_font_size+"px;color:"+c_sector(s.key)+"'><b>"+ s.key +"</b>:<br> -- $" +money(Math.round(s.values.value))+ " (<a style='color:#bbb' href='/projects?active_string=Active&country_name="+activeName+"&sector_name="+s.key+"'>"+s.values.count+" "+("project".pluralize(s.values.count))+"</a>)</p>"
+        headers_html += "<p style='text-align:left;font-size:"+bigger_font_size+"px;color:"+c_sector(s.key)+"'><b>"+ s.key +"</b>:<br> -- $" +nicemoney(Math.round(s.values.value))+ " (<a style='color:#bbb' href='/projects?active_string=Active&country_name="+activeName+"&sector_name="+s.key+"'>"+s.values.count+" "+("project".pluralize(s.values.count))+"</a>)</p>"
       })
 
       // load the headers 
@@ -589,7 +595,7 @@ function create_top_projects_box(projects, target, height){
 
   body_html = "<div style='text-align:left;font-size:"+medium_font_size+";'><p><b>Top projects in "+activeName+":</b></p><ul>"
   projects.forEach(function(p, i) {
-    body_html += "<li style='color:"+c_projects(i)+"'><span style='color:black'><a href='/projects/"+p.id+"'>"+p.title+"</a> ("+(p.year ? p.year : "<i>no year</i>")+"), $"+money(p.usd_2009)+"</span></li>"
+    body_html += "<li style='color:"+c_projects(i)+"'><span style='color:black'><a href='/projects/"+p.id+"'>"+p.title+"</a> ("+(p.year ? p.year : "<i>no year</i>")+"), $"+nicemoney(p.usd_2009)+"</span></li>"
   })
   body_html +="</ul></div>"
 
@@ -890,7 +896,7 @@ legend.selectAll('text')
   .attr("text-anchor", "start")
   .attr("font-size", legend_font_size)
   .attr("fill", function(d,i) {return greyscalec(i)})
-  .text(function(d) {return "$" + money(d)})
+  .text(function(d) {return "$" + nicemoney(d)})
 
 legend.append("svg:foreignObject")
   .attr("height", "100")
