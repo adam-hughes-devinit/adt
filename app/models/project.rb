@@ -265,8 +265,10 @@ class Project < ActiveRecord::Base
   end
 
 	def cache_this_project
-		cached_record = Cache.find_or_create_by_id(id)
-		cached_record.update_attribute(:text, cache_text)
+		if CACHE_ONE
+			cached_record = Cache.find_or_create_by_id(id)
+			cached_record.update_attribute(:text, cache_text)
+		end
 	end
 	
 	def cache!
