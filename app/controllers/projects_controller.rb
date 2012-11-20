@@ -43,6 +43,8 @@ before_filter :correct_owner?, only: [:edit]
   def show
     @project = Project.find(params[:id])
     @comment = Comment.new
+    @history = @project.history
+    @flags = @project.all_flags
 
     respond_to do |format|
       format.html # show.html.erb

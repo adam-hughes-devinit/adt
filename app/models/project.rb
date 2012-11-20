@@ -364,4 +364,18 @@ class Project < ActiveRecord::Base
             {participating_organizations: {only: [], include: [origin: {only: [:name]}, organization: {only: [:name, :organization_type]}, role: {only: [:name]}]}}
             ]) 
   end
+  
+  def history
+	  [self.versions \
+	    + self.transactions.map(&:versions) \
+	  	+ self.sources.map(&:versions) \
+	  	+ self.contacts.map(&:versions) \
+	  	+ self.comments.map(&:versions) \
+	  	+ self.participating_organizations.map(&:versions) \
+	  	+ self.geopoliticals.map(&:versions)].flatten
+	end
+	
+	def all_flags
+		[self.transactions.map(&:flags)].flatten
+	end
 end

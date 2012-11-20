@@ -1,0 +1,13 @@
+		<ul>
+			<% @project.transactions.each do |t| %>
+				<li class="project-transaction project-li flaggable">
+					<% if t.usd_defl.present? %>
+						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
+					<% end %>
+					<% if !t.currency.nil? %>
+					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>,
+					  	$<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
+					<% end %>
+				</li>
+			<% end %>
+		</ul>

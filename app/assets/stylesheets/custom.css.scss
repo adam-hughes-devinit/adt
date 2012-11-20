@@ -249,7 +249,29 @@ label {
 }
 
                                     /* Project Pages */
-
+  #inactive-project {
+    color: #942;
+  }
+  
+	.flaggable-hover {
+		-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #ccc;
+	}
+	
+	.flag-link {
+		visibility:hidden;
+		cursor:default;
+		float:right;
+		margin: 0px 0px 0px 3px;
+	}
+	.flag-link-hover {
+		visibility:visible;
+		cursor:pointer;
+	}
+	
 .project-page {
   line-height:16px;
   h3 {
@@ -263,15 +285,18 @@ label {
     margin-left:5px;
   }
 
-  #inactive-project,  {
-    color: #942;
-  }
+
 
 }
 .inactive-project-title {
   color: #942
 }
 
+.project-li {
+  margin: 3px 3px 3px 3px;
+  padding: 5px;
+  border-top: 1px solid #f0f0f0;
+	}
 .project-accessory-fields, .project-box {
   margin: 5px 5px 0px 5px;
   padding: 10px;

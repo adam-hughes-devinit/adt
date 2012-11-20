@@ -16,7 +16,7 @@ class CodesController < ApplicationController
     @object = @class_name.constantize.find(params[:id])
 
     respond_to do |format|
-      format.html {     render template: 'shared/code', locals: {object: @object, type: @class_type}}
+      format.html { render template: 'shared/code', locals: {object: @object, type: @class_type}}
       format.json { render json: @object }
     end
   end
@@ -41,7 +41,7 @@ class CodesController < ApplicationController
   # POST /flow_types
   # POST /flow_types.json
   def create
-    @object = @class_name.constantize.new(params[@class_type.downcase.underscore.to_sym])
+    @object = @class_name.constantize.new(params[@class_name.underscore.downcase.to_sym])
 
     respond_to do |format|
       if @object.save
@@ -91,8 +91,10 @@ class CodesController < ApplicationController
   end
 
   private
-  	def create_local_variables(class_name_val, class_type_val)
+  	def create_local_variables(class_name_val, class_type_val, options={})
   		@class_name = class_name_val
   		@class_type = class_type_val
+  		options.reverse_merge!({has_projects: true})
+  		@has_projects = options[:has_projects]
   	end
 end
