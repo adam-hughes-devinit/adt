@@ -49,6 +49,7 @@ var w = 800,
     xy = d3.geo.mercator().scale(w*4.5).translate([.125*w,.375*h]),
     path = d3.geo.path().projection(xy),
     c = d3.scale.linear().domain([0,8000000000,150000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
+    greyscalec = d3.scale.linear().domain([0,5]).range(['#8A8A8A','#FFFFFF']),
     c_sector= d3.scale.category20c(),
     money = d3.format("0,r")
     years = d3.range(2000,2012), 
@@ -888,7 +889,7 @@ legend.selectAll('text')
   .attr("x", function(d,i) {return 0})
   .attr("text-anchor", "start")
   .attr("font-size", legend_font_size)
-  .attr("fill", "#333")
+  .attr("fill", function(d,i) {return greyscalec(i)})
   .text(function(d) {return "$" + money(d)})
 
 legend.append("svg:foreignObject")
