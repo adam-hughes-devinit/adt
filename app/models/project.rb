@@ -24,7 +24,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :comments, allow_destroy: true
 
 
-  has_paper_trail
+  has_paper_trail if VERSION_CONTROL
 
   #validates :title, presence: true
 
