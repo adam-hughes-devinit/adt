@@ -7,6 +7,7 @@ Adt::Application.routes.draw do
   # limited access
   resources :projects, :organizations, :users
   resources :comments, only: [:create, :destroy, :show]
+  resources :flags, only: [:create, :destroy, :show]
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships

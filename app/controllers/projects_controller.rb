@@ -45,6 +45,7 @@ before_filter :correct_owner?, only: [:edit]
     @comment = Comment.new
     @history = @project.history
     @flags = @project.all_flags
+    @flag = Flag.new
 
     respond_to do |format|
       format.html # show.html.erb

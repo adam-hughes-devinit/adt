@@ -1,6 +1,6 @@
 		<ul>
 			<% @project.transactions.each do |t| %>
-				<li class="project-transaction project-li flaggable">
+				<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
 					<% if t.usd_defl.present? %>
 						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
 					<% end %>

@@ -5,12 +5,22 @@
 		
 
 		
-		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '#{ft.name}', trigger: 'manual'});"}.join(" 
+		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span>', trigger: 'manual', content: '#{render(partial: 'project_flag_form', locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')}'});"}.join(" 
 		").html_safe %>
 		
 		$('.flag-link')
 			.click(function(link) {
 				link.preventDefault()
+				$(this).popover('toggle')
+
+				$(".flag-popover").append('<input id="flag_flaggable_id" name="flag[flaggable_id]" size="10" type="hidden" value="'+$(this).parent().attr('flaggable_id')+'">' +
+					'<input id="flag_flaggable_type" name="flag[flaggable_type]" size="10" type="hidden" value="'+$(this).parent().attr('flaggable_type')+'">'
+					)
+
+				$(".cancel_flag").click(function(link) {
+					link.preventDefault()
+					$(".flag-link").popover("hide")
+				})
 			})
 	
 		$('.flaggable')
@@ -19,6 +29,8 @@
 					.children('.flag-link').toggleClass('flag-link-hover')
 				})
 			.click()
+
+
 	})
 	
 
