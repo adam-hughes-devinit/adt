@@ -1,15 +1,8 @@
 <% unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
 
 <div class="project-page">
-<div class="row">
-	<%  if !@project.active %>
-		<h1 id="inactive-project">-- Inactive --</h1>
-	<% end %>
-	<% if signed_in? && current_user.owner == @project.owner %>
-		<div class="project-details span11">	
-			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p>
-		</div>
-	<% end %>
+<div class="inactive_row">
+
 	<div class= "project-box span10">
 
 		<p style="text-align:center"> 
@@ -27,7 +20,7 @@
 		<p><b>Capacity:</b> <%= @project.capacity.blank? ? unset_data : @project.capacity %> </p>
 	</div>
 </div>
-<div class="row">
+<div class="inactive_row">
 	<div class="project-dates project-box span5">
 		<h3>Dates:</h3>
 		<ul>
@@ -56,22 +49,12 @@
 	</div>
 </div>
 <div class='row'>
+	
 	<div class="project-transactions project-box span5">
 		<h3>Transactions:</h3>
-		<ul>
-			<% @project.transactions.each do |t| %>
-				<li class="project-transaction project-li">
-					<% if t.usd_defl.present? %>
-						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
-					<% end %>
-					<% if !t.currency.nil? %>
-					 (<%= t.value.blank? ? unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>,
-					  	$<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
-					<% end %>
-				</li>
-			<% end %>
-		</ul>
+		<%= render 'project_transactions' %>
 	</div>
+	
 	<div class="project-geopoliticals project-box span5">
 		<h3>Geopolitical data:</h3>
 		<ul>
@@ -135,27 +118,6 @@
 		</ul>
 	</div>
 </div>
-<div class='row project-box' id='comment-section'>
-<h2> Comments: </h2>
-	<% @project.comments.each do |c| %>
-		<div class='comment'>
-			<p class='comment-header'><%= distance_of_time_in_words_to_now(c.created_at) %> ago, <b><%= c.name.blank? ? 'Anonymous' : c.name %></b> said... </p>
-			<p class='comment-content'><%= c.content %>
-				<% if current_user && current_user.admin? %>
-					<br><br><i><%= link_to "Delete comment", c, method: :delete %></i>
-				<% end %>
-			</p>
-		</div>
-	<% end %>
-<h2> Add a comment: </h2>
-	<%= simple_form_for(@comment, method: :post, url: comments_path, html: {class: "span6"}) do |f| %>
-		<%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",  input_html: {style: "display:none;", value: @project.id} %>
-		<%= f.input :name %>
-		<%= f.input :email, hint: "For validation only -- not published, not shared." %>
-		<%= f.input :content, label: "Message", input_html: {rows: 5} %>
-		<%= f.button :submit, "Submit" %>
-	<% end %>
 
 </div>
-
-</div>
+<%= render 'project_flaggable' %>

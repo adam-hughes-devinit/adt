@@ -1,0 +1,13 @@
+<ul>
+	<% @flags.each do |f| %>
+		<li>
+			<span>
+					<%= f.owner ? f.owner.name : "An anonymous user" %> <span style="color:<%= f.flag_type.color %>"><%= pluralize( 2, f.flag_type.name )[2..10] %></span> a <%= f.flaggable_type.downcase %>.
+			</span>
+			<ul>
+				<li><b>Source:</b> <%= f.source %> </li>
+				<li><b>Comment:</b> <%= f.comment %> </li>
+			</ul>
+		</li>
+	<% end %>
+</ul>

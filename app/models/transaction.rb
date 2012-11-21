@@ -6,6 +6,9 @@ class Transaction < ActiveRecord::Base
  
   belongs_to :currency
   belongs_to :project
+  
+  has_many :flags, as: :flaggable, dependent: :destroy
+  accepts_nested_attributes_for :flags
 
   def round_value
   	self.value = self.value ? self.value.round(2) : nil

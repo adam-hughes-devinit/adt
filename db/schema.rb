@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119222743) do
+ActiveRecord::Schema.define(:version => 20121120190134) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -66,6 +66,24 @@ ActiveRecord::Schema.define(:version => 20121119222743) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "flag_types", :force => true do |t|
+    t.string   "name"
+    t.string   "color"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "flags", :force => true do |t|
+    t.integer  "flaggable_id"
+    t.string   "flaggable_type"
+    t.integer  "flag_type_id"
+    t.string   "source"
+    t.text     "comment"
+    t.integer  "owner_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "flow_types", :force => true do |t|

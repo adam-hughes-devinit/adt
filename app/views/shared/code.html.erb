@@ -8,7 +8,9 @@
 		<p class='span12'><b><%= k.gsub(/_/, ' ').capitalize %>:</b> <%= v.to_s %> </p>
 	<% end %>
 <% end %>
-<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{object.name.gsub(/\s/, '+')}" %></b>. </p>
+<% if @has_projects %>
+	<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{object.name.gsub(/\s/, '+')}" %></b>. </p>
+<% end %>
 <p>
 	<% if current_user.present? && current_user.admin? %>
 		<%= link_to "Edit", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}/edit" %> |

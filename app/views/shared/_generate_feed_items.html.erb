@@ -16,6 +16,8 @@ def get_name(feed_item, patient)
 		patient.title
 	elsif feed_item.item_type == 'Comment'
 		patient.content[0..25] + '...'
+	elsif feed_item.item_type == 'Flag'
+		patient.flag_type ? patient.flag_type.name : patient.source[0..25]
 	elsif @project_accessory_objects.include? feed_item.item_type
 		"Project: "+Project.find_by_id(patient.project_id).title
 	elsif patient.name
@@ -28,6 +30,8 @@ end
 def get_path(feed_item, patient)
 	if @project_accessory_objects.include? feed_item.item_type
 		Project.find_by_id(patient.project_id)
+	elsif feed_item.item_type == 'Flag'
+		Project.find_by_id(patient.flaggable_type.constantize.find(patient.flaggable_id))
 	else
 		patient
 	end

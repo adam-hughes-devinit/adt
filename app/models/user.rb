@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :actions, class_name: "Version", foreign_key: :whodunnit
   # following architecture
   has_many :relationships, foreign_key: "follower_id"
+  has_many :flags, as: :owner
 
   def followed_user_ids
     relationships.map do |i| 

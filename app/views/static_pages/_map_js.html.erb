@@ -1,4 +1,5 @@
 
+
 <div id = "vis_controls" class="row" style='text-align:center;'>
 <%= form_for Project.new, html: {class: ""} do |f| %>
   <%= f.select :oda_like, options_for_select(["All Flow Classes"] + OdaLike.all.collect {|o| o.name}, "All Flow Classes"), {}, {multiple: true, class: "span2 vis_input", id: "oda_like_input", selected_value: "All Flow Classes"}  %>
@@ -7,6 +8,7 @@
   <%= f.select :flow_type, options_for_select(["All Flow Types"] + FlowType.all.collect {|o| o.name}, "All Flow Types"), {}, {class: "span2 vis_input", multiple: true, id: "flow_type_input"}  %>
 <% end %>
 </div>
+
 <div id="vis"></div>
 <script type="text/javascript">
 $('#vis').css('text-align', 'center')

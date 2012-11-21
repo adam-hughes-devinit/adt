@@ -1,8 +1,49 @@
 <% provide(:title, @project.title) %>
 <% provide(:first_header, @project.title) %>
-<%= render 'project' %>
 
 
+<div class="project-details row">	
+	<%  if !@project.active %>
+		<h1 style="display:inline;text-align:center;" id="inactive-project">-- Inactive --</h1>
+	<% end %>
+	<% if signed_in? && current_user.owner == @project.owner %>
+			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p>
+	<% end %>
+</div>
+
+<ul class="nav nav-tabs" id="projectTab">
+  <li class="active"><a href="#details">Project Details</a></li>
+  <li><a href="#flags">Flags</a></li>
+  <li><a href="#history">History</a></li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="details">
+		<%= render 'project' %>
+	</div>
+  <div class="tab-pane" id="flags">
+		<h2>Flags</h2>
+		<%= render 'project_flags' %>
+	</div>
+	<div class="tab-pane" id="history">
+		<h2>History</h2>
+		<%= render 'project_history' %>
+	</div>
+</div>
+
+		<%= render 'comment_form' %>
+
+
+<script>
+  $(function () {
+		$('#projectTab a').click(function (e) {
+					e.preventDefault();
+			$(this).tab('show');
+		})
+		$('#projectTab a:first').tab('show');
+	})
+</script>
 
 
 

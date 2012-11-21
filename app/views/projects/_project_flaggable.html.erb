@@ -1,0 +1,25 @@
+<script type='text/javascript'>
+
+	$(function() {
+		$('.flaggable').append("<%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %>")
+		
+
+		
+		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '#{ft.name}', trigger: 'manual'});"}.join(" 
+		").html_safe %>
+		
+		$('.flag-link')
+			.click(function(link) {
+				link.preventDefault()
+			})
+	
+		$('.flaggable')
+			.hover(function() { 
+				$(this).toggleClass('flaggable-hover')
+					.children('.flag-link').toggleClass('flag-link-hover')
+				})
+			.click()
+	})
+	
+
+	</script>
