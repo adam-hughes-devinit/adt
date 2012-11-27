@@ -1,4 +1,4 @@
-<% current_url = "#{request.protocol}#{request.host_with_port}/projects".gsub(/\??page=\d+&*/, '') %>
+<% current_url = "#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/projects/, '')}".gsub(/\??page=\d+&*/, '') %>
 <% joiner = current_url.index("?") ? "&" : "?" %>
 <div class="row" id='project-facets'>	
 	<div class="span10">

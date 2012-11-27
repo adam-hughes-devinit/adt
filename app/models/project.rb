@@ -17,8 +17,10 @@ class Project < ActiveRecord::Base
   :oda_like_id, :status_id, 
   :donor_id, :owner_id
   
+  before_save :set_verified_to_raw_if_null
   before_save :deflate_values
   after_save :cache_this_project
+  
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
@@ -418,5 +420,9 @@ class Project < ActiveRecord::Base
 			self.contacts.map(&:flags) +
 			self.participating_organizations.map(&:flags)
 		].flatten
+	end
+	
+	def set_verified_to_raw_if_null
+		verified = Verified.find_by_name("Raw") if verified.blank?
 	end
 end
