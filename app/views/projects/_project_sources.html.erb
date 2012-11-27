@@ -10,9 +10,9 @@
 						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
 				<% end %>
 				<ul class="project-source-details">
-					<li>Date: <%= s.date.blank? ? unset_data : " #{s.date.strftime("%d %B %Y")} " %></li>
-					<li>Document type: <%= s.document_type.nil? ? unset_data : link_to(s.document_type.name, s.document_type) %></li>
-					<li>Source type: <%= s.source_type.nil? ? unset_data : link_to( s.source_type.name, s.source_type) %></li>
+					<li>Date: <%= s.date.blank? ? @unset_data : " #{s.date.strftime("%d %B %Y")} " %></li>
+					<li>Document type: <%= s.document_type.nil? ? @unset_data : link_to(s.document_type.name, s.document_type) %></li>
+					<li>Source type: <%= s.source_type.nil? ? @unset_data : link_to( s.source_type.name, s.source_type) %></li>
 				</ul>
 		</li>
 	<% end %>

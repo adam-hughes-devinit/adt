@@ -1,4 +1,4 @@
-<% unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
+<% @unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
 <% @flag_counter = 0 %>
 <div class="project-page">
 <div class="inactive_row">
@@ -6,41 +6,41 @@
 	<div class= "project-box span10">
 
 		<p style="text-align:center"> 
-			<b>Donor:</b> <%= @project.donor.nil? ? unset_data : link_to(@project.donor.name, @project.donor) %> | 
-			<b>Commitment Year:</b> <%= @project.year.blank? ? unset_data : @project.year %>
+			<b>Donor:</b> <%= @project.donor.nil? ? @unset_data : link_to(@project.donor.name, @project.donor) %> | 
+			<b>Commitment Year:</b> <%= @project.year.blank? ? @unset_data : @project.year %>
 				<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
-			<b>Verified:</b> <%= @project.verified.nil? ? unset_data : link_to(@project.verified.name, @project.verified) %> |
+			<b>Verified:</b> <%= @project.verified.nil? ? @unset_data : link_to(@project.verified.name, @project.verified) %> |
 			<b>ID:</b> <%= link_to @project.id,  @project %> |
 			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
 		</p>
 	</div>
 	<div class="project-box span10">
 		<h3>Description:</h3>
-		<p class='project-description'><%= @project.description.blank? ? unset_data : @project.description %> </p>
-		<p><b>Capacity:</b> <%= @project.capacity.blank? ? unset_data : @project.capacity %> </p>
+		<p class='project-description'><%= @project.description.blank? ? @unset_data : @project.description %> </p>
+		<p><b>Capacity:</b> <%= @project.capacity.blank? ? @unset_data : @project.capacity %> </p>
 	</div>
 </div>
 <div class="inactive_row">
 	<div class="project-dates project-box span5">
 		<h3>Dates:</h3>
 		<ul>
-			<li><b>Start planned:</b> <%= @project.start_planned.nil? ? unset_data : @project.start_planned.strftime("%d %B %Y") %></li>
-			<li><b>Start actual:</b> <%= @project.start_actual.nil? ? unset_data : @project.start_actual.strftime("%d %B %Y") %></li>
-			<li><b>End planned:</b> <%= @project.end_planned.nil? ? unset_data : @project.end_planned.strftime("%d %B %Y") %></li>
-			<li><b>End actual:</b> <%= @project.end_actual.nil? ? unset_data : @project.end_actual.strftime("%d %B %Y") %></li>
+			<li><b>Start planned:</b> <%= @project.start_planned.nil? ? @unset_data : @project.start_planned.strftime("%d %B %Y") %></li>
+			<li><b>Start actual:</b> <%= @project.start_actual.nil? ? @unset_data : @project.start_actual.strftime("%d %B %Y") %></li>
+			<li><b>End planned:</b> <%= @project.end_planned.nil? ? @unset_data : @project.end_planned.strftime("%d %B %Y") %></li>
+			<li><b>End actual:</b> <%= @project.end_actual.nil? ? @unset_data : @project.end_actual.strftime("%d %B %Y") %></li>
 		</ul>
 	</div>
 	<div class="project-categories project-box span5">
 		<h3>Details: </h3>
 		<ul>
-			<li><b>Flow Class:</b> <%= @project.oda_like.nil? ? unset_data : link_to(@project.oda_like.name, @project.oda_like) %></li>
-			<li><b>Status:</b> <%= @project.status.nil? ? unset_data : link_to(@project.status.name, @project.status) %> </li>
-			<li><b>Sector:</b> <%= @project.sector.nil? ? unset_data :  link_to(@project.sector.name, @project.sector) %></li>
-			<li><b>Sector comment:</b> <%=  @project.sector_comment.blank? ? unset_data : @project.sector_comment %></li>
+			<li><b>Flow Class:</b> <%= @project.oda_like.nil? ? @unset_data : link_to(@project.oda_like.name, @project.oda_like) %></li>
+			<li><b>Status:</b> <%= @project.status.nil? ? @unset_data : link_to(@project.status.name, @project.status) %> </li>
+			<li><b>Sector:</b> <%= @project.sector.nil? ? @unset_data :  link_to(@project.sector.name, @project.sector) %></li>
+			<li><b>Sector comment:</b> <%=  @project.sector_comment.blank? ? @unset_data : @project.sector_comment %></li>
 			<li><b>Uncertain Debt Relief:</b> <%= @project.debt_uncertain %></li>
-			<li><b>CRS Sector:</b> <%= @project.crs_sector || unset_data %></li>
-			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? unset_data :  link_to(@project.flow_type.name, @project.flow_type) %></li>
-			<li><b>Tied:</b> <%= @project.tied.nil? ? unset_data : link_to(@project.tied.name, @project.tied) %></li>
+			<li><b>CRS Sector:</b> <%= @project.crs_sector || @unset_data %></li>
+			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? @unset_data :  link_to(@project.flow_type.name, @project.flow_type) %></li>
+			<li><b>Tied:</b> <%= @project.tied.nil? ? @unset_data : link_to(@project.tied.name, @project.tied) %></li>
 			<li><b>Commercial:</b> <%= @project.is_commercial %></li>
 			<li><b>Line of Credit:</b> <%= @project.line_of_credit %></li>
 			<li><b>Cofinanced:</b> <%= @project.is_cofinanced %></li>
