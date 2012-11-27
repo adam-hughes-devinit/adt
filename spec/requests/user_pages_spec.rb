@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "User pages" do
 
-	subject {page }
+	subject { page }
  
 	let(:user) {FactoryGirl.create(:user)}
 	

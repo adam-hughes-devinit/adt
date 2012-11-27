@@ -1,6 +1,8 @@
 class StaticPagesController < ApplicationController
 skip_before_filter :signed_in_user
+include SearchHelper
   def home
+  	custom_search # to initialize facets, etc
   	@total_projects = Project.where("active = ?", true ).count
   	@feed = Version.last(10)
   end

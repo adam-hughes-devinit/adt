@@ -14,10 +14,12 @@ The central data object is still the project and it has the same components. It 
 
 Authorized users may create and edit projects. Unauthorized users may view projects but not edit them. Users exist in a more formalized structure: they belong to organizations (in our case, AidData), and some are admins. When a user creates a project, it belongs to his or her organization. Users can only edit projects that belong to their organization. Admins have special privileges, notably: editing codes, adding and removing users from the organization and deleting comments. A user's actions create log entries, visible on the user's "profile." 
 
-## What's New: Codes, Comments, Organizations
+## What's New: Codes, Comments, Flags, Organizations
 Codes, which are supporting data for categorizing and tagging data records are now directly accessible to end users (with admin authorization). For example, to add a new sector, navigate to `[root]/sectors`. 
 
-Any page visitor may leave comments on project pages. Admins may delete these comments.
+Any page visitor may leave comments on project pages. Admins may delete these comments. 
+
+Any signed-in visitor may flag a project-associated data point with a defined flag type. Admins may delete these flags.
 
 As an experiment in data ownership and user domain, there is also an organization  element in the user model. For our purposes, it's important to know that we can specify users who belong to AidData, and only those users have authorization over our projects. Should other organizations take interest in our projects, we can make them their own organizations, users and admins. 
 
@@ -90,6 +92,9 @@ As before, deflation is handled by an external service, visible at `data.itpir.w
 On each project page, there is a section to display comments and a form where any page visitor may leave a comment. Admin users see a "Delete comment" link. 
 
 Hopefully, comments will provide a feedback loop for data users to report errors or recommend changes. AidData staff will respond to their comments as necessary. This feature is somewhat experimental.
+
+## Flags
+A signed-in user may flag a data point for review or confirmation. Flags are associated with project details (currently Transaction, Geopolitical, Contact, Source and Part. Org., but to be expanded to Year, Sector, and others). These flags are stored in the "Flags" tab and visible to all users. AidData admins may delete these flags.
 
 ## Data Feeds
 

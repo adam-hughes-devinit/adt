@@ -86,7 +86,9 @@ describe "Owner and admin system" do
 	end
 
 	describe "unsigned visit to user page " do
-		before {visit user_path(user)}
+		before {
+			visit user_path(user)
+			}
 		specify {response.should redirect_to(signin_path)}
 	end
 
@@ -143,6 +145,7 @@ describe "Owner and admin system" do
 
 	describe "sign in an owning user" do
 		before do 
+			user.save unless User.find_by_email(user.email)
 			project.update_attribute(:owner_id, user.owner.id)
 			visit signin_path
 			fill_in "Email", with: user.email

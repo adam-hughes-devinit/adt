@@ -19,6 +19,7 @@ group :development, :test do
   #gem 'factory_girl_rails', '1.4.0'
   gem 'progress_bar'
   gem 'sunspot_solr'
+  gem 'launchy'
 end
 
 # Gems used only for assets and not required

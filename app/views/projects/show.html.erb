@@ -13,26 +13,35 @@
 
 <ul class="nav nav-tabs" id="projectTab">
   <li class="active"><a href="#details">Project Details</a></li>
-  <li><a href="#flags">Flags</a></li>
-  <li><a href="#history">History</a></li>
+  <li><a id="flags_tab" href="#flags">Flags (<%= @flags.count %>)</a></li>
+   <li><a href="#comments">Comments (<%= @project.comments.count %>)</a></li>
+  <li><a href="#history">History (<%= @history.count %>)</a></li>
 </ul>
 
 
 <div class="tab-content">
   <div class="tab-pane active" id="details">
 		<%= render 'project' %>
+		<div class='row'>
+			<%= render 'comment_form' %>
+		</div>
 	</div>
   <div class="tab-pane" id="flags">
-		<h2>Flags</h2>
+		<h2 id='flags_header'>Flags</h2>
 		<%= render 'project_flags' %>
 	</div>
 	<div class="tab-pane" id="history">
 		<h2>History</h2>
 		<%= render 'project_history' %>
 	</div>
+	<div class="tab-pane" id="comments">
+		<h2>Comments</h2>
+		<%= render 'project_comments' %>
+		<div class='row'>
+			<%= render 'comment_form' %>
+		</div>
+	</div>
 </div>
-
-		<%= render 'comment_form' %>
 
 
 <script>

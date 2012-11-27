@@ -1,0 +1,37 @@
+<% current_url = "#{request.protocol}#{request.host_with_port}/projects".gsub(/\??page=\d+&*/, '') %>
+<% joiner = current_url.index("?") ? "&" : "?" %>
+<div class="row" id='project-facets'>	
+	<div class="span10">
+		<%= form_tag projects_path, method: :get do %>
+
+			<p> <b>Search: </b> 
+				<% @facets.each do |f| %>
+					<% if params[f[:sym]] %>
+						<%= hidden_field_tag f[:sym], params[f[:sym]] %>
+					<% end %>
+				<% end %>
+				
+				<%= text_field_tag :search, params[:search], class: "span7" %>
+				<%= submit_tag "Submit", name: nil, class: "btn" %>
+			</p>
+		<% end %>
+	</div>
+	<div class='span10'>
+		<p><b>Filters:</b></p>
+	</div>
+	<% first_half = (@facets.count/2).round %>
+	<div class='span5'>
+		<ol>
+		<% @facets[0..first_half].each do |f| %>
+			<%= render partial: 'projects/facet_list', locals: {f: f, current_url: current_url, joiner: joiner} %>
+		<% end %>
+		</ol>
+	</div>
+	<div class='span5'>
+		<ol>
+		<% @facets[first_half+1..-1].each do |f| %>
+			<%= render partial: 'projects/facet_list', locals: {f: f, current_url: current_url, joiner: joiner} %>
+		<% end %>
+		</ol>
+	</div>
+</div>

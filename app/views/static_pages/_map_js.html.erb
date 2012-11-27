@@ -1,5 +1,4 @@
 
-
 <div id = "vis_controls" class="row" style='text-align:center;'>
 <%= form_for Project.new, html: {class: ""} do |f| %>
   <%= f.select :oda_like, options_for_select(["All Flow Classes"] + OdaLike.all.collect {|o| o.name}, "All Flow Classes"), {}, {multiple: true, class: "span2 vis_input", id: "oda_like_input", selected_value: "All Flow Classes"}  %>

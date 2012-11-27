@@ -1,5 +1,5 @@
 <% unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
-
+<% @flag_counter = 0 %>
 <div class="project-page">
 <div class="inactive_row">
 
@@ -57,67 +57,25 @@
 	
 	<div class="project-geopoliticals project-box span5">
 		<h3>Geopolitical data:</h3>
-		<ul>
-			<% @project.geopoliticals.each do |g| %>
-				<% if !g.recipient.nil? %>
-				<li class="project-geopolitical project-li">
-					<b><%= link_to g.recipient.name, g.recipient %></b> 
-					<%= g.subnational.blank? ? '' : "(#{g.subnational})" %>
-					 <%= g.percent.blank? ? '' : " -- #{g.percent}%" %>
-				</li>
-				<% end %>
-			<% end %>
-		</ul>
+		<%= render 'project_geopoliticals' %>
 	</div>
 </div>
 <div class='row'>
 	<div class="project-participating-organizations project-box span5">
 		<h3>Participating Organizations:</h3>
-		<ul>
-			<% @project.participating_organizations.each do |p| %>
-				<% if !p.organization.nil? %>
-					<li class="project-organization project-li">
-						<b><%= link_to p.organization.name, p.organization %></b>, Role: <i><%= p.role.nil? ? unset_data : link_to(p.role.name, p.role) %></i> </li>
-				<% end %>
-			<% end %>
-		</ul>
+		<%= render 'project_participating_organizations' %>
 	</div>
 	<div class="project-contacts project-box span5">
 		<h3>Contacts:</h3>
-		<ul>
-			<% @project.contacts.each do |c| %>
-				<% if !c.name.blank? %>
-					<li class="project-contact project-li">
-						<b><%= c.name.blank? ? "Name "+unset_data : c.name %></b> 
-						<%= c.position.blank? ? '' : ", #{c.position}" %> 
-						<%= c.organization.nil? ? '' : link_to(" (#{c.organization.name})", c.organization) %>
-					</li>
-				<% end %>
-			<% end %>
-		</ul>
+			<%= render 'project_contacts' %>
 	</div>
 </div>
 <div class='row'>
 	<div class="project-sources project-box span10">
 		<h3>Sources:</h3>
-		<ul>
-			<% @project.sources.each do |s| %>
-				<% if !s.url.nil? %>
-					<li class="project-source project-li">
-						<b>
-							<%= link_to s.url, s.url, target: "_blank" %>
-						</b>
-						<ul class="project-source-details">
-							<li>Date: <%= s.date.blank? ? unset_data : " #{s.date.strftime("%d %B %Y")} " %></li>
-							<li>Document type: <%= s.document_type.nil? ? unset_data : link_to(s.document_type.name, s.document_type) %></li>
-							<li>Source type: <%= s.source_type.nil? ? unset_data : link_to( s.source_type.name, s.source_type) %></li>
-						</ul>
-					</li>
-				<% end %>
-			<% end %>
-		</ul>
+		<%= render 'project_sources' %>
 	</div>
 </div>
 
 </div>
-<%= render 'project_flaggable' %>
+<%= render('project_flaggable') if signed_in? %>
