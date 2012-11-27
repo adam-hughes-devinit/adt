@@ -13,7 +13,7 @@
 
 <ul class="nav nav-tabs" id="projectTab">
   <li class="active"><a href="#details">Project Details</a></li>
-  <li><a href="#flags">Flags (<%= @flags.count %>)</a></li>
+  <li><a id="flags_tab" href="#flags">Flags (<%= @flags.count %>)</a></li>
   <li><a href="#history">History (<%= @history.count %>)</a></li>
 </ul>
 
@@ -23,7 +23,7 @@
 		<%= render 'project' %>
 	</div>
   <div class="tab-pane" id="flags">
-		<h2>Flags</h2>
+		<h2 id='flags_header'>Flags</h2>
 		<%= render 'project_flags' %>
 	</div>
 	<div class="tab-pane" id="history">

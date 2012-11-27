@@ -74,6 +74,9 @@ coalesce('debt_uncertain: '||
 coalesce('line_of_credit: '||
 	(case when is_line_of_credit='t' then 'true' else 'false' end)
 	||', ', '')||
+coalese('is_cofinanced: '||
+	(case when is_cofinanced='t' then 'true' else 'false' end)
+	||', ', '')|| 
 -- status
 coalesce('status: Status.find_by_name("'||status||'"), ', '') ||
 -- flow_type

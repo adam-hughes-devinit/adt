@@ -4,7 +4,7 @@
 <ul class="nav nav-tabs" id="homeTab">
   <li class="active"><a href="#map">Visualize</a></li>
   <li><a href="#chart">Analyze</a></li>
-  <li><a href="/projects">All Projects</a></li>
+  <li><a href="#projects">All Projects</a></li>
   <li><a href="#activity-feed">Recent Activity</a></li>
   <li><a href="#research">Research and Papers</a></li>
   <li><a href="#documentation">Data and API Documentation</a></li>
@@ -19,6 +19,10 @@
   <div class="tab-pane" id="chart">
   	<h2>Analyze</h2>
   	<p>Forthcoming</p>
+  </div>
+  <div class="tab-pane" id="projects">
+  	<h2> Search Projects </h2>
+  	<%= render "projects/project_search" %>
   </div>
   <div class="tab-pane" id="activity-feed">	
 		<h2>Recent Activity</h2>

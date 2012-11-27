@@ -1,8 +1,9 @@
 <ul>
-	<% @flags.each do |f| %>
+	<% @flags.each_with_index do |f, i| %>
 		<li>
+			<a id="flag_<%= i+1 %>"></a> 
 			<span>
-					<%= f.owner ? f.owner.name : "An anonymous user" %> <span style="color:<%= f.flag_type.color %>"><%= pluralize( 2, f.flag_type.name )[2..10] %></span> a <%= f.flaggable_type.downcase %>.
+					<%= time_ago_in_words(f.updated_at) %> ago, <%= f.owner ? f.owner.name : "An anonymous user" %> <span style="color:<%= f.flag_type.color %>"><%= pluralize( 2, f.flag_type.name )[2..10] %></span> a <%= f.flaggable_type.downcase %>.
 			</span>
 			<ul>
 				<li><b>Source:</b> <%= f.source %> </li>

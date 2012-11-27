@@ -102,6 +102,10 @@ class Project < ActiveRecord::Base
   def line_of_credit_string
     line_of_credit ? "Line of Credit" : "Not Line of Credit"
   end
+  
+  def is_cofinanced_string
+  	is_cofinanced ? "Cofinanced" : "Not Cofinanced"
+  end
 
   # project accessories
   has_many :geopoliticals, dependent: :destroy
@@ -251,6 +255,7 @@ class Project < ActiveRecord::Base
     string :line_of_credit_string
     string :debt_uncertain_string
     string :year_uncertain_string
+    string :is_cofinanced_string
     string :crs_sector
     string :recipient_iso2 do
       if geopoliticals.count > 1

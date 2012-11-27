@@ -29,9 +29,9 @@
 				$(this).toggleClass('flaggable-hover')
 					.children('.flag-link').toggleClass('flag-link-hover')
 				})
-			.click()
+			//.click()
 
-
+		$('.flag-reference').click(function() {$('#flags_tab').tab('show'); $("html, body").animate({ scrollTop: 0 }, "fast");}) //$('#'+this.href.substr(this.href.indexOf("#")+1)).prev().focus()})
 	})
 	
 
