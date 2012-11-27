@@ -411,6 +411,9 @@ class Project < ActiveRecord::Base
 	end
 	
 	def all_flags
-		[self.transactions.map(&:flags)].flatten
+		[
+			self.transactions.map(&:flags) + 
+			self.geopoliticals.map(&:flags) 
+		].flatten
 	end
 end

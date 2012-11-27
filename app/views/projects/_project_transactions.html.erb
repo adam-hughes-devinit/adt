@@ -9,7 +9,7 @@
 					  	$<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
 					<% end %>
 					<% t.flags.each do |flag| %>
-						<a inactive_href="#flag_<%= flag.id %>" class='flag-reference' style="color:<%= flag.flag_type.color %>;">[<%= @flag_counter +=1 %>] </a>
+						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
 					<% end %>
 				</li>
 			<% end %>
