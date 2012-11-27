@@ -413,7 +413,10 @@ class Project < ActiveRecord::Base
 	def all_flags
 		[
 			self.transactions.map(&:flags) + 
-			self.geopoliticals.map(&:flags) 
+			self.geopoliticals.map(&:flags) +
+			self.sources.map(&:flags) +
+			self.contacts.map(&:flags) +
+			self.participating_organizations.map(&:flags)
 		].flatten
 	end
 end

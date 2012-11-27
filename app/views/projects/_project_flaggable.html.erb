@@ -1,7 +1,7 @@
 <script type='text/javascript'>
 
 	$(function() {
-		$('.flaggable').append("<%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %>")
+		$('.flaggable').append("<br> <%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %> <i class='flag-link'>Flag this:</i>")
 		
 
 		

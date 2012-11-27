@@ -1,0 +1,12 @@
+<ul>
+	<% @project.participating_organizations.each do |p| %>
+		<li class="project-organization project-li flaggable" flaggable_type='ParticipatingOrganization' flaggable_id=<%= p.id %>>
+			<% if !p.organization.nil? %>
+					<b><%= link_to p.organization.name, p.organization %></b>, Role: <i><%= p.role.nil? ? unset_data : link_to(p.role.name, p.role) %></i> 
+			<% end %>
+			<% p.flags.each do |flag| %>
+					<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+			<% end %>
+		</li>
+	<% end %>
+</ul>
