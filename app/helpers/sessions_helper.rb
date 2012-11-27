@@ -7,7 +7,12 @@ module SessionsHelper
     # On sign out, remember_token is cleared from the user's
     # cookies and current_user is set to nil.
 
-
+	
+	def current_user_is_aiddata_admin
+		# this finds out whether the current user is signed_in, admin, and belongs to AidData
+		signed_in? && current_user.admin? && current_user.owner_id == Organization.find_by_name("AidData").id 
+	end
+	
   def sign_in(user)
     cookies.permanent[:remember_token] = user.remember_token
     self.current_user = user

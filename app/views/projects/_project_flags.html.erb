@@ -9,6 +9,9 @@
 				<li class='flag-detail-li'><b>Source:</b> <%= f.source %> </li>
 				<li class='flag-detail-li'><b>Comment:</b> <%= f.comment %> </li>
 			</ul>
+			<% if current_user_is_aiddata_admin %>
+				<i><%= link_to "Delete flag", f, method: :delete %></i>
+			<% end %>
 		</li>
 	<% end %>
 </ul>
