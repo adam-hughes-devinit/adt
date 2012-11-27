@@ -423,6 +423,6 @@ class Project < ActiveRecord::Base
 	end
 	
 	def set_verified_to_raw_if_null
-		verified = Verified.find_by_name("Raw") if verified.blank?
+		self.verified = Verified.find_by_name("Raw") if verified.blank?
 	end
 end
