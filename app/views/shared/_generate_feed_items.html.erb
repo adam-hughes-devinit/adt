@@ -19,7 +19,7 @@ def get_name(feed_item, patient)
 	elsif feed_item.item_type == 'Flag'
 		patient.flag_type ? patient.flag_type.name : patient.source[0..25]
 	elsif @project_accessory_objects.include? feed_item.item_type
-		"Project: "+Project.find_by_id(patient.project_id).title
+		"#{feed_item.item_type} of project "+ Project.find_by_id(patient.project_id).title
 	elsif patient.name
 		patient.name
 	else 

@@ -5,7 +5,7 @@
 		
 
 		
-		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span>', trigger: 'manual', content: '#{render(partial: 'project_flag_form', locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')}'});"}.join(" 
+		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span> this:', trigger: 'manual', content: '#{render(partial: 'project_flag_form', locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')}'});"}.join(" 
 		").html_safe %>
 		
 		$('.flag-link')

@@ -59,6 +59,11 @@ Factory.define :role do |r|
   r.iati_code rand(1..5)
 end
 
+Factory.define :origin do |o|
+	names =["Donor", "Recipient"]
+	o.name names.sample
+end
+
 Factory.define :source do |s|
   s.url 'www.cnn.com'
   s.document_type FactoryGirl.create(:document_type)
@@ -67,19 +72,33 @@ Factory.define :source do |s|
 end
 
 
-Factory.define :user do |user|
-  user.name                  "rmosolgo"
-  user.email                 "rmosolgo@aiddata.org"
-  user.password              "foobar"
-  user.password_confirmation "foobar"
-  user.owner FactoryGirl.create(:organization)
+#Factory.define :user do |user|
+#  user.name                  "rmosolgo"
+#	sequence(:email) { |n| "user#{n}@example.com" }
+#  user.password              "foobar"
+#  user.password_confirmation "foobar"
+#  user.owner FactoryGirl.create(:organization)
+#end
+
+FactoryGirl.define do
+  sequence :email do |n|
+    "email#{n}@example.com"
+  end
+
+  factory :user do
+    email
+    name "rmosolgo"
+    password "secret"
+    password_confirmation "secret"
+    owner FactoryGirl.create(:organization)
+  end
 end
 
 Factory.define :currency do |currency|
-  country_name = Faker::Address.country
+  iso3 = ["CNY", "USD", "EUR", "KES", "XAF"].sample
   currency_name = Faker::Lorem.words[0]
-  currency.name "#{country_name} #{currency_name.capitalize}"
-  currency.iso3 currency_name[0..2].upcase
+  currency.name "#{iso3} #{currency_name.capitalize}"
+  currency.iso3 iso3
 end
 
 Factory.define :contact do |c|
@@ -132,9 +151,19 @@ Factory.define :project do |project|
 
 end
 
-Factory.define :cache do |cache|
-	cache.id 1
-	cache.text FactoryGirl.create(:project).cache_text
+
+Factory.define :flag_type do |ft|
+	ft.name Faker::Lorem.words[0].capitalize
+	ft.color ['red', 'blue', 'green', 'yellow'].sample
+end
+
+Factory.define :flag do |f|
+	f.flag_type FactoryGirl.create(:flag_type)
+	f.flaggable_type "Transaction"
+	f.flaggable_id FactoryGirl.create(:transaction).id
+	f.owner FactoryGirl.create(:user)
+	f.comment 'I have something to say'
+	f.source 'www.cnn.com/facts'
 end
 	
 

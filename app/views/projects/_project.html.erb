@@ -1,5 +1,5 @@
 <% unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
-
+<% @flag_counter = 0 %>
 <div class="project-page">
 <div class="inactive_row">
 
@@ -120,4 +120,4 @@
 </div>
 
 </div>
-<%= render 'project_flaggable' %>
+<%= render('project_flaggable') if signed_in? %>

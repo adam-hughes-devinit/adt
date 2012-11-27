@@ -8,10 +8,15 @@ describe "Project pages" do
   let(:organization) {FactoryGirl.create(:organization)}
   let(:contact) {FactoryGirl.create(:contact)}
   let(:comment) {FactoryGirl.build(:comment)}
-  
+  let(:flag_type) {FactoryGirl.create(:flag_type)}
+  let(:transaction){FactoryGirl.create(:transaction)}
+  let(:flag) {FactoryGirl.create(:flag)}
+
+   
   subject {page}
   
-  describe "should be impervious to un-signed-in users" do
+  
+  describe " #edit should be impervious to un-signed-in users" do
     before do 
         visit edit_project_path(project)
       end
@@ -33,7 +38,13 @@ describe "Project pages" do
 
 
   describe "view a project" do
-    before {visit project_path(project)}
+    before do
+	    flag_type.save
+	    transaction.flags << flag
+      project.transactions << transaction
+  		project.save!
+    	visit project_path(project)
+    end
     # test page title
     it {should have_selector("title", text: project.title)}
     # test main div
@@ -46,8 +57,25 @@ describe "Project pages" do
     it {should have_content(project.status.name)}
     it {should have_content(project.donor.name)}
 
-    it {should have_content("Add a comment")}
+		describe "Flag link" do
+			it {should have_content(flag_type.name)}
+    
+		  describe "see a Flag popover -- Can't get it to work! " do 
+		  	before do   		
+		  		p FlagType.all.map(&:name)
+		  		# save_and_open_page
+		  		find(".flag-link-#{flag_type.name}").click
+		  	end
+		  	# Screw it!!
+		  	it {should have_content("#{flag_type.name} this:")}
+		  end
+		end
 
+		describe "Flag text" do
+			it {should have_content flag.comment}
+		end
+		
+    it {should have_content("Add a comment")}
     describe "leave a comment" do
       before do
         fill_in "Name", with: comment.name
@@ -60,6 +88,8 @@ describe "Project pages" do
       it {should have_content(comment.content)}
       it {should_not have_content(comment.email)}
     end
+    
+
 
   end
 
