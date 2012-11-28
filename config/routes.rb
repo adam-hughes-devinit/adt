@@ -28,7 +28,5 @@ Adt::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
 
   match '/ajax', to: 'static_pages#ajax'
-  
-  get "static_pages/vis"
 
 end

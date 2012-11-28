@@ -22,14 +22,16 @@ include SearchHelper
         
         if @ids_for_export.length == Project.all.count
         	@csv_data = Cache.find(0).text # this is a chill hack -- id=0 holds all the text.
+        	full_or_partial="full"
         else	
         	@csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
-")			
+")				
+					full_or_partial="partial"
 				end
 
 				@csv_header = "\uFEFF" + "\"project_id\",\"donor\",\"title\",\"year\",\"year_uncertain\",\"description\",\"sector\",\"sector_comment\",\"crs_sector\",\"status\",\"status_code\",\"flow\",\"tied\",\"tied_code\",\"all recipients\",\"sources\",\"sources_count\",\"funding_agency\",\"implementing_agency\",\"donor_agency\",\"donor_agency_count\",\"recipient_agencies\",\"recipient_agencies_count\",\"verified\",\"verified_code\",\"flow_class\",\"flow_class_code\",\"active\",\"active_code\",\"factiva_sources\",\"amount\",\"currency\",\"deflators_used\",\"exchange_rates_used\",\"usd_defl\",\"start_actual\",\"start_planned\",\"end_actual\",\"end_planned\",\"recipient_count\",\"recipient_condensed\",\"recipient_cow_code\",\"recipient_oecd_code\",\"recipient_oecd_name\",\"recipient_iso3\",\"recipient_iso2\",\"recipient_un_code\",\"recipient_imf_code\",\"is_commercial\",\"is_commercial\",\"debt_uncertain\",\"line_of_credit\",\"is_cofinanced\"
 "
-        send_data((@csv_header + @csv_data), filename: "AidData_China_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
+        send_data((@csv_header + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
         
         #    This was the old way of doing it -- creating the file in memory from projects dynamically
         #@export_projects = Project.includes(:transactions, :geopoliticals, :contacts, :sources, :participating_organizations)
@@ -122,24 +124,24 @@ include SearchHelper
   # DELETE /Projects/1
   # DELETE /Projects/1.json
   def destroy
+  
     @project = Project.find(params[:id])
+    @cache = Cache.find(params[:id])
+    
     @project.destroy
+    @cache.destroy
 
     respond_to do |format|
-      format.html { redirect_to Projects_url }
+      format.html { redirect_to projects_url }
       format.json { head :no_content }
     end
+    
+    undo_link = view_context.link_to( 
+    "Undo", revert_version_path(@project.versions.scoped.last
+    ),
+    method: :post)
+    flash[:notice] = "Project deleted! #{undo_link}"
   end
-
-  def media
-    @project = Project.find_by_media_id(params[:media_id])
-    if current_user && @project.owner == Organization.find_by_name('AidData') && current_user.owner == Organization.find_by_name("AidData")
-      render 'edit'
-    else
-      render 'show'
-    end
-  end
-
 
   private
 

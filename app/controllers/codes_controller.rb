@@ -25,7 +25,7 @@ class CodesController < ApplicationController
   # GET /flow_types/new.json
   def new
     @object = @class_name.constantize.new
-
+	
     respond_to do |format|
       format.html {render template: 'shared/code_form', locals: {object: @object, type: @class_type}}
       format.json { render json: @object }
@@ -68,6 +68,8 @@ class CodesController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @object.errors, status: :unprocessable_entity }
       end
+      
+      reindex
     end
 
     undo_link = view_context.link_to( 
@@ -85,16 +87,25 @@ class CodesController < ApplicationController
     @object.destroy
 
     respond_to do |format|
-      format.html { redirect_to flow_types_url }
+      format.html { redirect_to "/#{view_context.pluralize(2, @class_type)[2..15].downcase.gsub(/\s/, '_')}" }
       format.json { head :no_content }
     end
+    
+    reindex
   end
 
   private
   	def create_local_variables(class_name_val, class_type_val, options={})
-  		@class_name = class_name_val
-  		@class_type = class_type_val
+  		@class_name = class_name_val # ex. OdaLike
+  		@class_type = class_type_val # ex. Oda Like
   		options.reverse_merge!({has_projects: true})
   		@has_projects = options[:has_projects]
   	end
+  	
+  	def reindex
+  		if @object.respond_to? 'projects'
+	  		Sunspot.index(@object.projects) 
+	  	end
+  	end
+
 end

@@ -330,8 +330,17 @@ label {
 .edit-project-link {
   float: right;
   padding:5px;
+  margin:5px;
   border: 3px solid green;
   background: lightgreen;
+}
+
+.delete-project-link {
+  float: right;
+  margin:5px;
+  padding:5px;
+  border: 3px solid #d00;
+  background: #f66;
 }
 
 .unset-data {
