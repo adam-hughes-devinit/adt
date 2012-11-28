@@ -8,6 +8,9 @@
           </a>
 
           <nav>
+          	<% if Rails.env.development? %>
+          		<p class="pull-right" style="margin:5px;color:#fcc;font-size:20px"><b>DEVELOPMENT</b></p>
+          	<% end %>
             <ul class="nav pull-right">
                   <li><%= link_to "Home", root_path %> </li>
                   <!-- Links for anyone !-->

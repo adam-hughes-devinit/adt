@@ -1,6 +1,6 @@
 class Cache < ActiveRecord::Base
   attr_accessible :id, :text
-  after_save :update_complete_cache
+  after_save :update_complete_cache, unless: :skip_cache_all?
   after_destroy :update_complete_cache
   
   def update_complete_cache
@@ -15,4 +15,13 @@ class Cache < ActiveRecord::Base
 			end
 		end
 	end
+	
+	def skip_cache_all=(true_or_false)
+		@skip_cache_all = true_or_false
+	end
+	
+	def skip_cache_all?
+		@skip_cache_all || false
+	end
+		
 end

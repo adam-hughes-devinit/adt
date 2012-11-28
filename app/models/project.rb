@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   attr_accessible :title, :active, :capacity, :description, :year,
-  :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,:cache!, :cache_text,
+  :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
+  :cache!, :cache_text, :cache_one!,
   :is_commercial, :media_id, 
   :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, :is_cofinanced,
   # belongs_to fields
@@ -16,10 +17,9 @@ class Project < ActiveRecord::Base
   :verified_id, :sector_id, :tied_id, :flow_type_id, 
   :oda_like_id, :status_id, 
   :donor_id, :owner_id
-  
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
-  after_save :cache_this_project
+  after_save :cache!
   
 
   has_many :comments, dependent: :destroy
@@ -271,15 +271,21 @@ class Project < ActiveRecord::Base
 
   end
 
-	def cache_this_project
+	
+	def cache!
 		if CACHE_ONE
 			cached_record = Cache.find_or_create_by_id(id)
+			cached_record.skip_cache_all = false
 			cached_record.update_attribute(:text, cache_text)
 		end
 	end
 	
-	def cache!
-		cache_this_project
+	def cache_one!
+		if CACHE_ONE
+			cached_record = Cache.find_or_create_by_id(id)
+			cached_record.skip_cache_all = true
+			cached_record.update_attribute(:text, cache_text)
+		end
 	end
 	
 	def cache_text

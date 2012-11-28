@@ -1,6 +1,5 @@
 class CodesController < ApplicationController
-  # GET /flow_types
-  # GET /flow_types.json
+
   def index
     @objects = @class_name.constantize.all
 
@@ -10,8 +9,7 @@ class CodesController < ApplicationController
     end
   end
 
-  # GET /flow_types/1
-  # GET /flow_types/1.json
+
   def show
     @object = @class_name.constantize.find(params[:id])
 
@@ -21,8 +19,6 @@ class CodesController < ApplicationController
     end
   end
 
-  # GET /flow_types/new
-  # GET /flow_types/new.json
   def new
     @object = @class_name.constantize.new
 	
@@ -32,14 +28,12 @@ class CodesController < ApplicationController
     end
   end
 
-  # GET /flow_types/1/edit
+
   def edit
     @object = @class_name.constantize.find(params[:id])
     render template: 'shared/code_form', locals: {object: @object, type: @class_type}
   end
 
-  # POST /flow_types
-  # POST /flow_types.json
   def create
     @object = @class_name.constantize.new(params[@class_name.underscore.downcase.to_sym])
 
@@ -54,8 +48,6 @@ class CodesController < ApplicationController
     end
   end
 
-  # PUT /flow_types/1
-  # PUT /flow_types/1.json
   def update
     @object = @class_name.constantize.find(params[:id])
 
@@ -69,7 +61,7 @@ class CodesController < ApplicationController
         format.json { render json: @object.errors, status: :unprocessable_entity }
       end
       
-      reindex
+      reindex_and_recache
     end
 
     undo_link = view_context.link_to( 
@@ -80,8 +72,7 @@ class CodesController < ApplicationController
     flash[:success] = "#{@class_type} updated. #{undo_link}"
   end
 
-  # DELETE /flow_types/1
-  # DELETE /flow_types/1.json
+
   def destroy
     @object = @class_name.constantize.find(params[:id])
     @object.destroy
@@ -91,7 +82,7 @@ class CodesController < ApplicationController
       format.json { head :no_content }
     end
     
-    reindex
+    reindex_and_recache
   end
 
   private
@@ -102,9 +93,12 @@ class CodesController < ApplicationController
   		@has_projects = options[:has_projects]
   	end
   	
-  	def reindex
+  	def reindex_and_recache
   		if @object.respond_to? 'projects'
-	  		Sunspot.index(@object.projects) 
+	  		Sunspot.index(@object.projects)
+				@object.projects.all.each {|p| p.cache_one!}
+				# to update the master cache... -->
+				@object.projects.first.cache!
 	  	end
   	end
 
