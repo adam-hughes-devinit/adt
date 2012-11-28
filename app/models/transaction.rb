@@ -1,6 +1,6 @@
 class Transaction < ActiveRecord::Base
-  attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, :usd_current
-  # before_save :round_value
+  attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, :usd_current, :deflator_used, :exchange_rate, :deflated_at
+  before_save :deflate_and_round_value
   has_paper_trail
   
  
@@ -10,10 +10,46 @@ class Transaction < ActiveRecord::Base
   has_many :flags, as: :flaggable, dependent: :destroy
   accepts_nested_attributes_for :flags
 
-  def round_value
-  	self.value = self.value ? self.value.round(2) : nil
-  	self.usd_defl = self.usd_defl ? self.usd_defl.round(2)  : nil
-  	self.usd_current = self.usd_current ? self.usd_current.round(2)  : nil
-  end
+	def deflate_and_round_value
+      if self.project.year && self.project.donor
+        donor_iso3 = self.project.donor.iso3
+        yr = self.project.year
+          if self.value && self.currency 
+            require 'open-uri'
 
+            deflator_query = "#{self.value.to_s}#{self.currency.iso3}#{yr}#{donor_iso3}" # This is defined at oscar.itpir.wm.edu/deflate
+            deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
+            deflator_string = open(deflator_url){|io| io.read}
+            deflator_object = ActiveSupport::JSON.decode(deflator_string)
+            begin  
+              deflated_amount = deflator_object["deflated_amount"]
+              current_amount = deflator_object["current_amount"]
+              exchange_rate_used = deflator_object["exchange_rate"]
+              deflator_used = deflator_object["deflator"]
+              
+              self.usd_defl=deflated_amount.to_f.round(2)
+              self.usd_current=current_amount.to_f.round(2)
+              self.deflator= deflator_used
+              self.exchange_rate = exchange_rate_used
+              self.deflated_at = Time.now
+            rescue
+                
+                self.usd_defl=nil
+                self.usd_current=nil
+                self.deflator=nil
+                self.exchange_rate=nil
+                self.deflated_at=nil
+
+            end
+
+          else
+                self.usd_defl=nil
+                self.usd_current=nil
+                self.deflator=nil
+                self.exchange_rate=nil
+                self.deflated_at=nil
+          end
+      end
+   end
+   
 end

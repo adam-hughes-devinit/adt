@@ -14,7 +14,7 @@
 <p>
 	<% if current_user_is_aiddata_admin %>
 		<%= link_to "Edit", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}/edit" %> |
-		<%= link_to "Destroy", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}", method: :delete, confirm: "Are you sure?" %> | 
+		<%= link_to "Destroy", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}", method: :delete, confirm: "Are you sure? All codes with this value will become 'Unset'. " %> | 
 	<% end %> 
 	
 	<%= link_to "See All #{type.pluralize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}" %>

@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
   :donor_id, :owner_id
   
   before_save :set_verified_to_raw_if_null
-  before_save :deflate_values
+  # before_save :deflate_values MOVED TO TRANSACTION MODEL
   after_save :cache_this_project
   
 
@@ -126,7 +126,7 @@ class Project < ActiveRecord::Base
   def usd_2009
     sum = 0
     transactions.map { |t| sum += t.usd_defl unless t.usd_defl.nil?} 
-    sum
+    sum > 0 ? sum : nil
   end
   def currency_name
     transactions.map do |t| 
@@ -343,49 +343,6 @@ class Project < ActiveRecord::Base
     "\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 2}\",\"#{debt_uncertain}\",\"#{line_of_credit}\",\"#{is_cofinanced}\""
 	end
  
-   def deflate_values
-      if year && donor
-        donor_iso3 = donor.iso3
-        yr = year
-        transactions.each do |t|
-          if t.value && t.currency 
-            require 'open-uri'
-
-            deflator_query = "#{t.value.to_s}#{t.currency.iso3}#{yr}#{donor_iso3}"
-            deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
-            deflator_string = open(deflator_url){|io| io.read}
-            deflator_object = ActiveSupport::JSON.decode(deflator_string)
-            begin  
-              deflated_amount = deflator_object["deflated_amount"]
-              current_amount = deflator_object["current_amount"]
-              exchange_rate_used = deflator_object["exchange_rate"]
-              deflator_used = deflator_object["deflator"]
-              
-              t.usd_defl=deflated_amount.to_f.round(2)
-              t.usd_current=current_amount.to_f.round(2)
-              t.deflator= deflator_used
-              t.exchange_rate = exchange_rate_used
-              t.deflated_at = Time.now
-            rescue
-                
-                t.usd_defl=nil
-                t.usd_current=nil
-                t.deflator=nil
-                t.exchange_rate=nil
-                t.deflated_at=nil
-
-            end
-
-          else
-                t.usd_defl=nil
-                t.usd_current=nil
-                t.deflator=nil
-                t.exchange_rate=nil
-                t.deflated_at=nil
-          end
-        end
-      end
-   end
 
    def as_json(options={})
     super(
