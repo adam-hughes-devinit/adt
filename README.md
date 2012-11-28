@@ -86,6 +86,8 @@ Codes are the various categorizations applied to project records and related dat
 
 It's not possible to create a new code type from the web interface, only change values for existing codes.
 
+When you change the value of an existing code (eg, change the name of country `Congo, Dem. Rep.` to `DRC`, or change the code of flow class "Vague (Com)" to `105`), all projects will be updated with the new value, the search index is updated and the export cache is updated. 
+
 ### Deflators
 As before, deflation is handled by an external service, visible at `data.itpir.wm.edu/deflate`. There are plans to embed deflation metadata with the project table so that end users can see the values used and when they were employed.
 ## Comments
