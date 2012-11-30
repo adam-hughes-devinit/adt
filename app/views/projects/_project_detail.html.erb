@@ -1,0 +1,28 @@
+<%
+	# Requires @project and locals:{ containter_tag: "string", class_name: "String", heading: "String for <b/>" }
+%>
+
+<<%= container_tag %> class='flaggable' flaggable_type='<%= class_name %>' flaggable_id=<%= @project.id %> >
+	<b>
+		<%= "#{heading}:" unless heading.blank?  %>
+		
+	</b> 
+		<% current_object = (@project.send(class_name.underscore) || nil) %>
+		
+		<% if current_object.blank? %>
+			<%= @unset_data %>
+		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
+			<%= class_name== "YearUncertain" ? "<i>(Year Uncertain)</i>".html_safe : current_object %>
+		<% elsif [Date, DateTime].include? current_object.class %>
+			<%= current_object.strftime("%d %B %Y") %>
+		<% elsif !current_object.nil? %>
+			<%= link_to(current_object.name, current_object) %>
+		<% else %>
+			<%=  @unset_data  %> 
+		<% end %>
+		
+	<% project_detail_flags(class_name).each do |flag| %>
+		<%= render(partial: 'flag_superscript', locals: { flag: flag}) %>
+	<% end %>
+	
+</<%= container_tag %> >

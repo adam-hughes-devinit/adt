@@ -1,5 +1,8 @@
 require 'active_support/inflector'
 module ApplicationHelper
+
+	PROJECT_ACCESSORY_OBJECTS = ['Transaction', 'Geopolitical', 'Source', 'ParticipatingOrganization', 'Contact']
+	
 	def link_to_remove_fields(name, f)
 		f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)")
 	end
@@ -11,5 +14,9 @@ module ApplicationHelper
     end
     link_to_function(name, "add_fields(this, \"#{association}\", \"#{escape_javascript(fields)}\")", class: "span12")
   end
+  
+  def project_detail_flags(flaggable_type_name)
+  	Flag.find_all_by_flaggable_id_and_flaggable_type(@project.id, flaggable_type_name) || []
+	end 
 
 end

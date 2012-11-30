@@ -1,7 +1,7 @@
 <script type='text/javascript'>
 
 	$(function() {
-		$('.flaggable').append("<br> <%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %> <i class='flag-link'>Flag this:</i>")
+		$('.flaggable').append("<span class='flag-links'><i class='flag-link'>Flag this:</i> <%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %> </span>")
 		
 
 		
@@ -14,8 +14,8 @@
 				$('.flag-link').popover('hide')
 				$(this).popover('show')
 
-				$(".flag-popover").append('<input id="flag_flaggable_id" name="flag[flaggable_id]" size="10" type="hidden" value="'+$(this).parent().attr('flaggable_id')+'">' +
-					'<input id="flag_flaggable_type" name="flag[flaggable_type]" size="10" type="hidden" value="'+$(this).parent().attr('flaggable_type')+'">'
+				$(".flag-popover").append('<input id="flag_flaggable_id" name="flag[flaggable_id]" size="10" type="hidden" value="'+$(this).parent().parent().attr('flaggable_id')+'">' +
+					'<input id="flag_flaggable_type" name="flag[flaggable_type]" size="10" type="hidden" value="'+$(this).parent().parent().attr('flaggable_type')+'">'
 					)
 
 				$(".cancel_flag").click(function(link) {
@@ -27,7 +27,7 @@
 		$('.flaggable')
 			.hover(function() { 
 				$(this).toggleClass('flaggable-hover')
-					.children('.flag-link').toggleClass('flag-link-hover')
+					.children('.flag-links').toggleClass('flag-links-hover')
 				})
 			//.click()
 

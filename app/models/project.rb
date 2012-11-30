@@ -381,8 +381,13 @@ class Project < ActiveRecord::Base
 			self.geopoliticals.map(&:flags) +
 			self.sources.map(&:flags) +
 			self.contacts.map(&:flags) +
-			self.participating_organizations.map(&:flags)
+			self.participating_organizations.map(&:flags) +
+			self.flags
 		].flatten
+	end
+	
+	def flags
+		Flag.where("flaggable_type not in(?) and flaggable_id= ?",ApplicationHelper::PROJECT_ACCESSORY_OBJECTS, id)
 	end
 	
 	def set_verified_to_raw_if_null

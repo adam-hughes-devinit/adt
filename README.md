@@ -90,13 +90,17 @@ When you change the value of an existing code (eg, change the name of country `C
 
 ### Deflators
 As before, deflation is handled by an external service, visible at `data.itpir.wm.edu/deflate`. There are plans to embed deflation metadata with the project table so that end users can see the values used and when they were employed.
+
 ## Comments
 On each project page, there is a section to display comments and a form where any page visitor may leave a comment. Admin users see a "Delete comment" link. 
 
 Hopefully, comments will provide a feedback loop for data users to report errors or recommend changes. AidData staff will respond to their comments as necessary. This feature is somewhat experimental.
 
 ## Flags
-A signed-in user may flag a data point for review or confirmation. Flags are associated with project details (currently Transaction, Geopolitical, Contact, Source and Part. Org., but to be expanded to Year, Sector, and others). These flags are stored in the "Flags" tab and visible to all users. AidData admins may delete these flags.
+### Purpose
+Flags exist as a way for a user to bring attention to a specific data point. We encourage users to flag things for revision or to confirm existing data. 
+### How To
+Any user may flag a data point for review or confirmation. Flags are associated with project details. These flags are stored in the "Flags" tab and visible to all users. AidData admins may delete these flags.
 
 ## Data Feeds
 

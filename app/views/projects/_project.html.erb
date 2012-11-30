@@ -1,50 +1,57 @@
 <% @unset_data = "<span class='unset-data'>Unset</span>".html_safe %>
 <% @flag_counter = 0 %>
 <div class="project-page">
-<div class="inactive_row">
 
+
+<div class="row">
 	<div class= "project-box span10">
-
-		<p style="text-align:center"> 
-			<b>Donor:</b> <%= @project.donor.nil? ? @unset_data : link_to(@project.donor.name, @project.donor) %> | 
-			<b>Commitment Year:</b> <%= @project.year.blank? ? @unset_data : @project.year %>
-				<i style="color:#bbb;"><%= @project.year_uncertain ? "(Uncertain)" : "" %> </i> |
-			<b>Verified:</b> <%= @project.verified.nil? ? @unset_data : link_to(@project.verified.name, @project.verified) %> |
-			<b>ID:</b> <%= link_to @project.id,  @project %> |
-			<b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %>
-		</p>
+	<h3> Overview:</h3>
+		<ul class="project-overview span6"> 
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Donor", heading: "Donor"} %> 
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Year", heading: "Commitment Year"} %> 
+				<% if @project.year_uncertain %>
+					<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "YearUncertain", heading: ""} %>
+				<% end %>
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Usd_2009", heading: "Total Amount (USD-2009)" } %>
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Verified", heading: "Verified"} %> 
+			<li><b>ID:</b> <%= link_to @project.id,  @project %></li>
+			<li><b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %></li>
+		
+		</ul>
+		<div class="span3" style="background-color:#dad0d0"><p> What can go here?</p><br><br><br><br><br><br></div>
 	</div>
 	<div class="project-box span10">
 		<h3>Description:</h3>
-		<p class='project-description'><%= @project.description.blank? ? @unset_data : @project.description %> </p>
-		<p><b>Capacity:</b> <%= @project.capacity.blank? ? @unset_data : @project.capacity %> </p>
+		<ul>
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Description", heading: ""} %>
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Capacity", heading: "Capacity" } %>
+		<ul>
 	</div>
 </div>
-<div class="inactive_row">
+<div class="row">
+	<div class="project-categories project-box span5">
+		<h3>Codes & Markers: </h3>
+		<ul>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OdaLike", heading: "Flow Class"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Status", heading: "Status"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Sector", heading: "Sector"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "SectorComment", heading: "Sector Comment"} %>			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "DebtUncertain", heading: "Debt Uncertain"} %>			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "CrsSector", heading: "CRS Sector"} %>			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "FlowType", heading: "Flow Type"} %>
+			<!-- TIED has been removed. -->
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCommercial", heading: "Commercial"} %>			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "LineOfCredit", heading: "Line of Credit"} %>			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>				
+		</ul>
+	</div>
 	<div class="project-dates project-box span5">
 		<h3>Dates:</h3>
 		<ul>
-			<li><b>Start planned:</b> <%= @project.start_planned.nil? ? @unset_data : @project.start_planned.strftime("%d %B %Y") %></li>
-			<li><b>Start actual:</b> <%= @project.start_actual.nil? ? @unset_data : @project.start_actual.strftime("%d %B %Y") %></li>
-			<li><b>End planned:</b> <%= @project.end_planned.nil? ? @unset_data : @project.end_planned.strftime("%d %B %Y") %></li>
-			<li><b>End actual:</b> <%= @project.end_actual.nil? ? @unset_data : @project.end_actual.strftime("%d %B %Y") %></li>
-		</ul>
-	</div>
-	<div class="project-categories project-box span5">
-		<h3>Details: </h3>
-		<ul>
-			<li><b>Flow Class:</b> <%= @project.oda_like.nil? ? @unset_data : link_to(@project.oda_like.name, @project.oda_like) %></li>
-			<li><b>Status:</b> <%= @project.status.nil? ? @unset_data : link_to(@project.status.name, @project.status) %> </li>
-			<li><b>Sector:</b> <%= @project.sector.nil? ? @unset_data :  link_to(@project.sector.name, @project.sector) %></li>
-			<li><b>Sector comment:</b> <%=  @project.sector_comment.blank? ? @unset_data : @project.sector_comment %></li>
-			<li><b>Uncertain Debt Relief:</b> <%= @project.debt_uncertain %></li>
-			<li><b>CRS Sector:</b> <%= @project.crs_sector || @unset_data %></li>
-			<li><b>Flow Type:</b> <%= @project.flow_type.nil? ? @unset_data :  link_to(@project.flow_type.name, @project.flow_type) %></li>
-			<!-- li><i> DEPRECATED:</i><b>Tied:</b> <%= @project.tied.nil? ? @unset_data : link_to(@project.tied.name, @project.tied) %></li!-->
-			<li><b>Commercial:</b> <%= @project.is_commercial %></li>
-			<li><b>Line of Credit:</b> <%= @project.line_of_credit %></li>
-			<li><b>Cofinanced:</b> <%= @project.is_cofinanced %></li>
-			
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "StartPlanned", heading: "Start (Planned)"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "StartActual", heading: "Start (Actual)"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "EndPlanned", heading: "End (Planned)"} %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "EndActual", heading: "End (Actual)"} %>
 		</ul>
 	</div>
 </div>
@@ -78,4 +85,4 @@
 </div>
 
 </div>
-<%= render('project_flaggable') if signed_in? %>
+<%= render('project_flaggable')  %>

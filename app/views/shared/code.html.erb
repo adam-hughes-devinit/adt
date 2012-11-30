@@ -9,7 +9,7 @@
 	<% end %>
 <% end %>
 <% if @has_projects %>
-	<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{object.name.gsub(/\s/, '+')}" %></b>. </p>
+	<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.map(&:id).uniq.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{object.name.gsub(/\s/, '+')}" %></b>. </p>
 <% end %>
 <p>
 	<% if current_user_is_aiddata_admin %>

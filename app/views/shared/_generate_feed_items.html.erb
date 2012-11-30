@@ -1,8 +1,6 @@
 <% 
 # These helpers probably belong somewhere else. sorry!
 
-@project_accessory_objects = ['Transaction', 'Geopolitical', 'Source', 'ParticipatingOrganization', 'Contact']
-
 def get_agent(feed_item)
 	if feed_item.whodunnit
 	   User.find(feed_item.whodunnit).owner ? User.find(feed_item.whodunnit).owner : User.find(feed_item.whodunnit)
@@ -18,7 +16,7 @@ def get_name(feed_item, patient)
 		patient.content[0..25] + '...'
 	elsif feed_item.item_type == 'Flag'
 		patient.flag_type ? patient.flag_type.name : patient.source[0..25]
-	elsif @project_accessory_objects.include? feed_item.item_type
+	elsif ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include? feed_item.item_type
 		"#{feed_item.item_type} of project "+ Project.find_by_id(patient.project_id).title
 	elsif patient.name
 		patient.name
@@ -28,10 +26,14 @@ def get_name(feed_item, patient)
 end	
 
 def get_path(feed_item, patient)
-	if @project_accessory_objects.include? feed_item.item_type
+	if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include? feed_item.item_type
 		Project.find_by_id(patient.project_id)
 	elsif feed_item.item_type == 'Flag'
-		Project.find_by_id(patient.flaggable_type.constantize.find(patient.flaggable_id))
+		if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include? patient.flaggable_type
+			Project.find_by_id(patient.flaggable_type.constantize.find(patient.flaggable_id))
+		else 
+			Project.find_by_id(patient.flaggable_id)
+		end
 	else
 		patient
 	end
