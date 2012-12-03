@@ -2,11 +2,12 @@
 <br>
 <div class="row">
 <h3>Project Info: </h3>
-	<%= f.input :owner_id, wrapper_html: {class: " span12"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
+	<%= f.input :owner_id, wrapper_html: {class: " span6"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
+	<%= f.input :active, wrapper_html: {class: " span3"} %>
 	<%= f.input :title, wrapper_html: {class: "span10"} %>
 	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
 	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
-	<%= f.input :year_uncertain, label: "Year is uncertain", wrapper_html: { class: "span2"} %>
+	<%= f.input :year_uncertain, label: "Year is uncertain", wrapper_html: { class: "span3"} %>
 	<%= f.input :description, input_html: {rows: "10" }, wrapper_html: {class: "span12"} %>
 	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
 	<%= f.association :verified, wrapper_html: {class: "span5"} %>
@@ -34,7 +35,7 @@
 	<%= f.association :oda_like, wrapper_html: {class: " span5"} %>
 	<%= f.association :status, wrapper_html: {class: " span5"} %>
 
-	<%= f.input :active, wrapper_html: {class: " span12"} %>
+	
 
 </div>
 <div class='row project-accessory-fields'>

@@ -252,6 +252,13 @@ label {
   @extend .error;
 }
 
+.boolean {
+	cursor:pointer
+	}
+.boolean:hover {
+	background-color:#d0d9f0;
+	}
+
                                     /* Project Pages */
   #inactive-project {
     color: #942;
