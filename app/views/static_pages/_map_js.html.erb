@@ -1,4 +1,3 @@
-
 <div id = "vis_controls" class="row" style='text-align:center;'>
 <%= form_for Project.new, html: {class: ""} do |f| %>
   <%= f.select :oda_like, options_for_select(["All Flow Classes"] + OdaLike.all.collect {|o| o.name}, "All Flow Classes"), {}, {multiple: true, class: "span2 vis_input", id: "oda_like_input", selected_value: "All Flow Classes"}  %>
@@ -21,7 +20,7 @@ $('#tooltip').css('position','absolute')
 $('#tooltiptext').css('margin-left','5px').css('margin-right','5px').css('margin-top','1px').css('margin-bottom','1px')
 $('#tooltip').hide()
 $('.vis_input').change(function() {
-if (active_params == gather_inputs()){
+if (active_params = gather_inputs()){
 make_map_with_params(active_params)
 }
 })
