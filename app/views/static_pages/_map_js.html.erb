@@ -9,10 +9,19 @@
 </div>
 
 <div id="vis"></div>
+<div id="tooltip"><p id="tooltiptext"></p></div>
 <script type="text/javascript">
 $('#vis').css('text-align', 'center')
+$('#tooltip').css('position','absolute')
+.css('font-family','sans-serif')
+.css('font-size','12px')
+.css('background-color','#FFF')
+.css('border','1px grey solid')
+.css('opacity','0.9');
+$('#tooltiptext').css('margin-left','5px').css('margin-right','5px').css('margin-top','1px').css('margin-bottom','1px')
+$('#tooltip').hide()
 $('.vis_input').change(function() {
-if (active_params = gather_inputs()){
+if (active_params == gather_inputs()){
 make_map_with_params(active_params)
 }
 })
@@ -233,6 +242,7 @@ function time_since(time) {
 make_map_with_params({})
 
 make_legend(logscale.ticks())
+
 
 //                     ___....--- Click   //    //    //    // 
 // ***---______...--***                  //    //    //    //
@@ -800,18 +810,42 @@ function removeOverlay() {
 
     unfuzz(0, 100)
 }
-// Highlight + Unhighlight
-
+//Get mouse position and move tooltip
+var mousePosition;
+function updateMousePosition(event) {
+    mousePosition = {left: event.pageX, top: event.pageY}
+     $('div#tooltip').css('left',mousePosition.left+10)
+     $('div#tooltip').css('top',mousePosition.top-25) 
+}
+$(document).mousemove(updateMousePosition);
+// Highlight + Unhighlight + tooltip
 function highlight() {
   d3.select(this)
   .transition()
-    .attr("stroke", "#ddd")
+    .attr("stroke", "#ddd")   
+// get the country info
+  activeIso = this.id
+  activeName = $(this).attr("name")
+//show and write the tooltip
+ $('div#tooltip').show()
+ $('p#tooltiptext').html(activeName+"<br> Total: $"+nicemoney(map_data_item(activeIso).values.value))
+}
+
+function highlightnull() {
+// get the country info
+  activeIso = this.id
+  activeName = $(this).attr("name")
+//show and write the tooltip
+ $('div#tooltip').show()
+ $('p#tooltiptext').html(activeName+"<br>No active projects")
 }
 
 function unhighlight() {
   d3.select(this)
   .transition()
     .attr("stroke",function() {return $(this).attr("name") ? "#333" : ""})
+    $('div#tooltip').hide()
+    $('p#tooltiptext').text("")
 }
 
 
@@ -883,8 +917,8 @@ function recolor_and_add_listeners() {
   else {
   country
       .on("click", "")
-      .on("mouseover", "")
-      .on("mouseout", "")
+      .on("mouseover", highlightnull)
+      .on("mouseout", unhighlight)
       .style('cursor', '')
         .transition()
           .attr("fill",  "#777")
