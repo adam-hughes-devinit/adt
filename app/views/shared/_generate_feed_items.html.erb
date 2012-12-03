@@ -46,17 +46,24 @@ end
 	<% feed.each do |f| 
 			agent = get_agent(f) 
 			verb = "#{f.event}#{f.event[-1]=="e" ? "" : "e"}d"
-			%>
-		<% if patient = f.item_type.constantize.find_by_id(f.item_id) %>
-			<% 
-			patient_link_text = get_name(f, patient) # see helper above
-			patient_path = get_path(f, patient) # see helper above
+	%>
+			<% if patient = f.item_type.constantize.find_by_id(f.item_id)
+				patient_link_text = get_name(f, patient) # see helper above
+				patient_path = get_path(f, patient) # see helper above
+				restore_path = "/versions/#{f.id}/revert"
+				%>
+			<li>
+				<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= link_to patient_link_text, patient_path %>" (<%= distance_of_time_in_words_to_now(f.created_at) %> ago) 
+					<%= link_to("Click to revert to this version", restore_path, method: :post) if f.item_type == "Project" && current_user_is_aiddata_admin %>
+			</li>
+		 <% else 
+				patient_text = "a #{f.item_type}"
+				restore_path = "/versions/#{f.id}/revert"
 			%>
 			<li>
-				<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= link_to patient_link_text, patient_path %>" (<%= distance_of_time_in_words_to_now(f.created_at) %> ago)
+				<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= patient_text %>" (<%= distance_of_time_in_words_to_now(f.created_at) %> ago) 
+					<%= link_to("Click to restore this record", restore_path, method: :post) if current_user_is_aiddata_admin %>
 			</li>
-		<% else %>
-			
-		<% end %>
+	    <% end %>
 	<% end %>
 </ul>
