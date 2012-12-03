@@ -1,11 +1,15 @@
 class Transaction < ActiveRecord::Base
-  attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, :usd_current, :deflator_used, :exchange_rate, :deflated_at
+	include VersionsHelper
+  attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, 
+  :usd_current, :deflator_used, :exchange_rate, :deflated_at, :deflator, :created_at, :updated_at
   before_save :deflate_and_round_value
+
+
   has_paper_trail
   
  
   belongs_to :currency
-  belongs_to :project
+  belongs_to :project, touch: :updated_at
   
   has_many :flags, as: :flaggable, dependent: :destroy
   accepts_nested_attributes_for :flags

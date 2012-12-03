@@ -2,8 +2,10 @@
 <br>
 <div class="row">
 <h3>Project Info: </h3>
+
 	<%= f.input :owner_id, wrapper_html: {class: " span6"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
 	<%= f.input :active, wrapper_html: {class: " span3"} %>
+	<%= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration+=1}" %>
 	<%= f.input :title, wrapper_html: {class: "span10"} %>
 	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
 	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
@@ -85,5 +87,7 @@
 </div>
 <div class='row'>
 	<%= f.button :submit, "Save" %>
+	<br>
+	
 </div>
 <% end %>

@@ -13,21 +13,39 @@ class Project < ActiveRecord::Base
   :participating_organizations, :participating_organizations_attributes,
   :contacts, :contacts_attributes,
   :sources, :sources_attributes,
+  # for version control
+  :accessories, :iteration,
   # hidden fields
-  :verified_id, :sector_id, :tied_id, :flow_type_id, 
-  :oda_like_id, :status_id, 
+  :verified_id, :sector_id, :tied_id, :flow_type_id, :oda_like_id, :status_id,
   :donor_id, :owner_id
+  
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
   after_save :cache!
+  # before_save :increment_iteration MOVED TO FORM
   
+  def increment_iteration # DUH, version was already taken by paper_trail
+  	iteration ||= 0
+		iteration += 1
+  end
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
 
-  has_paper_trail if VERSION_CONTROL
-
+  has_paper_trail(meta: {accessories: :accessories})
+  
+	
+	def accessories
+		{transaction: transactions.each(&:attributes), 
+		 source: sources.each(&:attributes), 
+		 participating_organization: participating_organizations.each(&:attributes),
+		 contact: contacts.each(&:attributes),
+		 geopolitical: geopoliticals.each(&:attributes)
+		 }.to_json
+	end
+	
+	
   #validates :title, presence: true
 
   # I'm adding string methods for these codes for Sunspot Facets

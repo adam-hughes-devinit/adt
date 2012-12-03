@@ -124,12 +124,26 @@ include SearchHelper
   # DELETE /Projects/1
   # DELETE /Projects/1.json
   def destroy
+  	
   
     @project = Project.find(params[:id])
     @cache = Cache.find(params[:id])
     
+    # The big problem here was that in @project.destroy, 
+    # all the accessory objects were destroyed _first_,
+    # so when @project was destroyed (and accessories were saved),
+    # the accessories were gone already and accessories was an empty array.
+    #
+    # To get around this, I'm saving the accessories, deleting everything,
+    # then adding the accessories by hand. 
+    @accessories = @project.accessories
+    
     @project.destroy
     @cache.destroy
+    
+    @last_version = @project.versions.scoped.last
+    @last_version.accessories = @accessories
+    @last_version.save!
 
     respond_to do |format|
       format.html { redirect_to projects_url }

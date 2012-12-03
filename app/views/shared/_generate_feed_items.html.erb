@@ -43,17 +43,20 @@ end
 
 %>
 <ul>
-	<% feed.each do |f| %>
+	<% feed.each do |f| 
+			agent = get_agent(f) 
+			verb = "#{f.event}#{f.event[-1]=="e" ? "" : "e"}d"
+			%>
 		<% if patient = f.item_type.constantize.find_by_id(f.item_id) %>
 			<% 
-			agent = get_agent(f) 
-			verb = "#{f.event}d"
 			patient_link_text = get_name(f, patient) # see helper above
 			patient_path = get_path(f, patient) # see helper above
 			%>
 			<li>
 				<%= link_to agent.name, agent %> <%= verb %> <%= f.item_type.downcase %> "<%= link_to patient_link_text, patient_path %>" (<%= distance_of_time_in_words_to_now(f.created_at) %> ago)
 			</li>
+		<% else %>
+			
 		<% end %>
 	<% end %>
 </ul>

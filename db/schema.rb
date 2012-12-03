@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120190134) do
+ActiveRecord::Schema.define(:version => 20121203211636) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(:version => 20121120190134) do
     t.boolean  "year_uncertain", :default => false
     t.boolean  "line_of_credit", :default => false
     t.boolean  "is_cofinanced",  :default => false
+    t.integer  "iteration",      :default => 0
   end
 
   add_index "projects", ["id"], :name => "index_projects_on_id"
@@ -284,12 +285,13 @@ ActiveRecord::Schema.define(:version => 20121120190134) do
   add_index "verifieds", ["id"], :name => "index_verifieds_on_id"
 
   create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
+    t.string   "item_type",   :null => false
+    t.integer  "item_id",     :null => false
+    t.string   "event",       :null => false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.text     "accessories"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
