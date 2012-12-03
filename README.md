@@ -131,10 +131,12 @@ The aggregate data feed has one mandatory parameter, `get`. `get` takes any of t
 _These field names are somewhat subject to change (according to our needs). I should update this again before the launch._
 
 Besides `get`, a user may also filter by data value:
+
 - recipient_iso2
 - flow_class
 - sector_name
 - flow_type
+- year
 
 _These filter names are somewhat subject to change (according to our needs). I should update this again before the launch._
 
@@ -178,6 +180,8 @@ If the aggregate feed becomes a priority, it could be expanded to aggregate on m
 Conduit is a flexible, schema-less web service which was created to hold supporting (non-Chinese Development Finance) data for the map visualization. For more information about this service, visit its current homepage: aiddataconduit.herokuapp.com
 ### Deflator 
 The deflator web service has been expanded to support JSON data response which includes:
+
+
 - deflated_amount
 - current_amount
 - input_amount
@@ -186,6 +190,8 @@ The deflator web service has been expanded to support JSON data response which i
 - exchange_rate
 - country
 - deflator
-See data.itpir.wm.edu/deflate for more background on this service.
+
+
+See http://data.itpir.wm.edu/deflate for more background on this service.
 ### World Bank WDI Web Service
 The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See data.worldbank.org.

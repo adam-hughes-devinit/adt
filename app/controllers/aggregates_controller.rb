@@ -34,7 +34,8 @@ class AggregatesController < ApplicationController
 	    	{sym: :sector_name, options:Sector.all.map{|c| c.name} , internal_filter: "sectors.name"},
 	    	{sym: :verified, options: Verified.all.map{|c| c.name} , internal_filter: "verifieds.name"},
 	    	{sym: :flow_type, options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
-	    	{sym: :flow_class, options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" }
+	    	{sym: :flow_class, options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
+	    	{sym: :year, options: ("2000".."2010").to_a , internal_filter: "year" }
 	    ]
 
 	    @filters = ["active = 't' "]
