@@ -348,7 +348,8 @@ class Project < ActiveRecord::Base
     
     cache_text = "\"#{id}\",\"#{donor_name}\",\"#{title}\",\"#{year}\",\"#{year_uncertain}\"," +
     "\"#{description}\",\"#{sector_name}\",\"#{sector_comment}\",\"#{crs_sector}\",\"#{status_name}\"," +
-    "\"#{status ? status.code : ''}\",\"#{flow_type_name}\",\"#{tied_name}\",\"#{tied ? tied.code : '' }\"," +
+    "\"#{status ? status.code : ''}\",\"#{flow_type_name}\"," + 
+     # \"#{tied_name}\",\"#{tied ? tied.code : '' }\"," +  # Maybe we'll need this again.
     "\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\"," +
     "\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\","+ 
     "\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].count}\"," +
@@ -372,7 +373,9 @@ class Project < ActiveRecord::Base
     super(
           only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
           methods: [:usd_2009, :donor_name,
-                    :sector_name, :flow_type_name, :oda_like_name, :status_name, :tied_name, :recipient_condensed
+                    :sector_name, :flow_type_name, :oda_like_name, :status_name, 
+                    # :tied_name, 
+                    :recipient_condensed
                     ],
           include: [
             {geopoliticals: {include: [recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}], only: [:percent]}},

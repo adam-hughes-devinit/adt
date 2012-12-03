@@ -13,6 +13,10 @@ module SessionsHelper
 		signed_in? && current_user.admin? && current_user.owner_id == Organization.find_by_name("AidData").id 
 	end
 	
+	def current_user_is_project_owner
+		signed_in? && @project && @project.owner && current_user.owner && @project.owner_id == current_user.owner_id
+	end 
+	
   def sign_in(user)
     cookies.permanent[:remember_token] = user.remember_token
     self.current_user = user

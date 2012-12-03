@@ -31,8 +31,10 @@
 	<%= f.input :is_commercial, wrapper_html: {class: " span5"} %>
 	<%= f.input :line_of_credit,wrapper_html: {class: " span3"}, hint: "Is this project a line of credit?" %>
 	<%= f.input :is_cofinanced,wrapper_html: {class: " span3"} %>
-	<%= f.input :debt_uncertain, wrapper_html: {class: "span4"} %>
-	<%= f.association :tied, wrapper_html: {class: " span5"}, hint: "This variable is deprecated." %>
+	<%= f.input :debt_uncertain, wrapper_html: {class: "span4"} %> 
+	<!-- <%= 
+		#f.association :tied, wrapper_html: {class: " span5"}, hint: "This variable is deprecated." 
+		%>!-->
 	<%= f.association :flow_type, wrapper_html: {class: " span5"} %>
 	<%= f.association :oda_like, wrapper_html: {class: " span5"} %>
 	<%= f.association :status, wrapper_html: {class: " span5"} %>

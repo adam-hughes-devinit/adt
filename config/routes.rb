@@ -1,7 +1,7 @@
 Adt::Application.routes.draw do
   # codes
   resources :roles, :countries, :sectors, :statuses, 
-  :verifieds, :oda_likes, :tieds, :flow_types, :origins, 
+  :verifieds, :oda_likes, :flow_types, :origins, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, :flag_types
 
   # limited access

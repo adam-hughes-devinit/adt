@@ -2,13 +2,13 @@ module SearchHelper
 	def custom_search(options = {})
 	  options.reverse_merge! paginate: true
 
-	   @facet_labels = ["Sector", "Flow Type", "Flow Class", "Is Commercial", "Active", "Recipient"]
+	   # @facet_labels = ["Sector", "Flow Type", "Flow Class", "Is Commercial", "Active", "Recipient"]
 	    @facets = facets = [
 	      {sym: :sector_name, name: "Sector"},
 	      {sym: :flow_type_name, name: "Flow Type"},
 	      {sym: :oda_like_name, name: "Flow Class"},
 	      {sym: :status_name, name:"Status"},
-	      {sym: :tied_name, name:"Tied/Untied"},
+	      # {sym: :tied_name, name:"Tied/Untied"}, # saved here just in case!
 	      {sym: :verified_name, name:"Verified/Unverified"},
 	      {sym: :currency_name, name:"Reported Currency"},
 	      {sym: :is_commercial_string, name: "Commericial Status"},
