@@ -352,8 +352,8 @@ class Project < ActiveRecord::Base
      # \"#{tied_name}\",\"#{tied ? tied.code : '' }\"," +  # Maybe we'll need this again.
     "\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\"," +
     "\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\","+ 
-    "\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].count}\"," +
-    "\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].count}\"," +
+    "\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].any? ? project_agencies[:Donor].count : ''}\"," +
+    "\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].any? ? project_agencies[:Recipient].count : ''}\"," +
     "\"#{verified_name}\",\"#{verified ? verified.code : '' }\",\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\","+ 
     "\"#{active_string}\",\"#{active ? 1 : 2}\",\"#{project_sources[:factiva].join("; ")}\"," +
     "\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\","+ 
