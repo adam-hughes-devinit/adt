@@ -53,7 +53,13 @@ The create page is accessible via Navbar > Projects > Create a project. Note tha
 When a user creates a project, it is associated with the organization that owns that user. Users who belong to the same organization (eg, other AidData research assistants) may edit that project, but other users may not. (All users, even if they are anonymous, may view the project page.)
 ## Exporting Data
 
+### Exporting project data
 Data can be exported from the search results page. The link appears above the search results. Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren't listed here). The fields can only be changed by altering the source code -- sorry!
+
+### Exporting aggregate data
+Aggregate data may be exported from the aggregate data feed, described in detail below. To get a CSV, simply send the request to `aggregates/projects.csv` instead of `aggregates/projects`.
+
+Sorry, there is currently no graphical interface for aggregate exports.
 
 ### Implementation details of export function
 Export data is stored in the caches table and controlled by the Cache model and Project model's `cache!` function. It was too slow to generate CSVs on the fly, so now, whenever a project is saved, its cache is updated also. Whenever a cache is saved, it also updates Cache Zero, which holds the _whole_ CSV. (So, when a user requests all projects, making a big select, we just give the one where project_id=0. I wonder if we'll add more specialized caches, like -1 for all active projects, etc.)
