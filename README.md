@@ -114,9 +114,9 @@ The best way to learn the project API is to insert `.json` into the search page 
 
 
 ### Aggregate Data Feed
-The aggregate data feed was implemented for the map visualization. At first, it loaded by aggregating projects one-by-one, but it was far too slow.  The aggregate data feed allows the visualization to grab only the data it needs in a succinct format. Other tech-savvy users could get aggregate data this way and in the future, it could drive an aggregate exporter. 
+
 #### What it does
-A user may specify which dimensions to aggregate by and he or she will receive a list of data records with those dimensions and the aggregated USD-2009. At present, the only filter available is "recipient_iso2."
+A user may specify which dimensions to aggregate by and how to filter and he or she will receive a list of data records with those dimensions and the aggregated USD-2009, the aggregated USD current (ie, not adjusted for inflation) and the count of projects.
 #### Query
 
 ##### Select attributes
@@ -154,8 +154,8 @@ Some projects have more than one recipient. Sometimes, amounts may be divided am
 - `duplicate` If a project has multiple recipients, the full amount is attributed to each recipient. __This introduces double-counting: the same amount is multiplied by the number of recipients.__ It is offered here for advanced users.
 
 #### Response
-
-The response is an array of objects including aggregated USD-2009 by each field name. For example,     
+_The data below is for example only_
+The response is an array of JSON objects including aggregated USD-2009 by each field name. For example,     
     
 	/aggregates/projects?get=donor
 	
@@ -184,8 +184,6 @@ which yields:
 
     [{"usd_2009":2368182328.74,"recipient_iso2":"KE"}]
 	
-#### Looking forward
-If the aggregate feed becomes a priority, it could be expanded to aggregate on more fields or filter on more fields. This document may become out of date if the implementation changes.
 
 ### Conduit
 Conduit is a flexible, schema-less web service which was created to hold supporting (non-Chinese Development Finance) data for the map visualization. For more information about this service, visit its current homepage: aiddataconduit.herokuapp.com
@@ -205,4 +203,4 @@ The deflator web service has been expanded to support JSON data response which i
 
 See http://data.itpir.wm.edu/deflate for more background on this service.
 ### World Bank WDI Web Service
-The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See data.worldbank.org.
+The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http://data.worldbank.org.

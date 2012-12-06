@@ -133,10 +133,13 @@ class Project < ActiveRecord::Base
   def country_name
       geopoliticals.map do |g|
         g.recipient ? g.recipient.name : 'Unset'
-      end
+      end.sort
   end
   def recipient_condensed
     country_name.count > 1 ? "Africa, regional" : country_name[0]
+  end
+  def number_of_recipients
+  	country_name.length
   end
   
   has_many :transactions, dependent: :destroy
@@ -204,6 +207,7 @@ class Project < ActiveRecord::Base
     string :year
 
     text :donor_name
+    string :donor_name
 
     text :comments do 
       comments.map do |c|
@@ -253,7 +257,8 @@ class Project < ActiveRecord::Base
           "#{c.organization ? c.organization.name : ''}"]
       end
     end
-
+    
+    string :number_of_recipients
     string :owner_name
     string :sector_name 
     string :flow_type_name

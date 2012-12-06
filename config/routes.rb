@@ -12,7 +12,7 @@ Adt::Application.routes.draw do
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
-  match '/aggregates/projects', to: 'aggregates#projects'
+  match '/aggregates/projects', to: 'aggregates#projects', :defaults=>{:format=>'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
 

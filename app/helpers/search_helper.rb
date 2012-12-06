@@ -26,7 +26,9 @@ module SearchHelper
 	      {sym: :year_uncertain_string, name: "Year Uncertain"},
 	      {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"},
 	      {sym: :is_cofinanced_string, name: "Cofinance Status"},
-	      {sym: :recipient_iso2, name: ""}
+	      {sym: :recipient_iso2, name: ""},
+	      {sym: :number_of_recipients, name: "Number of Recipients"},
+	      {sym: :year, name: "Commitment Year"}
 	    ].sort! { |a,b| a[:name] <=> b[:name] }
 	    @search = Project.search do
 	        fulltext params[:search]

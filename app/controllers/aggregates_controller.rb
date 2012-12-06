@@ -146,12 +146,30 @@ class AggregatesController < ApplicationController
 					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
 			@data = ActiveRecord::Base.connection.execute(sql)
 			
-		    render json: @data.as_json(
-		    	only: ["usd_2009", "usd_current", "count"] +  @fields_to_get.map{|f| f[:external]}
-		    	)
+			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] 
+		  
+		  respond_to do |format|
+		    # default: render json
+		    format.json { render json: @data.as_json(
+		    				only: @column_names
+		    	)}
+		    # if asking for CSV, send an on-the-fly CSV
+		    format.csv { send_data data_to_csv, filename: "AidData_China_Aggregates_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv"}
+		  end
+		  
 		else	
 			render json: params
-	    end  		
+	  end  		
 	
 	end
+	
+	private
+		def data_to_csv
+		 CSV.generate do |csv|
+				csv << @column_names
+				@data.each do |datum|
+					csv << datum.values_at(*@column_names)
+				end
+			end
+		end
 end
