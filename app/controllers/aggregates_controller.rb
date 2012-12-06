@@ -9,13 +9,68 @@ class AggregatesController < ApplicationController
 			{external: "recipient_iso2",   group: "recipient_iso2", internal: "recipient_iso2"},
 			{external: "recipient_iso3",   group: "recipient_iso3", internal: "recipient_iso3"},
 			{external: "flow_class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end)"}
-			# oda -like
-
 			# active 
-
 		]
+		
+		@recipient_field_names = ["name", "iso2", "iso3"]
+		
+		@duplication_handlers = [
+				# MERGE --> If a project has multiple recipients, call it "Africa, Regional"
+				{external: "merge", 
+						select: @recipient_field_names.map{ |fn| "(case when count(recipients.id) > 1 then 'Africa, regional' " +
+									"else max(recipients.#{fn}) end) as recipient_#{fn}" }.join(", "), 
+						group: "group by projects.id", 
+						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
+									"INNER JOIN countries recipients on geo.recipient_id = recipients.id",
+						amounts: 'sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current'
+						}, 
+						
+				# PERCENT THEN MERGE --> If a project has multiple recipients and percentages add up to 100, 
+				#															Then divide along those percentages
+				#												 Else call it "Africa, Regional"
+				{external: "percent_then_merge",
+						select: @recipient_field_names.map { |fn| "(case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) != 100) then 'Africa, regional' else recipients.#{fn} end ) as recipient_#{fn}"}.join(', ') + ", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else 1.0 end) as multiplier",
+						group: "", 
+						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
+									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
+						amounts: "sum(sum_usd_defl*p.multiplier) as usd_2009, sum(sum_usd_current*p.multiplier) as usd_current"
+						 },
+				 
+				# PERCENT THEN SHARE --> If a project has multiple recipients and percentages add up to 100, 
+				#															Then divide along those percentages
+				#												 Else share it equally among recipients
+				{external: "percent_then_share",
+						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') + 
+									", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else (select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id)/1.0 end) as multiplier",
+						group: "",
+						join:"LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
+									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
+						amounts: "sum(sum_usd_defl*p.multiplier) as usd_2009, sum(sum_usd_current*p.multiplier) as usd_current"
+						 },
+				
+				# SHARE --> If a project has multiple recipients, share the amount equally among recipients
+				{external: "share",
+						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') + ",(select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) as recipients_count" ,
+						group: "", 
+						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
+									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
+						amounts: "sum(sum_usd_defl/p.recipients_count) as usd_2009, sum(sum_usd_current/p.recipients_count) as usd_current"
+						},
+						
+				# DUPLICATE --> If a project has multiple recipients, allocate the full amount to each recipient (DOUBLE-COUNTING)
+				{external: "duplicate",
+						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') ,
+						group: "",
+						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
+									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
+						amounts: 'sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current'
+						}
+			]
+		
+		@duplication_scheme = @duplication_handlers.select { |h| h[:external] == "#{params[:multiple_recipients]}" }[0] || @duplication_handlers[0] 
+		
 		@fields_to_get = []
-
+	
 		if params[:get].class == String
 			@get = params[:get].split(",")
 		elsif params[:get].class == Array
@@ -68,16 +123,13 @@ class AggregatesController < ApplicationController
 		    # 	order: nil
 		    # 	    	)
 
-		 	sql = "select sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current, count(*) as count,
+		 	sql = "select #{@duplication_scheme[:amounts]}, count(*) as count,
 		 			#{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
-		 			from (select projects.*,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.name) end) as recipient_name,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso2) end) as recipient_iso2,
-		 					(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso3) end) as recipient_iso3
+		 			from (select projects.*, 
+		 					#{@duplication_scheme[:select]}
 		 					from projects 
-			 				INNER JOIN geopoliticals on projects.id = geopoliticals.project_id 
-				 			INNER JOIN countries recipients on geopoliticals.recipient_id = recipients.id
-				 			group by projects.id
+							#{@duplication_scheme[:join]}
+				 			#{@duplication_scheme[:group]}
 				 			) p
 				 			
 		 				LEFT OUTER JOIN sectors on p.sector_id = sectors.id

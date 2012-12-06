@@ -360,7 +360,7 @@ class Project < ActiveRecord::Base
     "\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\"," +
     "\"#{start_actual ? start_actual.strftime("%d %B %Y") : ''}\",\"#{start_planned ?  start_planned.strftime("%d %B %Y") : ''}\"," +
     "\"#{end_actual ? end_actual.strftime("%d %B %Y") : ''}\",\"#{end_planned ? end_planned.strftime("%d %B %Y"): '' }\"," +
-    "\"#{country_name.count}\",\"#{recipient_condensed}\"," + 
+    "\"#{country_name.any? ? country_name.count : ''}\",\"#{recipient_condensed}\"," + 
     "\"#{cached_recipients.map(&:cow_code).join("; ")}\",\"#{cached_recipients.map(&:oecd_code).join("; ")}\"," +
     "\"#{cached_recipients.map(&:oecd_name).join("; ")}\",\"#{cached_recipients.map(&:iso3).join("; ")}\"," +
     "\"#{cached_recipients.map(&:iso2).join("; ")}\",\"#{cached_recipients.map(&:un_code).join("; ")}\"," +
