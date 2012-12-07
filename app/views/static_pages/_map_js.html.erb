@@ -488,7 +488,7 @@ function try_drawing_overlay() {
 
 
  // paint the pie chart
-  // prep the data and function
+    // prep the data and function
     var pie = d3.layout.pie().sort(d3.ascending),
         pie_data = [100-percent_of_total, percent_of_total],
         pie_radius = 40,
@@ -563,7 +563,7 @@ function try_drawing_overlay() {
     worldbank_gni_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "NY.GNP.ATLS.CD")
     worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.TOTL.CD")
     worldbank_usaoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.USAL.CD")
-    
+   
     cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like,OOF-like,Vague%20(ODF)&recipient_iso2='+activeIso
     // Right now, these ajax called are made in sequence -- can they be made in parallel?
     d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
@@ -720,18 +720,24 @@ console.log("gni_data and oda_array:")
  		
  		// For each given oda_array
  		oda_array.forEach(function(d) {
+ 			d.graph_data= []  
      	if (d.source.indexOf('api.worldbank')!=-1) {	// That is, it's from World Bank, so give it the treatment
-     		d.graph_data = years.map(function(year) {
+     		years.forEach(function(year) {
      			// find the right point then push it. (or ZERO if no point)
-     			if ((amount = d.data[1].filter(function(c) {return c.date== year})[0]) && (gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && gni_value.value && amount.value)  {
-     				return [year, (100*Number(amount.value))/Number(gni_value.value)]}
-     			else {return [year,0]}
+     			if ((amount = d.data[1].filter(function(c) {return c.date== year})[0]) && 
+     				(gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && 
+     				gni_value.value && amount.value)  {
+	     				d.graph_data.push([year, (100*Number(amount.value))/Number(gni_value.value)])
+     				}
      		})
      	}
      	else if (d.source.indexOf('aggregates/projects')!=-1) { // That is, it's from the China API
-     		d.graph_data = years.map(function(year) {
-     			if ((amount = d.data.filter(function(c) {return c.year == year})[0]) && (gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && gni_value.value) {
-     				return [year, (100*Number(amount.usd_current))/Number(gni_value.value)]}
+     		years.forEach(function(year) {
+     			if ((amount = d.data.filter(function(c) {return c.year == year})[0]) && 
+     				(gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && 
+     				gni_value.value) {
+	     				d.graph_data.push([year, (100*Number(amount.usd_current))/Number(gni_value.value)])
+	     			}
      			else { return [year,0]}
      		})
      	}
@@ -804,7 +810,7 @@ console.log("gni_data and oda_array:")
 		    .attr('x', function(d,i) {return ((3+(i*8))/80)*w})
 		    .attr('y', line_chart_height + line_text_margin)
 
-  // paint the heading
+    // paint the heading
     line_chart.append('svg:text')
       .text("Finance/GNI")
       .style('fill', 'white')
@@ -814,7 +820,7 @@ console.log("gni_data and oda_array:")
       .style('font-weight', 'bold')
       .style('text-decoration', 'underline')
 
-  // paint sources
+    // paint sources
     line_chart.append('svg:foreignObject')
       .attr('x', -.025*w)
       .attr('y', line_chart_height + line_text_margin +5)
