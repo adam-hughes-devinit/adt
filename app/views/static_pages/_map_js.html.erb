@@ -9,27 +9,24 @@
 </div>
 
     <div class="content">
-    <!--[if IE 6]>
-  <div id="error">
-  <p>Sorry! This interactive graphic requires a browser with SVG support, such as <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/download/">Safari</a>. </p>
-  </div>
+<!--[if IE 6]>
+  <div id="error"></div>
   <div id="vis" style="display:none;"></div>
-		<![endif]-->
+<![endif]-->
 <!--[if IE 7]>
-  <div id="error">
-  <p>Sorry! This interactive graphic requires a browser with SVG support, such as <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/download/">Safari</a>. </p>
-  </div>
+  <div id="error"></div>
   <div id="vis" style="display:none;"></div>
-		<![endif]-->
+<![endif]-->
 <!--[if IE 8]>
-  <div id="error">
- <p>Sorry! This interactive graphic requires a browser with SVG support, such as <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/">Firefox</a>, or <a href="http://www.apple.com/safari/download/">Safari</a>. </p>
-   </div>
+  <div id="error"> </div>
   <div id="vis" style="display:none;"></div>
-		<![endif]-->
+<![endif]-->
+<script type="text/javascript">
+	$('#error').append("<p>Sorry! This interactive graphic requires a browser with SVG support, such as <a href='http://www.google.com/chrome'>Chrome</a>, <a href='http://www.mozilla.org/en-US/firefox/'>Firefox</a>, or <a href='http://www.apple.com/safari/download/'>Safari</a>. </p>")
+</script>
 <!--[if IE 9]>
   <div id="vis"></div>
-		<![endif]-->  
+<![endif]-->  
 <![if !IE]><div id="vis"></div><![endif]></div>
 <div id="tooltip"><p id="tooltiptext"></p></div>
 <script type="text/javascript">
@@ -411,8 +408,6 @@ function try_drawing_overlay() {
         .attr("fill", "#819014")
         ;
     // paint the labels
-
-
       // a scale for equally-spaced sector labels
         highest_label = (3/16)*h
         lowest_label = h-((1/16)*h)
@@ -564,16 +559,24 @@ function try_drawing_overlay() {
         .style('fill', 'hsla(0, 0%, 10%, 0.5)')
 
   // request related data, then call a function to draw the line chart
-
   worldbank_root = "http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
     worldbank_gni_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "NY.GNP.ATLS.CD")
-    worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DT.ODA.ODAT.GN.ZS")
-    cdf_path = '/aggregates/projects?get=year&recipient_iso2='+activeIso
+    worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.TOTL.CD")
+    worldbank_usaoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.USAL.CD")
+    
+    cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like,OOF-like,Vague%20(ODF)&recipient_iso2='+activeIso
+    // Right now, these ajax called are made in sequence -- can they be made in parallel?
     d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
-      d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_gni_data) {
-        d3.json(cdf_path, function(cdf_data){
-          create_line_graph(cdf_data, gni_data, dacoda_gni_data)
-        })
+      d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_data) {
+      	d3.json('/ajax?url='+encodeURIComponent(worldbank_usaoda_url), function(usaoda_data) {
+		      d3.json(cdf_path, function(cdf_data){
+		      	// Takes (gni_data, oda_array)
+		        create_line_graph(gni_data, [{name: "CDF", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
+		        														 {name: "DAC ODA", data: dacoda_data, source: worldbank_dacoda_url, color: "#6699ff"}, 
+		        														 {name:"USA ODA", data: usaoda_data, source: worldbank_usaoda_url, color: "cccc66"}
+		        														 ])
+		      })
+		    })
       })
     })
 
@@ -689,8 +692,14 @@ function plot_top_projects(projects) {
 }
 
 
-// Make the line graph
-function create_line_graph(cdf_data,gni_data, dacoda_gni_data){
+
+<% if Rails.env.development? %>  
+var testing_oda_array=[]
+var testing_gni_data=[]
+<% end %>
+// Make the line graph 
+function create_line_graph(gni_data, oda_array){
+// oda_array objects are {name: "Name", data: (unprocessed data...), source: "Some URL", color: "display CSS color"}
 // constants were set before function call!
     d3.select('#line_chart_background')
     .transition()
@@ -698,39 +707,44 @@ function create_line_graph(cdf_data,gni_data, dacoda_gni_data){
 
 
 <% if Rails.env.development? %>
-console.log("cdf, gni, and dacoda_gni data:")
- console.log(cdf_data)
+console.log("gni_data and oda_array:")
  console.log(gni_data)
- console.log(dacoda_gni_data)
+ console.log(oda_array)
 <% end %>
 
- // prep the data
-    cdf_over_gni = []
-    dacoda_over_gni = []
-
-    years.forEach(function(d) {
-      cdf_point = ((cdf_data.filter(function(c) {return c.year == d})[0]) || {usd_current: 0})
-      gni_point = gni_data[1].filter(function(c) {return c.date == d})[0]
-      dacoda_over_gni_point = dacoda_gni_data[1].filter(function(c) {return c.date == d})[0]
-
-      if (cdf_point&&gni_point&&gni_point.value) {
-        cdf_over_gni.push([d, 100*(cdf_point.usd_current/Number(gni_point.value))])
-      }
-
-      if (dacoda_over_gni_point&&dacoda_over_gni_point.value) {
-       dacoda_over_gni.push([d, Number(dacoda_over_gni_point.value)])
-      }
-
-    })
+ // prep the data: For each data object, iterate over years, grabbing relevant data and pushing them to the objects graph_data array
+ 		// make the graph data arrays
+ 		oda_array.forEach(function(d) {
+ 			d.graph_data = []
+ 			})
+ 		
+ 		// For each given oda_array
+ 		oda_array.forEach(function(d) {
+     	if (d.source.indexOf('api.worldbank')!=-1) {	// That is, it's from World Bank, so give it the treatment
+     		d.graph_data = years.map(function(year) {
+     			// find the right point then push it. (or ZERO if no point)
+     			if ((amount = d.data[1].filter(function(c) {return c.date== year})[0]) && (gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && gni_value.value && amount.value)  {
+     				return [year, (100*Number(amount.value))/Number(gni_value.value)]}
+     			else {return [year,0]}
+     		})
+     	}
+     	else if (d.source.indexOf('aggregates/projects')!=-1) { // That is, it's from the China API
+     		d.graph_data = years.map(function(year) {
+     			if ((amount = d.data.filter(function(c) {return c.year == year})[0]) && (gni_value = gni_data[1].filter(function(c) {return c.date==year})[0]) && gni_value.value) {
+     				return [year, (100*Number(amount.usd_current))/Number(gni_value.value)]}
+     			else { return [year,0]}
+     		})
+     	}
+     	})
 
     <% if Rails.env.development? %>
-    console.log(cdf_over_gni)
-    console.log(dacoda_over_gni)
+    console.log("oda_array after processing:")
+    console.log(oda_array)
+    testing_oda_array=oda_array
+    testing_gni_data=gni_data
     <% end %>
  
-
-
- annual_maximum_finance_over_gni = d3.max([d3.max(dacoda_over_gni, function(d) {return d[1]}), d3.max(cdf_over_gni, function(d) {return d[1]})])
+ annual_maximum_finance_over_gni = d3.max(oda_array.map(function(a) {return d3.max(a.graph_data, function(v) {return v[1]})}))
  line_percent_scale = d3.scale.linear().domain([0,(annual_maximum_finance_over_gni + (annual_maximum_finance_over_gni/10))]).range([line_chart_height, 0])
  line_year_scale = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,line_chart_width])
 
@@ -759,22 +773,36 @@ console.log("cdf, gni, and dacoda_gni data:")
       .style('fill', '#ccc')
       .attr('transform', 'translate('+line_chart_width+')')
       .attr("opacity", 1)
-  // paint line labels
-    cdf_over_gni_color = '#FF9696'
-    dacoda_over_gni_color = '#ADE8FF'
-    line_chart.append('svg:text')
-      .text('Chinese Dev. Fin.')
-      .style('fill', cdf_over_gni_color)
-      .attr('text-anchor', 'bottom')
-      .attr('x', (3/80)*w)
-      .attr('y', line_chart_height + line_text_margin)
+  // Paint everything else -- this could be cleaner if you made a svg:g
+  // for each item in oda_array, then called lines and labels inside those gs
+  // But I couldn't get it to do right, so I'm putting them right in line_chart.
 
-    line_chart.append('svg:text')
-      .text('DAC ODA')
-      .style('fill', dacoda_over_gni_color)
-      .attr('text-anchor', 'bottom')
-      .attr('x', (15/80)*w)
-      .attr('y', line_chart_height + line_text_margin)
+  	// paint lines
+ 	  gni_line = d3.svg.line()
+	    .x(function(d) { return line_year_scale(d[0]); })
+	    .y(function(d) { return line_percent_scale(d[1]); }); 	
+	  gni_stroke_width = 3
+	        		
+		line_chart.selectAll('.gni_line')
+				.data(oda_array)
+			.enter().append('svg:path')
+  			  .attr('class', 'gni_line')
+          .attr('d',function(d) {return gni_line(d.graph_data)})
+          .style('stroke', function(d) {return d.color})
+          .style('fill', 'transparent')
+          .style('opacity', '.6')
+          .attr('stroke-width', gni_stroke_width)
+        
+		// paint line labels
+		line_chart.selectAll('.gni_label')
+		  .data(oda_array)
+		  .enter().append('svg:text')
+		  	.attr('class', 'gni_label')
+		    .text(function(d) {return d.name})
+		    .style('fill', function(d) {return d.color})
+		    .attr('text-anchor', 'bottom')
+		    .attr('x', function(d,i) {return ((3+(i*8))/80)*w})
+		    .attr('y', line_chart_height + line_text_margin)
 
   // paint the heading
     line_chart.append('svg:text')
@@ -797,30 +825,8 @@ console.log("cdf, gni, and dacoda_gni data:")
         .style("background-color", "hsla(319, 0%, 100%, 0.5)")
         .style('text-align', 'center')
         .style('vertical-align', 'center')
-        .html('<p style="color:#333;font-size:'+medium_font_size+';"><b>Sources: </b><a href="'+cdf_path+'">CDF</a>, <a href="'+worldbank_gni_url+'">GNI</a>, <a href="'+worldbank_dacoda_url+'">ODA/GNI</a></p>')
+        .html('<p style="color:#333;font-size:'+medium_font_size+';"><b>Sources: </b> <a href="'+worldbank_gni_url+'">GNI</a>, '+ oda_array.map(function(d) {return '<a href="'+d.source+'">'+d.name+'</a>'}).join(', ') +'</p>')
 
-  // paint the lines
-  gni_line = d3.svg.line()
-    .x(function(d) { return line_year_scale(d[0]); })
-    .y(function(d) { return line_percent_scale(d[1]); });
-
-      gni_stroke_width = 3
-      gni_lines = line_chart.append('svg:g')
-          .attr('id', 'gni_lines')
-
-      gni_lines.append('svg:path')
-          .attr('class', 'gni_line')
-          .attr('d',gni_line(cdf_over_gni))
-          .style('stroke', cdf_over_gni_color)
-          .style('fill', 'transparent')
-          .attr('stroke-width', gni_stroke_width)
-
-      gni_lines.append('svg:path')
-          .attr('class', 'gni_line')
-          .attr('d',gni_line(dacoda_over_gni))
-          .style('stroke', dacoda_over_gni_color)
-          .style('fill', 'transparent')
-          .attr('stroke-width', gni_stroke_width)
 
 }
 
@@ -949,7 +955,7 @@ function recolor_and_add_listeners() {
           .attr("fill",  "#777")
   }
   <% if Rails.env.development? %>
-  data_item ? console.log("finished unfuzzing "+data_item.key+" "+time_since(start)) : null;
+  //data_item ? console.log("finished unfuzzing "+data_item.key+" "+time_since(start)) : null;
   <% end %>
 }
 
