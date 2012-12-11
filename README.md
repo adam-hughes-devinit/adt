@@ -159,6 +159,12 @@ Some projects have more than one recipient. Sometimes, amounts may be divided am
 - `percent_then_share` If a project has multiple recipients and the _percent_ variable sums to 100% for that project, the amount is divided among recipients according to the _percent_ variable. Otherwise it divided among those recipients equally.
 - `duplicate` If a project has multiple recipients, the full amount is attributed to each recipient. __This introduces double-counting: the same amount is multiplied by the number of recipients.__ It is offered here for advanced users.
 
+##### Merge World Bank's World Development Indicators with your data
+If your data is aggregated by recipient-year, you can also request data from World Bank's Indicator API. Be warned that this kind of request is not efficient and will add quite a bit of time to your query. To add WDI data to your request:
+
+- include `year` and `recipient_iso3` in your `&get=` string.
+- add `&wdi=` with any number of comma-separated indicator codes from http://data.worldbank.org (eg, `NY.GNP.ATLS.CD` or `DC.DAC.USAL.CD`)
+
 #### Response
 _The data below is for example only_
 The response is an array of JSON objects including aggregated USD-2009 by each field name. For example,     

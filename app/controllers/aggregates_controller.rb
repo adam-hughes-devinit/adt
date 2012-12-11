@@ -22,9 +22,9 @@ class AggregatesController < ApplicationController
 						group: "group by projects.id", 
 						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
 									"INNER JOIN countries recipients on geo.recipient_id = recipients.id",
-						amounts: 'sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current'
+						amounts: 'round(sum(sum_usd_defl),2) as usd_2009, round(sum(sum_usd_current),2) as usd_current'
 						}, 
-						
+								
 				# PERCENT THEN MERGE --> If a project has multiple recipients and percentages add up to 100, 
 				#															Then divide along those percentages
 				#												 Else call it "Africa, Regional"
@@ -33,7 +33,7 @@ class AggregatesController < ApplicationController
 						group: "", 
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "sum(sum_usd_defl*p.multiplier) as usd_2009, sum(sum_usd_current*p.multiplier) as usd_current"
+						amounts: "round(sum(sum_usd_defl*p.multiplier), 2) as usd_2009, round(sum(sum_usd_current*p.multiplier), 2) as usd_current"
 						 },
 				 
 				# PERCENT THEN SHARE --> If a project has multiple recipients and percentages add up to 100, 
@@ -45,7 +45,7 @@ class AggregatesController < ApplicationController
 						group: "",
 						join:"LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "sum(sum_usd_defl*p.multiplier) as usd_2009, sum(sum_usd_current*p.multiplier) as usd_current"
+						amounts: "round(sum(sum_usd_defl*p.multiplier), 2) as usd_2009, round(sum(sum_usd_current*p.multiplier),2) as usd_current"
 						 },
 				
 				# SHARE --> If a project has multiple recipients, share the amount equally among recipients
@@ -54,7 +54,7 @@ class AggregatesController < ApplicationController
 						group: "", 
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "sum(sum_usd_defl/p.recipients_count) as usd_2009, sum(sum_usd_current/p.recipients_count) as usd_current"
+						amounts: "round(sum(sum_usd_defl/p.recipients_count),2) as usd_2009, round(sum(sum_usd_current/p.recipients_count),2) as usd_current"
 						},
 						
 				# DUPLICATE --> If a project has multiple recipients, allocate the full amount to each recipient (DOUBLE-COUNTING)
@@ -63,7 +63,7 @@ class AggregatesController < ApplicationController
 						group: "",
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: 'sum(sum_usd_defl) as usd_2009, sum(sum_usd_current) as usd_current'
+						amounts: 'round(sum(sum_usd_defl), 2) as usd_2009, round(sum(sum_usd_current),2) as usd_current'
 						}
 			]
 		
@@ -76,13 +76,29 @@ class AggregatesController < ApplicationController
 		elsif params[:get].class == Array
 			@get = params[:get]
 		end
-			
+		
+		#  &wdi=#{wdi_code} 
+
+		if @get.include?("year") && @get.include?("recipient_iso3")
+			if params[:wdi].class== String
+				@wdi = params[:wdi].split(",")
+			elsif params[:wdi].class== Array
+				@wdi = params[:wdi]
+			else 
+				@wdi = []
+			end
+			@wdi = @wdi.map do |wdi_input| 
+				if wdi_input.upcase == wdi_input.upcase[/[A-Z0-9\.]+/]
+					wdi_input.upcase
+				end 
+			end
+		end
 
 		@valid_fields.each do |field|
 	      	if @get.include?(field[:external]) 
 	      		@fields_to_get.push field
 	      	end
-	    end
+	 end
 
 	    where_filters = [
 	    	{sym: :recipient_iso2, options: Country.all.map{|c| c.iso2} , internal_filter: "recipient_iso2"},
@@ -145,14 +161,32 @@ class AggregatesController < ApplicationController
 					
 					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
 			@data = ActiveRecord::Base.connection.execute(sql)
+
+			@errors = []
+			if @wdi
+				@data = @data.map do |d|
+					if d["year"] && d["recipient_iso3"] && d["recipient_iso3"].length == 3
+						@wdi.each do |wdi_code|
+							request_url = "http://api.worldbank.org/countries/#{d["recipient_iso3"]}/indicators/#{wdi_code}?format=json&date=#{d["year"]}"
+							wdi_response_string = open(request_url){|io| io.read} 
+							response_feed = ActiveSupport::JSON.decode(wdi_response_string)
+							d[wdi_code] = response_feed[1][0]["value"] 
+						end
+					else 
+						@errors.push(d)
+					end
+					d
+				end
+			end
 			
-			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] 
+				
+			
+			
+			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] + @wdi
 		  
 		  respond_to do |format|
 		    # default: render json
-		    format.json { render json: @data.as_json(
-		    				only: @column_names
-		    	)}
+		    format.json { render json: @data.as_json(only: @column_names)}
 		    # if asking for CSV, send an on-the-fly CSV
 		    format.csv { send_data data_to_csv, filename: "AidData_China_Aggregates_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv"}
 		  end
