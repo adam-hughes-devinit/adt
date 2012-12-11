@@ -162,7 +162,7 @@ class AggregatesController < ApplicationController
 					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
 			@data = ActiveRecord::Base.connection.execute(sql)
 
-			@errors = []
+
 			if @wdi
 				@data = @data.map do |d|
 					if d["year"] && d["recipient_iso3"] && d["recipient_iso3"].length == 3
@@ -172,11 +172,11 @@ class AggregatesController < ApplicationController
 							response_feed = ActiveSupport::JSON.decode(wdi_response_string)
 							d[wdi_code] = response_feed[1][0]["value"] 
 						end
-					else 
-						@errors.push(d)
 					end
 					d
-				end
+				end	
+			else 
+				@wdi=[]
 			end
 			
 				
