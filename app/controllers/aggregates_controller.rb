@@ -22,7 +22,7 @@ class AggregatesController < ApplicationController
 						group: "group by projects.id", 
 						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
 									"INNER JOIN countries recipients on geo.recipient_id = recipients.id",
-						amounts: 'round(sum(sum_usd_defl),2) as usd_2009, round(sum(sum_usd_current),2) as usd_current'
+						amounts: "round(cast(sum(sum_usd_defl) as numeric),2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
 						}, 
 								
 				# PERCENT THEN MERGE --> If a project has multiple recipients and percentages add up to 100, 
@@ -33,7 +33,7 @@ class AggregatesController < ApplicationController
 						group: "", 
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(sum(sum_usd_defl*p.multiplier), 2) as usd_2009, round(sum(sum_usd_current*p.multiplier), 2) as usd_current"
+						amounts: "round(cast(sum(sum_usd_defl*p.multiplier) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current*p.multiplier) as numeric), 2) as usd_current"
 						 },
 				 
 				# PERCENT THEN SHARE --> If a project has multiple recipients and percentages add up to 100, 
@@ -45,7 +45,7 @@ class AggregatesController < ApplicationController
 						group: "",
 						join:"LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(sum(sum_usd_defl*p.multiplier), 2) as usd_2009, round(sum(sum_usd_current*p.multiplier),2) as usd_current"
+						amounts: "round(cast(sum(sum_usd_defl*p.multiplier) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current*p.multiplier) as numeric),2) as usd_current"
 						 },
 				
 				# SHARE --> If a project has multiple recipients, share the amount equally among recipients
@@ -54,7 +54,7 @@ class AggregatesController < ApplicationController
 						group: "", 
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(sum(sum_usd_defl/p.recipients_count),2) as usd_2009, round(sum(sum_usd_current/p.recipients_count),2) as usd_current"
+						amounts: "round(cast(sum(sum_usd_defl/p.recipients_count) as numeric),2) as usd_2009, round(cast(sum(sum_usd_current/p.recipients_count) as numeric),2) as usd_current"
 						},
 						
 				# DUPLICATE --> If a project has multiple recipients, allocate the full amount to each recipient (DOUBLE-COUNTING)
@@ -63,7 +63,7 @@ class AggregatesController < ApplicationController
 						group: "",
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: 'round(sum(sum_usd_defl), 2) as usd_2009, round(sum(sum_usd_current),2) as usd_current'
+						amounts: "round(cast(sum(sum_usd_defl) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
 						}
 			]
 		
