@@ -193,7 +193,9 @@ class Project < ActiveRecord::Base
   # has_many :followers, dependent: :destroy
 
   searchable do 
-    string :id # only for searching
+    integer :id # only for searching
+    text :id
+    
     float :usd_2009
 
     text :title

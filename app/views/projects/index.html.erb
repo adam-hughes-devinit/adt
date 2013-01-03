@@ -7,10 +7,11 @@
 end
 %>
 <% def active_or_inactive(project)
+	project_display_name = project.title.blank? ? "#{project.id} (No title)" : project.title
 	if !project.active 
-		"<span class='inactive-project-title'>#{project.title} (Inactive)</span>".html_safe
+		"<span class='inactive-project-title'>#{project_display_name} (Inactive)</span>".html_safe
 	else
-		project.title
+		project_display_name
 	end
 end %>
 	
@@ -27,6 +28,7 @@ end %>
 	<thead>
 		<tr >
 			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{joiner}" %>
+			<th><%= link_to "ID", "#{current_url_with_joiner_without_ordering}#{order_by_params("id")}" %> </th>
 			<th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}#{order_by_params("donor_name")}"  %></th>
 			<th><%= link_to "Title","#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  %></th>
 			<th><%= link_to "Year","#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  %></th>
@@ -39,29 +41,7 @@ end %>
 	</thead>
 	<tbody>
 	    <% @projects.each do |p| %>
-	    	<tr>
-	    		<td><%= p.donor ? p.donor.name : 'Unset' %> </td>
-	    		<td><%= link_to active_or_inactive(p), p %></td> 
-	    		<td><%= p.year %></td>
-	    		<td><%= p.country_name.join(', ') %></td>
-	    		<td><%= p.usd_2009 %></td>
-	    		<% if current_user && current_user.owner %>
-		    		<td>
-		    			<% if p.owner %>
-	    					<% if p.owner == current_user.owner %>
-	    						<%= link_to "Edit", edit_project_path(p) %>
-	    					<% else %>
-	    						Owner: <%= link_to p.owner.name, p.owner %> 
-	    					<% end %>
-	    				<% else %>
-	    					No owner 
-	    				<% end %>
-
-	    			</td>
-	    		<% else %>
-	    		<td></td>
-	    		<% end %>
-	    	</tr>
+				<%= render partial: 'index_item', locals: {p: p} %>
 	    <% end %>
 	</tbody>
 </table>

@@ -1,0 +1,24 @@
+<tr>
+	<td><%= p.id %> </td>
+	<td><%= p.donor ? p.donor.name : 'Unset' %> </td>
+	<td><%= link_to active_or_inactive(p), p %></td> 
+	<td><%= p.year %></td>
+	<td><%= p.country_name.join(', ') %></td>
+	<td><%= p.usd_2009 %></td>
+	<% if current_user && current_user.owner %>
+		<td>
+			<% if p.owner %>
+				<% if p.owner == current_user.owner %>
+					<%= link_to "Edit", edit_project_path(p) %>
+				<% else %>
+					Owner: <%= link_to p.owner.name, p.owner %> 
+				<% end %>
+			<% else %>
+				No owner 
+			<% end %>
+
+		</td>
+	<% else %>
+	<td></td>
+	<% end %>
+</tr>
