@@ -30,7 +30,13 @@ Many user activities begin with projects. This section addresses how to create, 
 
 A user may find projects by two methods. If the user knows the projects ID number, the user may go directly to the project via Navbar > Projects > Find by ID. Alternatively, the user may type in the URL : `[root]/projects/[ID]`. 
 
+#### Searching
 Users may also find projects by search-and-filter, which can be accessed via Navbar > Projects > Search and Filter or the URL `[root]/projects`. A user may enter a search query in the text input, then click search to return all matching projects. The search function covers all text fields in a project record, including accessory data such as contact name and subnational location detail. To filter the project list, a user may click one of the filters to see the available options, then click one of those options to show only projects which contain that value. In some cases, such as "recipient country", a project may have more than one value, so it will match more than one filter (eg, a project to Burundi and Rwanda will appear under a filter for Burundi and a filter for Rwanda). 
+
+#### Scopes
+There are a few defined _scopes_ for projects. They are a group of filters to help users find meaningful groups of data. They are available on the search panel. 
+##### Default Scope
+The default scope is "Official Finance". A user is brought there by default, and notified by a notice on the page.
 
 ### View a Project
 

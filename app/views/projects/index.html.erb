@@ -14,7 +14,11 @@ end
 		project_display_name
 	end
 end %>
-	
+
+<% if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
+	  flash.now[:success] =  "You are viewing Chinese Official Finance. Click the filters below to change your settings."
+	 end
+%> 	
 <h2>Search Parameters</h2>
 <%= render 'project_search' %>
 <br>
