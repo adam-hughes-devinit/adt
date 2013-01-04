@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203211636) do
+ActiveRecord::Schema.define(:version => 20130104183837) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(:version => 20121203211636) do
     t.integer  "code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "color"
   end
 
   add_index "sectors", ["id"], :name => "index_sectors_on_id"

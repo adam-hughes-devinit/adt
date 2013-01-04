@@ -157,7 +157,7 @@ _These filter names are somewhat subject to change (according to our needs). I s
 
 The filters may be a single value (eg., `&recipient_iso=KE`) or many values (eg., `&recipient_iso2=KE,TZ,ZW`). Also, the filters may be combined (eg., `&recipient_iso=KE&flow_clas=ODA-like`).
 ##### Handle projects with multiple recipients
-Some projects have more than one recipient. Sometimes, amounts may be divided among those recipients -- but sometimes they cannot. Users may select how to handle this problem with the `multiple_recipients` variable. A user may pass one of five values:
+Some projects have more than one recipient. Sometimes, amounts may be divided among those recipients -- but sometimes they cannot. Users may select how to handle this problem with the `multiple_recipients` argument. A user may pass one of five values:
 
 - `merge` __(Default if no value is passed)__ If a project has multiple recipients, the recipients are 'merged' and the amount is attributed to "Africa, regional". There is no risk of double-counting, but accuracy is lost.
 - `percent_then_merge` If a project has multiple recipients and the _percent_ variable sums to 100% for that project, the amount is divided among recipients according to the _percent_ variable. Otherwise it is attributed to "Africa, regional".

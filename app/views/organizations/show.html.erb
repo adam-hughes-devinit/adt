@@ -5,7 +5,10 @@
   <b>Description:</b>
   <%= @organization.description %>
 </p>
-
+<p>
+  <b>Origin:</b>
+  <%= @organization.origins.map{|o| link_to o.name, o}.uniq.join(', ').html_safe %>
+</p>
 <p>
   <b>Type:</b>
   <%= @organization.organization_type.name unless @organization.organization_type.nil? %>

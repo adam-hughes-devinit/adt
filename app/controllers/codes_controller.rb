@@ -96,7 +96,7 @@ class CodesController < ApplicationController
   	def reindex_and_recache
   		if @object.respond_to? 'projects'
 	  		Sunspot.index(@object.projects)
-				@object.projects.all.each {|p| p.cache_one!}
+				@object.projects.each {|p| p.cache_one!}
 				# to update the master cache... -->
 				@object.projects.first.cache!
 	  	end

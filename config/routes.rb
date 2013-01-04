@@ -14,6 +14,7 @@ Adt::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
   match '/aggregates/projects', to: 'aggregates#projects', :defaults=>{:format=>'json'}
+  match '/projects/json', to: 'projects#index', defaults: { format: 'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
 

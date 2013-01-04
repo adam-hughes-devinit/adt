@@ -6,10 +6,11 @@ module SearchHelper
 	  options.reverse_merge! paginate: true
  
 	  @search = Project.search do
-	  	@scope = SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0]
 	  	
-	  	if (options[:default_to_official_finance]!=false) && !(request.env['HTTP_REFERER'] =~ /\/projects/)
-	  		if !params[:country_name] # which means it came from the vis
+	  	if @scope = SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0]
+	  		nil
+	  	elsif (options[:default_to_official_finance]!=false) && !(request.env['HTTP_REFERER'] =~ /\/projects/)
+	  		if (params.keys.select {|k| !(k.to_s =~ /name/) }.length == 0)
 		  		@scope = SCOPES.first
 		  		params[:scope] = @scope[:sym].to_s
 		  	end

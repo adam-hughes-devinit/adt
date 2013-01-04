@@ -65,7 +65,11 @@ oda_likes.length > 0 ? input_params.flow_class= oda_likes : null;
 verifieds.length > 0 ? input_params.verified= verifieds : null;
 sectors.length > 0 ? input_params.sector_name= sectors : null;
 flow_types.length > 0 ? input_params.flow_type= flow_types : null;
-active_years.length > 0 ? input_params.year= active_years : null;
+if (active_years.length > 0) {
+	input_params.year= active_years;
+	years = active_years
+	}
+	
 delete active_params.recipient_iso2
 delete active_params.get
 if (input_params !=active_params ){
@@ -81,17 +85,28 @@ var w = 800,
     xy = d3.geo.mercator().scale(w*4.5).translate([.125*w,.375*h]),
     path = d3.geo.path().projection(xy),
     c = d3.scale.linear().domain([0,8000000000,150000000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
-    logscale = d3.scale.log().domain([1,150000000000]),
+    logscale = d3.scale.log().domain([1,c.domain()[2]]),
     greyscalec = d3.scale.linear().domain([3,4]).range(['#000000','#FFFFFF']),
-    c_sector= d3.scale.category20c(),
+    // c_sector= d3.scale.category20c(), // Replaced with a custom mapping function (ERB) below
     money = d3.format("0,r")
     years = d3.range(2000,2012), 
     total_cdf_in_view = 0, 
     active_params = {},
-    bigger_font_size = d3.max([(14/800)*w,13])
-    medium_font_size = d3.max([(12/800)*w,12])    
-    smaller_font_size = d3.max([(10/800)*w,10])
+    bigger_font_size = d3.max([(14/800)*w,13]),
+    medium_font_size = d3.max([(12/800)*w,12]),  
+    smaller_font_size = d3.max([(10/800)*w,10]),
+    label_green = d3.rgb("#819014") // This is green for the overlay label
     ;
+    
+    function c_sector(sector_name) {
+    	sector_color_map = {
+    		<%= Sector.all.map{ |s| "'#{s.name}' : '#{s.color || '#444' }'" }.join(", ").html_safe %>
+    		, 'Unset' : '#ccc'
+    	}
+    	return sector_color_map[sector_name]
+   	}
+
+    
 <% if Rails.env.development? %>
 var top_projects_data =[]
 <% end %>
@@ -190,10 +205,6 @@ function make_map_with_params(params) {
   item_delay = 20
   item_duration = 300
   // 1. Fuzz over the map and remove listeners.
-  <% if Rails.env.development? %>
-  console.log("1. fuzz "+time_since(start))
-  <% end %>
-
   fuzz()
   d3.selectAll('.country')
           .on("click", '')
@@ -202,21 +213,12 @@ function make_map_with_params(params) {
           .style('cursor', '')
 
   // 2. Get country sums by params
-  <% if Rails.env.development? %>
-  console.log("2. Ajax call "+time_since(start))
-  <% end %>
-
   post_params = params || {}
   post_params.get = "recipient_iso2"
+  post_params.multiple_recipients = "percent_then_merge"
+  post_params.get = "recipient_iso2"
   $.post('/aggregates/projects', post_params, function(json){
-    // 3. Change map_data + total_cdf_in_view
-    <% if Rails.env.development? %>
-    console.log("3. Change map_data + total_cdf_in_view " +time_since(start))
-    <% end %>
-    // 4. color 
-    <% if Rails.env.development? %>
-    console.log("4. color "+time_since(start))
-    <% end %>    
+// Iterate over your new data and update map_data with it
     map_data.forEach(function(d,i) {
       if (n = json.filter(function(j) {return j.recipient_iso2 == d.key})[0]) {
         d.values.value = n.usd_2009
@@ -226,11 +228,16 @@ function make_map_with_params(params) {
         d.values.value = null
         d.values.value_current = null
       }
-
-//Rescale params - double check for color consistency
-       c.domain([0,((d3.max(map_data, function(m) {return m.values.value}))/20),d3.max(map_data, function(m) {return m.values.value})]);
-       logscale.domain([1,c.domain()[2]]);
-
+     })
+ // Then update your color scale to go with your new map_data
+    c.domain([0,
+    	((d3.max(map_data, function(m) {return m.values.value}))/4),
+    	(d3.max(map_data, function(m) {return m.values.value})*1.1)
+    	]);
+    logscale.domain([1,c.domain()[2]]); 
+ // Then iterate over map_data again to color with your new scale.
+ // (How to only iterate once? Maybe you could update the colorscale from "json" directly
+    map_data.forEach(function(d,i) {
       country = d3.select("#states #"+d.key)
       color = d.values.value == null ? '#777' : c(d.values.value)
       country.transition()
@@ -245,15 +252,8 @@ function make_map_with_params(params) {
 
 
     // 5. unfuzz and re-add listeners
-    <% if Rails.env.development? %>
-    console.log("5. unfuzz + listeners "+time_since(start) )
-    <% end %>
-
-    //unfuzz((item_delay * json.length)+(item_duration), item_duration)
     unfuzz((item_delay*map_data.length)+item_duration,item_duration)
-  <% if Rails.env.development? %>
-  console.log("End "+time_since(start))
-  <% end %>
+
 
   })
 }
@@ -318,7 +318,11 @@ else {
 
 
 function try_drawing_overlay() {
-
+	// Really quick -- if the user has only selected one year,force the previous year into years also
+	if (years.length == 1) {
+		years = [(years[0]-1), years[0], (Number(years[0])+1)]
+		}
+		
  // build year/sector data (for stack):
     // this is going to hold one array for each sector that is present
     stackLayers = []
@@ -385,47 +389,57 @@ function try_drawing_overlay() {
     .interpolate('monotone')
 
 
+
   // paint the header and labels
     // paint the header
-     overlay.selectAll('#country_header')
-        .data([activeName])
-      .enter().append('svg:text')
-        .attr("id", "country_header")
-        .attr("class", "overlay")
-        .attr("x", w/4)
-        .attr("y", w/8)
-        .text(String)
-        .attr("opacity", 0)
-        .attr("fill", '#222')
-        .attr("font", "Georgia")
-        .attr("font-weight", "bold")
-        .attr("font-size", "5em")
-      .transition()
-        .attr("opacity",1)
-        .duration(500)
-      .transition()
-        .duration(500)
-        .attr("fill", "#819014")
-        ;
+    // 
+    // I really want this to resize according to country name. But I can't figure out how to do that.
+     country_header = overlay.append('svg:g')
+     	.attr("id", "country_header")
+     	.append("svg:foreignObject")
+        .attr("x", 100)
+        .attr("y", 20)
+        .attr("height", h/6)
+        .attr("width", w/2.1)  
+        .append('xhtml:body')
+			    .attr("height", h/6)
+		      .attr("width", w/2.1)
+		      .style("padding-top","10px")
+		      .style("background-color", "transparent")
+	      	.style("opacity", 0)
+	      	.style("color", '#fff')
+	      	.style("font-size", 50)	      	 
+			    .style("font-family", "Georgia")		 
+			    .style("font-weight", "bold"    ) 
+			    .html("<div id = 'country_header_body' style = 'font-size:40px; height:"+h/6+"; width:"+w/2.1+"'><span>"+activeName+"</span></div>")
+					.transition()
+						.style("opacity",1)
+						.duration(500)
+					.transition()
+						.delay(50)
+						.duration(500)
+						.style("color", label_green.brighter() )
+		 ;
+
     // paint the labels
       // a scale for equally-spaced sector labels
-        highest_label = (3/16)*h
+        highest_label = (1.5/16)*h
         lowest_label = h-((1/16)*h)
         label_left_position = (5/8)*w
         label_height = d3.scale.linear().domain([0,sectorSums.length]).range([highest_label, lowest_label])
-        label_increment = d3.min([label_height(1) - label_height(0), 35])
+        label_increment = d3.min([label_height(1) - label_height(0), 35]) 
 
       // make a g to hold them
       headers = overlay.append('svg:g')
         .attr('id', 'headers')
         .append("svg:foreignObject")
-          .attr("height", label_increment * (sectorSums.length+2))
+          .attr("height", (label_increment * (sectorSums.length+2)) + 10)
           .attr("width", (3/8)*w)
           .attr("x", label_left_position-20)
           .attr("y", highest_label - 35)
           .append("xhtml:body")
             .attr('id', 'sectors_body')
-            .style("padding-top", 0)
+            .style("padding-top", "5px")
             .style("background-color", "transparent")
       // get the body content, then load it
       headers_html ="<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b></div>" 
@@ -441,13 +455,14 @@ function try_drawing_overlay() {
   // hold it it a g
   area_chart = overlay.append('svg:g')
     .attr("id", "area_chart")
-    .attr('transform', 'translate('+(.125*w)+','+(.25*h)+')')
+    .attr('transform', 'translate('+(.125*w)+','+(.2*h)+')')
 
   // paint the year labels
   xAxis = d3.svg.axis()
     .scale(sector_area_x)
     .orient('bottom')
     .tickFormat(d3.format("f")) 
+   	.tickValues(years)
   area_chart.append("svg:g")
     .attr('class', 'axis')
     .call(xAxis)
@@ -510,16 +525,9 @@ function try_drawing_overlay() {
     .attr("id", "pie_chart")
     .attr("width", pie_radius*2)
     .attr("height", pie_radius*2)
-    .attr("transform", "translate(15,10)")
+    .attr("transform", "translate(20,20)")
 
-  // make a label
-  pie_chart.append("text")
-    .attr("y", (pie_radius*2)+16)
-    .attr("text-anchor", "left")
-    .attr("fill", "#819014")
-    .style("font-weight", "bold")
-    .style("font-size", 12)
-    .text(activeName+": "+percent_of_total+"% of total")
+
   // put the arcs in their own gs
   var arcs = pie_chart.selectAll("g.arc")
     .data(pie)
@@ -529,18 +537,44 @@ function try_drawing_overlay() {
 
   // put paths in the gs and make them grow
   var paths = arcs.append("path")
-    .attr("fill", function(d, i) { return i == 1 ? '#819014' : '#fff'}); //#FAEDD9
+    .attr("fill", function(d, i) { return i == 1 ? label_green.brighter() : '#fff'}); //#FAEDD9
 
   paths.transition()
     .duration(1000)
     .attrTween("d", tweenPie);
 
+// make a label
+  pie_chart.append("text")
+    .attr("y", (pie_radius)+2)
+    .attr("x", (pie_radius))
+    .attr("text-anchor", "middle")
+    .attr("fill", label_green.darker() )
+    .style("font-weight", "bold")
+    .style("font-size", 17)
+    .text(""+ percent_of_total+"%")
+  
+  pie_chart.append("text")
+    .attr("y", (pie_radius)+14)
+    .attr("x", (pie_radius))
+    .attr("text-anchor", "middle")
+    .attr("fill", label_green.darker() )
+    .style("font-weight", "bold")
+    .style("font-size", 12)
+    .text("of flows")
+  pie_chart.append("text")
+    .attr("y", (pie_radius)+26)
+    .attr("x", (pie_radius))
+    .attr("text-anchor", "middle")
+    .attr("fill", label_green.darker() )
+    .style("font-weight", "bold")
+    .style("font-size", 12)
+    .text("on map.")
 // Drawing the line chart comparing CDF/GNI and ODA/GNI -- tough because requires ~current~ USD, not constant USD!
   // set the scene
      // Set the constants
-   line_chart_height = .12*w
-   line_chart_width = (280/800)*w
-   line_chart_offset_y = (640/800)*h
+   line_chart_height = (1/8)*w
+   line_chart_width = .35*w
+   line_chart_offset_y = (60/80)*h
    line_chart_offset_x = w - line_chart_width - 50
    line_text_margin = 33
 
@@ -583,9 +617,9 @@ function try_drawing_overlay() {
 // Set targets, get the top x projects, then call a function to paint them
   // set targets
     // Top projects box target
-      top_projects_offset_x = 10
-      top_projects_offset_y = (62/80)*h
-      top_projects_height = (17/80)*h
+      top_projects_offset_x = 20
+      top_projects_offset_y = (58/80)*h
+      top_projects_height = (2/8)*h
       top_projects_width  = .5*w
 
       top_projects_group = overlay.append('svg:g')
@@ -595,7 +629,7 @@ function try_drawing_overlay() {
           .attr("id", "top_projects_body")
           .attr("height", .05*h)
           .attr("width", top_projects_width)
-          .style("background-color", "hsla(319, 0%, 100%, 0.5)")
+          .style("background-color", "hsla(319, 0%, 100%, 0.7)")
           .style("margin","0 0 0 0")
           .style("padding","5px 5px 5px 5px")
           .append("xhtml:body")
@@ -605,18 +639,24 @@ function try_drawing_overlay() {
             .html("<p><b>Loading top projects...</b></p>")
 
 
-  top_projects_number = 5
-  top_projects_path = '/projects.json?order_by=usd_2009&dir=desc&active_string=Active&max='+top_projects_number+'&recipient_iso2='+activeIso
+	top_projects_path = '/projects/json'
+  top_projects_params = active_params || {}
+  	top_projects_params.active_string =  "Active"
+  	top_projects_params.order_by= "usd_2009"
+  	top_projects_params.dir= "desc"
+  	top_projects_params.max= top_projects_number = 5
+  	top_projects_params.recipient_iso2= activeIso
+  	delete top_projects_params.get
+ 
   c_projects = d3.scale.linear().domain([0, ((top_projects_number-1)/2), top_projects_number-1]).range(['#2A5C0B', '#55760f','#808f12'])
 
-  
-
-
-  d3.json(top_projects_path, function(top_projects_data){
+  $.post(top_projects_path, top_projects_params, function(top_projects_data ){
+  	console.log(top_projects_data )
+  	top_projects_data 
     plot_top_projects(top_projects_data)
     create_top_projects_box(top_projects_data, "top_projects_body", top_projects_height)
 
-  })
+  }, "json")
 
 <% if Rails.env.development? %> 
  // For development
@@ -681,11 +721,11 @@ function plot_top_projects(projects) {
   project_points = area_chart.selectAll('.project_point')
       .data(projects)
     .enter().append('svg:circle')
-      .attr('cx', function(d) {console.log(d); return sector_area_x(d.year)})
-      .attr('cy', function(d) {return sector_area_y(point_stack_height(d))})
-      .attr('r', 4)
+      .attr('cx', function(d) {return sector_area_x(d.year)})
+      .attr('cy', function(d) {return sector_area_y(d.usd_2009)})
+      .attr('r', 3)
       .attr('fill', function(d,i) {return c_projects(i)})
-      .attr('stroke', function(d) {return c_sector(d.sector_name)})
+      .attr('stroke','black') //function(d) {return c_sector(d.sector_name)})
       .attr('stroke-weight', 1)
       .append('title')
         .text(function(d) {return d.title})
@@ -697,6 +737,7 @@ function plot_top_projects(projects) {
 var testing_oda_array=[]
 var testing_gni_data=[]
 <% end %>
+
 // Make the line graph 
 function create_line_graph(gni_data, oda_array){
 // oda_array objects are {name: "Name", data: (unprocessed data...), source: "Some URL", color: "display CSS color"}
@@ -755,11 +796,22 @@ console.log("gni_data and oda_array:")
  line_year_scale = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,line_chart_width])
 
   // paint the year labels
-    line_xAxis = d3.svg.axis()
-      .scale(line_year_scale)
-      .orient('bottom')
-      .ticks(6)
-      .tickFormat(d3.format("f")) 
+    // For prettiness, if very few years, use exactly those for labels.
+    if (years.length >= 6) {
+		  line_xAxis = d3.svg.axis()
+		    .scale(line_year_scale)
+		    .orient('bottom')
+		    .ticks(6)
+		    .tickFormat(d3.format("f")) 
+		    }
+    else {
+		  line_xAxis = d3.svg.axis()
+		    .scale(line_year_scale)
+		    .orient('bottom')
+		    .tickValues(years)
+		    .tickFormat(d3.format("f"))
+		    }
+      
     line_chart.append("svg:g")
       .attr('class', 'axis')
       .call(line_xAxis)
@@ -903,10 +955,6 @@ function fuzz() {
   .text("");     
 }
 function unfuzz (delay, duration) {
-  <% if Rails.env.development? %>
-  console.log("started unfuzzing "+time_since(start));
-  console.log({delay: delay, duration: duration})
-  <% end %>
       d3.selectAll('.fuzz')
      .transition()
       .delay(delay || 100)
@@ -960,9 +1008,7 @@ function recolor_and_add_listeners() {
         .transition()
           .attr("fill",  "#777")
   }
-  <% if Rails.env.development? %>
-  //data_item ? console.log("finished unfuzzing "+data_item.key+" "+time_since(start)) : null;
-  <% end %>
+
 }
 
 Array.prototype.getUnique = function(){
@@ -1035,6 +1081,6 @@ legend.append("svg:foreignObject")
 }
 
 
-//Fix CV
+//Fix CV -- Cape Verde is too far 
 $('path#CV').attr("transform","translate (80,100)")
 </script>

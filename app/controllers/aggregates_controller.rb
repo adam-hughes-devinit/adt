@@ -13,11 +13,15 @@ class AggregatesController < ApplicationController
 		]
 		
 		@recipient_field_names = ["name", "iso2", "iso3"]
+		# Use "XR" for Africa, regional's ISO2
+		def	africa_regional_iso2(fn)
+			 fn == 'iso2' ? "'XR'" : "'Africa, regional'"
+		end
 		
 		@duplication_handlers = [
 				# MERGE --> If a project has multiple recipients, call it "Africa, Regional"
 				{external: "merge", 
-						select: @recipient_field_names.map{ |fn| "(case when count(recipients.id) > 1 then 'Africa, regional' " +
+						select: @recipient_field_names.map{ |fn| "(case when count(recipients.id) > 1 then #{ africa_regional_iso2(fn)} " +
 									"else max(recipients.#{fn}) end) as recipient_#{fn}" }.join(", "), 
 						group: "group by projects.id", 
 						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
@@ -29,7 +33,7 @@ class AggregatesController < ApplicationController
 				#															Then divide along those percentages
 				#												 Else call it "Africa, Regional"
 				{external: "percent_then_merge",
-						select: @recipient_field_names.map { |fn| "(case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) != 100) then 'Africa, regional' else recipients.#{fn} end ) as recipient_#{fn}"}.join(', ') + ", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else 1.0 end) as multiplier",
+						select: @recipient_field_names.map { |fn| "(case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) != 100) then #{africa_regional_iso2(fn)} else recipients.#{fn} end ) as recipient_#{fn}"}.join(', ') + ", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else 1.0 end) as multiplier",
 						group: "", 
 						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
@@ -79,7 +83,7 @@ class AggregatesController < ApplicationController
 		
 		#  &wdi=#{wdi_code} 
 
-		if @get.include?("year") && @get.include?("recipient_iso3")
+		if @get && @get.include?("year") && @get.include?("recipient_iso3")
 			if params[:wdi].class== String
 				@wdi = params[:wdi].split(",")
 			elsif params[:wdi].class== Array

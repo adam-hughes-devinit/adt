@@ -6,10 +6,6 @@ include SearchHelper
 
   def index
 
-
-
-		#@facets = FACETS
-		
     respond_to do |format|
       format.html do
    			custom_search

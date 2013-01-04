@@ -284,16 +284,18 @@ class Project < ActiveRecord::Base
     string :year_uncertain_string
     string :is_cofinanced_string
     string :crs_sector
-    string :recipient_iso2 do
-      if geopoliticals.count > 1
-        'Africa, regional' 
-      elsif geopoliticals.count == 1 && geopoliticals[0].recipient
-        geopoliticals[0].recipient.iso2 
-      else
-        'Unset'
-      end
+    #string :recipient_iso2 do
+     # if geopoliticals.count > 1
+      #  'XR' 
+      #elsif geopoliticals.count == 1 && geopoliticals[0].recipient
+      #  geopoliticals[0].recipient.iso2 
+      #else
+      #  'Unset'
+      #end
+    #end
+    string :recipient_iso2, multiple: true do
+    	geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
     end
-
   end
 
 	

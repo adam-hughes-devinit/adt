@@ -3,7 +3,7 @@
 
 
 
-<% hidden_attributes = ["created_at", "updated_at", "id"] %>
+<% hidden_attributes = ["created_at", "updated_at", "id", "color"] %>
 
 <div class="row">
 	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
@@ -28,7 +28,11 @@
 				  <tr>
 				  	<% o.attributes.each_pair do |k, v| %>
 				  		<% if !hidden_attributes.include?(k) %>
-							  <td><%= v %></td>
+							  <% if k == "name" %>
+							  	<td> <%= link_to v, o %> </td>
+							  <% else %>
+								  <td><%= v %></td>
+								 <% end %>
 						<% end %>
 					<% end %>
 					<td> 
