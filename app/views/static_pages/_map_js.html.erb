@@ -606,7 +606,7 @@ function try_drawing_overlay() {
 
 
   top_projects_number = 5
-  top_projects_path = '/projects.json?order_by=usd_2009&active_string=Active&max='+top_projects_number+'&recipient_iso2='+activeIso
+  top_projects_path = '/projects.json?order_by=usd_2009&dir=desc&active_string=Active&max='+top_projects_number+'&recipient_iso2='+activeIso
   c_projects = d3.scale.linear().domain([0, ((top_projects_number-1)/2), top_projects_number-1]).range(['#2A5C0B', '#55760f','#808f12'])
 
   

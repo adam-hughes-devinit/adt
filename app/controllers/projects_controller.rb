@@ -6,18 +6,21 @@ include SearchHelper
 
   def index
 
-		custom_search
+
 
 		#@facets = FACETS
 		
     respond_to do |format|
-      format.html do 
+      format.html do
+   			custom_search
         render html: @projects
       end
       format.json do
+				custom_search({default_to_official_finance: false})
         render json: @projects
       end
       format.csv do
+   			custom_search
         params[:max] = Project.all.count
         @ids_for_export = @projects.map { |p| p.id }
         

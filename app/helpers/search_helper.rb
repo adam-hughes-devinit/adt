@@ -7,9 +7,12 @@ module SearchHelper
  
 	  @search = Project.search do
 	  	@scope = SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0]
-	  	if !(request.env['HTTP_REFERER'] =~ /\/projects/)
-	  		@scope = SCOPES.first
-	  		params[:scope] = @scope[:sym].to_s
+	  	
+	  	if (options[:default_to_official_finance]!=false) && !(request.env['HTTP_REFERER'] =~ /\/projects/)
+	  		if !params[:country_name] # which means it came from the vis
+		  		@scope = SCOPES.first
+		  		params[:scope] = @scope[:sym].to_s
+		  	end
 	  	end
 	  	
 	    fulltext params[:search]
