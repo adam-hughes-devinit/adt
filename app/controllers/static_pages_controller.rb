@@ -10,8 +10,9 @@ include SearchHelper
   def help
   end
 
-  def vis
-  end
+	def analyze
+		render file: '/static_pages/_analyze_js'
+	end
 
   def ajax
   	require 'open-uri'

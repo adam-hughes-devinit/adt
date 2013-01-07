@@ -231,8 +231,8 @@ function make_map_with_params(params) {
      })
  // Then update your color scale to go with your new map_data
     c.domain([0,
-    	((d3.max(map_data, function(m) {return m.values.value}))/4),
-    	(d3.max(map_data, function(m) {return m.values.value})*1.1)
+    	((d3.max(map_data, function(m) {return Number(m.values.value)}))/4),
+    	(d3.max(map_data, function(m) {return Number(m.values.value)})*1.1)
     	]);
     logscale.domain([1,c.domain()[2]]); 
  // Then iterate over map_data again to color with your new scale.
@@ -423,7 +423,7 @@ function try_drawing_overlay() {
 
     // paint the labels
       // a scale for equally-spaced sector labels
-        highest_label = (1.5/16)*h
+        highest_label = (1/16)*h
         lowest_label = h-((1/16)*h)
         label_left_position = (5/8)*w
         label_height = d3.scale.linear().domain([0,sectorSums.length]).range([highest_label, lowest_label])

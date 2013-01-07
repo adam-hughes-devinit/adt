@@ -22,8 +22,10 @@ Adt::Application.routes.draw do
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
   get '/recent_activity', to: 'versions#index', as: 'versions'
   
+  # static pages
   root to: "static_pages#home"
   match '/china', to: "static_pages#home"
+	get '/analyze', to: "static_pages#analyze"
 
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
