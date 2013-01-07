@@ -15,8 +15,9 @@ end
 	end
 end %>
 
-<% if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
-	  flash.now[:success] =  "You are viewing Chinese Official Finance. Click the filters below to change your settings."
+<% #if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
+	if params[:scope]
+	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
 	 end
 %> 	
 <h2>Search Parameters</h2>

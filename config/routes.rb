@@ -5,7 +5,7 @@ Adt::Application.routes.draw do
   :source_types, :document_types, :organization_types, :currencies, :flag_types
 
   # limited access
-  get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
+  # get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
   resources :projects, :organizations, :users
   resources :comments, only: [:create, :destroy, :show]
   resources :flags, only: [:create, :destroy, :show]
