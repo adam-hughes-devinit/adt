@@ -1,0 +1,98 @@
+<% provide :title, "Aggregate data" %>
+<% provide :first_header, "Make an Aggregate Dataset" %>
+<div id = "aggregator_controls" class="row" style='text-align:center;'>
+	<div class='row'>
+		<h1> 1) Select fields to retrieve: </h1>
+		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "span6", id: "get_input"  %>
+		<br><br>
+		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span>
+	</div>
+
+
+	<br>
+	<hr style="width:75%">
+  <div class='row'>
+  	<h1> 2) Select filter values: </h1>
+  	<% where_filters.each do |wf| %>
+  		<div class='span4'>
+				<%= label_tag wf[:sym].to_s, wf[:name] %>
+				<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
+  		</div>
+  	<% end %>
+  </div>  
+  <br>
+ 	<hr style="width:75%">
+ 	
+ 	
+  <div class='row'>
+		<h1> 3) Select how to handle multiple recipients: </h1>
+		<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint(this.value)"  %>
+		<br><br>
+		<span id="handler_hint" style="color:#777">Select an option to get info</span>
+	</div>
+		<hr style="width:75%">
+		
+		
+	  <div class='row'>
+		<h1> 4) Send your query and get your file </h1>
+		<h2> Query preview: </h2>
+		<p><tt><span id="api_query_preview" style="color:#777">Make a selection to see a preview.</span></tt>
+		</p>
+		<br>
+		<h2> Download your CSV: </h2>
+		<p>
+			<tt><span id="api_download"> Make a selection to get a download link.</span></tt>
+		</p>
+		
+	</div>
+		<hr style="width:75%">
+	<div class=</div>
+
+<script>
+var handler_names = [<%= duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe %> ]  
+	
+function show_duplication_handler_hint(handler_name) {
+	if (current_hint =	handler_names.filter(function(h) {return h[0] == handler_name})[0])
+		{$("#handler_hint").text(current_hint[1])}
+	}
+
+function build_api_params () {
+		if ($('#get_input').val()) {
+			get_values = $('#get_input').val().join(",") }
+		else 
+			{ get_values = [] }
+		
+		param_values = 		[
+			{name: "get", value: get_values }, 
+			{name: "multiple_recipients", value: $('#multiple_recipients_input').val() }
+			]
+		
+		filter_values = []
+		
+		$('.where_filter').each(function(i,f) { if (f.value) {
+						console.log(f)
+						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join(",")})
+						
+						}}) 
+		
+		console.log(filter_values)
+		
+		if (filter_values.length>0)
+			{ filter_values.forEach(function(v) { console.log(v); param_values.push(v) }) }
+
+	param_string=$.param(param_values)
+	return  param_string
+}
+
+
+$(function() {
+
+	$('input, select').change(function() {
+		api_call = decodeURIComponent(build_api_params())
+		$('#api_query_preview').html("<a target='_blank' href='/aggregates/projects?"+api_call+"'>/aggregates/projects?"+api_call + "</a>")
+		$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Click here to download.</a>")
+	})
+
+})
+
+</script>

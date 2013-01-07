@@ -1,77 +1,16 @@
 class AggregatesController < ApplicationController
+include AggregatesHelper
 	skip_before_filter :signed_in_user  
 	def projects
-		@valid_fields = [
-			{external: "donor", internal: "donors.iso3", group: "donors.iso3"},
-			{external: "year",  internal: "year", group: "year"},
-			{external: "sector_name", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name"},
-			{external: "recipient_name",   group: "recipient_name", internal: "recipient_name"},
-			{external: "recipient_iso2",   group: "recipient_iso2", internal: "recipient_iso2"},
-			{external: "recipient_iso3",   group: "recipient_iso3", internal: "recipient_iso3"},
-			{external: "flow_class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end)"}
-			# active 
-		]
-		
+
 		@recipient_field_names = ["name", "iso2", "iso3"]
 		# Use "XR" for Africa, regional's ISO2
 		def	africa_regional_iso2(fn)
 			 fn == 'iso2' ? "'XR'" : "'Africa, regional'"
 		end
+
 		
-		@duplication_handlers = [
-				# MERGE --> If a project has multiple recipients, call it "Africa, Regional"
-				{external: "merge", 
-						select: @recipient_field_names.map{ |fn| "(case when count(recipients.id) > 1 then #{ africa_regional_iso2(fn)} " +
-									"else max(recipients.#{fn}) end) as recipient_#{fn}" }.join(", "), 
-						group: "group by projects.id", 
-						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
-									"INNER JOIN countries recipients on geo.recipient_id = recipients.id",
-						amounts: "round(cast(sum(sum_usd_defl) as numeric),2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
-						}, 
-								
-				# PERCENT THEN MERGE --> If a project has multiple recipients and percentages add up to 100, 
-				#															Then divide along those percentages
-				#												 Else call it "Africa, Regional"
-				{external: "percent_then_merge",
-						select: @recipient_field_names.map { |fn| "(case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) != 100) then #{africa_regional_iso2(fn)} else recipients.#{fn} end ) as recipient_#{fn}"}.join(', ') + ", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else 1.0 end) as multiplier",
-						group: "", 
-						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
-									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(cast(sum(sum_usd_defl*p.multiplier) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current*p.multiplier) as numeric), 2) as usd_current"
-						 },
-				 
-				# PERCENT THEN SHARE --> If a project has multiple recipients and percentages add up to 100, 
-				#															Then divide along those percentages
-				#												 Else share it equally among recipients
-				{external: "percent_then_share",
-						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') + 
-									", (case when ((select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) > 1 AND (select sum(percent) from geopoliticals g3 where g3.project_id=geo.project_id group by project_id) = 100) then geo.percent/100.0 else (select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id)/1.0 end) as multiplier",
-						group: "",
-						join:"LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
-									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(cast(sum(sum_usd_defl*p.multiplier) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current*p.multiplier) as numeric),2) as usd_current"
-						 },
-				
-				# SHARE --> If a project has multiple recipients, share the amount equally among recipients
-				{external: "share",
-						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') + ",(select count(*) from geopoliticals g2 where g2.project_id=geo.project_id group by project_id) as recipients_count" ,
-						group: "", 
-						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
-									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(cast(sum(sum_usd_defl/p.recipients_count) as numeric),2) as usd_2009, round(cast(sum(sum_usd_current/p.recipients_count) as numeric),2) as usd_current"
-						},
-						
-				# DUPLICATE --> If a project has multiple recipients, allocate the full amount to each recipient (DOUBLE-COUNTING)
-				{external: "duplicate",
-						select: @recipient_field_names.map { |fn| "recipients.#{fn} as recipient_#{fn}"}.join(', ') ,
-						group: "",
-						join: "LEFT OUTER JOIN geopoliticals geo on projects.id = geo.project_id " +
-									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
-						amounts: "round(cast(sum(sum_usd_defl) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
-						}
-			]
-		
-		@duplication_scheme = @duplication_handlers.select { |h| h[:external] == "#{params[:multiple_recipients]}" }[0] || @duplication_handlers[0] 
+		@duplication_scheme = DUPLICATION_HANDLERS.select { |h| h[:external] == "#{params[:multiple_recipients]}" }[0] || DUPLICATION_HANDLERS[0] 
 		
 		@fields_to_get = []
 	
@@ -98,24 +37,16 @@ class AggregatesController < ApplicationController
 			end
 		end
 
-		@valid_fields.each do |field|
+		VALID_FIELDS.each do |field|
 	      	if @get.include?(field[:external]) 
 	      		@fields_to_get.push field
 	      	end
 	 end
 
-	    where_filters = [
-	    	{sym: :recipient_iso2, options: Country.all.map{|c| c.iso2} , internal_filter: "recipient_iso2"},
-	    	{sym: :sector_name, options:Sector.all.map{|c| c.name} , internal_filter: "sectors.name"},
-	    	{sym: :verified, options: Verified.all.map{|c| c.name} , internal_filter: "verifieds.name"},
-	    	{sym: :flow_type, options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
-	    	{sym: :flow_class, options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
-	    	{sym: :year, options: ("2000".."2010").to_a , internal_filter: "year" }
-	    ]
-
 	    @filters = ["active = 't' "]
 
-	    where_filters.each do |wf|
+			# defined in AggregateHelper
+	    WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values
 		    	if param_values.class == String
@@ -146,7 +77,7 @@ class AggregatesController < ApplicationController
 		 	sql = "select #{@duplication_scheme[:amounts]}, count(*) as count,
 		 			#{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 		 			from (select projects.*, 
-		 					#{@duplication_scheme[:select]}
+		 					#{eval(@duplication_scheme[:select])}
 		 					from projects 
 							#{@duplication_scheme[:join]}
 				 			#{@duplication_scheme[:group]}
