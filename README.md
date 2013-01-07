@@ -35,6 +35,8 @@ Users may also find projects by search-and-filter, which can be accessed via Nav
 
 #### Scopes
 There are a few defined _scopes_ for projects. They are a group of filters to help users find meaningful groups of data. They are available on the search panel. 
+
+If a user is moving within a defined scope, there is a flash notification at the top of the search window to tell him which scope he is in.
 ##### Default Scope
 The default scope is "Official Finance". A user is brought there by default, and notified by a notice on the page.
 
@@ -65,11 +67,13 @@ Data can be exported from the search results page. The link appears above the se
 ### Exporting aggregate data
 Aggregate data may be exported from the aggregate data feed, described in detail below. To get a CSV, simply send the request to `aggregates/projects.csv` instead of `aggregates/projects`.
 
-Sorry, there is currently no graphical interface for aggregate exports.
+Sorry, there is currently no graphical interface for aggregate exports at this time.
 
 ### Implementation details of export function
 Export data is stored in the caches table and controlled by the Cache model and Project model's `cache!` function. It was too slow to generate CSVs on the fly, so now, whenever a project is saved, its cache is updated also. Whenever a cache is saved, it also updates Cache Zero, which holds the _whole_ CSV. (So, when a user requests all projects, making a big select, we just give the one where project_id=0. I wonder if we'll add more specialized caches, like -1 for all active projects, etc.)
- 
+
+__Note__: This should be updated to reflect scopes -- it is likely that the CDF scope will get the most downloads, not the other scopes. 
+
 ## Users
 ### Sign up, Sign in, Sign out
 
@@ -101,25 +105,35 @@ It's not possible to create a new code type from the web interface, only change 
 When you change the value of an existing code (eg, change the name of country `Congo, Dem. Rep.` to `DRC`, or change the code of flow class "Vague (Com)" to `105`), all projects will be updated with the new value, the search index is updated and the export cache is updated. 
 
 ### Deflators
-As before, deflation is handled by an external service, visible at `data.itpir.wm.edu/deflate`. There are plans to embed deflation metadata with the project table so that end users can see the values used and when they were employed.
+As before, deflation is handled by an external service, visible at `data.itpir.wm.edu/deflate`. Deflator data is stored with the project, so that if you export a project record, you can see 
+- when it was deflated
+- what exchange rate was used
+- what deflator was used
+
+These values are made available to decrease the "mystery" in the deflation process and make users more aware of the process.
 
 ## Comments
 On each project page, there is a section to display comments and a form where any page visitor may leave a comment. Admin users see a "Delete comment" link. 
 
-Hopefully, comments will provide a feedback loop for data users to report errors or recommend changes. AidData staff will respond to their comments as necessary. This feature is somewhat experimental.
+When someone leaves a comment, an email is sent to an Admin.
+
+Hopefully, comments will provide a feedback loop for data users to report errors or recommend changes. AidData staff will respond to their comments as necessary. 
 
 ## Flags
 ### Purpose
 Flags exist as a way for a user to bring attention to a specific data point. We encourage users to flag things for revision or to confirm existing data. 
+
+__Forthcoming__: When a user creates a flag, an email is sent to an Admin.
+
 ### How To
 Any user may flag a data point for review or confirmation. Flags are associated with project details. These flags are stored in the "Flags" tab and visible to all users. AidData admins may delete these flags.
 
 ## Data Feeds
 
-Underneath the project platform there are several data feeds which could be useful for people making data visualizations. The EDs should decide if/why/how to make these public.
+Underneath the project platform there are several data feeds which could be useful for people making data visualizations. 
 
 ### Project Data Feed
-The project data feed was implemented to feed "top projects" to the map visualization. It is available at /projects.json and takes exactly the same parameters as the search page. It defaults to 50 projects per page and only shows the first page of results unless the request includes `page` greater than 1. The number of projects per page can also be set by passing `max`. 
+The project data is available at /projects.json and takes exactly the same parameters as the search page. It defaults to 50 projects per page and only shows the first page of results unless the request includes `page` greater than 1. The number of projects per page can also be set by passing `max`. 
 
 
 The best way to learn the project API is to insert `.json` into the search page URL and see what you get. 
@@ -173,13 +187,13 @@ If your data is aggregated by recipient-year, you can also request data from Wor
 
 #### Response
 _The data below is for example only_
-The response is an array of JSON objects including aggregated USD-2009 by each field name. For example,     
+The response is an array of JSON objects including aggregated USD-2009, current USD and project count by each field name. For example,
     
 	/aggregates/projects?get=donor
 	
 returns an array with one object: 
     
-	[{"usd_2009":419168261554.65955,"donor":"CHN"}]
+	[{"donor":"CHN","usd_2009":"360180650450.82","usd_current":"326709526680.62","count":"2489"}]
 
 A more complicated request returns a more detailed dataset:
 
@@ -188,23 +202,39 @@ A more complicated request returns a more detailed dataset:
 which yields:
 
     [
-    	{"usd_2009":1697245819.4,"year":2000,"recipient_name":"Africa, regional"},
-    	{"usd_2009":15683908.9,"year":2000,"recipient_name":"Benin"},
-    	{"usd_2009":16401473.36,"year":2000,"recipient_name":"Congo, Dem. Rep."} 
+			{"year":"2003","recipient_name":"Algeria","usd_2009":"423075585.45","usd_current":"262604080.93","count":"3"},
+			{"year":"2011","recipient_name":"Gabon","usd_2009":"109047754.69","usd_current":"131549189.42","count":"2"},
+			{"year":"2005","recipient_name":"Djibouti","usd_2009":"1751749.33","usd_current":"1220358.01","count":"1"},
+			{"year":"2005","recipient_name":"Niger","usd_2009":"14071208.39","usd_current":"9802722.09","count":"5"},
     	...
     ]
-	
+
+_Sorry, the results aren't ordered, and at present, there is no way to order them!_
+
 Here is an example of filtering:
 
-    aggregates/projects?get=recipient_iso2&recipient_iso2=KE
+    /aggregates/projects?get=recipient_iso2&recipient_iso2=KE
 	
 which yields:
 
-    [{"usd_2009":2368182328.74,"recipient_iso2":"KE"}]
+    [{"recipient_iso2":"KE","usd_2009":"2093704869.17","usd_current":"1813886723.69","count":"99"}]
 	
 
-### Conduit
-Conduit is a flexible, schema-less web service which was created to hold supporting (non-Chinese Development Finance) data for the map visualization. For more information about this service, visit its current homepage: aiddataconduit.herokuapp.com
+Beyond this, you can combine filters and groups, like this:
+
+   /aggregates/projects?get=flow_class,recipient_name&recipient_iso2=KE&year=2005
+
+which yields:
+
+	[
+		{"recipient_name":"Kenya","flow_class":"CA +Gov","usd_2009":"2963815.82","usd_current":"2064745.40","count":"2"},
+		{"recipient_name":"Kenya","flow_class":"ODA-like","usd_2009":"36672592.42","usd_current":"25548000.00","count":"3"},
+		{"recipient_name":"Kenya","flow_class":"OOF-like","usd_2009":"34450533.04","usd_current":"24000000.00","count":"2"},
+		{"recipient_name":"Kenya","flow_class":"Vague (Com)","usd_2009":"4306316.63","usd_current":"3000000.00","count":"1"},
+		{"recipient_name":"Kenya","flow_class":"Vague (ODF)","usd_2009":"179807007.33","usd_current":"125262740.38","count":"4"}
+	]
+	
+	
 ### Deflator 
 The deflator web service has been expanded to support JSON data response which includes:
 

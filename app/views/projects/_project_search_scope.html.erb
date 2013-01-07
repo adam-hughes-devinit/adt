@@ -17,6 +17,7 @@
 		<% end %> 
 		
 		<% if params[:scope] %>
+			<%= hidden_field_tag "scope", params[:scope] %>
 			 <i><%= link_to "Remove scope", @current_url_without_scope, style: "color:#C96D6D" %> </i>
 		<% end %> 
 		

@@ -1,7 +1,12 @@
 <% provide(:title, "Projects") %>
 <% provide(:first_header, "View Projects") %>
 <% current_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
-<% joiner = current_url.index("?") ? "&" : "?" %>
+<% joiner = current_url.index("?") ? "&" : "?" 
+	if ( !current_url.index("scope") && params[:scope] )
+	 current_url += joiner + "scope=#{params[:scope]}" 
+	 joiner = "&"
+	end
+	%>
 <% def order_by_params(field)
 	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
 end
@@ -18,7 +23,7 @@ end %>
 <% #if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
 	if params[:scope]
 	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
-	 end
+	end
 %> 	
 <h2>Search Parameters</h2>
 <%= render 'project_search' %>

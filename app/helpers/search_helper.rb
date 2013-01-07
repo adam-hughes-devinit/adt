@@ -10,14 +10,7 @@ module SearchHelper
 	  	if @scope = SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0]
 	  		nil
 	  	elsif (options[:default_to_official_finance]) && !(request.env['HTTP_REFERER'] =~ /projects/)
-				params[:tripped_1] = true
-				params[:keys] = params.keys
 	  		if (params.keys.select {|k| (k.to_s =~ /name/) }.length == 0)
-	  			params[:tripped_2] = true
-		  		
-		  		
-		  		# redirect_to projects_url + "&scope=official_finance"
-		  		
 		  		@scope = SCOPES.first
 		  		params[:scope] = @scope[:sym].to_s
 		  	end
