@@ -1,6 +1,3 @@
-<% provide :title, "Aggregate data" %>
-<% provide :first_header, "Make an Aggregate Dataset" %>
-
 <h2> Build a Query: </h2>
 <div class="accordion span12" id="accordion2">
   <div class="accordion-group">
@@ -51,7 +48,7 @@
     </div>
     <div id="collapseThree" class="accordion-body collapse">
       <div class="accordion-inner">
-				<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint(this.value)"  %>
+				<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint()"  %>
 				<br><br>
 				<span id="handler_hint" style="color:#777">Select an option to get info</span>
       </div>
@@ -59,40 +56,7 @@
   </div>
 </div>
  	<hr style="width:75%">
-<!--
-<div id = "aggregator_controls" class="row " style='text-align:center;'>
-	<div class='row'>
-		<h1> 1) Select fields to retrieve: </h1>
-		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "span6", id: "get_input"  %>
-		<br><br>
-		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span>
-	</div>
 
-
-	<br>
-	<hr style="width:75%">
-  <div class='row'>
-  	<h1> 2) Select filter values: </h1>
-  	<% where_filters.each do |wf| %>
-  		<div class='span4'>
-				<%= label_tag wf[:sym].to_s, wf[:name] %>
-				<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
-  		</div>
-  	<% end %>
-  </div>  
-  <br>
- 	<hr style="width:75%">
- 	
- 	
-  <div class='row'>
-		<h1> 3) Select how to handle multiple recipients: </h1>
-		<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint(this.value)"  %>
-		<br><br>
-		<span id="handler_hint" style="color:#777">Select an option to get info</span>
-	</div>
-		<hr style="width:75%">
-		
-!-->
 <div class='row' style='text-align:center;'>
 	  <div class='row'>
 
@@ -121,8 +85,8 @@
 <script>
 var handler_names = [<%= duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe %> ]  
 	
-function show_duplication_handler_hint(handler_name) {
-	if (current_hint =	handler_names.filter(function(h) {return h[0] == handler_name})[0])
+function show_duplication_handler_hint() {
+	if (current_hint =	handler_names.filter(function(h) {return h[0] == $('#multiple_recipients_input').val() })[0])
 		{$("#handler_hint").text(current_hint[1])}
 	}
 
@@ -215,7 +179,7 @@ function update_previews() {
 	}
 
 $(function() {
-
+	show_duplication_handler_hint()
 	$('input, select').change(function() {update_previews()})
 	
 })

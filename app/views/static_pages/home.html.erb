@@ -5,9 +5,10 @@
   <li class="active"><a href="#map">Visualize</a></li>
   <li><a href="#chart">Analyze</a></li>
   <li><a href="#projects">All Projects</a></li>
-  <li><a href="#activity-feed">Recent Activity</a></li>
+  <li><a href="#aggregates">Aggregate Data</a></li>
   <li><a href="#research">Research and Papers</a></li>
   <li><a href="#documentation">API Documentation</a></li>
+  <li><a href="#activity-feed">Recent Activity</a></li>
 </ul>
 
 
@@ -24,10 +25,8 @@
   	<h2> Search Projects </h2>
   	<%= render "projects/project_search" %>
   </div>
-  <div class="tab-pane" id="activity-feed">	
-		<h2>Recent Activity</h2>
-		<%= render 'shared/feed' %>
-		<%= link_to "See All Recent Activity...", versions_path %>
+	<div class="tab-pane" id="aggregates" %>
+		<%= render partial: "aggregate_exporter", locals: @aggregator_locals %>
 	</div>
   <div class="tab-pane" id="research">...</div>
   <div class="tab-pane" id="documentation">
@@ -35,6 +34,11 @@
   	%>
   	<%= render partial: "documentation.html.md" %>
   </div>
+	<div class="tab-pane" id="activity-feed">	
+		<h2>Recent Activity</h2>
+		<%= render 'shared/feed' %>
+		<%= link_to "See All Recent Activity...", versions_path %>
+	</div>
 </div>
 
 
