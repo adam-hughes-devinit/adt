@@ -65,11 +65,26 @@ When a user creates a project, it is associated with the organization that owns 
 Data can be exported from the search results page. The link appears above the search results. Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren't listed here). The fields can only be changed by altering the source code -- sorry!
 
 ### Exporting aggregate data
+Aggregate data is available from `aggregates/export`. The interface provides three selections:
+#### Fields to retrieve
+These fields will become additional columns in the dataset. When you add a column, the data will be divided according to that column. For example, if you add "Flow Class" to your data set, you will get all finance, divided by Flow Class. If you then add "Recipient Name", you will get all finance divided by Flow Class _and_ Recipient. 
+
+#### Filters and scopes
+You may filter by one of several dimensions of a project. Also, you may select one of the preset scopes. You may combine custom filter selections with the scopes, but note that your selections will override the scope selection.
+
+#### Select how to handle multiple recipients
+Select how to handle projects with multiple recipients. For more information on these options, see __"Handle projects with multiple recipients"__ in the API description below.
+
+#### See a preview
+The exporter gives an _API Query Preview_, for users who wish to use the JSON API and a _Data Preview_ for uses who wish to use a CSV download.
+
+#### Download to CSV
+CSV is available via the dynamic download link.
+
+#### Getting a CSV from the API
 Aggregate data may be exported from the aggregate data feed, described in detail below. To get a CSV, simply send the request to `aggregates/projects.csv` instead of `aggregates/projects`.
 
-Sorry, there is currently no graphical interface for aggregate exports at this time.
-
-### Implementation details of export function
+### Implementation details of the project export function
 Export data is stored in the caches table and controlled by the Cache model and Project model's `cache!` function. It was too slow to generate CSVs on the fly, so now, whenever a project is saved, its cache is updated also. Whenever a cache is saved, it also updates Cache Zero, which holds the _whole_ CSV. (So, when a user requests all projects, making a big select, we just give the one where project_id=0. I wonder if we'll add more specialized caches, like -1 for all active projects, etc.)
 
 __Note__: This should be updated to reflect scopes -- it is likely that the CDF scope will get the most downloads, not the other scopes. 
@@ -166,6 +181,7 @@ Besides using `get`, a user may also filter by attribute value:
 - sector_name
 - flow_type
 - year
+- verified
 
 _These filter names are somewhat subject to change (according to our needs). I should update this again before the launch._
 

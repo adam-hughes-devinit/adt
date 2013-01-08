@@ -1,11 +1,12 @@
 <% provide :title, "Aggregate data" %>
 <% provide :first_header, "Make an Aggregate Dataset" %>
 
+<h2> Build a Query: </h2>
 <div class="accordion span12" id="accordion2">
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        1) Select fields to retrieve:
+        1) Select fields to retrieve/aggregate by:
       </a>
     </div>
     <div id="collapseOne" class="accordion-body collapse in">
@@ -25,10 +26,12 @@
     <div id="collapseTwo" class="accordion-body collapse">
       <div class="accordion-inner">
       	<div id="scopes" style='text-align:center'>
-      		<p>Preset scopes:</p>
+      		<p><b>Preset scopes:</b></p>
       		<button onclick="select_scope(this.id)" id='official_finance'>Official Finance</button>
       		<button onclick="select_scope(this.id)" id='unofficial_finance'>Unofficial Finance</button>
       		<button onclick="select_scope(this.id)" id='military'>Military</button>
+      		
+      		<br><br>
       		<button onclick="select_scope(this.id)" id='none'>Clear</button>
       	</div>
          <% where_filters.each do |wf| %>
@@ -55,7 +58,7 @@
     </div>
   </div>
 </div>
-
+ 	<hr style="width:75%">
 <!--
 <div id = "aggregator_controls" class="row " style='text-align:center;'>
 	<div class='row'>
@@ -155,7 +158,7 @@ function load_data_preview() {
 	$.post('/aggregates/projects?'+api_call, function(json) {
 	//console.log(data)
 	//json = $.parseJSON(data)
-	console.log(json)
+
 	length = json.length
 	json = json.slice(0,8)
 	
@@ -184,6 +187,7 @@ function select_scope(scope) {
 if (scope=='official_finance') {
 	$('#flow_class').val(["OOF-like", "ODA-like", "Vague (ODF)"])
 	$('#verified').val("Checked")
+	$("#status").val(["Pipeline/identification", "Implementation", "Completion"])
 	}
 else if (scope=='unofficial_finance') {
 	$('#flow_class').val(["JV +Gov", "JV -Gov","CA +SOE", "CA -SOE", "FDI +Gov", "FDI -Gov", "NGO Aid", "Vague (Com)"])
@@ -196,6 +200,7 @@ else if (scope=='military') {
 else if (scope=='none') {
 	$('#flow_class').val('')
 	$('#verified').val('')
+	$('#status').val('')
 	}
 	
 	update_previews()

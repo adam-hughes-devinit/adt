@@ -87,6 +87,7 @@ include AggregatesHelper
 		 				LEFT OUTER JOIN oda_likes on p.oda_like_id = oda_likes.id
 		 				LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
 		 				LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
+		 				LEFT OUTER JOIN statuses on p.status_id = statuses.id
 
 			 			INNER JOIN countries donors on p.donor_id = donors.id 
 			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id
