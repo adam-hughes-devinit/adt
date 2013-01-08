@@ -1,6 +1,63 @@
 <% provide :title, "Aggregate data" %>
 <% provide :first_header, "Make an Aggregate Dataset" %>
-<div id = "aggregator_controls" class="row" style='text-align:center;'>
+
+<div class="accordion span12" id="accordion2">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        1) Select fields to retrieve:
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse in">
+      <div class="accordion-inner">
+        		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "span6", id: "get_input"  %>
+		<br><br>
+		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span
+      </div>
+    </div>
+  </div>  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        2) Select filter values or preset scope:
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+      	<div id="scopes" style='text-align:center'>
+      		<p>Preset scopes:</p>
+      		<button onclick="select_scope(this.id)" id='official_finance'>Official Finance</button>
+      		<button onclick="select_scope(this.id)" id='unofficial_finance'>Unofficial Finance</button>
+      		<button onclick="select_scope(this.id)" id='military'>Military</button>
+      		<button onclick="select_scope(this.id)" id='none'>Clear</button>
+      	</div>
+         <% where_filters.each do |wf| %>
+  			<div class='span3'>
+					<%= label_tag wf[:sym].to_s, wf[:name] %>
+					<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
+				</div>
+  	<% end %>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+        3) Select how to handle multiple recipients:
+      </a>
+    </div>
+    <div id="collapseThree" class="accordion-body collapse">
+      <div class="accordion-inner">
+				<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint(this.value)"  %>
+				<br><br>
+				<span id="handler_hint" style="color:#777">Select an option to get info</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<div id = "aggregator_controls" class="row " style='text-align:center;'>
 	<div class='row'>
 		<h1> 1) Select fields to retrieve: </h1>
 		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "span6", id: "get_input"  %>
@@ -32,11 +89,21 @@
 	</div>
 		<hr style="width:75%">
 		
-		
+!-->
+<div class='row' style='text-align:center;'>
 	  <div class='row'>
-		<h1> 4) Send your query and get your file </h1>
+
 		<h2> Query preview: </h2>
 		<p><tt><span id="api_query_preview" style="color:#777">Make a selection to see a preview.</span></tt>
+		</p>
+		<br>
+		<h2> Data preview: </h2>
+		<p>
+			<table align='center' id="data_preview">
+			</table>
+			
+			<br>
+			<span id="data_preview_note" style="color:#777">Make a selection to see a preview.</span>
 		</p>
 		<br>
 		<h2> Download your CSV: </h2>
@@ -46,7 +113,7 @@
 		
 	</div>
 		<hr style="width:75%">
-	<div class=</div>
+</div>
 
 <script>
 var handler_names = [<%= duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe %> ]  
@@ -70,9 +137,7 @@ function build_api_params () {
 		filter_values = []
 		
 		$('.where_filter').each(function(i,f) { if (f.value) {
-						console.log(f)
-						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join(",")})
-						
+						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join(",")})						
 						}}) 
 		
 		console.log(filter_values)
@@ -84,15 +149,68 @@ function build_api_params () {
 	return  param_string
 }
 
+function load_data_preview() {
 
-$(function() {
+	api_call = decodeURIComponent(build_api_params())
+	$.post('/aggregates/projects?'+api_call, function(json) {
+	//console.log(data)
+	//json = $.parseJSON(data)
+	console.log(json)
+	length = json.length
+	json = json.slice(0,8)
+	
+	table_html = "<thead>"
+	for (key in json[0])
+		{table_html += "<th>"+key+"</th>"}
+	
+	table_html += "</thead><tbody>"
+	
+	json.forEach(function(j) {
+		table_html += "<tr>"
+		for (key in j) 
+			{table_html += "<td>"+j[key]+"</td>" }
+		table_html += "</tr>"
+	})
+	table_html += "</tbody></table>"
+	
+	$("#data_preview").html(table_html)
+	$("#data_preview_note").html("("+length+" rows in the full dataset)")
+})
 
-	$('input, select').change(function() {
+}
+	
+function select_scope(scope) {
+
+if (scope=='official_finance') {
+	$('#flow_class').val(["OOF-like", "ODA-like", "Vague (ODF)"])
+	$('#verified').val("Checked")
+	}
+else if (scope=='unofficial_finance') {
+	$('#flow_class').val(["JV +Gov", "JV -Gov","CA +SOE", "CA -SOE", "FDI +Gov", "FDI -Gov", "NGO Aid", "Vague (Com)"])
+	$('#verified').val("Checked")
+	}
+else if (scope=='military') {
+	$('#flow_class').val("Military")
+	$('#verified').val("Checked")
+	}
+else if (scope=='none') {
+	$('#flow_class').val('')
+	$('#verified').val('')
+	}
+	
+	update_previews()
+}
+			
+function update_previews() {
+		load_data_preview()
 		api_call = decodeURIComponent(build_api_params())
 		$('#api_query_preview').html("<a target='_blank' href='/aggregates/projects?"+api_call+"'>/aggregates/projects?"+api_call + "</a>")
 		$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Click here to download.</a>")
-	})
+	}
 
+$(function() {
+
+	$('input, select').change(function() {update_previews()})
+	
 })
-
 </script>
