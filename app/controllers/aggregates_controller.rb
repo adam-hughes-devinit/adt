@@ -40,6 +40,7 @@ include AggregatesHelper
 		VALID_FIELDS.each do |field|
 	      	if @get.include?(field[:external]) 
 	      		@fields_to_get.push field
+	      		@sorter = field[:sorter]
 	      	end
 	 end
 
@@ -49,7 +50,7 @@ include AggregatesHelper
 	    WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values
-		    	if param_values.class == String && param_values != "Africa, regional" # Was getting mis-parsed bc of comma
+		    	if param_values.class == String && param_values != "Africa, regional" # Was getting mis-parsed bc of comma -- still will have errors with other regions or when combined with other recipients
 		    		param_values = param_values.split(',')
 		    	else 
 		    		param_values = [param_values]
@@ -60,6 +61,8 @@ include AggregatesHelper
 		    	end
 		    end
 		end
+		
+			
 
 
 	    if !@fields_to_get.blank?  	
@@ -95,7 +98,8 @@ include AggregatesHelper
 			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id
 			 		where 
 			 		#{@filters.join(' and ')}
-					group by #{@fields_to_get.select{|f| Rails.env.production? ? f[:internal] : f[:group] }.map{|f| Rails.env.production? ? f[:internal] : f[:group]}.join(', ')} "
+					group by #{@fields_to_get.select{|f| Rails.env.production? ? f[:internal] : f[:group] }.map{|f| Rails.env.production? ? f[:internal] : f[:group]}.join(', ')} 
+					order by #{@sorter}"
 					
 					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
 			@data = ActiveRecord::Base.connection.execute(sql)

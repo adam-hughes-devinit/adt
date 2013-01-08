@@ -13,7 +13,7 @@ include AggregatesHelper
 		# Why can't I access the Aggregate constants in my view directly?
 
 		render 'aggregate_exporter', locals: {
-				valid_field_options: VALID_FIELDS.map {|f| [f[:name], f[:external].to_s] },
+				valid_field_options: VALID_FIELDS.map {|f| [f[:name], f[:external].to_s] }.sort { |a, b| a[1] <=> b[1] },
 				where_filters: WHERE_FILTERS.select {|f| f[:name] != "Recipient ISO2"},
 				duplication_handler_options: DUPLICATION_HANDLERS.map {|f| [f[:name], f[:external]] },
 				duplication_handler_hints: DUPLICATION_HANDLERS.map {|f| [f[:external], f[:note] ] }

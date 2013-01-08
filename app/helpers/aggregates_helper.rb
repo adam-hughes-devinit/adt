@@ -1,14 +1,15 @@
 module AggregatesHelper	
 
+		
 	VALID_FIELDS = [
-			{external: "donor", name: "Donor", internal: "donors.iso3", group: "donors.iso3"},
-			{external: "year",  name: "Year", internal: "year", group: "year"},
-			{external: "sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name"},
-			{external: "recipient_name", name: "Recipient Name",   group: "recipient_name", internal: "recipient_name"},
-			{external: "recipient_iso2",  name: "Recipient ISO2", group: "recipient_iso2", internal: "recipient_iso2"},
-			{external: "recipient_iso3",   name: "Recipient ISO3", group: "recipient_iso3", internal: "recipient_iso3"},
-			{external: "flow_class", name: "Flow Class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end)"},
-			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)"}
+			{external: "donor", name: "Donor", internal: "donors.iso3", group: "donors.iso3", sorter: "donors.iso3 asc" },
+			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)", sorter: "statuses.name asc"},
+			{external: "sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name", sorter: "sectors.name asc"},
+			{external: "flow_class", name: "Flow Class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end)", sorter: "oda_likes.name asc"},
+			{external: "recipient_iso2",  name: "Recipient ISO2", group: "recipient_iso2", internal: "recipient_iso2", sorter: "recipient_iso2 asc"},
+			{external: "recipient_iso3",   name: "Recipient ISO3", group: "recipient_iso3", internal: "recipient_iso3", sorter: "recipient_iso3 asc"},			
+			{external: "recipient_name", name: "Recipient Name",   group: "recipient_name", internal: "recipient_name", sorter: "recipient_name asc"},
+			{external: "year",  name: "Year", internal: "year", group: "year", sorter: "year desc"}
 			# active 
 		]
 		
@@ -21,7 +22,7 @@ module AggregatesHelper
 	    	{sym: :flow_type, name: "Flow Type", options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
 	    	{sym: :flow_class, name: "Flow Class", options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
 	    	{sym: :status, name: "Status", options: Status.all.map{|o| o.name}, internal_filter: "statuses.name" },
-	    	{sym: :year, name: "Year", options: ("2000".."2010").to_a , internal_filter: "year" }
+	    	{sym: :year, name: "Year", options: ("2000".."2010").to_a.reverse! , internal_filter: "year" }
 	    ]
 	
 		
