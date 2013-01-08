@@ -15,6 +15,7 @@ module AggregatesHelper
 	
 	WHERE_FILTERS = [
 	    	{sym: :recipient_iso2, name: "Recipient ISO2", options: Country.all.map{|c| c.iso2} , internal_filter: "recipient_iso2"},
+	    	{sym: :recipient_name, name: "Recipient Name", options: Country.all.map{|c| c.name} , internal_filter: "recipient_name"},
 	    	{sym: :sector_name, name: "Sector Name", options:Sector.all.map{|c| c.name} , internal_filter: "sectors.name"},
 	    	{sym: :verified, name: "Verified Status", options: Verified.all.map{|c| c.name} , internal_filter: "verifieds.name"},
 	    	{sym: :flow_type, name: "Flow Type", options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},

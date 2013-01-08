@@ -6,7 +6,7 @@ include AggregatesHelper
   def home
   	custom_search # to initialize facets, etc
   	@total_projects = Project.where("active = ?", true ).count
-  	@feed = Version.last(10)
+  	@feed = Version.last(20)
   end
 
 	def aggregator
@@ -14,7 +14,7 @@ include AggregatesHelper
 
 		render 'aggregate_exporter', locals: {
 				valid_field_options: VALID_FIELDS.map {|f| [f[:name], f[:external].to_s] },
-				where_filters: WHERE_FILTERS,
+				where_filters: WHERE_FILTERS.select {|f| f[:name] != "Recipient ISO2"},
 				duplication_handler_options: DUPLICATION_HANDLERS.map {|f| [f[:name], f[:external]] },
 				duplication_handler_hints: DUPLICATION_HANDLERS.map {|f| [f[:external], f[:note] ] }
 				}

@@ -49,8 +49,10 @@ include AggregatesHelper
 	    WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values
-		    	if param_values.class == String
+		    	if param_values.class == String && param_values != "Africa, regional" # Was getting mis-parsed bc of comma
 		    		param_values = param_values.split(',')
+		    	else 
+		    		param_values = [param_values]
 		    	end
 
 		    	if valid_values = (wf[:options] & param_values)
