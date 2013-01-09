@@ -1,5 +1,5 @@
 <h2> Build a Query: </h2>
-<div class="accordion span12" id="accordion2">
+<div class="accordion span11" id="accordion2">
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
@@ -31,12 +31,12 @@
       		<br><br>
       		<button onclick="select_scope(this.id)" id='none'>Clear</button>
       	</div>
-         <% where_filters.each do |wf| %>
-  			<div class='span3'>
-					<%= label_tag wf[:sym].to_s, wf[:name] %>
-					<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
-				</div>
-  	<% end %>
+        <% where_filters.each do |wf| %>
+  				<div class='span3'>
+						<%= label_tag wf[:sym].to_s, wf[:name] %>
+						<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
+					</div>
+  			<% end %>
       </div>
     </div>
   </div>
@@ -55,6 +55,7 @@
     </div>
   </div>
 </div>
+
  	<hr style="width:75%">
 
 <div class='row' style='text-align:center;'>
@@ -82,6 +83,7 @@
 		<hr style="width:75%">
 </div>
 
+</div>
 <script>
 var handler_names = [<%= duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe %> ]  
 	

@@ -25,7 +25,7 @@
   	<h2> Search Projects </h2>
   	<%= render "projects/project_search" %>
   </div>
-	<div class="tab-pane" id="aggregates" %>
+	<div class="tab-pane" id="aggregates" >
 		<%= render partial: "aggregate_exporter", locals: @aggregator_locals %>
 	</div>
   <div class="tab-pane" id="research">...</div>
@@ -39,6 +39,8 @@
 		<%= render 'shared/feed' %>
 		<%= link_to "See All Recent Activity...", versions_path %>
 	</div>
+</div>
+
 </div>
 
 
