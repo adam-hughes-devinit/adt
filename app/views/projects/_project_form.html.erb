@@ -23,6 +23,7 @@
 </div>
 
 <div class='row'>
+
 	<h3>Details:</h3>
 	<%= f.association :sector, wrapper_html: {class: "span4"} %>
 	<%= f.input :sector_comment, wrapper_html: {class: " span4"}, hint: "If multisector, add details" %>
@@ -36,8 +37,23 @@
 		#f.association :tied, wrapper_html: {class: " span5"}, hint: "This variable is deprecated." 
 		%>!-->
 	<%= f.association :flow_type, wrapper_html: {class: " span5"} %>
-	<%= f.association :oda_like, wrapper_html: {class: " span5"} %>
+	<!-- <%= 
+		#f.association :oda_like, wrapper_html: {class: " span5"}, hint: "This variable is deprecated."
+		%>
+	!-->
 	<%= f.association :status, wrapper_html: {class: " span5"} %>
+	
+	<h2> Flow Class: </h2>
+</div>
+<div class='row'>
+	<%= f.simple_fields_for :flow_class do |flow_class_form| %>  
+			<% # Hard-coding this is a bad idea
+				%>
+			<%= flow_class_form.association :oda_like_1 %>
+			<%= flow_class_form.association :oda_like_2 %>
+			<%= flow_class_form.association :oda_like_master %>
+			    <span style="color:#999">Will be autoarbitrated on Save if there is no Master and both flow_classes match</span>
+	<% end %>
 
 	
 

@@ -87,12 +87,16 @@ include AggregatesHelper
 							#{@duplication_scheme[:join]}
 				 			#{@duplication_scheme[:group]}
 				 			) p
-				 			
+				 		
+				 		LEFT OUTER JOIN (select id, project_id, oda_like_1_id, oda_like_2_id, oda_like_master_id, (case when oda_like_master_id is not null then oda_like_master_id when oda_like_2_id is not null then oda_like_2_id else oda_like_1_id end) oda_like_best_id from flow_classes) modified_flow_classes on p.id = modified_flow_classes.project_id
+				 		
+				 		LEFT OUTER JOIN oda_likes on modified_flow_classes.oda_like_best_id = oda_likes.id	
+				 		
 		 				LEFT OUTER JOIN sectors on p.sector_id = sectors.id
-		 				LEFT OUTER JOIN oda_likes on p.oda_like_id = oda_likes.id
 		 				LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
 		 				LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
 		 				LEFT OUTER JOIN statuses on p.status_id = statuses.id
+		 				
 
 			 			INNER JOIN countries donors on p.donor_id = donors.id 
 			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id

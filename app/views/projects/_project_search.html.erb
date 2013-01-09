@@ -40,4 +40,15 @@
 		<% end %>
 		</ol>
 	</div>
+	<br>
+	<div class='span10'>
+		<% if current_user_is_aiddata %>
+			<p><b>AidData Workflow Filters:</b><p>
+			<ol>
+				<% WORKFLOW_FACETS.each do |f| %>
+					<%= render partial: 'projects/facet_list', locals: {f: f} %>
+				<% end %>
+			</ol>
+		<% end %>
+	</div>
 </div>

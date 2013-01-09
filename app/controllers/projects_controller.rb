@@ -51,6 +51,7 @@ include SearchHelper
     @history = @project.history
     @flags = @project.all_flags
     @flag = Flag.new
+    @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -67,7 +68,7 @@ include SearchHelper
     @project.participating_organizations.build
     @project.contacts.build
     @project.sources.build
-
+    @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -78,6 +79,7 @@ include SearchHelper
   # GET /Projects/1/edit
   def edit
     @project = Project.find(params[:id])
+    @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
   end
 
   # POST /Projects
@@ -85,7 +87,7 @@ include SearchHelper
   def create
     @project = Project.new(params[:project])
     strip_tags_from_description
-    
+
     respond_to do |format|
       if @project.save
         format.html { redirect_to @project }
@@ -103,7 +105,7 @@ include SearchHelper
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
-  
+
 
     respond_to do |format|
       if @project.update_attributes(params[:project])

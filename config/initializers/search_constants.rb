@@ -1,4 +1,4 @@
-	SCOPES = [
+		SCOPES = [
 	# Official Finance: 
   #		- Active
   #   - Checked
@@ -86,3 +86,10 @@
       {sym: :number_of_recipients, name: "Number of Recipients"},
       {sym: :year, name: "Commitment Year"}
     ].sort! { |a,b| a[:name] <=> b[:name] }
+    
+    
+    WORKFLOW_FACETS = [
+    	{sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
+    	{sym: :flow_class_1, name: "Flow Class - 1"},
+    	{sym: :flow_class_2, name: "Flow Class - 2"}
+    ]

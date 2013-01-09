@@ -1,0 +1,14 @@
+
+<%= form_for @flow_class, method: :post, url: "/projects/#{@flow_class.project_id}/flow_class/"  do |f| %>  
+
+<div class='row'>
+  <div class="form-inputs span6">
+		<%= render partial: 'fields', locals: {f: f} %>
+
+  </div>
+
+  <div class="form-actions span12">
+    <%= f.submit %>
+  </div>
+</div>
+<% end %>

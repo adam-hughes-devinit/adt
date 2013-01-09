@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>FC Gatherer</title>
+    <script type='text/javascript' src="../jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type='text/javascript' src="../d3/d3.v2.js"></script>
+    <script type='text/javascript' src="variables.js"></script>
+	<link type="text/css" href="../css/custom-theme/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+<script type='text/javascript'>
+   var iso3 ='' ,
+     adtcode= '',
+     url= "http://gisdev.foundationcenter.org/aiddata/getAggregatedGrantsByCountryAndSubject.php?"  
+   jQuery.support.cors = true; // force cross-site scripting (as of jQuery 1.5) 
+     
+</script>
+  </head>
+  <body>
+
+<script type='text/javascript'>
+$(function (){
+//document.write(datum.iso3_code + "|"+ datum.country  + "|" +datum.adt_code + "|"+ datum.year + "|"+
+//datum.grant_amount + "|" + datum.foundation_count + "|" + datum.grant_count+ "|" + datum.subject+ " <br/>")
+  document.write("iso3|country|adt_code|year|grant_amount|foundation_count|grant_count|subject|<br/>")
+var data= Object;
+
+iso3choices.forEach(function(iso3){
+  adtchoices.forEach(function(adtcode) {
+  
+  getFC(iso3,adtcode,url);
+  
+  });
+});
+
+
+function getFC(iso3, adtcode, url) {
+  //alert(iso3 +" // " + adtcode + " // " + url);
+
+  $.ajax({
+    url: url,
+    cache: false,
+    type: "GET",
+    data: {
+      iso3 : iso3,
+      adtcode : adtcode
+    },
+    success: function(json) {
+      json = json.replace("query results", "results")
+     // alert(json);
+      data = jQuery.parseJSON(json);
+     // alert('success: ' + data.source + " " + data.results)
+      makeCsv(data.results);
+
+    },
+    error: function(a, b, c) {
+      //alert(a.statusText + " // " + b + ' // ' + c)
+      return
+    }
+    });
+};
+
+function makeCsv (array) {
+  var i =0;
+  if (Array.isArray(array)) {
+  array.forEach(function(datum) {
+    //console.log(i);
+    i++;
+    //alert(this.iso3+code + ", "+ this.adt_code + ", "+ this.year + ", "+ this.grant_amount + ", <br/>")
+    
+    document.write(datum.iso3_code + "|"+ datum.country  + "|" +datum.adt_code + "|"+ datum.year + "|"+ datum.grant_amount + "|" + datum.foundation_count + "|" + datum.grant_count+ "|" + datum.subject+ "| <br/>")
+  })
+}
+};
+
+});
+
+  
+
+  
+     
+</script>
+    </div>
+  </body>

@@ -1,0 +1,66 @@
+
+<html>
+<head>
+<title>Project Pages</title>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+<link type="text/css" href="../css/custom-theme/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+<style type='text/css'>
+</style>
+<script type='text/javascript'>
+
+function spt (a, url) {
+    rawArray = new Array
+    idArray = new Array   
+    if (a.indexOf(',')||a.indexOf(' ')||a.indexOf(/[\s\n\r\t]/)){
+        rawArray = a.replace(/[,]*[\s\n\r\t]/g, ',').split(',');
+    }
+    else {rawArray.push(a)}
+    rawArray.forEach(function(z){
+        if (z.length>1){
+        idArray.push(Number(z))
+        }
+    })
+    idArray.forEach(function(d){
+    window.open(url+d);
+    })
+}
+$(function(){
+    $('#go1')
+    .button({
+        icons : {primary: 'ui-icon-newwin'},
+        text: true
+    })
+    .click(function(){
+    a = $('#numbers').val();
+    spt(a, 'http://prod.aiddata.org/project/show/');
+    })
+    
+    $('#go2')
+    .button({
+        icons : {primary: 'ui-icon-newwin'},
+        text: true
+    })
+    .click(function(){
+    a = $('#numbers').val();
+    spt(a, 'http://aiddata.org/content/Project?id=');    
+    })
+})
+</script>
+</head>
+<body >
+    <p>Enter one or many AidData project IDs, separated by commas, spaces, tabs or line breaks. Then
+    select where you would like to open their project pages (Internal or External). </p>
+    <br/>
+    <span>Id Numbers: </span>
+    <input id='numbers'/>
+    <button id='go1'>Open Internal Pages</button>
+    <button id='go2'>Open External Pages</button>
+    <hr>
+        <br><br>
+    <span>8/1/2012</span>
+    
+</body>

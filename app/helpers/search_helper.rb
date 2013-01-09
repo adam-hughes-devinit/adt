@@ -1,6 +1,9 @@
 module SearchHelper
 	
-	# Constants definined in an initializer
+	# Constants in an initializer
+
+    
+    
 	    
 	def custom_search(options = {})
 	  options.reverse_merge! paginate: true
@@ -17,7 +20,7 @@ module SearchHelper
 	  	end
 	  	
 	    fulltext params[:search]
-	    FACETS.each do |f|
+	    (FACETS + WORKFLOW_FACETS).each do |f|
 	        facet f[:sym]
 	        if params[f[:sym]].present?
 	        	with f[:sym], params[f[:sym]] 

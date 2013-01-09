@@ -114,14 +114,14 @@ function build_api_params () {
 		if (filter_values.length>0)
 			{ filter_values.forEach(function(v) { console.log(v); param_values.push(v) }) }
 
-	param_string=$.param(param_values)
+	param_string=decodeURIComponent($.param(param_values)).replace("++", "+%2B") // for CA +SOE which is turned into CA++SOE without this.
 	return  param_string
 }
 
 function load_data_preview() {
 	$("#data_preview td").text("--")
 	$("#data_preview_note").html("... Loading your preview ... ")
-	api_call = decodeURIComponent(build_api_params())
+	api_call = build_api_params()
 	$.post('/aggregates/projects?'+api_call, function(json) {
 	//console.log(data)
 	//json = $.parseJSON(data)
@@ -175,7 +175,7 @@ else if (scope=='none') {
 			
 function update_previews() {
 		load_data_preview()
-		api_call = decodeURIComponent(build_api_params())
+		api_call = build_api_params()
 		$('#api_query_preview').html("<a target='_blank' href='/aggregates/projects?"+api_call+"'>/aggregates/projects?"+api_call + "</a>")
 		$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Click here to download.</a>")
 	}
