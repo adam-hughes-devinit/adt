@@ -1,0 +1,202 @@
+<html>
+  <head>
+    <title>ENV stream</title>
+    <script type='text/javascript' src="env.js"></script>
+    <script type='text/javascript' src="../../d3/d3.v2.js"></script>
+    <style type="text/css">
+       svg{background: #d2dEde;
+       font-family:Georgia;}
+    </style>
+<script type='text/javascript'>
+    function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+   var minYear = 1947,
+     first = getUrlVars()["minYear"]
+    if (first) {minYear=first}
+
+
+    env = env.filter(function(d) {return (d.year>=minYear)})//&&d.env_str!="NEUTRAL")})
+</script>
+  </head>
+  <body>
+<script type='text/javascript'>
+
+    var h = 400,
+        w = 2*h,
+        yMax = d3.max(env, function(d) {return d.amt}),
+        yMin = 0,
+        xMax = d3.max(env, function(d) {return d.year}),
+        xMin = d3.min(env, function(d) {return d.year}),
+        height = d3.scale.linear().domain([yMin, yMax]).range([0,(h-(h/3))]),
+        width = d3.scale.linear().domain([xMin, xMax]).range([0,w]),
+        envColors = envCodes2.map(function(d) {return d.color}),
+        color = d3.scale.ordinal()
+            //.domain([envCodes.map(function(d) {return d.name})])
+            .domain([0,1,2,3,4].reverse())
+            .range(envColors)
+        ;
+    
+    
+    var env_nest = d3.nest()
+        .key(function(d) {return d.env_8})
+        .entries(env)
+        ;
+    var env_nest2 = d3.nest()
+        .key(function(d) {return d.env_5})
+        .entries(env2)
+        ;
+    
+    var envArrays = []
+    
+    env_nest2.forEach(function(d) {
+        var envCodeArray= new Array;
+        var envValues = d.values;
+        //console.log(envValues);
+        envValues.forEach(function(v) {
+        var env_point = new Object;
+        env_point.x = v.year;
+        env_point.y = v.amt;
+        envCodeArray.push(env_point);
+        })
+        envArrays.push(envCodeArray)
+        })
+    
+    var envData = d3.layout.stack()
+        .offset('wiggle')
+        (envArrays)
+        ;
+    
+    var area = d3.svg.area()
+        .x(function(d) {return width(d.x)})
+        .y0(function(d) {return h - height(d.y0)})
+        .y1(function(d) {return h - height(d.y + d.y0)})
+        .interpolate("monotone")
+        ;
+        
+    var vis = d3.select('body')
+        .append('svg')
+            .attr('height', h)
+            .attr('width', w)
+            ;
+    
+    var graph = vis.selectAll('path')
+        .data(envData)
+    .enter().append('path')
+        .style("fill", function(d,i) {return color(i)})
+        .style("stroke", "#ccc" )
+        .attr("d", area)
+        //.attr("opacity", 0)
+    /*
+    graph.append('title')
+        .text(function(d,i) {return envCodes2[i].code})
+        ;
+    */
+    
+    
+    // ----------------- YEAR MARKERS -----------------    
+    var yearTicks =[],
+        minTick = xMin + (10 - (xMin % 10)),
+        maxTick = xMax - (xMax % 10)
+        ;
+    for (i=minTick; i<=maxTick; i=i+10)
+    {yearTicks.push(i)};
+    
+    var smallYearTicks = []
+    for (i=xMin; i<=xMax; i++) {smallYearTicks.push(i);}
+    
+    var tickColor = '#333'
+
+    vis.selectAll('.yearRule')
+        .data(yearTicks)
+    .enter().append('line')
+        .attr("class", "yearRule")
+        .attr("x1",function(d) {return width(d)})
+        .attr("x2",function(d) {return width(d)} )
+        .attr("y1",h)
+        .attr("y2",h-40)
+        .style("stroke", tickColor)
+        
+    vis.selectAll('.yearName')
+        .data(yearTicks)
+    .enter().append('text')
+        .attr("x",function(d) {return width(d) - 10})
+        .attr("y", h-5)
+        .attr("text-anchor", "start")
+        .attr("fill", tickColor)
+        .attr("font-size", "12px")
+        .attr("transform", function(d) {return "rotate(-90,"+ (width(d)-8)+","+(h-10)+")"})
+        .text(String)
+        
+    vis.selectAll('.smallYearRule')
+        .data(smallYearTicks)
+    .enter().append('line')
+        .attr("class", "smallYearRule")
+        .attr("x1",function(d) {return width(d)})
+        .attr("x2",function(d) {return width(d)} )
+        .attr("y1",h)
+        .attr("y2",h-10)
+        .style("stroke", tickColor)
+    
+    // --------------- LEGEND -------------
+    
+    var legendSize = w/50,
+        legendMargin = 5,
+        legendHeight = w/12,
+        legendX = w/12
+    ;
+    
+    var legend = vis.selectAll('rect')
+        .data(envCodes2)//.reverse())
+        ;
+    legend.enter().append('rect')
+        .attr("x", legendX )
+        .attr("y", function(d,i) {return (legendHeight + (i*(legendSize+legendMargin)))})
+        .attr("height", legendSize)
+        .attr("width", legendSize)
+        .attr("fill", function(d) {return d.color})
+        .attr("stroke", "#333")
+        ;
+    legend.enter().append('text')
+        .attr("font-size", w/50+"px")
+        .attr("x", legendX + legendSize + legendMargin)
+        .attr("y", function(d,i) {return (legendHeight + (legendSize+legendMargin)/2 +(i*(legendSize + legendMargin)))})
+        .text(function(d) {return d.code})
+        .attr("text-anchor", "start")
+        ;
+    // ------------ HEADING ------------------
+    var headingY = h/12,
+        headingX = w/2,
+        bigFont = h/15,
+        smallFont = h/25
+        ;
+        
+    vis.append('text')
+        .attr("x", headingX)
+        .attr("y", headingY)
+        .attr("font-size", bigFont+"px")
+        .attr("text-anchor", "middle")
+        .text("Environmental Purpose of Aid, "+xMin+"-"+xMax)
+        
+    vis.append('text')
+        .attr("x", headingX)
+        .attr("y", headingY + bigFont)
+        .attr("font-size", smallFont+"px")
+        .attr("text-anchor", "middle")
+        .attr("font-style", "italic")
+        .text("in constant USD2000, by environmental impact code")
+    /*    
+    vis.append('text')
+        .attr("x", (100))
+        .attr("y", legendHeight + (9*(legendSize+legendMargin)))
+        .attr("font-size", "12px")
+        .attr("text-anchor", "start")
+        .attr("font-style", "italic")
+        .text("to change start year, add '?minYear=' + year to the URL")
+    */
+</script>
+  </body>

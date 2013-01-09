@@ -1,0 +1,139 @@
+<html>
+<head>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+<title>Coding</title>
+</head>
+<body style='margin:25px'>
+<h1>AidData Project-Level Coding</h1>
+<p>
+    
+</p>
+
+<h2>Contents:</h2>
+<ul>
+    <li><a href='#sectorcoding'>AidData's Sector Coding Scheme</a></li>
+    <ul>
+        <li><a href='#purposecodes'>Purpose Codes</a></li>
+        <li><a href='#purposecodeexplorer'>Purpose Code Explorer</a></li>
+        <li><a href='#activitycodes'>Activity Codes</a></li>
+    </ul>
+    <li><a href='#activitycodingthecrs'>Activity Coding the OECD CRS</a></li>
+    <li><a href='#codebyrule'>"Code by Rule"</a></li>
+    <ul>
+        <li><a href='#coderules'>Code Rules</a></li>
+        <li><a href='#coderounds'>Code Rounds</a></li>
+        <li><a href='#codebyfile'>"Code by File"</a></li>
+    </ul>
+    <li><a href='#timelineofcrscoding'>Timeline of CRS Coding</a></li>
+    <li><a href='#othercoding'>Other types of project-level coding</a></li>
+    
+</ul>
+<a name='sectorcoding'><h2>AidData's Sector Coding Scheme</h2></a>
+<p>
+One of the most important steps in operationalizing development finance data is answering the question, "What is this flow's purpose?" AidData takes the task of categorizing flows by sector, purpose and activity quite seriously. After all, you can't answer many questions about the impact of development finance without determining the purpose of those flows. 
+</p>
+<p>
+AidData's methodology is built around the AidData sector coding scheme, which is a two-part system for operationalizing development project records. AidData staff are applying this methodology to records gathered from all sources, including annual reports, webscraped data and the OECD CRS. Besides sector coding, AidData staff and affiliated researchers are exploring other methods of adding value to development project records.
+</p>
+<p>
+AidData staff use a two-part coding scheme to categorize development projects by purpose and activity. AidData's coding scheme is based on the thorough and extensive <a href='http://www.oecd.org/document/18/0,3746,en_2649_34447_1914325_1_1_1_1,00.html'>CRS Purpose Codes</a>.  AidData's scheme differs in two ways:
+<ul>
+<li>The inventory of purpose codes is slightly different.</li>
+<li>AidData adds a new level of granularity with activity codes.</li>
+</ul>
+In the context of the AidData web portal, a <b>code round</b> is a combination of <i>one purpose code</i> and <i>one or more activity codes</i>.
+</p>
+<a name='purposecodes'><h3>Purpose Codes</h3></a>
+
+<p>
+AidData's purpose codes, like <a href='http://www.oecd.org/document/18/0,3746,en_2649_34447_1914325_1_1_1_1,00.html'>CRS Purpose codes</a>, are 5-digit numbers which correspond to a purpose name and signify the overall purpose of the flow. While these numbers and terms may be intimidating, the system is actually quite straightforward. 
+</p>
+<p>
+Purpose codes exist in a hierarchy, and the digits in a code reveal its place in the hierarchy. Left-most digits are most general groupings, right-most digits are most specific. For example:
+<br>
+<img style='max-height:200px' src='15120.png' />
+<img style='max-height:200px'src='12250.png' /> <br>
+
+
+Understanding the structure of a code, you could assess these three codes:
+<ul>	
+<li>14010</li>
+<li>14020</li>
+<li>16060</li>
+</ul>
+and recognize that:
+<ul>
+    <li>all three share the supersector prefix  <b>1****</b>  (<i>14010, 14020, 16060</i>)</li>
+    <li>two share the sector <b>140**</b> (<i>14010, 14020</i>)</li>
+</ul>
+
+</p>
+<a name='purposecodeexplorer'><h3>Purpose Code Explorer</h3></a>
+<p>
+    The interactive visualization below shows the AidData purpose code scheme in its <i>hierarchical</i> structure. Inner nodes are broader sectors; outer nodes are more specific sectors. End nodes (on the outermost edge) are AidData purpose codes. <b>Mouse over</b> to see the name of a selected node. <b>Click to zoom</b> on a selected node and see its children.
+</p>
+    <div id='chart'></div>
+    <script type="text/javascript" src='pcwheel.js'></script>
+	
+<a name='activitycodes'><h3>Activity Codes</h3></a>
+<p>
+The second component of AidData sector coding is the AidData activity code scheme. Activity codes are meant to capture <i>distinct activities</i> within the scope of a project. A project may include any number of activites. In the same way, an AidData project record may include <b>one or more number of activity codes</b>. Because of this, activity codes are helpful for filtering projects and isolating a subset of records, but <b>activity codes should not be used for aggregation</b>, as this would lead to double-counting of records with more than one activity code. 
+</p>
+<p>
+    Activity codes take the form of <b>seven-digit numbers</b>: five digits before the decimal and two digits after the decimal. They exist as children of purpose codes in the sector coding scheme, for example:
+    <br>
+        <img style='max-height:200px'src='41020.png'/>
+    <br>
+</p>
+<p>
+    While there is currently no "Activity Code Explorer," users are invited to find activity codes listed below their parent purpose codes in the <a href='http://aiddata.org/content/index/user-guide'>AidData User's Guide</a>
+</p>
+
+<a name='activitycodingthecrs'><h2>Activity Coding the OECD CRS</h2></a>
+<p>
+    The <a href='http://stats.oecd.org/index.aspx?DataSetCode=CRS1'>OECD CRS</a> is one of the richest financial datasets available pertaining to development finance. This dataset covers a huge proportion of the world's international aid flows and provides comparable coverage for all donors in the dataset. Since AidData's formation, one of AidData's goals has been to apply AidData purpose and activity codes to each record in the OECD CRS. More specific and more carefully-applied sector codes will leverage the OECD CRS's statistical breadth and depth for more fine-grained, sector- and activity-based research.
+</p>
+<a name='codebyrule'><h3>How It's Done: "Code by Rule"</h3></a>
+<p>Investigating the OECD CRS row-by-row is a tall order. To make the process more efficient, AidData developed the "code by rule" methodology. A <b>code rule</b> is a unique combination of descriptive fields (<i>title, short description, long description</i>) in the AidData web portal. As defined above, a <b>code round</b> is a combination of <i>one purpose code</i> and <i>one or more activity codes</i>. According to code by rule, each <i>code rule</i> receives one <i>code round</i>. While code by rule is most relevant in terms of records in the OECD CRS, this methodology is actually applied to all records in the AidData web portal. 
+</p>
+<p>Below is a description of the code by rule process, then a diagram of the workflow.</p>
+
+<a name='coderules'><h4>Code Rules</h4></a>
+<p>
+    Understanding code rules is essential to understanding code by rule. A code rule (unique combination of descriptive fields: <i>title, short description, long description</i>) in the AidData database may be linked to any number of project records. If the <a href=
+"http://aiddata.org/content/Project?id=40827529">descriptive information is very detailed</a>, the corresponding code rule may have only one linked project. On the other hand, if the descriptive information is <a href='http://aiddata.org/content/Project?id=50037881'>not</a> <a href='http://aiddata.org/content/Project?id=50038214'>very</a> <a href='http://aiddata.org/content/Project?id=50039723'>detailed</a>, it may have many linked projects (thousands, as seen in <a href='http://stats.oecd.org/qwids/microdata.html?mds=TC+AGGREGATED+ACTIVITIES&f=json'>QWIDS</a>).
+</p>
+<a name='coderounds'><h4>Code Rounds</h4></a>
+<p>
+    Code rounds (combinations of <i>one purpose code</i> and <i>one or more activity codes</i>)  are produced by AidData coders. Trained coders include AidData staff and research assistants at many of AidData's affiliated institutions, including Brigham Young University, the College of William and Mary and Development Gateway. Each code rule is <b>double-coded and arbitrated</b>: it is reviewed by two trained coders, and should those codes differ, the code round is arbitrated by a senior AidData coder. About 40% of code rounds match after double-coding; about 60% must be arbitrated by a senior coder.   
+</p>
+<a name='codebyfile'><h4>Scaling up: "Code by File"</h4></a>
+<p>
+    While many rules are coded within AidData's proprietary data management system, code rules from the OECD CRS were coded outside the system to reduce the load on AidData's servers. Project managers distribute code rule sets in spreadsheets and oversee the coding process. After AidData coders have applied codes to the code rules, they are loaded into AidData's internal data management system for arbitration. Then, finished code rules are applied to the database, attaching code rounds to <i>actual project records</i> and retaining the original code rules in case they need to be modified and re-applied.
+</p>
+<br>
+<img src='codingprocesswide.png' style='max-width:60%;float:none;' />
+<br>
+<a name='timelineofcrscoding'><h3>Timeline of CRS activity coding</h3></a>
+<p>
+    Activity coding the OECD CRS began in 2010 and is currently underway. AidData is releasing activity codes sector-by-sector, beginning with the humanitarian relief (720) sector in spring 2012 (coded and published in partnership with <a href='http://www.gfdrr.org/'>GFDRR</a> for the <a href='http://gfdrr.aiddata.org/dashboard'>Disaster Aid Tracking Dashboard</a>). AidData hopes to release the Government (150) sector by August/September 2012. 
+</p>
+
+<a name='othercoding'><h2>Other types of project-level coding</h2></a>
+<p>
+    Besides sector coding, AidData staff and affiliated researchers have engaged in many project-level coding projects. We welcome the opportunity to support researchers in collaborative data collection and improvement projects.
+</p>
+<h3>Environmental Coding</h3>
+<p>
+    Project Level AID (PLAID) was one of the projects that merged to form the AidData partnership. PLAID was focused on measuring the environmental impact of aid, and this required applying <i>environmental impact codes</i> to the PLAID research release (now the AidData research release). Environment codes in the AidData web portal are <b>forthcoming</b>. For more information regarding these codes, see <a href='http://www.amazon.com/Greening-Aid-Understanding-Environmental-Development/dp/0199213941'>Greening Aid</a> (Tierney et al, 2008).
+</p>
+<h3>Channel of Delivery Coding</h3>
+<p>Overseen by Simone Dietrich. Publication and data forthcoming.</p>
+<h3>Do you have an idea for a new coding project?</h3>
+<p>
+    The current AidData web portal contains the contributions of many affiliated researchers. If you would like to help us provide rich, valuable, accurate data, contact us at <a href="mailto:info@aiddata.org">info@aiddata.org</a> to talk to an AidData project manager. We love supporting academic faculty and other researchers in gathering data or adding value to existing data.
+</p>
+</body>
+</html>

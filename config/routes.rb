@@ -18,7 +18,14 @@ Adt::Application.routes.draw do
   match '/projects/json', to: 'projects#index', defaults: { format: 'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
-
+  
+  # Flow Classes hack 1/8/2013
+  get '/projects/:project_id/flow_class', to: 'flow_classes#show', as: 'flow_class'
+  post '/projects/:project_id/flow_class', to: 'flow_classes#update'
+  get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'
+  post '/projects/:project_id/flow_class/edit', to: 'flow_classes#update'
+  
+  
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
   get '/recent_activity', to: 'versions#index', as: 'versions'

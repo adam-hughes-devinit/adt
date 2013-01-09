@@ -1,0 +1,457 @@
+<html>
+  <head>
+    <title>FC Map</title>
+    <script type='text/javascript' src="collection.js"></script>
+    <script type='text/javascript' src="grants.js"></script>
+    <script type='text/javascript' src="../../d3/d3.v2.js"></script>
+    <script type='text/javascript' src="../../jquery-1.7.1.js"></script>
+    <style type="text/css">
+       svg {background: #1C6BA0;
+       font:"Georgia";
+       border:4px solid #333}
+    </style>
+<script type='text/javascript'>
+
+</script>
+  </head>
+  <body>
+
+<script type='text/javascript'>
+
+  
+  var w = 1200,
+    h = w*(54/100),
+    radius = Math.min(w, h) /2,
+    xy = d3.geo.mercator().scale(w),//.scale(870),
+    path = d3.geo.path().projection(xy),
+    c = d3.scale.linear().domain([0,100000000,1600000000]).range(['#FAEDD9', '#808F12', '#2A5C0B']),
+    r = d3.scale.linear().domain([0,100000000,1600000000]).range([5, 50, 100]),
+    c_adt=d3.scale.category20c(),
+    pieData = [],
+    barData = [],
+    barMax= new Number,
+    barMin=0,
+    barX = d3.scale.linear().domain([2005,2010]).range([100,w-600])
+    barY = h-100,
+    barW = 50,
+    //barH = d3.scale.linear().domain([barMin,barMax]).range([0,200])
+    money = d3.format("0,r"),
+    labelHeight = d3.scale.linear().domain([0,18]).range([100,h-100])
+    ;
+    
+    ;
+   var fc = d3.nest()
+    .key(function(d) {return d.iso2})
+    .key(function(d) {return d.adt_code})
+    .entries(fcdata)
+    
+//var fcmap = d3.map(fc);
+   
+var pie = d3.layout.pie()
+   .value(function(d) {return d.value});
+
+    
+ var arc = d3.svg.arc()
+   // .startAngle(function(d) { return d.x; })
+    //.endAngle(function(d) { return d.x + d.dx; })
+    .innerRadius(function(d) { return 0; })
+    .outerRadius(function(d) { return 100; })
+    ;
+    
+    
+var vis = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)    
+    ;
+    
+//---------------------------  LEGEND  ----------------------------------
+legendAmounts=[1000000,100000000,1000000000]
+var legend = vis.append('g')
+    .attr("id", "legend")
+var legendBars = legend.selectAll('rect')
+    .data(legendAmounts)
+  .enter().append('rect')
+    .attr("x", function(d,i) {return (48+(i*20))})
+    .attr("y", function(d,i) {return (460 - (i*40))})
+    .attr("width", 18)
+    .attr("height", function(d, i) {return (60 + (i*40))})
+    .attr("fill", function (d) {return c(d)})
+  ;
+legend.selectAll('text')
+  .data(legendAmounts)
+.enter().append('text')
+  .attr("x",function(d,i) {return (40+(i*20))})
+  .attr("y", function(d,i) {return (500)})
+  .attr("text-anchor", "start")
+  .attr("font-size", "10px")
+  .attr("fill", "#333")
+  .attr("transform",function(d,i) {return "rotate(-90,"+(60+(i*20))+", "+(500)+")"})
+  .text(function(d) {return "$" + money(d)})
+
+vis.append('text')
+  .text("U.S. Private Flows, 2005-2010")
+  .attr("x", 48)
+  .attr("y", 540)
+  .attr("text-anchor", "start")
+  .attr("font-size","18px")
+  ;
+  /*vis.append('text')
+  .text("Data provided by Foundation Center")
+  .attr("x", 48)
+  .attr("y", 555)
+  .attr("text-anchor", "start")
+  .attr("font-size","14px")
+  ;*/
+  vis.append('text')
+  .text("Click to see sector/year breakdown")
+  .attr("x", 48)
+  .attr("y", 555)
+  .attr("text-anchor", "start")
+  .attr("font-style", "italic")
+  .attr("font-size","12px")
+  ;
+vis.append('foreignObject')
+  .attr("x", 40)
+  .attr("y", 560)
+  .attr("height", "20px")
+  .attr("width", "500px")
+  .append('xhtml:body')
+  .html("<p style='font-size:12'><a href='fc_api_data.csv'>Download the Data</a></p>")
+
+  //.attr("text-anchor", "start")
+  //.attr("font-style", "italic")
+  
+  ;
+  
+vis.append('a').attr("xlink:href", "http://www.foundationcenter.org")
+.append('image')
+  .attr("x", 115)
+  .attr("y", 448)
+  .attr("height", 80)
+  .attr("width",200)
+  .attr("fill", "#fff")
+  .attr("stroke", "#333")
+  .attr("stroke-width", 2)
+  //.attr("opacity", .8)
+  .attr("xlink:href", "fc_logo.jpg")
+  
+  ;
+  
+var map = vis.append("svg:g")
+    .attr("id", "states")
+	.attr("transform","translate(100,"+ w/8 + ")");
+	
+var countries =  d3.select("#states")
+    .selectAll("path")
+      .data(collection.features)
+  .enter().append("svg:path")
+      .attr("cursor", "pointer")
+      .attr("id", function(d, i) {return d.id})
+      .attr("name", function(d) {return d.properties.name})
+      .attr("d", path)
+      .attr("stroke-width", 1)
+      .attr("stroke", "#333")
+      .attr("fill", function(d) {if (grants[d.id]) {return c(grants[d.id])} else { return "#777"}}) //console.log(d.properties.name + " " + d.id)}})
+      .on("click", click)
+      .on("mouseover", highlight)
+      .on("mouseout", unhighlight)
+    //.append('title')
+    //  .text(function(d) {return d.id + ": $" + money(grants[d.id])})
+      ;
+// ------------------- HIGHLIGHT / UNHIGHLIGHT ---------------     
+function highlight() {
+ //console.log(this)
+  d3.select("#"+this.id)
+  .transition()
+  //.attr("stroke-width", 3)
+    .attr("stroke", "#ddd")
+}
+
+function unhighlight() {
+  d3.select("#"+this.id)
+  .transition()
+    //.attr("stroke-width", 1)
+    .attr("stroke",function() {return $(this).attr("name") ? "#333" : ""})
+}
+// ---------------------  CLICK --------------------------
+function click() {
+var years = [2005,2006,2007,2008,2009,2010], 
+    activeCountry = this.id,
+    activeCountryName = this.getAttributeNS(null, "name")
+;
+vis.selectAll('#grayBox')
+    .transition()
+      .duration(200)
+      .attr("height", 0)
+      .attr("width", 0)
+      .attr("opacity", 0)
+    .remove();
+vis.selectAll('g.slice').remove();
+vis.selectAll('text.cHead').remove();
+vis.selectAll('g.bar').remove();
+vis.selectAll('g.stack').remove();
+    
+if (activeCountry.length==2) {    
+vis.append('svg:rect')
+  .attr("id", "grayBox")
+  .attr("height", h)
+  .attr("width", w)
+  .attr("fill", "#000")
+  .attr("opacity", 0)
+  .on("click", click)
+.transition()
+  .duration(200)
+  .attr("opacity", .6)
+  ;
+console.log(activeCountryName)
+
+vis.selectAll('.cHead')
+  .data([activeCountryName])
+.enter().append('svg:text')
+  .attr("class", "cHead")
+  .attr("x",350)
+  .attr("y", 70)
+  .text(String)
+  .attr("opacity", 0)
+  .attr("fill", '#222')
+  .attr("font", "Georgia")
+  .attr("font-weight", "bold")
+  .attr("font-size", "3em")
+.transition()
+  .attr("opacity",1)
+  .duration(500)
+.transition()
+  .duration(500)
+  .attr("fill", "#fff")
+  ;
+if (activeCountry.length==2){ 
+var yearData = d3.nest()
+  .key(function(d) {return d.year})
+  .entries(fcdata.filter(function(d) {return d.iso2 == activeCountry}))
+  ;
+
+}
+barData = []
+yearData.forEach(function(d){
+  var barObj = new Object;
+  barObj.label=d.key;
+  barObj.value=d3.sum(d.values, function(d) {return d.sum});
+  barData.push(barObj);
+})
+//console.log(barData)
+
+barMax = d3.max(barData, function(d) {return d.value})
+tickMax = Math.max(((Math.round(barMax/5000000))*5000000), 1000000)
+//tickMax =(Math.round(barMax/5000000)*5000000)
+
+barH = d3.scale.linear().domain([barMin,tickMax]).range([0,450])
+  
+var subjectData = d3.nest()
+  .key(function(d) {return d.subject})
+  .entries(fcdata.filter(function(d) {return d.iso2 == activeCountry})),
+  
+stackData = [],
+i=0;
+
+subjectData.forEach(function(d){
+  var stackArray = new Array;
+[2005,2006,2007,2008,2009,2010].forEach(function(yr) {
+  var stackObj = new Object;
+  stackObj.x=yr;
+  if (d.values.filter(function (v) {return v.year==yr})[0]) {
+  stackObj.y= d.values.filter(function (v) {return v.year==yr})[0].sum}
+  else {stackObj.y=0};
+  stackObj.sector=d.key
+  stackArray.push(stackObj);
+  })
+  //console.log(stackArray)
+  stackData.push(stackArray);
+})  
+
+var stack = d3.layout.stack()
+//.offset('wiggle')
+(stackData);
+//console.log(stack)
+
+var area1 = d3.svg.area()
+  .x(function(d) {return (barX(d.x))})
+  .y0(function(d) {return (barY-barH(d.y0))})
+  .y1(function(d) {return (barY-barH(d.y+d.y0))})
+  .interpolate('monotone')
+
+var area0 = d3.svg.area()
+  .x(function(d) {return (barX(d.x))})
+  .y0(h-100)
+  .y1(h-100)
+  .interpolate('monotone') 
+
+var stackGroup = vis.selectAll('g.stack')
+  .data([stackData])
+.enter().append('g')
+  .attr("class", "stack")
+  //.attr("transform", "translate(500, 200)")
+  ;
+var stackChange= stackGroup.selectAll('.sectorStack')
+  .data(stack);
+var newStack = stackChange.enter().append('path')
+  .attr("class", 'sectorStack')
+  .attr("id", function(d,i) {return "sectorPath"+i})
+  .attr("d", area0 )
+  .attr("fill", function(d) {return c_adt(d[0].sector)})
+  //.on("mouseover", highlight)
+  //.on("mouseout", unhighlight)
+  .transition()
+      .duration(600)
+      .attr("d", area1 )
+      ;
+      
+stackChange.append('title').text(function(d) {return d[0].sector})
+
+pieData = []
+subjectData.forEach(function(d){
+  var pieObj = new Object;
+  pieObj.label=d.key;
+  pieObj.value=d3.sum(d.values, function(d) {return d.sum});
+  pieData.push(pieObj);
+})
+
+function compare(a,b) {
+if (a.value > b.value)
+   return -1;
+if (a.value < b.value)
+  return 1;
+return 0;
+}
+//pieData = pieData.sort(compare)
+pieData=pieData.reverse()
+var pieGroup = vis.selectAll("g.slice")
+    .data([pieData])
+  .enter().append('g')
+    .attr("class", "slice")
+    //.attr("transform", "translate(200,200)")
+    ;
+    
+var pieChange= pieGroup.selectAll('.sectorpie')
+    .data(pie(pieData))
+/*
+var newPie = pieChange.enter().append('path')
+      .attr("class", "sectorpie")
+      .attr("d", arc)
+      .attr("fill", function(d) {return c_adt(d.data.label)})
+      .attr("stroke", '#333')
+      .attr("opacity", 0)
+      //.on("click",  click)
+      ;
+ 
+ newPie.transition()
+    .duration(600)
+    .attr("opacity", 1)
+  
+newPie.append('title')
+    .text(function(d) {return activeCountry + ", " +d.data.label + ": $" +money(d.data.value)})
+;
+*/
+labelHeight = d3.scale.linear().domain([0,pieData.length]).range([80,h-50]),
+
+pieChange.enter().append("foreignObject")
+    .attr("id", function(d,i) {return "sectorPath"+(pieData.length-(i+1))})
+    //.attr("class", "sectorDesc")
+    .attr("width", 550)
+    .attr("height", 80)
+    .attr("x", barX(2010.2))
+    .attr("y", function(d,i) {return labelHeight(i)})
+    //.attr("text-anchor", "start")
+    //.on("mouseover", highlight)
+    //.on("mouseout", unhighlight)
+    .append('xhtml:body')
+    .style("color", function(d) {return c_adt(d.data.label)})
+    .html(function(d) {return "<p style='font-size:14px;line-height:90%'><b>"+ d.data.label +"</b> : $" +money(d.data.value)+ "</p>"})
+ 
+/* d3.selectAll(".sectorDesc")
+ .transition()
+    .duration(200)
+    .delay(800)
+    .attr("y", 0)
+*/
+
+
+var barGroup = vis.selectAll("g.bar")
+    .data([barData])
+  .enter()
+  .append('g')
+    .attr("class", "bar")
+    //.attr("transform", "translate(600,200)")
+    ;
+/*    
+var barChange= barGroup.selectAll('.yearbar')
+    .data(barData)
+    
+var newBar =barChange
+    .enter().append('rect')
+      .attr("class", "yearbar")
+      .attr("x",function(d,i) {return barX(d.label)})
+      .attr("y",barY)
+      .attr("height", 0 )
+      .attr("width", barW -5 )
+      .attr("fill", function(d) {return c(d.value)})
+      .attr("stroke", '#333')
+      .attr("opacity", 1)
+      //.on("click",  click)
+newBar.append('title')
+      .text(function(d) {return d.label +": $" + money(d.value)})
+      ;
+ 
+ newBar.transition()
+    .delay(function(d,i) {return i*100})
+    .duration(400)
+    .attr("height", function(d) {return barH(d.value)})
+    .attr("y", function(d,i) {return barY - barH(d.value)})
+*/
+
+var yearY = barY+30
+
+
+barGroup.selectAll('.yearLabel')
+  .data(years)
+.enter().append("svg:text")
+    .attr("opacity", 0)
+    .attr("class", "yearLabel")
+    .attr("x", function(d) {return barX(d)}) 
+    .attr("y", yearY)
+    .attr("transform",function(d) {return "rotate(-30, "+barX(d)+", "+yearY+")"})
+    //.attr("text-anchor", "start")
+    //.attr("font-weight", "bold" )
+    .attr("fill", "#ccc")
+    .text(String)
+  .transition()
+    .delay(function(d,i) {return i*100})
+    .duration(400)
+    .attr("opacity", 1)
+
+yearTicks = [barMin, tickMax/4, (2*tickMax)/4,(3*tickMax)/4, tickMax, (tickMax+(tickMax/4))]
+ 
+var ticks = barGroup.selectAll('.yearTicks')
+  .data(yearTicks);
+  
+ticks.enter().append('line')
+  .attr("class", ".yearTicks")
+  .attr("x1", barX(2005) - 10)
+  .attr("x2", (barX(2010) + 10))
+  .attr("y1", function(d) { return barY - barH(d)} )
+  .attr("y2", function(d) { return barY - barH(d)})
+  .attr("stroke", "#bbb")
+
+ticks.enter().append('text')
+  .attr("x",barX(2005) - 12)
+  .attr("y", function(d) { return (barY - barH(d) +5 )} )
+  .attr("fill", "#ddd")
+  .attr("text-anchor", "end")
+  .text(function(d) {return "$"+ money(d)})
+
+}
+}
+
+</script>
+    </div>
+  </body>

@@ -32,17 +32,26 @@
 	<div class="project-categories project-box span5">
 		<h3>Codes & Markers: </h3>
 		<ul>
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OdaLike", heading: "Flow Class"} %>
+			<!-- ODALIKE has been removed !-->
+			<% if Rails.env.development? %>
+				<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OldOdaLike", heading: "Old Flow Class"} %>
+			<% end %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Status", heading: "Status"} %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Sector", heading: "Sector"} %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "SectorComment", heading: "Sector Comment"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "DebtUncertain", heading: "Debt Uncertain"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "CrsSector", heading: "CRS Sector"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "FlowType", heading: "Flow Type"} %>
-			<!-- TIED has been removed. -->
+			<!-- TIED has been removed. !-->
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCommercial", heading: "Commercial"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "LineOfCredit", heading: "Line of Credit"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>				
+		</ul>
+		<h3>Flow Class:</h3>
+		<ul>
+			<li><b>Arbitrated Value:</b> <%= @project.flow_class.show_round("master") %> </li>
+			<li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
+			<li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
 		</ul>
 	</div>
 	<div class="project-dates project-box span5">

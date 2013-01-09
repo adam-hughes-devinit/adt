@@ -13,6 +13,7 @@ class Project < ActiveRecord::Base
   :participating_organizations, :participating_organizations_attributes,
   :contacts, :contacts_attributes,
   :sources, :sources_attributes,
+  :flow_class_attributes,
   # for version control
   :accessories, :iteration,
   # hidden fields
@@ -73,14 +74,60 @@ class Project < ActiveRecord::Base
     end
   end
 
-  belongs_to :oda_like
+	# 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
+	#
+	# Replacing oda_like with a double-code + arbitrated FlowClass
+
+	# OLD:
+  #belongs_to :oda_like
+  
+	def old_oda_like
+		if oda_like_id
+			OdaLike.find(oda_like_id)
+		else
+			nil
+		end
+	end
+ 
   def oda_like_name
     unless oda_like.nil?
       oda_like.name
     else
-      "Unset"
+     "Unset"
     end
   end 
+  
+  # NEW:
+
+  def oda_like=(new_oda_like)
+  	# first it tries round 1, then round 2. you can't set the master this way. 
+  	flow_class= FlowClass.find_or_create_by_project_id(id)
+  	if new_oda_like
+			if flow_class.oda_like_1.nil?
+				flow_class.oda_like_1_id=new_oda_like.id
+			else
+				flow_class.oda_like_2_id=new_oda_like.id
+			end
+		end
+		
+  	flow_class.save
+  end
+  	
+  def oda_like
+  	if flow_class && best_answer = flow_class.oda_like_master || flow_class.oda_like_1 || flow_class.oda_like_2
+  		best_answer
+  	else
+  		nil
+  	end
+  end
+  
+ 
+  has_one :flow_class
+  accepts_nested_attributes_for :flow_class
+  
+  #
+  #  End restructuring
+  #
 
   belongs_to :sector
   def sector_name
