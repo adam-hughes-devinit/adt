@@ -33,9 +33,7 @@
 		<h3>Codes & Markers: </h3>
 		<ul>
 			<!-- ODALIKE has been removed !-->
-			<% if Rails.env.development? %>
-				<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OldOdaLike", heading: "Old Flow Class"} %>
-			<% end %>
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "VisibleFlowClass", heading: "Flow Class"} %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Status", heading: "Status"} %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "Sector", heading: "Sector"} %>
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "SectorComment", heading: "Sector Comment"} %>			
@@ -46,13 +44,19 @@
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCommercial", heading: "Commercial"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "LineOfCredit", heading: "Line of Credit"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>				
+			<% if Rails.env.development? %>
+				<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OldOdaLike", heading: "Old Flow Class (not shown on production)"} %>
+			<% end %>
 		</ul>
-		<h3>Flow Class:</h3>
-		<ul>
-			<li><b>Arbitrated Value:</b> <%= @project.flow_class.show_round("master") %> </li>
-			<li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
-			<li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
-		</ul>
+		<% if current_user_is_aiddata %>
+			<h3>Flow Class:</h3>
+			<ul>
+				<li><b>Arbitrated Value:</b> <%= @project.flow_class.show_round("master") %> </li>
+				<li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
+				<li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
+			</ul>
+			<span style="color:#999"><i> All three code rounds are only visible to AidData-affiliated users.</i></span>
+		<% end %>
 	</div>
 	<div class="project-dates project-box span5">
 		<h3>Dates:</h3>
