@@ -3,9 +3,9 @@ module AggregatesHelper
 		
 	VALID_FIELDS = [
 			{external: "donor", name: "Donor", internal: "donors.iso3", group: "donors.iso3", sorter: "donors.iso3 asc" },
-			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)", sorter: "statuses.name asc"},
-			{external: "sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name", sorter: "sectors.name asc"},
-			{external: "flow_class", name: "Flow Class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end) flow_class", sorter: "flow_class asc"},
+			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)", sorter: "status asc"},
+			{external: "sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name", sorter: "sector_name asc"},
+			{external: "flow_class", name: "Flow Class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end) ", sorter: "flow_class asc"},
 			{external: "recipient_iso2",  name: "Recipient ISO2", group: "recipient_iso2", internal: "recipient_iso2", sorter: "recipient_iso2 asc"},
 			{external: "recipient_iso3",   name: "Recipient ISO3", group: "recipient_iso3", internal: "recipient_iso3", sorter: "recipient_iso3 asc"},			
 			{external: "recipient_name", name: "Recipient Name",   group: "recipient_name", internal: "recipient_name", sorter: "recipient_name asc"},
