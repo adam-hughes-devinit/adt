@@ -15,7 +15,7 @@ class Transaction < ActiveRecord::Base
   accepts_nested_attributes_for :flags
 
 	def deflate_and_round_value
-      if self.project.year && self.project.donor
+      if self.project && self.project.year && self.project.donor
         donor_iso3 = self.project.donor.iso3
         yr = self.project.year
           if self.value && self.currency 

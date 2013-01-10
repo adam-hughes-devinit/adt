@@ -8,7 +8,7 @@
     </div>
     <div id="collapseOne" class="accordion-body collapse in">
       <div class="accordion-inner">
-        		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "span6", id: "get_input"  %>
+        		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "aggregate_input span6", id: "get_input"  %>
 		<br><br>
 		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span
       </div>
@@ -29,12 +29,12 @@
       		<button onclick="select_scope(this.id)" id='military'>Military</button>
       		
       		<br><br>
-      		<button onclick="select_scope(this.id)" id='none'>Clear</button>
+      		<button onclick="select_scope(this.id)" id='none'>Clear All</button>
       	</div>
         <% where_filters.each do |wf| %>
   				<div class='span3'>
 						<%= label_tag wf[:sym].to_s, wf[:name] %>
-						<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'where_filter' %>
+						<%= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'aggregate_input where_filter' %>
 					</div>
   			<% end %>
       </div>
@@ -48,7 +48,7 @@
     </div>
     <div id="collapseThree" class="accordion-body collapse">
       <div class="accordion-inner">
-				<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint()"  %>
+				<%= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "aggregate_input span6", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint()"  %>
 				<br><br>
 				<span id="handler_hint" style="color:#777">Select an option to get info</span>
       </div>
@@ -106,7 +106,7 @@ function build_api_params () {
 		filter_values = []
 		
 		$('.where_filter').each(function(i,f) { if (f.value) {
-						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join(",")})						
+						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("|")})						
 						}}) 
 		
 		console.log(filter_values)
@@ -168,6 +168,10 @@ else if (scope=='none') {
 	$('#flow_class').val('')
 	$('#verified').val('')
 	$('#status').val('')
+	$('#recipient_name').val('')
+	$('#sector').val('')
+	$('#flow_type').val('')
+	$('#year').val('')
 	}
 	
 	update_previews()
@@ -182,7 +186,7 @@ function update_previews() {
 
 $(function() {
 	show_duplication_handler_hint()
-	$('input, select').change(function() {update_previews()})
+	$('.aggregate_input').change(function() {update_previews()})
 	
 })
 </script>

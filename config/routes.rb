@@ -13,9 +13,9 @@ Adt::Application.routes.draw do
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
-  match '/aggregates/export', to: 'static_pages#aggregator'
-  match '/aggregates/projects', to: 'aggregates#projects', :defaults=>{:format=>'json'}
-  match '/projects/json', to: 'projects#index', defaults: { format: 'json'}
+  match '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
+  match '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
+  match '/projects/json', to: 'projects#index', as: "project_api", defaults: { format: 'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
   
