@@ -23,7 +23,7 @@
   </div>
   <div class="tab-pane" id="projects">
   	<h2> Search Projects </h2>
-  	<%= render "projects/project_search" %>
+  	<%= render "projects/project_search" unless Rails.env.test? %>
   </div>
 	<div class="tab-pane" id="aggregates" >
 		<%= render partial: "aggregate_exporter", locals: @aggregator_locals %>
@@ -32,7 +32,7 @@
   <div class="tab-pane" id="documentation">
   	<% # This is copied from README
   	%>
-  	<%= render partial: "documentation.html.md" %>
+  	<%= render "documentation.html.md" %>
   </div>
 	<div class="tab-pane" id="activity-feed">	
 		<h2>Recent Activity</h2>

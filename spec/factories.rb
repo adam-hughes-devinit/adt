@@ -141,9 +141,9 @@ Factory.define :project do |project|
 
   project.status FactoryGirl.create(:status)
   project.verified FactoryGirl.create(:verified)
-  project.oda_like FactoryGirl.create(:oda_like)
+  # project.oda_like FactoryGirl.create(:oda_like)
   project.flow_type FactoryGirl.create(:flow_type)
-  project.tied FactoryGirl.create(:tied)
+  # project.tied FactoryGirl.create(:tied)
   project.sector FactoryGirl.create(:sector)
 
   project.donor FactoryGirl.create(:country)
@@ -153,17 +153,17 @@ end
 
 
 Factory.define :flag_type do |ft|
-	ft.name Faker::Lorem.words[0].capitalize
+	ft.name ["Confirm", "Deny", "Challenge", "Dispute", "Applaud"].sample.capitalize
 	ft.color ['red', 'blue', 'green', 'yellow'].sample
 end
 
 Factory.define :flag do |f|
-	f.flag_type FactoryGirl.create(:flag_type)
-	f.flaggable_type "Transaction"
-	f.flaggable_id FactoryGirl.create(:transaction).id
-	f.owner FactoryGirl.create(:user)
-	f.comment 'I have something to say'
-	f.source 'www.cnn.com/facts'
+		f.flag_type FactoryGirl.create(:flag_type)
+		f.flaggable_type "Transaction"
+		f.flaggable_id FactoryGirl.create(:transaction).id
+		f.owner FactoryGirl.create(:user, email: "flag_email#{rand(0..1000000).round}@example.com")
+		f.comment 'I have something to say'
+		f.source 'www.cnn.com/facts'
 end
 	
 

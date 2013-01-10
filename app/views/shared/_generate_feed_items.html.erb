@@ -17,7 +17,11 @@ def get_name(feed_item, patient)
 	elsif feed_item.item_type == 'Flag'
 		patient.flag_type ? patient.flag_type.name : patient.source[0..25]
 	elsif ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include? feed_item.item_type
-		"#{feed_item.item_type} of project "+ Project.find_by_id(patient.project_id).title
+		if this_project = Project.find_by_id(patient.project_id)
+			"#{feed_item.item_type} of project "+ this_project.title
+		else 
+			"#{feed_item.item_type}"
+		end
 	elsif patient.name
 		patient.name
 	else 

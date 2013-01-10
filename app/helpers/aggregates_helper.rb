@@ -1,6 +1,7 @@
 module AggregatesHelper	
 
-		
+	VALUE_DELIMITER = "*" 
+	
 	VALID_FIELDS = [
 			{external: "donor", name: "Donor", internal: "donors.iso3", group: "donors.iso3", sorter: "donors.iso3 asc" },
 			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)", sorter: "status asc"},

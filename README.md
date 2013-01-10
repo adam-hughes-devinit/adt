@@ -185,7 +185,7 @@ Besides using `get`, a user may also filter by attribute value:
 
 _These filter names are somewhat subject to change (according to our needs). I should update this again before the launch._
 
-The filters may be a single value (eg., `&recipient_iso=KE`) or many values (eg., `&recipient_iso2=KE|TZ|ZW`) (joined with "|"). Also, the filters may be combined (eg., `&recipient_iso=KE&flow_clas=ODA-like`).
+The filters may be a single value (eg., `&recipient_iso=KE`) or many values (eg., `&recipient_iso2=KE*TZ*ZW`) (joined with "*"). Also, the filters may be combined (eg., `&recipient_iso=KE&flow_clas=ODA-like`).
 ##### Handle projects with multiple recipients
 Some projects have more than one recipient. Sometimes, amounts may be divided among those recipients -- but sometimes they cannot. Users may select how to handle this problem with the `multiple_recipients` argument. A user may pass one of five values:
 

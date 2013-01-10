@@ -75,7 +75,7 @@ describe "Project pages" do
 			it {should have_content flag.comment}
 		end
 		
-    it {should have_content("Add a comment")}
+    it {should have_content("Leave a comment")}
     describe "leave a comment" do
       before do
         fill_in "Name", with: comment.name
@@ -119,7 +119,7 @@ describe "Project pages" do
         fill_in "Capacity", with: "5 doctors"
         # fill_in "Start actual", with: 10.days.ago
         select "Suspicious", from: "Verified"
-        select "OOF-Like", from: "Oda like"
+        # select "OOF-Like", from: "Oda like"
         fill_in "Value", with: 5000
         select Currency.first.name, from: "Currency"
         select country.name, from: "Recipient country"

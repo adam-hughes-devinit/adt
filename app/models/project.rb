@@ -124,10 +124,13 @@ class Project < ActiveRecord::Base
 			if flow_class
 				if best_answer = flow_class.oda_like_master
 					answer_type = "Arbitrated"
+					 [best_answer, answer_type]
 				elsif best_answer = flow_class.oda_like_2 || flow_class.oda_like_1
 					answer_type = "Single-coded"
+					 [best_answer, answer_type]
+				else 
+					nil
 				end
-			 [best_answer, answer_type]
 			else
 				nil
 			end
@@ -453,7 +456,8 @@ class Project < ActiveRecord::Base
     "\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\","+ 
     "\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].any? ? project_agencies[:Donor].count : ''}\"," +
     "\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].any? ? project_agencies[:Recipient].count : ''}\"," +
-    "\"#{verified_name}\",\"#{verified ? verified.code : '' }\",\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\","+ 
+    "\"#{verified_name}\",\"#{verified ? verified.code : '' }\"," + 
+    "\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\","+ 
     "\"#{active_string}\",\"#{active ? 1 : 2}\",\"#{project_sources[:factiva].join("; ")}\"," +
     "\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\","+ 
     "\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\"," +

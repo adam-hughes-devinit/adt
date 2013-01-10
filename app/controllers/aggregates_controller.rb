@@ -24,7 +24,7 @@ include AggregatesHelper
 
 		if @get && @get.include?("year") && @get.include?("recipient_iso3")
 			if params[:wdi].class== String
-				@wdi = params[:wdi].split(",")
+				@wdi = params[:wdi].split(VALUE_DELIMITER)
 			elsif params[:wdi].class== Array
 				@wdi = params[:wdi]
 			else 
@@ -47,11 +47,11 @@ include AggregatesHelper
 	    @filters = ["active = 't' "]
 
 			# defined in AggregateHelper
-	    WHERE_FILTERS.each do |wf|
+	  WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values
 		    	if param_values.class == String 
-		    		param_values = param_values.split('|')
+		    		param_values = param_values.split(VALUE_DELIMITER)
 		    	else 
 		    		param_values = param_values
 		    	end

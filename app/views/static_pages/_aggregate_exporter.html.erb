@@ -106,7 +106,7 @@ function build_api_params () {
 		filter_values = []
 		
 		$('.where_filter').each(function(i,f) { if (f.value) {
-						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("|")})						
+						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("*")})						
 						}}) 
 		
 		console.log(filter_values)
@@ -114,7 +114,7 @@ function build_api_params () {
 		if (filter_values.length>0)
 			{ filter_values.forEach(function(v) { console.log(v); param_values.push(v) }) }
 
-	param_string=decodeURIComponent($.param(param_values)).replace("++", "+%2B") // for CA +SOE which is turned into CA++SOE without this.
+	param_string=decodeURIComponent($.param(param_values)).replace(/\+\+/g, "+%2B") // for CA +SOE which is turned into CA++SOE without this.
 	return  param_string
 }
 
