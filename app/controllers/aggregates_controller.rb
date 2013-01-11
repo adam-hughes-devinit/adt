@@ -2,7 +2,8 @@ class AggregatesController < ApplicationController
 include AggregatesHelper
 	skip_before_filter :signed_in_user  
 	def projects
-
+		require 'open-uri'
+		
 		@recipient_field_names = ["name", "iso2", "iso3"]
 		# Use "XR" for Africa, regional's ISO2
 		def	africa_regional_iso2(fn)
@@ -50,12 +51,17 @@ include AggregatesHelper
 	  WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values
+		    	p param_values.inspect 
+		    	p ""
+		    	
 		    	if param_values.class == String 
 		    		param_values = param_values.split(VALUE_DELIMITER)
 		    	else 
-		    		param_values = param_values
+		    		param_values = param_values.map { |v| URI::decode( v.gsub(/\+/, ' ')) }
 		    	end
-
+					
+					p param_values.inspect
+					
 		    	if valid_values = (wf[:options] & param_values)
 		    		@filters.push "#{wf[:internal_filter]} in ('#{valid_values.join("','")}')"
 		    	end
