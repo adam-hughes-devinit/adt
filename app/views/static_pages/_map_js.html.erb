@@ -154,13 +154,18 @@ var ocean_outline = map.append("svg:path")
       .attr('transform', 'scale('+(h/800)+') translate(-130, -'+((1.255/8)*h)+')')
       .attr('filter', "url(#blur)")
 
+other_features.forEach(function(f) {
+	f.properties.id = "non_african"
+	collection.features.unshift(f)
+	}
+	)
 
 var countries =  d3.select("#states")
     .selectAll(".country")
       .data(collection.features)
   .enter().append("svg:path")
-      .attr("class", "fuzz country")
-      .attr("id", function(d, i) {return d.id})
+      .attr("class", function (d) { return d.properties.id == "non_african" ? "non_african" : "fuzz country"})
+      .attr("id", function(d, i) {return d.properties.id == "non_african" ? "" : d.properties.id})
       .attr("name", function(d) {return d.properties.name})
       .attr("d", path)
       .attr("stroke-width", 1)
@@ -188,7 +193,7 @@ var frame = vis.append('svg:g')
     .attr('stroke-width', 8)
 
 map_data = d3.nest()
-  .key(function(d) {return d.id})
+  .key(function(d) {return d.properties.id})
   .rollup(function(d) {return {"value" : null, "value_current": null}})
   .entries(collection.features)
 
@@ -238,7 +243,8 @@ function make_map_with_params(params) {
  // Then iterate over map_data again to color with your new scale.
  // (How to only iterate once? Maybe you could update the colorscale from "json" directly
     map_data.forEach(function(d,i) {
-      country = d3.select("#states #"+d.key)
+    	console.log(d.key)
+      country = d3.select("#"+d.key)
       color = d.values.value == null ? '#777' : c(d.values.value)
       country.transition()
           .duration(item_duration)
@@ -932,7 +938,7 @@ function highlightnull() {
 function unhighlight() {
   d3.select(this)
   .transition()
-    .attr("stroke",function() {return $(this).attr("name") ? "#333" : ""})
+    .attr("stroke",function() {return ($(this).attr("name") && $(this).attr("id")!="non_african") ? "#333" : ""})
     $('div#tooltip').hide()
     $('p#tooltiptext').text("")
 }

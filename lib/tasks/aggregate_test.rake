@@ -129,7 +129,7 @@ namespace :aggregator do
 					post_data.each { |d| post_sum += d["usd_2009"].to_f}
 			
 					if post_sum.round == real_sum.round && get_sum.round == real_sum.round
-						p "        PASS #{test_set.join(",")[0..25]... }"
+						p "        PASS #{test_set.join(",")[0..25]}... "
 						@passes+=1
 					else
 						p "        FAIL #{test_set.join "," } with #{get_set.join","} :: GET : #{get_sum.round} | POST : #{post_sum.round} | REAL : #{real_sum.round}"
