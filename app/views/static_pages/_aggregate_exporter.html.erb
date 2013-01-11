@@ -106,7 +106,7 @@ function build_api_params () {
 		filter_values = []
 		
 		$('.where_filter').each(function(i,f) { if (f.value) {
-						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("*")})						
+						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("<%= @value_delimiter %>")})						
 						}}) 
 		
 		console.log(filter_values)

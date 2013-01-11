@@ -156,7 +156,6 @@ var ocean_outline = map.append("svg:path")
 
 other_features.forEach(function(f) {
 	f.properties.id = "non_african"
-	collection.features.unshift(f)
 	}
 	)
 
@@ -604,7 +603,7 @@ function try_drawing_overlay() {
     worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.TOTL.CD")
     worldbank_usaoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.USAL.CD")
    
-    cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like,OOF-like,Vague%20(ODF)&recipient_iso2='+activeIso
+    cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like<%= @value_delimiter %>OOF-like<%= @value_delimiter %>Vague%20(ODF)&recipient_iso2='+activeIso
     // Right now, these ajax called are made in sequence -- can they be made in parallel?
     d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
       d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_data) {
@@ -737,13 +736,6 @@ function plot_top_projects(projects) {
         .text(function(d) {return d.title})
 }
 
-
-
-<% if Rails.env.development? %>  
-var testing_oda_array=[]
-var testing_gni_data=[]
-<% end %>
-
 // Make the line graph 
 function create_line_graph(gni_data, oda_array){
 // oda_array objects are {name: "Name", data: (unprocessed data...), source: "Some URL", color: "display CSS color"}
@@ -752,12 +744,6 @@ function create_line_graph(gni_data, oda_array){
     .transition()
       .attr('height', line_chart_height + line_text_margin+25)
 
-
-<% if Rails.env.development? %>
-console.log("gni_data and oda_array:")
- console.log(gni_data)
- console.log(oda_array)
-<% end %>
 
  // prep the data: For each data object, iterate over years, grabbing relevant data and pushing them to the objects graph_data array
  		// make the graph data arrays

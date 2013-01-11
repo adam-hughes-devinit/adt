@@ -7,7 +7,7 @@ include AggregatesHelper
   	custom_search # to initialize facets, etc
   	@total_projects = Project.where("active = ?", true ).count
   	@feed = Version.last(20)
-  	
+  	@value_delimiter = VALUE_DELIMITER
   	@aggregator_locals = make_aggregator_locals
   end
 
