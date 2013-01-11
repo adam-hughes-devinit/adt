@@ -242,7 +242,6 @@ function make_map_with_params(params) {
  // Then iterate over map_data again to color with your new scale.
  // (How to only iterate once? Maybe you could update the colorscale from "json" directly
     map_data.forEach(function(d,i) {
-    	console.log(d.key)
       country = d3.select("#"+d.key)
       color = d.values.value == null ? '#777' : c(d.values.value)
       country.transition()
@@ -714,8 +713,7 @@ function create_top_projects_box(projects, target, height){
 
 function plot_top_projects(projects) {
   sectors = sectorSums.map(function(s) {return s.key})
-  console.log("projects for plotting:")
-  console.log(projects)
+
 
   function point_stack_height(project) {
     // UH oh, what if there are 2 in the same year?
@@ -776,12 +774,7 @@ function create_line_graph(gni_data, oda_array){
      	}
      	})
 
-    <% if Rails.env.development? %>
-    console.log("oda_array after processing:")
-    console.log(oda_array)
-    testing_oda_array=oda_array
-    testing_gni_data=gni_data
-    <% end %>
+
  
  annual_maximum_finance_over_gni = d3.max(oda_array.map(function(a) {return d3.max(a.graph_data, function(v) {return v[1]})}))
  line_percent_scale = d3.scale.linear().domain([0,(annual_maximum_finance_over_gni + (annual_maximum_finance_over_gni/10))]).range([line_chart_height, 0])
