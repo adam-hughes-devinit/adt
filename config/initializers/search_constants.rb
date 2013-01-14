@@ -84,7 +84,8 @@
       {sym: :is_cofinanced_string, name: "Cofinance Status"},
       {sym: :recipient_iso2, name: ""},
       {sym: :number_of_recipients, name: "Number of Recipients"},
-      {sym: :year, name: "Commitment Year"}
+      {sym: :year, name: "Commitment Year"},
+      {sym: :intent_name, name: "Intent"}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     

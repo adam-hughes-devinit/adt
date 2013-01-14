@@ -75,14 +75,14 @@ class CodesController < ApplicationController
 
   def destroy
     @object = @class_name.constantize.find(params[:id])
+    remove_object_from_projects_and_reindex_and_recache   
     @object.destroy
 
     respond_to do |format|
       format.html { redirect_to "/#{view_context.pluralize(2, @class_type)[2..15].downcase.gsub(/\s/, '_')}" }
       format.json { head :no_content }
     end
-    
-    reindex_and_recache
+
   end
 
   private
@@ -101,5 +101,17 @@ class CodesController < ApplicationController
 				@object.projects.first.cache!
 	  	end
   	end
+  	
+  	def remove_object_from_projects_and_reindex_and_recache
+  	  if @object.respond_to? 'projects'
+  	  	@object.projects.each do |p|
+			  	if p.respond_to? "{@class_name.underscore.downcase}_id"
+			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
+					end
+	  		end
+	  		@object.projects.first.cache!
+	  		Sunspot.index(@object.projects)
+	  	end
+	  end
 
 end

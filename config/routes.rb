@@ -1,7 +1,7 @@
 Adt::Application.routes.draw do
   # codes
   resources :roles, :countries, :sectors, :statuses, 
-  :verifieds, :oda_likes, :flow_types, :origins, # :tieds, 
+  :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, :flag_types
 
   # limited access
@@ -40,5 +40,9 @@ Adt::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
 
   match '/ajax', to: 'static_pages#ajax'
+  
+  # Caches -- for sharing the whole dataset
+  match '/caches', to: 'static_pages#caches', defaults: { format: 'json' }
+  
 
 end

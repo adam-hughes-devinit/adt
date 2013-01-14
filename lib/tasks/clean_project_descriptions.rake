@@ -37,4 +37,22 @@ namespace :projects do
 	end
 end
 
+namespace :projects do
+	desc "Remove PPIAF"
+	task :remove_ppiaf => :environment do
+
+	c = 0
+	ids = []
+	
+	Project.where("description like '%PPIAF%' or title like '%PPIAF%'").each do |p|
+		p.update_attribute(:description, p.description.gsub(/PPIAF/, ''))
+		p.update_attribute(:title, p.title.gsub(/[\(]PPIAF(\sID\s\d+|\s-\s)[\)]/, ''))
+		ids.push p.id
+		c+=1
+	end
+	
+	p "#{c} PPIAFs removed."
+	p ids
+	end
+end
 

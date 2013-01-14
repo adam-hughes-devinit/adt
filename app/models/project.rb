@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
   :accessories, :iteration,
   # hidden fields
   :verified_id, :sector_id, :tied_id, :flow_type_id, :oda_like_id, :status_id,
-  :donor_id, :owner_id
+  :donor_id, :owner_id, :intent_id
   
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
@@ -64,6 +64,11 @@ class Project < ActiveRecord::Base
   def tied_name
     tied.present? ? tied.name : 'Unset'
   end
+  
+  belongs_to :intent
+  def intent_name
+  	intent.present? ? intent.name : 'Unset'
+  end
 
   belongs_to :flow_type
   def flow_type_name
@@ -84,8 +89,6 @@ class Project < ActiveRecord::Base
 	def old_oda_like
 		if oda_like_id
 			OdaLike.find(oda_like_id)
-		else
-			nil
 		end
 	end
  
@@ -358,6 +361,7 @@ class Project < ActiveRecord::Base
     string :flow_class_arbitrated # These three are for workflow
     string :flow_class_1
     string :flow_class_2
+    string :intent_name
     string :verified_name
     string :tied_name
     string :status_name
@@ -377,15 +381,7 @@ class Project < ActiveRecord::Base
     string :year_uncertain_string
     string :is_cofinanced_string
     string :crs_sector
-    #string :recipient_iso2 do
-     # if geopoliticals.count > 1
-      #  'XR' 
-      #elsif geopoliticals.count == 1 && geopoliticals[0].recipient
-      #  geopoliticals[0].recipient.iso2 
-      #else
-      #  'Unset'
-      #end
-    #end
+
     string :recipient_iso2, multiple: true do
     	geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
     end
@@ -458,6 +454,7 @@ class Project < ActiveRecord::Base
     "\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].any? ? project_agencies[:Recipient].count : ''}\"," +
     "\"#{verified_name}\",\"#{verified ? verified.code : '' }\"," + 
     "\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\","+ 
+    "\"#{intent_name}\",\"#{intent ? intent.code : '' }\","+
     "\"#{active_string}\",\"#{active ? 1 : 2}\",\"#{project_sources[:factiva].join("; ")}\"," +
     "\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\","+ 
     "\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\"," +

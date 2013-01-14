@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130108190520) do
+ActiveRecord::Schema.define(:version => 20130114180040) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -118,6 +118,14 @@ ActiveRecord::Schema.define(:version => 20130108190520) do
 
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
 
+  create_table "intents", :force => true do |t|
+    t.string   "name"
+    t.integer  "code"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "oda_likes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -190,6 +198,7 @@ ActiveRecord::Schema.define(:version => 20130108190520) do
     t.boolean  "line_of_credit", :default => false
     t.boolean  "is_cofinanced",  :default => false
     t.integer  "iteration",      :default => 0
+    t.integer  "intent_id"
   end
 
   add_index "projects", ["id"], :name => "index_projects_on_id"

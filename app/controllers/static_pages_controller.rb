@@ -27,6 +27,12 @@ include AggregatesHelper
   	render text: @data
   end
   
+  def caches
+  	page = params[:page] || 1 
+  	text = Cache.where("id != 0").limit(50).offset(((page.to_i-1)*50)).map { |c| c.text }
+  	render json: text
+  end
+  
   private
   
   	def make_aggregator_locals()
