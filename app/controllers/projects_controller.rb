@@ -55,6 +55,7 @@ include SearchHelper
     @flags = @project.all_flags
     @flag = Flag.new
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
+    @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -72,6 +73,7 @@ include SearchHelper
     @project.contacts.build
     @project.sources.build
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
+    @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -83,6 +85,8 @@ include SearchHelper
   def edit
     @project = Project.find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
+    @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
+
   end
 
   # POST /Projects
