@@ -22,7 +22,7 @@ def get_name(feed_item, patient)
 		else 
 			"#{feed_item.item_type}"
 		end
-	elsif patient.name
+	elsif patient.respond_to?("name")
 		patient.name
 	else 
 		"(unnamed)"

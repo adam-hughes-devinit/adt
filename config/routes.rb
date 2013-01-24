@@ -2,7 +2,7 @@ Adt::Application.routes.draw do
   # codes
   resources :roles, :countries, :sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
-  :source_types, :document_types, :organization_types, :currencies, :flag_types
+  :source_types, :document_types, :organization_types, :currencies, :flag_types, :loan_types
 
   # limited access
   # get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
@@ -24,6 +24,7 @@ Adt::Application.routes.draw do
   post '/projects/:project_id/flow_class', to: 'flow_classes#update'
   get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'
   post '/projects/:project_id/flow_class/edit', to: 'flow_classes#update'
+
   
   
   # Versions -- revert action, and index for all recent activity

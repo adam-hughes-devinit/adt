@@ -14,6 +14,7 @@ class Project < ActiveRecord::Base
   :contacts, :contacts_attributes,
   :sources, :sources_attributes,
   :flow_class_attributes,
+  :loan_detail, :loan_detail_attributes,
   # for version control
   :accessories, :iteration,
   # hidden fields
@@ -171,6 +172,8 @@ class Project < ActiveRecord::Base
   has_one :flow_class
   accepts_nested_attributes_for :flow_class
   
+  has_one :loan_detail
+  accepts_nested_attributes_for :loan_detail
   #
   #  End restructuring
   #
@@ -317,7 +320,7 @@ class Project < ActiveRecord::Base
             ["#{g.subnational}",
              "#{g.recipient ? g.recipient.name : ''}",
              "#{g.recipient ? g.recipient.iso3 : '' }"]
-        end
+          end
         end
     end
 

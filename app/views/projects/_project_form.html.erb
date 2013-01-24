@@ -44,9 +44,20 @@
 	<%= f.association :status, wrapper_html: {class: " span5"} %>
 	<%= f.association :intent, wrapper_html: {class: " span4"} %>
 	
-	<h2> Flow Class: </h2>
+	
 </div>
+
 <div class='row'>
+	<h2> Loan Detail: </h2>
+	<%= f.simple_fields_for :loan_detail do |loan_detail_form| %>
+    <%= loan_detail_form.association :loan_type %>
+    <%= loan_detail_form.input :maturity %>
+	<% end %>
+
+</div>
+
+<div class='row'>
+	<h2> Flow Class: </h2>
 	<%= f.simple_fields_for :flow_class do |flow_class_form| %>  
 			<% # Hard-coding this is a bad idea
 				%>
@@ -55,8 +66,6 @@
 			<%= flow_class_form.association :oda_like_master %>
 			    <span style="color:#999">Will be autoarbitrated on Save if there is no Master and both flow_classes match</span>
 	<% end %>
-
-	
 
 </div>
 <div class='row project-accessory-fields'>

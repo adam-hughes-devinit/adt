@@ -44,7 +44,7 @@
 			<!-- TIED has been removed. !-->
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCommercial", heading: "Commercial"} %>			
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "LineOfCredit", heading: "Line of Credit"} %>			
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>				
+			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>
 			<% if Rails.env.development? %>
 				<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "OldOdaLike", heading: "Old Flow Class (not shown on production)"} %>
 			<% end %>
