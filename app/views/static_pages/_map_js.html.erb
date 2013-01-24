@@ -656,37 +656,19 @@ function try_drawing_overlay() {
   c_projects = d3.scale.linear().domain([0, ((top_projects_number-1)/2), top_projects_number-1]).range(['#2A5C0B', '#55760f','#808f12'])
 
   $.post(top_projects_path, top_projects_params, function(top_projects_data ){
-  	console.log(top_projects_data )
+
   	top_projects_data 
     plot_top_projects(top_projects_data)
     create_top_projects_box(top_projects_data, "top_projects_body", top_projects_height)
 
   }, "json")
 
-<% if Rails.env.development? %> 
- // For development
- console.log(activeIso +", "+ activeName)
- console.log("activeCountryData:")
- console.log(activeCountryData)
- console.log("sectorSums:")
- console.log(sectorSums)
- console.log("yearSectorStack:")
- console.log(yearSectorStack)
- console.log("percent_of_total")
- console.log(percent_of_total)
- console.log("annual_maximum")
- console.log(annual_maximum)
- console.log("pie_data")
- console.log(pie_data)
-<% end %>
+
 
 }
 //Make the top projects list
 function create_top_projects_box(projects, target, height){
-  <% if Rails.env.development? %>
-  console.log("projects:")
-  console.log(projects)
-  <% end %>
+
 
   body_html = "<div style='text-align:left;font-size:"+medium_font_size+";'><p><b>Top projects in "+activeName+":</b></p><ul>"
   projects.forEach(function(p, i) {

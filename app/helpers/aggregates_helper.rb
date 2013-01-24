@@ -18,9 +18,9 @@ module AggregatesHelper
 	
 	WHERE_FILTERS = [
 	    	{sym: :recipient_iso2, name: "Recipient ISO2", options: Country.all.map{|c| c.iso2} , internal_filter: "recipient_iso2"},
-	    	{sym: :recipient_name, name: "Recipient Name", options: Country.all.map{|c| c.name} , internal_filter: "recipient_name"},
+	    	{sym: :recipient_name, name: "Recipient Name", options: Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map{|c| c.name} , internal_filter: "recipient_name"},
 	    	{sym: :sector_name, name: "Sector Name", options:Sector.all.map{|c| c.name} , internal_filter: "sectors.name"},
-	    	{sym: :intent_name, name: "Intent Name", options:Intent.all.map{|c| c.name} , internal_filter: "intents.name"},
+	    	{sym: :intent_name, name: "Intent", options:Intent.all.map{|c| c.name} , internal_filter: "intents.name"},
 	    	{sym: :verified, name: "Verified Status", options: Verified.all.map{|c| c.name} , internal_filter: "verifieds.name"},
 	    	{sym: :flow_type, name: "Flow Type", options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
 	    	{sym: :flow_class, name: "Flow Class", options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
@@ -85,5 +85,20 @@ module AggregatesHelper
 									"INNER JOIN countries recipients on geo.recipient_id=recipients.id",
 						amounts: "round(cast(sum(sum_usd_defl) as numeric), 2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
 						}
+			]
+			
+			WDI = [
+				{ code: "DT.ODA.ALLD.CD", 
+					name: "Net official development assistance and official aid received (current US$)", 
+					note: "Official Aid (USD-current)"
+				},
+				{ code: "DT.ODA.ODAT.PC.ZS",
+					name: "Net ODA received per capita (current US$)",
+					note: "ODA per capita (USD-current)"
+				},
+				{ code: "DT.ODA.ODAT.GN.ZS",
+					name: "Net ODA received (% of GNI)",
+					note: "ODA/GNI"
+				}
 			]
 end

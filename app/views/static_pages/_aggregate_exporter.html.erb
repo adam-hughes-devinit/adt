@@ -10,7 +10,7 @@
       <div class="accordion-inner">
         		<%= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]) , multiple: true, class: "aggregate_input span6", id: "get_input"  %>
 		<br><br>
-		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span
+		<span style="color:#666">These fields are also the units of aggregation. Use Shift or Control to select multiple options</span>
       </div>
     </div>
   </div>  
@@ -27,7 +27,6 @@
       		<button onclick="select_scope(this.id)" id='official_finance'>Official Finance</button>
       		<button onclick="select_scope(this.id)" id='unofficial_finance'>Unofficial Finance</button>
       		<button onclick="select_scope(this.id)" id='military'>Military</button>
-      		
       		<br><br>
       		<button onclick="select_scope(this.id)" id='none'>Clear All</button>
       	</div>
@@ -54,6 +53,22 @@
       </div>
     </div>
   </div>
+  <% if current_user_is_aiddata %>
+	<div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+        4) Merge an indicator from the World Bank WDIs
+      </a>
+    </div>
+    <div id="collapseFour" class="accordion-body collapse">
+      <div class="accordion-inner">
+				<%= select_tag "wdi", options_for_select(wdi) , multiple: false, include_blank: true, class: "aggregate_input span6", id: "wdi_input", onchange: ""   %>
+				<br><br>
+				<span style="color:#666">You must select "Recipient ISO3" and "Year" in section 1 to merge in a WDI. It may take a few minutes to merge in data from the World Bank API.</span>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>
 
  	<hr style="width:75%">
@@ -83,7 +98,7 @@
 		<hr style="width:75%">
 </div>
 
-</div>
+
 <script>
 var handler_names = [<%= duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe %> ]  
 	
@@ -109,11 +124,19 @@ function build_api_params () {
 						filter_values.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val().join("<%= @value_delimiter %>")})						
 						}}) 
 		
-		console.log(filter_values)
 		
 		if (filter_values.length>0)
-			{ filter_values.forEach(function(v) { console.log(v); param_values.push(v) }) }
-
+			{ filter_values.forEach(function(v) {param_values.push(v) }) }
+		
+		if ($('#wdi_input').val())
+			{ 
+				wdi_input = $('#wdi_input').val()
+				if (wdi_input.constructor.name == "String")
+					{ param_values.push( { name:"wdi", value : wdi_input }) }
+				else if (wdi_input.constructor.name == "Array")
+				 {param_values.push( { name:"wdi", value : wdi_input.join("<%= @value_delimiter %>") }) }
+			}
+			
 	param_string=decodeURIComponent($.param(param_values)).replace(/\+\+/g, "+%2B") // for CA +SOE which is turned into CA++SOE without this.
 	return  param_string
 }
@@ -151,7 +174,7 @@ function load_data_preview() {
 	
 function select_scope(scope) {
 
-if (scope=='official_finance') {
+if (scope=='official_finance') {L
 	$('#flow_class').val(["OOF-like", "ODA-like", "Vague (ODF)"])
 	$('#verified').val("Checked")
 	$("#status").val(["Pipeline/identification", "Implementation", "Completion"])
@@ -169,9 +192,10 @@ else if (scope=='none') {
 	$('#verified').val('')
 	$('#status').val('')
 	$('#recipient_name').val('')
-	$('#sector').val('')
+	$('#sector_name').val('')
 	$('#flow_type').val('')
 	$('#year').val('')
+	$('#intent_name').val('')
 	}
 	
 	update_previews()
@@ -190,3 +214,4 @@ $(function() {
 	
 })
 </script>
+

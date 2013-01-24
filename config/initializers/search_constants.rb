@@ -5,7 +5,7 @@
   #		- ODA-like, OOF-like, Vague (ODF)
   #		- NOT Cancelled or Suspended
 						{sym: :official_finance, 
-						 name: "Official Finance (CDF)",
+						 name: "Official Finance",
 						 with_and: {oda_like_name: ["OOF-like", "ODA-like", "Vague (ODF)"],
 												 active_string: "Active",
 												 verified_name: "Checked"},

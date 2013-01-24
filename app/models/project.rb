@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   :contacts, :contacts_attributes,
   :sources, :sources_attributes,
   :flow_class_attributes,
-  :loan_detail, :loan_detail_attributes,
+  :loan_detail_attributes,
   # for version control
   :accessories, :iteration,
   # hidden fields
@@ -43,7 +43,9 @@ class Project < ActiveRecord::Base
 		 source: sources.each(&:attributes), 
 		 participating_organization: participating_organizations.each(&:attributes),
 		 contact: contacts.each(&:attributes),
-		 geopolitical: geopoliticals.each(&:attributes)
+		 geopolitical: geopoliticals.each(&:attributes),
+     flow_class: flow_class(&:attributes),
+     loan_detail: loan_detail(&:attributes)
 		 }.to_json
 	end
 	

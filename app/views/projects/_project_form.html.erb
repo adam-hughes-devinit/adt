@@ -50,10 +50,10 @@
 <div class='row'>
 	<h2> Loan Detail: </h2>
 	<%= f.simple_fields_for :loan_detail do |loan_detail_form| %>
-    <%= loan_detail_form.association :loan_type %>
-    <%= loan_detail_form.input :maturity %>
+	    <%= loan_detail_form.association :loan_type %>
+	    <%= loan_detail_form.input :maturity %>
+	    <p> This is a test </p>
 	<% end %>
-
 </div>
 
 <div class='row'>

@@ -50,18 +50,13 @@ include AggregatesHelper
 			# defined in AggregateHelper
 	  WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
-		    if param_values
-		    	p param_values.inspect 
-		    	p ""
-		    	
+		    if param_values		    	
 		    	if param_values.class == String 
 		    		param_values = param_values.split(VALUE_DELIMITER)
 		    	else 
 		    		param_values = param_values.map { |v| URI::decode( v.gsub(/\+/, ' ')) }
 		    	end
-					
-					p param_values.inspect
-					
+
 		    	if valid_values = (wf[:options] & param_values)
 		    		@filters.push "#{wf[:internal_filter]} in ('#{valid_values.join("','")}')"
 		    	end
@@ -115,27 +110,54 @@ include AggregatesHelper
 			@data = ActiveRecord::Base.connection.execute(sql)
 
 
-			if @wdi
-				@data = @data.map do |d|
-					if d["year"] && d["recipient_iso3"] && d["recipient_iso3"].length == 3
+			# HANDLING WDI
+			if @wdi  # && @data.last["year"] && @data.last["recipient_iso3"]
+				p "Trying"
+				active_recipients = @data.map {|d| d["recipient_iso3"] }
+				wdi_recipient_year_nest = {}
+				
+				active_recipients.each do |recipient_iso3|
+					if recipient_iso3.length == 3
+						wdi_recipient_year_nest[recipient_iso3]={} 
+				
+						("2000".."2012").each do |y|
+							wdi_recipient_year_nest[recipient_iso3][y] = {}
+						end
+				
 						@wdi.each do |wdi_code|
-							request_url = "http://api.worldbank.org/countries/#{d["recipient_iso3"]}/indicators/#{wdi_code}?format=json&date=#{d["year"]}"
+				
+							request_url = "http://api.worldbank.org/countries/#{recipient_iso3}/indicators/#{wdi_code}?per_page=50&format=json&date=2000:2012"
 							wdi_response_string = open(request_url){|io| io.read} 
 							response_feed = ActiveSupport::JSON.decode(wdi_response_string)
-							d[wdi_code] = response_feed[1][0]["value"] 
+							# go through for each year and drop it in "nest"
+							response_feed[1].each do |wdi_point|
+								# then drop it by _nest[recipient][year]
+								wdi_recipient_year_nest[recipient_iso3][wdi_point["date"]][wdi_point["indicator"]["id"]] = wdi_point["value"]
+							end
 						end
 					end
-					d
-				end	
-			else 
-				@wdi=[]
+				end
+				p wdi_recipient_year_nest.inspect
+				p @wdi.inspect
+				if wdi_recipient_year_nest
+					@data.each do |d|
+						if wdi_values = wdi_recipient_year_nest[d["recipient_iso3"]] 
+							if wdi_values_iso3_year = wdi_values[d["year"].to_s]
+								wdi_values_iso3_year.each_pair do |k,v|
+									d[k] = v
+								end
+							end
+						end
+					end
+				end
 			end
-			
+		
 				
 			
 			
-			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] + @wdi
-		  
+			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] + (@wdi || [])
+		  p @column_names
+		  p @data.sample(5).inspect
 		  respond_to do |format|
 		    # default: render json
 		    format.json { render json: @data.as_json(only: @column_names)}
