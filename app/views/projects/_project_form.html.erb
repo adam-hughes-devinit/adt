@@ -50,10 +50,13 @@
 <div class='row'>
 	<h2> Loan Detail: </h2>
 	<%= f.simple_fields_for :loan_detail do |loan_detail_form| %>
-    <%= loan_detail_form.association :loan_type %>
-    <%= loan_detail_form.input :maturity %>
+	    <%= loan_detail_form.association :loan_type,wrapper_html: {class: " span4"} %>
+	    <%= loan_detail_form.input :interest_rate,wrapper_html: {class: " span4"} %>
+	    <%= loan_detail_form.input :grace_period,wrapper_html: {class: " span4"} %>
+	    <%= loan_detail_form.input :maturity,wrapper_html: {class: " span4"} %>
+	    <%= loan_detail_form.input :grant_element,wrapper_html: {class: " span4"} %>
 	<% end %>
-
+ 	<span style='color:#999;padding:5px;' class='span3 btn'><a href='http://www.worldbank.org/ida/ida-grant-element-calculator.html' target='_blank'>Grant Element Calculator <i class='icon-share'></i> </a></span>
 </div>
 
 <div class='row'>

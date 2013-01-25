@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130124192320) do
+ActiveRecord::Schema.define(:version => 20130125135501) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(:version => 20130124192320) do
   create_table "loan_details", :force => true do |t|
     t.integer  "project_id"
     t.integer  "loan_type_id"
-    t.float    "instrest_rate"
+    t.float    "interest_rate"
     t.integer  "maturity"
     t.integer  "grace_period"
     t.float    "grant_element"
