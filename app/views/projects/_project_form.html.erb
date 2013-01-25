@@ -16,10 +16,10 @@
 </div>
 <div class='row'>
 	<h3>Dates:</h3>
-	<%= f.input :start_planned, include_blank: true, input_html: {value: ''}, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :start_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_planned, include_blank: true, input_html: {value: '' }, use_short_month: true, use_short_month: true, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, wrapper_html: {class: "project-date span6"} %>
+	<%= f.input :start_planned, include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :start_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :end_planned, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
+	<%= f.input :end_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span6"} %>
 </div>
 
 <div class='row'>
