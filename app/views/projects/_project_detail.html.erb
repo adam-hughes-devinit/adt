@@ -1,12 +1,16 @@
 <%
-	# Requires @project and locals:{ containter_tag: "string", class_name: "String", heading: "String for <b/>" }
+  # Requires @project and locals:{ containter_tag: "string", 
+  # class_name: "String", heading: "String for <b/>" }
+  # Optional local :units - with options :years, :percentage
 %>
 
-<<%= container_tag %> class='flaggable' flaggable_type='<%= class_name %>' flaggable_id=<%= @project.id %> >
+<<%= container_tag %> class='flaggable' flaggable_type='<%= class_name %>' 
+  flaggable_id=<%= @project.id %> >
+
 	<b>
 		<%= "#{heading}:" unless heading.blank?  %>
-		
 	</b> 
+
 		<% current_object = (@project.send(class_name.underscore) || nil) %>
 		
 		<% if current_object.blank? %>
@@ -15,6 +19,8 @@
 			<%= link_to(current_object[0].name, current_object[0]) %> (<%= current_object[1] %>)
 		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
 			<%= class_name== "YearUncertain" ? "<i>(Year Uncertain)</i>".html_safe : current_object %>
+		<% elsif current_object.class == Float %>
+      <%= current_object %>
 		<% elsif [Date, DateTime].include? current_object.class %>
 			<%= current_object.strftime("%d %B %Y") %>
 		<% elsif !current_object.nil? %>
@@ -22,7 +28,21 @@
 		<% else %>
 			<%=  @unset_data  %> 
 		<% end %>
-		
+
+    <!-- If units were passed along with the detail display them correctly -->
+    <% if defined? units %>
+      <% if units == :years %>
+        <!-- By default pluralize will return "3 years" just "years" -->
+        <!-- So split it up into an array an just take the "years" -->
+        <% plural_string = pluralize(current_object, "year") %>
+        <% plural_array = plural_string.split(/\W+/) %>
+        <%= plural_array[1] %>
+
+      <% elsif units == :percentage %>
+        <%= "%" %>
+      <% end %>
+    <% end %>
+
 	<% project_detail_flags(class_name).each do |flag| %>
 		<%= render(partial: 'flag_superscript', locals: { flag: flag}) %>
 	<% end %>

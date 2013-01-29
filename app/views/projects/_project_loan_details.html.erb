@@ -1,0 +1,13 @@
+<ul>
+  <b>Loan Type</b>
+  <% @project.loan_detail do |t| %>
+    <li class="project-loan_details project-li flaggable" flaggable_type='
+      loan_details' flaggable_id=<%= t.id %>>
+      <% if t.loan_type.nil? %>
+      <% end %>
+      <% t.flags.each do |flag| %>
+        <%= render partial: 'flag_superscript', locals: { flag: flag} %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

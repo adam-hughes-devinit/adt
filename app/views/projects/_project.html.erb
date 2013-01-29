@@ -56,17 +56,46 @@
 				<li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
 				<li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
 			</ul>
-			<span style="color:#999"><i> All three code rounds are only visible to AidData-affiliated users.</i></span>
+      <span style="color:#999"><i> All three code rounds are only visible to 
+          AidData-affiliated users.</i></span>
 		<% end %>
 	</div>
 	<div class="project-dates project-box span5">
 		<h3>Dates:</h3>
 		<ul>
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "StartPlanned", heading: "Start (Planned)"} %>
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "StartActual", heading: "Start (Actual)"} %>
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "EndPlanned", heading: "End (Planned)"} %>
-			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "EndActual", heading: "End (Actual)"} %>
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "StartPlanned", heading: "Start (Planned)"} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li", 
+        class_name: "StartActual", heading: "Start (Actual)"} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li", 
+        class_name: "EndPlanned", heading: "End (Planned)"} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li", 
+        class_name: "EndActual", heading: "End (Actual)"} %>
+
 		</ul>
+    <h3>Loan Details:</h3>
+    <ul>
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "LoanType", heading: "Loan Type"} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "InterestRate", heading: "Interest Rate",
+        units: :percentage } %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "Maturity", heading: "Maturity",
+        units: :years} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "GracePeriod", heading: "Grace Period", units: :years} %>
+
+      <%= render partial: 'project_detail', locals: {container_tag: "li",
+        class_name: "GrantElement", heading: "Grant Element",
+        units: :percentage } %>
+    </ul>
 	</div>
 </div>
 <div class='row'>

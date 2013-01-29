@@ -143,6 +143,9 @@ class Project < ActiveRecord::Base
 		end
   end
   
+  ############################################################
+  # Flow Class Methods
+  ############################################################
   def visible_flow_class
   	oda_like(true) # to return [best_answer, answer_type]
   end
@@ -170,12 +173,57 @@ class Project < ActiveRecord::Base
   		"None"
   	end
   end 
- 
+
   has_one :flow_class
   accepts_nested_attributes_for :flow_class
-  
+
+  ####################################################
+  # Loan Detail Methods
+  ####################################################
+ 
   has_one :loan_detail
   accepts_nested_attributes_for :loan_detail
+  
+  def loan_type
+    if loan_detail.nil?
+      "Unset"
+    else
+      loan_detail.loan_type
+    end
+  end
+
+  def interest_rate
+    if loan_detail.nil?
+      "Unset"
+    else
+      loan_detail.interest_rate
+    end
+  end
+
+  def maturity
+    if loan_detail.nil?
+      "Unset"
+    else
+      loan_detail.maturity
+    end
+  end
+
+  def grace_period
+    if loan_detail.nil?
+      "Unset"
+    else
+      loan_detail.grace_period
+    end
+  end
+
+  def grant_element
+    if loan_detail.nil?
+      "Unset"
+    else
+      loan_detail.grant_element
+    end
+  end
+
   #
   #  End restructuring
   #
@@ -386,10 +434,17 @@ class Project < ActiveRecord::Base
     string :year_uncertain_string
     string :is_cofinanced_string
     string :crs_sector
+    string :loan_type
+    string :interest_rate
+    string :maturity
+    string :grace_period
+    string  :grant_element
+    
 
     string :recipient_iso2, multiple: true do
     	geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
     end
+
   end
 
 	
@@ -470,7 +525,9 @@ class Project < ActiveRecord::Base
     "\"#{cached_recipients.map(&:oecd_name).join("; ")}\",\"#{cached_recipients.map(&:iso3).join("; ")}\"," +
     "\"#{cached_recipients.map(&:iso2).join("; ")}\",\"#{cached_recipients.map(&:un_code).join("; ")}\"," +
     "\"#{cached_recipients.map(&:imf_code).join("; ")}\"," +
-    "\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 2}\",\"#{debt_uncertain}\",\"#{line_of_credit}\",\"#{is_cofinanced}\""
+    "\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 2}\",\"#{debt_uncertain}\",\"#{line_of_credit}\",\"#{is_cofinanced}\"," +
+    "\"#{loan_type}\",\"#{interest_rate}\",\"#{maturity}\"," +
+    "\"#{grace_period}\",\"#{grant_element}\""
 	end
  
 
