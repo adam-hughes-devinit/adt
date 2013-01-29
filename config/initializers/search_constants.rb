@@ -85,12 +85,17 @@
       {sym: :recipient_iso2, name: ""},
       {sym: :number_of_recipients, name: "Number of Recipients"},
       {sym: :year, name: "Commitment Year"},
-      {sym: :intent_name, name: "Intent"}
+      {sym: :intent_name, name: "Intent"},
+      {sym: :loan_type, name: "Loan Type"},
+      {sym: :interest_rate, name: "Interest Rate"},
+      {sym: :maturity, name: "Maturity"},
+      {sym: :grace_period, name: "Grace Period"},
+      {sym: :grant_element, name: "Grant Element"},
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     
     WORKFLOW_FACETS = [
     	{sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
     	{sym: :flow_class_1, name: "Flow Class - 1"},
-    	{sym: :flow_class_2, name: "Flow Class - 2"}
+    	{sym: :flow_class_2, name: "Flow Class - 2"},
     ]
