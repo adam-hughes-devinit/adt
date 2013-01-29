@@ -44,7 +44,8 @@ include SearchHelper
 				'"recipient_oecd_name","recipient_iso3","recipient_iso2",'\
 				'"recipient_un_code","recipient_imf_code","is_commercial",'\
 				'"is_commercial","debt_uncertain","line_of_credit","is_cofinanced",'\
-				'"loan_type","interest_rate","maturity","grace_period","grant_element"'
+				'"loan_type","interest_rate","maturity","grace_period","grant_element"'+
+				"\n"
         send_data((@csv_header + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
         
         #    This was the old way of doing it -- creating the file in memory from projects dynamically
