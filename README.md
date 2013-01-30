@@ -274,7 +274,5 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 - `rake sunspot:solr:start` for the search engine.
 - `rake db:populate` to fill the db with sample
 - There are a few rake tasks that get the data up to speed:
-	- `rake projects:old_oda_like_to_flow_class` to transfer ODA-like to the new structure
-	- `rake projects:create_intents` to create intents
-	- `rake projects:create_loan_types` to create the loan type attributes
+  - `rake projects` runs various tasks on the project-related data
 	- `rake sectors:add_random_colors` to put color in the vis
