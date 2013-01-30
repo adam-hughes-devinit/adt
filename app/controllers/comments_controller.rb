@@ -3,7 +3,7 @@ skip_before_filter :signed_in_user, only: [:create]
 	def create
 		@comment = Comment.new(params[:comment])
 		if @comment.save!
-			AiddataAdminMailer.comment_notification(@comment).deliver if Date.new.year > 2012
+			AiddataAdminMailer.comment_notification(@comment).deliver
 			flash[:success] = "Comment added."
 			redirect_to :back
 		else

@@ -1,7 +1,8 @@
 require 'active_support/inflector'
 module ApplicationHelper
 
-	PROJECT_ACCESSORY_OBJECTS = ['Transaction', 'Geopolitical', 'Source', 'ParticipatingOrganization', 'Contact','LoanDetail']
+	PROJECT_ACCESSORY_OBJECTS = ['Transaction', 'Geopolitical', 'Source', 
+	  'ParticipatingOrganization', 'Contact','LoanDetail']
 	
 	def link_to_remove_fields(name, f)
 		f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)")

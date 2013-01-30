@@ -11,9 +11,4 @@ class Flag < ActiveRecord::Base
   def name
   	flag_type ? flag_type.name : source
   end
-  
-
-  	
-  
-  
 end
