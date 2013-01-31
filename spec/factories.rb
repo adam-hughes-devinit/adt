@@ -165,6 +165,3 @@ Factory.define :flag do |f|
 		f.comment 'I have something to say'
 		f.source 'www.cnn.com/facts'
 end
-	
-
-

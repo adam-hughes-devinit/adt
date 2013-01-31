@@ -2,8 +2,14 @@
 	<% @flags.each_with_index do |f, i| %>
 		<li class='flag-li'>
 			<span>
-				<a id="flag_<%= i+1 %>"style="color:<%= f.flag_type.color%>">[<%= i+1 %>]</a> 
-					<%= time_ago_in_words(f.updated_at) %> ago, <%= f.owner ? f.owner.name : "An anonymous user" %> flagged a <%= f.flaggable_type.downcase %>. <span style="color:<%=f.flag_type.color%>">(<%=f.flag_type.name%>)</span>
+        <a id="flag_<%= i+1 %>"
+          style="color:<%= f.flag_type.color%>">[<%= i+1 %>]
+        </a> 
+
+        <%= time_ago_in_words(f.updated_at) %> ago, 
+        <%= f.owner ? f.owner.name : "An anonymous user" %> flagged a 
+        <%= f.flaggable_type.downcase %>. <span style="color:
+        <%=f.flag_type.color%>">(<%=f.flag_type.name%>)</span>
 			</span>
 			<ul class='flag-detail-ul'>
 				<li class='flag-detail-li'><b>Source:</b> <%= f.source %> </li>
