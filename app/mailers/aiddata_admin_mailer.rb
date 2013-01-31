@@ -1,14 +1,22 @@
+include ApplicationHelper
+
 class AiddataAdminMailer < ActionMailer::Base
-  default from: "rmosolgo@aiddata.org"
+  default from: "adamparkerfrey@gmail.com"
+  default to: "adamparkerfrey@gmail.com"
   
   def comment_notification(comment)
   	@comment = comment
-  	@aiddata_admin_emails = User.where(owner_id: Organization.find_by_name('AidData').id, admin: true).map(&:email)
-  	mail to: @aiddata_admin_emails, subject: "New Comment on Project #{@comment.project.id}"
+  	mail subject: "New Comment on Project #{@comment.project.id}"
   end
 
-  def flag_notification()
+  def flag_notification(flag)
+    @flag = flag
+    if PROJECT_ACCESSORY_OBJECTS.include?(@flag.flaggable_type)
+      proj_id = (@flag.flaggable_type.constantize).find(@flag.flaggable_id).project.id
+    else
+      proj_id = @flag.flaggable_id
+    end
+    @flag = flag
+  	mail subject: "New Flag on Project #{proj_id}"
   end
-  	
-  
 end
