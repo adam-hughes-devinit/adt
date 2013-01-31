@@ -7,8 +7,15 @@
         </a> 
 
         <%= time_ago_in_words(f.updated_at) %> ago, 
-        <%= f.owner ? f.owner.name : "An anonymous user" %> flagged a 
-        <%= f.flaggable_type.downcase %>. <span style="color:
+        <%= f.owner ? f.owner.name : "An anonymous user" %> flagged
+        <%= if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(f.flaggable_type) 
+              f.flaggable_type.downcase.a_or_an 
+            else 
+              "#{f.flaggable_type.downcase.a_or_an} code"
+            end %>
+        . <span style="color:
+            
+              
         <%=f.flag_type.color%>">(<%=f.flag_type.name%>)</span>
 			</span>
 			<ul class='flag-detail-ul'>

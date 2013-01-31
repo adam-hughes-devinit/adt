@@ -1,4 +1,7 @@
-<a inactive_href="#flag_<%= flag.id %>" class='flag-reference' > 
+
+<a inactive_href="#flag_<%= flag.id %>" class='flag-reference' 
+  title="<%= flag.comment %>">
+
   <sup style="color:<%= flag.flag_type.color %>;">
     [<%= @flag_counter +=1 %>]
   </sup>
