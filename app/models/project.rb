@@ -3,7 +3,8 @@ class Project < ActiveRecord::Base
   :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
   :cache!, :cache_text, :cache_one!,
   :is_commercial, :media_id, 
-  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, :is_cofinanced,
+  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, 
+  :is_cofinanced,
   # belongs_to fields
   :status, :verified, :tied, :flow_type, :oda_like, :sector,
   #convoluted fields
