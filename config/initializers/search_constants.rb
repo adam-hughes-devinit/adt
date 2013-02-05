@@ -10,7 +10,7 @@
 												 active_string: "Active",
 												 verified_name: "Checked"},
 						 without: {status_name: ["Cancelled", "Suspended"]},
-						 #with_or: {none: nil}
+						 with_or: {none: nil}
 						},
 	# Unofficial Finance
 	#		- Active
@@ -21,8 +21,8 @@
 						 with_and: {oda_like_name: ["JV +Gov", "JV -Gov","CA +SOE", "CA -SOE", "FDI +Gov", "FDI -Gov", "NGO Aid", "Vague (Com)"],
 												 active_string: "Active",
 												 verified_name: "Checked"},
-						 without: {none: nil}
-						 #with_or: {none: nil}
+						 without: {none: nil},
+						 with_or: {none: nil}
 						},
 	# Military
 	#		 - Military
@@ -33,8 +33,8 @@
 						 with_and: {oda_like_name: ["Military"],
 												 active_string: "Active",
 												 verified_name: "Checked"},
-						 without: {none: nil}
-						 #with_or: {none: nil}
+						 without: {none: nil},
+						 with_or: {none: nil}
 						},
 	
 	# Cancelled
@@ -46,8 +46,8 @@
 						 with_and: {status_name: "Cancelled",
 												 active_string: "Active",
 												 verified_name: "Checked"},
-						 without: {none: nil}
-						 #with_or: {none: nil}
+						 without: {none: nil},
+						 with_or: {none: nil}
 						},
 	# Inactive and Suspicious
 	#		 - Suspicious OR Inactive

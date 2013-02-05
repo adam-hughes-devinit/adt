@@ -38,12 +38,23 @@ end %>
 	<thead>
 		<tr >
 			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{joiner}" %>
-			<th><%= link_to "ID", "#{current_url_with_joiner_without_ordering}#{order_by_params("id")}" %> </th>
-			<th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}#{order_by_params("donor_name")}"  %></th>
-			<th><%= link_to "Title","#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  %></th>
-			<th><%= link_to "Year","#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  %></th>
-			<th><%= link_to "Recipients","#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  %></th>
-			<th><%= link_to "Amount (USD-2009)","#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  %></th>
+      <th><%= link_to "ID", "#{current_url_with_joiner_without_ordering}
+        #{order_by_params("id")}" %> </th>
+
+      <th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}
+        #{order_by_params("donor_name")}"  %></th>
+
+      <th><%= link_to "Title","#{current_url_with_joiner_without_ordering}
+        #{order_by_params("title")}"  %></th>
+
+      <th><%= link_to "Year","#{current_url_with_joiner_without_ordering}
+        #{order_by_params("year")}"  %></th>
+
+      <th><%= link_to "Recipients","#{current_url_with_joiner_without_ordering}
+        #{order_by_params("recipient_condensed")}"  %></th>
+      
+      <th><%= link_to "Amount (USD-2009)","#{current_url_with_joiner_without_ordering}
+        #{order_by_params("usd_2009")}"  %></th>
 			<% if current_user %>
 				<th>Links</th>
 			<% end %>
