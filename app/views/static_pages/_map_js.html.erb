@@ -603,7 +603,7 @@ function try_drawing_overlay() {
     worldbank_dacoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.TOTL.CD")
     worldbank_usaoda_url = worldbank_root.replace(/#\{country_iso\}/, activeIso).replace(/#{indicator_code}/, "DC.DAC.USAL.CD")
    
-    cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like<%= @value_delimiter %>OOF-like<%= @value_delimiter %>Vague%20(ODF)&recipient_iso2='+activeIso
+    cdf_path = '/aggregates/projects?get=year&flow_class=ODA-like<%= @value_delimiter %>OOF-like<%= @value_delimiter %>Vague%20(Official%20Finance)&recipient_iso2='+activeIso
     // Right now, these ajax called are made in sequence -- can they be made in parallel?
     d3.json('/ajax?url='+ encodeURIComponent(worldbank_gni_url), function(gni_data) {
       d3.json('/ajax?url='+encodeURIComponent(worldbank_dacoda_url), function(dacoda_data) {
