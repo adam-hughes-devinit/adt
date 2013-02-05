@@ -452,6 +452,49 @@ class Project < ActiveRecord::Base
   end
 
 	
+	def scope
+	  scope_array = []
+
+    #check the SCOPE architecture in the search constant initializer
+	  SCOPES.each do |sco|
+	    catch :invalid_scope do
+        needs = sco[:with_and]
+        #in case nil
+        needs ||= []
+        needs.each do |need|
+          next unless self.respond_to?(need[0])
+          response = self.send(need[0])
+          unless response == need[1] || need[1].include?(response)
+            throw :invalid_scope
+          end
+        end
+
+        cants = sco[:without]
+        #in case nil
+        cants ||= []
+        cants.each do |cant|
+          next unless self.respond_to?(cant[0])
+          response = self.send(cant[0])
+          unless response == cant[1] || cant[1].include?(response)
+            throw :invalid_scope
+          end
+        end
+
+        ors = sco[:with_or]
+        ors ||= []
+        ors.each do |or_array|
+          next unless self.respond_to?(or_array[0])
+          response = self.send(or_array[0])
+          unless response == or_array[1] || or_array[1].include?(response)
+            throw :invalid_scope
+          end
+        end
+
+        scope_array << sco[:sym]
+      end
+    end
+    return scope_array
+  end
  
 
    def as_json(options={})

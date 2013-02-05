@@ -2,9 +2,6 @@ module SearchHelper
 	
 	# Constants in an initializer
 
-    
-    
-	    
 	def custom_search(options = {})
 	  options.reverse_merge! paginate: true
  		options.reverse_merge! default_to_official_finance: true
