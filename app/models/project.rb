@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   include ProjectCache
   include ProjectExporters
+  extend  ProjectExporterHeaders
 
   attr_accessible :title, :active, :capacity, :description, :year,
   :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,

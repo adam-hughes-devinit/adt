@@ -28,25 +28,9 @@ include SearchHelper
 ")				
 					full_or_partial="partial"
 				end
+				@csv_header = Project.csv_header
 
-				@csv_header = "\uFEFF" + '"project_id","donor","title","year",'\
-				'"year_uncertain","description","sector","sector_comment","crs_sector",'\
-				'"status","status_code","flow","' +  # "tied","tied_code", #removed
-				'"all recipients","sources","sources_count","funding_agency",'\
-				'"implementing_agency","donor_agency","donor_agency_count",'\
-				'"recipient_agencies","recipient_agencies_count","verified",'\
-				'"verified_code","flow_class","flow_class_code",'\
-				'"intent","intent_code",'\
-				'"active","active_code","factiva_sources","amount","currency",'\
-				'"deflators_used","exchange_rates_used","usd_defl","start_actual",'\
-				'"start_planned","end_actual","end_planned","recipient_count",'\
-				'"recipient_condensed","recipient_cow_code","recipient_oecd_code",'\
-				'"recipient_oecd_name","recipient_iso3","recipient_iso2",'\
-				'"recipient_un_code","recipient_imf_code","is_commercial",'\
-				'"is_commercial","debt_uncertain","line_of_credit","is_cofinanced",'\
-				'"loan_type","interest_rate","maturity","grace_period","grant_element"'+
-				"\n"
-        send_data((@csv_header + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
+        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
         
         #    This was the old way of doing it -- creating the file in memory from projects dynamically
         #@export_projects = Project.includes(:transactions, :geopoliticals, :contacts, :sources, :participating_organizations)
