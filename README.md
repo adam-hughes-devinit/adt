@@ -271,8 +271,15 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 
 # Deploying this rails app
 - all your normal stuff: bundle update, `rake db:migrate`
-- `rake sunspot:solr:start` for the search engine.
 - `rake db:populate` to fill the db with sample
 - There are a few rake tasks that get the data up to speed:
-  - `rake projects` runs various tasks on the project-related data
-	- `rake sectors:add_random_colors` to put color in the vis
+- `rake projects` runs various tasks on the project-related data
+
+- `rake sunspot:solr:start` for the search engine.
+
+- Create an file called app_config.yml in the config directory containing two lines:
+ 	smtp_username: YOUR-GMAIL-USERNAME
+ 	smtp_password: YOUR-GMAIL-PASSWORD
+   Don't worry, because app_config.yml is listed in the .gitignore file, your password won't get uploaded to Github
+
+
