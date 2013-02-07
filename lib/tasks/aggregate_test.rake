@@ -1,33 +1,41 @@
 namespace :aggregator do
-	desc "Test aggregator"
-	task :test => :environment do
 	
-		require 'open-uri'
-		require 'net/http'
-		
-		@passes = 0
-		@fails = 0
-		def get_aggregate_data(params_string)
-			aggregate_url="http://localhost:3000/aggregates/projects"
-			call_url = "#{aggregate_url}?#{params_string}"
-			JSON.parse(open(call_url){|f| f.read })
-		end
-		
-		def post_aggregate_data(params_hash)
-			aggregate_url= "http://localhost:3000/aggregates/projects"
-			res = Net::HTTP.post_form(URI(aggregate_url), params_hash)
-			JSON.parse(res.body)
-		end
-		
-		# Begin
-		p " Testing on localhost"
-		
+	require 'open-uri'
+	require 'net/http'
+	
+	@passes = 0
+	@fails = 0
+
+	def get_aggregate_data(params_string)
+		aggregate_url="http://localhost:3000/aggregates/projects"
+		call_url = "#{aggregate_url}?#{params_string}"
+		JSON.parse(open(call_url){|f| f.read })
+	end
+	
+	def post_aggregate_data(params_hash)
+		aggregate_url= "http://localhost:3000/aggregates/projects"
+		res = Net::HTTP.post_form(URI(aggregate_url), params_hash)
+		JSON.parse(res.body)
+	end
+
+	def display_results
+		p "------------------------------------------------------"
+		p "   passes: #{@passes}"
+		p "   fails: #{@fails}"
+	end
+
+	desc "Test aggregator"
+	task :test => [:test_donor, :test_codes, :test_years, :test_mergers]
+
+
+	desc "Test donor in aggregator"
+	task :test_donor => :environment do
 		# donor
 		p " Test get=donor"	
 		donor_data = get_aggregate_data "get=donor"
 
 		donor_sum = 0
-		donor_data.map{|d| donor_sum += d["usd_2009"]}
+		donor_data.map{|d| donor_sum += d["usd_2009"].to_f}
 
 		real_donor_sum = 0
 		Country.all.each{|c| c.projects_as_donor.each {|p| real_donor_sum += p.usd_2009.to_f if p.active }}
@@ -40,6 +48,11 @@ namespace :aggregator do
 			@fails +=1
 		end
 
+		display_results
+	end
+	
+	desc "Test codes in aggregator"
+	task :test_codes => :environment do
 		# function
 		def test_code(code_class, get_call, filter_name=get_call)
 			p "Test #{get_call}"
@@ -143,7 +156,11 @@ namespace :aggregator do
 		test_code(Sector, "sector_name")
 		test_code(OdaLike, "flow_class")
 		test_code(Status, "status")	
-		
+		display_results
+	end
+	
+	desc "Test years in aggregator"
+	task :test_years => :environment do
 		# Test years
 		p "Test years"
 		years = (2000..2010).to_a
@@ -191,15 +208,37 @@ namespace :aggregator do
 				@fails +=1
 			end
 		end
-		
+		display_results
+	end
+	
+	desc "Test mergers in aggregator"
+	task :test_mergers => :environment do
+		# Test Mergers
+		years = (2000..2010).to_a
+		mergers = %w{merge percent_then_merge share percent_then_share duplicate}
+		other_params = %w{flow_class donor recipient_name recipient_iso3 year sector}
+		mergers.each do |m|
+			p "Testing #{m}"
+			year = years.sample
+			other_param = other_params.sample(2)
+			params = { "get[]" => other_param, "year" => year, "multiple_recipients"=> m}
+			
+			if post_merger = post_aggregate_data(params)
+				@passes += 1
+			else
+				@fails += 1
+			end
+			# As long as there's no error, that will do for now...
+		end
+		display_results
+	end
+
 		##
 		##
 		## TO ADD: Random combinations
 		##
 		##
-		
-		p "------------------------------------------------------"
-		p "   passes: #{@passes}"
-		p "   fails: #{@fails}"
-		end
+
+
+
 end

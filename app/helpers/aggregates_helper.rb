@@ -33,11 +33,14 @@ module AggregatesHelper
 				# MERGE --> If a project has multiple recipients, call it "Africa, Regional"
 				{external: "merge", name: "Merge",
 				 note: "If a project has multiple recipients, call it 'Africa, Regional'",
-						select: '@recipient_field_names.map{ |fn| "(case when count(recipients.id) > 1 then #{ africa_regional_iso2(fn)} " +
-									"else max(recipients.#{fn}) end) as recipient_#{fn}" }.join(", ")', 
-						group: "group by projects.id", 
-						join: "INNER JOIN geopoliticals geo on projects.id = geo.project_id "+
-									"INNER JOIN countries recipients on geo.recipient_id = recipients.id",
+						select: '"geo.*"', 
+						group: "", 
+						join: "INNER JOIN (select project_id," +
+								"(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.name) end) as recipient_name," +
+								"(case when count(recipients.id) > 1 then 'XR' else max(recipients.iso2) end) as recipient_iso2, "+
+								"(case when count(recipients.id) > 1 then 'Africa, regional' else max(recipients.iso3) end) as recipient_iso3,"+
+								"count(*) as g_count from geopoliticals g "+
+								"INNER JOIN countries recipients on g.recipient_id = recipients.id group by g.project_id )  geo on projects.id = geo.project_id ",
 						amounts: "round(cast(sum(sum_usd_defl) as numeric),2) as usd_2009, round(cast(sum(sum_usd_current) as numeric),2) as usd_current"
 						}, 
 								

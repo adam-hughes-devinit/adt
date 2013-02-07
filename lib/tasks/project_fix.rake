@@ -100,21 +100,56 @@ end
 	p ids
 	end
 
-	desc "Remove PPIAF"
-	task :remove_ppiaf => :environment do
+	desc "Remove PPIAF from title"
+	task :remove_ppiaf_from_title => :environment do
 
-	c = 0
-	ids = []
-	
-	Project.where("description like '%PPIAF%' or title like '%PPIAF%'").each do |p|
-		p.update_attribute(:description, p.description.gsub(/PPIAF/, ''))
-		p.update_attribute(:title, p.title.gsub(/[\(]PPIAF(\sID\s\d+|\s-\s)[\)]/, ''))
-		ids.push p.id
-		c+=1
+		c = 0
+		ids = []
+		#
+		# Observed cases:
+		#
+		# -- Title: "PPIAF", "PPIAF - ", "(PPIAF)", "(PPIAF ID \d+)"
+		#
+		# -- Desc: "PPIAF-ID:\d+", "(PPIAF)"
+		#
+		# -- Source: Url --> "PPIAF_Consolutant", "PPIAF_Source" !! KEEP THESE FOR REFERENCE !!
+
+		Project.where("title like '%PPIAF%'").each do |p|
+			
+
+			p.update_attribute(:title, p.title.gsub(/[\(]?PPIAF(\sID\s\d+|\s-\s|\s)?[\)]?/, ''))
+			ids.push p.id
+			c+=1
+		end
+		
+		p "#{c} PPIAFs removed."
+		p ids
 	end
-	
-	p "#{c} PPIAFs removed."
-	p ids
+
+	desc "Remove PPIAF from description"
+	task :remove_ppiaf_from_description => :environment do
+
+		c = 0
+		ids = []
+		#
+		# Observed cases:
+		#
+		# -- Title: "PPIAF", "PPIAF - ", "(PPIAF)", "(PPIAF ID \d+)"
+		#
+		# -- Desc: "PPIAF-ID:\d+", "(PPIAF)"
+		#
+		# -- Source: Url --> "PPIAF_Consolutant", "PPIAF_Source" !! KEEP THESE FOR REFERENCE !!
+
+		Project.where("description like '%PPIAF%' ").each do |p|
+			
+			p.update_attribute(:description, p.description.gsub(/\s?[\(]?PPIAF(-ID\:\d+|\))?[\)]?/, ''))
+			
+			ids.push p.id
+			c+=1
+		end
+		
+		p "#{c} PPIAFs removed."
+		p ids
 	end
 
   desc "Create Flag Types"

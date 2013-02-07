@@ -272,7 +272,25 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 # Deploying this rails app
 - all your normal stuff: bundle update, `rake db:migrate`
 - `rake sunspot:solr:start` for the search engine.
-- `rake db:populate` to fill the db with sample
+- `rake db:populate` to fill the db with sample data
+
+- To create the development postgres database
+  - Install PostgreSQL 8.4 or higher
+  - Open the PostgreSQL shell by typing "psql"
+  - `create role adt_user with password 'aiddata'; create database adt_development with owner adt_user;`
+  - Update pg_hba.conf to allow the user to sign in
+    - Somewhere on your computer is a file called pg_hba.conf
+    - Somewhere in that file it says "ident" under "METHOD"
+    - Change "ident" to "md5"
+    - Restart the postgresql service with something like "sudo service postgresql restart"
+    - You'll know it works when you can log in to psql like this `psql -U adt_user adt_development --password`
+    - `rake db:migrate`
+    - log into psql with the command above then run `\i adt_production_2_6_2013.sql` to copy the data\
+    - Restart the rails server 
+    - `rake sunspot:reindex`
+    - `rake projects:recache` ??
+
+
 - There are a few rake tasks that get the data up to speed:
   - `rake projects` runs various tasks on the project-related data
 	- `rake sectors:add_random_colors` to put color in the vis

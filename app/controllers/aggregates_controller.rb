@@ -80,21 +80,23 @@ include AggregatesHelper
 		    # 	order: nil
 		    # 	    	)
 
-		 	sql = "select #{@duplication_scheme[:amounts]}, count(*) as count,
-		 			#{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
-		 			from (select projects.*, 
-		 					#{eval(@duplication_scheme[:select])}
-		 					from projects 
-							#{@duplication_scheme[:join]}
-				 			#{@duplication_scheme[:group]}
-				 			) p
+		 	sql = "select #{@duplication_scheme[:amounts]}, count(*) as count,"+
+		 			" #{@fields_to_get.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}"+
+		 			" from (select projects.*, "+
+		 					" #{eval(@duplication_scheme[:select])}"+
+		 					" from projects "+
+							" #{@duplication_scheme[:join]}"+
+				 			" #{@duplication_scheme[:group]}" +
+				 			") p \n"+
 				 		
-				 		LEFT OUTER JOIN (select id, project_id, oda_like_1_id, oda_like_2_id, oda_like_master_id, (case when oda_like_master_id is not null then oda_like_master_id when oda_like_2_id is not null then oda_like_2_id else oda_like_1_id end) oda_like_best_id from flow_classes) modified_flow_classes on p.id = modified_flow_classes.project_id
+				 		" LEFT OUTER JOIN (select id, project_id, oda_like_1_id, oda_like_2_id, oda_like_master_id, "+
+				 		" (case when oda_like_master_id is not null then oda_like_master_id when oda_like_2_id is not null then oda_like_2_id else oda_like_1_id end) oda_like_best_id from flow_classes)" +
+				 		" modified_flow_classes on p.id = modified_flow_classes.project_id " +
 				 		
-				 		LEFT OUTER JOIN oda_likes on modified_flow_classes.oda_like_best_id = oda_likes.id	
+				 		" LEFT OUTER JOIN oda_likes on modified_flow_classes.oda_like_best_id = oda_likes.id	"+
 				 		
-		 				LEFT OUTER JOIN sectors on p.sector_id = sectors.id
-		 				LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
+		 				" LEFT OUTER JOIN sectors on p.sector_id = sectors.id"+
+		 				" LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
 		 				LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
 		 				LEFT OUTER JOIN statuses on p.status_id = statuses.id
 		 				LEFT OUTER JOIN intents on p.intent_id = intents.id		 				
@@ -103,7 +105,8 @@ include AggregatesHelper
 			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id
 			 		where 
 			 		#{@filters.join(' and ')}
-					group by #{@fields_to_get.select{|f| Rails.env.production? ? f[:internal] : f[:group] }.map{|f| Rails.env.production? ? f[:internal] : f[:group]}.join(', ')} 
+					group by #{@fields_to_get.select{|f| Rails.env.production? || Rails.env.development? ? f[:internal] : f[:group] }
+						.map{|f| Rails.env.production?  || Rails.env.development? ? f[:internal] : f[:group]}.join(', ')} 
 					order by #{@sorter}"
 					
 					# That little nonsense is because you group by recipient_iso2 in SQLite but recipients.name in PSQL
@@ -157,7 +160,7 @@ include AggregatesHelper
 			
 			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] + (@wdi || [])
 		  p @column_names
-		  p @data.sample(5).inspect
+		  
 		  respond_to do |format|
 		    # default: render json
 		    format.json { render json: @data.as_json(only: @column_names)}
