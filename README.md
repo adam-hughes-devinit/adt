@@ -275,6 +275,7 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
   - Install PostgreSQL 8.4 or higher
   - Open the PostgreSQL shell by typing "psql"
   - `create role adt_user with password 'aiddata'; create database adt_development with owner adt_user;`
+  - `alter role adt_user with login;`
   - Update pg_hba.conf to allow the user to sign in
     - Somewhere on your computer is a file called pg_hba.conf
     - Somewhere in that file it says "ident" under "METHOD"
