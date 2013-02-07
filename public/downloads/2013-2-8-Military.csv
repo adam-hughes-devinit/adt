@@ -1,0 +1,601 @@
+"project_id","donor","title","year","year_uncertain","description","sector","sector_comment","crs_sector","status","status_code","flow","all_recipients","sources","sources_count","funding_agency","implementing_agency","donor_agency","donor_agency_count","recipient_agencies","recipient_agencies_count","verified","verified_code","flow_class","flow_class_code","intent","intent_code","active","active_code","factiva_sources","amount","currency","deflators_used","exchange_rates_used","usd_defl","start_actual","start_planned","end_actual","end_planned","recipient_count","recipient_condensed","recipient_cow_code","recipient_oecd_code","recipient_oecd_name","recipient_iso3","recipient_iso2","recipient_un_code","recipient_imf_code","is_commercial","is_commercital","debt_uncertian","line_of_credit","is_cofinanced","loan_type","interest_rate","maturity","grace_period","grant_element"
+"528","China","Imported defense equipment","2006","false","According to the UN, in 2006, China exported defense equipment to Republic of Congo, Gabon, Tanzania, Niger, Namibia, and Zimbabwe.The contents of the donation are uncertain. ","Military","","150","Completion","3","In-kind contribution","Unset","","Africa, regional, Congo, Rep., Gabon, Namibia, Niger, Tanzania, Zimbabwe","http://global.factiva.com/aa/?ref=MTPW000020080903e493003bh&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Mixed (No Development)","","Active","1","http://global.factiva.com/aa/?ref=MTPW000020080903e493003bh&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","7","Africa, regional","552; 565; 436; 510; 484; ; 481","265; 275; 260; 282; 234; 298; 239","Zimbabwe; Namibia; Niger; Tanzania; Congo, Rep.; Africa, regional; Gabon","ZWE; NAM; NER; TZA; COG; ; GAB","ZW; NA; NE; TZ; CG; XR; GA","716; 516; 562; 834; 178; ; 266","698; 728; 692; 738; 634; ; 646","Not Commercial","2","false","false","false","","","","",""
+"535","China","Instructors to maintain military equipment","2003","false","In 2003, China and Zimbabwe signed a military cooperation agreement that included the provision of several instructors. The instructors were not to train Zimbabwean troops for combat missions, however, they were there to help in the maintenance of equipment through the National Defense University. The financial amount for this project cannot be found.","Military","","150","Completion","3","Free-standing technical assistance","Unset","","Zimbabwe","http://mil.news.sohu.com/20070323/n248915877.shtml 
+      , Local Language Source
+      , Donor media or official; http://global.factiva.com/aa/?ref=FPAR000020090823e57100003&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","National Defense University, Academic, Training and Research","National Defense University, Academic, Training and Research","1","Zimbabwe Defence Forces (ZDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://mil.news.sohu.com/20070323/n248915877.shtml 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=FPAR000020090823e57100003&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","01 January 2003","","27 October 2006","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"952","China","Construction of military installation","2007","false","'Recently, the Chinese began exploring for oil and building at least one Ethiopian military installation.' The status of the project is unknown.  ","Military","","150","Pipeline/identification","1","In-kind contribution","Unset","","Ethiopia","http://global.factiva.com/aa/?ref=AFNWS00020070125e31p000p2&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020070125e31p000p2&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Ethiopia","530","238","Ethiopia","ETH","ET","231","644","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1120","China","Mozambique to Receive Chinese military aid","2009","false","Mozambique's defense ministry announced on May 20, 2009 that under an agreement recently signed in Beijing, Mozambique would receive 3 million USD in military aid from China.  A defense ministry spokesman said the money would be used to purchase logistical equipment. Confirmation of transaction still needed.  ","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Mozambique","http://global.factiva.com/redir/default.aspx?P=sa&an=AFPR000020090520e55k005ka&cat=a&ep=ASE 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/redir/default.aspx?P=sa&an=AFPR000020090520e55k005ka&cat=a&ep=ASE 
+        , Factiva
+        , International media report","3000000.0","EUR","1.0","0.7181","4177691.13","","","","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1196","China","Computer hardware to military","2011","false","In 2011, Gong Yuan Xing, Chinese Ambassador to Senegal, donated computer hardware worth FCFA 1 billion to the Senegalese armed forces. It is unclear what the equipment consisted of and when exactly the delivery was made.","Military","","150","Completion","3","In-kind contribution","Unset","","Senegal","http://global.factiva.com/aa/?ref=BBCAP00020110404e7440018i&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Development","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020110404e7440018i&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1000000000.0","XOF","1.206344778","471.8661140917","1756749.19","","","03 April 2011","","1","Senegal","433","269","Senegal","SEN","SN","686","722","Not Commercial","2","false","false","false","","","","",""
+"2458","China","Donation of trucks to Ugandan army","2002","false","In March, 2002 during a visit by Chinese Maj. Zhang Bangbong to Ugandan army headquarters in Bombo, Uganda, China donated 50 heavy duty Jiefang trucks to the Ugandan army. Ugandan military officials valued the trucks at 1.3 million USD. During the visit, Maj. Zhang also pledged spaces in Chinese military colleges for Ugandan army officers (See ID#15026).","Military","","150","Completion","3","In-kind contribution","Unset","","Uganda","http://ug.chineseembassy.org/eng/zwgx/t168251.htm 
+      , Google US
+      , Donor media or official; http://global.factiva.com/aa/?ref=kyodo00020020301dy3100464&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://ug.chineseembassy.org/eng/zwgx/t168251.htm 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=kyodo00020020301dy3100464&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1300000.0","USD","0.60491092610499","1.0","2149076.74","04 March 2002","","04 March 2002","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"1849","China","Defense Aid","2006","false","In 2006, Nigerian security sources said Nigeria would receive new defense supplies from China would include dozens of patrol boats to secure the swamps and creeks that form the launching pad for rebel attacks.Analysts say Nigeria wants 200 boats to guard the Delta.The status of the supplies is uncertain. ","Military","","150","Pipeline: Pledge","12","In-kind contribution","Unset","","Nigeria","http://global.factiva.com/aa/?ref=FTCOM00020060228e22s0005m&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=FTCOM00020060228e22s0005m&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Nigeria","475","261","Nigeria","NGA","NG","566","694","Not Commercial","2","false","false","false","","","","",""
+"1937","China","Military equipment donation","2007","false","In 2007, China donated to Senegal military equipment worth a total of 1.5 million Euros. The donation consists of trucks, ambulances, and mine-clearing equipment. Further details on the donation are unclear.","Military","","150","Completion","3","In-kind contribution","Unset","","Senegal","http://global.factiva.com/aa/?ref=WDAN000020071205e3c50003k&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Development","","Active","1","http://global.factiva.com/aa/?ref=WDAN000020071205e3c50003k&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1500000.0","EUR","0.8379948373178","0.7305","2450358.88","","","","","1","Senegal","433","269","Senegal","SEN","SN","686","722","Not Commercial","2","false","false","false","","","","",""
+"2019","China","Grant for construction of floating dock","2010","false","On October 23, 2010, Rwandan Defense Minister James Kaberebe and Chinese Defense Minister Liang Guanglie signed a protocol giving Rwanda a grant for the construction of a floating dock for the Rwandan marine regiment. The amount and start and end dates are unknown.","Military","","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Rwanda","http://global.factiva.com/aa/?ref=AFPR000020101023e6an005bz&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFPR000020101023e6an005bz&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Rwanda","517","266","Rwanda","RWA","RW","646","714","Not Commercial","2","false","false","false","","","","",""
+"2227","China","25m CNY military donation","2003","false","In November of 2003, China donated 25 million CNY worth of military equipment to the Sierra Leonean military during an official visit to the People's Republic of China, where discussions were held to further the relationship between the two countries and their armed forces. The Deputy Defense Minister, Joe Blell, who was accompanied by Alhaji Ibrahim Morekeh Fofanah, Special Assistant to the President, Al-Hassan Kharamoh Kondeh, Director Defence Policy, Mr. Alusine Deen, Sierra Leone's Ambassador to China and his Deputy, Mr. Sahr E. Johnny, on the invitation of the Chinese government, discussed issues that will further strengthen the friendly relations and fruitful cooperation between the two Armed Forces. The head of the Chinese Team, which received the Sierra Leone delegation, was pleased to inform the delegation that the Ministry of National Defence of China has decided to grant a total of RMB 25,000,000 Yuan to the Ministry of Defense in Sierra Leone in respect of what he called Military Aid, assisting in areas of military equipment and training. The project appears to be untied, and it is unclear exactly how the funds were used.","Military","Equipment+Training","150","Implementation","2","In-kind contribution","Unset","","Sierra Leone","http://global.factiva.com/aa/?ref=AFNWS00020031128dzbl004cc&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","China Ministry of National Defense, Government Agency","1","Sierra Leone Defense Ministry, Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020031128dzbl004cc&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","25000000.0","CNY","0.62070251737246","8.27703666666667","4866106.65","","","21 November 2003","","1","Sierra Leone","451","272","Sierra Leone","SLE","SL","694","724","Not Commercial","2","false","false","false","","","","",""
+"17771","China","China provides radio-jamming device to Zimbabwe","2005","false","In 2005, China provided a radio-jamming device for Zimbabwe. The device went to a military base outside of the capital of Harare; reports said that the installation provided the authoritarian leader Mugabe to control the airwaves around the election campaigns in the country. As a 'thank you,' Zimbabwe invested support in China's claim over Taiwan. Information on specific amounts, dates, contacts, and organizations are yet to be found. ","Military","government/military","150","Completion","3","In-kind contribution","Tied","4","Zimbabwe","http://global.factiva.com/aa/?ref=CHSM000020050329e13u00003&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=CHSM000020050329e13u00003&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"18190","China","Chinese-Zimbabwean agreement to build Air Force warehouse","2005","false","On July 25, 2005, the Zimbabwe Defense Forces signed an agreement with an unnamed Chinese group for the construction of a bonded warehouse for the Air Force of Zimbabwe.","Military","","150","Pipeline: Commitment","11","In-kind contribution","Unset","","Zimbabwe","http://global.factiva.com.proxy.wm.edu/aa/?ref=AFNWS00020050727e17r0018i&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Zimbabwean Air Force, Government Agency","","","Zimbabwe Defence Forces (ZDF), Government Agency; Zimbabwean Air Force, Government Agency","2","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com.proxy.wm.edu/aa/?ref=AFNWS00020050727e17r0018i&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"25620","China","Military Cooperation Grant","2009","false","In 2009, the Chinese government stated that they will provide a grant of 3 million USD to the Malawian Armed Forces. The projects to be financed with this grant or a disbursement have yet to be found.","Military","","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Malawi","http://mw.china-embassy.org/eng/dsxx/dsjh/t621077.htm 
+      , Google US
+      , Donor media or official","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://mw.china-embassy.org/eng/dsxx/dsjh/t621077.htm 
+        , Factiva
+        , Donor media or official","3000000.0","USD","1.0","1.0","3000000.0","","","","","1","Malawi","553","253","Malawi","MWI","MW","454","676","Not Commercial","2","false","false","false","","","","",""
+"286","China","Joint military drills","2009","false","From June 21-28, 2009 'Angel of Peace 2009,' a joint Gabonese-Chinese medical-military exercise took place in Ogooue Ivindo province. Joint military drills with the Chinese PLA, Mongolia, Singapore and Gabon were held for the first time in the history of China's international military exchanges with them. A financial amount, as well as contacts for this project are unknown. Angel of Peace 2009 included a medical rescue training exercise, #532 and the donation of equipment to the Gabonese military, #23566. ","Military","","150","Completion","3","Scholarships/training in the donor country","Unset","","Gabon","http://global.factiva.com/aa/?ref=CHNDLY0020090805e5860000x&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","1","","Chinese People, Government Agency","Chinese People, Government Agency","1","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=CHNDLY0020090805e5860000x&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","21 June 2009","","28 June 2009","","1","Gabon","481","239","Gabon","GAB","GA","266","646","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"326","China","Military cooperation accord","2000","false","On June 24, 2000, China and the Republic of the Congo signed a military cooperation accord to reorganize the Congolese army. The accord followed an official visit by Congolese President Denis Sassou Nguesso to China in April. The start and end dates of this project are  yet unknown.","Military","","150","Pipeline/identification","1","In-kind contribution","Unset","","Congo, Rep.","http://global.factiva.com/aa/?ref=afpr000020010803dw6o02hkc&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=afpr000020010803dw6o02hkc&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Congo, Rep.","484","234","Congo, Rep.","COG","CG","178","634","Not Commercial","2","false","false","false","","","","",""
+"444","China","10 Military Vehicles","2007","false","On November 7, 2007, the Chinese government donated ten military vehicles to the DRC's armed forces. Ambassador Wu Zexian spoke at the handing over ceremony, with Defense Minister Chikez Diemu officially receiving them.","Military","","150","Completion","3","In-kind contribution","Unset","","Congo, Dem. Rep.","http://global.factiva.com/aa/?ref=XNEWS00020071107e3b7006em&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=XNEWS00020071107e3b7006em&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","07 November 2007","","07 November 2007","","1","Congo, Dem. Rep.","490","235","Congo, Dem. Rep.","COD","CD","180","636","Not Commercial","2","false","false","false","","","","",""
+"647","China","Vague: Military assistance","2002","false","In 2002, Ethiopia received military assistance from China.","Military","","150","Implementation","2","Free-standing technical assistance","Unset","","Ethiopia","http://global.factiva.com/aa/?ref=afnws00020021201dyc1000me&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=afnws00020021201dyc1000me&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Ethiopia","530","238","Ethiopia","ETH","ET","231","644","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"883","China","Military Infrastructure","2004","false","In September of 2004, China pledged US$6.8 million to Guinea-Bissau to reconstruct the regional hospital in Canchungo as well as reestablish military infrastructure. The hospital project reportedly cost US$3.5 million (ID#882), leaving US$3.3 million for the military infrastructure projects.  ","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Guinea-Bissau","http://global.factiva.com/aa/?ref=BBCAP00020040910e09a003s5&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","Ministry for Foreign Affairs and International Cooperation, Government Agency","","","Ministry for Foreign Affairs and International Cooperation, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020040910e09a003s5&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","3300000.0","USD","0.66362944683753","1.0","4972654.57","","","","","1","Guinea-Bissau","404","244","Guinea-Bissau","GNB","GW","624","654","Not Commercial","2","false","false","false","","","","",""
+"918","China","Donation of military equipment","2006","false","On September 14, 2006, China donated military equipment to Madagascar's Ministry of Defense headquarters in Ampahibe. The donation was mainly fabric to make military wear and equipment for use by the Malagasy army, including 23 km of jungle green military fabric, 300 army rangers boots, and a 20-watt radio. The donation was received by the minister of national defense.","Military","","150","Completion","3","In-kind contribution","Unset","","Madagascar","http://global.factiva.com/aa/?ref=BBCAP00020060914e29e001ba&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Ministry of Defense, Government Agency","","","Ministry of Defense, Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020060914e29e001ba&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","14 September 2006","","14 September 2006","","1","Madagascar","580","252","Madagascar","MDG","MG","450","674","Not Commercial","2","false","false","false","","","","",""
+"1203","China","China Supports Mozambican Armed Forces","2008","false","On December 9, 2008 the Chinese government pledged to disburse 1.5 million US dollars in 2009 to support the Mozambican Armed Forces (FADM). To that end, the Mozambican Defense Minister, Filipe Nyussi, signed a cooperation agreement in Maputo on Monday with Chinese Ambassador Tian Gueng Feng to formalize the grant. Searches on this project did not pull up any further information on the project. However, searching did indicate that China routinely donates to the the FADM, including projects #754, #940, #1189, #1191, #1203, #1214, #1224, #1245","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Mozambique","http://global.factiva.com/aa/?ref=AFNWS00020081209e4c90018k&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","Mozambican Armed Forces (FADM), Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020081209e4c90018k&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","1500000.0","USD","0.98899595221395","1.0","1516689.73","","","","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1114","China","Military aid","2007","false","On November 21, 2007, China donated 150 million KES to Kenya's military to improve its operations. Visiting Chinese vice-chairman of the central military commission and defense minister, Gen Cao Gangcuan, donated the money to Kenya's chief of general staff, Gen Jeremiah Kianga. Senior military officers were to decide where the funds would be invested. The start and end dates are unknown.","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Kenya","http://global.factiva.com/aa/?ref=BBCAP00020071121e3bl000dy&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","Kenyan Ministry of Defense, Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020071121e3bl000dy&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","150000000.0","KES","0.8379948373178","67.3176381242857","2659016.58","","","","","1","Kenya","501","248","Kenya","KEN","KE","404","664","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1191","China","Boost logistical capacity of FADM","2007","false","On April 26, 2007 Mozambican Prime Minister Luisa Diogo received a Chinese delegation, headed by the Political Comissar of the Chinese Armed Forces, Dong Chiangyou. During the visit the Chinese delegation signed a protocol under which China agreed to provide assistance, valued at 1.5 million US dollars, to boost the logistical capacity of the Mozambican armed forces (FADM).On May 19, 2007 the Chinese ambassador to Mozambique Tiang Guafeng presented a donation of equipment worth 1.5 million USD, including seven light vehicles, 31 computers, and assorted uniforms for the Mozambican army, navy and air force. Mozambican Defense Minister Tobias Dai attested to the donation. ","Military","","150","Pipeline/identification","1","In-kind contribution","Unset","","Mozambique","http://www.africanews.com/site/list_message/3062 
+      , Google US
+      , International media report; http://global.factiva.com/redir/default.aspx?P=sa&an=AFNWS00020070426e34q000yj&cat=a&ep=ASE 
+      , Factiva
+      , Recipient media or official","2","","","","","Mozambican Armed Forces (FADM), Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://www.africanews.com/site/list_message/3062 
+        , Factiva
+        , International media report; http://global.factiva.com/redir/default.aspx?P=sa&an=AFNWS00020070426e34q000yj&cat=a&ep=ASE 
+        , Factiva
+        , Recipient media or official","1500000.0","USD","0.8379948373178","1.0","1789987.16","19 May 2007","","19 May 2007","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1365","China","Army uniform factory","2001","false","As reported in January 2001, the government of Tanzania was implementing plans to improve a uniform manufacturing plant run by the National Service Camp in Ruvu under the framework of cooperation with China. Defense Minister Professor Philemon Sarungi said that a market for the uniforms would be assured, given the fact that Nigeria and Namibia used to purchase uniforms from them. The current status of this project is yet unknown.","Military","","320","Pipeline: Pledge","12","In-kind contribution","Unset","","Tanzania","http://global.factiva.com/aa/?ref=bbcap00020010710dx190007j&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=bbcap00020010710dx190007j&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","","","","","1","Tanzania","510","282","Tanzania","TZA","TZ","834","738","Commercial","1","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1476","China","Construction of new housing units at military barracks","2002","false","In 2002, China agreed to assist Ghana with constructing new housing units at all military barracks in the country at a cost of $2.7 million USD. (Conflicting information: other sources say China agreed to grant the Ghana Armed Forces and Police Service a $4.5 million USD interest-free loan In January of 2003.) According to Dr. Kwame Addo-Kufuor, Minister of Defense for Ghana, this project was part of measures used to motivate soldiers. Construction commenced in January of 2003 with a sod-cutting ceremony. The barracks will comprise of three blocks of 28 units and two blocks of 12 units, accommodating 105 families. There is some confusion as to the amount of the Chinese financing. Reports include the $2.7 million USD amount, but also indicate an interest-free loan of $2.5 million USD. It is unclear when the project was completed. This project is related to ID#1449.","Military","Police and Military Barracks Construction","150","Completion","3","Loan (excluding debt rescheduling)","Unset","","Ghana","http://www.china-defense-mashup.com/chinese-firm-to-complete-abandoned-military-projects-in-ghana.html/2 
+      , Google US
+      , Donor media or official; http://www.china-defense-mashup.com/chinese-firm-to-complete-abandoned-military-projects-in-ghana.html 
+      , Google US
+      , Donor media or official; http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://www.modernghana.com/news/19479/1/chinese-assists-to-improve-facilities-at-army-barr.html 
+      , Google US
+      , Recipient media or official; http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://global.factiva.com/aa/?ref=afnws00020030803dz83000rv&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://global.factiva.com/aa/?ref=AFNWS00020040316e03g001pj&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://www.guxiang86.com/gaige/bjzl/kaifang/200903/79222.html 
+      , Local Language Source
+      , Donor media or official; http://global.factiva.com/redir/default.aspx?P=sa&an=afnws00020020620dy6k000xd&cat=a&ep=ASE 
+      , Other English Source
+      , International media report","9","","Poly Technologies, State-Owned Company","Poly Technologies, State-Owned Company","1","","","Checked","1","Military","4","Unset","","Active","1","http://www.china-defense-mashup.com/chinese-firm-to-complete-abandoned-military-projects-in-ghana.html/2 
+        , Factiva
+        , Donor media or official; http://www.china-defense-mashup.com/chinese-firm-to-complete-abandoned-military-projects-in-ghana.html 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://www.modernghana.com/news/19479/1/chinese-assists-to-improve-facilities-at-army-barr.html 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=afnws00020030803dz83000rv&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=AFNWS00020040316e03g001pj&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://www.guxiang86.com/gaige/bjzl/kaifang/200903/79222.html 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/redir/default.aspx?P=sa&an=afnws00020020620dy6k000xd&cat=a&ep=ASE 
+        , Factiva
+        , International media report","4500000.0","USD","0.60491092610499","1.0","7439111.79","","","","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","","","","",""
+"1449","China","Donation of twenty-three vehicles","2003","false","In 2003, the Ghanaian Minister of Defense and Acting Interior Minister Dr. Kwame Addo-Kufuor received a donation of 23 vehicles from the Chinese Government. The donation of vehicles includes four tipper trucks, eight troops carrying vehicles, six double cabin pick-ups and five single cabin pick-ups made possible with a grant of $482,000 USD.This project is related to ID#1476 and #1687","Military","","150","Completion","3","Grant (excluding debt forgiveness)","Unset","","Ghana","http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Ghana Armed Forces, Government Agency","","","Ghana Armed Forces, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=afnws00020030123dz1n002bd&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","482000.0","USD","0.62070251737246","1.0","776539.46","","","21 January 2003","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1933","China","Defense college","2011","false","On January 8, 2011, construction on the Tanzania People's Defense Forces' National Defense College in Kunduchi was completed by China's Xing Xing. The construction was co-funded by the Tanzanian government and China. China's contribution was $3 million, while Tanzania contributed 2 billion TZS. Chief of Staff Lt-General Abdulahman Shimbo commended the project. The exact start date is unknown.","Military","","150","Completion","3","Unset","Unset","","Tanzania","http://global.factiva.com/aa/?ref=BBCAP00020110108e718000m9&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Xing Xing","Xing Xing","1","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020110108e718000m9&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","3000000.0","USD","1.206344778","1.0","2486851.23","","","10 January 2011","","1","Tanzania","510","282","Tanzania","TZA","TZ","834","738","Not Commercial","2","false","false","false","","","","",""
+"2245","China","Military equipment donation","2006","false","In March 2006, China granted Sierra Leone a military patrol boat and other assistant package to the maritime wing of the Sierra Leone Armed Forces at a ceremony at the Government Wharf at Freetown. The donation included a Type 62-1 Escort Chinese boat, two water bowers and spare parts, UHF and VHF communication equipment, training package for the maritime wing personnel and construction of residential apartments at the Kingtom naval wing facility. The ceremony was attended by the Sierra Leone President, Alhaji Dr. Ahmad Tejan Kabbah. According to the Chinese ambassador to Sierra Leone, Cheng Wenju, China hoped the donation would help the defensive capacity of the Sierra Leone Armed Forces within their capacity, and contribute significantly to the safeguarding of the coastline and maritime resources and to protect normal fishery production.","Military","","150","Completion","3","In-kind contribution","Unset","","Sierra Leone","http://global.factiva.com/aa/?ref=BBCAPP0020060120e21k002pa&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020060315e23f0002t&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","2","","Republic of Sierra Leone Armed Forces (RSLAF), Government Agency","","","Republic of Sierra Leone Armed Forces (RSLAF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAPP0020060120e21k002pa&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020060315e23f0002t&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","","","15 March 2006","","1","Sierra Leone","451","272","Sierra Leone","SLE","SL","694","724","Not Commercial","2","false","false","false","","","","",""
+"12050","China","Rebuild Army Headquarters","2002","false","In 2005, the Financial Times reported that the Chinese were convinced by the Kabbah government in 2002 to pick up where they had left off in investment projects, which took the form of the rebuilding and refurbishment of Chinese-built buildings in Freetown, including the the army head quarters. The status of the project is uncertain. ","Military","","150","Completion","3","Unset","Unset","","Sierra Leone","http://www.sierra-leone.org/Speeches/kabbah-062003.html 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=FTFT000020050214e12e0005j&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://www.sierra-leone.org/Speeches/kabbah-062003.html 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=FTFT000020050214e12e0005j&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Sierra Leone","451","272","Sierra Leone","SLE","SL","694","724","Not Commercial","2","false","false","false","","","","",""
+"16161","China","Defense Exchanges","2005","false","In 2005, China and South Africa met at their second Defense Committee meeting, agreeing to enhance consultations and dialogue on defense and security issues. The two countries agreed to improve multi-level exchanges and cooperation between the defense departments and armies of the two countries. It is unclear how the agreement was implemented.","Military","","150","Pipeline: Pledge","12","Unset","Unset","","South Africa","http://english.peopledaily.com.cn/200506/17/eng20050617_190905.html 
+      , Google US
+      , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020050617e16h006hf&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://english.peopledaily.com.cn/200506/17/eng20050617_190905.html 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020050617e16h006hf&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","","","","","1","South Africa","560","218","South Africa","ZAF","ZA","710","199","Not Commercial","2","false","false","false","","","","",""
+"18421","China","Construction equipment to Zimbabwe Defense Force","2006","false","On May 4, 2006, the Chinese handed over construction equipment to the Zimbabwe Defense Forces (ZDF). The equipment included brick making machines, bricklayers, plaster, carpenter and electrician tool kits, and surveying gear. The equipment totaled a $1.5 million US dollar gift from the Chinese government. The tools would be used to help build housing for the Pomona Barracks in Harare. The gift also cut down on the costs of renting equipment and transporting the rentals. ","Military","military barracks construction","150","Completion","3","In-kind contribution","Unset","","Zimbabwe","http://www.focac.org/eng/zxxx/t253399.htm 
+      , Google US
+      , International media report; http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060505e255001uu&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","3","","Zimbabwe Defence Forces (ZDF), Government Agency","","","Zimbabwe Defence Forces (ZDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://www.focac.org/eng/zxxx/t253399.htm 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060505e255001uu&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","1500000.0","USD","0.74305214409552","1.0","2018700.86","","","04 May 2006","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"18379","China","Military training and assistance","2006","false","By 2006, the People's Liberation Army in China has helped the Zimbabwe Defense Forces (ZDF) through numerous programs. These programs included military aid, training exchange and bringing the PLA Instructors Team to the Zimbabwe Staff College. The officers helped train the defense forces and provide other assistance. The ZDF has benefited in gifts of equipment for both the ZNA and Air Force. Information regarding amounts, dates of implementation are yet to be found. Continued assistance shown in Project #19939. ","Military","","150","Completion","3","Free-standing technical assistance","Unset","","Zimbabwe","http://www.orwelltoday.com/zimbabwegenocide.shtml 
+      , Google US
+      , Recipient media or official; http://global.factiva.com/aa/?ref=AFNWS00020060328e23s0013t&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","2","","People's Liberation Army (PLA), Government Agency; People's Liberation Army of China, Government Agency","People's Liberation Army (PLA), Government Agency; People's Liberation Army of China, Government Agency","2","Zimbabwe Defence Forces (ZDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://www.orwelltoday.com/zimbabwegenocide.shtml 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=AFNWS00020060328e23s0013t&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"18736","China","China to provide military materials, training to Zimbabwe","2006","false","On July 31, 2006, the military forces of Zimbabwe signed a cooperation agreement with the Chinese People's Liberation Army for assistance in military materials and personnel training. Specifically, the Zimbabwean Defense Forces will send 55 officers to China to receive military and technical training during 2006 and 2007. The Zimbabwe Defense Forces were represented by General Constantine Chiwenga and the Chinese government was represented by the military attache of the Chinese Embassy in Zimbabwe, Tian Jianjun.","Military","","150","Pipeline: Commitment","11","Scholarships/training in the donor country","Unset","","Zimbabwe","http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","1","","Zimbabwe Defence Forces (ZDF), Government Agency; People's Liberation Army of China, Government Agency","People's Liberation Army of China, Government Agency","1","Zimbabwe Defence Forces (ZDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"1115","China","66 vehicles donated to Kenyan Military","2002","false","From 2002 to 2007, China donated 66 vehicles to Kenya's military. The amount is unknown.","Military","","150","Completion","3","In-kind contribution","Unset","","Kenya","http://global.factiva.com/aa/?ref=BBCAP00020071121e3bl000dy&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020071121e3bl000dy&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","01 January 2002","","31 December 2007","","1","Kenya","501","248","Kenya","KEN","KE","404","664","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1616","China","Logistical Support to Liberian Military","2006","false","On September 19, 2006 the People's Republic of China  pledged US$600,000 in logistical support to the Defense Ministry in Monrovia. Chinese Ambassador, Lin Songtian stated that China would provide logistical support, medical equipment, and personnel training. Defense Minister, Brownie Samukai attended the ceremony.","Military","","150","Pipeline: Pledge","12","In-kind contribution","Unset","","Liberia","http://www.cablegatesearch.net/cable.php?id=07MONROVIA289 
+      , Google US
+      , Non-media; http://lr.china-embassy.org/chn/sghdhzxxx/t272899.htm 
+      , Baidu
+      , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060920e29k000s6&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","3","","Liberian Ministry of National Defense, Government Agency; China Ministry of Defense, Government Agency","China Ministry of Defense, Government Agency","1","Liberian Ministry of National Defense, Government Agency","1","Checked","1","Military","4","Development","","Active","1","http://www.cablegatesearch.net/cable.php?id=07MONROVIA289 
+        , Factiva
+        , Non-media; http://lr.china-embassy.org/chn/sghdhzxxx/t272899.htm 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060920e29k000s6&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","600000.0","USD","0.74305214409552","1.0","807480.34","19 September 2006","","19 September 2006","","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","","","","",""
+"1652","China","Fighter jets in compensation for fishing rights","2005","false","In 2005, China gave Mauritania 2 fighter jets as partial compensation for fishing rights. It is unclear what the value of the jets is. ","Military","","310","Completion","3","Joint venture with recipient","Tied","4","Mauritania","http://global.factiva.com/aa/?ref=J000000020070718e37i0002i&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Mixed (No Development)","","Active","1","http://global.factiva.com/aa/?ref=J000000020070718e37i0002i&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Mauritania","435","256","Mauritania","MRT","MR","478","682","Commercial","1","false","false","false","","","","",""
+"1900","China","Grant for procurement of military equipment","2007","false","On May 22, 2007, the Commander General of the Shenyang military region of China, Lt. Gen. Chang Wanquan, offered a 5 million CNY grant from the Chinese army to the Rwanda Defense Forces for the procurement of military equipment. The current status and start and end dates are unknown.","Military","","150","Pipeline: Pledge","12","Grant (excluding debt forgiveness)","Unset","","Rwanda","http://global.factiva.com/aa/?ref=AFNWS00020070522e35m000p3&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","People's Liberation Army of China, Government Agency","","People's Liberation Army of China, Government Agency","1","Rwanda Defence Forces, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020070522e35m000p3&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","5000000.0","CNY","0.8379948373178","7.6075325","784304.75","","","","","1","Rwanda","517","266","Rwanda","RWA","RW","646","714","Not Commercial","2","false","false","false","","","","",""
+"2396","China","Special forces training","2009","false","In 2009, the Chinese assisted in training the Guinean special forces. It is unclear what the details of the arrangement were.","Military","special forces","150","Completion","3","Free-standing technical assistance","Unset","","Guinea","http://global.factiva.com/aa/?ref=VNCS000020090504e5540002v&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=VNCS000020090504e5540002v&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Guinea","438","243","Guinea","GIN","GN","324","656","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"24437","China","Equipment for Liberian Military","2006","false","On September 19, 2006 the People's Republic of China pledged US$600,000 in logistical support to the Defense Ministry in Monrovia (see project #1616). The consignment included among other items, two generators, three vehicles, 48 sets of computers, and several communication gadgets. Chinese Ambassador, Lin Songtian stated that China would provide logistical support, medical equipment, and personnel training. Defense Minister, Brownie Samukai attended the ceremony.","Military","","150","Completion","3","In-kind contribution","Unset","","Liberia","http://www.cablegatesearch.net/cable.php?id=07MONROVIA289 
+      , Google US
+      , Non-media; http://lr.china-embassy.org/chn/sghdhzxxx/t272899.htm 
+      , Baidu
+      , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060920e29k000s6&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","3","","China Ministry of Defense, Government Agency","China Ministry of Defense, Government Agency","1","Liberian Ministry of National Defense, Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://www.cablegatesearch.net/cable.php?id=07MONROVIA289 
+        , Factiva
+        , Non-media; http://lr.china-embassy.org/chn/sghdhzxxx/t272899.htm 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020060920e29k000s6&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","19 September 2006","","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"679","China","Gabonese intelligence officials training at Chinese centers","2010","false","A number of documents online state that Gabonese intelligence officers were being trained at Chinese centers as of 2010. Searches did not pull up any further information outside of that statement, including implementing agencies, start and end dates, financial amounts, or contacts.","Military","Intelligence","150","Pipeline/identification","1","Scholarships/training in the donor country","Unset","","Gabon","http://global.factiva.com/aa/?ref=BBCEUP0020100811e68b0008e&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=BBCEUP0020100811e68b0008e&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Gabon","481","239","Gabon","GAB","GA","266","646","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"299","China","Military Tents","2006","false","On December 6, 2006, Burundi's first vice-president of the republic, Dr Martin Nduwimana, met with the Chinese National Defence Ministry, Maj-Gen Ding Jingong. During the meeting, the Chinese ambassador to Burundi announced that an earlier request by the Burundian President for a Chinese donation of 500 military tents for the Burundian army had been approved. The amount is unknown.","Military","","150","Completion","3","In-kind contribution","Unset","","Burundi","http://global.factiva.com/aa/?ref=BBCAP00020061206e2c6002gy&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020061206e2c6002gy&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","06 December 2006","","06 December 2006","","1","Burundi","516","228","Burundi","BDI","BI","108","618","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"754","China","China Donates Military Equipment to Mozambican Armed Forces","2002","false","On November 12, 2002 China donated military equipment worth 1.8m dollars to the Mozambique Defence Armed Forces (FADM). The donation consists of eight trucks, health and diving equipment, boots, and about 200,000 meters of cloth for the manufacture of uniforms.","Military","","150","Completion","3","In-kind contribution","Unset","","Mozambique","http://global.factiva.com/aa/?ref=bbcap00020021115dybf00209&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=bbcap00020021115dybf00209&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","1800000.0","USD","0.60491092610499","1.0","2975644.71","","","12 November 2002","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"771","China","Strengthening of military cooperation","2008","false","In 2008, the Chinese government provided the Malawian Armed forces with a 3 million USD grant for defense and security. The projects to be financed with this grant cannot be determined. The government provided a second grant for 3 million additional USD in 2009 (Project #25620). ","Military","","150","Completion","3","Grant (excluding debt forgiveness)","Unset","","Malawi","http://www.cablegatesearch.net/cable.php?id=08LILONGWE253&version=1314326040 
+      , Google US
+      , Non-media; http://mw.china-embassy.org/eng/dsxx/dsjh/t621077.htm 
+      , Google US
+      , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020080326e43r004k0&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","3","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://www.cablegatesearch.net/cable.php?id=08LILONGWE253&version=1314326040 
+        , Factiva
+        , Non-media; http://mw.china-embassy.org/eng/dsxx/dsjh/t621077.htm 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020080326e43r004k0&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","3000000.0","USD","0.98899595221395","1.0","3033379.45","","","","","1","Malawi","553","253","Malawi","MWI","MW","454","676","Not Commercial","2","false","false","false","","","","",""
+"919","China","Training of military officers in China NEEDS CONFIRMATION","2006","false","In 2006, 24 Malagasy army officers were sent to China for training. The status of their training and return to Madagascar is uncertain. ","Military","","150","Implementation","2","Scholarships/training in the donor country","Unset","","Madagascar","http://global.factiva.com/aa/?ref=BBCAP00020060914e29e001ba&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020060914e29e001ba&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Madagascar","580","252","Madagascar","MDG","MG","450","674","Not Commercial","2","false","false","false","","","","",""
+"1224","China","Military assistance in equipment and operations","2010","false","On December 28 of 2010, China and Mozambique signed an agreement of military assistance for the Mozambican Armed Forces (FADM) totaling 20 million CNY. Part of this assistance came in a 10 million CNY donation in May of 2011 for military equipment as referenced to in Project #1245 (uniforms, boots, rucksacks, raincoats). The other half of the pledge was said to go toward the operating Maputo military hospital and barracks, but an exact date of completion is yet to be found. Information on the organizations, exact dates, and contacts are still to be determined. This project is linked to annual donations that China offers to the Mozambique Defence sector, including #754, #769, #1113, #1189, #1191. ","Military","","150","Implementation","2","Grant (excluding debt forgiveness)","Unset","","Mozambique","http://allafrica.com/stories/201105260262.html 
+      , Google US
+      , International media report; http://global.factiva.com/aa/?ref=AFNWS00020101230e6cu0015p&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","","","","Mozambican Armed Forces (FADM), Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://allafrica.com/stories/201105260262.html 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=AFNWS00020101230e6cu0015p&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","20000000.0","CNY","1.0756432121391","6.7702690287094","2746349.65","","","","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1605","China","5 million yuan worth of equipment","2006","false","In April 2006, The Chinese Government through its Embassy in Monrovia promised to provide some technical assistance to the National Defense Ministry. Major General Zhang Bangdong disclosed that his government is making available 5 million Chinese yuan worth of equipment to the Liberian Defense Ministry. The equipments will include three Toyota pick-ups, 36 computer Lap tops, 42 pieces of radio hand sets, 2 base radios, amongst others.  The equipments is expected to take roughly 55 days to arrive in the country. The equipment's arrival still needs verification. ","Military","","150","Pipeline: Commitment","11","In-kind contribution","Unset","","Liberia","http://global.factiva.com/aa/?ref=AFNWS00020060403e243001mu&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020060403e243001mu&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","5000000.0","CNY","0.74305214409552","7.97343833333333","843927.37","","","","25 June 2006","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","","","","",""
+"2123","China","China donates US$1.2m to armed forces","2001","false","In November of 2001, the Chinese government donated $1.2 million USD to the Zambian armed forces. Among those present at the ceremony where Chinese People's Army General Fu Quanyou, Zambian Defense Minister Joshua Simuyandi, and Zambian Minister of Foreign Affairs, and the Commander of the Zambian Army. It is unclear how the funds were used, and the project appears to be untied.","Military","","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Zambia","http://global.factiva.com/aa/?ref=afnws00020021113dxbr0054z&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=afnws00020021113dxbr0054z&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1200000.0","USD","0.60138952444015","1.0","1995378.95","","","","","1","Zambia","551","288","Zambia","ZMB","ZM","894","754","Not Commercial","2","false","false","false","","","","",""
+"15451","China","Grant for military","2011","false","On November 30, 2011, China's Defence Minister Liang Guanglie signed a deal with Uganda to give 15 million CNY in military assistance to the Uganda People's Defense Force for domestic capacity building and to support Uganda's troops in the African Union Mission in Somalia (AMISOM). The current status and start and end dates are unknown.","Military","","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Uganda","http://global.factiva.com/aa/?ref=AFPR000020111130e7bu005v7&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","Uganda People's Defense Force (UPDF), Government Agency","","","Uganda People's Defense Force (UPDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=AFPR000020111130e7bu005v7&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","15000000.0","CNY","1.206344778","6.46146132655007","1924372.14","","","","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"2006","China","China donates vehicles, other equipment to Ghana Armed Forces","2010","false","In 2010, the Chinese government presented $1.5 million USD worth of equipment to the Ghana Armed Forces, including vehicles and spare parts to the military to enhance it operational capacity. The equipment includes two water tankers, one bus, one ambulance, six troop-carrying vehicles, and one container full of spare parts. ","Military","","150","Completion","3","In-kind contribution","Unset","","Ghana","http://www.ghanaweb.com/GhanaHomePage/NewsArchive/artikel.php?ID=183482&comment=5788486#com 
+      , Google US
+      , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020100608e668000dx&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","2","","Ghana Armed Forces, Government Agency","","","Ghana Armed Forces, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://www.ghanaweb.com/GhanaHomePage/NewsArchive/artikel.php?ID=183482&comment=5788486#com 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020100608e668000dx&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","1500000.0","USD","1.0756432121391","1.0","1394514.45","","","07 June 2010","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","","","","",""
+"2090","China","Donation for military equipment","2007","false","In 2007, Ghana received the sum of $1.7 million USD from China for the upgrading of its defense and military equipment. It is possible that the funds were used to help finance the Defense Ministry's office complex in ID# 1497, but the status of the funding is unclear. ","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Ghana","http://books.google.com/books?id=hu7n1YNNrqcC 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=ASPOSC0020110705e76u00002&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://books.google.com/books?id=hu7n1YNNrqcC 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=ASPOSC0020110705e76u00002&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1700000.0","USD","0.8379948373178","1.0","2028652.12","","","","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"2419","China","China gives military aid","2010","false","In April of 2010, Chinese ambassador to Nouakchott, Zhang Xun, and Mauritanian Defense Minister, Hamadi Ould Hamadi, signed a memorandum of understanding, giving the African nation 1 million EUR to purchase equipment for military engineering, including bulldozers and other machines. It is unclear if the agreement is tied.","Military","","150","Completion","3","Grant (excluding debt forgiveness)","Unset","","Mauritania","http://www.apanews.net/photo/fr/photo.php?id=122674 
+      , Google US
+      , International media report; http://www.voanews.com/content/china-donates-15-billion-to-boost-mauritanias-defense-91607329/154178.html 
+      , Google US
+      , International media report; http://global.factiva.com/aa/?ref=AFPR000020100420e64k005br&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","3","","","","","","","Checked","1","Military","4","Development","","Active","1","http://www.apanews.net/photo/fr/photo.php?id=122674 
+        , Factiva
+        , International media report; http://www.voanews.com/content/china-donates-15-billion-to-boost-mauritanias-defense-91607329/154178.html 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=AFPR000020100420e64k005br&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","1000000.0","EUR","1.0756432121391","0.755","1231359.34","","","","","1","Mauritania","435","256","Mauritania","MRT","MR","478","682","Not Commercial","2","false","false","false","","","","",""
+"2287","China","Chinese donation to the Guinean military","2002","false","In 2002, a Chinese military delegation donated 2 billion Guinean francs to the Guinean army. It is unclear how the funds were used. ","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Guinea","http://global.factiva.com/aa/?ref=bbcap00020020703dy730012x&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=bbcap00020020703dy730012x&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","2000000000.0","GNF","0.60491092610499","1975.84375","1673346.84","","","","","1","Guinea","438","243","Guinea","GIN","GN","324","656","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"12219","China","Grant to Ugandan Defense Ministry","2008","false","In November, 2008 in Bombo, Uganda, Gen Jing Zhiyuam, the commander of the Chinese Second Artillery Force, handed over a 2.3 billion USD grant agreement  for the Ugandan Permanent Defense Force to Defense Permanent Secretary, Rosette Byengoma. The money will be spent to train the army. to buy trucks and military equipment, and to build an information technology center. The ceremony was witnessed by defense state minister Ruth Nankabirwa, the UPDF chief of defense forces, Aronda Nyakairima, and other senior UPDF and Chinese military officers. The current status and start and end dates are unknown.","Military","","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Uganda","http://global.factiva.com.proxy.wm.edu/aa/?ref=LQAF000020081201e4bu0000h&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Uganda People’s Defence Force (UPDF), Government Agency","","","Uganda People’s Defence Force (UPDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com.proxy.wm.edu/aa/?ref=LQAF000020081201e4bu0000h&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","2300000000.0","UGX","0.98899595221395","1720.44388331777","1351738.89","","","","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"12239","China","Grant to aid Somalia peacekeeping mission","2008","false","On December 30, 2008, China gave Uganda $400 million USD to assist the Uganda People's Defense Force peacekeepers in Somalia. The Chinese Ambassador to Uganda, Sun Heping, and Uganda'a Minister for Defense, Dr Crispus Kiyonga, signed the agreement. The money was for logistics and other military equipment. The current status and start and end dates are unknown. ","Military","Peacekeeping","150","Pipeline: Commitment","11","Grant (excluding debt forgiveness)","Unset","","Uganda","http://global.factiva.com.proxy.wm.edu/aa/?ref=BBCAP00020081230e4cu000ru&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","Uganda People’s Defence Force (UPDF), Government Agency","","","Uganda People’s Defence Force (UPDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com.proxy.wm.edu/aa/?ref=BBCAP00020081230e4cu000ru&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","400000000.0","USD","0.98899595221395","1.0","404450593.66","","","","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"12330","China","Donation of boats to Ugandan Navy","2009","false","On March 3, 2009 in Entebbe, Chinese ambassador, Sun Heping, handed over marine boats to Ugandan President Yoweri Museveni to help improve the security of the Great Lakes region. Uganda's Defense Minister, Crispus Kiyonga and the Chief of Defense Forces, Gen. Aronda Nyakairima, attended the ceremony. The amount is unknown.","Military","","150","Completion","3","In-kind contribution","Unset","","Uganda","http://global.factiva.com.proxy.wm.edu/aa/?ref=LQAF000020090304e53300008&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com.proxy.wm.edu/aa/?ref=LQAF000020090304e53300008&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","03 March 2008","","03 March 2008","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"13883","China","China provides furniture for Armed Forces","2009","false","In 2009, the Chinese government agreed to provide furniture worth $500,000 USD to furnish the office complex for the Ghana Armed Forces at Burma Camp in Accra. It is unclear if the furniture was delivered. ","Military","","150","Pipeline/identification","1","In-kind contribution","Unset","","Ghana","http://global.factiva.com/aa/?ref=BBCAP00020090520e55k0030e&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020090520e55k0030e&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","500000.0","USD","1.0","1.0","500000.0","","","","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"15026","China","Training of military officers","2002","false","During a meeting on March 3, 2002 with Brig. Gen. Nakabus Lakara, the Ugandan chief of staff, Maj. Zhang Bangbong, second-in-command of the Chinese army, pledged 21 places in Chinese military colleges for training senior Ugandan army officers. The amount, current status, and start and end dates are unknown. During the same meeting, Zhang donated trucks to Ugandan army. (See ID#2458)","Military","","150","Pipeline: Pledge","12","Scholarships/training in the donor country","Unset","","Uganda","http://global.factiva.com/aa/?ref=kyodo00020020301dy3100464&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=kyodo00020020301dy3100464&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"17904","China","China donates military equipment","2011","false","in 2011, China's ambassador to Sierra Leone presented AK47 rifles, rocket launchers, anti-aircraft guns and mortars to Sierra Leone's army to improve its defense capabilities. Foreign Minister Joseph Dauda indicated that eleven military officers are being trained in China. ","Military","","150","Completion","3","In-kind contribution","Unset","","Sierra Leone","http://www.dailytimes.com.pk/default.asp?page=2011%2525255C05%2525255C03%2525255Cstory_3-5-2011_pg14_7 
+      , Google US
+      , International media report; http://www.terradaily.com/reports/Chinese_army_gives_rocket_launchers_weapons_to_Sierra_Leone_999.html 
+      , Google US
+      , International media report","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://www.dailytimes.com.pk/default.asp?page=2011%2525255C05%2525255C03%2525255Cstory_3-5-2011_pg14_7 
+        , Factiva
+        , International media report; http://www.terradaily.com/reports/Chinese_army_gives_rocket_launchers_weapons_to_Sierra_Leone_999.html 
+        , Factiva
+        , International media report","25000000.0","CNY","1.206344778","6.46146132655007","3207286.9","","","","","1","Sierra Leone","451","272","Sierra Leone","SLE","SL","694","724","Not Commercial","2","false","false","false","","","","",""
+"18825","China","Donation of Military Trucks to UPDF","2007","false","On June 5, 2007 during a handover ceremony in Bombo, the Chinese government donated 51 military trucks to the Uganda Peoples Defense Force (UPDF), bringing the total number donated since 2002  to 128. The Chinese ambassador, Fan Guijin, handed the trucks over to the UPDF, which were to be used to improve security and maintain peace and security in the country. The amount is unknown.","Military","","150","Completion","3","In-kind contribution","Unset","","Uganda","http://allafrica.com/stories/200706060410.html 
+      , Google US
+      , International media report","1","","","","","Uganda People’s Defence Force (UPDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://allafrica.com/stories/200706060410.html 
+        , Factiva
+        , International media report","","","","","","05 June 2007","","05 June 2007","","1","Uganda","500","285","Uganda","UGA","UG","800","746","Not Commercial","2","false","false","false","","","","",""
+"23566","China","donation to Gabonese military","2009","false","Between June 21 and 38, 2009 the Chinese gave the Gabonese military ten shipping containers of vehicles, medical equipment and supplies.  A financial amount for this project, as well as contacts, are unknown.This donation was received following a medical rescue training project # 532 and joint military drills #286","Military","","150","Completion","3","In-kind contribution","Unset","","Gabon","http://www.cablegatesearch.net/cable.php?id=09LIBREVILLE307 
+      , Google US
+      , Non-media","1","","Chinese People, Government Agency","Chinese People, Government Agency","1","","","Checked","1","Military","4","Unset","","Active","1","http://www.cablegatesearch.net/cable.php?id=09LIBREVILLE307 
+        , Factiva
+        , Non-media","","","","","","","","28 June 2009","","1","Gabon","481","239","Gabon","GAB","GA","266","646","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"24410","China","Military Technology Transfer","2000","false","In March 2000, China made a military technology transfer involving the exchange of missile technology and information with Libya. The financial value for this project is unknown.","Military","","150","Completion","3","In-kind contribution","Unset","","Libya","http://global.factiva.com/aa/?ref=wati000020010814dw4d005ej&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=wati000020010814dw4d005ej&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","","","","","","","","01 March 2000","","1","Libya","620","133","Libya","LBY","LY","434","672","Not Commercial","2","false","false","false","","","","",""
+"26375","China","China supplies military with trucks and equipment","2005","false","In 2005, China provided the armed forces of Zimbabwe with 39 military trucks, educational and medical equipment worth more than $3 million USD. According to a report from the University of Stellenbosch, the facilities are part of a $3 million USD grant. Further details have not been found.","Military","","150","Completion","3","Grant (excluding debt forgiveness)","Unset","","Zimbabwe","http://dspace.cigilibrary.org/jspui/bitstream/123456789/32047/1/Zimbabwe-China.pdf?1 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","2","","","","","Zimbabwe Defence Forces (ZDF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://dspace.cigilibrary.org/jspui/bitstream/123456789/32047/1/Zimbabwe-China.pdf?1 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=BBCAPP0020060801e2810008e&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","3000000.0","USD","0.69665104956371","1.0","4306316.63","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Not Commercial","2","false","false","false","","","","",""
+"23661","China","Liberian Soldiers to Undergo Training in China","2011","false","On August 2, 2011 Chinese Ambassador Zhao Jianhua announced that more than 30 officers of the Armed Forces of Liberia (AFL) were expected to enroll in the 2011-2012 academic programs of eight military colleges in the People’s Republic of China (PRC). Defense Minister Brownie Samukai was also attending the ceremony at which the announcement was made.","Military","Training","150","Pipeline: Commitment","11","Scholarships/training in the donor country","Unset","","Liberia","http://www.concern-liberians.org/chat_room/view_topic.php?id=69343&forum_id=1 
+      , Google US
+      , International media report; http://africatv1.com/Dawala/?p=2524 
+      , Google US
+      , International media report","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://www.concern-liberians.org/chat_room/view_topic.php?id=69343&forum_id=1 
+        , Factiva
+        , International media report; http://africatv1.com/Dawala/?p=2524 
+        , Factiva
+        , International media report","","","","","","","","","","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","","","","",""
+"18208","China","Military equipment in exchange of gold and tobacco","2005","false","During President Mugabe's visit to China in 2005, he supposedly formed a deal with the Chinese government to trade gold, tobacco, and cash for military consignments from China. These products included 12 fighter jets, 3 turbo-prop planes, and 700 troop carriers. This would cost Zimbabwe approximately $480 million US dollars in gold and tobacco. Zimbabwean economist, Eddy Cross, claimed that the Zimbabwean government already pre-sold 25 tons of gold and tobacco for the deal. Since military equipment deliveries are rarely documented, the exact dates of completion are yet to be found as well as organizations impacted by the proposal. ","Military","","150","Completion","3","Joint venture with recipient","Tied","4","Zimbabwe","http://global.factiva.com.proxy.wm.edu/aa/?ref=AGEE000020050729e17u0004r&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","1","","","","","","","Checked","1","Military","4","Mixed (No Development)","","Active","1","http://global.factiva.com.proxy.wm.edu/aa/?ref=AGEE000020050729e17u0004r&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","480000000.0","USD","0.69665104956371","1.0","689010660.79","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Commercial","1","false","false","false","","","","",""
+"27602","China","China to support FADM training","2010","false","In April of 2010, along with a sizable donation of agricultural equipment, the Chinese government agreed to provide support for training and logistics for the FADM. They agreed to spend 1 million Euros on the venture to support the Ministry of Defense in Mozambique. The money transferred directly to this entity to improve training. This project is linked to Project #21449. The exact wiring of money is yet to be found as well as contact information. ","Military","","150","Completion","3","Free-standing technical assistance","Unset","","Mozambique","http://www.oje.pt/noticias/africa/china-equipa-exercito-de-mocambique-com-material-agricola-de-4-milhoes-de-euros 
+      , Google US
+      , International media report","1","","","","","Mozambican Armed Forces (FADM), Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://www.oje.pt/noticias/africa/china-equipa-exercito-de-mocambique-com-material-agricola-de-4-milhoes-de-euros 
+        , Factiva
+        , International media report","1000000.0","EUR","1.0756432121391","0.755","1231359.34","","","","17 April 2010","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"321","China","Military assistance to CNG","2007","false","On July 3, 2007, following a request by Cameroonian Secretary of State Jean-Baptiste Bokam, Lieutenant General Jia Runxing announced that China's Military Police was offering CFA 28 million in assistance to Cameroon's National Gendarmerie. The only results for this search brought up the original article about the grant, so the terms of the assistance, as well as its start and end dates, are unknown.","Military","","150","Pipeline: Pledge","12","Grant (excluding debt forgiveness)","Unset","","Cameroon","http://global.factiva.com/aa/?ref=AFNWS00020070705e375000cn&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","Republic of China Military Police, Government Agency","","Republic of China Military Police, Government Agency","1","Cameroon National Gendarmerie, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020070705e375000cn&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","28000000.0","XAF","0.8379948373178","479.2667825875","69717.11","","","","","1","Cameroon","471","229","Cameroon","CMR","CM","120","622","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"745","China","Military Hospital","2007","false","The military hospital was promised as early as January 2007. Later reports stated that the hospital would cost US$12 million and would hold 200 beds. The project began in April of 2009 in Bissau's Brá neighborhood, at the site of a former army barracks. The project was expected to last 16 months, but there has been no confirmation of completion. ","Military","","120","Implementation","2","In-kind contribution","Unset","","Guinea-Bissau","http://www.macauhub.com.mo/en/2009/04/30/6986/ 
+      , Google US
+      , Donor media or official; http://global.factiva.com/aa/?ref=AFPR000020101110e6ba007hq&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report; http://global.factiva.com/aa/?ref=APRS000020070104e314001oc&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","3","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://www.macauhub.com.mo/en/2009/04/30/6986/ 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=AFPR000020101110e6ba007hq&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=APRS000020070104e314001oc&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","12000000.0","USD","0.8379948373178","1.0","14319897.29","","30 April 2009","30 August 2010","","1","Guinea-Bissau","404","244","Guinea-Bissau","GNB","GW","624","654","Not Commercial","2","false","false","false","","","","",""
+"22580","China","$2.7 million Refurbishing of Barracks and Officer’s Mess at Bissau General Headquarters","2005","false","On November 18, 2005 Guinea Bissau and China have signed a cooperation agreement to provide Bissau with technical and financial support totaling USD 3.7 million. The agreement was signed by Guinea’s Foreign Affairs Minister, Isaac Monteiro, and by China’s deputy Foreign Affairs Minister. Of the investment provided USD 2.7 million is for refurbishing barracks and officer’s mess at Bissau General Headquarters, and USD 1 million is for budget support. This project remains unconfirmed.See related project ID#887 ","Military","","150","Pipeline/identification","1","Grant (excluding debt forgiveness)","Unset","","Guinea-Bissau","http://www.macauhub.com.mo/en/2005/11/21/42/ 
+      , Google US
+      , Donor media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://www.macauhub.com.mo/en/2005/11/21/42/ 
+        , Factiva
+        , Donor media or official","2700000.0","USD","0.69665104956371","1.0","3875684.97","","","","","1","Guinea-Bissau","404","244","Guinea-Bissau","GNB","GW","624","654","Not Commercial","2","false","false","false","","","","",""
+"769","China","China Donates Equipment to Defence Ministry.","2003","false","On April 10, 2003 the Chinese government delivered over a million dollars worth of equipment to the Mozambican Defense Ministry in Maputo. The donation includes 4 tractors, 2 trucks, a caterpillar, concrete mixer, steamroller, spare parts, logistical and medical equipment.  The organization that manufactured the equipment is unknown.  ","Military","","150","Completion","3","In-kind contribution","Unset","","Mozambique","http://global.factiva.com/aa/?ref=AFNWS00020030410dz4a000s6&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=AFNWS00020030410dz4a000s6&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","1000000.0","USD","0.62070251737246","1.0","1611077.73","","","10 April 2003","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"21449","China","Agricultural equipment for FADM","2010","false","In April of 2010, the Mozambique National Defense Ministry received a donation of agricultural equipment from China to improve the FADM production logistics program, training of soldiers in agriculture, and improving their diet. The donation included trucks, tractors, mowers and motorbikes. The toal cost equaled 4 million Euros. Linked to Project #27602. ","Military","","150","Completion","3","In-kind contribution","Unset","","Mozambique","http://www.oje.pt/noticias/africa/china-equipa-exercito-de-mocambique-com-material-agricola-de-4-milhoes-de-euros 
+      , Google US
+      , International media report; http://global.factiva.com/aa/?ref=AFNWS00020101230e6cu0015p&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","2","","","","","Mozambican Armed Forces (FADM), Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://www.oje.pt/noticias/africa/china-equipa-exercito-de-mocambique-com-material-agricola-de-4-milhoes-de-euros 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=AFNWS00020101230e6cu0015p&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","4000000.0","EUR","1.0756432121391","0.755","4925437.34","","","17 April 2010","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1687","China","China donates vehicles to Defense Ministry","2005","false","In 2005, the Chinese Ambassador to Ghana, Zhang Keyuan, donated 55 vehicles to the Ghanaian Ministry of Defense in Accra. They are made up of 40 troop-carrying vehicles and 15 pick-up trucks. This project is linked to #1449, although it is uncertain how the two are connected.","Military","","150","Completion","3","In-kind contribution","Unset","","Ghana","http://global.factiva.com/aa/?ref=BBCAP00020050207e127002ut&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Unset","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020050207e127002ut&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","","","","","","","","07 February 2005","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"2103","China","Chinese firm to build two naval patrol boats for Ghana","2008","false","In 2008, the Ghanaian Minister of Defense, Lt. Gen. J. H. Smith, commissioned the construction of two new patrol boats. The 46 meter naval patrol boats are being built by Poly Technologies Inc. of China. The boats form part of a programme to retool the Ghana Armed Forces and the Ghana Navy in particular. Part of this programme includes the construction of four patrol boats and expansion of the Naval Dockyard in Sekondi. The boats will be used to combat piracy and increase maritime security. Ghana signed a contract with PTI for the two vessels worth $39.86 million USD. Construction began at China's Quigdao Shipyard in May 2009 and were launched in April of 2011. The boats are named Chemle and Ehoo. The two vessels were being funded by Ghana's Ministry of Food and Agriculture. ","Military","","150","Pipeline/identification","1","Joint venture with recipient","Unset","","Ghana","http://www.ghanaweb.com/GhanaHomePage/NewsArchive/artikel.php?ID=221609 
+      , Google US
+      , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020110816e78g00105&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","2","","","Poly Technologies, State-Owned Company","1","","","Checked","1","Military","4","Unset","","Active","1","http://www.ghanaweb.com/GhanaHomePage/NewsArchive/artikel.php?ID=221609 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=BBCAP00020110816e78g00105&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","39860000.0","USD","0.98899595221395","1.0","40303501.66","","","","","1","Ghana","452","241","Ghana","GHA","GH","288","652","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1113","China"," Free housing for the officers of the Forças Armadas de Defesa de Moçambique (FADM)","2005","false","In 2005, the Chinese worked to build houses for the officers of Forças Armadas de Defesa de Moçambique (FADM), the military organization in Mozambique. The housing projects were built in Magoanine, a suburb of Maputo, Mozambique. An additional source reported the value of military housing provided to Mozambique at about $7 million. The amount of housing and exact dates including completion have yet to be determined. ","Military","","150","Implementation","2","In-kind contribution","Unset","","Mozambique","http://www.cifor.org/publications/pdf_files/WPapers/WP93German.pdf 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=IOLET00020050712e16i00014&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","2","","","","","Forças Armadas de Defesa de Moçambique, Government Agency","1","Checked","1","Military","4","Unset","","Active","1","http://www.cifor.org/publications/pdf_files/WPapers/WP93German.pdf 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=IOLET00020050712e16i00014&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","7000000.0","USD","0.69665104956371","1.0","10048072.14","","","","","1","Mozambique","541","259","Mozambique","MOZ","MZ","508","688","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"1621","China","Military Capacity Building and Training","2005","false","On April 14, 2005 the Chinese government pledged 5m yuan to assist with capacity-building of the Liberian army. He Meng, the second secretary at the embassy, said that the money would be given in the form of material and logistics. Technical details, according to the diplomat, would be worked out at a later date. A 2006 report stated that 22 Liberian VIP protection personnel and eight medics and logisticians of the military were undergoing training in China. ","Military","Education, military, health","150","Implementation","2","In-kind contribution","Unset","","Liberia","http://global.factiva.com/aa/?ref=BBCAPP0020050414e14e002mh&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020060928e29s006el&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","2","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAPP0020050414e14e002mh&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=XNEWS00020060928e29s006el&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","5000000.0","CNY","0.69665104956371","8.19431666666667","875874.67","14 April 2005","","06 January 2006","","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"2289","China","China delivers two planes to Zambia","2006","false","In 2006, China donated two planes to the Zambian air force. The two planes will enhance the air transport capability of the Zambian air force and help transport election materials and officials. It is unclear what type of planes they are or how much they are worth. ","Military","","210","Completion","3","In-kind contribution","Unset","","Zambia","http://global.factiva.com/aa/?ref=XNEWS00020060818e28i007by&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Donor media or official","1","","","","","Zambian Air Force (ZAF), Government Agency","1","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=XNEWS00020060818e28i007by&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Donor media or official","","","","","","","","","","1","Zambia","551","288","Zambia","ZMB","ZM","894","754","Not Commercial","2","false","false","false","","","","",""
+"2079","China","Military cooperation against piracy","2010","false","In 2010, China and Seychelles discussed further cooperation on military cooperation against piracy. The cooperation agreement will be worth $10 million USD. It is uncertain how the militaries will be operating. There was no agreement officially signed as the topic was discussed as part of the broader recognition of an economic and technical cooperation agreement. ","Military","","150","Pipeline: Pledge","12","Unset","Unset","","Seychelles","http://global.factiva.com/aa/?ref=BBCAP00020100729e67t00231&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Development","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020100729e67t00231&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","10000000.0","USD","1.0756432121391","1.0","9296762.99","","","","","1","Seychelles","591","270","Seychelles","SYC","SC","690","718","Not Commercial","2","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"17796","China","Zimbabwe Purchases Chinese Fighters and Missiles","2005","false","On April 13, 2005, the government of Zimbabwe entered into an agreement with Chinese state-owned aircraft companies that saw Zimbabwe's military order six US$20 million Chinese-made  K-8 fighter airplanes as well as an air-to-air missile arms package to be used with the aircraft. The aircraft were received by President Robert Mugabe on the same day, April 13, and were immediately entered into service. Furthermore, one of the six original K-8 aircraft crashed, according to Zimbabwean media sources, in September 2008 while in operation by Air Force of Zimbabwe pilots near Thornhill Air Force Base, Gweru, Zimbabwe. The deal was reported by the Shadow Minister of Defense for the opposition political party Movement for Democratic Change, Giles Mutsekwa. Note it is unclear what the degree of concessionality was in this deal, and the deal could be a direct sale of arms. Therefore its classification as official military aid is questionable. ","Military","","150","Completion","3","Unset","Unset","","Zimbabwe","http://mg.co.za/print/2005-04-14-so-long-and-thanks-for-all-the-jets 
+      , Google US
+      , International media report; http://www.newzimbabwe.com/pages/army49.18719.html 
+      , Google US
+      , Recipient media or official; http://www.guardian.co.uk/world/2005/apr/14/zimbabwe 
+      , Google US
+      , International media report; http://global.factiva.com/aa/?ref=FORCST0020050415e14e0000a&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","4","","Zimbabwean Air Force, Government Agency","","","Zimbabwean Air Force, Government Agency","1","Checked","1","Military","4","Mixed (No Development)","","Active","1","http://mg.co.za/print/2005-04-14-so-long-and-thanks-for-all-the-jets 
+        , Factiva
+        , International media report; http://www.newzimbabwe.com/pages/army49.18719.html 
+        , Factiva
+        , Recipient media or official; http://www.guardian.co.uk/world/2005/apr/14/zimbabwe 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=FORCST0020050415e14e0000a&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","120000000.0","USD","0.69665104956371","1.0","172252665.2","13 April 2005","","13 April 2005","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Commercial","1","false","false","false","","","","",""
+"1714","China","Nigerian Air Force contract with China for armaments and jets","2005","false","In 2005, Nigeria's defense ministry signed a $220 million contract for one squadron of 15 Chengdu F/Ft-7NI strike aircraft and trainers from the China National Aero-Technology Import and Export Corporation (CATIC). The agreement brokered 12 F-7NI fighters and three FT-7NI trainers, which details a unit cost of over $11 million. A related armaments package accounts for around $32 million of the deal’s value. CATIC will deliver 20 live PL-9Cs, 10 training rounds, launchers and training and support services for the weapons for around $18 million under the agreement. The service's two-seat FT-7s were to be shipped from China in June 2006 for reassembly in Nigeria, with the single-seat fighters to follow from October 2006. Twelve Nigerian pilots, including four instructors, will travel to China in early 2006 to undergo conversion training on the new aircraft.Whether or not the contract has been completely fulfilled is uncertain. STAFF_NOTES: this project appears to be a sale of aircraft from a state-owned Chinese company, but the funding source is unkown. Details on the terms of the funding are not known. ","Military","","150","Implementation","2","Unset","Unset","","Nigeria","http://www.flightglobal.com/news/articles/nigeria-rebuilds-air-force-with-220m-deal-for-f-7s-200660/ 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=NLIN000020070724e37100008&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report; http://nigeriadefence.com/story.aspx?Sid=580 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=BBCAP00020060520e25k0008d&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official; http://global.factiva.com/aa/?ref=LBA0000020050928e19s001q1&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report; http://global.factiva.com/aa/?ref=fligi00020050803e1820000z&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","6","China National Aero-Technology Import & Export Corporation (CATIC), State-Owned Company","","China National Aero-Technology Import & Export Corporation (CATIC), State-Owned Company","1","","","Checked","1","Military","4","Unset","","Active","1","http://www.flightglobal.com/news/articles/nigeria-rebuilds-air-force-with-220m-deal-for-f-7s-200660/ 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=NLIN000020070724e37100008&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report; http://nigeriadefence.com/story.aspx?Sid=580 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=BBCAP00020060520e25k0008d&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official; http://global.factiva.com/aa/?ref=LBA0000020050928e19s001q1&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=fligi00020050803e1820000z&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","220000000.0","USD","0.69665104956371","1.0","315796552.86","","01 January 2008","","","1","Nigeria","475","261","Nigeria","NGA","NG","566","694","Commercial","1","false","false","false","Unset","Unset","Unset","Unset","Unset"
+"17340","China","Zimbabwe to order fighter jets/arms from China","2004","false","In June 2004, the Zimbabwean Ministry of Defense confirmed a deal to buy 12 fighter jets and 100 military vehicles worth US$200 million from the Chinese government. The fighter jets ordered by the Zimbabwean government were Chinese FC-1 fighters, and were due to be delivered within the week of June 10, 2004. A later 2008 report indicated that armored personnel carriers, riot gear, and mobile water cannons were also ordered. The project was confirmed by the Minister of Defense, Trust Maphosa, and the Chairman of the Defense and Home Affairs Parliamentary Portfolio Committee, Saviour Kasukuwere, after being condemned by a spokesman for the opposition party, Movement for Democratic Change, Giles Mutsekwa. Additional research into the delivery dates of the military equipment, and organizations involved in the transaction was unsuccessful. Note it is unclear what the degree of concessionality was in this deal, and the deal could be a direct sale of arms. Therefore its classification as official military aid is questionable. ","Military","military arms","150","Pipeline: Commitment","11","Unset","Unset","","Zimbabwe","http://www.sadocc.at/news/2004-191.shtml 
+      , Google US
+      , Non-media; http://www.humanrightsfirst.org/wp-content/uploads/pdf/080428-CAH-china-zimbab-arms-fs.pdf 
+      , Google US
+      , Non-media; http://global.factiva.com/aa/?ref=DJI0000020040614e06e000eh&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","3","","","","","","","Checked","1","Military","4","Commercial","","Active","1","http://www.sadocc.at/news/2004-191.shtml 
+        , Factiva
+        , Non-media; http://www.humanrightsfirst.org/wp-content/uploads/pdf/080428-CAH-china-zimbab-arms-fs.pdf 
+        , Factiva
+        , Non-media; http://global.factiva.com/aa/?ref=DJI0000020040614e06e000eh&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","200000000.0","USD","0.66362944683753","1.0","301373004.1","","","","","1","Zimbabwe","552","265","Zimbabwe","ZWE","ZW","716","698","Commercial","1","false","false","false","","","","",""
+"2075","China","Grant for military training and equipment maintenance","2009","false","In 2009, China and Seychelles signed an agreement where Seychelles will receive 6 million Yuan for military training and equipment maintenance. The MoU was signed at the Seychelles People's Defence Forces (SPDF) headquarters by the chief of defence forces Brigadier Leopold Payet and the director of national defence at China's Ministry of Foreign Affairs, Maj-Gen Qian Lihua. It is unclear if the loan was implemented, and if it was, for what. ","Military","","150","Pipeline: Pledge","12","Grant (excluding debt forgiveness)","Unset","","Seychelles","http://global.factiva.com/aa/?ref=BBCAP00020090901e591003jt&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , Recipient media or official","1","","","","","","","Checked","1","Military","4","Representational","","Active","1","http://global.factiva.com/aa/?ref=BBCAP00020090901e591003jt&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , Recipient media or official","6000000.0","CNY","1.0","6.83141605176666","878295.21","","","","","1","Seychelles","591","270","Seychelles","SYC","SC","690","718","Not Commercial","2","false","false","false","","","","",""
+"1617","China","Camp Tubman Military Barracks (amount needs confirmation)","2006","false","Technical discussions between the governments of Liberia and the People's Republic of China for the reconstruction of the Tubman Military Camp began in November of 2006. A memorandum of understanding was signed between the Liberian Government and the government of the People's Republic of China through the People's Liberation Army on July 21, 2007 and provided for the framework of renovation the Camp. The project was completed in April of 2009 and the Chinese government officially turned it over to the Liberian government.","Military","","150","Completion","3","In-kind contribution","Unset","","Liberia","http://www.emansion.gov.lr/press.php?news_id=1151 
+      , Google US
+      , Recipient media or official; http://lr.china-embassy.org/chn/sghdhzxxx/t345937.htm 
+      , Baidu
+      , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020090430e54u0013g&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report; http://global.factiva.com/aa/?ref=AFNWS00020061108e2b8000l0&pp=1&fcpil=en&napc=S&sa_from= 
+      , Factiva
+      , International media report","4","","Xing Xing Digital Corporation, Private Sector","Xing Xing Digital Corporation, Private Sector","1","","","Checked","1","Military","4","Representational","","Active","1","http://www.emansion.gov.lr/press.php?news_id=1151 
+        , Factiva
+        , Recipient media or official; http://lr.china-embassy.org/chn/sghdhzxxx/t345937.htm 
+        , Factiva
+        , Donor media or official; http://global.factiva.com/aa/?ref=AFNWS00020090430e54u0013g&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report; http://global.factiva.com/aa/?ref=AFNWS00020061108e2b8000l0&pp=1&fcpil=en&napc=S&sa_from= 
+        , Factiva
+        , International media report","5500000.0","USD","0.74305214409552","1.0","7401903.14","23 July 2007","","30 April 2009","","1","Liberia","450","251","Liberia","LBR","LR","430","668","Not Commercial","2","false","false","false","","","","",""

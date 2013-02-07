@@ -9,13 +9,13 @@
 
   csv_links.each do |file|
     case file
-    when /Official_Finance/
+    when /Official/
       of_finance_link = file[7..-1] #drops 'public/' from path
-    when /Unofficial_Finance/
+    when /Unofficial/
       uf_finance_link = file[7..-1]
-    when /Military_Flows/
+    when /Military/
       military_link = file[7..-1]
-    when /Cancelled_Activities/
+    when /Cancelled/
       cancelled_link = file[7..-1]
     when /Suspicious/
       suspicious_link = file[7..-1]
@@ -23,17 +23,40 @@
   end
 
 %>
-<h2>Official Finance</h2>
-<%= link_to "CSV file", of_finance_link %>
 
-<h2>Unofficial Flows</h2>
-<%= link_to "CSV file", uf_finance_link %>
+<table id="download_table" align="center">
 
-<h2>Military Flows</h2>
-<%= link_to "CSV file", military_link%>
+  <!-- Table header -->
 
-<h2>Cancelled Activities</h2>
-<%= link_to "CSV file", cancelled_link %>
+  <thead>
+    <tr>
+      <th scope="col" id="header" align="center">Data Downloads</th>
+    </tr>
+  </thead>
 
-<h2>Suspicious Or Inactive Records</h2>
-<%= link_to "CSV file", suspicious_link %>
+  <!-- Table body -->
+
+  <tbody>
+    <tr>
+      <td>Official Finance</td>
+      <td><%= link_to "CSV file", of_finance_link %></td>
+    </tr>
+    <tr>
+      <td>Unofficial Finance</td>
+      <td><%= link_to "CSV file", uf_finance_link %></td>
+    </tr>
+    <tr>
+      <td>Military Flows</td>
+      <td><%= link_to "CSV file", military_link%></td>
+    </tr>
+    <tr>
+      <td>Cancelled Activities</td>
+      <td><%= link_to "CSV file", cancelled_link %></td>
+    </tr>
+    <tr>
+      <td>Suspicious Or Inactive Records </td>
+      <td><%= link_to "CSV file", suspicious_link %></td>
+    </tr>
+  </tbody>
+
+</table>
