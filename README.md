@@ -288,9 +288,8 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
     - `rake projects:recache` ??
 
 - There are a few rake tasks that get the data up to speed:
-- `rake projects` runs various tasks on the project-related data
-
-- `rake sunspot:solr:start` for the search engine.
+  - `rake projects` runs various tasks on the project-related data
+  - `rake sunspot:solr:start` for the search engine.
 
 - Create an file called app_config.yml in the config directory containing two lines:
 
