@@ -458,6 +458,8 @@ class Project < ActiveRecord::Base
     #check the SCOPE architecture in the search constant initializer
 	  SCOPES.each do |sco|
 	    catch :invalid_scope do
+
+	      #Things a project needs to be in the scope
         needs = sco[:with_and]
         #in case nil
         needs ||= []
@@ -465,35 +467,57 @@ class Project < ActiveRecord::Base
           next unless self.respond_to?(need[0])
           response = self.send(need[0])
           unless response == need[1] || need[1].include?(response)
+            logger.info("fail: #{sco} !!!  #{need[0]} -- #{response}\n")
             throw :invalid_scope
           end
         end
 
+        #Things a project can't have if it is in the scope
         cants = sco[:without]
         #in case nil
         cants ||= []
         cants.each do |cant|
           next unless self.respond_to?(cant[0])
           response = self.send(cant[0])
-          unless response == cant[1] || cant[1].include?(response)
+          if response == cant[1] || cant[1].include?(response)
+            logger.info("without fail: #{sco} !!!  #{cant[0]} -- #{response}\n")
             throw :invalid_scope
           end
         end
 
         ors = sco[:with_or]
         ors ||= []
+
+        #If the project has any of these things, it is in the scope
+        non_trivial_or = false
+        or_tag = false
         ors.each do |or_array|
           next unless self.respond_to?(or_array[0])
+          #if it reaches here, we have a nontrivial with_or value
+          non_trivial_or = true
           response = self.send(or_array[0])
-          unless response == or_array[1] || or_array[1].include?(response)
-            throw :invalid_scope
+          if response == or_array[1] || or_array[1].include?(response)
+            or_tag = true
           end
+        end
+
+        if non_trivial_or and not or_tag
+          throw :invalid_scope
         end
 
         scope_array << sco[:sym]
       end
     end
     return scope_array
+  end
+
+  def contains_scope?(test_scope)
+    scope_array = scope
+    if scope_array.includes?(test_scope)
+      true
+    else
+      false
+    end
   end
  
 

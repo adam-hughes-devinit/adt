@@ -30,7 +30,7 @@ module SearchHelper
 	        end			      
 	    end
 	    
-	    if @scope && @scope[:with_or]
+	    if @scope && @scope[:with_or] && @scope[:with_or] != {none: nil}
 	    	or_script = "any_of {" + @scope[:with_or].map {|w| "with(:#{w[0]}, '#{w[1]}'); "}.join(" ") +" }"
 	    	eval or_script
 	    end

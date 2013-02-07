@@ -1,4 +1,3 @@
-
 # Data Feeds
 
 Underneath the project platform there are several data feeds which could be useful for people making data visualizations. 

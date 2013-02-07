@@ -9,13 +9,15 @@
   <li><a href="#research">Research and Papers</a></li>
   <li><a href="#documentation">API Documentation</a></li>
   <li><a href="#activity-feed">Recent Activity</a></li>
+  <li><a href="#download-data">Download Data</a></li>
 </ul>
 
 
 	<div class="tab-content">
 		<div class="tab-pane active" id="map">
 			<h2>Visualize</h2>
-			<%= render partial: 'static_pages/map_js', locals: {total_projects: @total_projects} %>
+      <%= render partial: 'static_pages/map_js', 
+                 locals: {total_projects: @total_projects} %>
 		</div>
 		<div class="tab-pane" id="chart">
 			<h2>Analyze</h2>
@@ -42,6 +44,11 @@
 			<%= render 'shared/feed' %>
 			<%= link_to "See All Recent Activity...", versions_path %>
 		</div>
+
+    <div class="tab-pane" id="download-data" style='text-align:center'>
+      <h1>Download Full Data Set</h1>
+			<%= render partial: "download_data" %>
+    </div>
 	</div>
 
 </div>

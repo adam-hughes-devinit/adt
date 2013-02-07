@@ -6,6 +6,10 @@ module ProjectCache
 			cached_record = Cache.find_or_create_by_id(id)
 			cached_record.skip_cache_all = false
 			cached_record.update_attribute(:text, self.csv_text)
+
+			scopes = self.scope
+			scopes.each do scope
+      end
 		end
 	end
 	handle_asynchronously :cache!
