@@ -1,0 +1,26 @@
+  <div id="container" class="container">
+    <div id="main" role="main">
+      <div id="view_selection" class="btn-group">
+        <a href="#" id="all" class="btn active">All Projects</a>
+        <a href="#" id="year" class="btn">Projects By Year</a>
+        <a href="#" id="flow" class="btn">Projects By Flow Class</a>
+      </div>
+      <div id="vis2"></div>
+    </div>
+    <footer>
+    <p>Animated Bubble Chart</p>
+    </footer>
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(document).ready(function() {
+          $('#view_selection a').click(function() {
+            var view_type = $(this).attr('id');
+            $('#view_selection a').removeClass('active');
+            $(this).toggleClass('active');
+            toggle_view(view_type);
+            return false;
+          });
+        });
+    });
+  </script>
