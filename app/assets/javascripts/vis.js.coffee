@@ -53,7 +53,7 @@ class BubbleChart
     }
     @flow_centers = {
       "ODA-like" : {x:300, y: @height / 2},
-      "Vague (ODF)" : {x:300, y: @height / 2},
+      "Vague (Official Finance)" : {x:300, y: @height / 2},
       "OOF-like" : {x:300, y: @height / 2},
       "CA -SOE" : {x: @width / 2, y: @height / 2},
       "CA +SOE" : {x: @width / 2, y: @height / 2},
@@ -64,6 +64,7 @@ class BubbleChart
       "Military" : {x:@width-300, y: @height / 2},
       "NGO Aid" : {x: @width / 2, y: @height / 2},
       "Vague (Com)" : {x: @width / 2, y: @height / 2},
+      "Official Investment" : {x:300, y: @height / 2}
     }
 
     # used when setting up force and
@@ -283,7 +284,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl>0
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl>0 && d.flow_class!="" && d.flow_class!="Unset"
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
@@ -307,4 +308,4 @@ $ ->
         else
         root.display_all()
 
-  d3.csv "projects.csv?active_string=Active&max=4000", render_vis
+  d3.csv "/projects.csv?active_string=Active&max=4000", render_vis
