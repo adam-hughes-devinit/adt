@@ -31,7 +31,7 @@ include SearchHelper
 
 				@csv_header = "\uFEFF" + '"project_id","donor","title","year",'\
 				'"year_uncertain","description","sector","sector_comment","crs_sector",'\
-				'"status","status_code","flow","' +  # "tied","tied_code", #removed
+				'"status","status_code","flow",' +  # "tied","tied_code", #removed
 				'"all recipients","sources","sources_count","funding_agency",'\
 				'"implementing_agency","donor_agency","donor_agency_count",'\
 				'"recipient_agencies","recipient_agencies_count","verified",'\
