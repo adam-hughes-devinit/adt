@@ -1,16 +1,26 @@
   <div id="container" class="container">
-    <div id="main" role="main">
+    <div id="main" role="main" class='row'>
       <div id="view_selection" class="btn-group">
         <a href="#" id="all" class="btn active">All Projects</a>
         <a href="#" id="year" class="btn">Projects By Year</a>
         <a href="#" id="flow" class="btn">Projects By Flow Class</a>
       </div>
-      <div id="vis2"></div>
+
+      <div id='loading-bar' class='offset2 span8' style='margin:20px'>
+          <div class="progress progress-striped active">
+             <div class="bar" style="width: 5%;"></div>
+          </div>
+          <p>Loading data...</p>
+      </div>
+
+      <div id="vis2" >
+      </div>
     </div>
-    <footer>
-    <p>Animated Bubble Chart</p>
-    </footer>
+    <div class='row'>
+      <p>Animated Bubble Chart</p>
+    </div>
   </div>
+  <%= javascript_include_tag 'bubbles/index' %>
   <script type="text/javascript">
     $(document).ready(function() {
         $(document).ready(function() {

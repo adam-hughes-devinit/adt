@@ -308,4 +308,28 @@ $ ->
         else
         root.display_all()
 
-  d3.csv "/projects.csv?active_string=Active&max=4000", render_vis
+
+  page = 1
+  page_size = 1000
+  max_count = 2000
+  percent_loaded = 0
+  percent_step = 100 / ( max_count/page_size )
+  csv = []
+
+  load_projects = (page, page_size, percent_loaded,percent_step) ->
+    console.log "Getting #{page_size} projects from page #{page}"
+    d3.csv "/projects.csv?active_string=Active&page=#{page}&max=#{page_size}", (data) ->
+      percent_loaded += percent_step
+      $('#loading-bar .progress .bar').css("width", "#{percent_loaded}%")
+      csv = csv.concat(data)
+      if data.length >= page_size
+        page +=1
+        load_projects(page, page_size, percent_loaded, percent_step)
+      else
+        $('#loading-bar').css("width", "100%")
+        console.log "Found #{csv.length} active projects"
+        render_vis csv
+        $('#loading-bar').slideUp().remove()
+
+  load_projects page, page_size, percent_loaded, percent_step
+
