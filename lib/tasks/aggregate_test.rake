@@ -238,7 +238,4 @@ namespace :aggregator do
 		## TO ADD: Random combinations
 		##
 		##
-
-
-
 end

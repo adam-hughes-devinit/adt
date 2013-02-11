@@ -70,7 +70,7 @@ p {
 }
 
 
-                                                                        /* header */
+                      /* header */
 
 .navbar-inner {
   min-height: 32px;
@@ -163,7 +163,7 @@ footer {
 }
 
 
-/* miscellaneous */
+                                            /* miscellaneous */
 
 .debug_dump {
   clear: both;
@@ -175,8 +175,23 @@ footer {
 
                                         /* Visualization */
 
+#vis {
+  text-align:center;
+}
 #africa-map {
   background: transparent;
+}
+#tooltip {
+  position:absolute;
+  font-family:sans-serif;
+  font-size:12px;
+  background-color:#fff;
+  border: 1px solid gray;
+  opacity: 0.9;
+}
+
+#tooltiptext {
+  margin: 1px 5px;
 }
 
 #sectors_body {
