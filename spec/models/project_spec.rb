@@ -9,7 +9,6 @@ describe Project do
   let(:contact) {FactoryGirl.build(:contact)}
   let(:source) {FactoryGirl.build(:source)}
   let(:comment) {FactoryGirl.build(:comment)}
-
   subject {project}
 
   describe "have a valid Factory" do

@@ -518,39 +518,9 @@ class Project < ActiveRecord::Base
   end
 
 
-  def as_json(options={})
-=======
-
-        cants = sco[:without]
-        #in case nil
-        cants ||= []
-        cants.each do |cant|
-          next unless self.respond_to?(cant[0])
-          response = self.send(cant[0])
-          unless response == cant[1] || cant[1].include?(response)
-            throw :invalid_scope
-          end
-        end
-
-        ors = sco[:with_or]
-        ors ||= []
-        ors.each do |or_array|
-          next unless self.respond_to?(or_array[0])
-          response = self.send(or_array[0])
-          unless response == or_array[1] || or_array[1].include?(response)
-            throw :invalid_scope
-          end
-        end
-
-        scope_array << sco[:sym]
-      end
-    end
-    return scope_array
-  end
  
 
    def as_json(options={})
->>>>>>> e42969ae73b0813eb1e53478d4f686071c79aae0
     super(
       only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
       methods: [:usd_2009, :donor_name,
