@@ -14,6 +14,7 @@ Adt::Application.routes.draw do
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
+  resources :scopes, only: [:index]
   match '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
   match '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
   match '/projects/json', to: 'projects#index', as: "project_api", defaults: { format: 'json'}
@@ -34,7 +35,6 @@ Adt::Application.routes.draw do
   
   # static pages
   root to: "static_pages#home"
-  match '/china', to: "static_pages#home"
 	get '/analyze', to: "static_pages#analyze"
 
   match '/signup', to: 'users#new'

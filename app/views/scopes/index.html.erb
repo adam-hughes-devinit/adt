@@ -1,0 +1,73 @@
+<% provide :title, "Scopes"
+provide :first_header, "Project Scopes" %>
+
+<h2>Scopes</h2>
+
+<p>
+	Scopes allow projects to be automatically sorted according to the parameters displayed below. 
+</p>
+<br>
+
+<% SCOPES.each do |scope| %>
+
+	<table class='table table-bordered'>
+		<thead >
+			<tr>
+				<th>
+					<h3 style='color:#555;'>
+						<%= scope[:name] %>
+					</h3>
+				</th>
+			</tr>
+			<tr style='background-color:#eee;'>
+				<th>Code</th>
+				<th>Required Values</th>
+				<th>Prohibited Values</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% scope[:with_and].each do |field, values| %>
+				<% if field != :none %>
+					<tr>
+						<td>
+							<b><%= field.to_s.gsub(/(name|string)/, '').gsub(/oda_like/, 'flow_class').humanize %></b>
+						</td>
+						<td>
+							<%= values.class == Array ? values.join(", ") : values %>
+						</td>
+						<td>
+						</td>
+					</tr>
+				<% end %>
+			<% end %>
+			<% scope[:without].each do |field, values| %>
+				<% if field != :none %>
+					<tr>
+						<td>
+							<b><%= field.to_s.gsub(/(name|string)/, '').gsub(/oda_like/, 'flow_class').humanize %></b>
+						</td>
+						<td>
+						</td>
+						<td>
+							<%= values.class == Array ? values.join(", ") : values %>
+						</td>
+					</tr>
+				<% end %>
+			<% end %>
+			<% if w = scope[:with_or] then w.each do |field, values| %>
+				<% if field != :none %>
+					<tr>
+						<td>
+							<b><%= field.to_s.gsub(/(name|string)/, '').gsub(/oda_like/, 'flow_class').humanize %></b>
+						</td>
+						<td>
+							<%= values.class == Array ? values.join(", ") : values %>
+						</td>
+						<td>
+						</td>
+					</tr>
+				<% end %>
+			<% end end%>
+		</tbody>
+	</table>
+<% end %>

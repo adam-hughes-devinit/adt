@@ -25,7 +25,7 @@ module AggregatesHelper
 	    	{sym: :flow_type, name: "Flow Type", options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
 	    	{sym: :flow_class, name: "Flow Class", options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
 	    	{sym: :status, name: "Status", options: Status.all.map{|o| o.name}, internal_filter: "statuses.name" },
-	    	{sym: :year, name: "Year", options: ("2000".."2010").to_a.reverse! , internal_filter: "year" }
+	    	{sym: :year, name: "Year", options: ("2000".."2011").to_a.reverse! , internal_filter: "year" }
 	    ]
 	
 		
