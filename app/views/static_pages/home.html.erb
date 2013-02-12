@@ -37,7 +37,7 @@
 		<div class="tab-pane" id="documentation">
 			<% # This is copied from README
 			%>
-			<%= render "documentation.html.md" %>
+      <%= render "documentation", handlers: [:md] %>
 		</div>
 		<div class="tab-pane" id="activity-feed">	
 			<h2>Recent Activity</h2>

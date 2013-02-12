@@ -19,10 +19,11 @@ gem 'delayed_job_active_record'
  
 group :development, :test do
   gem 'sqlite3', '1.3.5'
-  gem 'rspec-rails', '2.11.0'
+  gem 'rspec-rails'
   #gem 'factory_girl_rails', '1.4.0'
   gem 'sunspot_solr'
   gem 'launchy'
+  gem 'spork', '0.9.2'
 end
 
 # Gems used only for assets and not required

@@ -3,13 +3,11 @@ module ProjectCache
   require 'fileutils'
 
   def cache!
-    File.open("1.txt", "w") {}
     if CACHE_ONE
       cached_record = Cache.find_or_create_by_id(id)
       cached_record.skip_cache_all = false
       cached_record.update_attribute(:text, self.csv_text)
 
-    File.open("2.txt", "w") {}
       scopes = self.scope
       scopes.each { |s| cache_files(s) }
 
@@ -30,7 +28,6 @@ module ProjectCache
     #remove old file
     FileUtils.rm Dir.glob("public/downloads/*#{scope_name.to_s.capitalize}.csv"), :force => true
 
-    File.open("3.txt", "w") {}
     file_prefix = "#{scope_name.to_s.capitalize}"
     # this prepends the last updated time to the filename, but
     # maybe that's not the best because people will think data is out of date
@@ -47,7 +44,6 @@ module ProjectCache
         end
       end
     end
-    File.open("4.txt", "w") {}
   end
   handle_asynchronously :cache_files
 end

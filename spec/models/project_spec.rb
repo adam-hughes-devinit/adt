@@ -61,5 +61,8 @@ describe Project do
     it {should be_valid}
   end
 
-
+  describe "Should recognize official scope" do
+    subject { FactoryGirl.create(:user, :official) }
+    its(:active_string) { should eq "Active" }
+  end
 end
