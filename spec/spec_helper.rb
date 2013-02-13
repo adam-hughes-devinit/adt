@@ -67,9 +67,7 @@ end
 Spork.each_run do
   # This code will be run each time you run your specs.
   require 'factory_girl_rails'
-  FactoryGirl.factories.clear
-  FactoryGirl.sequences.clear
-  FactoryGirl.find_definitions
+  FactoryGirl.reload
 
 end
 

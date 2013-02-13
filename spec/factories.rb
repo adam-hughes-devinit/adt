@@ -128,32 +128,62 @@ FactoryGirl.define do
     o.organization  FactoryGirl.create(:organization)
   end
 
-  factory :project do |project|
+  factory :project do
 
-    project.title "Example project title"
-    project.description "Example description of a development project"
-    project.active true
-    project.start_actual 10.years.ago
-    project.start_planned 11.years.ago
-    project.end_planned 2.years.ago
-    project.end_actual 1.year.ago
-    project.year 2002
-    project.is_commercial false
+    title "Example project title"
+    description "Example description of a development project"
+    active true
+    start_actual 10.years.ago
+    start_planned 11.years.ago
+    end_planned 2.years.ago
+    end_actual 1.year.ago
+    year 2002
+    is_commercial false
 
-    project.status FactoryGirl.create(:status)
-    project.verified FactoryGirl.create(:verified)
-    # project.oda_like FactoryGirl.create(:oda_like)
-    project.flow_type FactoryGirl.create(:flow_type)
-    # project.tied FactoryGirl.create(:tied)
-    project.sector FactoryGirl.create(:sector)
+    flow_type FactoryGirl.create(:flow_type)
+    #project.tied FactoryGirl.create(:tied)
+    sector FactoryGirl.create(:sector)
 
-    project.donor FactoryGirl.create(:country)
-    project.owner FactoryGirl.create(:organization)
+    donor FactoryGirl.create(:country)
+    owner FactoryGirl.create(:organization)
 
-    trait :official do
-      oda_like_name "ODA-like"
-      active_string "Active"
-      verified_name "Checked"
+    trait :offic do
+      comment FactoryGirl.create(:comment)
+      oda_like FactoryGirl.create(:oda_like, )#name: "ODA-like")
+      active true
+      verified FactoryGirl.create(:verified, name: "Checked")
+      status FactoryGirl.create(:status, name: "Pipeline: Pledge")
+    end
+
+    
+    trait :unoffic do
+      oda_like FactoryGirl.create(:oda_like, name: "NGO Aid")
+      active true
+      verified FactoryGirl.create(:verified, name: "Checked")
+      status FactoryGirl.create(:status, name: "Bogus")
+    end
+
+    trait :military do
+      oda_like FactoryGirl.create(:oda_like, name: "Military")
+      active true
+      verified FactoryGirl.create(:verified, name: "Checked")
+      status FactoryGirl.create(:status, name: "Bogus")
+    end
+
+    trait :cancelled do
+      status FactoryGirl.create(:status, name: "Cancelled")
+      active true
+      verified FactoryGirl.create(:verified, name: "Checked")
+    end
+
+    trait :sus do
+      active true
+      verified FactoryGirl.create(:verified, name: "Suspicious")
+    end
+
+    trait :inact do
+      status FactoryGirl.create(:status, name: "Cancelled")
+      active false
     end
   end
 

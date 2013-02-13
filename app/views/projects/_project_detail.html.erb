@@ -30,7 +30,7 @@
 		<% end %>
 
     <!-- If units were passed along with the detail display them correctly -->
-    <% if defined? units %>
+    <% if defined? units and current_object.present? %>
       <% if units == :years %>
         <!-- By default pluralize will return "3 years" just "years" -->
         <!-- So split it up into an array an just take the "years" -->
