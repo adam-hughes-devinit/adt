@@ -1,6 +1,7 @@
 <% provide :title, "Scopes"
 provide :first_header, "Project Scopes" %>
-
+<%= javascript_include_tag 'backbone/index' %>
+<%= javascript_include_tag 'scopes/index' %>
 <h2>Scopes</h2>
 
 <p>
@@ -8,7 +9,9 @@ provide :first_header, "Project Scopes" %>
 </p>
 <br>
 
-<% SCOPES.each do |scope| %>
+<div id='scope_div'></div>
+
+<% [].each do |scope| %>
 
 	<table class='table table-bordered'>
 		<thead >
