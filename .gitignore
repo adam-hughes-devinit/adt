@@ -12,9 +12,16 @@
 
 # Ignore development search engine
 /solr/data/development
+/solr/data/test
 /solr/pids/development
+/solr/pids/test
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
 # Ignore sensitive info
 /config/app_config.yml
+
+# Ignore sql dumps
+/*.sql
