@@ -1,35 +1,38 @@
 class Project < ActiveRecord::Base
+  include ProjectCache
+  include ProjectExporters
+  extend  ProjectExporterHeaders
+
   attr_accessible :title, :active, :capacity, :description, :year,
-  :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
-  :cache!, :cache_text, :cache_one!,
-  :is_commercial, :media_id, 
-  :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, 
-  :is_cofinanced,
-  # belongs_to fields
-  :status, :verified, :tied, :flow_type, :oda_like, :sector,
-  #convoluted fields
-  :donor, :owner, 
-  :transactions, :transactions_attributes,
-  :geopoliticals, :geopoliticals_attributes,
-  :participating_organizations, :participating_organizations_attributes,
-  :contacts, :contacts_attributes,
-  :sources, :sources_attributes,
-  :flow_class_attributes,
-  :loan_detail_attributes,
-  # for version control
-  :accessories, :iteration,
-  # hidden fields
-  :verified_id, :sector_id, :tied_id, :flow_type_id, :oda_like_id, :status_id,
-  :donor_id, :owner_id, :intent_id
-  
+    :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
+    :is_commercial, :media_id, 
+    :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, 
+    :is_cofinanced,
+    # belongs_to fields
+    :status, :verified, :tied, :flow_type, :oda_like, :sector,
+    #convoluted fields
+    :donor, :owner, 
+    :transactions, :transactions_attributes,
+    :geopoliticals, :geopoliticals_attributes,
+    :participating_organizations, :participating_organizations_attributes,
+    :contacts, :contacts_attributes,
+    :sources, :sources_attributes,
+    :flow_class_attributes,
+    :loan_detail_attributes,
+    # for version control
+    :accessories, :iteration,
+    # hidden fields
+    :verified_id, :sector_id, :tied_id, :flow_type_id, :oda_like_id, :status_id,
+    :donor_id, :owner_id, :intent_id
+
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
   after_save :cache!
   # before_save :increment_iteration MOVED TO FORM
-  
+
   def increment_iteration # DUH, version was already taken by paper_trail
-  	iteration ||= 0
-		iteration += 1
+    iteration ||= 0
+    iteration += 1
   end
 
   has_many :comments, dependent: :destroy
@@ -37,20 +40,20 @@ class Project < ActiveRecord::Base
 
 
   has_paper_trail(meta: {accessories: :accessories})
-  
-	
-	def accessories
-		{transaction: transactions.each(&:attributes), 
-		 source: sources.each(&:attributes), 
-		 participating_organization: participating_organizations.each(&:attributes),
-		 contact: contacts.each(&:attributes),
-		 geopolitical: geopoliticals.each(&:attributes),
-     flow_class: flow_class(&:attributes),
-     loan_detail: loan_detail(&:attributes)
-		 }.to_json
-	end
-	
-	
+
+
+  def accessories
+    {transaction: transactions.each(&:attributes), 
+      source: sources.each(&:attributes), 
+      participating_organization: participating_organizations.each(&:attributes),
+      contact: contacts.each(&:attributes),
+      geopolitical: geopoliticals.each(&:attributes),
+      flow_class: flow_class(&:attributes),
+      loan_detail: loan_detail(&:attributes)
+    }.to_json
+  end
+
+
   #validates :title, presence: true
 
   # I'm adding string methods for these codes for Sunspot Facets
@@ -58,7 +61,7 @@ class Project < ActiveRecord::Base
   def status_name
     status.present?  ? status.name : 'Unset'
   end
-  
+
   belongs_to :verified
   def verified_name
     verified.present? ? verified.name : 'Unset'
@@ -68,10 +71,10 @@ class Project < ActiveRecord::Base
   def tied_name
     tied.present? ? tied.name : 'Unset'
   end
-  
+
   belongs_to :intent
   def intent_name
-  	intent.present? ? intent.name : 'Unset'
+    intent.present? ? intent.name : 'Unset'
   end
 
   belongs_to :flow_type
@@ -83,96 +86,96 @@ class Project < ActiveRecord::Base
     end
   end
 
-	# 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
-	#
-	# Replacing oda_like with a double-code + arbitrated FlowClass
+  # 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
+  #
+  # Replacing oda_like with a double-code + arbitrated FlowClass
 
-	# OLD:
+  # OLD:
   #belongs_to :oda_like
-  
-	def old_oda_like
-		if oda_like_id
-			OdaLike.find(oda_like_id)
-		end
-	end
- 
+
+  def old_oda_like
+    if oda_like_id
+      OdaLike.find(oda_like_id)
+    end
+  end
+
   def oda_like_name
     unless oda_like.nil?
       oda_like.name
     else
-     "Unset"
+      "Unset"
     end
   end 
-  
+
   # NEW:
 
   def oda_like=(new_oda_like)
-  	# first it tries round 1, then round 2. you can't set the master this way. 
-  	flow_class= FlowClass.find_or_create_by_project_id(id)
-  	if new_oda_like
-			if flow_class.oda_like_1.nil?
-				flow_class.oda_like_1_id=new_oda_like.id
-			else
-				flow_class.oda_like_2_id=new_oda_like.id
-			end
-		end
-		
-  	flow_class.save
+    # first it tries round 1, then round 2. you can't set the master this way. 
+    flow_class= FlowClass.find_or_create_by_project_id(id)
+    if new_oda_like
+      if flow_class.oda_like_1.nil?
+        flow_class.oda_like_1_id=new_oda_like.id
+      else
+        flow_class.oda_like_2_id=new_oda_like.id
+      end
+    end
+
+    flow_class.save
   end
-  	
+
   def oda_like(what_is_it=false)
-		if what_is_it==false
-			if flow_class && best_answer = flow_class.oda_like_master || flow_class.oda_like_2 || flow_class.oda_like_1
-				best_answer
-			else
-				nil
-			end
-		else
-			if flow_class
-				if best_answer = flow_class.oda_like_master
-					answer_type = "Arbitrated"
-					 [best_answer, answer_type]
-				elsif best_answer = flow_class.oda_like_2 || flow_class.oda_like_1
-					answer_type = "Single-coded"
-					 [best_answer, answer_type]
-				else 
-					nil
-				end
-			else
-				nil
-			end
-		end
+    if what_is_it==false
+      if flow_class && best_answer = flow_class.oda_like_master || flow_class.oda_like_2 || flow_class.oda_like_1
+        best_answer
+      else
+        nil
+      end
+    else
+      if flow_class
+        if best_answer = flow_class.oda_like_master
+          answer_type = "Arbitrated"
+          [best_answer, answer_type]
+        elsif best_answer = flow_class.oda_like_2 || flow_class.oda_like_1
+          answer_type = "Single-coded"
+          [best_answer, answer_type]
+        else 
+          nil
+        end
+      else
+        nil
+      end
+    end
   end
-  
+
   ############################################################
   # Flow Class Methods
   ############################################################
   def visible_flow_class
-  	oda_like(true) # to return [best_answer, answer_type]
+    oda_like(true) # to return [best_answer, answer_type]
   end
-  
+
   def flow_class_arbitrated
-  	if flow_class && flow_class.oda_like_master
-  		flow_class.oda_like_master.name
-  	else
-  		"None"
-  	end
+    if flow_class && flow_class.oda_like_master
+      flow_class.oda_like_master.name
+    else
+      "None"
+    end
   end
-  
+
   def flow_class_1
-  	if flow_class && flow_class.oda_like_1
-  		flow_class.oda_like_1.name
-  	else
-  		"None"
-  	end
+    if flow_class && flow_class.oda_like_1
+      flow_class.oda_like_1.name
+    else
+      "None"
+    end
   end
-  
+
   def flow_class_2
-  	if flow_class && flow_class.oda_like_2
-  		flow_class.oda_like_2.name
-  	else
-  		"None"
-  	end
+    if flow_class && flow_class.oda_like_2
+      flow_class.oda_like_2.name
+    else
+      "None"
+    end
   end 
 
   has_one :flow_class
@@ -181,10 +184,10 @@ class Project < ActiveRecord::Base
   ####################################################
   # Loan Detail Methods
   ####################################################
- 
+
   has_one :loan_detail
   accepts_nested_attributes_for :loan_detail
-  
+
   def loan_type
     if loan_detail.nil?
       "Unset"
@@ -269,26 +272,26 @@ class Project < ActiveRecord::Base
   def line_of_credit_string
     line_of_credit ? "Line of Credit" : "Not Line of Credit"
   end
-  
+
   def is_cofinanced_string
-  	is_cofinanced ? "Cofinanced" : "Not Cofinanced"
+    is_cofinanced ? "Cofinanced" : "Not Cofinanced"
   end
 
   # project accessories
   has_many :geopoliticals, dependent: :destroy
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
   def country_name
-      geopoliticals.map do |g|
-        g.recipient ? g.recipient.name : 'Unset'
-      end.sort
+    geopoliticals.map do |g|
+      g.recipient ? g.recipient.name : 'Unset'
+    end.sort
   end
   def recipient_condensed
     country_name.count > 1 ? "Africa, regional" : country_name[0]
   end
   def number_of_recipients
-  	country_name.length
+    country_name.length
   end
-  
+
   has_many :transactions, dependent: :destroy
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
   def usd_2009
@@ -342,7 +345,7 @@ class Project < ActiveRecord::Base
   searchable do 
     integer :id # only for searching
     text :id
-    
+
     float :usd_2009
 
     text :title
@@ -351,7 +354,7 @@ class Project < ActiveRecord::Base
     text :description
     text :capacity
     text :sector_comment
-    
+
     text :year
     string :year
 
@@ -361,35 +364,35 @@ class Project < ActiveRecord::Base
     text :comments do 
       comments.map do |c|
         ["#{c.name}",
-        "#{c.content}"]
+          "#{c.content}"]
       end
     end
 
     text :geopoliticals do
-        geopoliticals.map do |g| 
-          if g
-            ["#{g.subnational}",
-             "#{g.recipient ? g.recipient.name : ''}",
-             "#{g.recipient ? g.recipient.iso3 : '' }"]
-          end
+      geopoliticals.map do |g| 
+        if g
+          ["#{g.subnational}",
+            "#{g.recipient ? g.recipient.name : ''}",
+            "#{g.recipient ? g.recipient.iso3 : '' }"]
         end
+      end
     end
 
     text :participating_organizations do
       participating_organizations.map do |o| 
         ["#{o.organization ? o.organization.name : '' }",
-         "#{o.role ?  o.role.name : ''}",
-         "#{o.organization && o.organization.organization_type ? o.organization.organization_type.name : ''}"] 
+          "#{o.role ?  o.role.name : ''}",
+          "#{o.organization && o.organization.organization_type ? o.organization.organization_type.name : ''}"] 
       end
     end
 
     text :sources do
       sources.map do |s| 
         ["#{s.url}",
-         "#{s.source_type  ? s.source_type.name : ''}",
-         "#{s.document_type ? s.document_type.name  : ''}",
-         "#{s.date ? s.date.strftime('%d %B %Y') : ''}"]
-       end
+          "#{s.source_type  ? s.source_type.name : ''}",
+          "#{s.document_type ? s.document_type.name  : ''}",
+          "#{s.date ? s.date.strftime('%d %B %Y') : ''}"]
+      end
     end
 
     text :transactions do
@@ -406,7 +409,7 @@ class Project < ActiveRecord::Base
           "#{c.organization ? c.organization.name : ''}"]
       end
     end
-    
+
     string :number_of_recipients
     string :owner_name
     string :sector_name 
@@ -439,142 +442,127 @@ class Project < ActiveRecord::Base
     string :interest_rate
     string :maturity
     string :grace_period
-    string  :grant_element
-    
+    string :grant_element
+
 
     string :recipient_iso2, multiple: true do
-    	geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
+      geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
     end
 
   end
 
 	
-	def cache!
-		if CACHE_ONE
-			cached_record = Cache.find_or_create_by_id(id)
-			cached_record.skip_cache_all = false
-			cached_record.update_attribute(:text, cache_text)
-		end
-	end
-	
-	def cache_one!
-		if CACHE_ONE
-			cached_record = Cache.find_or_create_by_id(id)
-			cached_record.skip_cache_all = true
-			cached_record.update_attribute(:text, cache_text)
-		end
-	end
-	
-	def cache_text
-    project_sources = {}
-    project_sources[:all] = sources.map{|s| "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }" }
-    project_sources[:factiva] = sources.map do |s| 
-      if s.source_type = SourceType.find_by_name("Factiva")
-        "#{s.url} #{s.source_type ? ", "+s.source_type.name : ""}#{s.document_type ? ", "+s.document_type.name : '' }"
+	def scope
+	  scope_array = []
+
+    #check the SCOPE architecture in the search constant initializer
+	  SCOPES.each do |sco|
+	    catch :invalid_scope do
+        needs = sco[:with_and]
+        #in case nil
+        needs ||= []
+        needs.each do |need|
+          next unless self.respond_to?(need[0])
+          response = self.send(need[0])
+          unless response == need[1] || need[1].include?(response)
+            throw :invalid_scope
+          end
+        end
+
+        #Things a project can't have if it is in the scope
+        cants = sco[:without]
+        #in case nil
+        cants ||= []
+        cants.each do |cant|
+          next unless self.respond_to?(cant[0])
+          response = self.send(cant[0])
+          if response == cant[1] || cant[1].include?(response)
+            throw :invalid_scope
+          end
+        end
+
+        ors = sco[:with_or]
+        ors ||= []
+
+        #If the project has any of these things, it is in the scope
+        non_trivial_or = false
+        or_tag = false
+        ors.each do |or_array|
+          next unless self.respond_to?(or_array[0])
+          #if it reaches here, we have a nontrivial with_or value
+          non_trivial_or = true
+          response = self.send(or_array[0])
+          if response == or_array[1] || or_array[1].include?(response)
+            or_tag = true
+          end
+        end
+
+        if non_trivial_or and not or_tag
+          throw :invalid_scope
+        end
+
+        scope_array << sco[:sym]
       end
     end
+    return scope_array
+  end
 
-    project_agencies = {}
-    ["Funding", "Implementing"].map do |type|
-    	project_agencies[type.to_sym] = (
-    	if Role.find_by_name(type)
-		    participating_organizations.where("role_id = #{Role.find_by_name(type).id}").map do |a| 
-		      if a.organization 
-		        "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
-		      end
-		    end
-		  else
-		  	[]
-		  end
-		  )
+  #test_scope should be a symbol. Check the SCOPE constant for possibilites
+  def contains_scope?(test_scope)
+    scope_array = scope
+    if scope_array.include?(test_scope)
+      true
+    else
+      false
     end
-    ["Donor", "Recipient", "Other"].map do |origin|
-    	project_agencies[origin.to_sym] = (
-		  if Origin.find_by_name(origin)
-				   participating_organizations.where("origin_id = #{Origin.find_by_name(origin).id}").map do |a| 
-				    if a.organization 
-				      "#{a.organization.name}#{a.organization.organization_type ? ", " + a.organization.organization_type.name : ''}"
-				    end
-				  end
-			else 
-				[]
-			end
-			)
-    end
-    
-    cached_recipients = []
-    geopoliticals.each {|g| g.recipient ? cached_recipients.push(g.recipient) : nil }	
-    
-    cache_text = "\"#{id}\",\"#{donor_name}\",\"#{title}\",\"#{year}\",\"#{year_uncertain}\"," +
-    "\"#{description}\",\"#{sector_name}\",\"#{sector_comment}\",\"#{crs_sector}\",\"#{status_name}\"," +
-    "\"#{status ? status.code : ''}\",\"#{flow_type_name}\"," + 
-     # \"#{tied_name}\",\"#{tied ? tied.code : '' }\"," +  # Maybe we'll need this again.
-    "\"#{country_name.join(", ")}\",\"#{project_sources[:all].join("; ")}\",\"#{project_sources[:all].count}\"," +
-    "\"#{project_agencies[:Funding].join('; ')}\",\"#{project_agencies[:Implementing].join("; ")}\","+ 
-    "\"#{project_agencies[:Donor].join("; ")}\",\"#{project_agencies[:Donor].any? ? project_agencies[:Donor].count : ''}\"," +
-    "\"#{project_agencies[:Recipient].join('; ')}\",\"#{project_agencies[:Recipient].any? ? project_agencies[:Recipient].count : ''}\"," +
-    "\"#{verified_name}\",\"#{verified ? verified.code : '' }\"," + 
-    "\"#{oda_like_name}\",\"#{oda_like ? oda_like.code : '' }\","+ 
-    "\"#{intent_name}\",\"#{intent ? intent.code : '' }\","+
-    "\"#{active_string}\",\"#{active ? 1 : 2}\",\"#{project_sources[:factiva].join("; ")}\"," +
-    "\"#{transactions.map{|t| t.value}.join("; ")}\",\"#{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}\","+ 
-    "\"#{transactions.map{|t| t.deflator}.join("; ")}\",\"#{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}\"," +
-    "\"#{start_actual ? start_actual.strftime("%d %B %Y") : ''}\",\"#{start_planned ?  start_planned.strftime("%d %B %Y") : ''}\"," +
-    "\"#{end_actual ? end_actual.strftime("%d %B %Y") : ''}\",\"#{end_planned ? end_planned.strftime("%d %B %Y"): '' }\"," +
-    "\"#{country_name.any? ? country_name.count : ''}\",\"#{recipient_condensed}\"," + 
-    "\"#{cached_recipients.map(&:cow_code).join("; ")}\",\"#{cached_recipients.map(&:oecd_code).join("; ")}\"," +
-    "\"#{cached_recipients.map(&:oecd_name).join("; ")}\",\"#{cached_recipients.map(&:iso3).join("; ")}\"," +
-    "\"#{cached_recipients.map(&:iso2).join("; ")}\",\"#{cached_recipients.map(&:un_code).join("; ")}\"," +
-    "\"#{cached_recipients.map(&:imf_code).join("; ")}\"," +
-    "\"#{is_commercial_string}\",\"#{is_commercial ? 1 : 2}\",\"#{debt_uncertain}\",\"#{line_of_credit}\",\"#{is_cofinanced}\"," +
-    "\"#{loan_type}\",\"#{interest_rate}\",\"#{maturity}\"," +
-    "\"#{grace_period}\",\"#{grant_element}\""
-	end
+  end
+
+
  
 
    def as_json(options={})
     super(
-          only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
-          methods: [:usd_2009, :donor_name,
-                    :sector_name, :flow_type_name, :oda_like_name, :status_name, 
-                    # :tied_name, 
-                    :recipient_condensed
-                    ],
-          include: [
-            {geopoliticals: {include: [recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}], only: [:percent]}},
-            {transactions: {include: [currency: {only: [:name, :iso3]}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
-            {contacts: {only: [:name, :position], include: [organization: {only: [:name, :organization_type]}]}},
-            {sources: {only: [:url, :date], include: [source_type: {only: [:name]}, document_type: {only:[:name]}]}},
-            {participating_organizations: {only: [], include: [origin: {only: [:name]}, organization: {only: [:name, :organization_type]}, role: {only: [:name]}]}}
-            ]) 
+      only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
+      methods: [:usd_2009, :donor_name,
+        :sector_name, :flow_type_name, :oda_like_name, :status_name, 
+        # :tied_name, 
+        :recipient_condensed
+    ],
+      include: [
+        {geopoliticals: {include: [recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}], only: [:percent]}},
+        {transactions: {include: [currency: {only: [:name, :iso3]}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
+        {contacts: {only: [:name, :position], include: [organization: {only: [:name, :organization_type]}]}},
+        {sources: {only: [:url, :date], include: [source_type: {only: [:name]}, document_type: {only:[:name]}]}},
+        {participating_organizations: {only: [], include: [origin: {only: [:name]}, organization: {only: [:name, :organization_type]}, role: {only: [:name]}]}}
+    ]) 
   end
-  
+
   def history
-	  [self.versions \
-	    + self.transactions.map(&:versions) \
-	  	+ self.sources.map(&:versions) \
-	  	+ self.contacts.map(&:versions) \
-	  	+ self.comments.map(&:versions) \
-	  	+ self.participating_organizations.map(&:versions) \
-	  	+ self.geopoliticals.map(&:versions)].flatten
-	end
-	
-	def all_flags
-		[
-			self.transactions.map(&:flags) + 
-			self.geopoliticals.map(&:flags) +
-			self.sources.map(&:flags) +
-			self.contacts.map(&:flags) +
-			self.participating_organizations.map(&:flags) +
-			self.flags
-		].flatten
-	end
-	
-	def flags
-		Flag.where("flaggable_type not in(?) and flaggable_id= ?",ApplicationHelper::PROJECT_ACCESSORY_OBJECTS, id)
-	end
-	
-	def set_verified_to_raw_if_null
-		self.verified = Verified.find_by_name("Raw") if verified.blank?
-	end
+    [self.versions \
+      + self.transactions.map(&:versions) \
+      + self.sources.map(&:versions) \
+      + self.contacts.map(&:versions) \
+      + self.comments.map(&:versions) \
+      + self.participating_organizations.map(&:versions) \
+      + self.geopoliticals.map(&:versions)].flatten
+  end
+
+  def all_flags
+    [
+      self.transactions.map(&:flags) + 
+      self.geopoliticals.map(&:flags) +
+      self.sources.map(&:flags) +
+      self.contacts.map(&:flags) +
+      self.participating_organizations.map(&:flags) +
+      self.flags
+    ].flatten
+  end
+
+  def flags
+    Flag.where("flaggable_type not in(?) and flaggable_id= ?",ApplicationHelper::PROJECT_ACCESSORY_OBJECTS, id)
+  end
+
+  def set_verified_to_raw_if_null
+    self.verified = Verified.find_by_name("Raw") if verified.blank?
+  end
 end

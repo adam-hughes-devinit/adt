@@ -17,14 +17,14 @@ module AggregatesHelper
 		
 	
 	WHERE_FILTERS = [
-	    	{sym: :recipient_iso2, name: "Recipient ISO2", options: Country.all.map{|c| c.iso2} , internal_filter: "recipient_iso2"},
-	    	{sym: :recipient_name, name: "Recipient Name", options: Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map{|c| c.name} , internal_filter: "recipient_name"},
-	    	{sym: :sector_name, name: "Sector Name", options:Sector.all.map{|c| c.name} , internal_filter: "sectors.name"},
-	    	{sym: :intent_name, name: "Intent", options:Intent.all.map{|c| c.name} , internal_filter: "intents.name"},
-	    	{sym: :verified, name: "Verified Status", options: Verified.all.map{|c| c.name} , internal_filter: "verifieds.name"},
-	    	{sym: :flow_type, name: "Flow Type", options: FlowType.all.map{|c| c.name} , internal_filter: "flow_types.name"},
-	    	{sym: :flow_class, name: "Flow Class", options: OdaLike.all.map{|o| o.name}, internal_filter: "oda_likes.name" },
-	    	{sym: :status, name: "Status", options: Status.all.map{|o| o.name}, internal_filter: "statuses.name" },
+	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new {  Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
+	    	{sym: :recipient_name, name: "Recipient Name", options:   Proc.new { Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map(&:name) }.call, internal_filter: "recipient_name"},
+	    	{sym: :sector_name, name: "Sector Name", options:  Proc.new { Sector.all.map(&:name) }.call , internal_filter: "sectors.name"},
+	    	{sym: :intent_name, name: "Intent", options:  Proc.new { Intent.all.map(&:name) }.call , internal_filter: "intents.name"},
+	    	{sym: :verified, name: "Verified Status", options:  Proc.new { Verified.all.map(&:name) }.call , internal_filter: "verifieds.name"},
+	    	{sym: :flow_type, name: "Flow Type", options:  Proc.new { FlowType.all.map(&:name) }.call, internal_filter: "flow_types.name"},
+	    	{sym: :flow_class, name: "Flow Class", options: Proc.new { OdaLike.all.map(&:name) }.call, internal_filter: "oda_likes.name" },
+	    	{sym: :status, name: "Status", options:  Proc.new { Status.all.map(&:name) }.call, internal_filter: "statuses.name" },
 	    	{sym: :year, name: "Year", options: ("2000".."2011").to_a.reverse! , internal_filter: "year" }
 	    ]
 	
@@ -102,6 +102,14 @@ module AggregatesHelper
 				{ code: "DT.ODA.ODAT.GN.ZS",
 					name: "Net ODA received (% of GNI)",
 					note: "ODA/GNI"
+				},
+				{ code: "SH.DYN.MORT",
+					name: "Mortality rate, under-5 (per 1,000 live births)",
+					note: "Under-5 mortality rate, per 1000"
+				},
+				{ code: "EN.ATM.CO2E.KT",
+					name: "CO2 emissions (kilotons)",
+					note: "CO2 (kt)"
 				}
 			]
 end

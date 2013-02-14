@@ -167,7 +167,7 @@ include AggregatesHelper
 		    # if asking for CSV, send an on-the-fly CSV
 		    format.csv { send_data data_to_csv, filename: "AidData_China_Aggregates_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv"}
 		  end
-		  
+		  p @column_names
 		else	
 			render json: params
 	  end  		

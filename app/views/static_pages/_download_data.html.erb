@@ -1,0 +1,78 @@
+      <h1>Download Datasets</h1>
+      
+<%  
+  csv_directory = Rails.root.join('public', 'downloads') + '*.csv'
+  csv_links = Dir.glob(csv_directory) 
+  csv_table_data = []
+
+  csv_links.each do |file|
+    case file
+    when /Official/
+      name = "Official finance"
+      order = 1
+    when /Unofficial/
+      name = "Unofficial Finance"
+      order = 2
+    when /Military/
+      name = "Military Finance"
+      order = 3
+    when /Cancelled/
+      name = "Cancelled Projects"
+      order = 4
+    when /Suspicious/
+      name = "Suspicious or Inactive Projects"
+      order = 5
+    else 
+      name = "Unscoped dataset"
+      order = 6
+    end
+
+    link = '/downloads/' + File.basename(file)
+    time = File.atime(file)
+
+    csv_table_data << { name: name, link: link, time: time, order: order }
+  end
+
+  csv_table_data.sort!{ |x, y| x[:order] <=> y[:order] }
+
+%>
+
+
+<table id="download_table" align="center" class='table table-hover'>
+
+  <!-- Table header -->
+
+  <thead>
+    <tr style='background-color:#ccc'>
+      <th scope="col" id="header" align="center">Downloads</th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Filename</th>
+      <th>File type</th>
+      <% if current_user_is_aiddata %>
+        <th><span id='last-updated' data-toggle="tooltip" title="Visible to AidData only." >Last Updated</span></th>
+      <% end %>
+  </thead>
+
+  <!-- Table body -->
+
+  <tbody>
+    <% csv_table_data.each do |file| %>
+      <tr>
+        <td><%= file[:name] %></td>
+        <td><%= link_to "CSV file",file[:link] %></td>
+        <% if current_user_is_aiddata %>
+          <td><%= time_ago_in_words(file[:time]) %> ago </td>
+        <% end %>
+      </tr>
+   <% end %>
+  </tbody>
+
+</table>
+
+<script>
+  $('#last-updated').tooltip()
+</script>
+
