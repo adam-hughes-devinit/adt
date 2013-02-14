@@ -1,3 +1,5 @@
+      <h1>Download Datasets</h1>
+      
 <%  
   csv_directory = Rails.root.join('public', 'downloads') + '*.csv'
   csv_links = Dir.glob(csv_directory) 
@@ -50,7 +52,7 @@
       <th>Filename</th>
       <th>File type</th>
       <% if current_user_is_aiddata %>
-        <th>Last Updated</th>
+        <th><span id='last-updated' data-toggle="tooltip" title="Visible to AidData only." >Last Updated</span></th>
       <% end %>
   </thead>
 
@@ -69,3 +71,8 @@
   </tbody>
 
 </table>
+
+<script>
+  $('#last-updated').tooltip()
+</script>
+

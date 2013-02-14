@@ -442,7 +442,7 @@ class Project < ActiveRecord::Base
     string :interest_rate
     string :maturity
     string :grace_period
-    string  :grant_element
+    string :grant_element
 
 
     string :recipient_iso2, multiple: true do

@@ -20,6 +20,10 @@ include AggregatesHelper
 		render file: '/static_pages/_analyze_js'
 	end
 
+  def downloads
+    render file: '/static_pages/_download_data'
+  end
+
   def ajax
   	require 'open-uri'
   	CGI::unescape request_url = params[:url]
