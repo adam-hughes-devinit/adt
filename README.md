@@ -301,4 +301,8 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 
   Don't worry, because app_config.yml is listed in the .gitignore file, your password won't get uploaded to Github
 
+- Set up delayed_jobs to run task in the background
+  - `rails generate delayed_job:active_record`
+  - `rake db:migrate`
+  - Then run `rake jobs:work` in a separate terminal or as a background process
 
