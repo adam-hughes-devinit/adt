@@ -50,3 +50,4 @@ include AggregatesHelper
 		end
 
 end
+
