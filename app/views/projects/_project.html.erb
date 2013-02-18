@@ -13,9 +13,10 @@
 					<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "YearUncertain", heading: ""} %>
 				<% end %>
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Usd_2009", heading: "Total Amount (USD-2009)" } %>
+			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Scope", heading: "Scope" } %>
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Verified", heading: "Verified"} %> 
 			<li><b>ID:</b> <%= link_to @project.id,  @project %></li>
-			<li><b>Record Owner:</b> <%= @project.owner.nil? ? 'None' : link_to(@project.owner.name, @project.owner) %></li>
+
 		
 		</ul>
 		<div class="span3" style="background-color:#dad0d0"><p> What can go here?</p><br><br><br><br><br><br></div>

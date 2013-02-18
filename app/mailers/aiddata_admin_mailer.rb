@@ -6,7 +6,9 @@ class AiddataAdminMailer < ActionMailer::Base
   
   def comment_notification(comment)
   	@comment = comment
-  	mail subject: "New Comment on Project #{@comment.project.id}"
+  	if Rails.env.production?
+      mail subject: "New Comment on Project #{@comment.project.id}"
+    end
   end
 
   def flag_notification(flag)
@@ -17,6 +19,8 @@ class AiddataAdminMailer < ActionMailer::Base
       proj_id = @flag.flaggable_id
     end
     @flag = flag
-  	mail subject: "New Flag on Project #{proj_id}"
+    if Rails.env.production?
+    	mail subject: "New Flag on Project #{proj_id}"
+    end
   end
 end
