@@ -57,7 +57,7 @@ include AggregatesHelper
 		    		param_values = param_values.map { |v| URI::decode( v.gsub(/\+/, ' ')) }
 		    	end
 
-		    	if valid_values = (wf[:options] & param_values)
+		    	if valid_values = (wf[:options] && param_values)
 		    		@filters.push "#{wf[:internal_filter]} in ('#{valid_values.join("','")}')"
 		    	end
 		    end
