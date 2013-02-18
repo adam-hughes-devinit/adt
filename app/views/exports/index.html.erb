@@ -1,0 +1,35 @@
+<% provide(:title, "Exports") %>
+<% provide(:first_header, "All Exports") %>
+
+<div class="row">
+<div>
+<% hidden_fields = ["created_at", "updated_at", "id" ] %>
+
+<table class='code-index-table'>
+	<thead>
+		<% @exports.first.attributes.each_pair do |k, v| %>
+			<% if !hidden_fields.include?(k) %>
+				<th><b><%= k.capitalize %></b></th>
+			<% end %>
+		<% end %>
+		<th>Links</th>
+	</thead>
+	<tbody>
+			<% @exports.each do |o| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+	  					<% if !hidden_fields.include?(k) %>
+							  <td><%= v %></td>
+						<% end %>
+					<% end %>
+					<td> 
+					</td> 
+				  </tr>
+
+			<% end %>
+	</tbody>
+</table>
+
+<br>
+
+ 

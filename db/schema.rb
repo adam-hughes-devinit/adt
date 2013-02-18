@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212213901) do
+ActiveRecord::Schema.define(:version => 20130218204739) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -80,6 +80,12 @@ ActiveRecord::Schema.define(:version => 20130212213901) do
 
   create_table "document_types", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "exports", :force => true do |t|
+    t.string   "email"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
