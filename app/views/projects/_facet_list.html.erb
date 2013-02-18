@@ -10,7 +10,7 @@
 						<% if params[f[:sym]].blank? %>
               <%= link_to row.value, "#{ @current_url}#{ @joiner}"\
               "#{f[:sym].to_s.gsub(/\s/, '_')}=#{CGI.escape row.value}"\
-              "#{ (@scope && !params[:scope]) ? "&scope=#{@scope}" : "" }"%> (<%= row.count %>)
+              "#{ (@scope && !@current_url.index("scope")) ? "&scope=#{@scope}" : "" }"%> (<%= row.count %>)
 						<% else %>
 							<b><%= row.value %></b> (<%= link_to "remove", "#{ @current_url.gsub(/#{f[:sym].to_s.gsub(/\s/, '_')}=[^&]+&?/, '')}" %>) 
 						<% end %>

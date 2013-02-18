@@ -1,8 +1,8 @@
 <% provide(:title, "Projects") %>
 <% provide(:first_header, "Search Projects") %>
-<% current_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
-<% joiner = current_url.index("?") ? "&" : "?" 
-	%>
+
+<% # @current_url and @joiner are set in _project_search.html.erb %>
+
 <% def order_by_params(field)
 	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
 end
@@ -29,14 +29,14 @@ end %>
 <div style='display:none;' id='project-facets-button'>
 	<button class='btn' style='margin:20px;' onclick='toggle_search_params()'>Show search facets</button>
 </div>
-	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", "#{current_url.gsub(/projects/, 'projects.csv')}" %>)</h2>
+	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", "#{@current_url.gsub(/projects/, 'projects.csv')}" %>)</h2>
 	<%= will_paginate @projects %>	
 </div>
 <br>
 <table id="project-search-results">
 	<thead>
 		<tr >
-			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{joiner}" %>
+			<% current_url_with_joiner_without_ordering = "#{@current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{@joiner}" %>
       <th><%= link_to "ID", 
       "#{current_url_with_joiner_without_ordering}#{order_by_params("id")}" 
         %> </th>

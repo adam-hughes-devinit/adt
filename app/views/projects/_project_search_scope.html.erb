@@ -2,7 +2,7 @@
 	
 	def scope_to(scope_label, scope_code)
 		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope=' + scope_code}"
-		if params[:scope] == scope_code
+		if @scope == scope_code
 			"<b>#{scoped_url}</b>".html_safe
 		else
 			scoped_url.html_safe
@@ -11,15 +11,25 @@
 	
 %> 
 <p>
+		<% if params[:scope] %>
+			<% 
+				# it's possible that params[:scope] was set in custom_search
+				# by default_to_official_finance,
+				# but if that happened, it isn't in the URL
+
+				@scope = params[:scope] 
+			%>
+			<%= hidden_field_tag "scope", @scope %>
+		<% end %>
+
 		<b>Scopes:</b> 
 		<% SCOPES.each do |s| %>
 			<%= scope_to s[:name], s[:sym].to_s %> | 
 		<% end %> 
 		
-		<% if params[:scope] %>
-			<% @scope = params[:scope] %>
-			<%= hidden_field_tag "scope", @scope %>
+		<% if @scope %>
 			 <i><%= link_to "Remove scope", @current_url_without_scope, style: "color:#C96D6D" %> </i>
 		<% end %> 
 		
 </p>
+
