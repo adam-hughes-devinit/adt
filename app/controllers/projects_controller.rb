@@ -5,6 +5,7 @@ include SearchHelper
 
 
   def index
+    # custom_search function defines @projects
 
     respond_to do |format|
       format.html do
@@ -16,27 +17,22 @@ include SearchHelper
         render json: @projects
       end
       format.csv do
-   			custom_search
-        params[:max] = Project.all.count
+        if params[:page]
+          @paginate = true
+        else
+          @paginate = false
+        end
+   			custom_search(paginate: @paginate, default_to_official_finance: false)
+        
         @ids_for_export = @projects.map { |p| p.id }
-        
-        if @ids_for_export.length == Project.all.count
-        	@csv_data = Cache.find(0).text # this is a chill hack -- id=0 holds all the text.
-        	full_or_partial="full"
-        else	
-        	@csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
+        @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
 ")				
-					full_or_partial="partial"
-				end
-				@csv_header = Project.csv_header
+				
+        @csv_header = Project.csv_header
 
-        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
-        
-        #    This was the old way of doing it -- creating the file in memory from projects dynamically
-        #@export_projects = Project.includes(:transactions, :geopoliticals, :contacts, :sources, :participating_organizations)
-        #.where("id in(?)", 
-        #  @projects.map{ |p| p.id})
-        #send_data @export_projects.to_csv
+
+        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_custom_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
+
       end
     end
   end

@@ -94,14 +94,16 @@ class CodesController < ApplicationController
   	end
   	
   	def reindex_and_recache
-  		if @object.respond_to? 'projects'
+  		# What's the best way to background this?
+      if @object.respond_to? 'projects'
 	  		Sunspot.index(@object.projects)
-				@object.projects.each {|p| p.cache_one!}
+				@object.projects.each {|p| p.delay.cache_one!}
 				# to update the master cache... -->
-				@object.projects.first.cache!
+				@object.projects.first.delay.cache!
 	  	end
   	end
-  	
+
+
   	def remove_object_from_projects_and_reindex_and_recache
   	  if @object.respond_to? 'projects'
   	  	@object.projects.each do |p|
@@ -109,7 +111,7 @@ class CodesController < ApplicationController
 			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
 					end
 	  		end
-	  		@object.projects.first.cache!
+	  		@object.projects.first.delay.cache!
 	  		Sunspot.index(@object.projects)
 	  	end
 	  end

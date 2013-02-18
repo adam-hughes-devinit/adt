@@ -17,19 +17,11 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-        2) Select filter values or preset scope:
+        2) Select filter values:
       </a>
     </div>
     <div id="collapseTwo" class="accordion-body collapse">
       <div class="accordion-inner">
-      	<div id="scopes" style='text-align:center'>
-      		<p><b>Preset scopes:</b></p>
-      		<button onclick="select_scope(this.id)" id='official_finance'>Official Finance</button>
-      		<button onclick="select_scope(this.id)" id='unofficial_finance'>Unofficial Finance</button>
-      		<button onclick="select_scope(this.id)" id='military'>Military</button>
-      		<br><br>
-      		<button onclick="select_scope(this.id)" id='none'>Clear All</button>
-      	</div>
         <% where_filters.each do |wf| %>
   				<div class='span3'>
 						<%= label_tag wf[:sym].to_s, wf[:name] %>
@@ -170,35 +162,6 @@ function load_data_preview() {
 	$("#data_preview_note").html("("+length+" rows in the full dataset)")
 })
 
-}
-	
-function select_scope(scope) {
-
-if (scope=='official_finance') {
-	$('#flow_class').val(["OOF-like", "ODA-like", "Vague (Official Finance)"])
-	$('#verified').val("Checked")
-	$("#status").val(["Pipeline/identification", "Implementation", "Completion"])
-	}
-else if (scope=='unofficial_finance') {
-	$('#flow_class').val(["JV +Gov", "JV -Gov","CA +SOE", "CA -SOE", "FDI +Gov", "FDI -Gov", "NGO Aid", "Vague (Com)"])
-	$('#verified').val("Checked")
-	}
-else if (scope=='military') {
-	$('#flow_class').val("Military")
-	$('#verified').val("Checked")
-	}
-else if (scope=='none') {
-	$('#flow_class').val('')
-  $('#verified').val('')
-	$('#status').val('')
-	$('#recipient_name').val('')
-	$('#sector_name').val('')
-	$('#flow_type').val('')
-	$('#year').val('')
-	$('#intent_name').val('')
-	}
-	
-	update_previews()
 }
 			
 function update_previews() {

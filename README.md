@@ -274,8 +274,7 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 - To create the development postgres database
   - Install PostgreSQL 8.4 or higher
   - Open the PostgreSQL shell by typing "psql"
-  - `create role adt_user with password 'aiddata'; create database adt_development with owner adt_user;`
-  - `alter role adt_user with login;`
+  - `create role adt_user with login password 'aiddata'; create database adt_development with owner adt_user;`
   - Update pg_hba.conf to allow the user to sign in
     - Somewhere on your computer is a file called pg_hba.conf
     - Somewhere in that file it says "ident" under "METHOD"
@@ -285,12 +284,13 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
     - `rake db:migrate`
     - log into psql with the command above then run `\i adt_production_2_6_2013.sql` to copy the data\
     - Restart the rails server 
+    - `rake sunspot:solr:start` for the search engine. You will need to do this each time you log in to your computer
     - `rake sunspot:reindex`
     - `rake projects:recache` ??
 
 - There are a few rake tasks that get the data up to speed:
   - `rake projects` runs various tasks on the project-related data
-  - `rake sunspot:solr:start` for the search engine.
+  
 
 - Create an file called app_config.yml in the config directory containing two lines:
 
@@ -300,4 +300,8 @@ The GNI and DAC ODA/GNI data comes from the World Bank WDI data feed. See http:/
 
   Don't worry, because app_config.yml is listed in the .gitignore file, your password won't get uploaded to Github
 
+- Set up delayed_jobs to run task in the background
+  - `rails generate delayed_job:active_record`
+  - `rake db:migrate`
+  - Then run `rake jobs:work` in a separate terminal or as a background process
 

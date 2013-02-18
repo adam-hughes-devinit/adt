@@ -1,0 +1,1 @@
+p "Don't forget to start the search engine with rake sunspot:solr:start and start delayed job with script/delayed_job start!!"

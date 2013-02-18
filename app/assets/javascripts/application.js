@@ -13,7 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
-//= require_tree .
+//= require ./app.js
+
 
 function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
@@ -26,4 +27,7 @@ function add_fields(link, association, content) {
   $(link).parent().before(content.replace(regexp, new_id));
 }
 
+$(function() {
+	$('#tooltip').hide()
+})
 

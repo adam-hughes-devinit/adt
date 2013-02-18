@@ -1,13 +1,8 @@
 <% provide(:title, "Projects") %>
-<% provide(:first_header, "View Projects") %>
-<% current_url = "#{request.protocol}#{request.host_with_port}
-                  #{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
-<% joiner = current_url.index("?") ? "&" : "?" 
-	if ( !current_url.index("scope") && params[:scope] )
-	 current_url += joiner + "scope=#{params[:scope]}" 
-	 joiner = "&"
-	end
-	%>
+<% provide(:first_header, "Search Projects") %>
+
+<% # @current_url and @joiner are set in _project_search.html.erb %>
+
 <% def order_by_params(field)
 	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
 end
@@ -26,33 +21,46 @@ end %>
 	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
 	end
 %> 	
-<h2>Search Parameters</h2>
-<%= render 'project_search' %>
+<% # inside wrapper: <div class="row" id='project-facets'>	%>
+	<%= render 'project_search' %>
+
 <br>
+
+<div class='row'>
+<div style='display:none;' id='project-facets-button'>
+	<button class='btn' style='margin:20px;' onclick='toggle_search_params()'>Show search facets</button>
+</div>
 <%= render 'export_search' %>
-<%= will_paginate @projects %>
+	<%= will_paginate @projects %>	
+</div>
 <br>
 <table id="project-search-results">
 	<thead>
 		<tr >
-			<% current_url_with_joiner_without_ordering = "#{current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{joiner}" %>
-      <th><%= link_to "ID", "#{current_url_with_joiner_without_ordering}
-        #{order_by_params("id")}" %> </th>
+			<% current_url_with_joiner_without_ordering = "#{@current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{@joiner}" %>
+      <th><%= link_to "ID", 
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("id")}" 
+        %> </th>
 
-      <th><%= link_to "Donor","#{current_url_with_joiner_without_ordering}
-        #{order_by_params("donor_name")}"  %></th>
+      <th><%= link_to "Donor",
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("donor_name")}"  
+        %></th>
 
-      <th><%= link_to "Title","#{current_url_with_joiner_without_ordering}
-        #{order_by_params("title")}"  %></th>
+      <th><%= link_to "Title",
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  
+      %></th>
 
-      <th><%= link_to "Year","#{current_url_with_joiner_without_ordering}
-        #{order_by_params("year")}"  %></th>
+      <th><%= link_to "Year",
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  
+      %></th>
 
-      <th><%= link_to "Recipients","#{current_url_with_joiner_without_ordering}
-        #{order_by_params("recipient_condensed")}"  %></th>
+      <th><%= link_to "Recipients",
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  
+        %></th>
       
-      <th><%= link_to "Amount (USD-2009)","#{current_url_with_joiner_without_ordering}
-        #{order_by_params("usd_2009")}"  %></th>
+      <th><%= link_to "Amount (USD-2009)",
+      "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
+        %></th>
 			<% if current_user %>
 				<th>Links</th>
 			<% end %>
@@ -65,3 +73,24 @@ end %>
 	</tbody>
 </table>
 <%= will_paginate @projects %>
+
+
+<script type='text/javascript'>
+	function toggle_search_params() {
+		var facet_box = $('#project-facets')
+		var facet_button = $('#project-facets-button')
+		if (facet_box.is(":visible"))
+		{
+			facet_box.hide()
+			facet_button.show()
+
+		}
+		else {
+			facet_box.slideDown()
+			facet_button.slideUp()
+		}
+	}
+	<% if (params[:page].to_i || 1) > 1 %>
+		toggle_search_params()
+	<% end %>
+</script>

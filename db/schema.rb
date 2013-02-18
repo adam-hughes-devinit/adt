@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130204194654) do
+ActiveRecord::Schema.define(:version => 20130212213901) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -248,6 +248,23 @@ ActiveRecord::Schema.define(:version => 20130204194654) do
   create_table "roles", :force => true do |t|
     t.string   "name"
     t.integer  "iati_code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "scope_requirements", :force => true do |t|
+    t.integer  "scope_id"
+    t.string   "field"
+    t.string   "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "scopes", :force => true do |t|
+    t.string   "name"
+    t.text     "hint"
+    t.string   "type"
+    t.string   "symbol"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

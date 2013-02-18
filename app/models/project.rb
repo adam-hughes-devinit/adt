@@ -35,6 +35,7 @@ class Project < ActiveRecord::Base
     iteration += 1
   end
 
+
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
@@ -442,7 +443,9 @@ class Project < ActiveRecord::Base
     string :interest_rate
     string :maturity
     string :grace_period
-    string  :grant_element
+    string :grant_element
+
+    string :scope, multiple: true
 
 
     string :recipient_iso2, multiple: true do

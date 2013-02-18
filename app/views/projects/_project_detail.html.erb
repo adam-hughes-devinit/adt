@@ -15,12 +15,14 @@
 		
 		<% if current_object.blank? %>
 			<%= @unset_data %>
+		<% elsif class_name == "Scope" %>
+			<%= current_object.map{|s| s.to_s.humanize}.join(', ') %>
 		<% elsif class_name == "VisibleFlowClass" && current_object.class == Array %>
 			<%= link_to(current_object[0].name, current_object[0]) %> (<%= current_object[1] %>)
 		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
 			<%= class_name== "YearUncertain" ? "<i>(Year Uncertain)</i>".html_safe : current_object %>
 		<% elsif current_object.class == Float %>
-      <%= current_object %>
+      		<%= current_object %>
 		<% elsif [Date, DateTime].include? current_object.class %>
 			<%= current_object.strftime("%d %B %Y") %>
 		<% elsif !current_object.nil? %>

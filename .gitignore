@@ -7,14 +7,24 @@
 # Ignore bundler config
 /.bundle
 
+# Ignore the pre-packaged datasets
+/public/downloads/*
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
 # Ignore development search engine
 /solr/data/development
+/solr/data/test
 /solr/pids/development
+/solr/pids/test
+
 # Ignore all logfiles and tempfiles.
-/log/*.log
+/log
 /tmp
+
 # Ignore sensitive info
 /config/app_config.yml
+
+# Ignore sql dumps
+/*.sql
