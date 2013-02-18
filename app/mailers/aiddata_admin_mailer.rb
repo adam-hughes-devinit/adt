@@ -19,4 +19,5 @@ class AiddataAdminMailer < ActionMailer::Base
     @flag = flag
   	mail subject: "New Flag on Project #{proj_id}"
   end
+
 end

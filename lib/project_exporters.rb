@@ -57,8 +57,6 @@ module ProjectExporters
     #{status_name}
     #{status ? status.code : ''}
     #{flow_type_name}
-    #{tied_name}
-    #{tied ? tied.code : '' }
     #{country_name.join(", ")}
     #{project_sources[:all].join("; ")}
     #{project_sources[:all].count}
