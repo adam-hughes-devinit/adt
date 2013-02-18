@@ -424,9 +424,9 @@ create_line_graph = (line_chart, gni_data, oda_array, worldbank_gni_url) ->
 				# find the right point then push it. 
 				#console.log y
 				amount = d.data[1].filter((c) -> Number(c.date) is y)[0]
-				gni_value = gni_data[1].filter((c) -> Number(c.date) is y)[0]
-				if gni_value.value && amount
-					data_point = [y, (100*Number(amount.value))/Number(gni_value.value)]
+				gni_value = gni_data[1].filter((c) -> Number(c.date) is y)[0]?.value
+				if gni_value && amount
+					data_point = [y, (100*Number(amount.value))/Number(gni_value)]
 					#console.log data_point
 					d.graph_data.push(data_point)	
 		else if (d.source.indexOf('aggregates/projects')!=-1)  # That is, it's from the China API
