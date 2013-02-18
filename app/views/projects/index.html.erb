@@ -21,9 +21,9 @@ end %>
 	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
 	end
 %> 	
-<div class="row" id='project-facets'>	
+<% # inside wrapper: <div class="row" id='project-facets'>	%>
 	<%= render 'project_search' %>
-</div>
+
 <br>
 <div class='row'>
 <div style='display:none;' id='project-facets-button'>
