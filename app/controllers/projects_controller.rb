@@ -17,7 +17,12 @@ include SearchHelper
         render json: @projects
       end
       format.csv do
-   			custom_search(paginate: false, default_to_official_finance: false)
+        if params[:page]
+          @paginate = true
+        else
+          @paginate = false
+        end
+   			custom_search(paginate: @paginate, default_to_official_finance: false)
         
         @ids_for_export = @projects.map { |p| p.id }
         @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
