@@ -91,6 +91,7 @@
       {sym: :maturity, name: "Maturity"},
       {sym: :grace_period, name: "Grace Period"},
       {sym: :grant_element, name: "Grant Element"},
+      {sym: :scope, name: "Scope"}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     

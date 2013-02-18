@@ -1,11 +1,7 @@
 <% provide(:title, "Projects") %>
-<% provide(:first_header, "View Projects") %>
+<% provide(:first_header, "Search Projects") %>
 <% current_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/\??page=\d+&*/, '') %>
 <% joiner = current_url.index("?") ? "&" : "?" 
-	if ( !current_url.index("scope") && params[:scope] )
-	 current_url += joiner + "scope=#{params[:scope]}" 
-	 joiner = "&"
-	end
 	%>
 <% def order_by_params(field)
 	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
@@ -25,13 +21,16 @@ end %>
 	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
 	end
 %> 	
-<h2>Search Parameters</h2>
-<%= render 'project_search' %>
+<div class="row" id='project-facets'>	
+	<%= render 'project_search' %>
+</div>
 <br>
 <div class='row'>
-	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", current_url.gsub(/projects/, 'projects.csv')%>)</h2>
-	<%= will_paginate @projects %>
-	
+<div style='display:none;' id='project-facets-button'>
+	<button class='btn' style='margin:20px;' onclick='toggle_search_params()'>Show search facets</button>
+</div>
+	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", "#{current_url.gsub(/projects/, 'projects.csv')}" %>)</h2>
+	<%= will_paginate @projects %>	
 </div>
 <br>
 <table id="project-search-results">
@@ -73,3 +72,24 @@ end %>
 	</tbody>
 </table>
 <%= will_paginate @projects %>
+
+
+<script type='text/javascript'>
+	function toggle_search_params() {
+		var facet_box = $('#project-facets')
+		var facet_button = $('#project-facets-button')
+		if (facet_box.is(":visible"))
+		{
+			facet_box.hide()
+			facet_button.show()
+
+		}
+		else {
+			facet_box.slideDown()
+			facet_button.slideUp()
+		}
+	}
+	<% if (params[:page].to_i || 1) > 1 %>
+		toggle_search_params()
+	<% end %>
+</script>

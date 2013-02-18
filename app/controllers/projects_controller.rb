@@ -5,6 +5,7 @@ include SearchHelper
 
 
   def index
+    # custom_search function defines @projects
 
     respond_to do |format|
       format.html do
@@ -16,23 +17,16 @@ include SearchHelper
         render json: @projects
       end
       format.csv do
-   			custom_search
-        params[:max] = Project.all.count
-        @ids_for_export = @projects.map { |p| p.id }
+   			custom_search(paginate: false, default_to_official_finance: false)
         
-        if @ids_for_export.length == Project.all.count
-        	@csv_data = Cache.find(0).text # this is a chill hack -- id=0 holds all the text.
-        	full_or_partial="full"
-        else	
-        	@csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
+        @ids_for_export = @projects.map { |p| p.id }
+        @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
 ")				
-					full_or_partial="partial"
-				end
 				
         @csv_header = Project.csv_header
 
 
-        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_#{full_or_partial}_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
+        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_custom_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
 
       end
     end
