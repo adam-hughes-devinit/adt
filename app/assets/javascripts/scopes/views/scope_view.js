@@ -4,7 +4,15 @@ var app = app || {}
 app.ScopeView = Backbone.View.extend({
 	el: $("#scope"),
 	template: _.template(
-	"<h1><%= name %></h1>" +
+	"<p class='field'>" +
+		"<b>Name: </b>"+ 
+		"<span class='scope-show-field'>"+
+			"<%= name %>" +
+		"</span>"+
+		"<input class='scope-edit-field' type='text' value='" +
+			"<%= name %>"+
+		"'/>" +
+	"</p>" +
 	"<% channels.forEach(function (c) { %>" +
 		"<ul class='channel unstyled'>" +
 			"<% c.forEach(function(i) { %>" +
@@ -30,7 +38,14 @@ app.ScopeView = Backbone.View.extend({
 			"<%= symbol %>" +
 		"'/>" +
 	"</p>" +
-	"<p> <%= description %> </p>"
+	"<p class='field'>" +
+		"<span class='scope-show-field'>" +
+			"<%= description %>" +
+		"</span>" +
+		"<textarea class='scope-edit-field'>" +
+			"<%= description %>" +
+		"</textarea>"+
+	"</p>"
 	),
 
 	tagName: "div",
@@ -69,13 +84,10 @@ app.ScopeView = Backbone.View.extend({
 		console.log("closing -- this:", this, ", event: ", e)
 		$field = $(".editing")
 		$field.removeClass("editing")
-		$field.children('.scope-edit-field').slideUp(100, 
-			function() {
-				$show = $field.children('.scope-show-field')
-				$show.html($field.children('.scope-edit-field').val())
-				$show.show()
-			}
-		)
+		$field.children('.scope-edit-field').hide() 
+		$field.children('.scope-show-field')
+			.html($field.children('.scope-edit-field').val())
+			.show()
 	},
 
 	// If you hit `enter`, we're through editing the item.

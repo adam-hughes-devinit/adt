@@ -106,7 +106,7 @@ module ProjectExporters
 
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
-    csv_array.each {|v| csv_text_string << "\"#{v.gsub(/[\n\r\t\s]+/, ' ')}\"," }
+    csv_array.each {|v| csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," }
     
     # get rid of that trailing comma
     csv_text_string.chomp!(',')

@@ -30,6 +30,14 @@ class Project < ActiveRecord::Base
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
   after_save :cache!
+  after_destroy :remake_scope_files
+
+  def remake_scope_files
+    scope.each do |s|
+      cache_files(s)
+    end
+  end 
+
   # before_save :increment_iteration MOVED TO FORM
 
   def increment_iteration # DUH, version was already taken by paper_trail
