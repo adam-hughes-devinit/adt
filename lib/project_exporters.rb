@@ -2,14 +2,15 @@ module ProjectExporters
 
   def csv_text
     project_sources = {}
-    project_sources[:all] = sources.map{|s| "#{s.url} 
-      #{s.source_type ? ", "+s.source_type.name : ""}
-      #{s.document_type ? ", "+s.document_type.name : '' }" }
+    project_sources[:all] = sources.map{|s| 
+     "#{s.url}" +
+     "#{s.source_type ? ", "+s.source_type.name : ""}" +
+      "#{s.document_type ? ", "+s.document_type.name : '' }" }
     project_sources[:factiva] = sources.map do |s| 
       if s.source_type = SourceType.find_by_name("Factiva")
-        "#{s.url} 
-        #{s.source_type ? ", "+s.source_type.name : ""}
-        #{s.document_type ? ", "+s.document_type.name : '' }"
+        "#{s.url}"+ 
+        "#{s.source_type ? ", "+s.source_type.name : ""}"+
+        "#{s.document_type ? ", "+s.document_type.name : '' }"
       end
     end
 

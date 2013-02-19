@@ -7,7 +7,7 @@ namespace :projects do
 		p "Caching individual projects"
 
 		Project.all.each do |p| 
-			p.cache_one!
+			p.cache_one! now: true
 			progress_bar.increment!
 		end
 		

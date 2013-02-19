@@ -2,7 +2,16 @@ module ProjectCache
   include ProjectExporters
   require 'fileutils'
 
-  def cache!
+  def cache!(options={})
+    options.reverse_merge! now: false
+    if options[:now]
+      cache_now
+    else
+      cache_later
+    end
+  end
+
+  def cache_now
     cached_record = Cache.find_or_create_by_id(id)
     cached_record.skip_cache_all = false
     cached_record.update_attribute(:text, self.csv_text)
@@ -10,7 +19,17 @@ module ProjectCache
     scopes = self.scope
     scopes.each { |s| cache_files(s) }
   end
-  handle_asynchronously :cache!
+
+
+  def cache_later
+    cached_record = Cache.find_or_create_by_id(id)
+    cached_record.skip_cache_all = false
+    cached_record.update_attribute(:text, self.csv_text)
+
+    scopes = self.scope
+    scopes.each { |s| cache_files(s) }
+  end
+  handle_asynchronously :cache_later
 
   def cache_one!
     cached_record = Cache.find_or_create_by_id(id)

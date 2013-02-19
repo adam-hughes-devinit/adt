@@ -9,7 +9,7 @@ app.Scope = Backbone.Model.extend({
 		// Internal reference (ruby symbol)
 		symbol: "scope_name",
 		// Short text description
-		description: "This is the Scope default setting."
+		description: "This is the Scope default setting.",
 		// OR-channels. A project can match any of these channels
 		channels: [
 			// A field can be ...?
@@ -20,6 +20,10 @@ app.Scope = Backbone.Model.extend({
 				{field: "verified_name", values: ["Checked", "Suspicious"]}
 			]
 		],
+	},
+
+	initialize: function() {
+		console.log("initializing Scope", this)
 	}
 
 })
