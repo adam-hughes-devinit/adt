@@ -64,7 +64,6 @@
       {sym: :flow_type_name, name: "Flow Type"},
       {sym: :oda_like_name, name: "Flow Class"},
       {sym: :status_name, name:"Status"},
-      # {sym: :tied_name, name:"Tied/Untied"}, # saved here just in case!
       {sym: :verified_name, name:"Verified/Unverified"},
       {sym: :currency_name, name:"Reported Currency"},
       {sym: :is_commercial_string, name: "Commericial Status"},
@@ -99,4 +98,6 @@
     	{sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
     	{sym: :flow_class_1, name: "Flow Class - 1"},
     	{sym: :flow_class_2, name: "Flow Class - 2"},
+    	{sym: :flagged, name: "Flagged"},
+    	# {sym: :commented, name: "Commented"},
     ]

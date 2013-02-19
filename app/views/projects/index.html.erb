@@ -26,11 +26,15 @@ end %>
 
 <br>
 <div class='row'>
-<div style='display:none;' id='project-facets-button'>
-	<button class='btn' style='margin:20px;' onclick='toggle_search_params()'>Show search facets</button>
-</div>
-	<h2><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", "#{@current_url.gsub(/projects/, 'projects.csv')}" %>)</h2>
-	<%= will_paginate @projects %>	
+	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
+		<button class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
+	</div>
+	<div class='span12'>
+		<h2 style='margin-bottom:12px;'><%= pluralize(@search.total, "Project") %> (<%= link_to "export as CSV", "#{@current_url.gsub(/projects/, 'projects.csv')}" %>)</h2>
+	</div>
+	<div class='span12'>
+		<%= will_paginate @projects %>	
+	</div>
 </div>
 <br>
 <table id="project-search-results">

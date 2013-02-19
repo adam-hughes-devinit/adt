@@ -16,12 +16,13 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="map">
 			<h2>Visualize</h2>
-      <%= render partial: 'static_pages/map_js', 
+      		<%= render partial: 'static_pages/map_js', 
                  locals: {total_projects: @total_projects} %>
 		</div>
 		<div class="tab-pane" id="chart">
 			<h2>Analyze</h2>
-			<%= render partial: 'static_pages/analyze_js' %>
+			<%= # render partial: 'static_pages/analyze_js' 
+			%>
 		</div>
 		<div class="tab-pane" id="projects">
 			<h2> Search Projects </h2>

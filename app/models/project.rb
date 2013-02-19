@@ -447,6 +447,10 @@ class Project < ActiveRecord::Base
 
     string :scope, multiple: true
 
+    string :flagged, multiple: true do 
+      all_flags.map(&:name)
+    end
+
 
     string :recipient_iso2, multiple: true do
       geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
