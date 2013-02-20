@@ -51,15 +51,19 @@
             </tbody>
           </table>
           <h4> Matched</h4><br>
-          <%= "#{pluralize(@search.total, "Project")}"  %><br><br>
-          <% 
+          <%
             sum = 0
-            @search.results.each do |project|
+            proj_count = 0
+            @all_projects.each do |project|
               proj_usd = project.usd_2009
               proj_usd ||= 0
               sum += proj_usd
+              proj_count += 1
+            end
+            @search.results.each do |project|
             end
           %>
+          <%= "#{pluralize(proj_count, "Project")}"  %><br><br>
           <%= "$#{number_with_precision(sum, precision: 2, delimiter: ',')}
            (USD 2009)" %><br>
           <br>
@@ -71,7 +75,7 @@
             <%= f.email_field :email,
                               placeholder: 'enter email',
                               class: 'span3' %>
-            <%= f.input :projects, as: :hidden, input_html: {value: @search.results.map(&:id)} %>
+            <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
             <%= f.button :submit %>
           <% end %>
           <!--

@@ -9,12 +9,13 @@ include SearchHelper
 
     respond_to do |format|
       format.html do
-   			custom_search
+        @all_projects = custom_search(paginate: false)
+   			@projects = custom_search
         @export = Export.new(params[:export])
         render html: @projects
       end
       format.json do
-				custom_search({default_to_official_finance: false})
+				@projects = custom_search({default_to_official_finance: false})
         render json: @projects
       end
       format.csv do
@@ -23,7 +24,7 @@ include SearchHelper
         else
           @paginate = false
         end
-   			custom_search(paginate: @paginate, default_to_official_finance: false)
+   			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
         @ids_for_export = @projects.map { |p| p.id }
         @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
