@@ -7,6 +7,10 @@ lay_down_base_layers = () ->
 	# 2) @map_data (scaffold for color data)
 
 	add_other_features_to_collection_and_make_map_data = () ->
+		
+		# For no good reason, the features are split in 2 files
+		# Oh I just remembered -- I had one file for Africa, one for others
+
 		@other_features.forEach((feature) -> 
 		  #console.log('f', feature)
 		  feature.properties.id = "non_african"
@@ -24,6 +28,9 @@ lay_down_base_layers = () ->
 		# Set the Height and Width here to influence the rest of the application
 		h = 800
 		w = h
+
+		# I'm creating a global variable
+		# called vis_config which holds a bunch of important values and functions.
 
 		m = window.vis_config
 		window.vis_config = 
@@ -88,6 +95,7 @@ lay_down_base_layers = () ->
 		map = vis.append("svg:g")
 			.attr("id", "states")
 			.attr("transform","translate(100,"+ window.vis_config.w/7 + ")")
+		# Nice blue outline was made by hand in Inkscape
 		ocean = map.append("svg:path")
 			.attr("id", "ocean_outline")
 			.attr("d", @ocean_outline_d)
@@ -120,6 +128,7 @@ lay_down_base_layers = () ->
 
 
 	create_frame = () ->
+		# For style
 		h = window.vis_config.h
 		w = window.vis_config.w
 		border_line_array = [

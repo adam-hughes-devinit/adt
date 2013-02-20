@@ -1,0 +1,38 @@
+@mixin project_form_box {
+	margin: 8px 8px 8px 8px;
+	padding: 8px;
+	border-right: 2px solid #ccc;
+	border-bottom: 2px solid #ddd;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.project-accessory-fields .fields, .project-main-details, .dates-box,
+.project-flow-class, .project-loan-detail, .project-sector-details {
+	@include project_form_box;
+}
+
+.project-main-details {
+	label {
+		max-width:80px;
+	}
+	.controls {
+		margin-left:100px;
+	}
+}
+
+.project-date{
+	.controls {
+		margin-left:110px;
+	}
+	label {
+		max-width:100px;
+	}
+	select {
+		display:inline;
+		max-width:60px;
+	}
+}
+
+

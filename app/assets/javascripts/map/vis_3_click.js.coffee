@@ -360,7 +360,7 @@ plot_top_projects = (projects, sectorSums, c_projects, sector_area_x, sector_are
 
 
 make_gni_chart = (overlay, active_country) ->
-	console.log "before gni_chart years: ", window.vis_config.years
+	#console.log "before gni_chart years: ", window.vis_config.years
 	w = window.vis_config.w
 	h = window.vis_config.h
 	line_chart = {}
@@ -424,9 +424,9 @@ create_line_graph = (line_chart, gni_data, oda_array, worldbank_gni_url) ->
 				# find the right point then push it. 
 				#console.log y
 				amount = d.data[1].filter((c) -> Number(c.date) is y)[0]
-				gni_value = gni_data[1].filter((c) -> Number(c.date) is y)[0]
-				if gni_value.value && amount
-					data_point = [y, (100*Number(amount.value))/Number(gni_value.value)]
+				gni_value = gni_data[1].filter((c) -> Number(c.date) is y)[0]?.value
+				if gni_value && amount
+					data_point = [y, (100*Number(amount.value))/Number(gni_value)]
 					#console.log data_point
 					d.graph_data.push(data_point)	
 		else if (d.source.indexOf('aggregates/projects')!=-1)  # That is, it's from the China API
@@ -476,7 +476,7 @@ create_line_graph = (line_chart, gni_data, oda_array, worldbank_gni_url) ->
 		.attr("opacity", 1)
 
 	#console.log line_year_scale, line_percent_scale, years
-	console.log oda_array, gni_data
+	#console.log oda_array, gni_data
 	gni_line = d3.svg.line()
 		.x((d) -> line_year_scale(d[0]))
 		.y((d) -> line_percent_scale(d[1]))
@@ -538,7 +538,7 @@ window.click = () ->
 	window.active_params.recipient_iso2 = active_country.iso2
 	$.post("aggregates/projects", window.active_params, (json) ->
 		active_country.data = json
-		console.log(active_country)
+		#console.log(active_country)
 		make_sector_graph(overlay, active_country)
 		make_pie_chart(overlay, active_country)
 		make_gni_chart(overlay, active_country)

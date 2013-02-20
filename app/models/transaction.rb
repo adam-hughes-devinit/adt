@@ -24,18 +24,26 @@ class Transaction < ActiveRecord::Base
             deflator_query = "#{self.value.to_s}#{self.currency.iso3}#{yr}#{donor_iso3}" # This is defined at oscar.itpir.wm.edu/deflate
             deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
             deflator_string = open(deflator_url){|io| io.read}
+            # p "JSON Response: #{deflator_string}"
+            
             deflator_object = ActiveSupport::JSON.decode(deflator_string)
+            # p "Parsed JSON: #{deflator_object.inspect}"
+           
+            # This is me being lazy because there might be an error
             begin  
+              
               deflated_amount = deflator_object["deflated_amount"]
-              current_amount = deflator_object["current_amount"]
+              current_amount =  deflator_object["current_amount"]
               exchange_rate_used = deflator_object["exchange_rate"]
               deflator_used = deflator_object["deflator"]
-              
-              self.usd_defl=deflated_amount.to_f.round(2)
-              self.usd_current=current_amount.to_f.round(2)
+              #p "Deflated is #{deflated_amount.class}, Currency is #{current_amount.class}"
+
+              self.usd_defl= deflated_amount
+              self.usd_current= current_amount
               self.deflator= deflator_used
               self.exchange_rate = exchange_rate_used
               self.deflated_at = Time.now
+
             rescue
                 
                 self.usd_defl=nil
@@ -53,6 +61,7 @@ class Transaction < ActiveRecord::Base
                 self.exchange_rate=nil
                 self.deflated_at=nil
           end
+          # p "TRANSACTION: #{self.inspect}"
       end
    end
    

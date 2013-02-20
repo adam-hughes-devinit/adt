@@ -9,7 +9,9 @@ class Project < ActiveRecord::Base
     :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, 
     :is_cofinanced,
     # belongs_to fields
-    :status, :verified, :tied, :flow_type, :oda_like, :sector,
+    :status, :verified, 
+    ## :tied, :tied_id, -- removed so that it will break if it's used somewhere. 
+    :flow_type, :oda_like, :sector,
     #convoluted fields
     :donor, :owner, 
     :transactions, :transactions_attributes,
@@ -22,12 +24,20 @@ class Project < ActiveRecord::Base
     # for version control
     :accessories, :iteration,
     # hidden fields
-    :verified_id, :sector_id, :tied_id, :flow_type_id, :oda_like_id, :status_id,
+    :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
     :donor_id, :owner_id, :intent_id
 
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
   after_save :cache!
+  after_destroy :remake_scope_files
+
+  def remake_scope_files
+    scope.each do |s|
+      cache_files(s)
+    end
+  end 
+
   # before_save :increment_iteration MOVED TO FORM
 
   def increment_iteration # DUH, version was already taken by paper_trail
@@ -448,6 +458,10 @@ class Project < ActiveRecord::Base
     string :grant_element
 
     string :scope, multiple: true
+
+    string :flagged, multiple: true do 
+      all_flags.map(&:name)
+    end
 
 
     string :recipient_iso2, multiple: true do

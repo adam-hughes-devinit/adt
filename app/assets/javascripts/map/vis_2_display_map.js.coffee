@@ -105,7 +105,7 @@ color_the_map = (json) ->
 	make_a_legend()
 
 make_a_legend = () ->
-	console.log "making legend"
+	#console.log "making legend"
 	w = window.vis_config.w
 	h = window.vis_config.h
 	c = window.vis_config.c
@@ -120,7 +120,7 @@ make_a_legend = () ->
 	max = Math.max(amounts[2], 1000000)
 	# legendize = (v) -> Math.round()
 	legend_amounts = [max/10, max/5, max/2, (max*1.1)]
-	console.log(legend_amounts)
+	#console.log(legend_amounts)
 	d3.selectAll('.legend_bar, .legend_text')
 		.transition()
 			.duration(400)
@@ -237,7 +237,7 @@ $('.vis_input').change(() ->
 	
 	if params = gather_inputs()
 		window.active_params = params
-		console.log('active_params', window.active_params)
+		#console.log('active_params', window.active_params)
 		send_params(params)
 )
 

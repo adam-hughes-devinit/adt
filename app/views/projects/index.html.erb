@@ -27,11 +27,12 @@ end %>
 <br>
 
 <div class='row'>
-<div style='display:none;' id='project-facets-button'>
-	<button class='btn' style='margin:20px;' onclick='toggle_search_params()'>Show search facets</button>
-</div>
-<%= render 'export_search' %>
-	<%= will_paginate @projects %>	
+	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
+		<button class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
+	</div>
+  <%= render 'export_search' %>
+		<%= will_paginate @projects %>	
+	</div>
 </div>
 <br>
 <table id="project-search-results">

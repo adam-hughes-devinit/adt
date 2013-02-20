@@ -1,6 +1,6 @@
 <%= simple_form_for(@project, html: {class: "form-horizontal"}) do |f| %>
 <br>
-<div class="row">
+<div class="row project-main-details">
 <h3>Project Info: </h3>
 
 	<%= f.input :owner_id, wrapper_html: {class: " span6"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
@@ -10,19 +10,46 @@
 	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
 	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
 	<%= f.input :year_uncertain, label: "Year is uncertain", wrapper_html: { class: "span3"} %>
-	<%= f.input :description, input_html: {rows: "10" }, wrapper_html: {class: "span12"} %>
+	<%= f.input :description, input_html: {rows: "10", cols: "30" }, wrapper_html: {class: "span11"} %>
 	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
 	<%= f.association :verified, wrapper_html: {class: "span5"} %>
 </div>
-<div class='row'>
+<div class='row '>
 	<h3>Dates:</h3>
-	<%= f.input :start_planned, include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :start_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_planned, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span6"} %>
+	<div class='span5 dates-box'>
+		<%= f.input :start_planned, 
+			include_blank: true, 
+			input_html: {value: ''}, 
+			use_short_month: true, start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :start_actual, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
+	<div class='span5 dates-box' >
+		<%= f.input :end_planned, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :end_actual, 
+			include_blank: true, 
+			input_html: {value: '' },
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year,
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
 </div>
 
-<div class='row'>
+<div class='row project-sector-details'>
 
 	<h3>Details:</h3>
 	<%= f.association :sector, wrapper_html: {class: "span4"} %>
@@ -47,7 +74,7 @@
 	
 </div>
 
-<div class='row'>
+<div class='row project-loan-detail'>
 	<h2> Loan Detail: </h2>
 	<%= f.simple_fields_for :loan_detail do |loan_detail_form| %>
 	    <%= loan_detail_form.association :loan_type,wrapper_html: {class: " span4"} %>
@@ -59,7 +86,7 @@
  	<span style='color:#999;padding:5px;' class='span3 btn'><a href='http://www.worldbank.org/ida/ida-grant-element-calculator.html' target='_blank'>Grant Element Calculator <i class='icon-share'></i> </a></span>
 </div>
 
-<div class='row'>
+<div class='row project-flow-class'>
 	<h2> Flow Class: </h2>
 	<%= f.simple_fields_for :flow_class do |flow_class_form| %>  
 			<% # Hard-coding this is a bad idea

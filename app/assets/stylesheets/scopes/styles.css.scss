@@ -1,0 +1,32 @@
+#scope {
+	
+	
+
+	.scope-edit-field {
+		display:none;
+	}
+
+	.scope-edit-field.editing {
+		display: inherit;
+	}
+	
+	.scope-show-field.editing {
+		display:none;
+	}
+
+	.field {
+
+		line-height:20px;
+		margin: 2px;
+		height: 28px;
+		
+
+		input, span {
+			line-height:inherit;
+			height:inherit;
+			max-width: 50%
+		}
+	}
+}
+
+

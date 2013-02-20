@@ -4,17 +4,12 @@ namespace :projects do
 	
 		progress_bar = ProgressBar.new(Project.count)
 		
-		p "Caching individual projects"
+		p "Caching individual projects now"
 
 		Project.all.each do |p| 
-			p.cache_one!
+			p.cache! now: true
 			progress_bar.increment!
 		end
-		
-		p "Remaking master cache"
-		
-
-		Project.all.sample.cache!
 		
 		p "Finished Rechaching."
 	end

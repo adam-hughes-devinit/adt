@@ -86,6 +86,7 @@ class CodesController < ApplicationController
   end
 
   private
+
   	def create_local_variables(class_name_val, class_type_val, options={})
   		@class_name = class_name_val # ex. OdaLike
   		@class_type = class_type_val # ex. Oda Like
@@ -96,10 +97,10 @@ class CodesController < ApplicationController
   	def reindex_and_recache
   		# What's the best way to background this?
       if @object.respond_to? 'projects'
-	  		Sunspot.index(@object.projects)
-				@object.projects.each {|p| p.delay.cache_one!}
-				# to update the master cache... -->
-				@object.projects.first.delay.cache!
+	  		Sunspot.delay.index(@object.projects)
+				@object.projects.each {|p| p.cache!}
+				# to update the files... -->
+				
 	  	end
   	end
 
