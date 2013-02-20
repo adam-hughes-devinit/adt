@@ -1,0 +1,28 @@
+<% provide(:title, "Export") %>
+<% provide(:first_header, "Export: #{@export.id}") %>
+
+<div class="row">
+<section>
+	<p>
+	<b>Email:</b> <%= @export.email %> 
+	</p>
+  <p>
+  <b>Projects exported: </b> 
+  <% @export.projects.each do |p| %>
+    <%= link_to(p.id, p)  %>
+    <%= ", " %> 
+  <% end %>
+  </p>
+</section>
+<section>
+	<!--
+	<% if signed_in? %>
+		<%= render partial: 'shared/follow_form', locals: {object: @export} %>
+	<% end %>
+	!-->
+</section>
+</div>
+<div class="row">
+<hr class="row span8">
+<br>
+</div>

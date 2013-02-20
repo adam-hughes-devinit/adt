@@ -59,13 +59,22 @@
               proj_usd ||= 0
               sum += proj_usd
             end
+
           %>
           <%= "$#{number_with_precision(sum, precision: 2, delimiter: ',')}
            (USD 2009)" %><br>
           <br>
 
           
-          <%= email_field_tag 'email', nil, placeholder: 'enter email', class: "span3" %>
+          <%= simple_form_for(@export, method: :post,
+                                       url: exports_path,
+                                       html: { class: "form-horizontal"}) do |f| %>
+            <%= f.email_field :email,
+                              placeholder: 'enter email',
+                              class: 'span3' %>
+            <%= f.input :projects, as: :hidden, input_html: {value: @search.results.map(&:id)} %>
+            <%= f.button :submit %>
+          <% end %>
           <!--
           <form action="" id="export-form" class="form-horizontal"> 
             <div class="control-group">
@@ -77,7 +86,8 @@
         </p>
       </div>
       <div class="modal-footer">
-        <a href="/export" class="btn btn-primary">Email me the CSV</a>
+        <%= link_to("Email me the CSV", @export, {class: "btn btn-primary"}) %>
+        <!--<a href="/export" class="btn btn-primary">Email me the CSV</a> -->
         <a href="#" class="btn" data-dismiss="modal">Close</a>
       </div>
     </div>

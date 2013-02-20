@@ -1,13 +1,10 @@
 class ExportsController < ApplicationController
   def index
-
     @exports = Export.all
-    # respond_to do |format|
-    #    format.html {render template: 'shared/code_index', locals: {objects: @objects, type: @class_type.pluralize}}
-    # end
   end
 
   def show
+    @export = Export.find(params[:id])
   end
 
   def new
@@ -17,5 +14,12 @@ class ExportsController < ApplicationController
   end
 
   def create
+    @export = Export.new(params[:export])
+    if @export.save
+      redirect_to(@export, notice: 'Post was successfully created.')
+    else
+      render action: "new"
+    end
   end
+
 end

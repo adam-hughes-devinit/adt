@@ -10,6 +10,7 @@ include SearchHelper
     respond_to do |format|
       format.html do
    			custom_search
+        @export = Export.new(params[:export])
         render html: @projects
       end
       format.json do
