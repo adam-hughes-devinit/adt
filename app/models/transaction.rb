@@ -31,11 +31,12 @@ class Transaction < ActiveRecord::Base
               exchange_rate_used = deflator_object["exchange_rate"]
               deflator_used = deflator_object["deflator"]
               
-              self.usd_defl=deflated_amount.to_f.round(2)
-              self.usd_current=current_amount.to_f.round(2)
+              self.usd_defl=deflated_amount.round(2)
+              self.usd_current=current_amount.round(2)
               self.deflator= deflator_used
               self.exchange_rate = exchange_rate_used
               self.deflated_at = Time.now
+
             rescue
                 
                 self.usd_defl=nil

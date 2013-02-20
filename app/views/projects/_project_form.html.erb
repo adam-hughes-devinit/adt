@@ -14,12 +14,39 @@
 	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
 	<%= f.association :verified, wrapper_html: {class: "span5"} %>
 </div>
-<div class='row'>
+<div class='row '>
 	<h3>Dates:</h3>
-	<%= f.input :start_planned, include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :start_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_planned, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span10"} %>
-	<%= f.input :end_actual, include_blank: true, input_html: {value: '' }, use_short_month: true, start_year: 1980, end_year: Date.today.year, wrapper_html: {class: "project-date span6"} %>
+	<div class='span5 dates-box'>
+		<%= f.input :start_planned, 
+			include_blank: true, 
+			input_html: {value: ''}, 
+			use_short_month: true, start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :start_actual, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
+	<div class='span5 dates-box' >
+		<%= f.input :end_planned, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :end_actual, 
+			include_blank: true, 
+			input_html: {value: '' },
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year,
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
 </div>
 
 <div class='row'>
