@@ -8,12 +8,18 @@
 	border-radius: 4px;
 }
 
-.project-accessory-fields .fields {
+.project-accessory-fields .fields, .project-main-details, .dates-box,
+.project-flow-class, .project-loan-detail, .project-sector-details {
 	@include project_form_box;
 }
 
-.dates-box{
-	@include project_form_box;
+.project-main-details {
+	label {
+		max-width:80px;
+	}
+	.controls {
+		margin-left:100px;
+	}
 }
 
 .project-date{
