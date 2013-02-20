@@ -98,7 +98,7 @@ module ProjectExporters
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
-    #{loan_type}
+    #{loan_type ? loan_type.name : '' }
     #{interest_rate}
     #{maturity}
     #{grace_period}
