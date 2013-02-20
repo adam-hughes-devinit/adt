@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212213901) do
+ActiveRecord::Schema.define(:version => 20130220193727) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -318,9 +318,9 @@ ActiveRecord::Schema.define(:version => 20130212213901) do
   add_index "tieds", ["id"], :name => "index_tieds_on_id"
 
   create_table "transactions", :force => true do |t|
-    t.decimal  "value"
+    t.float    "value"
     t.integer  "currency_id"
-    t.decimal  "usd_defl"
+    t.float    "usd_defl"
     t.integer  "project_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false

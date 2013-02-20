@@ -1,5 +1,6 @@
 class Source < ActiveRecord::Base
   attr_accessible :date, :document_type_id, :source_type_id, :url, :project_id, :source_type, :document_type
+  default_scope order: "date"
   has_paper_trail
 
   has_many :flags, as: :flaggable, dependent: :destroy

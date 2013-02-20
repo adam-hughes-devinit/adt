@@ -2,10 +2,10 @@
 			<% @project.transactions.each do |t| %>
 				<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
 					<% if t.usd_defl.present? %>
-						<b><%= "%.2f" % t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
+						<b><%= t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
 					<% end %>
 					<% if !t.currency.nil? %>
-					 (<%= t.value.blank? ? @unset_data : "%.2f" % t.value.round(2) %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>, $<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
+					 (<%= t.value.blank? ? @unset_data : t.value %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>, $<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
 					<% end %>
 					<% t.flags.each do |flag| %>
 						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
