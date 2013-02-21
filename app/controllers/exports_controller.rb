@@ -25,7 +25,8 @@ class ExportsController < ApplicationController
 
     @export = Export.new(params[:export])
     if @export.save
-      redirect_to(@export, notice: 'Post was successfully created.')
+			ExportMailer.delay.export_request(@export, params[:export][:email])
+      redirect_to(@export)
     else
       render action: "new"
     end

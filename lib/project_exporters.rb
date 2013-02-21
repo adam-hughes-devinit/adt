@@ -98,12 +98,13 @@ module ProjectExporters
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
-    #{loan_type ? loan_type.name : '' }
+    #{if loan_type != nil && loan_type != "Unset" then loan_type.name else '' end }
     #{interest_rate}
     #{maturity}
     #{grace_period}
     #{grant_element} ]
 
+    #TODO fix loan_type line above ^ this is a hack because loan_type is designed wrong
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
     csv_array.each {|v| csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," }

@@ -76,23 +76,13 @@
                               placeholder: 'enter email',
                               class: 'span3' %>
             <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
-            <%= f.button :submit %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <%= f.button :submit, class: 'btn-primary' %>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
           <% end %>
-          <!--
-          <form action="" id="export-form" class="form-horizontal"> 
-            <div class="control-group">
-              <input type="text" align "center" id="inputEmail"
-              placeholder="Email" class="input-large">
-            </div>
-          </form>
-          -->
-        </p>
-      </div>
-      <div class="modal-footer">
-        <%= link_to("Email me the CSV", @export, {class: "btn btn-primary"}) %>
-        <!--<a href="/export" class="btn btn-primary">Email me the CSV</a> -->
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-      </div>
     </div>
   </div>
 </div>
