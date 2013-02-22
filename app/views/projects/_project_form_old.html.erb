@@ -1,0 +1,151 @@
+<%= simple_form_for(@project, html: {class: "form-horizontal project-form row-fluid"}) do |f| %>
+<br>
+<div class="row project-main-details">
+	<h3>Project Info: </h3>
+
+	<%= f.input :owner_id, wrapper_html: {class: " span6"},  as: :hidden, hint: "Created by: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
+	<%= f.input :active, wrapper_html: {class: " span3"} %>
+	<%= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration+=1}" %>
+	<%= f.input :title, wrapper_html: {class: "span10"} %>
+	<%= f.association :donor, wrapper_html: {class: "span4"}, label: 'Donor country' %>
+	<%= f.input :year, hint: "Commitment year", wrapper_html: {class: "span4"} %>
+	<%= f.input :year_uncertain, label: "Year is uncertain", wrapper_html: { class: "span3"} %>
+	<%= f.input :description, input_html: {rows: "10", cols: "30" }, wrapper_html: {class: "span11"} %>
+	<%= f.input :capacity, wrapper_html: {class: "span6"} %>
+	<%= f.association :verified, wrapper_html: {class: "span5"} %>
+</div>
+<div class='row '>
+	<h3>Dates:</h3>
+	<div class='span5 dates-box'>
+		<%= f.input :start_planned, 
+			include_blank: true, 
+			input_html: {value: ''}, 
+			use_short_month: true, start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :start_actual, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
+	<div class='span5 dates-box' >
+		<%= f.input :end_planned, 
+			include_blank: true, 
+			input_html: {value: '' }, 
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year, 
+			wrapper_html: {class: "project-date span4"} %>
+		<%= f.input :end_actual, 
+			include_blank: true, 
+			input_html: {value: '' },
+			use_short_month: true, 
+			start_year: 1980, 
+			end_year: Date.today.year,
+			wrapper_html: {class: "project-date span4"} %>
+	</div>
+</div>
+
+<div class='row project-sector-details'>
+
+	<h3>Details:</h3>
+	<%= f.association :sector, wrapper_html: {class: "span4"} %>
+	<%= f.input :sector_comment, wrapper_html: {class: " span4"}, hint: "If multisector, add details" %>
+	<%= f.input :crs_sector, wrapper_html: {class: " span4"}, hint: "3-digit CRS code" %>
+	<br>
+	<%= f.input :is_commercial, wrapper_html: {class: " span5"} %>
+	<%= f.input :line_of_credit,wrapper_html: {class: " span3"}, hint: "Is this project a line of credit?" %>
+	<%= f.input :is_cofinanced,wrapper_html: {class: " span3"} %>
+	<%= f.input :debt_uncertain, wrapper_html: {class: "span4"} %> 
+	<!-- <%= 
+		#f.association :tied, wrapper_html: {class: " span5"}, hint: "This variable is deprecated." 
+		%>!-->
+	<%= f.association :flow_type, wrapper_html: {class: " span5"} %>
+	<!-- <%= 
+		#f.association :oda_like, wrapper_html: {class: " span5"}, hint: "This variable is deprecated."
+		%>
+	!-->
+	<%= f.association :status, wrapper_html: {class: " span5"} %>
+	<%= f.association :intent, wrapper_html: {class: " span4"} %>
+	
+	
+</div>
+
+<div class='row project-loan-detail'>
+	<h2> Loan Detail: </h2>
+	<%= f.simple_fields_for :loan_detail do |loan_detail_form| %>
+	    <%= loan_detail_form.association :loan_type,wrapper_html: {class: " span4"} %>
+	    <%= loan_detail_form.input :interest_rate,wrapper_html: {class: " span4"}, hint: "In %, eg. 2.5 for 2.5%." %>
+	    <%= loan_detail_form.input :grace_period,wrapper_html: {class: " span4"}, hint: "Years until first payment." %>
+	    <%= loan_detail_form.input :maturity,wrapper_html: {class: " span4"}, hint: "Years until final payment." %>
+	    <%= loan_detail_form.input :grant_element,wrapper_html: {class: " span4"}, hint: "In %." %>
+	<% end %>
+ 	<span style='color:#999;padding:5px;' class='span3 btn'><a href='http://www.worldbank.org/ida/ida-grant-element-calculator.html' target='_blank'>Grant Element Calculator <i class='icon-share'></i> </a></span>
+</div>
+
+<div class='row project-flow-class'>
+	<h2> Flow Class: </h2>
+	<%= f.simple_fields_for :flow_class do |flow_class_form| %>  
+			<% # Hard-coding this is a bad idea
+				%>
+			<%= flow_class_form.association :oda_like_1 %>
+			<%= flow_class_form.association :oda_like_2 %>
+			<%= flow_class_form.association :oda_like_master %>
+			    <span style="color:#999">Will be autoarbitrated on Save if there is no Master and both flow_classes match</span>
+	<% end %>
+
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Transactions: </h3>
+	<div>
+		<%= f.simple_fields_for :transactions do |transaction_form| %>
+			<%= render 'transaction_fields', f: transaction_form %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Transaction", f, :transactions %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Geopolitical Data: </h3>
+	<div>
+		<%= f.simple_fields_for :geopoliticals do |geos| %>
+			<%= render 'geopolitical_fields', f: geos %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Recipient", f, :geopoliticals %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Participating Organizations: </h3>
+	<div>
+		<%= f.simple_fields_for :participating_organizations do |orgs| %>
+			<%= render 'participating_organization_fields', f: orgs %>
+		<% end %>
+		<b><%= link_to_add_fields "Add an Organization", f, :participating_organizations %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Contacts: </h3>
+	<div>
+		<%= f.simple_fields_for :contacts do |cons| %>
+			<%= render 'contact_fields', f:cons %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Contact", f, :contacts %></b>
+	</div>
+</div>
+<div class='row project-accessory-fields'>
+	<h3>Sources: </h3>
+	<div>
+		<%= f.simple_fields_for :sources do |srcs| %>
+			<%= render 'source_fields', f: srcs %>
+		<% end %>
+		<b><%= link_to_add_fields "Add a Source", f, :sources %></b>
+	</div>
+</div>
+<div class='row'>
+	<%= f.button :submit, "Save" %>
+	<br>
+	
+</div>
+<% end %>

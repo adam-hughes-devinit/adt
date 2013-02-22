@@ -1,28 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="shortcut icon" href="/favicon.ico?v=1" />
-<title>AidData | <%= yield(:title) %></title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag   "application" %>
-  <%= render :partial => 'layouts/ga' if Rails.env == 'production' %>
-  <%= csrf_meta_tags %>
-  <% if Rails.env.test? %>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"> </script>
-  <% end %>
-      <!--[if lt IE 9]>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico?v=1" />
+    <title>AidData | <%= yield(:title) %></title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag   "application" %>
+    <%= render :partial => 'layouts/ga' if Rails.env == 'production' %>
+    <%= csrf_meta_tags %>
+    <% if Rails.env.test? %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"> </script>
+    <% end %>
+    <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-offset="150" data-target=".scroll-spy" >
+
     <%= render 'layouts/header' %>
 
-    <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>"><%= raw(value) %></div>
+    <% if flash.count > 0 %>
+        <div class='alerts container'>
+            <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %>">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <%= raw(value) %>
+                </div>
+            <% end %>
+        </div>
     <% end %>
 
     <div class="container">
       <%= yield %>
+     
       <%= render 'layouts/footer' %>
 
       <%= debug(params) if Rails.env.development? %>

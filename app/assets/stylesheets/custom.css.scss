@@ -1,6 +1,17 @@
+
+
+/* Bootstrap overrides */
+
+$baseFontSize: 13px; 
+$navbarBackground: #172237;
+$navbarBackgroundHighlight: rgba(0,0,0,0);
+
 @import "bootstrap";
+@import "bootstrap-responsive";
 @import "scopes/styles";
 @import "project/styles";
+@import "navbar/styles";
+
 
 /* mixins, variables, etc. */
 
@@ -11,9 +22,7 @@ $grayMediumLight: #eaeaea;
   -webkit-box-sizing: border-box; 
   box-sizing: border-box;
 }
-
 																										/* universal */
-
 
 html {
   overflow-y: scroll;
@@ -29,10 +38,13 @@ section {
   overflow: auto;
 }
 
-textarea {
-  resize: vertical;
+.alerts {
+  margin-top: 10px;
+  display: block;
 }
-
+.row-fluid, .row {
+  margin-left:0px;
+}
 .center {
   text-align: center;
     h1 {
@@ -44,7 +56,6 @@ textarea {
 .tab-content {
 	padding:5px;
 	}
-
 
 																											/* typography */
 
@@ -74,66 +85,14 @@ p {
 
                       /* header */
 
-.navbar-inner {
-  min-height: 32px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background-color: #172237;
-  background-image: -moz-linear-gradient(top, #1c2a43, #101826);
-  background-image: -ms-linear-gradient(top, #1c2a43, #101826);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1c2a43), to(#101826));
-  background-image: -webkit-linear-gradient(top, #1c2a43, #101826);
-  background-image: -o-linear-gradient(top, #1c2a43, #101826);
-  background-image: linear-gradient(top, #1c2a43, #101826);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF1C2A43', endColorstr='#FF101826', GradientType=0);
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-}
-
-#logo {
-  float: left;
-  margin-right: 10px;
-  font-size: 1.7em;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: -1px;
-  padding-top: 0px;
-  font-weight: bold;
-  line-height: 1;
-    img {
-    height:80px;
-    }
-}
-
-#image_and_header {
-  max-height:150px;
+#first_header{
   position:relative;
-  top:-30px;
-  
-  #background-image {
-    vertical-align:top;
-    width:100%;
-    height:140px;
-    z-index:-1;
-    left:0;
-    top:0;
-    opacity:0.9;
-    filter:alpha(opacity=90); /* For IE8 and earlier */
-  }
-
-  #first_header{
-    position:relative;
-    text-shadow:1px 1px #cce;
-    color:#000;
-    top:-80px;
-    z-index:5;
-  }
+  text-shadow:1px 1px #cce;
+  color:#000;
+  top:-80px;
+  z-index:5;
 }
+
 
                                       /* footer */
 
