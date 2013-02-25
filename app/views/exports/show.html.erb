@@ -1,18 +1,13 @@
 <% provide(:title, "Export") %>
 <% provide(:first_header, "") %>
 
+<h1>Your Export</h1>
 <div class="row">
 <section>
-	<p>
-	<b>Email:</b> <%= @export.email %> 
-	</p>
-  <p>
-  <b>Projects exported: </b> 
-  <% @export.projects.each do |p| %>
-    <%= link_to(p.id, p)  %>
-    <%= ", " %> 
-  <% end %>
-  </p>
+<div class="progress progress-striped active">
+  <div id="mybar" class="bar" ></div>
+</div>
+<p>You may close this window and the export will continue</p>
 </section>
 <section>
 	<!--
@@ -26,3 +21,27 @@
 <hr class="row span8">
 <br>
 </div>
+
+<script>
+  var bar = document.getElementById("mybar");
+  var progress = 0;
+
+  function setProgress(percent){
+    bar.style.width = percent + "%";
+  }
+
+  var interval = setInterval(
+  function(){
+    $.getJSON("<%= "#{@export.id}.json" %>", function(data){
+        var items = [];
+
+        $.each(data, function(key, val) {
+          if (key === "status_percent") {
+            progress = val
+          }
+        });
+      });
+    setProgress(progress)
+    if (progress == 100) window.clearInterval(interval);
+  }, 100);
+</script>

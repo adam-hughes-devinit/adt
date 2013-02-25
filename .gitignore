@@ -9,6 +9,8 @@
 
 # Ignore the pre-packaged datasets
 /public/downloads/*
+# and the Exports
+/public/exports/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
@@ -25,6 +27,8 @@
 
 # Ignore sensitive info
 /config/app_config.yml
+#And rvmrc files
+.rvmrc
 
 # Ignore sql dumps
 /*.sql

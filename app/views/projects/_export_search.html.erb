@@ -21,7 +21,7 @@
             scope_val = scope_val.gsub('_',' ').titleize
             display_params["Scope"] = scope_val
             params.each do |param|
-              unless %w(action controller scope).include?(param[0])
+              unless %w(action controller scope utf8).include?(param[0])
                 key = param[0].gsub('_',' ').titleize
                 value = param[1].gsub('_',' ').titleize
                 key.gsub!(' String', '')
