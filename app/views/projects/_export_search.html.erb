@@ -21,7 +21,7 @@
             scope_val = scope_val.gsub('_',' ').titleize
             display_params["Scope"] = scope_val
             params.each do |param|
-              unless %w(action controller scope).include?(param[0])
+              unless %w(action controller scope utf8).include?(param[0])
                 key = param[0].gsub('_',' ').titleize
                 value = param[1].gsub('_',' ').titleize
                 key.gsub!(' String', '')
@@ -72,27 +72,17 @@
           <%= simple_form_for(@export, method: :post,
                                        url: exports_path,
                                        html: { class: "form-horizontal"}) do |f| %>
-            <%= f.email_field :email,
+            <%= f.email_field :email, 
                               placeholder: 'enter email',
                               class: 'span3' %>
             <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
-            <%= f.button :submit %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <%= f.button :submit, class: 'btn-primary' %>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
           <% end %>
-          <!--
-          <form action="" id="export-form" class="form-horizontal"> 
-            <div class="control-group">
-              <input type="text" align "center" id="inputEmail"
-              placeholder="Email" class="input-large">
-            </div>
-          </form>
-          -->
-        </p>
-      </div>
-      <div class="modal-footer">
-        <%= link_to("Email me the CSV", @export, {class: "btn btn-primary"}) %>
-        <!--<a href="/export" class="btn btn-primary">Email me the CSV</a> -->
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-      </div>
     </div>
   </div>
 </div>

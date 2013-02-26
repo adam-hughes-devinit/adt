@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130220193727) do
+ActiveRecord::Schema.define(:version => 20130225224226) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -86,8 +86,10 @@ ActiveRecord::Schema.define(:version => 20130220193727) do
 
   create_table "exports", :force => true do |t|
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "status_percent"
+    t.string   "file_path"
   end
 
   create_table "exports_projects", :id => false, :force => true do |t|

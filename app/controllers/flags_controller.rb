@@ -7,7 +7,7 @@ class FlagsController < ApplicationController
 	def create
 		@flag = Flag.new(params[:flag])
 		if @flag.save!
-			AiddataAdminMailer.flag_notification(@flag).deliver
+			AiddataAdminMailer.delay.flag_notification(@flag)
 			flash[:success] = "Flag added"
 		else
 			flash[:message] = "Flag failed"
