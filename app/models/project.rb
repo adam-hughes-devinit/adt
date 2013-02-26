@@ -189,14 +189,14 @@ class Project < ActiveRecord::Base
     end
   end 
 
-  has_one :flow_class
+  has_one :flow_class, dependent: :destroy
   accepts_nested_attributes_for :flow_class
 
   ####################################################
   # Loan Detail Methods
   ####################################################
 
-  has_one :loan_detail
+  has_one :loan_detail, dependent: :destroy
   accepts_nested_attributes_for :loan_detail
 
   def loan_type
@@ -471,56 +471,15 @@ class Project < ActiveRecord::Base
 	
 	def scope
 	  scope_array = []
-
-    #check the SCOPE architecture in the search constant initializer
-	  SCOPES.each do |sco|
-	    catch :invalid_scope do
-        needs = sco[:with_and]
-        #in case nil
-        needs ||= []
-        needs.each do |need|
-          next unless self.respond_to?(need[0])
-          response = self.send(need[0])
-          unless response == need[1] || need[1].include?(response)
-            throw :invalid_scope
-          end
-        end
-
-        #Things a project can't have if it is in the scope
-        cants = sco[:without]
-        #in case nil
-        cants ||= []
-        cants.each do |cant|
-          next unless self.respond_to?(cant[0])
-          response = self.send(cant[0])
-          if response == cant[1] || cant[1].include?(response)
-            throw :invalid_scope
-          end
-        end
-
-        ors = sco[:with_or]
-        ors ||= []
-
-        #If the project has any of these things, it is in the scope
-        non_trivial_or = false
-        or_tag = false
-        ors.each do |or_array|
-          next unless self.respond_to?(or_array[0])
-          #if it reaches here, we have a nontrivial with_or value
-          non_trivial_or = true
-          response = self.send(or_array[0])
-          if response == or_array[1] || or_array[1].include?(response)
-            or_tag = true
-          end
-        end
-
-        if non_trivial_or and not or_tag
-          throw :invalid_scope
-        end
-
-        scope_array << sco[:sym]
+    # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
+    
+    #check the Scope architecture in the search constant initializer
+	  Scope.all.each do |scope|
+      if scope.includes_project? self
+        scope_array << scope.symbol.to_sym
       end
     end
+	   
     return scope_array
   end
 

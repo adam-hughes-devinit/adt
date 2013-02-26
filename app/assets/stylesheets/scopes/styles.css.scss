@@ -1,32 +1,32 @@
-#scope {
-	
-	
-
-	.scope-edit-field {
-		display:none;
+.scope-form {
+	.scope-channel-form {
+		background-color: #f0c0c0;
+	}
+	.scope-filter-form {
+		background-color: #a0f0c0;
+	}
+	.scope-filter-value-form {
+		background-color: #a9a;
 	}
 
-	.scope-edit-field.editing {
-		display: inherit;
+}
+
+#scopes {
+
+
+	span.scope-editable {
+		width:200px;
 	}
-	
-	.scope-show-field.editing {
-		display:none;
-	}
 
-	.field {
-
-		line-height:20px;
-		margin: 2px;
-		height: 28px;
-		
-
-		input, span {
-			line-height:inherit;
-			height:inherit;
-			max-width: 50%
-		}
+	input.scope-edit{
+		display:inline;
+		max-width: 200px !important;
 	}
 }
 
-
+.scope_channel {
+	margin-left:40px;
+	ul {
+		margin-left: 40px;
+	}
+}

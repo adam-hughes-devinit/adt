@@ -1,7 +1,12 @@
 
-var app = app || {};
+var app = app || {}
 var ENTER_KEY = 13;
 
 $(function(){
-	new app.ScopeView(new app.Scope() )
+	  _.templateSettings.evaluate =    /\{\[(.+?)\]\}/g,
+      _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
+
+
+	app.sv = new app.ScopeView({ model: new app.Scope})
+
 })

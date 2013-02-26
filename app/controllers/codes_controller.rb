@@ -106,14 +106,14 @@ class CodesController < ApplicationController
 
 
   	def remove_object_from_projects_and_reindex_and_recache
-  	  if @object.respond_to? 'projects'
-  	  	@object.projects.each do |p|
+  	  if @object.respond_to?('projects') && projects = @object.projects
+        Sunspot.index(@object.projects)
+        projects.each do |p|
 			  	if p.respond_to? "{@class_name.underscore.downcase}_id"
 			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
 					end
 	  		end
-	  		@object.projects.first.delay.cache!
-	  		Sunspot.index(@object.projects)
+	  		
 	  	end
 	  end
 

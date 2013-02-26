@@ -98,7 +98,7 @@ module ProjectExporters
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
-    #{loan_type ? loan_type.name : '' }
+    #{if loan_type != nil && loan_type != "Unset" then loan_type.name else '' end }
     #{interest_rate}
     #{maturity}
     #{grace_period}
@@ -106,7 +106,9 @@ module ProjectExporters
 
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
-    csv_array.each {|v| csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," }
+    csv_array.each do |v| 
+        csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," 
+    end
     
     # get rid of that trailing comma
     csv_text_string.chomp!(',')

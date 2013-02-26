@@ -2,8 +2,7 @@ class CreateScopes < ActiveRecord::Migration
   def change
     create_table :scopes do |t|
       t.string :name
-      t.text :hint
-      t.string :type
+      t.text :description
       t.string :symbol
 
       t.timestamps

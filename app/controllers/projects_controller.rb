@@ -137,6 +137,7 @@ include SearchHelper
     #
     # To get around this, I'm saving the accessories, deleting everything,
     # then adding the accessories by hand. 
+    
     @accessories = @project.accessories
     
     @project.destroy

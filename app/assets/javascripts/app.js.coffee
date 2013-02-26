@@ -18,6 +18,7 @@ String.prototype.pluralize = (count, plural) ->
       plural = this + 's'
     plural
 
+
 @remove_fields = (link) ->
   if (confirm("Are you sure?") )
     @changed = true

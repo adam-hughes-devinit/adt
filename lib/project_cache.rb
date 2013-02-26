@@ -2,30 +2,25 @@ module ProjectCache
   include ProjectExporters
   require 'fileutils'
 
-  def cache!(options = {})
-    options.reverse_merge! now: false
+  def cache!(options = {now: false, include_files: true })
+
     if options[:now]
-      cache_now
+      cached_record = Cache.find_or_create_by_id(id)
+    cached_record.update_attribute(:text, self.csv_text)
     else
-      cache_later
+      cached_record = Cache.find_or_create_by_id(id)
+      cached_record.delay.update_attribute(:text, self.csv_text)
     end
+
+    if options[:include_files]
+      scopes = self.scope
+      scopes.each { |s| cache_files(s) }
+    end
+
+    self
+    
   end
 
-  def cache_now
-    cached_record = Cache.find_or_create_by_id(id)
-    cached_record.update_attribute(:text, self.csv_text)
-    scopes = self.scope
-    scopes.each { |s| cache_files(s) }
-  end
-
-
-  def cache_later
-    cached_record = Cache.find_or_create_by_id(id)
-    cached_record.update_attribute(:text, self.csv_text)
-    scopes = self.scope
-    scopes.each { |s| cache_files(s) }
-  end
-  handle_asynchronously :cache_later
 
 
   # scope_name is a symbol
