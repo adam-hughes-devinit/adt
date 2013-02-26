@@ -1,0 +1,27 @@
+<% provide(:title, "Exports") %>
+<% provide(:first_header, "All Exports") %>
+<%# <% @proj %1> %>
+<div class="row">
+  <div>
+    <% hidden_fields = ["created_at", "updated_at", "id" ] %>
+
+    <table class='code-index-table'>
+      <thead>
+        <tr>
+          <th>Export Id</th>
+          <th>Email</th>
+          <th>Projects</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @exports.each do |e| %>
+          <tr>
+            <td><%= e.id %></td>
+            <td><%= e.email %></td>
+            <td><%= e.projects.count %></td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>

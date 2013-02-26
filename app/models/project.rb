@@ -47,6 +47,7 @@ class Project < ActiveRecord::Base
 
 
   has_many :comments, dependent: :destroy
+  has_and_belongs_to_many :exports
   accepts_nested_attributes_for :comments, allow_destroy: true
 
 
@@ -67,6 +68,7 @@ class Project < ActiveRecord::Base
 
   #validates :title, presence: true
 
+  
   # I'm adding string methods for these codes for Sunspot Facets
   belongs_to :status
   def status_name

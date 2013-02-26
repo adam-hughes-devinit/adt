@@ -104,6 +104,7 @@ module ProjectExporters
     #{grace_period}
     #{grant_element} ]
 
+    #TODO fix loan_type line above ^ this is a hack because loan_type is designed wrong
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
     csv_array.each do |v| 

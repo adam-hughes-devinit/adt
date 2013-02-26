@@ -11,7 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+
 ActiveRecord::Schema.define(:version => 20130226205710) do
+
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -92,7 +94,25 @@ ActiveRecord::Schema.define(:version => 20130226205710) do
     t.datetime "updated_at", :null => false
   end
 
+
   add_index "document_types", ["name"], :name => "index_document_types_on_name"
+
+  create_table "exports", :force => true do |t|
+    t.string   "email"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "status_percent"
+    t.string   "file_path"
+  end
+
+  create_table "exports_projects", :id => false, :force => true do |t|
+    t.integer "export_id"
+    t.integer "project_id"
+  end
+
+  add_index "exports_projects", ["export_id", "project_id"], :name => "index_exports_projects_on_export_id_and_project_id"
+  add_index "exports_projects", ["project_id", "export_id"], :name => "index_exports_projects_on_project_id_and_export_id"
+
 
   create_table "flag_types", :force => true do |t|
     t.string   "name"

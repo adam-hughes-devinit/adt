@@ -1,12 +1,12 @@
 include ApplicationHelper
 
 class AiddataAdminMailer < ActionMailer::Base
-  default from: "rmosolgo@aiddata.org"
-  default to: "china@aiddata.org"
-  
+  default from: "adamparkerfrey@gmail.com"
+  default to: "adamparkerfrey@gmail.com"
+
   def comment_notification(comment)
-  	@comment = comment
-  	if Rails.env.production?
+    @comment = comment
+    if Rails.env.production?
       mail subject: "New Comment on Project #{@comment.project.id}"
     end
   end
@@ -20,7 +20,8 @@ class AiddataAdminMailer < ActionMailer::Base
     end
     @flag = flag
     if Rails.env.production?
-    	mail subject: "New Flag on Project #{proj_id}"
+      mail subject: "New Flag on Project #{proj_id}"
     end
   end
+
 end

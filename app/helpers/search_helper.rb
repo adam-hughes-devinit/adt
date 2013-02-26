@@ -43,7 +43,7 @@ module SearchHelper
 
 	  end
 	  
-	  @projects = @search.results
+	  @search.results
 	end
 
 end

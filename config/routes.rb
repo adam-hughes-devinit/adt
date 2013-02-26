@@ -46,4 +46,6 @@ Adt::Application.routes.draw do
   
   # Caches -- for sharing the whole dataset
   match '/caches', to: 'static_pages#caches', defaults: { format: 'json' }
+
+  resources :exports
 end
