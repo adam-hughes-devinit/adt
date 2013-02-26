@@ -23,19 +23,15 @@ class ExportsController < ApplicationController
     projects_string.gsub!(/[\[\]]/,'')
     projects_array = []
 
-    project_count = projects_string.count(',')
-    # percentage_update = (45.0 / project_count) * 10
-    projects_string.split(",").each_with_index.map do |proj_id, index|
-      # if index % 10 == 0
-      #   @export.status_percent += percentage_update
-      #   @export.save
-      # end
+    projects_string.split(",").map do |proj_id|
       proj_id.strip!
       projects_array << Project.find(proj_id.to_i)
     end
     params[:export][:projects] = projects_array
 
     @export = Export.new(params[:export])
+    # @host = request.host
+    # @port = request.port
     if @export.save
 			 ExportMailer.delay.export_request(@export, params[:export][:email])
       redirect_to(@export)

@@ -1,13 +1,15 @@
 <% provide(:title, "Export") %>
 <% provide(:first_header, "") %>
 
-<h1>Your Export</h1>
-<div class="row">
+<h2>Your request is being processed.</h2>
+<div id="main_div" class="row">
 <section>
 <div class="progress progress-striped active">
   <div id="mybar" class="bar" ></div>
 </div>
-<p>You may close this window and the export will continue</p>
+<div id="centered_div" class="center"
+  <p>You may close this window and the export will continue</p>
+</div>
 </section>
 <section>
 	<!--
@@ -23,25 +25,43 @@
 </div>
 
 <script>
-  var bar = document.getElementById("mybar");
+  var bar = $('#mybar');
   var progress = 0;
+  var export_path = 'test';
 
   function setProgress(percent){
-    bar.style.width = percent + "%";
+    bar.css('width', percent + "%");
+    bar.text(percent + "%");
   }
 
-  var interval = setInterval(
+  var interval_id = setInterval(
   function(){
     $.getJSON("<%= "#{@export.id}.json" %>", function(data){
-        var items = [];
 
         $.each(data, function(key, val) {
           if (key === "status_percent") {
             progress = val
           }
+          if (key === "file_path") {
+            export_path = val
+            //get to root path
+            export_path = "../" + export_path;
+          }
         });
       });
     setProgress(progress)
-    if (progress == 100) window.clearInterval(interval);
+    if (progress == 100){
+      bar.parent().removeClass("active");
+
+      $(document.createElement("BUTTON"));
+      var $finished_button = document.createElement('a');
+      $finished_button.setAttribute('class', 'btn btn-primary');
+      $finished_button.setAttribute('href', export_path);
+      $finished_button.innerHTML = "Download Your Export";
+      $("#centered_div").append($finished_button);
+
+      clearInterval(interval_id)
+    }
   }, 100);
+
 </script>

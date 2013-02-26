@@ -8,17 +8,22 @@ class ExportMailer < ActionMailer::Base
     # open up a file on the filesystem and write the export to that file
     # Could be a problem if we don't have access to filesystem
 
-    exports_directory = 'public/exports'
+    exports_directory = 'public/export_downloads'
     #make directory if not there
     if !(File.directory?(exports_directory))
       FileUtils.mkdir_p(exports_directory)
     end
 
-    date = Time.now
-    export_file_name = "#{exports_directory}/#{date.to_s}.csv"
+    @export = export
+
+    time = Time.now
+    time = time.strftime("%y-%m-%d--%H%M%S")
+    export_file_name = "#{exports_directory}/#{time.to_s}_Aiddata_Export.csv"
+    @export.file_path = "export_downloads/#{time.to_s}_Aiddata_Export.csv"
+    @export.save
+
     export_file = File.open(export_file_name, 'w')
     export_file.puts Project.csv_header
-    @export = export
 
     #This is to update the progress bar on the export page
     @export.status_percent = 15 
@@ -38,7 +43,7 @@ class ExportMailer < ActionMailer::Base
 
     mail.attachments['Aiddata_Export.csv'] = {mime_type: 'text/csv',
                                               content: File.read(export_file_name)}
-    mail( to: email, subject: "Your Export is Ready")
+    mail( to: email, subject: "Your Aiddata Export is Ready")
     @export.status_percent = 100
     @export.save
 
