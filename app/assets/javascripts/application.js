@@ -14,8 +14,4 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require ./app
-
-
-
-
-
+//= require rails.validations
