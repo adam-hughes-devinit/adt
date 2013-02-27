@@ -3,25 +3,44 @@
 <%# <% @proj %1> %>
 <div class="row">
   <div>
-    <% hidden_fields = ["created_at", "updated_at", "id" ] %>
-
-    <table class='code-index-table'>
+    <table class='code-index-table' cellpadding="10">
       <thead>
         <tr>
           <th>Export Id</th>
           <th>Email</th>
           <th>Projects</th>
+          <th>Time Created</th>
+          <th>Last Updated</th>
+          <th>Successfully Emailed?<th>
         </tr>
       </thead>
       <tbody>
         <% @exports.each do |e| %>
-          <tr>
-            <td><%= e.id %></td>
-            <td><%= e.email %></td>
-            <td><%= e.projects.count %></td>
-          </tr>
+          <% if not e.mailed? %>
+            <tr>
+              <td><%= e.id %></td>
+              <td><%= e.email %></td>
+              <td><%= e.projects.count %></td>
+              <td><%= e.created_at%></td>
+              <td><%= e.updated_at%></td>
+              <td><%= e.mailed? %><td>
+            </tr>
+          <% end %>
         <%end%>
+        <% @exports.each do |e| %>
+          <% if e.mailed? %>
+            <tr>
+              <td><%= e.id %></td>
+              <td><%= e.email %></td>
+              <td><%= e.projects.count %></td>
+              <td><%= e.created_at%></td>
+              <td><%= e.updated_at%></td>
+              <td><%= e.mailed? %><td>
+            </tr>
+          <% end %>
+        <%end%>
+          <tr>
       </tbody>
     </table>
   </div>
-</div>
+<div>

@@ -11,8 +11,8 @@ module SearchHelper
 	  	# Default to official finance if the user is coming from somewhere else
 	  	if (options[:default_to_official_finance]==true) && !(request.env['HTTP_REFERER'] =~ /projects/)
 	  		if (params.keys.select {|k| (k.to_s =~ /name/) }.length == 0)
-		  		@scope = SCOPES.first
-		  		params[:scope] = @scope[:sym].to_s
+		  		@scope = Scope.find_by_symbol("official_finance")
+		  		params[:scope] = @scope.symbol
 		  	end
 	  	end
 	  	

@@ -29,7 +29,7 @@ class ExportMailer < ActionMailer::Base
     @export.status_percent = 15 
     @export.save
     count = @export.projects.count
-    percent_increase = (75.0 / count) * 10
+    percent_increase = (45.0 / count) * 10
 
     @export.projects.each_with_index do |project, index|
       export_file.puts project.csv_text
@@ -45,7 +45,9 @@ class ExportMailer < ActionMailer::Base
                                               content: File.read(export_file_name)}
     mail( to: email, subject: "Your Aiddata Export is Ready")
     @export.status_percent = 100
+    @export.mailed_status = true
     @export.save
+
 
   end
 end

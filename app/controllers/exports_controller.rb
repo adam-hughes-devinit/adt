@@ -29,14 +29,14 @@ class ExportsController < ApplicationController
     end
     params[:export][:projects] = projects_array
 
+    session[:return_to] ||= request.referer
+
     @export = Export.new(params[:export])
-    # @host = request.host
-    # @port = request.port
     if @export.save
 			 ExportMailer.delay.export_request(@export, params[:export][:email])
       redirect_to(@export)
     else
-      render action: "new"
+      redirect_to session[:return_to], :flash => {:error => "Sorry. Invalid email address."}
     end
   end
 
