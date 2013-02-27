@@ -41,16 +41,4 @@ Adt::Application.configure do
   }
 end
 
-# Mailer Settings
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.perform_deliveries = true
-ActionMailer::Base.smtp_settings = {
-	:address => 'smtp.gmail.com',
-	:port => 587,
-	:domain => 'aiddata.org',
-	:authentication => :plain,
-	:user_name => 'rmosolgo@aiddata.org',
-	:password => 'Faculty2'
-		}
-
-
+# Mailer settings removed

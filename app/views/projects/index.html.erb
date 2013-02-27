@@ -18,7 +18,7 @@ end %>
 
 <% #if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
 	if params[:scope]
-	  flash.now[:success] =  "You are viewing <b>#{SCOPES.select { |s| s[:sym].to_s == params[:scope] }[0][:name]}</b>. Click the filters below to change your settings.".html_safe
+	  flash.now[:success] =  "You are viewing <b>#{Scope.find_by_symbol(params[:scope]).name}</b>. Click the filters below to change your settings.".html_safe
 	end
 %> 	
 <% # inside wrapper: <div class="row" id='project-facets'>	%>
@@ -30,12 +30,12 @@ end %>
 	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
 		<button class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
 	</div>
-  <%= render 'export_search' %>
+ 	<%= render 'export_search' %>
 		<%= will_paginate @projects %>	
-	</div>
+
 </div>
 <br>
-<table id="project-search-results">
+<table id="project-search-results" >
 	<thead>
 		<tr >
 			<% current_url_with_joiner_without_ordering = "#{@current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{@joiner}" %>

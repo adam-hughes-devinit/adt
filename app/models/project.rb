@@ -474,8 +474,6 @@ class Project < ActiveRecord::Base
 	def scope
 	  scope_array = []
     # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
-    
-    #check the Scope architecture in the search constant initializer
 	  Scope.all.each do |scope|
       if scope.includes_project? self
         scope_array << scope.symbol.to_sym

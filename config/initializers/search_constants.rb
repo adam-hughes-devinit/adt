@@ -1,4 +1,4 @@
-		SCOPES = [
+		SCOPES_INACTIVE = [
 	# Official Finance: 
   #		- Active
   #   - Checked

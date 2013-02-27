@@ -20,7 +20,7 @@
 		</ul>
 	<% else %>
 		<li class='facet-header'> 
-      <b><%= f[:name] %>:</b> <%= @search.facet(f[:sym]).rows[0].value %> 
+      <b><%= f[:name] %>:</b> <%= if facet_name = @search.facet(f[:sym]).rows[0] then facet_name.value else "" end %> 
       (<%= link_to "remove", 
       "#{ @current_url.gsub(/#{f[:sym].to_s.gsub(/\s/, '_')}=[^&]+&?/, '')}" %>)
 		</li>

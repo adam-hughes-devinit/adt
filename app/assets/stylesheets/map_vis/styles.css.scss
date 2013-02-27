@@ -1,0 +1,48 @@
+s#vis {
+  text-align:center;
+}
+#africa-map {
+  background: transparent;
+}
+#tooltip {
+  position:absolute;
+  font-family:sans-serif;
+  font-size:12px;
+  background-color:#fff;
+  border: 1px solid gray;
+  opacity: 0.9;
+}
+
+#tooltiptext {
+  margin: 1px 5px;
+}
+
+#sectors_body {
+  a {
+  color: inherit;
+  &:hover {
+    color: #ccc;
+    }
+  }
+}
+
+#top_projects_body{
+  color:black;
+  ul {
+ 
+  }
+  li {
+    margin-left:5px;
+  }
+  a {
+  color: darkblue;
+    &:hover {
+      color:#ccc;
+    }
+  }
+}
+
+.axis line, .axis path {
+  fill:none;
+  stroke: #fff;
+}

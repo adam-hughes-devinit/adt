@@ -28,7 +28,8 @@ class Scope < ActiveRecord::Base
 		
 		# 2) For each channel,
 			# 2.1) For each parameter,
-				# 2.1.1) Does the project have one of these value?
+				# 2.1.1) Does the project have one of these values?
+				#   -- if array, use include
 				#   if no, then kick it to the next channel
 				#   if yes, then continue
 				# 2.1.2) If project matches parameters, 
@@ -49,19 +50,33 @@ class Scope < ActiveRecord::Base
 				# then the project doesn't fit!
 				value_for_this_project = project.send(filter.field) 
 
-				# Disallowed values begin with "not 
+				# For example, country_name returns an array. 
+				if value_for_this_project.class != Array
+					values_for_this_project = [value_for_this_project]
+				else 
+					values_for_this_project = value_for_this_project
+				end
 
-				if ( 
-						(	!filter.required_values.blank? && # if required values exist AND 
-							!filter.required_values.include?(value_for_this_project) # don't include the value for this project
-						) || 
-						
-						(	!filter.disallowed_values.blank? && # or disallowed values exist 
-							filter.disallowed_values.include?(value_for_this_project) # AND _do_ include value for this project
+				values_for_this_project.each do |this_value|
+					if ( 
+							(	!filter.required_values.blank? && # if required values exist AND 
+								!filter.required_values.include?(this_value) # don't include the value for this project
+							) || 
+							
+							(	!filter.disallowed_values.blank? && # or disallowed values exist 
+								filter.disallowed_values.include?(this_value) # AND _do_ include value for this project
+							)
 						)
-					)
-					# it doesn't pass this channel.
-					passes_this_channel = false
+						# it doesn't pass this channel.
+						passes_this_channel = false
+					else
+						# Lets say the scope wants recipient_iso3 = "RWA",
+						# and the project has 2 recipients: "RWA" and "BDI".
+						# It _should_ match, since the project was in Rwanda.
+						#
+						# hence, if it passes once, it passes the whole thing.
+						break
+					end
 				end
 
 				# if it didn't pass the filter, you might as well

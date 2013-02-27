@@ -23,8 +23,8 @@
 		<% end %>
 
 		<b>Scopes:</b> 
-		<% SCOPES.each do |s| %>
-			<%= scope_to s[:name], s[:sym].to_s %> | 
+		<% Scope.all.each do |s| %>
+			<%= scope_to s.name, s.symbol %> | 
 		<% end %> 
 		
 		<% if @scope %>

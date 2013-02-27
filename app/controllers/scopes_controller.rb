@@ -119,14 +119,14 @@ class ScopesController < ApplicationController
 						end
 
 						if !this_f.valid?
-							alert += this_f.errors
+							alert += this_f.errors.full_messages.join ", "
 						end
 						
 						this_c.scope_filters << this_f
 					end
 
 					if !this_c.valid?
-						alert+= this_c.errors
+						alert+= this_c.errors.full_messages.join ", "
 					end
 
 					# alert += "#{this_c} #{!this_c.blank?} <br>"

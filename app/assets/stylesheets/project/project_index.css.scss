@@ -1,0 +1,59 @@
+
+                                        /* Project Index */
+#project-search-results {
+
+
+
+	margin-right:auto;
+	margin-left:auto;
+
+  th {
+  margin: 2px 8px 4px 8px;
+  padding: 2px 3px 2px 3px; 
+  border-left: 1px solid #ddd;
+
+  }
+
+  td {
+  border-left: 1px solid #ddd;
+  margin: 2px 8px 4px 8px;
+  max-width:500px;
+  padding: 2px 3px 2px 3px; 
+  border-top: 1px solid #999;
+  }
+}
+
+
+.pagination {
+  vertical-align:center;
+  text-align:center;
+}
+
+#project-facets  {
+    border: 1px solid #333;
+    background-color: #ddd;
+    padding: 10px;
+  
+    .facet-list{ 
+      list-style:none;
+      display:none;
+    }
+
+
+
+    .facet-header {
+      display:block;
+      padding: 0 4px 0 4px;
+      margin: 5px 0px 5px 0px;
+      border-left: 2px solid #111;
+
+    }
+    .facet-list-item {
+      display:block;
+      padding: 0 4px 0 4px;
+      margin: 4px 0 4px 0;
+      border-left: 2px solid #fff;
+    }
+}
+
+

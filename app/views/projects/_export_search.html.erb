@@ -1,88 +1,93 @@
 <div class='row'>
   <div class="center">
-    <a class="btn btn-primary" data-toggle="modal" href="#myModal">
-       Export as CSV (<%= pluralize(@search.total, "Project") %>)</a>
+    <a class="btn btn-primary" data-toggle="modal" href="#export_dialog">
+    Export as CSV (<%= pluralize(@search.total, "Project") %>)</a>
 
 
-    <div class="modal hide" id="myModal" >
+    <div class="modal hide" id="export_dialog" >
       <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
         <h3>Search Export</h3>
       </div>
       <div class="modal-body">
-        <p> 
-          <h4>Search Parameters</h4><br>
-          <% 
-            display_params = {}
+      <p> 
+        <h4>Search Parameters</h4>
+        <% 
+          display_params = {}
 
-            scope_val = params["scope"]
-            #if no scope is present, scope defaults to all
-            scope_val ||= "All"
-            scope_val = scope_val.gsub('_',' ').titleize
-            display_params["Scope"] = scope_val
-            params.each do |param|
-              unless %w(action controller scope utf8).include?(param[0])
-                key = param[0].gsub('_',' ').titleize
-                value = param[1].gsub('_',' ').titleize
-                key.gsub!(' String', '')
-                display_params[key] = value
-              end
+          scope_val = params["scope"]
+          #if no scope is present, scope defaults to all
+          scope_val ||= "All"
+          scope_val = scope_val.gsub('_',' ').titleize
+          display_params["Scope"] = scope_val
+          params.each do |param|
+            unless %w(action controller scope utf8).include?(param[0])
+              key = param[0].gsub('_',' ').titleize
+              value = param[1].gsub('_',' ').titleize
+              key.gsub!(' String', '')
+              display_params[key] = value
             end
-          %>
-          <table id ="param_table" class="table table-condensed" align="center">
-            <!-- Table header -->
-            <thead>
-              <tr> 
-                <th></th>
-                <th></th>
-              </tr>
+          end
+        %>
+        <table id ="param_table" class="table table-condensed" align="center">
+        <!-- Table header -->
+          <thead>
+            <tr> 
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <!-- Table body -->
+
+          <tbody>
+            <% display_params.each do |param| %>
               <tr>
-            </thead>
-
-            <!-- Table body -->
-
-            <tbody>
-              <% display_params.each do |param| %>
-                <tr>
-                  <td><%="#{param[0]}:"%></td>
-                  <td><%="#{param[1]}"%></td>
-                </tr>
+                <td><%="#{param[0]}:"%></td>
+                <td><%="#{param[1]}"%></td>
+              </tr>
             <% end %>
-            </tbody>
-          </table>
-          <h4> Matched</h4><br>
-          <%
-            sum = 0
-            proj_count = 0
-            @all_projects.each do |project|
-              proj_usd = project.usd_2009
-              proj_usd ||= 0
-              sum += proj_usd
-              proj_count += 1
-            end
-            @search.results.each do |project|
-            end
-          %>
-          <%= "#{pluralize(proj_count, "Project")}"  %><br><br>
-          <%= "$#{number_with_precision(sum, precision: 2, delimiter: ',')}
-           (USD 2009)" %><br>
-          <br>
+          </tbody>
+        </table>
+        <h4> Matched</h4><br>
+        <%
+          sum = 0
+          proj_count = 0
+          @all_projects.each do |project|
+            proj_usd = project.usd_2009
+            proj_usd ||= 0
+            sum += proj_usd
+            proj_count += 1
+          end
+          @search.results.each do |project|
+          end
+        %>
+        <%= "#{pluralize(proj_count, "Project")}"  %>
+        <br>
+        <br>
+        <%= "$#{number_with_precision(sum, precision: 2, delimiter: ',')}
+        (USD 2009)" %>
+        <br>
+        <br>
 
-          
-          <%= simple_form_for(@export, method: :post,
-                                       url: exports_path,
-                                       html: { class: "form-horizontal"}) do |f| %>
-            <%= f.email_field :email, 
-                              placeholder: 'enter email',
-                              class: 'span3' %>
-            <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <%= f.button :submit, class: 'btn-primary' %>
-          <a href="#" class="btn" data-dismiss="modal">Close</a>
-        </div>
-          <% end %>
+
+        <%= simple_form_for(@export, method: :post,
+          url: exports_path,
+          html: { class: "form-horizontal"}) do |f| %>
+
+          <%= f.email_field :email, 
+            placeholder: 'enter email',
+            class: 'span3' %>
+          <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
+      </p>
+
+      </div>
+      <div class="modal-footer">
+      <%= f.button :submit, class: 'btn-primary' %>
+      <% end %>
+      <a href="#" class="btn" data-dismiss="modal">Close</a>
+      </div>
+    </div> 
     </div>
   </div>
 </div>
