@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require ./app.js
+//= require rails.validations
 
 
 function remove_fields(link) {

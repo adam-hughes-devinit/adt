@@ -10,7 +10,7 @@
 # Ignore the pre-packaged datasets
 /public/downloads/*
 # and the Exports
-/public/exports/*
+/public/export_downloads/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
