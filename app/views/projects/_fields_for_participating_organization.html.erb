@@ -1,5 +1,5 @@
 <div class='fields row-fluid'>
-	<%= f.association :organization, wrapper_html: {class: "span7"} %>
+	<%= f.association :organization, label_method: :name_with_type, value_method: :id, wrapper_html: {class: "span7"} %>
 	<%= f.association :role, wrapper_html: {class: "span3"} %>
 	<%= f.association :origin, wrapper_html: {class: "span2"} %>
 	<i><%= link_to_remove_fields "<i class='icon-trash'></i>", f %></i>

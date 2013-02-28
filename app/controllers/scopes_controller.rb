@@ -92,11 +92,11 @@ class ScopesController < ApplicationController
 			# -- scope-level values below
 			# nested arrays channels -> filters -> values
 
-			if (
-				scope.update_attribute(:name, attr_hash["name"]) &&
-				scope.update_attribute(:symbol, attr_hash["symbol"]) &&
-				scope.update_attribute(:description, attr_hash["description"])
-				)
+			scope.name =  attr_hash["name"]
+			scope.symbol =  attr_hash["symbol"]
+			scope.description = attr_hash["description"]
+
+			if scope.valid?
 				
 				alert = ""
 

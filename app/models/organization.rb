@@ -3,6 +3,10 @@ class Organization < ActiveRecord::Base
   has_paper_trail
   default_scope order: "name"
 
+  def name_with_type
+  	"#{self.name} (#{self.organization_type.blank? ? '' : self.organization_type.name})"
+  end
+
   belongs_to :organization_type
   has_many :participating_organizations
   has_many :origins, through: :participating_organizations

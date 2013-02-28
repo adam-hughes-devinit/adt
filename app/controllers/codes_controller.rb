@@ -1,5 +1,7 @@
 class CodesController < ApplicationController
 
+  include IndexAndCacheHelper
+
   def index
     @objects = @class_name.constantize.all
 
@@ -51,17 +53,18 @@ class CodesController < ApplicationController
   def update
     @object = @class_name.constantize.find(params[:id])
 
+
     respond_to do |format|
       if @object.update_attributes(params[@class_type.downcase.gsub(/\s/, '_').to_sym])
-
+       
+        reindex_and_recache_by_associated_object(@object)
+        
         format.html { redirect_to @object}
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
         format.json { render json: @object.errors, status: :unprocessable_entity }
       end
-      
-      reindex_and_recache
     end
 
     undo_link = view_context.link_to( 
@@ -75,6 +78,7 @@ class CodesController < ApplicationController
 
   def destroy
     @object = @class_name.constantize.find(params[:id])
+    
     remove_object_from_projects_and_reindex_and_recache   
     @object.destroy
 
@@ -94,26 +98,18 @@ class CodesController < ApplicationController
   		@has_projects = options[:has_projects]
   	end
   	
-  	def reindex_and_recache
-  		# What's the best way to background this?
-      if @object.respond_to? 'projects'
-	  		Sunspot.delay.index(@object.projects)
-				@object.projects.each {|p| p.cache!}
-				# to update the files... -->
-				
-	  	end
-  	end
+
 
 
   	def remove_object_from_projects_and_reindex_and_recache
   	  if @object.respond_to?('projects') && projects = @object.projects
-        Sunspot.index(@object.projects)
         projects.each do |p|
 			  	if p.respond_to? "{@class_name.underscore.downcase}_id"
+            # This should handle the reindexing and recaching... 
 			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
 					end
 	  		end
-	  		
+
 	  	end
 	  end
 

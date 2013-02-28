@@ -23,14 +23,15 @@
       name = "Suspicious or Inactive Projects"
       order = 5
     else 
-      name = "Unscoped dataset"
+      name = "#{File.basename(file).gsub(/\.csv/, '' ).humanize} Projects"
       order = 6
     end
 
     link = '/downloads/' + File.basename(file)
     time = File.atime(file)
+    size = "#{'%.0f' % (File.size(file)/1000)} kb"
 
-    csv_table_data << { name: name, link: link, time: time, order: order }
+    csv_table_data << { name: name, link: link, time: time, size: size, order: order }
   end
 
   csv_table_data.sort!{ |x, y| x[:order] <=> y[:order] }
@@ -62,7 +63,7 @@
     <% csv_table_data.each do |file| %>
       <tr>
         <td><%= file[:name] %></td>
-        <td><%= link_to "CSV file",file[:link] %></td>
+        <td><%= link_to "CSV file",file[:link] %> (<%= file[:size] %>)</td>
         <% if current_user_is_aiddata %>
           <td><%= time_ago_in_words(file[:time]) %> ago </td>
         <% end %>

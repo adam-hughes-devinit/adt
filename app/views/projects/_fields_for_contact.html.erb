@@ -1,6 +1,6 @@
 <div class='fields row-fluid'>
 	<%= f.input :name, label: "Contact name", wrapper_html: {class: "span4"} %>
 	<%= f.input :position, label: "Contact position", wrapper_html: {class: "span3"} %>
-	<%= f.association :organization, wrapper_html: {class: "span4"} %>
+	<%= f.association :organization, label_method: :name_with_type, value_method: :id, wrapper_html: {class: "span4"} %>
 	<%= link_to_remove_fields "<i class='icon-trash'></i>", f %>
 </div>
