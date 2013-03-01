@@ -26,5 +26,5 @@ Owns
   <%= pluralize(@organization.owned_projects.count, "project") %>. 
   </b>
 </p>
-<%= current_user && current_user.owner == Organization.find_by_name('AidData') ? link_to('Edit', edit_organization_path(@organization)) : '' %> |
+<%= current_user_is_aiddata ? link_to('Edit', edit_organization_path(@organization)) : '' %> |
 <%= link_to 'See all Organizations', organizations_path %>

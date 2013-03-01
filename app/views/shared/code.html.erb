@@ -12,7 +12,7 @@
 	<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.map(&:id).uniq.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{CGI.escape object.name}" %></b>. </p>
 <% end %>
 <p>
-	<% if current_user_is_aiddata_admin %>
+	<% if current_user_is_aiddata %>
 		<%= link_to "Edit", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}/edit" %> |
 		<%= link_to "Destroy", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}", method: :delete, confirm: "Are you sure? All codes with this value will become 'Unset'. " %> | 
 	<% end %> 

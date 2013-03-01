@@ -111,6 +111,9 @@ class Scope < ActiveRecord::Base
 
 	def build_scope_scaffold
 			#fills out a skeleton, returns self
+		self.name = 'Scope Name'
+		self.symbol = 'scope_symbol'
+		self.description = 'This is the description of the scope.'
 		self.scope_channels.build
 		self.scope_channels.each do |c|
 			c.build_scope_channel_scaffold

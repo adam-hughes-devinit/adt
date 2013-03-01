@@ -24,14 +24,26 @@ end %>
 <% # inside wrapper: <div class="row" id='project-facets'>	%>
 	<%= render 'project_search' %>
 
-<br>
-
 <div class='row'>
 	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
 		<button class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
 	</div>
+</div>
+
+<div class='row' >
  	<%= render 'export_search' %>
-		<%= will_paginate @projects %>	
+ </div>
+ <% if current_user_is_aiddata %>
+	<div class='row' style='text-align:center'>
+		<br>
+		<p>
+			<%= link_to "Quick Export (CSV)", "#{@current_url.gsub(/projects/, 'projects.csv')}", class: 'btn' %> 
+			<i>(AidData only)</i>
+		</p>
+	</div>
+<% end %>
+ <div class='row' >
+	<%= will_paginate @projects %>	
 
 </div>
 <br>

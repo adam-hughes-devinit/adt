@@ -1,0 +1,6 @@
+<% cache "fields_for_organization_form" do %>
+	<%= f.association :organization,
+	label_method: :name_with_type,
+	wrapper_html: {class: wrapper_class } 
+	%>
+<% end %>

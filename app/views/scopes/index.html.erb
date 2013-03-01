@@ -1,4 +1,6 @@
-<h2> Scopes</h2>
+<% provide :title, "Scopes" %>
+<% provide :first_header, "Scopes" %>
+
 <p>
 	<%= link_to "New Scope", new_scope_path %>
 </p>
@@ -6,52 +8,3 @@
 	<%= render partial: "scope", locals: {s: s} %>
 <% end %>
 
-
-<!--
-<div id='scopes' style='border:2px solid brown'>
-	<br>
-</div>
-<%= javascript_include_tag 'mustache' %>
-<%= javascript_include_tag 'underscore' %>
-<%= javascript_include_tag 'backbone' %>
-<%= javascript_include_tag 'scopes' %>
-<script type='template/text' id='scope_template'>
-	<div class='scope_template'>
-		<p>
-			<b>Scope:</b> 
-
-			<span class='scope-editable'>{{ name }}</span> 
-			<input type='text' class='scope-edit' style='display:none;'
-				value="{{ name }}" />
-			(<i>
-				<span class='scope-editable'>{{ symbol}}</span>
-				<input type='text' class='scope-edit' style='display:none;'
-					value="{{ symbol }}" />
-			</i>)
-		</p>
-		<p>
-			<span class='scope-editable'> {{ description }}</span>
-			<textarea class='scope-edit' style='display:none'>{{ description }}</textarea>
-		</p>
-		<div >
-			<ul class='scope_channels'>
-			</ul>
-			<a href='#' id='add_scope_channel'>Add a Channel</a>
-		<div>
-	</div>
-
-</script>
-
-<script id='scope_channel_template' type='text/template'>
-	<li> Channel:
-		<ul>
-			{[ scope_filters.forEach(function(filter){ ]} 
-				<li>
-					{{ filter.attributes.field }},
-					{{ filter.attributes.values.join(", ") }}
-				</li>
-			{[ }) ]}
-		</ul>
-	</li>
-</script>
--->

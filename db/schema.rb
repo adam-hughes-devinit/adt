@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226205710) do
+ActiveRecord::Schema.define(:version => 20130301145311) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(:version => 20130226205710) do
   end
 
   add_index "organizations", ["id"], :name => "index_organizations_on_id"
+  add_index "organizations", ["name"], :name => "index_organizations_on_name"
   add_index "organizations", ["organization_type_id"], :name => "index_organizations_on_organization_type_id"
 
   create_table "origins", :force => true do |t|
