@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130301145311) do
-=======
-ActiveRecord::Schema.define(:version => 20130227205412) do
->>>>>>> 4e84fbf872f3d852efcc0f8bc9b354d7163130c7
 
   create_table "caches", :force => true do |t|
     t.text     "text"
