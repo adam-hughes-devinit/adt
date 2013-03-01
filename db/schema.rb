@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130301145311) do
+=======
+ActiveRecord::Schema.define(:version => 20130227205412) do
+>>>>>>> 4e84fbf872f3d852efcc0f8bc9b354d7163130c7
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -100,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20130301145311) do
     t.datetime "updated_at",     :null => false
     t.integer  "status_percent"
     t.string   "file_path"
+    t.boolean  "mailed_status"
   end
 
   create_table "exports_projects", :id => false, :force => true do |t|

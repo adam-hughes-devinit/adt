@@ -15,8 +15,6 @@ gem 'progress_bar'
 gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
-gem 'client_side_validations'
-gem 'client_side_validations-simple_form'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

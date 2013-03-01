@@ -12,6 +12,9 @@
   <div id="export_bar" class="bar" ></div>
 </div>
 
+<div id="centered_div_lower" class="center">
+</div>
+
 </section>
 <section>
 	<!--
@@ -60,7 +63,7 @@
       $finished_button.setAttribute('class', 'btn btn-primary');
       $finished_button.setAttribute('href', export_path);
       $finished_button.innerHTML = "Download Your Export";
-      $("#centered_div").append($finished_button);
+      $("#centered_div_lower").append($finished_button);
 
       clearInterval(interval_id)
     }
