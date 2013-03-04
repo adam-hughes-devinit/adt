@@ -9,7 +9,10 @@ module SearchHelper
 	  @search = Project.search do
 	  	
 	  	# Default to official finance if the user is coming from somewhere else
-	  	if (options[:default_to_official_finance]==true) && !(request.env['HTTP_REFERER'] =~ /projects/ && !current_user_is_aiddata)
+	  	if (options[:default_to_official_finance]==true) && # if defaulting is enabled
+	  		!(request.env['HTTP_REFERER'] =~ /projects/) && # and it's coming from somewhere other than /projects/
+	  		!current_user_is_aiddata # and the current_user isn't AidData
+	  		
 	  		if (params.keys.select {|k| (k.to_s =~ /name/) }.length == 0)
 		  		@scope = Scope.find_by_symbol("official_finance")
 		  		params[:scope] = @scope.symbol
