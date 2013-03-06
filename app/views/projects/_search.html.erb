@@ -12,61 +12,62 @@
 			<p> 
 				<b>Search: </b> 
 				<%= text_field_tag :search, params[:search], class: "span7" %>
-				<%= submit_tag "Submit", name: nil, class: "btn" %>
-				<% cache do %>
-					<% 
-					@all_projects = Project.search do
-						(WORKFLOW_FACETS + FACETS).each do |f|
-							facet f[:sym]
-						end
+				<%= submit_tag "Submit", name: nil, class: "btn btn-primary" %>
 
-					end 
-					%>
-					<div class='span12'>
-						<p><b>Filters:</b></p>
-					</div>
-					<div class='span12 row-fluid'>
-						<% first_part = (FACETS.count/3).round %>
-						<div class='span4'>
-							<ol>
-							<% FACETS[0..first_part].each do |f| %>
-								<%= render partial: 'projects/search_facet', locals: {f: f} %>
-							<% end %>
-							</ol>
-						</div>
-						<div class='span4'>
-							<ol>
-							<% FACETS[first_part+1..(2*first_part)].each do |f| %>
-								<%= render partial: 'projects/search_facet', locals: {f: f} %>
-							<% end %>
-							</ol>
-						</div>
-						<div class='span4'>
-							<ol>
-							<% FACETS[(2*first_part)+1..-1].each do |f| %>
-								<%= render partial: 'projects/search_facet', locals: {f: f} %>
-							<% end %>
-							</ol>
-						</div>
-					</div>
-					<div class='span10'>
-						<% if current_user_is_aiddata %>
-							<p><b>AidData Workflow Filters:</b><p>
-							<ol>
-								<% WORKFLOW_FACETS.each do |f| %>
-									<%= 
-										render partial: 'projects/search_facet', locals: {f: f} 
-									%>
-								<% end %>
-							</ol>
+				<% 
+				@all_projects = Project.search do
+					(WORKFLOW_FACETS + FACETS).each do |f|
+						facet f[:sym]
+					end
+
+				end 
+				%>
+				<div class='span12'>
+					<p><b>Filters:</b></p>
+				</div>
+				<div class='span12 row-fluid'>
+					<% first_part = (FACETS.count/3).round %>
+					<div class='span4'>
+						<ol>
+						<% FACETS[0..first_part].each do |f| %>
+							<%= render partial: 'projects/search_facet', locals: {f: f} %>
 						<% end %>
+						</ol>
+					</div>
+					<div class='span4'>
+						<ol>
+						<% FACETS[first_part+1..(2*first_part)].each do |f| %>
+							<%= render partial: 'projects/search_facet', locals: {f: f} %>
+						<% end %>
+						</ol>
+					</div>
+					<div class='span4'>
+						<ol>
+						<% FACETS[(2*first_part)+1..-1].each do |f| %>
+							<%= render partial: 'projects/search_facet', locals: {f: f} %>
+						<% end %>
+						</ol>
+					</div>
+				</div>
+				<% if current_user_is_aiddata %>
+					<div class='row'>			
+						<p><b>AidData Workflow Filters:</b><p>
+						<ol>
+							<% WORKFLOW_FACETS.each do |f| %>
+								<%= 
+									render partial: 'projects/search_facet', locals: {f: f} 
+								%>
+							<% end %>
+						</ol>					
 					</div>
 				<% end %>
 
-				
 
+				
+			<%= submit_tag "Submit", name: nil, class: "btn btn-primary" %>
 			</p>
-			<%= submit_tag "Submit", name: nil, class: "btn" %>
+
+			
 		<% end %>
 	</div>
 
