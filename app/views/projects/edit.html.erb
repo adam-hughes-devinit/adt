@@ -2,3 +2,23 @@
 <% provide(:first_header, "Edit " + @project.title) %>
 
 <%= render 'project_form' %>
+
+<script>
+	var orgs;
+	function repopulate_organization_dropdowns(json) {
+		console.log("repopulating ", json.length, 'organizations:', json )
+		orgs = json
+		$('.organization-select option').each(function(i, d) {
+			value = $(d).text().trim()
+			new_org = json.filter(function(o) { return o.name == value})[0]
+			if (new_org) {
+				// console.log(value, new_org)
+				$(d).text(new_org.name_with_type)
+			}
+		})
+	}
+	
+	$.get('/organizations.json', 
+		repopulate_organization_dropdowns)
+
+</script>

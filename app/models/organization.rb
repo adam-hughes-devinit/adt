@@ -23,6 +23,13 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def as_json(options={})
+    super(
+      only: [:id,:name], 
+      methods: [:name_with_type]
+    ) 
+  end
+
 
   belongs_to :organization_type
   has_many :participating_organizations
