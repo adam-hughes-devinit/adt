@@ -1,0 +1,74 @@
+<% @current_url = "#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/(projects)?/, '')}".gsub(/page=\d+&*/, '') %>
+<% @joiner = @current_url.index("?") ? "&" : "?" 
+	%>
+<% @current_url_without_scope = @current_url.gsub(/&?scope[^=]*=[a-z_]+/, '') %>
+
+<div class="row-fluid" id='project-facets'>
+	<div class="span12">
+		<div class='span12'>
+			<%= render partial: 'projects/search_scope' %>
+		</div>
+		<%= form_tag "/projects", method: :get do %>
+			<p> 
+				<b>Search: </b> 
+				<%= text_field_tag :search, params[:search], class: "span7" %>
+				<%= submit_tag "Submit", name: nil, class: "btn" %>
+				<% cache do %>
+					<% 
+					@all_projects = Project.search do
+						(WORKFLOW_FACETS + FACETS).each do |f|
+							facet f[:sym]
+						end
+
+					end 
+					%>
+					<div class='span12'>
+						<p><b>Filters:</b></p>
+					</div>
+					<div class='span12 row-fluid'>
+						<% first_part = (FACETS.count/3).round %>
+						<div class='span4'>
+							<ol>
+							<% FACETS[0..first_part].each do |f| %>
+								<%= render partial: 'projects/search_facet', locals: {f: f} %>
+							<% end %>
+							</ol>
+						</div>
+						<div class='span4'>
+							<ol>
+							<% FACETS[first_part+1..(2*first_part)].each do |f| %>
+								<%= render partial: 'projects/search_facet', locals: {f: f} %>
+							<% end %>
+							</ol>
+						</div>
+						<div class='span4'>
+							<ol>
+							<% FACETS[(2*first_part)+1..-1].each do |f| %>
+								<%= render partial: 'projects/search_facet', locals: {f: f} %>
+							<% end %>
+							</ol>
+						</div>
+					</div>
+				<% end %>
+
+				
+
+			</p>
+			<%= submit_tag "Submit", name: nil, class: "btn" %>
+		<% end %>
+	</div>
+
+	<br>
+	<div class='span10'>
+		<% if current_user_is_aiddata %>
+			<p><b>AidData Workflow Filters:</b><p>
+			<ol>
+				<% WORKFLOW_FACETS.each do |f| %>
+					<%= 
+						render partial: 'projects/search_facet', locals: {f: f} 
+					%>
+				<% end %>
+			</ol>
+		<% end %>
+	</div>
+</div>

@@ -1,3 +1,5 @@
+
+
 #vis {
 	border: 2px solid #777;
 	margin:10px ;
@@ -8,6 +10,10 @@
 	#waiting {
 		margin: 50px;
 		color: #555;
+	}
+
+	.domain {
+		visibility: hidden;
 	}
 }
 
@@ -30,21 +36,15 @@
 	}
 }
 
+#filter_container {
+	background-color: white;
+	.filters {
 
-.domain {
-	visibility: hidden;
-}
+		max-height:200px;
+		overflow-y:scroll;
 
 
-
-.filters {
-
-	max-height:100px;
-	overflow-y:scroll;
-
-	tr {
-
-		&.active td {
+		.active {
 			background-color: #cfd;
 
 			&:hover{ 
@@ -52,18 +52,21 @@
 			}
 		}
 
+		.controller {
+				cursor:pointer;
+		}
+
+		.filter_box {
+			margin-top: 5px;
+		}
+
+		.value {
+			display: block;
+		}
 	}
 
-	.controller {
-			cursor:pointer;
+	.current_x_axis {
+		color: #942;
 	}
 
-	.filter_box {
-		margin-top: 5px;
-	}
-
-}
-
-.current_x_axis {
-	color: #942;
 }

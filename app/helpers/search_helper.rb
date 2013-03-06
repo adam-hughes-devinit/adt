@@ -1,4 +1,5 @@
 module SearchHelper
+	include AggregatesHelper
 	
 	# Constants in an initializer
 
@@ -25,8 +26,12 @@ module SearchHelper
 	    # Filter by params
 	    (FACETS + WORKFLOW_FACETS).each do |f|
 	        facet f[:sym]
-	        if params[f[:sym]].present?
-	        	with f[:sym], params[f[:sym]] 
+	        if requested_values = params[f[:sym]]
+	        	if requested_values.class == String
+		        	# VALUE DELIMITER defined in Aggregates helper
+		        	requested_values = requested_values.split(VALUE_DELIMITER) 
+		        end
+		        with f[:sym], requested_values
 	        end			      
 	    end
 
@@ -48,5 +53,6 @@ module SearchHelper
 	  
 	  @search.results
 	end
+
 
 end

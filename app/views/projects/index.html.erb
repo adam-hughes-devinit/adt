@@ -18,11 +18,14 @@ end %>
 
 <% #if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
 	if params[:scope]
-	  flash.now[:success] =  "You are viewing <b>#{Scope.find_by_symbol(params[:scope]).name}</b>. Click the filters below to change your settings.".html_safe
+	  flash.now[:success] =  
+	  	"You are viewing <b>#{
+	  		params[:scope].map {|s| Scope.find_by_symbol(s).name}.join(' and ')
+	  		}</b>. Click the filters below to change your settings.".html_safe 
 	end
 %> 	
 <% # inside wrapper: <div class="row" id='project-facets'>	%>
-	<%= render 'project_search' %>
+	<%= render 'search' %>
 
 <div class='row'>
 	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
@@ -31,7 +34,7 @@ end %>
 </div>
 
 <div class='row' >
- 	<%= render 'export_search' %>
+ 	<%= render 'search_export' %>
  </div>
  <% if current_user_is_aiddata %>
 	<div class='row' style='text-align:center'>
@@ -81,7 +84,7 @@ end %>
 	</thead>
 	<tbody>
 	    <% @projects.each do |p| %>
-				<%= render partial: 'index_item', locals: {p: p} %>
+				<%= render partial: 'projects/search_result', locals: {p: p} %>
 	    <% end %>
 	</tbody>
 </table>

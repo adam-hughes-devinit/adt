@@ -8,7 +8,7 @@ include SearchHelper
    
     respond_to do |format|
       format.html do
-        @all_projects = custom_search(paginate: false)
+        @full_results = custom_search(paginate: false)
    			@projects = custom_search
         @export = Export.new(params[:export])
         render html: @projects

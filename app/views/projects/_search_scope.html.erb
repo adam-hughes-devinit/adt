@@ -1,8 +1,8 @@
 <% 
 	
 	def scope_to(scope_label, scope_code)
-		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope=' + scope_code}"
-		if @scope == scope_code
+		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope[]=' + scope_code}"
+		if @scope && @scope.include?(scope_code)
 			"<b>#{scoped_url}</b>".html_safe
 		else
 			scoped_url.html_safe
@@ -17,9 +17,8 @@
 				# by default_to_official_finance,
 				# but if that happened, it isn't in the URL
 
-				@scope = params[:scope] 
+				@scope = params[:scope]
 			%>
-			<%= hidden_field_tag "scope", @scope %>
 		<% end %>
 
 		<b>Scopes:</b> 

@@ -1,0 +1,28 @@
+<div class='search-facet'>
+	<% if f[:name]!= "" &&
+			rows = @all_projects.facet(f[:sym]).rows %>
+		<b class='facet-header'>
+			<%= 
+				link_to_function f[:name], 
+				"$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle()"  
+			%>
+		</b> 
+		<%= link_to_function "Select all", "$(this).siblings('ul').find('input').attr('checked', 'true')", class: 'facet-controller' %>
+		<%= link_to_function "Unselect all", "$(this).siblings('ul').find('input').attr('checked', false)", class: 'facet-controller' %>
+		<ul class='unstyled facet-list'>
+			<% rows.sort!{|a,b| a.value <=> b.value}.each do |row| %>
+				<li class='facet-list-item'>
+					<input 
+						type="checkbox" 
+						name="<%= f[:sym].to_s %>[]" 
+						value="<%= row.value %>"
+						<% if URI::unescape(@current_url).include? "#{f[:sym].to_s}[]=#{row.value}" %>
+							checked='true'
+						<% end %>
+					/>
+					<%= row.value %>
+				</li>
+			<% end %>
+		</ul>
+	<% end %>
+</div>

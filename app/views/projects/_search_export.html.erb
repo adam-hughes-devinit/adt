@@ -15,15 +15,14 @@
         <% 
           display_params = {}
 
-          scope_val = params["scope"]
+          scope_val = (params["scope"] || ["All"] ).join(", ")
           #if no scope is present, scope defaults to all
-          scope_val ||= "All"
           scope_val = scope_val.gsub('_',' ').titleize
           display_params["Scope"] = scope_val
           params.each do |param|
             unless %w(action controller scope utf8).include?(param[0])
-              key = param[0].gsub('_',' ').titleize
-              value = param[1].gsub('_',' ').titleize
+              key = param[0].to_s.gsub('_',' ').titleize
+              value = param[1].to_s.gsub('_',' ').titleize
               key.gsub!(' String', '')
               display_params[key] = value
             end
@@ -81,7 +80,7 @@
           <%= f.email_field :email, 
             placeholder: 'enter email',
             class: 'span3' %>
-          <%= f.input :projects, as: :hidden, input_html: {value: @all_projects.map(&:id)} %>
+          <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
       </p>
 
       </div>

@@ -4,10 +4,8 @@
 <%= render 'project_form' %>
 
 <script>
-	var orgs;
 	function repopulate_organization_dropdowns(json) {
-		console.log("repopulating ", json.length, 'organizations:', json )
-		orgs = json
+		// This was added because loading org + type on all the fields took too long.
 		$('.organization-select option').each(function(i, d) {
 			value = $(d).text().trim()
 			new_org = json.filter(function(o) { return o.name == value})[0]

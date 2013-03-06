@@ -2,3 +2,4 @@
 //= require ./controls
 //= require ./chart
 //= require ./data
+//= require ./main
