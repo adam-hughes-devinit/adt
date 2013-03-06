@@ -5,8 +5,7 @@ include SearchHelper
 
 
   def index
-    # custom_search function defines @projects
-
+   
     respond_to do |format|
       format.html do
         @all_projects = custom_search(paginate: false)

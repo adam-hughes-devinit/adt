@@ -34,6 +34,7 @@ end
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
   gem 'jquery-rails'
+
 # end
 
 

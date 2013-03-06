@@ -1,15 +1,5 @@
 <div class='row'>
   <div class="center">
-    <% if current_user_is_aiddata_admin %>
-      <div class='row'>
-        <h2>
-          <span id='admin' data-toggle="tooltip" title="Visible to AidData Admin only">
-            <%= pluralize(@search.total, "Project") %> 
-          (<%= link_to "Aiddata Admin Quick Export", "#{request.protocol}#{request.host_with_port}#{request.fullpath}".gsub(/projects/, 'projects.csv')%>)
-        </span>
-      </h2>
-      </div>
-    <% end %>
     <a class="btn btn-primary" data-toggle="modal" href="#export_dialog">
     Export as CSV (<%= pluralize(@search.total, "Project") %>)</a>
 
@@ -59,25 +49,29 @@
             <% end %>
           </tbody>
         </table>
-        <h4> Matched</h4><br>
+        <h4>Contents:</h4>
         <%
           sum = 0
-          proj_count = 0
-          @all_projects.each do |project|
-            proj_usd = project.usd_2009
-            proj_usd ||= 0
-            sum += proj_usd
-            proj_count += 1
-          end
-          @search.results.each do |project|
-          end
+          proj_count = @search.total
+          # RDM 3-6
+          #
+          # deactivated because it's just such a 
+          # drag on performance. Another option is to 
+          # make an AJAX call to get the sum, then load it to the HTML
+          #
+          # @all_projects.each do |project|
+          #   proj_usd = project.usd_2009
+          #   proj_usd ||= 0
+          #   sum += proj_usd
+          #   proj_count += 1
+          # end
+         
         %>
         <%= "#{pluralize(proj_count, "Project")}"  %>
         <br>
-        <br>
-        <%= "$#{number_with_precision(sum, precision: 2, delimiter: ',')}
-        (USD 2009)" %>
-        <br>
+        <% 
+          # "$#{number_with_precision(sum, precision: 2, delimiter: ',')} (USD 2009)" 
+        %>
         <br>
 
         <%= simple_form_for(@export, method: :post,

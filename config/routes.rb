@@ -37,6 +37,7 @@ Adt::Application.routes.draw do
   root to: "static_pages#home"
 	get '/analyze', to: "static_pages#analyze"
   get '/downloads', to: 'static_pages#downloads'
+  get '/dashboard', to: 'static_pages#dashboard'
 
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
