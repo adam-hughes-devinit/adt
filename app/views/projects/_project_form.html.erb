@@ -168,6 +168,7 @@
 		<%= f.input :owner_id, wrapper_html: {class: ""},  as: :hidden, hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name) %>
 
 		<%= f.button :submit, "Save", class: 'submit-button' %>
+		<%= f.button :submit, "Save", class: 'submit-button on-nav-bar' %>
 	<% end %>
 	<div class='span12'>
 		<br>
