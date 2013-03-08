@@ -25,7 +25,11 @@
 		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
 			<%= class_name== "YearUncertain" ? "<i>(Year Uncertain)</i>".html_safe : current_object %>
 		<% elsif current_object.class == Float %>
-      		<%= current_object %>
+      		<% if class_name="Usd_2009" %>
+	      		<%= number_to_currency(current_object, unit: "$") %>
+	      	<% else %>
+	      		<%= current_object %>
+	      	<% end %>
 		<% elsif [Date, DateTime].include? current_object.class %>
 			<%= current_object.strftime("%d %B %Y") %>
 		<% elsif !current_object.nil? %>

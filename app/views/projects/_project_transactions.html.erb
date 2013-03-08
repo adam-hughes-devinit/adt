@@ -1,15 +1,22 @@
-		<ul>
-			<% @project.transactions.each do |t| %>
-				<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
-					<% if t.usd_defl.present? %>
-						<b><%= t.usd_defl %> <span class="usd-2009">USD-2009</span></b>
-					<% end %>
-					<% if !t.currency.nil? %>
-					 (<%= t.value.blank? ? @unset_data : t.value %> <%= t.currency.nil? ? '' : t.currency.iso3 %><% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>, $<%= t.usd_current %><% end %><% if @project.year %> in <%= @project.year %><% end %>)
-					<% end %>
-					<% t.flags.each do |flag| %>
-						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
-					<% end %>
-				</li>
+<ul>
+	<% @project.transactions.each do |t| %>
+		<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
+			<% if t.usd_defl.present? %>
+				<b><%= number_to_currency(t.usd_defl, unit: "$") %> 
+					<span class="usd-2009">USD-2009</span>
+				</b>
 			<% end %>
-		</ul>
+			<% if !t.currency.nil? %>
+			 (<%= t.value.blank? ? @unset_data : number_to_currency(t.value) %>
+			  <%= t.currency.nil? ? '' : t.currency.iso3 %>
+			  <% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>, 
+			  		<%= number_to_currency(t.usd_current, unit: "$") %>
+			  	<% end %>
+			  	<% if @project.year %>in <%= @project.year %><% end %>)
+			<% end %>
+			<% t.flags.each do |flag| %>
+				<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+			<% end %>
+		</li>
+	<% end %>
+</ul>

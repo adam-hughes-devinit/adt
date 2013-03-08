@@ -355,6 +355,16 @@ class Project < ActiveRecord::Base
   # has_many :classifications, dependent: :destroy
   # has_many :followers, dependent: :destroy
 
+  # These used to be done inside the search block, now that FACETS are integrated, 
+  # I had to move the code down here.
+  def flagged 
+     all_flags.map(&:name)
+  end
+
+  def recipient_iso2
+    self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
+  end
+
   searchable do 
     integer :id # only for searching
     string :title # for sorting

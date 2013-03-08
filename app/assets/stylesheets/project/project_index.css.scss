@@ -39,25 +39,28 @@
       display:none;
     }
 
+    .search-facet {
 
-
-    .facet-header {
-     
-      padding: 0 4px 0 4px;
-      margin: 5px 0px 5px 0px;
+      margin: 10px 0px 0px 0px;
       border-left: 2px solid #111;
 
-    }
-    .facet-list-item {
-      display:block;
-      padding: 0 4px 0 14px;
-      margin: 4px 0 4px 10px;
-      border-left: 2px solid #fff;
-    }
-    .facet-controller {
-      font-style: italic;
-      font-size:90%;
-      display:none;
+      .facet-header {
+        padding: 0 4px 0 4px;
+        margin: 15px 0px 5px 0px;
+        
+
+      }
+      .facet-list-item {
+        display:block;
+        padding: 0 4px 0 10px;
+        margin: 4px 0 4px 10px;
+        border-left: 2px solid #fff;
+      }
+      .facet-controller {
+        font-style: italic;
+        font-size:90%;
+        display:none;
+      }
     }
 }
 

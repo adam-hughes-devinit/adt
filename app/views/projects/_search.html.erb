@@ -1,4 +1,6 @@
-<% @current_url = "#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/(projects)?/, '')}".gsub(/page=\d+&*/, '') %>
+<% @current_url = URI::unescape(
+	"#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/(projects)?/, '')}")
+	.gsub(/page=\d+&*/, '') %>
 <% @joiner = @current_url.index("?") ? "&" : "?" 
 	%>
 <% @current_url_without_scope = @current_url.gsub(/&?scope[^=]*=[a-z_]+/, '') %>
@@ -23,7 +25,11 @@
 				end 
 				%>
 				<div class='span12'>
-					<p><b>Filters:</b></p>
+					<p><b>Filters:</b> 
+						<i>
+							<%= link_to_function "Unselect All", "$('.search_check').prop('checked', false); update_all_check_counts();" %>
+						</i>
+					</p>
 				</div>
 				<div class='span12 row-fluid'>
 					<% first_part = (FACETS.count/3).round %>

@@ -1,7 +1,5 @@
-<% cache "fields_for_organization_form" do %>
-	<%= f.association :organization,
+<%= f.association :organization,
 	# Org types loaded by AJAX on the project form
 	input_html: {class: "organization-select"},
 	wrapper_html: {class: wrapper_class } 
-	%>
-<% end %>
+%>

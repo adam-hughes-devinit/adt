@@ -66,7 +66,7 @@
       {sym: :status_name, name:"Status"},
       {sym: :verified_name, name:"Verified/Unverified"},
       {sym: :currency_name, name:"Reported Currency", multiple: true},
-      {sym: :is_commercial_string, name: "Commericial Status"},
+      {sym: :is_commercial_string, name: "Commercial Status"},
       {sym: :active_string, name: "Active/Inactive"},
       {sym: :country_name, name: "Recipient", multiple: true},
       {sym: :source_type_name, name: "Source Type", multiple: true},
@@ -81,7 +81,7 @@
       {sym: :year_uncertain_string, name: "Year Uncertain"},
       {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"},
       {sym: :is_cofinanced_string, name: "Cofinance Status"},
-      {sym: :recipient_iso2, name: "", multiple: true, code: Proc.new { self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }} },
+      {sym: :recipient_iso2, name: "", multiple: true},
       {sym: :number_of_recipients, name: "Number of Recipients"},
       {sym: :year, name: "Commitment Year"},
       {sym: :intent_name, name: "Intent"},
@@ -98,7 +98,7 @@
     	{sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
     	{sym: :flow_class_1, name: "Flow Class - 1"},
     	{sym: :flow_class_2, name: "Flow Class - 2"},
-    	{sym: :flagged, name: "Flagged", multiple: true, code: Proc.new { all_flags.map(&:name) } },
+    	{sym: :flagged, name: "Flagged", multiple: true },
     	# {sym: :commented, name: "Commented"},
     ]
 

@@ -83,6 +83,32 @@ end %>
 
 
 <script type='text/javascript'>
+	
+
+
+
+	$('.facet-list-item').click(function() {
+		this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+		update_check_counter_for(this_facet)
+	})
+
+	function update_check_counter_for(this_facet) {
+		checked_boxes = $(".search_check."+this_facet+":checked")
+		check_count = checked_boxes.length
+		counter = $('.check_count.'+this_facet)
+		counter_text = check_count > 0 ? "("+check_count+")" : ""
+		counter.text(counter_text)
+		console.log(this, checked_boxes, check_count, counter)
+	}
+
+	function update_all_check_counts() {
+		<% (FACETS + WORKFLOW_FACETS).each do |f| %>
+			<%= "update_check_counter_for('#{f[:sym].to_s}')".html_safe %>
+		<% end %>
+	}
+
+	update_all_check_counts()
+
 	function toggle_search_params() {
 		var facet_box = $('#project-facets')
 		var facet_button = $('#project-facets-button')

@@ -15,7 +15,7 @@ module SearchHelper
 	  		!current_user_is_aiddata # and the current_user isn't AidData
 	  		
 	  		if (params.keys.select {|k| (k.to_s =~ /name/) }.length == 0)
-		  		@scope = Scope.find_by_symbol("official_finance")
+		  		@scope = [Scope.find_by_symbol("official_finance")]
 		  		params[:scope] = @scope.symbol
 		  	end
 	  	end

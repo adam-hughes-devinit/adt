@@ -174,11 +174,12 @@ label {
 }
 
 .boolean {
-	cursor:pointer
-	}
-.boolean:hover {
-	background-color:#d0d9f0;
-	}
+	cursor:pointer;
+
+    &:hover {
+  	background-color:#d0d9f0;
+  	}
+}
 
 
 																				/* Codes CSS */
