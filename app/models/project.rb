@@ -367,6 +367,7 @@ class Project < ActiveRecord::Base
 
   searchable do 
     integer :id # only for searching
+    integer :usd_2009 # for sorting
     string :title # for sorting
     text :id
     text :title

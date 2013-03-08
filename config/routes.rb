@@ -7,6 +7,7 @@ Adt::Application.routes.draw do
 
   # limited access
   # get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
+  match '/projects/json', to: 'projects#index', as: "project_api", defaults: { format: 'json'}
   resources :projects, :organizations, :users
   resources :comments, only: [:create, :destroy, :show]
   resources :flags, only: [:create, :destroy, :show]
@@ -17,7 +18,6 @@ Adt::Application.routes.draw do
   resources :scopes
   match '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
   match '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
-  match '/projects/json', to: 'projects#index', as: "project_api", defaults: { format: 'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
   
