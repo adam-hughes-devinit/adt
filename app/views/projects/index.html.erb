@@ -18,20 +18,26 @@ end %>
 
 <% #if !(request.env['HTTP_REFERER'] =~ /\/projects/) && params[:scope] == "official_finance"
 	if params[:scope]
-	  flash.now[:success] =  "You are viewing <b>#{Scope.find_by_symbol(params[:scope]).name}</b>. Click the filters below to change your settings.".html_safe
+	  flash.now[:success] =  
+	  	"You are viewing <b>#{
+	  		params[:scope].map {|s| Scope.find_by_symbol(s).name}.join(' and ')
+	  		}</b>. Click the filters below to change your settings.".html_safe 
 	end
 %> 	
 <% # inside wrapper: <div class="row" id='project-facets'>	%>
-	<%= render 'project_search' %>
-
-<br>
+	<%= render 'search' %>
 
 <div class='row'>
 	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
-		<button class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
+
+		<button class='btn btn-primary' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
 	</div>
- 	<%= render 'export_search' %>
-		<%= will_paginate @projects %>	
+</div>
+
+<div class='row' >
+ 	<%= render 'search_export' %>
+ </div>
+	<%= will_paginate @projects %>	
 
 </div>
 <br>
@@ -69,7 +75,7 @@ end %>
 	</thead>
 	<tbody>
 	    <% @projects.each do |p| %>
-				<%= render partial: 'index_item', locals: {p: p} %>
+				<%= render partial: 'projects/search_result', locals: {p: p} %>
 	    <% end %>
 	</tbody>
 </table>
@@ -77,6 +83,32 @@ end %>
 
 
 <script type='text/javascript'>
+	
+
+
+
+	$('.facet-list-item').click(function() {
+		this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+		update_check_counter_for(this_facet)
+	})
+
+	function update_check_counter_for(this_facet) {
+		checked_boxes = $(".search_check."+this_facet+":checked")
+		check_count = checked_boxes.length
+		counter = $('.check_count.'+this_facet)
+		counter_text = check_count > 0 ? "("+check_count+")" : ""
+		counter.text(counter_text)
+		console.log(this, checked_boxes, check_count, counter)
+	}
+
+	function update_all_check_counts() {
+		<% (FACETS + WORKFLOW_FACETS).each do |f| %>
+			<%= "update_check_counter_for('#{f[:sym].to_s}')".html_safe %>
+		<% end %>
+	}
+
+	update_all_check_counts()
+
 	function toggle_search_params() {
 		var facet_box = $('#project-facets')
 		var facet_button = $('#project-facets-button')

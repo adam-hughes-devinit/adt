@@ -23,4 +23,6 @@ module ApplicationHelper
   	Flag.find_all_by_flaggable_id_and_flaggable_type(@project.id, flaggable_type_name) || []
 	end 
 
+
+
 end

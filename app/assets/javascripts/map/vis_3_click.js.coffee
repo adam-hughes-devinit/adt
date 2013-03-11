@@ -315,7 +315,12 @@ create_top_projects_box = (active_country, projects, target, height, c_projects)
 		"<span style='color:black'><a href='/projects/#{p.id}'>#{p.title}</a> (#{(p.year ? "<i>no year</i>")})," + 
 		" $#{window.vis_config.nicemoney(p.usd_2009)}</span></li>"
 	)
-	body_html +="</ul></div>"
+	body_html +="</ul>
+		<p><a href='/projects?country_name=#{active_country.name}&active_string=Active'>
+			See all projects in #{active_country.name} &rarr;
+			</a>
+			</p>
+		</div>"
 
 	foreign_object = d3.select('#'+target);
 

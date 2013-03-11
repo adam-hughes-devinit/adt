@@ -1,11 +1,24 @@
 <script type='text/javascript'>
 
 	$(function() {
-		$('.flaggable').append("<span class='flag-links'><i class='flag-link'>Flag this:</i> <%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %> </span>")
+		$('.flaggable').append("<span class='flag-links'> \
+			<i class='flag-link'>Flag this:</i> \
+			 <%= FlagType.all.map { |ft| "<a href='#' style='color:#{ft.color}' class='flag-link flag-link-#{ft.name}'>#{ft.name}</a> " }.join("  ").html_safe %> \
+			  </span>")
 		
 
 		
-		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover({placement: 'top', title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span> this:', trigger: 'manual', content: '#{render(partial: 'project_flag_form', locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')}'});"}.join(" 
+		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover(
+				{
+					placement: 'top',
+					title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span>', 
+					trigger: 'manual',
+					html: true, 
+					content: '#{render(
+						partial: 'project_flag_form',
+						 locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')
+					}'});"
+			}.join(" 
 		").html_safe %>
 		
 		$('.flag-link')

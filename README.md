@@ -62,7 +62,9 @@ When a user creates a project, it is associated with the organization that owns 
 ## Exporting Data
 
 ### Exporting project data
-Data can be exported from the search results page. The link appears above the search results. Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren't listed here). The fields can only be changed by altering the source code -- sorry!
+Data can be exported from the search results page. The link appears above the search results. Users will be prompted to enter their email address and when the export is finished,
+a link will appear to download the CSV file and an email will be sent to the user containing the CSV file as well.
+The Project records are exported as CSV and include fixed set of fields in a fixed order, as described in the China release documentation (the fields aren't listed here). The fields can only be changed by altering the source code -- sorry!
 
 ### Exporting aggregate data
 Aggregate data is available from `aggregates/export`. The interface provides three selections:

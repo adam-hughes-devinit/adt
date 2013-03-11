@@ -355,32 +355,33 @@ class Project < ActiveRecord::Base
   # has_many :classifications, dependent: :destroy
   # has_many :followers, dependent: :destroy
 
+  # These used to be done inside the search block, now that FACETS are integrated, 
+  # I had to move the code down here.
+  def flagged 
+     all_flags.map(&:name)
+  end
+
+  def recipient_iso2
+    self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
+  end
+
   searchable do 
     integer :id # only for searching
+    double :usd_2009 # for sorting
+    string :title # for sorting
     text :id
-
-    float :usd_2009
-
     text :title
-    string :title
-
     text :description
     text :capacity
     text :sector_comment
-
     text :year
-    string :year
-
     text :donor_name
-    string :donor_name
-
     text :comments do 
       comments.map do |c|
         ["#{c.name}",
           "#{c.content}"]
       end
     end
-
     text :geopoliticals do
       geopoliticals.map do |g| 
         if g
@@ -423,49 +424,11 @@ class Project < ActiveRecord::Base
       end
     end
 
-    string :number_of_recipients
-    string :owner_name
-    string :sector_name 
-    string :flow_type_name
-    string :oda_like_name
-    string :flow_class_arbitrated # These three are for workflow
-    string :flow_class_1
-    string :flow_class_2
-    string :intent_name
-    string :verified_name
-    string :tied_name
-    string :status_name
-    string :source_type_name, multiple: true
-    string :document_type_name, multiple: true
-    string :currency_name, multiple: true
-    string :origin_name, multiple: true
-    string :organization_type_name, multiple: true
-    string :organization_name, multiple: true
-    string :role_name, multiple: true
-    string :country_name, multiple: true
-    string :recipient_condensed
-    string :active_string 
-    string :is_commercial_string
-    string :line_of_credit_string
-    string :debt_uncertain_string
-    string :year_uncertain_string
-    string :is_cofinanced_string
-    string :crs_sector
-    string :loan_type
-    string :interest_rate
-    string :maturity
-    string :grace_period
-    string :grant_element
-
-    string :scope, multiple: true
-
-    string :flagged, multiple: true do 
-      all_flags.map(&:name)
-    end
-
-
-    string :recipient_iso2, multiple: true do
-      geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
+    # All the facets are defined in initializers/search_constants
+    (FACETS + WORKFLOW_FACETS).each do |facet|
+      string facet[:sym], multiple: (facet[:multiple] || false ) do 
+        facet[:code] || self.send(facet[:sym]) 
+      end
     end
 
   end
@@ -475,6 +438,7 @@ class Project < ActiveRecord::Base
 	  scope_array = []
     # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
 	  Scope.all.each do |scope|
+      # Scope_hash is implemented in Scope#includes_project?
       if scope.includes_project? self
         scope_array << scope.symbol.to_sym
       end

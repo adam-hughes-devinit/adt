@@ -1,9 +1,9 @@
-<h2> Scopes</h2>
+<% provide :title, "Scopes" %>
+<% provide :first_header, "Scopes" %>
+
 <p>
 	<%= link_to "New Scope", new_scope_path %>
 </p>
 <% @scopes.each do |s| %>
 	<%= render partial: "scope", locals: {s: s} %>
 <% end %>
-
-

@@ -5,11 +5,10 @@ include SearchHelper
 
 
   def index
-    # custom_search function defines @projects
-
+   
     respond_to do |format|
       format.html do
-        @all_projects = custom_search(paginate: false)
+        @full_results = custom_search(paginate: false)
    			@projects = custom_search
         @export = Export.new(params[:export])
         render html: @projects
@@ -64,8 +63,8 @@ include SearchHelper
     @project.participating_organizations.build
     @project.contacts.build
     @project.sources.build
-    @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
-    @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
+    @flow_class = @project.flow_class = FlowClass.new
+    @loan_detail = @project.loan_detail = LoanDetail.new
 
     respond_to do |format|
       format.html # new.html.erb

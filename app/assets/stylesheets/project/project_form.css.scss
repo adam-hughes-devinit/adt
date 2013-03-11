@@ -27,6 +27,18 @@
 		margin-left:25px;
 	}
 
+	.on-nav-bar {
+		position: fixed;
+		top: 80px;
+
+	}
+
+	.project-form-anchor:before  {
+		    display:block; 
+		    content:""; 
+		    height:50px; 
+		    margin:-50px 0 0; 
+	}
 	#project-form-nav-wrapper {
 
 		#project-form-nav {
@@ -70,9 +82,11 @@
 		}
 
 		#project-form-flow-class {
+			background-color: #B9CAFA;
 		}
 
 		#project-form-loan-detail {
+			background-color: #FFE3E3;
 		}
 		#project-form-sources {
 		}

@@ -17,7 +17,7 @@ module AggregatesHelper
 		
 	
 	WHERE_FILTERS = [
-	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new {  Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
+	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new {  p "Fetching where-filters"; Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
 	    	{sym: :recipient_name, name: "Recipient Name", options:   Proc.new { Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map(&:name) }.call, internal_filter: "recipient_name"},
 	    	{sym: :sector_name, name: "Sector Name", options:  Proc.new { Sector.all.map(&:name) }.call , internal_filter: "sectors.name"},
 	    	{sym: :intent_name, name: "Intent", options:  Proc.new { Intent.all.map(&:name) }.call , internal_filter: "intents.name"},

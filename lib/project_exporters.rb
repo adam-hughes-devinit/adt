@@ -79,7 +79,8 @@ module ProjectExporters
     #{transactions.map{|t| t.value}.join("; ")}
     #{transactions.map{|t| t.currency ? t.currency.iso3 : '' }.join("; ")}
     #{transactions.map{|t| t.deflator}.join("; ")}
-    #{transactions.map{|t| t.exchange_rate}.join("; ")}\",\"#{usd_2009}
+    #{transactions.map{|t| t.exchange_rate}.join("; ")}
+    #{usd_2009}
     #{start_actual ? start_actual.strftime("%d %B %Y") : ''}
     #{start_planned ?  start_planned.strftime("%d %B %Y") : ''}
     #{end_actual ? end_actual.strftime("%d %B %Y") : ''}

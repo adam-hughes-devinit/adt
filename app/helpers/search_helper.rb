@@ -1,4 +1,5 @@
 module SearchHelper
+	include AggregatesHelper
 	
 	# Constants in an initializer
 
@@ -9,10 +10,13 @@ module SearchHelper
 	  @search = Project.search do
 	  	
 	  	# Default to official finance if the user is coming from somewhere else
-	  	if (options[:default_to_official_finance]==true) && !(request.env['HTTP_REFERER'] =~ /projects/)
+	  	if (options[:default_to_official_finance]==true) && # if defaulting is enabled
+	  		!(request.env['HTTP_REFERER'] =~ /projects/) && # and it's coming from somewhere other than /projects/
+	  		!current_user_is_aiddata # and the current_user isn't AidData
+	  		
 	  		if (params.keys.select {|k| (k.to_s =~ /name/) }.length == 0)
-		  		@scope = Scope.find_by_symbol("official_finance")
-		  		params[:scope] = @scope.symbol
+		  		@scope = [Scope.find_by_symbol("official_finance").symbol]
+		  		params[:scope] = @scope
 		  	end
 	  	end
 	  	
@@ -22,8 +26,12 @@ module SearchHelper
 	    # Filter by params
 	    (FACETS + WORKFLOW_FACETS).each do |f|
 	        facet f[:sym]
-	        if params[f[:sym]].present?
-	        	with f[:sym], params[f[:sym]] 
+	        if requested_values = params[f[:sym]]
+	        	if requested_values.class == String
+		        	# VALUE DELIMITER defined in Aggregates helper
+		        	requested_values = requested_values.split(VALUE_DELIMITER) 
+		        end
+		        with f[:sym], requested_values
 	        end			      
 	    end
 
@@ -45,5 +53,6 @@ module SearchHelper
 	  
 	  @search.results
 	end
+
 
 end

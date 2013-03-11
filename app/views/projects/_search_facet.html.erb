@@ -1,0 +1,46 @@
+<div class='search-facet'>
+	<% if f[:name]!= "" &&
+			rows = @all_projects.facet(f[:sym]).rows %>
+		<b class='facet-header'>
+			<%= 
+				link_to_function f[:name], 
+				"$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle()"  
+			%>
+		</b> 
+		<span class='check_count <%= f[:sym].to_s %>'>
+
+		</span>
+		<%= link_to_function "Select all", 
+			"$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('#{f[:sym].to_s}')", 
+			class: "facet-controller" %>
+		<%= link_to_function "Unselect all", "$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('#{f[:sym].to_s}')", class: "facet-controller" %>
+		<ul class='unstyled facet-list'>
+			<% rows.sort!{|a,b| a.value <=> b.value}.each do |row| %>
+				<li class='facet-list-item'>
+					<label class='checkbox'>
+						<input 
+							type="checkbox" 
+							name="<%= f[:sym].to_s %>[]" 
+							value="<%= row.value %>"
+							class="search_check boolean <%= f[:sym].to_s %>"
+							<% if (
+									@current_url.gsub(/\+/, ' ').include?("#{f[:sym].to_s}[]=#{row.value}")||
+									@current_url.gsub(/\+/, ' ').include?("#{f[:sym].to_s}=#{row.value}")
+									) %>
+								checked='true'
+							<% end %>
+						>
+						<%= row.value %>
+						<span style='font-weight:normal;'>
+							<% if @search.facet(f[:sym]) && this_row = @search.facet(f[:sym]).rows.select { |r| r.value == row.value}[0]  %>
+								(<%= this_row.count %>)
+							<% else %>
+								(0)
+							<% end %>
+						</span>
+					</label>
+				</li>
+			<% end %>
+		</ul>
+	<% end %>
+</div>
