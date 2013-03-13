@@ -15,31 +15,22 @@
         </tr>
       </thead>
       <tbody>
-        <% @exports.each do |e| %>
-          <% if not e.mailed? %>
-            <tr>
-              <td><%= e.id %></td>
-              <td><%= e.email %></td>
-              <td><%= e.projects.count %></td>
-              <td><%= e.created_at%></td>
-              <td><%= e.updated_at%></td>
-              <td><%= e.mailed? %><td>
-            </tr>
-          <% end %>
-        <%end%>
-        <% @exports.each do |e| %>
+        <% successful_exports = [] %>
+        <% failed_exports = [] %>
+        <% Export.all.each do |e| %>
           <% if e.mailed? %>
-            <tr>
-              <td><%= e.id %></td>
-              <td><%= e.email %></td>
-              <td><%= e.projects.count %></td>
-              <td><%= e.created_at%></td>
-              <td><%= e.updated_at%></td>
-              <td><%= e.mailed? %><td>
-            </tr>
+            <% successful_exports << e %>
+          <% else %>
+            <% failed_exports << e %>
           <% end %>
-        <%end%>
-          <tr>
+        <% end %>
+
+        <% failed_exports.each do |e| %>
+          <%= render partial: 'export_index_item', locals: {e: e} %>
+        <% end %>
+        <% successful_exports.each do |e| %>
+          <%= render partial: 'export_index_item', locals: {e: e} %>
+        <% end %>
       </tbody>
     </table>
   </div>
