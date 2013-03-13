@@ -7,7 +7,7 @@ Adt::Application.routes.draw do
 
   # limited access
   # get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
-  match '/projects/json', to: 'projects#index', as: "project_api", defaults: { format: 'json'}
+ 
   resources :projects, :organizations, :users
   resources :comments, only: [:create, :destroy, :show]
   resources :flags, only: [:create, :destroy, :show]

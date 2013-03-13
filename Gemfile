@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 gem 'rails', '3.2.12'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'faker', '1.1.2'
@@ -15,6 +15,7 @@ gem 'progress_bar'
 gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
+gem 'pg'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
@@ -44,7 +45,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '0.12.2'
+  
   #gem 'sunspot-client' 
 end
 
