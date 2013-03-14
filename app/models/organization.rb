@@ -1,9 +1,13 @@
 class Organization < ActiveRecord::Base
+
   include OrganizationsHelper
+  include IndexAndCacheHelper
+
   attr_accessible :description, :name, :organization_type_id, :organization_type
   has_paper_trail
   default_scope order: "name"
   after_save :destroy_organizations_hash
+  after_save :recache_and_reindex_this_organizations_projects
   after_destroy :destroy_organizations_hash
 
   def name_with_type
@@ -37,4 +41,9 @@ class Organization < ActiveRecord::Base
   has_many :projects, through: :participating_organizations
   has_many :owned_projects, class_name: "Project", foreign_key: "owner_id"
   has_many :users, foreign_key: "owner_id"
+
+
+  def recache_and_reindex_this_organizations_projects
+     reindex_and_recache_by_associated_object self
+  end
 end

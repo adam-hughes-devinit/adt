@@ -1,4 +1,6 @@
 class OrganizationsController < ApplicationController
+
+
   # GET /organizations
   # GET /organizations.json
   def index
@@ -62,6 +64,8 @@ class OrganizationsController < ApplicationController
         "Undo", "/versions/#{@organization.versions.last.id}/revert",
          method: :post)
     flash[:success] = "Organization updated. #{undo_link}"
+    
+
 
     respond_to do |format|
       if @organization.update_attributes(params[:organization])
