@@ -66,12 +66,12 @@ App.render_overlay_content = (target,options) ->
 
 	if page>1
 		previous = 
-			"<span class='pager-modal' onclick='App.render_overlay_content(#{target}, {page: #{page-1}})'>
+			"<span class='pager-modal' onclick='App.render_overlay_content(\"#{target}\", {page: #{page-1}})'>
 				&larr; Prev 
 			</span>"
 	if number_of_rows > page * per_page
 		next = 	
-			"<span class='pager-modal'  onclick='App.render_overlay_content(#{target}, {page: #{page+1}})'>
+			"<span class='pager-modal'  onclick='App.render_overlay_content(\"#{target}\", {page: #{page+1}})'>
 				Next &rarr; 
 			</span>"
 

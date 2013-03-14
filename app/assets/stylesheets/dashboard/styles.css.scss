@@ -1,11 +1,11 @@
 
-
 #vis {
 	border: 2px solid #777;
 	margin:10px ;
 	padding:10px ;
 	min-height: 100px;
 	max-width: 900px;
+	
 
 	#waiting {
 		margin: 50px;
@@ -20,8 +20,8 @@
 #now_showing {
 
 	h1 {
-		text-align: left;
 		margin: 5px;
+		text-align: left;
 	}
 	p {
 		margin: 5px;
@@ -37,11 +37,22 @@
 	}
 }
 
+.current_x_axis, .current_y_axis {
+	color: #942;
+	&:hover {
+		color: #c96;
+	}
+}
+
+#value_container {
+	margin: 8px;
+}
+
 #filter_container {
 	background-color: white;
 	.filters {
 
-		max-height:200px;
+		max-height:180px;
 		overflow-y:scroll;
 
 
@@ -66,8 +77,26 @@
 		}
 	}
 
-	.current_x_axis {
-		color: #942;
+
+
+}
+
+#overlay {
+	left:7.5%;
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+
+	.pager-modal {
+		cursor:pointer;
+		color: #26a;
+		&:hover {
+			text-decoration: underline;
+			color: #48c;
+		}
 	}
 
+	#page-number {
+		display:none;
+	}
 }
