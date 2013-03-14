@@ -287,7 +287,7 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 				.style('color', 'black')
 				.html("<p><b>Loading top projects...</b></p>")
 
-	top_projects_path = '/projects/json'
+	top_projects_path = '/projects.json'
 	top_projects_params = @active_params || {}
 	top_projects_params.active_string =  "Active"
 	top_projects_params.order_by = "usd_2009"
