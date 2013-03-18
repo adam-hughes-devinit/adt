@@ -31,13 +31,12 @@ module IndexAndCacheHelper
 	handle_asynchronously :remake_files
 	
 
-	def reindex_and_recache_by_associated_object(object)
-  		# What's the best way to background this?
-      if object.respond_to? 'projects'
-	  		reindex_projects(object.projects)
-			recache_projects object.projects
-			remake_files	
-	  end	
-  	end
-
+  def reindex_and_recache_by_associated_object(object)
+    # What's the best way to background this?
+    if object.respond_to? 'projects'
+      reindex_projects(object.projects)
+      recache_projects object.projects
+      remake_files	
+    end	
+  end
 end
