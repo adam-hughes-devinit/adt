@@ -82,6 +82,11 @@ module ProjectCache
         end
         all_proj_file.puts project.csv_text
       end
+
+      #close all the files
+      file_hash.each do |name, file|
+        file.close
+      end
     else
       file_prefix = "/#{scope_symbol.to_s.capitalize}"
 
