@@ -110,5 +110,5 @@ module ProjectCache
     end
   end
 
-  # handle_asynchronously :cache_files
+  handle_asynchronously :cache_files
 end
