@@ -22,11 +22,10 @@ class LoanDetail < ActiveRecord::Base
 	  	ge_root = 'http://aiddata-loan-calculator.herokuapp.com/calculate'
 
 	    
-	    p  ge_url = "#{ge_root}?#{ge_query}"
+	      
+	    ge_url = "#{ge_root}?#{ge_query}"
 	    ge_string = open(ge_url){|io| io.read}
-	    p ge_string
-
-
+	    
 		ge_object = ActiveSupport::JSON.decode(ge_string)
 
 
@@ -35,7 +34,7 @@ class LoanDetail < ActiveRecord::Base
 		self.grant_element = (ge_percent * 100).round(2)
 		self.time_calculated = Time.now
 	else
-		p "No grant element"
+		# p "No grant element"
 	end
 
   end

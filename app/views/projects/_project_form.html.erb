@@ -102,7 +102,7 @@
 									<%= loan_detail_form.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %." %>
 									<%= loan_detail_form.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment." %>
 									<%= loan_detail_form.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment." %>
-									<span style='color:#999"padding:5px"margin-top:10px"' class='span2 btn'><a href='http://www.oecd.org/dac/stats/15344611.xls' target='_blank'>Grant Element Calculator (OECD) <i class='icon-share'></i> </a></span>
+									<span style='color:#999;' class='span2'>The grant element will be <a target='_blank' href='http://aiddata-loan-calculator.herokuapp.com'>calculated automatically</a> if <b>maturity</b>,<b>interest rate</b>, and <b>transaction value</b> are present.</span>
 								</div>
 							<% end %>
 						</div>

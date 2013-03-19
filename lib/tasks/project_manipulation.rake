@@ -13,5 +13,17 @@ namespace :projects do
 		
 		p "Finished Rechaching."
 	end
+
+	desc "Recalculate Grant Element for all Loan Details"
+	task :recalculate_grant_element => :environment do
+	
+		progress_bar = ProgressBar.new(LoanDetail.where("maturity is not null").count)
+		
+		LoanDetail.where("maturity is not null").each do |ld| 
+			ld.save!
+			progress_bar.increment!
+		end
+
+	end
 end
 
