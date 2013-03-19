@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301145311) do
+ActiveRecord::Schema.define(:version => 20130319200152) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -190,8 +190,9 @@ ActiveRecord::Schema.define(:version => 20130301145311) do
     t.integer  "maturity"
     t.integer  "grace_period"
     t.float    "grant_element"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.datetime "time_calculated"
   end
 
   add_index "loan_details", ["loan_type_id"], :name => "index_loan_details_on_loan_type_id"
