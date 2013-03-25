@@ -31,7 +31,7 @@ FactoryGirl.define do
     t.iati_code 5
   end
 
-  factory :sector do |s|
+  factory :crs_sector do |s|
     s.name 'Education'
   end
 
@@ -142,7 +142,7 @@ FactoryGirl.define do
 
     flow_type FactoryGirl.create(:flow_type)
     #project.tied FactoryGirl.create(:tied)
-    sector FactoryGirl.create(:sector)
+    crs_sector FactoryGirl.create(:crs_sector)
 
     donor FactoryGirl.create(:country)
     owner FactoryGirl.create(:organization)

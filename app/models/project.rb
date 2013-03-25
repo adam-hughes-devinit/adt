@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
     :is_commercial, :media_id, 
-    :year_uncertain, :debt_uncertain, :line_of_credit, :crs_sector, 
+    :year_uncertain, :debt_uncertain, :line_of_credit,
     :is_cofinanced,
     # belongs_to fields
     :status, :verified, 
@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
     :accessories, :iteration,
     # hidden fields
     :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
-    :donor_id, :owner_id, :intent_id
+    :donor_id, :owner_id, :intent_id, :crs_sector_id
 
   before_save :set_verified_to_raw_if_null
   # before_save :deflate_values MOVED TO TRANSACTION MODEL
@@ -245,6 +245,7 @@ class Project < ActiveRecord::Base
   #  End restructuring
   #
 
+  # Deprecated in favor of CrsSectors
   belongs_to :sector
   def sector_name
     unless sector.nil?  
@@ -254,6 +255,14 @@ class Project < ActiveRecord::Base
     end 
   end
 
+  belongs_to :crs_sector
+  def crs_sector_name
+    crs_sector ? crs_sector.name : nil
+  end
+
+  def crs_sector_code
+    crs_sector ? crs_sector.code : nil
+  end
 
   belongs_to :donor, class_name: "Country"
   def donor_name 
@@ -464,7 +473,7 @@ class Project < ActiveRecord::Base
     super(
       only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
       methods: [:usd_2009, :donor_name,
-        :sector_name, :flow_type_name, :oda_like_name, :status_name, 
+        :crs_sector_name, :flow_type_name, :oda_like_name, :status_name, 
         # :tied_name, 
         :recipient_condensed
     ],

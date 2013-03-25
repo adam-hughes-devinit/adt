@@ -6,7 +6,7 @@ module AggregatesHelper
 			{external: "donor", name: "Donor", internal: "donors.iso3", group: "donors.iso3", sorter: "donors.iso3 asc" },
 			{external: "status", name: "Status", group: "statuses.name", internal: "(case when statuses.name is null then 'Unset' else statuses.name end)", sorter: "status asc"},
 			{external: "intent", name: "Intent", group: "intents.name", internal: "(case when intents.name is null then 'Unset' else intents.name end)", sorter: "intent asc"},
-			{external: "sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "sectors.name", sorter: "sector_name asc"},
+			{external: "crs_sector_name", name: "Sector", internal: "(case when sectors.name is null then 'Unset' else sectors.name end)", group: "crs_sector.name", sorter: "crs_sector_name asc"},
 			{external: "flow_class", name: "Flow Class", group: "oda_likes.name", internal: "(case when oda_likes.name is null then 'Unset' else oda_likes.name end) ", sorter: "flow_class asc"},
 			{external: "recipient_iso2",  name: "Recipient ISO2", group: "recipient_iso2", internal: "recipient_iso2", sorter: "recipient_iso2 asc"},
 			{external: "recipient_iso3",   name: "Recipient ISO3", group: "recipient_iso3", internal: "recipient_iso3", sorter: "recipient_iso3 asc"},			
@@ -19,7 +19,7 @@ module AggregatesHelper
 	WHERE_FILTERS = [
 	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new {  p "Fetching where-filters"; Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
 	    	{sym: :recipient_name, name: "Recipient Name", options:   Proc.new { Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map(&:name) }.call, internal_filter: "recipient_name"},
-	    	{sym: :sector_name, name: "Sector Name", options:  Proc.new { Sector.all.map(&:name) }.call , internal_filter: "sectors.name"},
+	    	{sym: :crs_sector_name, name: "CRS Sector Name", options:  Proc.new { CrsSector.all.map(&:name) }.call , internal_filter: "crs_sector.name"},
 	    	{sym: :intent_name, name: "Intent", options:  Proc.new { Intent.all.map(&:name) }.call , internal_filter: "intents.name"},
 	    	{sym: :verified, name: "Verified Status", options:  Proc.new { Verified.all.map(&:name) }.call , internal_filter: "verifieds.name"},
 	    	{sym: :flow_type, name: "Flow Type", options:  Proc.new { FlowType.all.map(&:name) }.call, internal_filter: "flow_types.name"},

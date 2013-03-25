@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301145311) do
+ActiveRecord::Schema.define(:version => 20130325182340) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -59,6 +59,13 @@ ActiveRecord::Schema.define(:version => 20130301145311) do
   add_index "countries", ["id"], :name => "index_countries_on_id"
   add_index "countries", ["iso3"], :name => "index_countries_on_iso3"
   add_index "countries", ["name"], :name => "index_countries_on_name"
+
+  create_table "crs_sectors", :force => true do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "currencies", :force => true do |t|
     t.string   "name"
@@ -285,6 +292,7 @@ ActiveRecord::Schema.define(:version => 20130301145311) do
     t.boolean  "is_cofinanced",  :default => false
     t.integer  "iteration",      :default => 0
     t.integer  "intent_id"
+    t.integer  "crs_sector_id"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"

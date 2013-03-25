@@ -33,14 +33,14 @@
 						<%= f.association :verified, wrapper_html: {class: "span3"} %>
 						<%= f.association :status, wrapper_html: {class: "span3"} %>
 						<%= f.association :intent, wrapper_html: {class: "span3"} %>
-						<%= f.input :crs_sector, wrapper_html: {class: "span3"} %>
 					</div>
 					<div class='row-fluid'>
 						<%= f.input :description, input_html: {rows: "8", cols: "30" }, wrapper_html: {class: "span12"} %>
 					</div>
 						<div class='row-fluid'>
 							<%= f.input :capacity, wrapper_html: {class: "span3"} %>
-							<%= f.association :sector, wrapper_html: {class: "span3"} %>
+              <%= f.association :crs_sector, label_method: lambda { |s| s.full_name },
+                      wrapper_html: {class: "span3"} %>
 							<%= f.input :sector_comment, wrapper_html: {class: "span3"} #hint: "If multisector, add details" 
 							%>
 							<%= f.association :flow_type, wrapper_html: {class: "span3"} %>
@@ -91,7 +91,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						<%# </div> %>
 						<div class='span9' id = 'project-form-loan-detail'>
 							<!--a id='loan-detail-anchor' class='project-form-anchor'></a-->
 							<hr>

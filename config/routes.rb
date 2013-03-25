@@ -1,6 +1,6 @@
 Adt::Application.routes.draw do
   # codes
-  resources :roles, :countries, :sectors, :statuses, 
+  resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
   :flag_types, :loan_types

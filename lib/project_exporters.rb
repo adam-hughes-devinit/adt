@@ -52,9 +52,9 @@ module ProjectExporters
     #{year}
     #{year_uncertain}
     #{description}
-    #{sector_name}
+    #{crs_sector_code}
+    #{crs_sector_name}
     #{sector_comment}
-    #{crs_sector}
     #{status_name}
     #{status ? status.code : ''}
     #{flow_type_name}

@@ -2,7 +2,7 @@ module ProjectExporterHeaders
 
   def csv_header
     csv_header_array = %W[project_id donor title year year_uncertain
-    description sector sector_comment crs_sector status status_code flow
+    description crs_sector_code crs_sector_name sector_comment status status_code flow
     all_recipients sources sources_count funding_agency implementing_agency
     donor_agency donor_agency_count recipient_agencies recipient_agencies_count
     verified verified_code flow_class flow_class_code intent intent_code

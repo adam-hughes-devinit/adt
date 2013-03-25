@@ -60,7 +60,6 @@
 						}]
   
   FACETS = [
-      {sym: :sector_name, name: "Sector"},
       {sym: :flow_type_name, name: "Flow Type"},
       {sym: :oda_like_name, name: "Flow Class"},
       {sym: :status_name, name:"Status"},

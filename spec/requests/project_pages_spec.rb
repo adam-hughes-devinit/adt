@@ -52,7 +52,7 @@ describe "Project pages" do
     # test dates div
     it {should have_content(project.start_actual.strftime("%d %B %Y"))}
     # test details div
-    it {should have_content(project.sector.name)}
+    it {should have_content(project.crs_sector.name)}
     it {should have_content(project.flow_type.name)}
     it {should have_content(project.status.name)}
     it {should have_content(project.donor.name)}
