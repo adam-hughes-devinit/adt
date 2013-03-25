@@ -196,7 +196,7 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     end
   
     def expire_this_cache
-      expire_fragment(%r{/project/#{params[:id]}.*})
+      expire_fragment(%r{projects/#{params[:id]}.*})
       expire_fragment(%r{.*index.*}) 
     end
 
