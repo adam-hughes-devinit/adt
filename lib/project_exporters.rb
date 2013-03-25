@@ -99,7 +99,7 @@ module ProjectExporters
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
-    #{if loan_type != nil && loan_type != "Unset" then loan_type.name else '' end }
+    #{loan_type_name}
     #{interest_rate}
     #{maturity}
     #{grace_period}

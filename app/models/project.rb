@@ -198,6 +198,8 @@ class Project < ActiveRecord::Base
   # Loan Detail Methods
   ####################################################
 
+  # RDM 3/25/2013 "_band" methods for searching
+
   has_one :loan_detail, dependent: :destroy
   accepts_nested_attributes_for :loan_detail
 
@@ -209,11 +211,33 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def loan_type_name
+    if loan_detail.nil? || loan_detail.loan_type.nil?
+      "Unset"
+    else
+      loan_detail.loan_type.name
+    end
+  end
+
   def interest_rate
     if loan_detail.nil?
       "Unset"
     else
       loan_detail.interest_rate
+    end
+  end
+
+
+  def interest_rate_band
+    # don't use "%" -- it screws up the search URLs
+    if (!loan_detail.nil?) && (m = loan_detail.interest_rate)
+      if m <= 10
+        "#{m} percent"
+      elsif m > 10
+        ">10 percent"
+      end
+    else
+      "(None)"
     end
   end
 
@@ -225,6 +249,22 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def maturity_band
+    if (!loan_detail.nil?) && (m = loan_detail.maturity)
+      if m < 5
+        "0 to 5 years"
+      elsif m >= 5 && m <=15
+        "5 to 15 years"
+      elsif m > 15
+        ">15 years"
+      end
+
+    else
+      "(None)"
+    end
+  end
+        
+
   def grace_period
     if loan_detail.nil?
       "Unset"
@@ -233,11 +273,41 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def grace_period_band
+    if (!loan_detail.nil?) && (m = loan_detail.grace_period)
+      if m <= 5
+        "#{m} year#{ m != 1 ? 's' : ""}"
+      elsif m > 5 && m <=10
+        "6 to 10 years"
+      elsif m > 10
+        ">10 years"
+      end
+    else
+      "(None)"
+    end
+  end
+
   def grant_element
     if loan_detail.nil?
       "Unset"
     else
       loan_detail.grant_element
+    end
+  end
+  
+  def grant_element_band
+    if (!loan_detail.nil?) && (m = loan_detail.grant_element)
+      if m < 25
+        "0 to 24 percent"
+      elsif m >= 100
+        "100 percent"
+      elsif m >= 25 && m <= 50
+        "25 to 50 percent"
+      elsif m < 100 && m > 50
+        "51 to 99 percent"
+      end
+    else
+      "(None)"
     end
   end
 
