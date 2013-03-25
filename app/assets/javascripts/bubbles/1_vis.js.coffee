@@ -355,6 +355,12 @@ class BubbleChart
       #.attr("y", (d) -> sectors_x[d][1] )
       #.attr("text-anchor", "middle")
       #.text((d) -> d)
+    #sectors.enter().append("text")
+      #.attr("class", "sectors")
+      #.attr("x", @width*0.5)
+      #.attr("y", @height*0.5)
+      #.attr("text-anchor", "middle")
+      #.text(")
 
   # Method to hide sector titles
   hide_sectors: () =>
@@ -369,7 +375,7 @@ class BubbleChart
     content +="<span class=\"tooltiptext\">Year:</span><span class=\"value\"> #{data.year}</span><br/>"
     content +="<span class=\"tooltiptext\">Flow Class:</span><span class=\"value\"> #{data.group}</span><br/>"
     content +="<span class=\"tooltiptext\">Sector:</span><span class=\"value\"> #{@sector(data.sector)}</span></br>"
-    #content +="<span class=\"tooltiptext\">*Click to go to project record</span>"
+    content +="<span class=\"tooltiptext\">*Click to view project page</span>"
     showTooltip(content,d3.event)
 
 
@@ -384,7 +390,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!=""
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.crs_sector!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
