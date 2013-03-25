@@ -3,8 +3,8 @@ before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit]
 include SearchHelper
 
-caches_page :show, :cache_path => Proc.new { |c| "#{current_user_is_aiddata}/projects/#{c.params[:id]}"}
-caches_page :index, :cache_path => Proc.new { |c| "#{current_user_is_aiddata}/projects/#{c.params.inspect}" }
+caches_page :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}_#{current_user_is_aiddata}"}
+caches_page :index, :cache_path => Proc.new { |c| "projects/#{c.params.inspect}_#{current_user_is_aiddata}" }
 
   def index
    
