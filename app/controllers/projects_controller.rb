@@ -3,8 +3,8 @@ before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit]
 include SearchHelper
 
-caches_action :show, if: proc { current_user_is_aiddata }
-caches_action :index, :cache_path => Proc.new { |c| "#{c.params.inspect}_#{current_user_is_aiddata}" }
+caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata}" }
+caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata}?#{c.params.inspect}" }
 
   def index
    
@@ -196,8 +196,8 @@ caches_action :index, :cache_path => Proc.new { |c| "#{c.params.inspect}_#{curre
     end
   
     def expire_this_cache
-      expire_page action: :show, id: params[:id]
-      expire_page action: :index
+      expire_action :show, id: params[:id]
+      expire_fragment(%r{.*index.*}) 
     end
 
 
