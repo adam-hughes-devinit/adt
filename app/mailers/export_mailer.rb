@@ -23,7 +23,13 @@ class ExportMailer < ActionMailer::Base
     @export.save
 
     export_file = File.open(export_file_name, 'w')
-    export_file.puts Project.csv_header
+
+    # add is_x scope variable for users to search by scope after exporting
+    header = Project.csv_header
+    Scope.all.each do |scope|
+      header << ", is_scope_#{scope.symbol}?"
+    end
+    export_file.puts header
 
     #This is to update the progress bar on the export page
     @export.status_percent = 15 
@@ -32,7 +38,12 @@ class ExportMailer < ActionMailer::Base
     percent_increase = (45.0 / count) * 10
 
     @export.projects.each_with_index do |project, index|
-      export_file.puts project.csv_text
+      text =  project.csv_text
+      # include the boolean value for is_x scope variable from above
+      Scope.all.each do |scope|
+        text << ", #{project.scope.include?(scope.symbol.to_sym)}"
+      end
+      export_file.puts text
 
       if index % 10 == 0
         @export.status_percent += percent_increase
