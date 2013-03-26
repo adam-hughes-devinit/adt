@@ -84,11 +84,11 @@
       {sym: :number_of_recipients, name: "Number of Recipients"},
       {sym: :year, name: "Commitment Year"},
       {sym: :intent_name, name: "Intent"},
-      {sym: :loan_type, name: "Loan Type"},
-      {sym: :interest_rate, name: "Interest Rate"},
-      {sym: :maturity, name: "Maturity"},
-      {sym: :grace_period, name: "Grace Period"},
-      {sym: :grant_element, name: "Grant Element"},
+      {sym: :loan_type_name, name: "Loan Type"},
+      {sym: :interest_rate_band, name: "Interest Rate"},
+      {sym: :maturity_band, name: "Maturity"},
+      {sym: :grace_period_band, name: "Grace Period"},
+      {sym: :grant_element_band, name: "Grant Element"},
       {sym: :scope, name: "Scope", multiple: true}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     

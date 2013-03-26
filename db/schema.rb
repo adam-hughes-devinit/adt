@@ -197,8 +197,9 @@ ActiveRecord::Schema.define(:version => 20130325182340) do
     t.integer  "maturity"
     t.integer  "grace_period"
     t.float    "grant_element"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.datetime "time_calculated"
   end
 
   add_index "loan_details", ["loan_type_id"], :name => "index_loan_details_on_loan_type_id"

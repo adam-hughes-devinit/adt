@@ -3,6 +3,8 @@ before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit]
 include SearchHelper
 
+caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata}" }
+caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata}?#{c.params.inspect}" }
 
   def index
    
@@ -96,6 +98,8 @@ include SearchHelper
       end
     end
 
+    expire_this_cache
+
 
   end
 
@@ -121,6 +125,10 @@ include SearchHelper
     #"Undo", "/versions/#{@object.versions.last.id}/revert",
     method: :post)
     flash[:success] = "Project updated. #{undo_link}"
+
+    # defined below
+    expire_this_cache
+
   end
 
   # DELETE /Projects/1
@@ -158,6 +166,9 @@ include SearchHelper
     ),
     method: :post)
     flash[:notice] = "Project deleted! #{undo_link}"
+    # defined below
+    expire_this_cache
+
   end
 
   private
@@ -184,7 +195,10 @@ include SearchHelper
 
     end
   
-  
+    def expire_this_cache
+      expire_fragment(%r{projects/#{params[:id]}.*})
+      expire_fragment(%r{.*index.*}) 
+    end
 
 
 end

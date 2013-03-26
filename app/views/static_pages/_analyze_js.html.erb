@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class='row'>
-      <p>Animated Bubble Chart</p>
+      <p>Chinese Official Finance, USD-2009.</p>
     </div>
   </div>
   <%= javascript_include_tag 'bubbles/index' %>
@@ -29,6 +29,11 @@
             $('#view_selection a').removeClass('active');
             $(this).toggleClass('active');
             toggle_view(view_type);
+            return false;
+          });
+          $('circle').not('#example').click(function(){
+            var circleid = $(this).attr("id")
+            window.location = "/projects/"+circleid
             return false;
           });
         });

@@ -7,6 +7,7 @@
 	<div class= "project-box span10">
 	<h3> Overview:</h3>
 		<ul class="project-overview span6"> 
+
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Donor", heading: "Donor"} %> 
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Year", heading: "Commitment Year"} %> 
 				<% if @project.year_uncertain %>
@@ -16,6 +17,20 @@
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Scope", heading: "Scope" } %>
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Verified", heading: "Verified"} %> 
 			<li><b>ID:</b> <%= link_to @project.id,  @project %></li>
+			<% if current_user_is_aiddata %>
+				<% robocode = @project.robocode %>
+			<li>
+				<span class='muted'>
+					Visible to AidData users only:
+				</span>
+				<br>
+				<b>Robocoder says:</b>
+				<%= robocode[:text] %>
+				<a href='<%= robocode[:url] %>'>
+					(Source)
+				</a>
+			</li>
+			<% end %>
 
 		
 		</ul>

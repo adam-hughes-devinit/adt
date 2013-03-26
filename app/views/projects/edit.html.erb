@@ -19,4 +19,81 @@
 	$.get('/organizations.json', 
 		repopulate_organization_dropdowns)
 
+	var changed = false
+
+	inputs = $('input, textarea, select')
+	
+	inputs.change(function() {
+		if (!changed) {
+			changed = true;
+		}
+	})
+
+	$('.submit-button').click(function(){
+		//to ignore the alert
+		changed = false
+	})
+
+
+	window.onbeforeunload = function(){
+		if (changed == true ) {
+			return 'You have edited this project!';
+		}
+	};
+
+	$('#project-form-nav').scrollspy()
+	
+	<% if !@project.active %>
+		$('#first_header').css("color", "#942").append(" -- INACTIVE -- ")
+	<% end %>
+
+	$('#project_active').change(function(e) {
+		$('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
+	})
+
+var flavors= ["neon", "pastel", "plain", "classic"]
+flavors.forEach(function(f) {
+	$('#flavors').append("<a class='btn flavor-button' data-flavor='"+f+"'>"+f+"</a>")
+})
+
+$('.flavor-button').click(function(){
+	colorize($(this).attr("data-flavor"))
+})
+
+function colorize(flavor) {
+	var items = [
+		{ selector: "#project-form-wrapper", neon: "#40d040", pastel: "#B9E4B9", classic: "white"},
+		{ selector: "#project-form-content", neon: "#5090a0", pastel: "#EE9EAE", classic: "lightgray"},
+		{ selector: "#project-form-project", neon: "#ee4466" , pastel: "#EE9EAE", classic: "darkgray"},
+		{ selector: "#project-form-flow-class", neon: "#a91", pastel: "#F5F2D9", classic: "steelblue" },
+		{ selector: "#project-form-loan-detail", neon: "#1fa", pastel: "#F8E3BE", classic: "darkred" },
+		{ selector: "#project-form-sources", neon: "#44eeaa", pastel: "#F8E3BE", classic: "steelblue" },
+		{ selector: "#project-form-recipients", neon: "#7c2", pastel: "#83FFC1", classic: "steelblue" },
+		{ selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred" },
+		{ selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred" },
+		{ selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred"  },
+	]
+
+	if (flavor != "plain" && flavor != false ) {
+
+		items.forEach(function(item) {
+			$(item.selector).css("background-color", item[flavor] )
+		})
+	}
+	else {
+		items.forEach(function(item) {
+			$(item.selector).css('background-color', 'transparent')
+		})
+	}
+
+	localStorage.china_flavor = flavor;	
+}
+
+
+var your_flavor = localStorage.china_flavor || false
+if (your_flavor) {
+	colorize(your_flavor)
+}
+
+
 </script>
