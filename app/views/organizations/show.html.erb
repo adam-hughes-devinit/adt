@@ -17,13 +17,28 @@
 <p>
 	Participating in 
   <b>
-  <%= link_to pluralize(@organization.projects.count, "project"), "/projects?organization_name=#{CGI.escape(@organization.name)}" %>. 
+    <% 
+      #list only active projects
+      project_count = 0
+      @organization.projects.each do |p|
+        project_count += 1 if p.active?
+      end
+    %>
+
+    <%= link_to pluralize(project_count, "project"), 
+      "/projects?organization_name=#{CGI.escape(@organization.name)}&active_string[]=Active" %>. 
   </b>
 </p>
 <p>
 Owns  
   <b>
-  <%= pluralize(@organization.owned_projects.count, "project") %>. 
+    <%
+      owned_count = 0
+      @organization.owned_projects.each do |p|
+        owned_count += 1 if p.active?
+      end
+    %>
+  <%= pluralize(owned_count, "project") %>. 
   </b>
 </p>
 <%= current_user_is_aiddata ? link_to('Edit', edit_organization_path(@organization)) : '' %> |
