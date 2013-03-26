@@ -72,14 +72,23 @@ class Project < ActiveRecord::Base
   def robocode
     # This bounces the project off of Robocoder
     require 'open-uri'
-    robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{title}#{description.gsub(/\n/, ' ').gsub(/[^[\w\s]]/, '')[0..200]}")
-    res = open(robocode_url){|io| io.read}
-    code = JSON.parse(res)
-    {
-      text: "#{code['guess_name']} (#{code["guess_code"]})",
-      code: "#{code['guess_name']}",
-      url: robocode_url,
-    }
+      robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{title}#{description.gsub(/\n/, ' ').gsub(/[^[\w\s]]/, '')[0..200]}")
+    begin
+      res = open(robocode_url){|io| io.read}
+      code = JSON.parse(res)
+      {
+        text: "#{code['guess_name']} (#{code["guess_code"]})",
+        code: "#{code['guess_name']}",
+        url: robocode_url,
+      }
+    rescue
+      {
+        text: "Oops, there was an error.",
+        code: "",
+        url: robocode_url,
+      }  
+    end
+
   end
   
   # I'm adding string methods for these codes for Sunspot Facets
