@@ -159,6 +159,46 @@ end
     FlagType.create!(name: "Challenge", color: 'red')
     FlagType.create!(name: "Confirm", color: 'green')
   end
+
+  desc "Create CRS Codes"
+  task :create_crs_codes  => :environment do
+    puts "Creating and Assigning CRS Codes"
+    crs_codes = { 
+      110 => "Education",
+      120 => "Health",
+      130 => "Population Policies / Programmes and Reproductive Health",
+      140 => "Water Supply and Sanitation",
+      150 => "Government and Civil Society",
+      160 => "Other Social infrastructure and services",
+      210 => "Transport and Storage",
+      220 => "Communications",
+      230 => "Energy Generation and Supply",
+      240 => "Banking and Financial Services",
+      250 => "Business and Other Services",
+      310 => "Agriculture, Forestry and Fishing",
+      320 => "Industry, Mining, Construction",
+      330 => "Trade and Tourism",
+      410 => "General Environmental Protection",
+      420 => "Women in Development",
+      430 => "Other Multisector",
+      510 => "General Budget Support",
+      520 => "Developmental Food Aid/Food Security Assistance",
+      530 => "Non-food commodity assistance",
+      600 => "Action Relating to Debt",
+      700 => "Emergency Response",
+      910 => "Administrative Costs of Donors",
+      920 => "Support to Non-governmental Organizations (NGOs) and Government Organizations",
+      998 => "Unallocated / Unspecified"
+    }
+
+    crs_codes.each do |code, name|
+      c = CrsSector.create!(code: code, name: name)
+      Project.find_all_by_crs_sector(code).each do |p|
+        p.crs_sector = c
+        p.save
+      end
+    end
+  end
 end
 
 task :projects => ["projects:old_oda_like_to_flow_class",

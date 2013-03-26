@@ -76,7 +76,7 @@
       {sym: :organization_name, name: "Organization Name", multiple: true},
       {sym: :owner_name, name: "Record Owner"},
       {sym: :line_of_credit_string, name: "Line of Credit"},
-      {sym: :crs_sector, name: "CRS Sector"},
+      {sym: :crs_sector_name, name: "CRS Sector"},
       {sym: :year_uncertain_string, name: "Year Uncertain"},
       {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"},
       {sym: :is_cofinanced_string, name: "Cofinance Status"},
