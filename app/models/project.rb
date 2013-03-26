@@ -46,8 +46,10 @@ class Project < ActiveRecord::Base
   end
 
 
-  has_many :comments, dependent: :destroy
+
   has_and_belongs_to_many :exports
+
+  has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
 
@@ -65,9 +67,20 @@ class Project < ActiveRecord::Base
     }.to_json
   end
 
-
   #validates :title, presence: true
 
+  def robocode
+    # This bounces the project off of Robocoder
+    require 'open-uri'
+    robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{title}#{description.gsub(/\n/, ' ').gsub(/[^[\w\s]]/, '')[0..200]}")
+    res = open(robocode_url){|io| io.read}
+    code = JSON.parse(res)
+    {
+      text: "#{code['guess_name']} (#{code["guess_code"]})",
+      code: "#{code['guess_name']}",
+      url: robocode_url,
+    }
+  end
   
   # I'm adding string methods for these codes for Sunspot Facets
   belongs_to :status
