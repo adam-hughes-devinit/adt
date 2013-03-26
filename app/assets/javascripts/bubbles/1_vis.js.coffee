@@ -38,25 +38,25 @@ class BubbleChart
     # used
     @center = {x: @width / 2, y: @height / 2}
     @year_centers = {
-      "2000": {x: 150, y: @height / 2},
-      "2001": {x: 208, y: @height / 2},
-      "2002": {x: 266, y: @height / 2},
-      "2003": {x: 324, y: @height / 2},
-      "2004": {x: 382, y: @height / 2},
-      "2005": {x: 440, y: @height / 2},
-      "2006": {x: @width-440, y: @height / 2},
-      "2007": {x: @width-382, y: @height / 2},
-      "2008": {x: @width-324, y: @height / 2},
-      "2009": {x: @width-266, y: @height / 2},
-      "2010": {x: @width-208, y: @height / 2},
-      "2011": {x: @width-150, y: @height / 2},
+      "2000": {x: 200, y: @height / 2},
+      "2001": {x: 250, y: @height / 2},
+      "2002": {x: 300, y: @height / 2},
+      "2003": {x: 350, y: @height / 2},
+      "2004": {x: 400, y: @height / 2},
+      "2005": {x: 450, y: @height / 2},
+      "2006": {x: @width-450, y: @height / 2},
+      "2007": {x: @width-400, y: @height / 2},
+      "2008": {x: @width-350, y: @height / 2},
+      "2009": {x: @width-300, y: @height / 2},
+      "2010": {x: @width-250, y: @height / 2},
+      "2011": {x: @width-200, y: @height / 2},
     }
     @flow_centers = {
       "ODA-like" : {x:300, y: @height / 2},
       "Vague (Official Finance)" : {x:300, y: @height / 2},
       "OOF-like" : {x:300, y: @height / 2},
-      "CA -SOE" : {x: @width / 2, y: @height / 2},
-      "CA +SOE" : {x: @width / 2, y: @height / 2},
+      "CA -Gov" : {x: @width / 2, y: @height / 2},
+      "CA +Gov" : {x: @width / 2, y: @height / 2},
       "FDI -Gov" : {x: @width / 2, y: @height / 2},
       "FDI +Gov" : {x: @width / 2, y: @height / 2},
       "JV -Gov" : {x: @width / 2, y: @height / 2},
@@ -66,7 +66,33 @@ class BubbleChart
       "Vague (Com)" : {x: @width / 2, y: @height / 2},
       "Official Investment" : {x:300, y: @height / 2}
     }
-
+    @sector_centers = {
+      "320" : {x:220, y: @height / 3},
+      "210" : {x:270, y: @height / 3},
+      "230" : {x:320, y: @height / 3},
+      "510" : {x:370, y: @height / 3},
+      "220" : {x:420, y: @height / 3},
+      "430" : {x:470, y: @height / 3},
+      "310" : {x:@width-430, y: @height / 3},
+      "150" : {x:@width-380, y: @height / 3},
+      "240" : {x:@width-330, y: @height / 3},
+      "160" : {x:@width-280, y: @height / 3},
+      "330" : {x:@width-230, y: @height / 3},
+      "120" : {x:@width-180, y: @height / 3},
+      "910" : {x:220, y: 2*(@height / 3)}
+      "410" : {x:220, y: 2*(@height / 3)},
+      "420" : {x:270, y: 2*(@height / 3)},
+      "530" : {x:320, y: 2*(@height / 3)},
+      "130" : {x:370, y: 2*(@height / 3)},
+      "920" : {x:420, y: 2*(@height / 3)},
+      "520" : {x:470, y: 2*(@height / 3)},
+      "998" : {x:@width-430, y: 2*(@height / 3)},
+      "250" : {x:@width-380, y: 2*(@height / 3)},
+      "110" : {x:@width-330, y: 2*(@height / 3)},
+      "700" : {x:@width-280, y: 2*(@height / 3)},
+      "140" : {x:@width-230, y: 2*(@height / 3)},
+      "600" : {x:@width-180, y: 2*(@height / 3)}
+    }
     # used when setting up force and
     # moving around nodes
     @layout_gravity = -0.01
@@ -79,13 +105,16 @@ class BubbleChart
     @circles = null
 
     # nice looking colors - no reason to buck the trend
-    @fill_color = d3.scale.category20()
-   #   .domain(["ODA-like", "Vague Official Finance", "OOF-like"])
-    #  .range(["#d84b2a", "#beccae", "#7aa25c"])
+    @fill_color = d3.scale.category20c()
 
     # use the max total_amount in the data as the max in the scale's domain
     max_amount = d3.max(@data, (d) -> parseInt(d.usd_defl))
-    @radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([2, 40])
+    @radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([2, 50])
+    
+    #Set names for CRS sectors
+    @sector = d3.scale.ordinal()
+      .domain(["110","120","130","140","150","160","210","220","230","240","250","310","320","330","410","420","430","510","520","530","600","700","910","920","998"])
+      .range(["Education","Health","Population Policies","Water and Sanitation","Government Services and Peace","Social","Transport","Communications","Energy","Banking","Support to Business","Agriculture, Fishing, and Forestry","Manufacturing and Mining","Trade and Tourism","Environmental","Women in Development","Multisector","Budget Support","Food","Commodity","Actions relating to debt","Emergency Aid and Recovery","Administrative Costs","NGO Support","Unspecified"])
     
     this.create_nodes()
     this.create_vis()
@@ -99,10 +128,12 @@ class BubbleChart
       node = {
         id: d.project_id
         radius: @radius_scale(parseInt(d.usd_defl))
-        value: d.usd_defl
+        value: parseInt(d.usd_defl)
         name: d.title
         group: d.flow_class
         year: d.year
+        recipient: d.recipient_condensed
+        sector: d.crs_sector
         x: Math.random() * 900
         y: Math.random() * 800
       }
@@ -133,7 +164,7 @@ class BubbleChart
       .attr("fill", (d) => @fill_color(d.group))
       .attr("stroke-width", 1)
       .attr("stroke", (d) => d3.rgb(@fill_color(d.group)).darker())
-      .attr("id", (d) -> "bubble_#{d.id}")
+      .attr("id", (d) -> "#{d.id}")
       .on("mouseover", (d,i) -> that.show_details(d,i,this))
       .on("mouseout", (d,i) -> that.hide_details(d,i,this))
 
@@ -173,9 +204,33 @@ class BubbleChart
           .attr("cx", (d) -> d.x)
           .attr("cy", (d) -> d.y)
     @force.start()
+    
+    max_amount = d3.max(@data, (d) -> parseInt(d.usd_defl))
+    min_amount = d3.min(@data, (d) -> parseInt(d.usd_defl))
+    exampleArr = [{"r":@radius_scale(d3.round(max_amount,-9)),"amount":@readable(d3.round(max_amount,-9))},{"r":@radius_scale(d3.round(max_amount/2,-9)),"amount":@readable(d3.round(max_amount/2,-9))},{"r":@radius_scale(d3.round(max_amount/6,-7)),"amount":@readable(d3.round(max_amount/6,-7))},{"r":@radius_scale(d3.round(min_amount,-2)),"amount":@readable(d3.round(min_amount,-2))}]       
+    @vis.selectAll("circle#example")
+      .data(exampleArr)
+      .enter().append("circle")
+      .attr("cx",(d) -> 0 + d.r)
+      .attr("cy",(d) -> 595- d.r)
+      .attr("r",(d) -> d.r)
+      .attr("fill","white")
+      .attr("style","stroke-dasharray: 2, 2")
+      .attr("stroke","black")
+      .attr("fill-opacity","1.0")
+      .attr("id","example")
+      .attr("stroke-opacity","0.5")
+    @vis.selectAll("text#example")
+      .data(exampleArr)
+      .enter().append("text")
+      .attr("x", (d) -> 0 + 2*d.r)
+      .attr("y", (d) -> 600-d.r)
+      .attr("id","example")
+      .text((d) ->return "-----$"+d.amount)
 
     this.hide_years()
     this.hide_flows()
+    this.hide_sectors()
 
   # Moves all circles towards the @center
   # of the visualization
@@ -198,6 +253,7 @@ class BubbleChart
 
     this.display_years()
     this.hide_flows()
+    this.hide_sectors()
 
   # move all circles to their associated @year_centers 
   move_towards_year: (alpha) =>
@@ -237,8 +293,9 @@ class BubbleChart
 
     this.display_flows()
     this.hide_years()
+    this.hide_sectors()
 
-  # move all circles to their associated @year_centers 
+  # move all circles to their associated @flow_centers 
   move_towards_flow: (alpha) =>
     (d) =>
       target = @flow_centers[d.group]
@@ -263,13 +320,56 @@ class BubbleChart
   hide_flows: () =>
     flows = @vis.selectAll(".flows").remove()
 
+  #Sector
+  display_by_sector: () =>
+    @force.gravity(@layout_gravity)
+      .charge(this.charge)
+      .friction(0.9)
+      .on "tick", (e) =>
+        @circles.each(this.move_towards_sector(e.alpha))
+          .attr("cx", (d) -> d.x)
+          .attr("cy", (d) -> d.y)
+    @force.start()
+
+    this.display_sectors()
+    this.hide_years()
+    this.hide_flows()
+
+  # move all circles to their associated @sector_centers 
+  move_towards_sector: (alpha) =>
+    (d) =>
+      target = @sector_centers[d.sector]
+      d.x = d.x + (target.x - d.x) * (@damper + 0.02) * alpha * 1.1
+      d.y = d.y + (target.y - d.y) * (@damper + 0.02) * alpha * 1.1
+
+  # Method to display sector titles
+  display_sectors: () =>
+    #sectors_x = {"Official":[160,@height*.62], "Unofficial":[240,@height*.62],"Military":[320,@height*.62]}
+    #sectors_data = d3.keys(sectors_x)
+    #sectors = @vis.selectAll(".sectors")
+      #.data(sectors_data)
+
+    #sectors.enter().append("text")
+      #.attr("class", "sectors")
+      #.attr("x", (d) -> sectors_x[d][0] )
+      #.attr("y", (d) -> sectors_x[d][1] )
+      #.attr("text-anchor", "middle")
+      #.text((d) -> d)
+
+  # Method to hide sector titles
+  hide_sectors: () =>
+    flows = @vis.selectAll(".sectors").remove()
+
 
   show_details: (data, i, element) =>
     d3.select(element).attr("stroke", "black")
     content = "<span class=\"tooltiptext\">Title:</span><span class=\"value\"> #{data.name}</span><br/>"
     content +="<span class=\"tooltiptext\">Amount:</span><span class=\"value\"> $#{@readable(data.value)}</span><br/>"
+    content +="<span class=\"tooltiptext\">Recipient:</span><span class=\"value\"> #{data.recipient}</span><br/>"
     content +="<span class=\"tooltiptext\">Year:</span><span class=\"value\"> #{data.year}</span><br/>"
-    content +="<span class=\"tooltiptext\">Flow Class:</span><span class=\"value\"> #{data.group}</span>"
+    content +="<span class=\"tooltiptext\">Flow Class:</span><span class=\"value\"> #{data.group}</span><br/>"
+    content +="<span class=\"tooltiptext\">Sector:</span><span class=\"value\"> #{@sector(data.sector)}</span></br>"
+    #content +="<span class=\"tooltiptext\">*Click to go to project record</span>"
     showTooltip(content,d3.event)
 
 
@@ -284,7 +384,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl>0 && d.flow_class!="" && d.flow_class!="Unset"
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
@@ -295,7 +395,7 @@ $ ->
   root.display_flow = () =>
     chart.display_by_flow()
   root.display_sector = () =>
-    #$('div').hide()
+    chart.display_by_sector()
   root.toggle_view = (view_type) =>
     if view_type == 'year'
       root.display_year()
@@ -306,7 +406,7 @@ $ ->
         if view_type == 'sector'
           root.display_sector()
         else
-        root.display_all()
+          root.display_all()
 
 
   page = 1
