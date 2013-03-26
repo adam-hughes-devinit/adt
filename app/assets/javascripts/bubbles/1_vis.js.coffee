@@ -31,6 +31,8 @@ class BubbleChart
       $('#bubbletooltip').html(content);
       $('#bubbletooltip').show();
       window.updatePosition(event);
+    open_project_in_new_window = (d) ->
+      window.open "/projects/" + d
       
 
     # locations the nodes will move towards
@@ -165,8 +167,10 @@ class BubbleChart
       .attr("stroke-width", 1)
       .attr("stroke", (d) => d3.rgb(@fill_color(d.group)).darker())
       .attr("id", (d) -> "#{d.id}")
+      .style("curser","pointer")
       .on("mouseover", (d,i) -> that.show_details(d,i,this))
       .on("mouseout", (d,i) -> that.hide_details(d,i,this))
+      .on("click", (d) -> open_project_in_new_window(d.id))
 
     # Fancy transition to make bubbles appear, ending with the
     # correct radius
