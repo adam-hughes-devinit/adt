@@ -49,4 +49,7 @@ Adt::Application.routes.draw do
   match '/caches', to: 'static_pages#caches', defaults: { format: 'json' }
 
   resources :exports
+
+  #openauth
+  match "/auth/:provider/callback", to: "sessions#create"
 end

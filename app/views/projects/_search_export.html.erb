@@ -78,14 +78,24 @@
         %>
         <br>
 
-        <%= simple_form_for(@export, method: :post,
+        <%= 
+          simple_form_for(@export, method: :post,
           url: exports_path,
-          html: { class: "form-horizontal"}) do |f| %>
+          html: { class: "form-horizontal"}) do |f| 
+        %>
 
-          <%= f.email_field :email, 
-            placeholder: 'enter email',
-            class: 'span3' %>
-          <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
+        <%
+          if current_user
+            placeholder_string = current_user.email
+          else
+            placeholder_string = 'enter email'
+          end
+        %>
+              
+        <%= f.email_field :email, 
+          placeholder: placeholder_string,
+          class: 'span3' %>
+        <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
       </p>
 
       </div>

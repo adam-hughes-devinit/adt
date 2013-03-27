@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325182340) do
+ActiveRecord::Schema.define(:version => 20130327192322) do
 
   create_table "caches", :force => true do |t|
     t.text     "text"
@@ -441,6 +441,8 @@ ActiveRecord::Schema.define(:version => 20130325182340) do
     t.string   "remember_token"
     t.integer  "owner_id"
     t.boolean  "admin",           :default => false
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
