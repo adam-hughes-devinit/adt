@@ -46,7 +46,6 @@ class Project < ActiveRecord::Base
   end
 
 
-
   has_and_belongs_to_many :exports
 
   has_many :comments, dependent: :destroy
@@ -447,9 +446,14 @@ class Project < ActiveRecord::Base
   end
 
   searchable do 
-    integer :id # only for searching
+
+    integer :id # for sorting
     double :usd_2009 # for sorting
     string :title # for sorting
+    string :donor_name # for sorting
+    string :recipient_condensed # fir sorting
+
+    # for text search:
     text :id
     text :title
     text :description
