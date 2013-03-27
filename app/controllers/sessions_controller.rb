@@ -8,8 +8,8 @@ skip_before_filter :signed_in_user
 	  auth =  request.env["omniauth.auth"]
     if auth
       user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
-      session[:user_id] = user.id
-      redirect_to root_url, notice: "Signed in!"
+      sign_in user
+      redirect_back_or root_url
     else
       user = User.find_by_email(params[:session][:email].downcase)
       if user && user.authenticate(params[:session][:password])
