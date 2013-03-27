@@ -69,27 +69,7 @@ class Project < ActiveRecord::Base
 
   #validates :title, presence: true
 
-  def robocode
-    # This bounces the project off of Robocoder
-    require 'open-uri'
-      robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{title}#{description.gsub(/\n/, ' ').gsub(/[^[\w\s]]/, '')[0..200]}")
-    begin
-      res = open(robocode_url){|io| io.read}
-      code = JSON.parse(res)
-      {
-        text: "#{code['guess_name']} (#{code["guess_code"]})",
-        code: "#{code['guess_name']}",
-        url: robocode_url,
-      }
-    rescue
-      {
-        text: "Oops, there was an error.",
-        code: "",
-        url: robocode_url,
-      }  
-    end
 
-  end
   
   # I'm adding string methods for these codes for Sunspot Facets
   belongs_to :status
@@ -605,5 +585,76 @@ class Project < ActiveRecord::Base
 
   def set_verified_to_raw_if_null
     self.verified = Verified.find_by_name("Raw") if verified.blank?
+  end
+
+  def robocode
+    # This bounces the project off of Robocoder
+    require 'open-uri'
+    code_text = "#{title} #{description}"
+    if code_text != " "
+      robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{code_text.gsub(/\n/, ' ').gsub(/[^[\w\s]]/, '')[0..200]}")
+      begin
+        res = open(robocode_url){|io| io.read}
+        code = JSON.parse(res)
+        {
+          text: "#{code['guess_name']} (#{code["guess_code"]})",
+          code: "#{code['guess_name']}",
+          url: robocode_url,
+        }
+      rescue
+        {
+          text: "Oops, there was an error.",
+          code: "",
+          url: robocode_url,
+        }  
+      end
+    else
+        {
+          text: "No text to robocode!",
+          code: "",
+          url: ""
+        } 
+    end 
+  end
+
+  def update_geocodes
+    #
+    # Needs validation
+    #
+    # require 'open-uri'
+    # this_projects_geocodes_url= URI.encode("https://services1.arcgis.com/" +
+    # "4AWkjqgSzd8pqxQA/arcgis/rest/services/all_cdf_africa_geo/FeatureServer/" +
+    # "query?f=json&layerDefs={'0':'Project_ID=#{id}'}")
+    # p response = JSON.parse(open(this_projects_geocodes_url){|io| io.read})
+
+
+    # codes = response["layers"][0]["features"]
+    # if ! codes.blank?
+    #   codes.map{|f|
+    #     {
+    #       latitude: "#{f["Latitude"]}",
+    #       longitude: "#{f["Longitude"]}",
+    #       geoname: "#{f["Geoname"]}",
+    #       geoname_id: "#{f["Geoname_id"]}",
+    #       adm1: "#{f["ADM1"]}",
+    #       adm2: "#{f["ADM2"]}",
+    #       adm3: "#{f["ADM3"]}",
+    #       adm4: "#{f["ADM4"]}",
+    #       adm5: "#{f["ADM5"]}",
+    #       adm1_id: "#{f["ADM1_ID"]}",
+    #       adm2_id: "#{f["ADM2_ID"]}",
+    #       adm3_id: "#{f["ADM3_ID"]}",
+    #       adm4_id: "#{f["ADM4_ID"]}",
+    #       adm5_id: "#{f["ADM5_ID"]}",
+    #       precision: "#{f["Precision"]}", 
+    #       timestamp: "#{f["Timestamp"]}", 
+    #       source: "#{f["Source"]}",
+    #       source_url: "#{f["sourceURL"]}", 
+    #       fid: "#{f["FID"]}",
+    #     }
+    #   }
+    # end
+
+    "not implemented"
   end
 end

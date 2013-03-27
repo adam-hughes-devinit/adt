@@ -13,6 +13,7 @@ include AggregatesHelper
 
 	def aggregator
 		@aggregator_locals = make_aggregator_locals
+    @value_delimiter = VALUE_DELIMITER
 		render 'aggregate_exporter_page'
 	end
 

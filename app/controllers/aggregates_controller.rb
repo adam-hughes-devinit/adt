@@ -95,8 +95,8 @@ include AggregatesHelper
 				 		
 				 		" LEFT OUTER JOIN oda_likes on modified_flow_classes.oda_like_best_id = oda_likes.id	"+
 				 		
-		 				" LEFT OUTER JOIN sectors on p.sector_id = sectors.id"+
-		 				" LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
+		 				"LEFT OUTER JOIN crs_sectors on p.crs_sector_id = crs_sectors.id
+		 				LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
 		 				LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
 		 				LEFT OUTER JOIN statuses on p.status_id = statuses.id
 		 				LEFT OUTER JOIN intents on p.intent_id = intents.id		 				

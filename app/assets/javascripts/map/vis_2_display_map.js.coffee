@@ -43,7 +43,8 @@ gather_inputs = () ->
 	if verifieds.length > 0 
 		input_params.verified = verifieds
 	if sectors.length > 0 
-		input_params.sector_name = sectors
+		# UPDATE FOR CRS SECTORS 
+		input_params.crs_sector_name = sectors
 	if flow_types.length > 0 
 		input_params.flow_type = flow_types 
 	if active_years?.length > 0

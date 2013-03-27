@@ -2,7 +2,7 @@
 <%= form_for Project.new, html: {class: ""} do |f| %>
   <%= f.select :oda_like, options_for_select(["All Flow Classes"] + OdaLike.all.collect {|o| o.name}, "All Flow Classes"), {}, {multiple: true, class: "span2 vis_input", id: "oda_like_input", selected_value: "All Flow Classes"}  %>
   <%= f.select :verified, options_for_select(["All Verified Levels"] + Verified.all.collect {|o| o.name}, "All Verified Levels"), {}, {class: "span2 vis_input", multiple: true, id: "verified_input"}  %>
-  <%= f.select :sector, options_for_select(["All Sectors"] + Sector.all.collect {|o| o.name}, "All Sectors"), {},{class: "span2 vis_input", multiple: true, id: "sector_input"}  %>
+  <%= f.select :crs_sector, options_for_select(["All Sectors"] + CrsSector.all.collect {|o| o.name}, "All Sectors"), {},{class: "span2 vis_input", multiple: true, id: "sector_input"}  %>
   <%= f.select :flow_type, options_for_select(["All Flow Types"] + FlowType.all.collect {|o| o.name}, "All Flow Types"), {}, {class: "span2 vis_input", multiple: true, id: "flow_type_input"}  %>
   <%= f.select :year, options_for_select(["All Years"] + (2000..2011).to_a.reverse! , "All Years"), {}, {class: "span2 vis_input", multiple: true, id: "year_input"}  %>
 <% end %>
