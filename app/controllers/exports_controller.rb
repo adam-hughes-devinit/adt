@@ -39,5 +39,4 @@ class ExportsController < ApplicationController
       redirect_to session[:return_to], :flash => {:error => "Sorry. Invalid email address."}
     end
   end
-
 end

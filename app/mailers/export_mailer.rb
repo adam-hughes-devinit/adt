@@ -59,6 +59,5 @@ class ExportMailer < ActionMailer::Base
     @export.mailed_status = true
     @export.save
 
-
   end
 end
