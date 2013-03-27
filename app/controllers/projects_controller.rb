@@ -175,10 +175,17 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
     def correct_owner? 
       project_owner = Project.find(params[:id]).owner 
-      unless project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner))
+      if ( 
+          (project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
+          (current_user_is_aiddata && project_owner.nil?)
+        )
+        true
+      else
         flash[:notice] = "Only #{project_owner.name} can edit this record."
         redirect_to Project.find(params[:id])
+
       end
+
 
     end
     def set_owner
