@@ -17,6 +17,10 @@ module ProjectExporterHeaders
 
     csv_header_string = ""
     csv_header_array.each {|v| csv_header_string << "\"#{v}\"," }
+
+    Scope.all.each do |scope|
+        csv_header_string << "is_#{scope.symbol},"
+    end
     #Get rid of trailing comma
     csv_header_string.chomp!(',')
 

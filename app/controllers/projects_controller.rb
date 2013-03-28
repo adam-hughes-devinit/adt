@@ -20,11 +20,13 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
         render json: @projects
       end
       format.csv do
+        p params.inspect
         if params[:page]
           @paginate = true
         else
           @paginate = false
         end
+
    			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
         @ids_for_export = @projects.map { |p| p.id }
@@ -68,6 +70,9 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     @flow_class = @project.flow_class = FlowClass.new
     @loan_detail = @project.loan_detail = LoanDetail.new
 
+
+    warn_that_data_is_frozen
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @project }
@@ -76,6 +81,9 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
   # GET /Projects/1/edit
   def edit
+
+    warn_that_data_is_frozen
+    
     @project = Project.find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
@@ -211,5 +219,9 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
       expire_fragment(%r{.*index.*}) 
     end
 
+
+    def warn_that_data_is_frozen
+      flash[:danger] = "This dataset is <b>frozen</b> until release! <b>Don't add or edit</b> any data."
+    end
 
 end

@@ -26,9 +26,12 @@ class ExportMailer < ActionMailer::Base
 
     # add is_x scope variable for users to search by scope after exporting
     header = Project.csv_header
-    Scope.all.each do |scope|
-      header << ", is_scope_#{scope.symbol}?"
-    end
+
+    # MOVED TO lib/project_exporter_headers.rb -- now included in CSV HEADER
+    #  
+    # Scope.all.each do |scope|
+    #   header << ", is_scope_#{scope.symbol}?"
+    # end
     export_file.puts header
 
     #This is to update the progress bar on the export page
@@ -39,10 +42,11 @@ class ExportMailer < ActionMailer::Base
 
     @export.projects.each_with_index do |project, index|
       text =  project.csv_text
-      # include the boolean value for is_x scope variable from above
-      Scope.all.each do |scope|
-        text << ", #{project.scope.include?(scope.symbol.to_sym)}"
-      end
+      # MOVED TO lib/project_exporters.rb -- this is included in CSV TEXT
+      # # include the boolean value for is_x scope variable from above
+      # Scope.all.each do |scope|
+      #   text << ", #{project.scope.include?(scope.symbol.to_sym)}"
+      # end
       export_file.puts text
 
       if index % 10 == 0

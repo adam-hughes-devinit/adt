@@ -4,7 +4,7 @@
       Export as CSV (<%= pluralize(@search.total, "Project") %>)
     </a>
     <% if current_user_is_aiddata %>
-      <%= link_to "Quick Export (CSV)", "#{@current_url.gsub(/projects/, 'projects.csv')}", class: 'btn' %> 
+      <%= link_to "Quick Export (CSV)", "#{URI.encode( @current_url.gsub(/projects/, 'projects.csv') )}", class: 'btn' %> 
       <i>(AidData only)</i>
     <% end %>
 

@@ -111,7 +111,10 @@ module ProjectExporters
     csv_array.each do |v| 
         csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," 
     end
-    
+    Scope.all.each do |scope|
+        csv_text_string << "#{self.scope.include?(scope.symbol.to_sym) ? 1 : 0 },"
+    end
+
     # get rid of that trailing comma
     csv_text_string.chomp!(',')
 
