@@ -10,17 +10,23 @@ module ProjectExporterHeaders
     exchange_rates_used usd_defl start_actual start_planned end_actual
     end_planned recipient_count recipient_condensed recipient_cow_code
     recipient_oecd_code recipient_oecd_name recipient_iso3 recipient_iso2
-    recipient_un_code recipient_imf_code is_commercial is_commercital 
+    recipient_un_code recipient_imf_code 
     debt_uncertian line_of_credit is_cofinanced loan_type interest_rate 
     maturity grace_period
     grant_element]
 
+    # Removed at brians request 3-28 is_commercial is_commercital 
+    
     csv_header_string = ""
     csv_header_array.each {|v| csv_header_string << "\"#{v}\"," }
 
-    Scope.all.each do |scope|
-        csv_header_string << "is_#{scope.symbol},"
-    end
+    # Brian says he only wants is_official
+    # Scope.all.each do |scope|
+    #     csv_header_string << "is_#{scope.symbol},"
+    # end
+
+    csv_header_string << "is_official_finance"
+
     #Get rid of trailing comma
     csv_header_string.chomp!(',')
 

@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController  
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
+
+before_filter :lock_editing_in_production, except: [:index, :show]
+
 include SearchHelper
 
 caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata}" }
@@ -26,6 +29,10 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
         else
           @paginate = false
         end
+
+        # Fer troubleshooting
+        # flash[:warning] = "#{YAML::dump params}"
+        # redirect_to projects_path
 
    			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
@@ -181,6 +188,15 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
   private
 
+    def lock_editing_in_production
+      warn_that_data_is_frozen
+      if Rails.env.production?
+        redirect_to Project.find(params[:id])
+      else
+        flash[:notice] = "In production, redirects to #{project_path Project.find(params[:id])}"
+      end
+    end
+
     def correct_owner? 
       project_owner = Project.find(params[:id]).owner 
       if ( 
@@ -221,7 +237,7 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
 
     def warn_that_data_is_frozen
-      flash[:danger] = "This dataset is <b>frozen</b> until release! <b>Don't add or edit</b> any data."
+      flash[:danger] = "This dataset is <b>frozen</b> until release! <b>You can't add or edit</b> any data."
     end
 
 end

@@ -94,8 +94,7 @@ module ProjectExporters
     #{cached_recipients.map(&:iso2).join("; ")}
     #{cached_recipients.map(&:un_code).join("; ")}
     #{cached_recipients.map(&:imf_code).join("; ")}
-    #{is_commercial_string}
-    #{is_commercial ? 1 : 2}
+
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
@@ -105,15 +104,24 @@ module ProjectExporters
     #{grace_period}
     #{grant_element} ]
 
+    # Removed 3-28 at brians request
+    #{is_commercial_string}
+    #{is_commercial ? 1 : 2}
+
     #TODO fix loan_type line above ^ this is a hack because loan_type is designed wrong
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
     csv_array.each do |v| 
         csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," 
     end
-    Scope.all.each do |scope|
-        csv_text_string << "#{self.scope.include?(scope.symbol.to_sym) ? 1 : 0 },"
-    end
+
+    # Brian says he only wants is_official_finance
+    #
+    # Scope.all.each do |scope|
+    #     csv_text_string << "#{self.scope.include?(scope.symbol.to_sym) ? 1 : 0 },"
+    # end
+
+    csv_text_string << "#{ self.scope.include?(:official_finance) ? 1 : 0 }"
 
     # get rid of that trailing comma
     csv_text_string.chomp!(',')

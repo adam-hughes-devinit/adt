@@ -214,7 +214,7 @@ class Project < ActiveRecord::Base
 
   def loan_type_name
     if loan_detail.nil? || loan_detail.loan_type.nil?
-      "Unset"
+      ""
     else
       loan_detail.loan_type.name
     end
@@ -222,7 +222,7 @@ class Project < ActiveRecord::Base
 
   def interest_rate
     if loan_detail.nil?
-      "Unset"
+      ""
     else
       loan_detail.interest_rate
     end
@@ -244,7 +244,7 @@ class Project < ActiveRecord::Base
 
   def maturity
     if loan_detail.nil?
-      "Unset"
+      ""
     else
       loan_detail.maturity
     end
@@ -268,7 +268,7 @@ class Project < ActiveRecord::Base
 
   def grace_period
     if loan_detail.nil?
-      "Unset"
+      ""
     else
       loan_detail.grace_period
     end
@@ -290,7 +290,7 @@ class Project < ActiveRecord::Base
 
   def grant_element
     if loan_detail.nil?
-      "Unset"
+      ""
     else
       loan_detail.grant_element
     end
