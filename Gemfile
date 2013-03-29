@@ -16,6 +16,8 @@ gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'pg'
+gem 'haml'
+gem 'multipart-post'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

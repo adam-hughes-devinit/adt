@@ -1,0 +1,26 @@
+<div class='well'>
+	<h3>Files:</h3>
+	<ul id='files' class='unstyled'>
+		<li>Loading...</li>
+	</ul>
+
+	<%= javascript_include_tag 'files/index' %>
+
+	<%= form_tag "#{project_path @project}/files", :multipart => true do %>
+	  <%= file_field_tag 'file' %>
+	  <%= submit_tag 'Add file' %>
+	<% end %>
+	
+	<% if current_user_is_aiddata %>
+		<p>
+			<b>
+				AidData users
+			</b>
+			may manage these docs at 
+			<a href="http://aiddata-fs.herokuapp.com/#/china/<%= @project.id %>">
+				AidDataFS
+			</a>
+		</p>
+	<% end %>
+
+</div>

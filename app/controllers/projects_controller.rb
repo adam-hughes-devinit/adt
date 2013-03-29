@@ -191,7 +191,7 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     def lock_editing_in_production
       warn_that_data_is_frozen
       if Rails.env.production?
-        http_basic_authenticate_with name:'aiddata_china_admin', password: 'a1dd4t4_admin'
+        redirect_to Project.find(params[:id])
       else
         flash[:notice] = "In production, redirects to #{project_path Project.find(params[:id])}"
       end
@@ -209,9 +209,8 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
         redirect_to Project.find(params[:id])
 
       end
-
-
     end
+    
     def set_owner
       if signed_in?
         current_user.owner 
