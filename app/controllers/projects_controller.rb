@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
 
-before_filter :lock_editing_in_production, except: [:index, :show]
+before_filter :lock_editing_except_for_admins, except: [:index, :show]
 
 include SearchHelper
 
@@ -188,13 +188,15 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
   private
 
-    def lock_editing_in_production
+    def lock_editing_except_for_admins
       warn_that_data_is_frozen
-      if Rails.env.production?
+
+      if !current_user_is_aiddata_admin
         redirect_to Project.find(params[:id])
       else
-        flash[:notice] = "In production, redirects to #{project_path Project.find(params[:id])}"
+        flash[:notice] = "You have access because you are an AidData admin."
       end
+
     end
 
     def correct_owner? 

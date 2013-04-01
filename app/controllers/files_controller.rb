@@ -1,4 +1,5 @@
 class FilesController < ApplicationController
+skip_before_filter :signed_in_user, only: [:create]
 before_filter :is_project_owner?, only: [:edit, :destroy]
 
 	AIDDATA_FS ='http://aiddata-fs.herokuapp.com/files/china'
@@ -87,7 +88,7 @@ before_filter :is_project_owner?, only: [:edit, :destroy]
 	private
 
     def correct_owner? 
-      project_owner = Project.find(params[:id]).owner 
+      project_owner = Project.find(params[:project_id]).owner 
       if ( 
           (project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
           (current_user_is_aiddata && project_owner.nil?)
