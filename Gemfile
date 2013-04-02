@@ -18,6 +18,7 @@ gem 'delayed_job_active_record'
 gem 'pg'
 gem 'haml'
 gem 'multipart-post'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
