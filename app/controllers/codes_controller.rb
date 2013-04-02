@@ -55,7 +55,7 @@ class CodesController < ApplicationController
 
 
     respond_to do |format|
-      if @object.update_attributes(params[@class_type.downcase.gsub(/\s/, '_').to_sym])
+      if @object.update_attributes(params[@class_name.underscore.downcase.to_sym])
        
         reindex_and_recache_by_associated_object(@object)
         

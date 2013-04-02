@@ -1,6 +1,21 @@
 module ProjectExporters
 
+  # AKA Project#csv_text
+    
   def csv_text
+    
+    # Maintain the Project#csv_text API as to not break code.
+
+     Rails.cache.fetch("project_csv_text/#{self.id}") do
+          self.create_csv_text
+     end
+  end
+
+  def expire_csv_text
+    Rails.cache.delete("project_csv_text/#{self.id}")
+  end
+
+  def create_csv_text
     project_sources = {}
     project_sources[:all] = sources.map{|s| 
      "#{s.url}" +

@@ -33,13 +33,11 @@ before_filter :is_project_owner?, only: [:edit, :destroy]
 			uploaded_io = params[:file]
 			url = URI.parse("#{AIDDATA_FS}/#{params[:project_id]}")	
 			
-			p url
+			# p url
 
-			p "SENDING FILE"
-			
-			response_body = '{}'
+			# p "SENDING FILE"
 
-			p this_file =  uploaded_io.tempfile
+			# p this_file =  uploaded_io.tempfile
 
 			File.open(this_file, 'r') do |file|
 				

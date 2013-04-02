@@ -10,7 +10,7 @@
 
 		function print_data(data) {
 			var target = $('#files')
-			if(data.contents.length > 0) {
+			if(data["contents"] && data.contents.length > 0) {
 				menu = data.contents.map(function(d) { return "<li id='"+d.type+"-"+d.key+"' class='document'>" +
 							"<i class='"+ (d.type == 'document' ? 'icon-file' : 'icon-folder-close') + "'></i>" +
 							"<a href='http://aiddata-fs.herokuapp.com/documents/"+ d.key + "' onclick=\"App.navigate_to('"+d.type+"','"+d.key+"')\">" +

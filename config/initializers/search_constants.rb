@@ -15,7 +15,7 @@
       {sym: :role_name, name: "Organization Role", multiple: true},
       {sym: :organization_type_name, name: "Organization Type", multiple: true},
       {sym: :organization_name, name: "Organization Name", multiple: true},
-      {sym: :owner_name, name: "Record Owner"},
+      {sym: :owner_name, name: ""},
       {sym: :line_of_credit_string, name: "Line of Credit"},
       {sym: :crs_sector_name, name: "CRS Sector"},
       {sym: :year_uncertain_string, name: "Year Uncertain"},
@@ -30,7 +30,7 @@
       {sym: :maturity_band, name: "Maturity"},
       {sym: :grace_period_band, name: "Grace Period"},
       {sym: :grant_element_band, name: "Grant Element"},
-      {sym: :scope, name: "Scope", multiple: true}
+      {sym: :scope_names, name: "Scope", multiple: true}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     

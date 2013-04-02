@@ -28,8 +28,6 @@ class Project < ActiveRecord::Base
     :donor_id, :owner_id, :intent_id, :crs_sector_id
 
   before_save :set_verified_to_raw_if_null
-  # before_save :deflate_values MOVED TO TRANSACTION MODEL
-  after_save :cache!
   after_destroy :remake_scope_files
 
   def remake_scope_files
@@ -532,6 +530,16 @@ class Project < ActiveRecord::Base
     return scope_array
   end
 
+  def scope_names
+    scope_array = []
+    Scope.all.each do |scope|
+      # Scope_hash is implemented in Scope#includes_project?
+      if scope.includes_project? self
+        scope_array << scope.name
+      end
+    end
+    scope_array
+  end
   #test_scope should be a symbol. Check the SCOPE constant for possibilites
   def contains_scope?(test_scope)
     scope_array = scope

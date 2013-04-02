@@ -11,7 +11,7 @@ Adt::Application.routes.draw do
     resources :files # RDM 3_26_2013
   end
 
-  resources :organizations, :users, :scopes
+  resources :organizations, :users, :scopes, :exports
 
   # limited access
   resources :comments, only: [:create, :destroy, :show]
@@ -50,9 +50,5 @@ Adt::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
 
   match '/ajax', to: 'static_pages#ajax'
-  
-  # Caches -- for sharing the whole dataset
-  match '/caches', to: 'static_pages#caches', defaults: { format: 'json' }
 
-  resources :exports
 end

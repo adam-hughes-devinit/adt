@@ -6,8 +6,9 @@ before_filter :lock_editing_except_for_admins, except: [:index, :show]
 
 include SearchHelper
 
-caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata}" }
-caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata}?#{c.params.inspect}" }
+caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata ? "signed_in" : "not_signed_in"}" }
+caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata ? "signed_in" : "not_signed_in"}?#{c.params.inspect}" }
+cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
   def index
    
@@ -36,9 +37,7 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
    			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
-        @ids_for_export = @projects.map { |p| p.id }
-        @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
-")				
+        @csv_data = @projects.map{|p| p.csv_text } .join("\n")				
 				
         @csv_header = Project.csv_header
 
@@ -101,7 +100,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
   # POST /Projects.json
   def create
     @project = Project.new(params[:project])
-    strip_tags_from_description
 
     respond_to do |format|
       if @project.save
@@ -113,16 +111,12 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
       end
     end
 
-    expire_this_cache
-
-
   end
 
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
-
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
@@ -141,8 +135,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     method: :post)
     flash[:success] = "Project updated. #{undo_link}"
 
-    # defined below
-    expire_this_cache
 
   end
 
@@ -152,7 +144,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
   	
   
     @project = Project.find(params[:id])
-    @cache = Cache.find(params[:id])
     
     # The big problem here was that in @project.destroy, 
     # all the accessory objects were destroyed _first_,
@@ -181,9 +172,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     ),
     method: :post)
     flash[:notice] = "Project deleted! #{undo_link}"
-    # defined below
-    expire_this_cache
-
   end
 
   private
@@ -220,22 +208,7 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
         Organization.find_by_name("AidData")
       end
     end
-
-    def strip_tags_from_description
-      @project.description = view_context.strip_tags(@project.description)
-      
-      # hack when data uploading
-      # if @project.title.blank?
-      #   @project.title = "Unset"
-      # end
-
-    end
   
-    def expire_this_cache
-      expire_fragment(%r{projects/#{params[:id]}.*})
-      expire_fragment(%r{.*index.*}) 
-    end
-
 
     def warn_that_data_is_frozen
       flash[:danger] = "This dataset is <b>frozen</b> until release! <b>You can't add or edit</b> any data."
