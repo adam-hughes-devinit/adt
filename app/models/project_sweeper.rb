@@ -17,11 +17,13 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   end
  
   private
+
   def expire_cache_for(project)
     # expire the Show page(s) no that it is changed
     expire_fragment(%r{projects/#{project.id}.*})
     # Expire the index page now that a project has changed
     expire_fragment(%r{.*index.*}) 
+    
     # expire the CSV text
     project.expire_csv_text
   end
