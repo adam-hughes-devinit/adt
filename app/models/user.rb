@@ -67,10 +67,11 @@ class User < ActiveRecord::Base
 
   def self.create_with_omniauth(auth)
     user = User.new
-    user.uid = auth["uid"]
-    user.provider = auth["provider"]
-    user.name = auth["first_name"] + " " + auth["last_name"]
-    user.email = email
+    user.uid = auth['uid']
+    user.provider = auth['provider']
+    user.name = auth['info']['name']
+    user.email = auth['info']['email']
+
     user.save(validate: false)
     #return
     user

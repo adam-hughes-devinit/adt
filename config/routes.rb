@@ -40,9 +40,9 @@ Adt::Application.routes.draw do
   get '/dashboard', to: 'static_pages#dashboard'
 
   match '/signup', to: 'users#new'
-  match '/signin', to: 'sessions#new'
+  match '/login', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
-
+  match '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
   
   # Caches -- for sharing the whole dataset

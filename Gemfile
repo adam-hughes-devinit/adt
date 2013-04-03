@@ -18,6 +18,9 @@ gem 'delayed_job_active_record'
 gem 'pg'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-linkedin'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
