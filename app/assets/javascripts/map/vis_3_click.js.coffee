@@ -132,7 +132,7 @@ make_sector_graph = (overlay, active_country) ->
 		window.vis_config.years = [(window.vis_config.years[0]-1), window.vis_config.years[0], (Number(window.vis_config.years[0])+1)]
 	years = window.vis_config.years
 
-	sectors = active_country.data.map((d) -> d.sector_name).getUnique()
+	sectors = active_country.data.map((d) -> d.crs_sector_name).getUnique()
 	
 	stackLayers = []  
 	sectors.forEach((sector) ->
@@ -140,7 +140,7 @@ make_sector_graph = (overlay, active_country) ->
 		# years is defined at the top -- range 2000 to 201x
 		years.forEach((year) -> 
 			pointData = active_country.data.filter((d) -> 
-				Number(d.year) == year && d.sector_name == sector)
+				Number(d.year) == year && d.crs_sector_name == sector)
 			point = {x: year, y: d3.sum(pointData, (d)-> d.usd_2009)}
 			sectorLayer.push(point)
 		)
@@ -149,7 +149,7 @@ make_sector_graph = (overlay, active_country) ->
 
 	yearSectorStack = d3.layout.stack()(stackLayers)
 	sectorSums = d3.nest() 
-		.key((d) -> d.sector_name)
+		.key((d) -> d.crs_sector_name)
 		.rollup((data) ->{ "value" : d3.sum(data,(d) -> d.usd_2009), "count" : d3.sum(data, (d) ->d.count) } )
 		.entries(active_country.data)
 	# for building scales...
@@ -200,15 +200,35 @@ make_sector_graph = (overlay, active_country) ->
 				.style("padding-top", "5px")
 				.style("background-color", "transparent")
 	# get the body content, then load it
-	headers_html = "<div style='text-align:left;color:white;'><p style='font-size:1.4em;'><b>Sectors:</b></div>" 
+	headers_html = "
+		<table style='font-size:#{window.vis_config.bigger_font_size}px'>
+			<thead>
+				<tr>
+					<th style='color:white;margin-right:4px;'>Sector</th>
+					<th style='color:white;margin-right:4px;'>Amount</th>
+					<th style='color:white;margin-right:4px;'>Projects</th>
+				</tr>
+			</thead>
+			<tbody>"
 	sectorSums.forEach((s) ->
-		headers_html += "<p style='text-align:left;font-size:#{window.vis_config.bigger_font_size}px;color:#{window.vis_config.c_sector(s.key)}'>" +
-			"<b>#{s.key}</b>:<br> -- "+
-			"$#{window.vis_config.nicemoney(Math.round(s.values.value))} ("+ 
-			"<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&sector_name=#{s.key}'>" +
-			"#{s.values.count} #{"project".pluralize(s.values.count)}</a>)</p>"
-		)
+		headers_html += "
+			<tr style='padding:3px 3px;border-top: 1px solid #888;'>
+				<td style='color:#{window.vis_config.c_sector(s.key)}'>
+					#{s.key}
+				</td>
+				<td>
+					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&sector_name=#{s.key}'>
+						$#{window.vis_config.nicemoney(Math.round(s.values.value))}
+					</a>
+				</td>
+				<td>
+					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&sector_name=#{s.key}'>
+						#{s.values.count} 
+					</a>
+				</td>
+			</tr>")
 
+	headers_html += "</tbody></table>"
 	# load the headers 
 	headers.html(headers_html)
 	# paint the area chart
@@ -299,7 +319,7 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 		.domain([0, ((top_projects_number-1)/2), top_projects_number-1])
 		.range(['#2A5C0B', '#55760f','#808f12'])
 
-	$.post(top_projects_path, top_projects_params, (top_projects_data) -> 
+	$.get(top_projects_path, top_projects_params, (top_projects_data) -> 
 		#console.log(top_projects_data)
 		plot_top_projects(top_projects_data, sectorSums, c_projects, sector_area_x, sector_area_y, area_chart)
 		create_top_projects_box(active_country, top_projects_data, "top_projects_body", top_projects_height, c_projects)
@@ -341,7 +361,7 @@ plot_top_projects = (projects, sectorSums, c_projects, sector_area_x, sector_are
 
 	point_stack_height = (project) -> 
 	# UH oh, what if there are 2 in the same year?
-		stack_object = yearSectorStack[sectors.indexOf(project.sector_name)][project.year-d3.min(@years)]
+		stack_object = yearSectorStack[sectors.indexOf(project.crs_sector_name)][project.year-d3.min(@years)]
 		if stack_object
 			stack_object.y0 + stack_object.y 
 		else
@@ -353,7 +373,7 @@ plot_top_projects = (projects, sectorSums, c_projects, sector_area_x, sector_are
 			.attr('cy', (d) ->  sector_area_y(d.usd_2009))
 			.attr('r', '0px')
 			.attr('fill', (d,i) -> c_projects(i))
-			.attr('stroke','black') #(d) ->  c_sector(d.sector_name))
+			.attr('stroke','black') #(d) ->  c_sector(d.crs_sector_name))
 			.attr('stroke-weight', 1)
 			.transition()
 				.duration(500)
@@ -539,9 +559,9 @@ window.click = () ->
 	
 	active_country = get_active_country(this) # returns .iso2 and .name
 	overlay = drop_overlay()
-	window.active_params.get = 'sector_name,year'
+	window.active_params.get = 'crs_sector_name,year'
 	window.active_params.recipient_iso2 = active_country.iso2
-	$.post("aggregates/projects", window.active_params, (json) ->
+	$.get("aggregates/projects", window.active_params, (json) ->
 		active_country.data = json
 		#console.log(active_country)
 		make_sector_graph(overlay, active_country)

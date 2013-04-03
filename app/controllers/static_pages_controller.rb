@@ -21,6 +21,10 @@ include AggregatesHelper
 		render file: '/static_pages/_analyze_js'
 	end
 
+  def csv_health
+    render 'csv_health'
+  end
+
   def downloads
     render file: '/static_pages/_download_data'
   end

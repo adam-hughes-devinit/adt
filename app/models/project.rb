@@ -64,7 +64,7 @@ class Project < ActiveRecord::Base
     }.to_json
   end
 
-  #validates :title, presence: true
+  validates :donor, presence: true
 
 
   

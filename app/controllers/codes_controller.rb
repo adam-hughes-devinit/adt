@@ -109,7 +109,7 @@ class CodesController < ApplicationController
 			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
 					end
 	  		end
-
+        Sunspot.reindex!(projects)
 	  	end
 	  end
 

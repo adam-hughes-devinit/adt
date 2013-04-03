@@ -137,7 +137,7 @@ function load_data_preview() {
 	$("#data_preview td").text("--")
 	$("#data_preview_note").html("... Loading your preview ... ")
 	api_call = build_api_params()
-	$.post('/aggregates/projects?'+api_call, function(json) {
+	$.get('/aggregates/projects?'+api_call, function(json) {
 	//console.log(data)
 	//json = $.parseJSON(data)
 

@@ -60,6 +60,7 @@ module ProjectExporters
     
     cached_recipients = []
     geopoliticals.each {|g| g.recipient ? cached_recipients.push(g.recipient) : nil }
+    
     csv_array = %W[
     #{id}
     #{donor_name}
@@ -87,7 +88,7 @@ module ProjectExporters
     #{oda_like_name}
     #{oda_like ? oda_like.code : '' }
     #{intent_name}
-    #{intent ? intent.code : '' }
+    #{intent ? intent.code : '0' }
     #{active_string}
     #{active ? 1 : 2}
     #{project_sources[:factiva].join("; ")}
@@ -109,7 +110,6 @@ module ProjectExporters
     #{cached_recipients.map(&:iso2).join("; ")}
     #{cached_recipients.map(&:un_code).join("; ")}
     #{cached_recipients.map(&:imf_code).join("; ")}
-
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
