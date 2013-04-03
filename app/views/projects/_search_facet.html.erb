@@ -24,8 +24,8 @@
 							value="<%= row.value %>"
 							class="search_check boolean <%= f[:sym].to_s %>"
 							<% if (
-									@current_url.gsub(/\+/, ' ').include?("#{f[:sym].to_s}[]=#{row.value}")||
-									@current_url.gsub(/\+/, ' ').include?("#{f[:sym].to_s}=#{row.value}")
+									@current_url_human_readable.include?("#{f[:sym].to_s}[]=#{row.value}")||
+									@current_url_human_readable.include?("#{f[:sym].to_s}=#{row.value}")
 									) %>
 								checked='true'
 							<% end %>

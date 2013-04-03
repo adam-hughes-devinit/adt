@@ -1,9 +1,14 @@
-<% @current_url = URI::unescape(
-	"#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/(projects)?/, '')}")
-	.gsub(/page=\d+&*/, '') %>
+<% 
+	current_url_dirty = "#{request.protocol}#{request.host_with_port}/projects#{request.fullpath.gsub(/\/(projects)?/, '')}"
+	@current_url =  current_url_dirty
+		.gsub(/page=\d+&*/, '')
+	@current_url_human_readable = URI.decode(@current_url).gsub(/([^\s])\+/, '\1 ')
+
+	%>
 <% @joiner = @current_url.index("?") ? "&" : "?" 
 	%>
-<% @current_url_without_scope = @current_url.gsub(/&?scope[^=]*=[a-z_]+/, '') %>
+<% @current_url_without_scope = @current_url.gsub(/\&?scope_names[^=]*=.+[\&\?]?/, '') %>
+
 
 <div class="row-fluid" id='project-facets'>
 	<div class="span12">

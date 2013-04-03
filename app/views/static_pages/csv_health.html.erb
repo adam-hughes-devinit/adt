@@ -1,0 +1,43 @@
+<% provide(:title, 'CSV Health') %>
+<% provide(:first_header, "CSV Health Tester") %>
+
+<%
+	query_string = "#{request.fullpath.gsub(/\/(csv_health)?\??/, '')}"
+
+%>
+
+
+
+<p>
+	To test a CSV, enter query string from a search url below:
+</p>
+
+<p>
+	<b>
+		http://china.aiddata.org/projects?
+	</b>
+	<input style='display:inline;width:50%' type='text' id='path' value='<%= query_string %>'/>
+	<span class='btn btn-primary' onclick="csv_test()">
+		Test
+	</span>
+</p>
+
+<h2 id='header'></h2>
+
+<table class='table sortable'>
+	<thead>
+		<tr>
+			<th>Column Name</th>
+			<th># Unique </th>
+			<th># Populated</th>
+			<th># Empty</th>		
+			<th>Min. Length of Value</th>
+			<th>Avg. Length </th>
+			<th>Max. Length </th>
+		</tr>
+	</thead>
+	<tbody id='data'>
+	</tbody>
+</table>
+
+<%= javascript_include_tag "csv_test/index" %>

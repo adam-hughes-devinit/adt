@@ -1,63 +1,4 @@
-		SCOPES_INACTIVE = [
-	# Official Finance: 
-  #		- Active
-  #   - Checked
-  #		- ODA-like, OOF-like, Vague (Official Finance)
-  #		- NOT Cancelled or Suspended
-						{sym: :official_finance, 
-						 name: "Official Finance",
-						 with_and: {oda_like_name: ["OOF-like", "ODA-like", "Vague (Official Finance)"],
-												 active_string: "Active",
-												 verified_name: "Checked"},
-						 without: {status_name: ["Cancelled", "Suspended"]},
-						 with_or: {none: nil}
-						},
-	# Unofficial Finance
-	#		- Active
-	#		- CA, JV, FDI, NGO, Vague (COM)
-	#   - Checked
-						{sym: :unofficial_finance, 
-						 name: "Unofficial Flows",
-						 with_and: {oda_like_name: ["JV +Gov", "JV -Gov","CA +SOE", "CA -SOE", "FDI +Gov", "FDI -Gov", "NGO Aid", "Vague (Com)"],
-												 active_string: "Active",
-												 verified_name: "Checked"},
-						 without: {none: nil},
-						 with_or: {none: nil}
-						},
-	# Military
-	#		 - Military
-	#		 - Active
-	#		 - Checked
-						{sym: :military, 
-						 name: "Military Flows", 
-						 with_and: {oda_like_name: ["Military"],
-												 active_string: "Active",
-												 verified_name: "Checked"},
-						 without: {none: nil},
-						 with_or: {none: nil}
-						},
-	
-	# Cancelled
-	#		 - Cancelled
-	#		 - Active
-	#		 - Checked	
-						{sym: :cancelled, 
-						 name: "Cancelled Activities", 
-						 with_and: {status_name: "Cancelled",
-												 active_string: "Active",
-												 verified_name: "Checked"},
-						 without: {none: nil},
-						 with_or: {none: nil}
-						},
-	# Inactive and Suspicious
-	#		 - Suspicious OR Inactive
-						{sym: :suspicious_or_inactive, 
-						 name: "Suspicious or Inactive Records",
-						 with_and: {none: nil},
-						 without: {none: nil},
-						 with_or: {active_string: "Inactive",
-  									 verified_name: "Suspicious"}
-						}]
+
   
   FACETS = [
       {sym: :flow_type_name, name: "Flow Type"},
@@ -74,7 +15,7 @@
       {sym: :role_name, name: "Organization Role", multiple: true},
       {sym: :organization_type_name, name: "Organization Type", multiple: true},
       {sym: :organization_name, name: "Organization Name", multiple: true},
-      {sym: :owner_name, name: "Record Owner"},
+      {sym: :owner_name, name: ""},
       {sym: :line_of_credit_string, name: "Line of Credit"},
       {sym: :crs_sector_name, name: "CRS Sector"},
       {sym: :year_uncertain_string, name: "Year Uncertain"},
@@ -89,7 +30,7 @@
       {sym: :maturity_band, name: "Maturity"},
       {sym: :grace_period_band, name: "Grace Period"},
       {sym: :grant_element_band, name: "Grant Element"},
-      {sym: :scope, name: "Scope", multiple: true}
+      {sym: :scope_names, name: "Scope", multiple: true}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     

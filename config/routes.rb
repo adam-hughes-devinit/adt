@@ -5,17 +5,23 @@ Adt::Application.routes.draw do
   :source_types, :document_types, :organization_types, :currencies, 
   :flag_types, :loan_types
 
-  # limited access
-  # get "/projects?scope=official_finance", to: "projects#index", as: 'projects'
+  
  
-  resources :projects, :organizations, :users
+  resources :projects do
+    resources :files # RDM 3_26_2013
+  end
+
+  resources :organizations, :users, :scopes, :exports
+
+  # limited access
   resources :comments, only: [:create, :destroy, :show]
   resources :flags, only: [:create, :destroy, :show]
   
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships
-  resources :scopes
+
+
   match '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
   match '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
@@ -38,15 +44,13 @@ Adt::Application.routes.draw do
 	get '/analyze', to: "static_pages#analyze"
   get '/downloads', to: 'static_pages#downloads'
   get '/dashboard', to: 'static_pages#dashboard'
+  get '/csv_health', to: 'static_pages#csv_health'
 
   match '/signup', to: 'users#new'
   match '/login', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
-  
-  # Caches -- for sharing the whole dataset
-  match '/caches', to: 'static_pages#caches', defaults: { format: 'json' }
 
   resources :exports
 

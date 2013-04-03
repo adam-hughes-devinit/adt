@@ -11,7 +11,7 @@
         <%= if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(f.flaggable_type)
               f.flaggable_type.downcase.a_or_an 
             else
-              #splits up the flaggable_type to something human-readable
+              # splits up the flaggable_type to something human-readable
               f.flaggable_type.gsub(/(?<=[a-z])(?=[A-Z])/, ' ').downcase
             end %>. <span style="color:
             

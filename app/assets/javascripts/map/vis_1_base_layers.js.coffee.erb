@@ -36,13 +36,8 @@ lay_down_base_layers = () ->
 		window.vis_config = 
 			label_green: d3.rgb("#819014") # This is green for the overlay label
 			c_sector: (sector_name) ->
-				sector_color_map = 
-					<%= Sector.all.map{ |s| 
-					"'#{s.name}' : '#{s.color || '#444' }'" }
-					.join(
-					"
-					").html_safe %>
-					'Unset' : '#ccc'
+				sector_color_map = {}
+				( sector_color_map[c.name] = c.color for c in  CRS_SECTOR_COLORS)
 				sector_color_map[sector_name]
 			nicemoney: (amount) ->
 				if 100 > amount 

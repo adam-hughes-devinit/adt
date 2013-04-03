@@ -1,6 +1,21 @@
 module ProjectExporters
 
+  # AKA Project#csv_text
+    
   def csv_text
+    
+    # Maintain the Project#csv_text API as to not break code.
+
+     Rails.cache.fetch("project_csv_text/#{self.id}") do
+          self.create_csv_text
+     end
+  end
+
+  def expire_csv_text
+    Rails.cache.delete("project_csv_text/#{self.id}")
+  end
+
+  def create_csv_text
     project_sources = {}
     project_sources[:all] = sources.map{|s| 
      "#{s.url}" +
@@ -45,6 +60,7 @@ module ProjectExporters
     
     cached_recipients = []
     geopoliticals.each {|g| g.recipient ? cached_recipients.push(g.recipient) : nil }
+    
     csv_array = %W[
     #{id}
     #{donor_name}
@@ -72,7 +88,7 @@ module ProjectExporters
     #{oda_like_name}
     #{oda_like ? oda_like.code : '' }
     #{intent_name}
-    #{intent ? intent.code : '' }
+    #{intent ? intent.code : '0' }
     #{active_string}
     #{active ? 1 : 2}
     #{project_sources[:factiva].join("; ")}
@@ -94,8 +110,6 @@ module ProjectExporters
     #{cached_recipients.map(&:iso2).join("; ")}
     #{cached_recipients.map(&:un_code).join("; ")}
     #{cached_recipients.map(&:imf_code).join("; ")}
-    #{is_commercial_string}
-    #{is_commercial ? 1 : 2}
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
@@ -105,13 +119,25 @@ module ProjectExporters
     #{grace_period}
     #{grant_element} ]
 
+    # Removed 3-28 at brians request
+    #{is_commercial_string}
+    #{is_commercial ? 1 : 2}
+
     #TODO fix loan_type line above ^ this is a hack because loan_type is designed wrong
     csv_text_string = ""
     # I think it brought the line breaks etc. into the strings -->
     csv_array.each do |v| 
         csv_text_string << "\"#{v.gsub(/"/, "'").gsub(/[\n\r\t\s]+/, ' ')}\"," 
     end
-    
+
+    # Brian says he only wants is_official_finance
+    #
+    # Scope.all.each do |scope|
+    #     csv_text_string << "#{self.scope.include?(scope.symbol.to_sym) ? 1 : 0 },"
+    # end
+
+    csv_text_string << "#{ self.scope.include?(:official_finance) ? 1 : 0 }"
+
     # get rid of that trailing comma
     csv_text_string.chomp!(',')
 

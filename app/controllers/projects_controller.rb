@@ -1,10 +1,14 @@
 class ProjectsController < ApplicationController  
 before_filter :set_owner, only: [:create, :new]
-before_filter :correct_owner?, only: [:edit]
+before_filter :correct_owner?, only: [:edit, :destroy]
+
+before_filter :lock_editing_except_for_admins, except: [:index, :show]
+
 include SearchHelper
 
-caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata}" }
-caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata}?#{c.params.inspect}" }
+caches_action :show, :cache_path => Proc.new { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata ? "signed_in" : "not_signed_in"}" }
+caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_user_is_aiddata ? "signed_in" : "not_signed_in"}?#{c.params.inspect}" }
+cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
   def index
    
@@ -20,16 +24,20 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
         render json: @projects
       end
       format.csv do
+        p params.inspect
         if params[:page]
           @paginate = true
         else
           @paginate = false
         end
+
+        # Fer troubleshooting
+        # flash[:warning] = "#{YAML::dump params}"
+        # redirect_to projects_path
+
    			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
-        @ids_for_export = @projects.map { |p| p.id }
-        @csv_data = Cache.where("id in(?)", @ids_for_export ).map{|c| c.text } .join("
-")				
+        @csv_data = @projects.map{|p| p.csv_text } .join("\n")				
 				
         @csv_header = Project.csv_header
 
@@ -68,6 +76,9 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     @flow_class = @project.flow_class = FlowClass.new
     @loan_detail = @project.loan_detail = LoanDetail.new
 
+
+    warn_that_data_is_frozen
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @project }
@@ -76,6 +87,9 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
 
   # GET /Projects/1/edit
   def edit
+
+    warn_that_data_is_frozen
+    
     @project = Project.find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
@@ -86,7 +100,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
   # POST /Projects.json
   def create
     @project = Project.new(params[:project])
-    strip_tags_from_description
 
     respond_to do |format|
       if @project.save
@@ -98,16 +111,12 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
       end
     end
 
-    expire_this_cache
-
-
   end
 
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
-
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
@@ -126,8 +135,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     method: :post)
     flash[:success] = "Project updated. #{undo_link}"
 
-    # defined below
-    expire_this_cache
 
   end
 
@@ -137,7 +144,6 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
   	
   
     @project = Project.find(params[:id])
-    @cache = Cache.find(params[:id])
     
     # The big problem here was that in @project.destroy, 
     # all the accessory objects were destroyed _first_,
@@ -166,39 +172,46 @@ caches_action :index, :cache_path => Proc.new { |c| "projects/index/#{current_us
     ),
     method: :post)
     flash[:notice] = "Project deleted! #{undo_link}"
-    # defined below
-    expire_this_cache
-
   end
 
   private
 
-    def correct_owner? 
-      project_owner = Project.find(params[:id]).owner 
-      unless signed_in? && current_user.owner.present? && (current_user.owner == project_owner)
-        flash[:notice] = "Only #{project_owner.name} can edit this record."
+    def lock_editing_except_for_admins
+      warn_that_data_is_frozen
+
+      if !current_user_is_aiddata_admin
         redirect_to Project.find(params[:id])
+      else
+        flash[:notice] = "You have access because you are an AidData admin."
       end
 
     end
-    def set_owner
-      @new_owner = current_user.owner if signed_in?
+
+    def correct_owner? 
+      project_owner = Project.find(params[:id]).owner 
+      if ( 
+          (project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
+          (current_user_is_aiddata && project_owner.nil?)
+        )
+        true
+      else
+        flash[:notice] = "Only #{project_owner.name} can edit this record."
+        redirect_to Project.find(params[:id])
+
+      end
     end
-
-    def strip_tags_from_description
-      @project.description = view_context.strip_tags(@project.description)
-      
-      # hack when data uploading
-      # if @project.title.blank?
-      #   @project.title = "Unset"
-      # end
-
+    
+    def set_owner
+      if signed_in?
+        current_user.owner 
+      else 
+        Organization.find_by_name("AidData")
+      end
     end
   
-    def expire_this_cache
-      expire_fragment(%r{projects/#{params[:id]}.*})
-      expire_fragment(%r{.*index.*}) 
-    end
 
+    def warn_that_data_is_frozen
+      flash[:danger] = "This dataset is <b>frozen</b> until release! <b>You can't add or edit</b> any data."
+    end
 
 end

@@ -1,8 +1,8 @@
 <% 
 	
-	def scope_to(scope_label, scope_code)
-		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope[]=' + scope_code}"
-		if @scope && @scope.include?(scope_code)
+	def scope_to(scope_label, scope_name)
+		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope_name}"
+		if @scope && @scope.include?(scope_name)
 			"<b>#{scoped_url}</b>".html_safe
 		else
 			scoped_url.html_safe
@@ -11,19 +11,19 @@
 	
 %> 
 <p>
-		<% if params[:scope] %>
+		<% if params[:scope_names] %>
 			<% 
 				# it's possible that params[:scope] was set in custom_search
 				# by default_to_official_finance,
 				# but if that happened, it isn't in the URL
 
-				@scope = params[:scope]
+				@scope = params[:scope_names]
 			%>
 		<% end %>
 
 		<b>Scopes:</b> 
 		<% Scope.all.each do |s| %>
-			<%= scope_to s.name, s.symbol %> | 
+			<%= scope_to s.name, s.name %> | 
 		<% end %> 
 		
 		<% if @scope %>

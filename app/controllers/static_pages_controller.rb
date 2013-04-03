@@ -13,12 +13,17 @@ include AggregatesHelper
 
 	def aggregator
 		@aggregator_locals = make_aggregator_locals
+    @value_delimiter = VALUE_DELIMITER
 		render 'aggregate_exporter_page'
 	end
 
 	def analyze
 		render file: '/static_pages/_analyze_js'
 	end
+
+  def csv_health
+    render 'csv_health'
+  end
 
   def downloads
     render file: '/static_pages/_download_data'
@@ -40,11 +45,7 @@ include AggregatesHelper
   	render text: @data
   end
   
-  def caches
-  	page = params[:page] || 1 
-  	text = Cache.where("id != 0").limit(50).offset(((page.to_i-1)*50)).map { |c| c.text }
-  	render json: text
-  end
+
   
   private
   

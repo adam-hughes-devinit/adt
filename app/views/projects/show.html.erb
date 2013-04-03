@@ -6,7 +6,7 @@
 	<%  if !@project.active %>
 		<h1 style="display:inline;text-align:center;" id="inactive-project">-- Inactive --</h1>
 	<% end %>
-	<% if signed_in? && current_user.owner == @project.owner %>
+	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user.owner ==  Organization.find_by_name("AidData")) %>
 			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p> 
 			<p class='delete-project-link'><b><%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?" %></b></p>
 	<% end %>

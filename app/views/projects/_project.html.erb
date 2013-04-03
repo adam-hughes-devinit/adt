@@ -34,7 +34,9 @@
 
 		
 		</ul>
-		<div class="span3" style="background-color:#dad0d0"><p> What can go here?</p><br><br><br><br><br><br></div>
+		<div class="span3" >
+			<%= render 'project_files' %>
+		</div>
 	</div>
 	<div class="project-box span10">
 		<h3>Description:</h3>
@@ -46,7 +48,7 @@
 </div>
 <div class="row">
 	<div class="project-categories project-box span5">
-		<h3>Codes & Markers: </h3>
+		<h3>Codes &amp; Markers: </h3>
 		<ul>
 			<!-- ODALIKE has been removed !-->
 			<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "VisibleFlowClass", heading: "Flow Class"} %>
@@ -71,7 +73,7 @@
 				<li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
 				<li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
 			</ul>
-      <span style="color:#999"><i> All three code rounds are only visible to 
+      		<span class='muted' ><i> All three code rounds are only visible to 
           AidData-affiliated users.</i></span>
 		<% end %>
 	</div>

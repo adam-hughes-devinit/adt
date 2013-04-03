@@ -1,0 +1,47 @@
+<div class='well'>
+	<h3>Files:</h3>
+	<ul id='files' class='unstyled'>
+		<li>Loading...</li>
+	</ul>
+
+	<script>
+		var url = window.location + "/files"
+		$.get(url, print_data)
+
+		function print_data(data) {
+			var target = $('#files')
+			if(data["contents"] && data.contents.length > 0) {
+				menu = data.contents.map(function(d) { return "<li id='"+d.type+"-"+d.key+"' class='document'>" +
+							"<i class='"+ (d.type == 'document' ? 'icon-file' : 'icon-folder-close') + "'></i>" +
+							"<a href='http://aiddata-fs.herokuapp.com/documents/"+ d.key + "' onclick=\"App.navigate_to('"+d.type+"','"+d.key+"')\">" +
+							d.name + 
+							"</a>" +
+							" </li>"}).join("") 
+			}
+			else {
+				menu = "<li>(No files yet)</li>" 
+			}
+			target.html(menu)
+
+		}
+	</script>
+
+	<%= form_tag "#{project_path @project}/files", :multipart => true do %>
+	  <%= file_field_tag 'file' %>
+	  <%= submit_tag 'Add file' %>
+	<% end %>
+	
+	<% if current_user_is_aiddata %>
+		<p class='label label-notice'>
+			<b>
+				AidData users:
+			</b>
+			<br>
+			manage these docs at 
+			<a href="http://aiddata-fs.herokuapp.com/#/files/china/<%= @project.id %>">
+				AidDataFS
+			</a>
+		</p>
+	<% end %>
+
+</div>
