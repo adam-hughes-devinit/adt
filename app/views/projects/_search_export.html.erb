@@ -7,10 +7,9 @@
     <% if current_user_is_aiddata %>
       <%= link_to "Quick Export (AidData only)", 
         "#{@current_url.gsub(/projects/, 'projects.csv')}", class: 'btn' %> 
+      <%= link_to "Analyze this CSV", 
+        "#{@current_url.gsub(/projects/, 'csv_health')}", class: 'btn btn-info' %> 
     <% end %>
-    <%= link_to "Analyze this CSV", 
-      "#{@current_url.gsub(/projects/, 'csv_health')}", class: 'btn btn-info' %> 
-    </a>
 
 
 

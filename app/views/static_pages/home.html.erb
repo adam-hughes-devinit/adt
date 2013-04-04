@@ -1,69 +1,142 @@
 <% provide(:title, 'Home') %>
-<% provide(:first_header, "Chinese Development Finance") %>
 
-<ul class="nav nav-tabs" id="homeTab">
-  <li class="active"><a href="#map">Visualize</a></li>
-  <li><a href="#chart">Analyze</a></li>
-  <li><a href="#projects">All Projects</a></li>
-  <li><a href="#aggregates">Aggregate Data</a></li>
-  <li><a href="#research">Research and Papers</a></li>
-  <li><a href="#documentation">API Documentation</a></li>
-  <li><a href="#activity-feed">Recent Activity</a></li>
-  <li><a href="#download-data">Download Data</a></li>
-</ul>
+<%= javascript_include_tag "holder/holder" %>
 
+<%
+	header_content = <<EOS
 
-	<div class="tab-content">
-		<div class="tab-pane active" id="map">
-			<h2>Visualize</h2>
-      		<%= render partial: 'static_pages/map_js', 
-                 locals: {total_projects: @total_projects} %>
+<div class='container-fluid'>
+	<div class='row'><br><br></div>
+	<div class='row-fluid'>
+		<div id='home_carousel' class='span9 carousel slide'>
+		  <ol class='carousel-indicators'>
+		    <li data-target='#home_carousel' data-slide-to='0' class='active'></li>
+		    <li data-target='#home_carousel' data-slide-to='1'></li>
+		    <li data-target='#home_carousel' data-slide-to='2'></li>
+		  </ol>
+		  <div class='carousel-inner'>
+		    <div class='active item'>
+	    	    <img src='holder.js/900x500'>
+		    	<div class='carousel-caption'>
+		    		<h4>Your Home Page</h4>
+		    		<p>Guess what, we're starting on the new home page!!</p>
+		    	</div>
+		    </div>
+		    <div class='item'>
+		    	<img src='holder.js/900x500'>
+		    	<div class='carousel-caption'>
+		    		<h4>Random Picture</h4>
+		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
+		    	</div>
+		    </div>
+		    <div class='item'>
+		    	<img src='holder.js/900x500'>
+		    	<div class='carousel-caption'>
+		    		<h4>Random Picture</h4>
+		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
+		    	</div>
+		    </div>
+		  </div>
+		  <a class='carousel-control left' href='#home_carousel' data-slide='prev'>&lsaquo;</a>
+		  <a class='carousel-control right' href='#home_carousel' data-slide='next'>&rsaquo;</a>
 		</div>
-		<div class="tab-pane" id="chart">
-			<h2>Analyze</h2>
-			<%= # render partial: 'static_pages/analyze_js' 
-			%>
+		<div class='span3 home_thumbnails'>
+			<ul class='thumbnails'>
+				<li>
+					<a href="#" class="thumbnail">
+						<h4>How to Use the Data</h4>
+						<img src='holder.js/250x250'>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="thumbnail">
+						<h4>Help us Improve the Data</h4>
+						<img src='holder.js/250x250'>
+					</a>
+				</li>
+			</ul>
 		</div>
-		<div class="tab-pane" id="projects">
-			<h2> Search Projects </h2>
-			<%= render "projects/search" unless Rails.env.test? %>
-		</div>
-	
-		<div class="tab-pane" id="aggregates" >
-			<%= render partial: "aggregate_exporter", locals: @aggregator_locals %>
-		</div>
-	
-		<div class="tab-pane" id="research">...</div>
-		
-		<div class="tab-pane" id="documentation">
-			<% # This is copied from README
-			%>
-      <%= render "documentation", handlers: [:md] %>
-		</div>
-		<div class="tab-pane" id="activity-feed">	
-			<h2>Recent Activity</h2>
-			<%= render 'shared/feed' %>
-			<%= link_to "See All Recent Activity...", versions_path %>
-		</div>
-
-    <div class="tab-pane" id="download-data" style='text-align:center'>
-			<%= render partial: "download_data" %>
-    </div>
 	</div>
 
 </div>
 
+EOS
 
+%>
 
-<script>
-  $(function () {
-		$('#homeTab a').click(function (e) {
-			if ($(this).attr('href').substr(0,1) != '/') 
-				{
-					e.preventDefault();
-					}
-			$(this).tab('show');
-		})
-		$('#homeTab a:first').tab('show');
-	})
-</script>
+<% provide(:header_content, header_content.html_safe) %>
+
+<div class='row-fluid home_thumbnails'>
+	<ul class='thumbnails '>
+		<li class='span4'>
+			<a href="#" class="thumbnail">
+				<h4>See the Big Picture &rarr;</h4>
+				<img src='holder.js/400x200'>
+				
+			</a>
+		</li>
+		<li class='span4'>
+			<a href="#" class="thumbnail">
+				<h4>Country-Level Perspective &rarr;</h4>
+				<img src='holder.js/400x200'>
+			</a>
+		</li>
+		<li class='span4'>
+			<a href="#" class="thumbnail">
+				<h4>Project-Level Data &rarr;</h4>
+				<img src='holder.js/400x200'>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class='row-fluid well' id='home_media'>
+	<div class='span4'>
+		<h3>
+			In the News:
+		</h3>
+		<ul class='unstyled'>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+		</ul>
+	</div>
+	<div class='span4'>
+		<h3>
+			Recent Tweets:
+		</h3>
+		<ul class='unstyled'>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+		</ul>
+	</div>
+	<div class='span4'>
+		<h3>
+			Publications:
+		</h3>
+		<ul class='unstyled'>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+			<li>
+				<a href='#'>Exciting News article featuring our work!</a>
+			</li>
+		</ul>
+	</div>
+</div>
