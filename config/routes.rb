@@ -44,7 +44,7 @@ Adt::Application.routes.draw do
 	get '/analyze', to: "static_pages#analyze"
   get '/downloads', to: 'static_pages#downloads'
   get '/dashboard', to: 'static_pages#dashboard'
-  get '/csv_health', to: 'static_pages#csv_health'
+  get '/csv_analyzer', to: 'static_pages#csv_analyzer'
 
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'

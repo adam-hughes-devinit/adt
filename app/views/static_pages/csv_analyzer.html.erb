@@ -1,5 +1,4 @@
 <% provide(:title, 'CSV Health') %>
-<% provide(:first_header, "CSV Health Tester") %>
 
 <%
 	query_string = "#{request.fullpath.gsub(/\/(csv_health)?\??/, '')}"
@@ -7,9 +6,9 @@
 %>
 
 
-
+<h2> CSV Analyzer</h2>
 <p>
-	To test a CSV, enter query string from a search url below:
+	To test a CSV, enter query string from a search URL below:
 </p>
 
 <p>
@@ -40,4 +39,4 @@
 	</tbody>
 </table>
 
-<%= javascript_include_tag "csv_test/index" %>
+<%= javascript_include_tag "csv_analyzer/index" %>
