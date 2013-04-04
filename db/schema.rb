@@ -435,6 +435,8 @@ ActiveRecord::Schema.define(:version => 20130401205645) do
     t.string   "remember_token"
     t.integer  "owner_id"
     t.boolean  "admin",           :default => false
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

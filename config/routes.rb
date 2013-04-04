@@ -47,9 +47,13 @@ Adt::Application.routes.draw do
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
 
   match '/signup', to: 'users#new'
-  match '/signin', to: 'sessions#new'
+  match '/login', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
-
+  match '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
 
+  resources :exports
+
+  #openauth
+  match "/auth/:provider/callback", to: "sessions#create"
 end

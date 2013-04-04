@@ -33,6 +33,10 @@ include AggregatesHelper
     render 'dashboard'
   end
 
+  def signup
+    render file: '/static_pages/signup'
+  end
+
 
   def ajax
   	require 'open-uri'
