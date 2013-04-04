@@ -1,57 +1,82 @@
- <header class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
+ <header> 
+  <div class="navbar">    
+    <div class="navbar-inner">
+      <div class="container">
 
-          <% # heading logo %>
-          <a href="http://aiddata.org" id='logo' style="position:absolute">
-            <%= image_tag "adt.png" %>
-          </a>
+        
+        <a href="http://aiddata.org" id='logo' style="position:absolute">
+          <%= image_tag "adt.png" %>
+        </a>
 
-          <nav>
-          	<% if Rails.env.development? %>
-          		<p class="pull-right" style="margin:5px;color:#fcc;font-size:20px"><b>DEVELOPMENT</b></p>
-          	<% end %>
-            <ul class="nav pull-right">
-                  <li><%= link_to "Home", root_path %> </li>
-                  <!-- Links for anyone !-->
-                  <%= render 'layouts/project_menu' %>
-                  
-                  <% if signed_in? %>
-                    <% # Links for signed-in users %>
+        <nav>
+        	
 
-                    
 
-                    <li id="fat-menu" class="dropdown">
-                       
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                          Users <b class="caret"></b>
-                       </a>
-                      <ul class="dropdown-menu">
-                        <li><%= link_to "My Profile", current_user %></li>
-                        <li><%= link_to "All Users", users_path %></li>
-                        <li class="divider"></li>
-                        <li>
-                          <%= link_to "Sign out", signout_path, method: "delete" %>
-                        </li>
-                      </ul>
+          <ul class="nav pull-right">
+                <li><%= link_to "Home", root_path %> </li>
+                <li><%= link_to "Team", "#" %> </li>
+                <li><%= link_to "Methods", "#" %> </li>
+                <li class="dropdown">
+                  <a href="#" class='dropdown-toggle' data-toggle='dropdown'>
+                    Data
+                    <i class='caret'></i>
+                  </a>
+                  <ul class='dropdown-menu'>
+                    <li><%= link_to "Visualize", "#" %></li>
+                    <li><%= link_to "Search", projects_path %></li>
+                    <li><%= link_to "Download", '#' %></li>
+                  </ul>
+                </li>
+                <li><%= link_to "Publications", "#" %> </li>
+                <li><%= link_to "Media", "#" %> </li>
+                <li><%= link_to "Contact", "#" %> </li>
+ 
+                <li><a href='#'>Old menu items &rarr;</a></li>
+                <!-- Links for anyone !-->
+                <%= render 'layouts/project_menu' %>
+                
+                <% if signed_in? %>
+                  <% # Links for signed-in users %>
 
-                    </li>
-                  
-                  <% else %>
 
-                    <% # Links for non-signed-in-users %>
-                    <li><%= link_to "Create account", signup_path %></li>
-                    <li><%= link_to "Sign in", signin_path %></li>
-                  
-                  <% end %>
-            </ul>
-          </nav>
+                  <li id="fat-menu" class="dropdown">
+                     
+                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Users <b class="caret"></b>
+                     </a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to "My Profile", current_user %></li>
+                      <li><%= link_to "All Users", users_path %></li>
+                      <li class="divider"></li>
+                      <li>
+                        <%= link_to "Sign out", signout_path, method: "delete" %>
+                      </li>
+                    </ul>
 
-        </div>
+                  </li>
+                
+                <% else %>
+
+                  <% # Links for non-signed-in-users %>
+                  <li><%= link_to "Create account", signup_path %></li>
+                  <li><%= link_to "Sign in", signin_path %></li>
+                
+                <% end %>
+          </ul>
+          <% if Rails.env.development? %>
+            <p class="pull-right" style="margin:5px;color:#fcc;font-size:20px"><b>DEVELOPMENT</b></p>
+          <% end %>
+        </nav>
+
       </div>
-    </header>
-<div class='row' id='image_and_header'>
-  <%= image_tag "aiddata_background.jpg", id: "background-image"%>
-  <h1 id="first_header"> <%= yield(:first_header) %></h1>
+    </div>
+  </div>
+
+
+<div id="header_content" class='container-fluid'> 
+   <%= yield(:header_content) %>
+   <%= yield(:first_header) %>
 </div>
 
+
+</header>

@@ -1,17 +1,9 @@
 namespace :projects do
 	desc "Recache all projects and total cache"
 	task :recache => :environment do
+		
+		p "Project caching has been removed -- try `rake caches:wipe` to reset cached pages and data."
 	
-		progress_bar = ProgressBar.new(Project.count)
-		
-		p "Caching individual projects now"
-
-		Project.all.each do |p| 
-			p.cache! now: true
-			progress_bar.increment!
-		end
-		
-		p "Finished Rechaching."
 	end
 
 	desc "Recalculate Grant Element for all Loan Details"

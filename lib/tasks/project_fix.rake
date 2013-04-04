@@ -49,7 +49,6 @@ cofinanced_ids = [
 		CACHE_ALL = false
 		Project.where("id in (?)", cofinanced_ids).each{ |p| p.update_attribute :is_cofinanced, true}
 		CACHE_ALL = true
-		Project.first.cache!
 		p "finished applying."
 	end
 
@@ -61,7 +60,6 @@ cofinanced_ids = [
 		CACHE_ALL = false
 		Project.where("year is null").each{ |p| p.update_attribute :year_uncertain, true}
 		CACHE_ALL = true
-		Project.first.cache!
 		p "finished applying."
 	end
 end

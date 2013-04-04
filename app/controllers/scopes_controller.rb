@@ -126,10 +126,10 @@ class ScopesController < ApplicationController
 					end
 
 					if !this_c.valid?
-						alert+= this_c.errors.full_messages.join ", "
+						alert += this_c.errors.full_messages.join ", "
 					end
 
-					# alert += "#{this_c} #{!this_c.blank?} <br>"
+					alert += "#{this_c.inspect} #{!this_c.blank?} <br>"
 					this_c
 
 				end
@@ -147,7 +147,7 @@ class ScopesController < ApplicationController
 					flash[:success] = 'Saved scope and channels'
 					return true
 				else
-					flash[:error] = scope.errors.full_messages
+					flash[:error] = "#{alert} <br> #{scope.errors.full_messages.join "," }"
 					flash[:notice] = 'Saved scope, not channels'
 					return false
 				end

@@ -6,9 +6,12 @@ class Scope < ActiveRecord::Base
 	:scope_channels, :scope_channels_attributes
 
 	after_save :remake_scopes_hash
-	after_save :recache_and_reindex_projects_for_this_scope
-	
 	after_destroy :remake_scopes_hash
+
+	after_save :touch_projects
+	after_destroy :touch_projects
+	
+	
 
 
 	def channels
@@ -130,76 +133,22 @@ class Scope < ActiveRecord::Base
 	end
 
 
-	def recache_and_reindex_projects_for_this_scope
+	def touch_projects
 		start = Time.new
 
-		p "Recache and reindex projects for #{self.name} at #{start}"
-	#end
-
-	# def dummy
+		p "Touch projects for #{self.name} at #{start}"
 	 	
-		
-	 	# reindex_projects_for_this_scope -- reindex ones that used to have this scope
-	 	
-	 	projects_which_had_this_scope = Project.search do
-	 		with :scope, self.symbol
-	 		# I hope I don't get screwed for doing it this way.
-	 		paginate per_page: 10**5
-	 	end.results
-
-	 	p "Start reindexing #{projects_which_had_this_scope.count} projects that already have this scope after #{ (Time.new - start).round(2) } seconds"
-	 	projects_which_had_this_scope.each do |p|
-	 		Sunspot.index!(p)
-	 		# committed below
-	 	end
-
-		
-		# check other projects -- and reindex if they match this scope
-		
-		if projects_which_had_this_scope.blank?
-			all_other_projects = Project.all
-		else		
-		 	all_other_projects = Project.where("id not in (?)", projects_which_had_this_scope.map(&:id))
-		end
-
-	 	p "Start reindexing #{all_other_projects.count } other projects after #{ (Time.new - start).round(2) } seconds"
-	 	
-	 	all_other_projects.each do |p|
-	 		# This is only efficient bc Project#scope draws on the in-memory cache
-	 		if p.scope.include? self.symbol.to_sym
-	 			Sunspot.index!(p)
-	 			# committed below
-	 		end
-	 		
-	 	end
-	 	p "Commit the reindexes after #{ (Time.new - start).round(2) } seconds"
-
-
-		# recache_projects_for_this_scope
-		
-		Sunspot.commit
-		
-		projects_which_now_have_this_scope = Project.search do
-	 		with :scope, self.symbol
-	 		paginate per_page: 10**5
-	 	end.results
-
-	 	p "Start recaching #{projects_which_now_have_this_scope.count } projects with this scope after #{ (Time.new - start).round(2) } seconds"
-	 	projects_which_now_have_this_scope.each do |p|
-	 		p.cache! now: true, include_files: false
-	 	end
+		Project.all.each{ |p| p.delay.save }
 
 	 	# recache files
 	 	p "Start remaking the Scope files after #{ (Time.new - start).round(2) } seconds"
-	 	Scope.all.each do |s|
-	 		p "Starting cache task for  #{s.symbol.to_sym} #{Time.new}"
-	 		Project.all.sample.cache_files(s.symbol.to_sym)
-	 	end
+
+	 	Project.first.cache_files
+
 	 	p "Finished after #{ (Time.new - start).round(2) } seconds"
 
 	end
-	handle_asynchronously :recache_and_reindex_projects_for_this_scope
-
+	
 
 	
 

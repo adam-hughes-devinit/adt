@@ -3,8 +3,8 @@ class Flag < ActiveRecord::Base
     :flaggable_type, :owner_id, :owner, :source, :updated_at
   
   default_scope order: "updated_at"	
-  after_destroy :recache_and_reindex_project
-  after_save :recache_and_reindex_project
+  after_destroy :touch_project
+  after_save :touch_project
 
   belongs_to :flag_type
   belongs_to :flaggable, polymorphic: true
@@ -25,8 +25,8 @@ class Flag < ActiveRecord::Base
     end
   end
 
-  def recache_and_reindex_project
-    Sunspot.index(project)
-    project.cache!
+  def touch_project
+    # touch wasn't forcing reindex!
+    project.save!
   end
 end
