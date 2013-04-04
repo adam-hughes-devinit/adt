@@ -1,0 +1,5 @@
+<%= simple_form_for(:session, url: sessions_path, html: { class: "form-horizontal row-fluid"} )  do |f| %>
+	<%= f.input :email, html: {class: "span4"} %>
+	<%= f.input :password, html: {class: "span4"} %>
+  <%= f.button :submit, "Sign in", {class: "btn-primary", align: "center"} %>
+<% end %>
