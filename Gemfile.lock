@@ -83,9 +83,9 @@ GEM
     fattr (2.2.1)
     ffi (1.6.0)
     ffi (1.6.0-x86-mingw32)
-    hashie (1.2.0)
     haml (4.0.1)
       tilt
+    hashie (1.2.0)
     highline (1.6.16)
     hike (1.2.1)
     httpauth (0.2.0)
@@ -264,12 +264,12 @@ DEPENDENCIES
   jquery-rails
   launchy
   markdown-rails
+  multipart-post
   omniauth
   omniauth-facebook
   omniauth-google-oauth2
   omniauth-linkedin
   omniauth-twitter
-  multipart-post
   paper_trail
   pg
   progress_bar

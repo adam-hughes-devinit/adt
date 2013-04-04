@@ -1,8 +1,29 @@
-	<h2>Leave a Comment</h2>
-	<%= simple_form_for(@comment, method: :post, url: comments_path, html: {class: "span9"}) do |f| %>
-		<%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",  input_html: {style: "display:none;", value: @project.id} %>
-		<%= f.input :name %>
-		<%= f.input :email, hint: "For validation only -- not published, not shared." %>
-		<%= f.input :content, label: "Message", input_html: {rows: 5} %>
-		<%= f.button :submit, "Submit" %>
-	<% end %>
+<h2>Leave a Comment</h2>
+<% user = current_user %>
+<% user_name = (user && user.name) || nil %>
+<% user_email = (user && user.email) || nil %>
+<%= simple_form_for(@comment, method: :post, 
+                              url: comments_path,
+                              input_html: { align: "center" }) do |f| %>
+
+    <%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",
+      input_html: {style: "display:none;", value: @project.id} %>
+
+    <%= f.input :name, input_html: { class: "span3", value: user_name }%>
+    <%= f.input :email, input_html: { class: "span3", value: user_email },
+                hint: "For validation only -- not published, not shared." %>
+    <% if not user %>
+      <p>
+        You are not currently logged in to the Aiddata site.
+        Comments submitted by non logged in users must be approved by
+        site administrators before they are displayed.</br>
+      </p>
+      <p>
+        Consider <%= link_to "signing in", signin_path %> 
+        before submitting a comment to avoid the approval process.
+      </p>
+    <% end %>
+		<%= f.input :content, label: "Message", input_html: {class: "span5", rows: 5} %>
+
+    <%= f.button :submit, "Submit" %>
+<% end %>
