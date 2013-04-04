@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401205645) do
+ActiveRecord::Schema.define(:version => 20130404171757) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -308,6 +308,13 @@ ActiveRecord::Schema.define(:version => 20130401205645) do
     t.string   "followed_type"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "review_entries", :force => true do |t|
+    t.string   "status",          :default => "OPEN"
+    t.text     "serialized_item"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "roles", :force => true do |t|

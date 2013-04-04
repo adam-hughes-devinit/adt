@@ -34,7 +34,6 @@ Adt::Application.routes.draw do
   post '/projects/:project_id/flow_class/edit', to: 'flow_classes#update'
 
   
-  
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
   get '/recent_activity', to: 'versions#index', as: 'versions'
@@ -47,8 +46,13 @@ Adt::Application.routes.draw do
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
 
   match '/signup', to: 'users#new'
-  match '/login', to: 'sessions#new'
+
+  # this is for staff log in:
+  match '/login', to: 'sessions#new', as: "staff_login" 
+
   match '/signout', to: 'sessions#destroy', via: :delete
+
+  # this is for external log in:
   match '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
 
