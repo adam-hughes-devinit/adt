@@ -1,7 +1,7 @@
 <% provide(:title, 'CSV Analyzer') %>
 
 <%
-	query_string = "#{request.fullpath.gsub(/\/(csv_health)?\??/, '')}"
+	query_string = "#{request.fullpath.gsub(/\/(csv_analyzer)?\??/, '')}"
 
 %>
 
@@ -26,10 +26,10 @@
 <table class='table sortable'>
 	<thead>
 		<tr>
-			<th>Column Name</th>
-			<th># Unique </th>
-			<th># Populated</th>
-			<th># Empty</th>		
+			<th>CSV Column Name</th>
+			<th># Unique Values</th>
+			<th># Populated Fields</th>
+			<th># Empty Fields</th>		
 			<th>Min. Length of Value</th>
 			<th>Avg. Length </th>
 			<th>Max. Length </th>

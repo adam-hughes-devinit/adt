@@ -37,5 +37,6 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       # expire the CSV text
       project.expire_csv_text
     end
+    
   end
 end
