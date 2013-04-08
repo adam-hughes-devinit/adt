@@ -53,6 +53,7 @@ Adt::Application.routes.draw do
   match '/ajax', to: 'static_pages#ajax'
 
   resources :exports
+  resources :review_entries
 
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"

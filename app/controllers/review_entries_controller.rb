@@ -6,4 +6,5 @@ class ReviewEntriesController < ApplicationController
   def show
     @review_entry = ReviewEntry.find(params[:id])
   end
+
 end

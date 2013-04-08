@@ -1,3 +1,12 @@
 - @review_entries.each do |r|
-  =r.status
-  =r.serialized_item
+  - if r.status == "OPEN"
+    =r.status
+    =r.item
+    %br/
+
+- @review_entries.each do |r|
+  - if r.status == "CLOSED"
+    =r.status
+    =r.serialized_item
+    %br/
+

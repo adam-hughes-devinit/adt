@@ -2,13 +2,19 @@ class CommentsController < ApplicationController
 skip_before_filter :signed_in_user, only: [:create]
 	def create
 		@comment = Comment.new(params[:comment])
-		if @comment.save!
-			AiddataAdminMailer.delay.comment_notification(@comment)
-			flash[:success] = "Comment added."
-			redirect_to :back
-		else
-			flash[:notice] = "Comment failed."
-		end
+    if not current_user
+      @review_entry = ReviewEntry.new
+      @review_entry.add_item(@comment)
+      @review_entry.save!
+      flash[:notice] = "Comment will be reviewed before being posted"
+
+    elsif @comment.save!
+      AiddataAdminMailer.delay.comment_notification(@comment)
+      flash[:success] = "Comment added."
+    else
+      flash[:notice] = "Comment failed."
+    end
+    redirect_to :back
 		
 	end
 

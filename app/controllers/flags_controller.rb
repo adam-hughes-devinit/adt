@@ -6,7 +6,12 @@ class FlagsController < ApplicationController
 	
 	def create
 		@flag = Flag.new(params[:flag])
-		if @flag.save!
+		if not current_user
+      @review_entry = ReviewEntry.new
+      @review_entry.add_item(@flag)
+      @review_entry.save!
+      flash[:notice] = "Comment will be reviewed before being posted"
+    elsif @flag.save!
 			AiddataAdminMailer.delay.flag_notification(@flag)
 			flash[:success] = "Flag added"
 		else
