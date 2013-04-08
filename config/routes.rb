@@ -40,10 +40,11 @@ Adt::Application.routes.draw do
   
   # static pages
   root to: "static_pages#home"
-	get '/analyze', to: "static_pages#analyze"
-  get '/downloads', to: 'static_pages#downloads'
+	get '/analyze', to: "static_pages#analyze", as: "bubbles"
+  get '/downloads', to: 'static_pages#downloads', as: "downloads"
   get '/dashboard', to: 'static_pages#dashboard'
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
+  get '/map', to: 'static_pages#map', as: "map"
 
   match '/signup', to: 'users#new'
 

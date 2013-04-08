@@ -18,7 +18,7 @@ include AggregatesHelper
 	end
 
 	def analyze
-		render file: '/static_pages/_analyze_js'
+		render 'bubbles'
 	end
 
   def csv_analyzer
@@ -33,9 +33,14 @@ include AggregatesHelper
     render 'dashboard'
   end
 
+  def map
+    render 'map'
+  end
+
   def signup
     render file: '/static_pages/signup'
   end
+
 
 
   def ajax
