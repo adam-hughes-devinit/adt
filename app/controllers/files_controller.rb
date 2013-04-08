@@ -37,7 +37,7 @@ before_filter :is_project_owner?, only: [:edit, :destroy]
 
 			# p "SENDING FILE"
 
-			# p this_file =  uploaded_io.tempfile
+			this_file =  uploaded_io.tempfile
 
 			File.open(this_file, 'r') do |file|
 				

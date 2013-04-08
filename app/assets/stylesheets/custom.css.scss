@@ -3,15 +3,21 @@
 /* Bootstrap overrides */
 
 $baseFontSize: 13px; 
-$navbarBackground: #172237;
+// $navbarBackground: #172237;
 $navbarBackgroundHighlight: rgba(0,0,0,0);
+$linkColor: #1146a6;
+$sansFontFamily: Arial, Tahoma, sans-serif;
+
+/* my stuff */
+$invalidRed: #942;
+$whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
+
 
 @import "bootstrap";
 @import "bootstrap-responsive";
-@import "scopes/styles";
 @import "project/styles";
-@import "navbar/styles";
-@import "map_vis/styles";
+
+
 
 
 /* mixins, variables, etc. */
@@ -31,13 +37,21 @@ html {
 
 body {
   font-family: Tahoma, Arial, sans-serif;
-  padding-top: 60px;
   line-height: 14px;
+
+  .container, .container-fluid {
+
+    &.main {
+      background-color: white;
+    }
+  }
 }
 
+/*
 section {
   overflow: auto;
 }
+//*/
 
 .alerts {
   margin-top: 10px;
@@ -83,18 +97,6 @@ p {
   font-size: 1em;
 }
 
-
-                      /* header */
-
-#first_header{
-  position:relative;
-  text-shadow:1px 1px #cce;
-  color:#000;
-  top:-80px;
-  z-index:5;
-}
-
-
                                       /* footer */
 
 footer {
@@ -133,6 +135,24 @@ footer {
   width: 100%;
   margin-top: 45px;
   @include box_sizing;
+}
+
+
+.home_thumbnails {
+    .thumbnail {
+      position: relative;
+      h4 {
+        text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
+        padding: 10px;
+        position: absolute;
+    }
+  }
+}
+
+#home_media {
+  h1,h2,h3,h4 {
+    text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
+  }
 }
 
 

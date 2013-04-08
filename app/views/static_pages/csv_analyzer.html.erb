@@ -1,0 +1,42 @@
+<% provide(:title, 'CSV Analyzer') %>
+
+<%
+	query_string = "#{request.fullpath.gsub(/\/(csv_analyzer)?\??/, '')}"
+
+%>
+
+
+<h2> CSV Analyzer</h2>
+<p>
+	To test a CSV, enter query string from a search URL below:
+</p>
+
+<p>
+	<b>
+		http://china.aiddata.org/projects?
+	</b>
+	<input style='display:inline;width:50%' type='text' id='path' value='<%= query_string %>'/>
+	<span class='btn btn-primary' onclick="csv_test()">
+		Test
+	</span>
+</p>
+
+<h2 id='header'></h2>
+
+<table class='table sortable'>
+	<thead>
+		<tr>
+			<th>CSV Column Name</th>
+			<th># Unique Values</th>
+			<th># Populated Fields</th>
+			<th># Empty Fields</th>		
+			<th>Min. Length of Value</th>
+			<th>Avg. Length </th>
+			<th>Max. Length </th>
+		</tr>
+	</thead>
+	<tbody id='data'>
+	</tbody>
+</table>
+
+<%= javascript_include_tag "csv_analyzer/index" %>

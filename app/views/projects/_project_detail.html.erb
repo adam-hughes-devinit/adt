@@ -23,7 +23,15 @@
 		<% elsif class_name == "VisibleFlowClass" && current_object.class == Array %>
 			<%= link_to(current_object[0].name, current_object[0]) %> (<%= current_object[1] %>)
 		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
-			<%= class_name== "YearUncertain" ? "<i>(Year Uncertain)</i>".html_safe : current_object %>
+			
+			<% if class_name == "YearUncertain" %>
+				<i>(Year Uncertain)</i>
+			<% elsif class_name == "Description" %>
+				<%= current_object.gsub(/\n/, "<br>").gsub(/\t/, "&emsp;").html_safe %>
+			<% else %>
+				<%= current_object %>
+			<% end %>
+
 		<% elsif current_object.class == Float %>
       		<% if class_name=="Usd_2009" %>
 	      		<%= number_to_currency(current_object, unit: "$") %>

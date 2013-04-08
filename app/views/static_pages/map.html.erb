@@ -1,0 +1,5 @@
+
+<% provide :title, "China in Africa" %>
+<% provide :header_content, "<h1>Country Perspective</h1>".html_safe %>
+
+<%= render partial: 'static_pages/map_js', locals: {total_projects: @total_projects} %>

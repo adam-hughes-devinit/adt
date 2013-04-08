@@ -1,12 +1,16 @@
 <div class='row'>
   <div class="center">
-    <a class="btn btn-info" data-toggle="modal" href="#export_dialog">
+    
+    <a class="btn btn-success" data-toggle="modal" href="#export_dialog">
       Export as CSV (<%= pluralize(@search.total, "Project") %>)
     </a>
     <% if current_user_is_aiddata %>
-      <%= link_to "Quick Export (CSV)", "#{@current_url.gsub(/projects/, 'projects.csv')}", class: 'btn' %> 
-      <i>(AidData only)</i>
+      <%= link_to "Quick Export (AidData only)", 
+        "#{@current_url.gsub(/projects/, 'projects.csv')}", class: 'btn' %> 
+      <%= link_to "Analyze this CSV", 
+        "#{@current_url.gsub(/projects/, 'csv_analyzer')}", class: 'btn btn-info' %> 
     <% end %>
+
 
 
     <div class="modal hide" id="export_dialog" >
@@ -20,7 +24,7 @@
         <% 
           display_params = {}
 
-          scope_val = (params["scope"] || ["All"] ).join(", ")
+          scope_val = (params["scope_names"] || ["All"] ).join(", ")
           #if no scope is present, scope defaults to all
           scope_val = scope_val.gsub('_',' ').titleize
           display_params["Scope"] = scope_val
@@ -78,14 +82,24 @@
         %>
         <br>
 
-        <%= simple_form_for(@export, method: :post,
+        <%= 
+          simple_form_for(@export, method: :post,
           url: exports_path,
-          html: { class: "form-horizontal"}) do |f| %>
+          html: { class: "form-horizontal"}) do |f| 
+        %>
 
-          <%= f.email_field :email, 
-            placeholder: 'enter email',
-            class: 'span3' %>
-          <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
+        <%
+          if current_user
+            placeholder_string = current_user.email
+          else
+            placeholder_string = 'enter email'
+          end
+        %>
+              
+        <%= f.email_field :email, 
+          placeholder: placeholder_string,
+          class: 'span3' %>
+        <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
       </p>
 
       </div>

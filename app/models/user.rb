@@ -2,11 +2,11 @@ class User < ActiveRecord::Base
   
   attr_accessible :email, :name, 
   :password, :password_confirmation,
-  :owner, :owner_id, :admin
+  :owner, :owner_id, :admin, :provider, :uid
   has_paper_trail
   
   has_secure_password
-  before_save { |user| user.email = email.downcase }
+  before_save { |user| user.email = email.downcase if email } 
   before_save :create_remember_token
 
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -65,10 +65,21 @@ class User < ActiveRecord::Base
       Relationship.find_by_followed_id_and_followed_type(user_or_project.id, user_or_project.class.name).destroy
   end
 
+  def self.create_with_omniauth(auth)
+    user = User.new
+    user.uid = auth['uid']
+    user.provider = auth['provider']
+    user.name = auth['info']['name']
+    user.email = auth['info']['email']
+
+    user.save(validate: false)
+    #return
+    user
+  end
+
 private 
 
   def create_remember_token
-	 self.remember_token = SecureRandom.urlsafe_base64
-	end
-
+	  self.remember_token = SecureRandom.urlsafe_base64
+  end
 end

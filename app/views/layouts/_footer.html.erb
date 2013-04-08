@@ -5,8 +5,9 @@
   <nav>
     <ul>
       <li><%= link_to "About",   '#' %></li>
-      <li><%= link_to "Contact", 'mailto:info@aiddata.org' %></li>
-      <li><a href="http://blog.aiddata.org/">Blog</a></li>
+      <li><%= mail_to "china@aiddata.org", "Contact" %></li>
+      <li><%= link_to "Blog", "http://blog.aiddata.org/" %></li>
+      <li><%= link_to "Staff Login", staff_login_path %></li>
     </ul>
   </nav>
 </footer>
