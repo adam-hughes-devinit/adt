@@ -26,7 +26,7 @@ class Flag < ActiveRecord::Base
   end
 
   def touch_project
-    # touch wasn't forcing reindex!
+    # project.touch wasn't forcing reindex!
     project.save!
   end
 end

@@ -1,46 +1,46 @@
 
+.project-header {
+  //text-shadow: rgba(255,255,255,1) 0px 0px 4px;
+}
 
-  #inactive-project {
-    color: #942;
-  }
-  
-  .flaggable {
-  	padding: 1px;
-  }
-	.flaggable-hover {
-		-moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    border-radius: 5px;
-    background-color: #ccc;
-	}
-	
+#inactive-project, .inactive-project-title {
+  color: #942;
+}
 
-	
-	.flag-links {
-		vertical-align:text-top;
-		visibility:hidden;
-		cursor:default;
-		float:right;
-		margin: 0px 0px 0px 0px;
-	}
-	
-	.flag-links-hover {
-		visibility:visible;
-		cursor:pointer;
-	}
-	
-	.flag-reference {
+.flaggable {
+	padding: 1px;
+}
+.flaggable-hover {
+	-moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #eee;
+}
+.flag-links {
+	vertical-align:text-top;
+	visibility:hidden;
+	cursor:default;
+	float:right;
+	margin: 0px 0px 0px 0px;
+}
 
+.flag-links-hover {
+	visibility:visible;
+	cursor:pointer;
+}
+
+.flag-reference {
+
+}
+.flag-ul, .flag-detail-ul {
+	list-style:none;
 	}
-	.flag-ul, .flag-detail-ul {
-		list-style:none;
-		}
-	.flag-detail-ul {
-	  margin: 2px 2px 10px 20px;
-    padding: 2px 2px 2px 16px;
-    border-left: 3px solid #ccc;
-   }
+.flag-detail-ul {
+  margin: 2px 2px 10px 20px;
+  padding: 2px 2px 2px 16px;
+  border-left: 3px solid #ccc;
+ }
 		
 .project-page {
 	margin: 2px;
@@ -48,10 +48,7 @@
   h3 {
     margin-bottom:8px;
   }
-  ul, li {
-    list-style:none;
-    margin: 1 1 1 10;
-  }
+
   .project-details {
     margin-left:5px;
   }
@@ -60,22 +57,20 @@
   	}
 
 }
-.inactive-project-title {
-  color: #942
-}
+
 
 .project-li {
-  margin: 1px;
-  padding: 5px 5px 16px 5px;
-  border-top: 1px solid #f0f0f0;
+  margin: 0px;
+  padding: 3px 0px 0px 8px;
+  //border-bottom: 1px solid #f0f0f0;
 	}
 	
-.project-accessory-fields, .project-box {
-  margin: 5px 2px 0px 10px;
+.project-accessory-fields, {
+  margin: 5px 2px 0px 5px;
   padding: 5px;
-  border-top: 2px solid #e5e5e5;
+  // border-top: 2px solid #e5e5e5;
   h3 {
-    margin-bottom:5px;
+    margin-bottom:2px;
   }
 }
 

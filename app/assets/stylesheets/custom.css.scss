@@ -6,9 +6,16 @@ $baseFontSize: 13px;
 // $navbarBackground: #172237;
 $navbarBackgroundHighlight: rgba(0,0,0,0);
 $linkColor: #1146a6;
+$sansFontFamily: Arial, Tahoma, sans-serif;
+
+/* my stuff */
+$invalidRed: #942;
+$whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
+
 
 @import "bootstrap";
 @import "bootstrap-responsive";
+@import "project/styles";
 
 
 
