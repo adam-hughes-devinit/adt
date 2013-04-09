@@ -45,6 +45,7 @@ Adt::Application.routes.draw do
   get '/dashboard', to: 'static_pages#dashboard'
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
   get '/map', to: 'static_pages#map', as: "map"
+  get '/new_map', to: 'static_pages#new_map', as: "new_map"
 
   match '/signup', to: 'users#new'
 

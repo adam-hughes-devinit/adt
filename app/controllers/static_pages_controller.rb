@@ -37,6 +37,10 @@ include AggregatesHelper
     render 'map'
   end
 
+  def new_map
+    render file: '/static_pages/new_map'
+  end
+
   def signup
     render file: '/static_pages/signup'
   end
