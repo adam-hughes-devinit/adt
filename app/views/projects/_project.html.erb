@@ -20,7 +20,7 @@ provide(:header_content, header_content.html_safe)
 <div class="row-fluid">
 
 	<div class= "project-box span6">
-		<h3> Overview, <%= link_to "project ##{@project.id}",  @project %></h3>
+		
 		<ul class="unstyled"> 
 			<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Donor", heading: "Donor"} %> 
 			<li>

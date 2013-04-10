@@ -33,6 +33,7 @@
 			%thead
 				%tr
 					%th ID
+					%th Year
 					%th Title
 					%th Amount
 					%th Sector
@@ -43,6 +44,8 @@
 	%tr
 		%td 
 			<%= id %>
+		%td
+			<%= year %>
 		%td
 			%a{target: "_blank", href: "/projects/<%= id %>".html_safe}
 				<%= title %>

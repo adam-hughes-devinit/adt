@@ -47,7 +47,6 @@ Adt::Application.routes.draw do
   get '/map', to: 'static_pages#map', as: "map"
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
   get '/content/:name', to: 'contents#show_by_name'
-  get '/publications', to: 'static_pages#publications', as: 'publications'
   
   match '/signup', to: 'users#new'
 

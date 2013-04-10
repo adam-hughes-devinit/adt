@@ -7,12 +7,6 @@ include AggregatesHelper
     render 'home'
   end
 
-  def publications
-    # DEPRECATED
-    @aiddata_publications = Content.order("updated_at").find_all_by_content_type("AidData Publication")
-    @other_publications = Content.order("updated_at").find_all_by_content_type("Other Publication")
-  end
-
 	def aggregator
 		@aggregator_locals = make_aggregator_locals
     @value_delimiter = VALUE_DELIMITER
