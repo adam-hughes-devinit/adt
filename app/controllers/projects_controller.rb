@@ -52,7 +52,6 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
   def show
     @project = Project.find(params[:id])
     @comment = Comment.new
-    @history = @project.history
     @flags = @project.all_flags
     @flag = Flag.new
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)

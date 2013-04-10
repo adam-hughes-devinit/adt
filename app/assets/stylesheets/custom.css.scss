@@ -39,13 +39,19 @@ html {
   visibility:hidden;
 }
 body {
+  background-color: #f3f3f3;
   font-family: Tahoma, Arial, sans-serif;
   line-height: 14px;
 
+  .with_shadow {
+      box-shadow: rgba(50,50,50,.8) 0px 0px 9px;
+  }
   .container, .container-fluid {
 
     &.main {
+      padding: 10px 10px;
       background-color: white;
+      bottom: 0px;
     }
   }
 }
@@ -144,6 +150,7 @@ footer {
 .home_thumbnails {
     .thumbnail {
       position: relative;
+      background-color: white;
       h4 {
         text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
         padding: 10px;

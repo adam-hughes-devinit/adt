@@ -24,8 +24,8 @@ end %>
 	  		}</b>. Click the filters below to change your settings.".html_safe 
 	end
 %> 	
-<% # inside wrapper: <div class="row" id='project-facets'>	%>
-	<%= render 'search' %>
+
+<%= render 'search' %>
 
 <div class='row'>
 	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
@@ -37,11 +37,11 @@ end %>
 <div class='row' >
  	<%= render 'search_export' %>
  </div>
+<div class='row' >
 	<%= will_paginate @projects %>	
-
 </div>
 <br>
-<table id="project-search-results" >
+<table id="project-search-results" class="table table-hover" >
 	<thead>
 		<tr>
 			<% current_url_with_joiner_without_ordering = "#{@current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{@joiner}" %>
@@ -57,24 +57,32 @@ end %>
        		 %>
        	</th>
 
-      <th><%= link_to "Title",
-      "#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  
-      %></th>
+      <th>
+      		<%= link_to "Title",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  
+      		%>
+  	  </th>
 
-      <th><%= link_to "Year",
-      "#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  
-      %></th>
+      <th>
+      		<%= link_to "Year",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  
+      		%>
+  	  </th>
 
-      <th><%= link_to "Recipients",
-      "#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  
-        %></th>
+      <th>
+      		<%= link_to "Recipients",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  
+      		%>
+      </th>
       
-      <th><%= link_to "Amount (USD-2009)",
-      "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
-        %></th>
-			<% if current_user %>
-				<th>Links</th>
-			<% end %>
+      <th>
+      	<%= link_to "Amount",
+    	  "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
+        %>
+      </th>
+		<% if current_user %>
+			<th>Links</th>
+		<% end %>
 		</tr>
 	</thead>
 	<tbody>
