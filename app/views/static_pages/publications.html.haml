@@ -1,0 +1,23 @@
+- header_content =  Content.find_by_name("publications_header").content 
+- provide :title, "Publications"
+- provide :header_content, header_content.html_safe
+
+%p.row
+	:markdown
+		#{ Content.find_by_name("publications_intro").content }
+
+%ul.row.unstyled
+	- @aiddata_publications.each do |p|
+		%li
+			:markdown
+				#{p.content}
+
+%p.row
+	:markdown
+		#{ Content.find_by_name("publications_middle").content }
+
+%ul.row.unstyled
+	- @other_publications.each do |p|
+		.li
+			:markdown
+				#{p.content}

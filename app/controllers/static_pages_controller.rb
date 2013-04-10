@@ -4,11 +4,13 @@ include SearchHelper
 include AggregatesHelper
 
   def home
-  	custom_search # to initialize facets, etc
-  	@total_projects = Project.where("active = ?", true ).count
-  	@feed = Version.last(20)
-  	@value_delimiter = VALUE_DELIMITER
-  	@aggregator_locals = make_aggregator_locals
+    render 'home'
+  end
+
+  def publications
+    # DEPRECATED
+    @aiddata_publications = Content.order("updated_at").find_all_by_content_type("AidData Publication")
+    @other_publications = Content.order("updated_at").find_all_by_content_type("Other Publication")
   end
 
 	def aggregator

@@ -3,7 +3,7 @@ Adt::Application.routes.draw do
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
-  :flag_types, :loan_types
+  :flag_types, :loan_types, :contents
 
   
  
@@ -46,7 +46,9 @@ Adt::Application.routes.draw do
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
   get '/map', to: 'static_pages#map', as: "map"
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
-
+  get '/content/:name', to: 'contents#show_by_name'
+  get '/publications', to: 'static_pages#publications', as: 'publications'
+  
   match '/signup', to: 'users#new'
 
   # this is for staff log in:

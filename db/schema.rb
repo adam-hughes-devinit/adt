@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130404171757) do
+ActiveRecord::Schema.define(:version => 20130409214127) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(:version => 20130404171757) do
 
   add_index "contacts", ["organization_id"], :name => "index_contacts_on_organization_id"
   add_index "contacts", ["project_id"], :name => "index_contacts_on_project_id"
+
+  create_table "contents", :force => true do |t|
+    t.string   "content_type"
+    t.string   "name"
+    t.text     "content"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "countries", :force => true do |t|
     t.string   "name"

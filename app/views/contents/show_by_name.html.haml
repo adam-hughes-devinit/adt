@@ -1,0 +1,6 @@
+- provide :title, @content.name.titleize
+- provide :header_content, "<h1>#{@content.name.titleize}</h1>".html_safe
+
+%p.row.site_content
+	:markdown
+		#{@content.content}

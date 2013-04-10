@@ -14,8 +14,8 @@
 
           <ul class="nav pull-right">
                 <li><%= link_to "Home", root_path %> </li>
-                <li><%= link_to "Team", "#" %> </li>
-                <li><%= link_to "Methods", "#" %> </li>
+                <li><%= link_to "Team", "/content/meet_the_team" %> </li>
+                <li><%= link_to "Methods", "/content/methodology" %> </li>
                 <li class="dropdown">
                   <a href="#" class='dropdown-toggle' data-toggle='dropdown'>
                     Data
@@ -27,9 +27,9 @@
                     <li><%= link_to "Download", '#' %></li>
                   </ul>
                 </li>
-                <li><%= link_to "Publications", "#" %> </li>
-                <li><%= link_to "Media", "#" %> </li>
-                <li><%= link_to "Contact", "#" %> </li>
+                <li><%= link_to "Publications", "/content/publications" %> </li>
+                <li><%= link_to "Media", "/content/media" %> </li>
+                <li><%= link_to "Contact", "/content/contact" %> </li>
  
                 <li><a href='#'>Old menu items &rarr;</a></li>
                 <!-- Links for anyone !-->
@@ -38,6 +38,7 @@
                 <% if signed_in? %>
                   <% # Links for signed-in users %>
 
+                  <li><%= link_to "Edit site content", contents_path %></li>
 
                   <li id="fat-menu" class="dropdown">
                      

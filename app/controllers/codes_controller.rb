@@ -1,6 +1,8 @@
 class CodesController < ApplicationController
 
   include IndexAndCacheHelper
+  
+  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
   def index
     @objects = @class_name.constantize.all
@@ -44,7 +46,7 @@ class CodesController < ApplicationController
         format.html { redirect_to @object }
         format.json { render json: @object, status: :created, location: @object }
       else
-        format.html { render action: "new" }
+        format.html { render template: "shared/code_form",  locals: {object: @object, type: @class_type} }
         format.json { render json: @object.errors, status: :unprocessable_entity }
       end
     end
