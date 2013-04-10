@@ -1,13 +1,10 @@
 <% provide(:title, "#{ @project.title.blank? ? "(No Title)" : @project.title }") %>
 
 
-<div class="row project-edit-links">	
+<div class="row project-edit-links pull-right">	
 	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user_is_aiddata) %>
-			<p class='span3 pull-right btn btn-success'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p> 
-			<p class='span3 pull-right btn btn-danger'>
-				<b>
-					<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?" %>
-				</b>
+			<%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
+			<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
 			</p>
 	<% end %>
 </div>
