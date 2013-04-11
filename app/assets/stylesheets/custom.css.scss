@@ -7,7 +7,8 @@ $baseFontSize: 13px;
 $navbarBackgroundHighlight: rgba(0,0,0,0);
 $linkColor: #1146a6;
 $sansFontFamily: Arial, Tahoma, sans-serif;
-
+$btnInfoBackground: #63a3d1;
+$btnInfoBackgroundHighlight: #4881b6;
 /* my stuff */
 $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
@@ -211,41 +212,5 @@ label {
     &:hover {
   	background-color:#d0d9f0;
   	}
-}
-
-
-																				/* Codes CSS */
-
-.code-table {
-  /*margin-left: auto;
-  margin-right: auto;*/
-  min-width:50%;
-  th {
-  border: 5px solid white;
-  text-align: center;
-  }
-  td {
-    padding: 3px 8px 2px 4px;
-    border-top: 1px solid #ddd;
-  }
-  td:first {
-    padding-left:15px;
-  }
-}
-																		/* AGGREGATE EXPORTER TABLE */
-																		
-#data_preview {
-	border: 1px solid #777;
-	
-	th {
-		border: 1px solid #777;
-		border-bottom: 1px solid #555;
-		padding: 5px;
-	}
-	
-	td {
-		padding: 5px;
-		border: 1px solid #aaa;
-	}
 }
 

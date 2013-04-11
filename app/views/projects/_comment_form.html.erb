@@ -10,10 +10,10 @@
     <div class='row-fluid'>
       <%= f.input :name, wrapper_html: {class: "span6"}, input_html: {value: user_name }%>
       <%= f.input :email, wrapper_html: { class: "span6"}, input_html: { value: user_email },
-                hint: "For validation only -- not published, not shared." %>
+                hint: "For validation &ndash; not published or shared.".html_safe %>
     </div>
     <% if not user %>
-      <p class='row'>
+      <p class='row-fluid'>
         Unless you <%= link_to "sign in", signin_path %>,
         your comment will be reviewed by AidData before being posted. 
       </p>
