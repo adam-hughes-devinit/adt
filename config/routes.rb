@@ -9,6 +9,7 @@ Adt::Application.routes.draw do
  
   resources :projects do
     resources :files # RDM 3_26_2013
+    resources :robocodes # RDM 4 12 2013
   end
 
   resources :organizations, :users, :scopes, :exports
@@ -28,6 +29,8 @@ Adt::Application.routes.draw do
   post '/users/:id/disown', to: 'users#disown'
   
   # Flow Classes hack 1/8/2013
+  # This should really be nested under project like files and robocodes,
+  # but gotta make sure it won't stop the existing functionality.
   get '/projects/:project_id/flow_class', to: 'flow_classes#show', as: 'flow_class'
   post '/projects/:project_id/flow_class', to: 'flow_classes#update'
   get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'

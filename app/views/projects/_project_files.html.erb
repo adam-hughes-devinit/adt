@@ -1,4 +1,4 @@
-<div class='well'>
+<div class='well well-small'>
 	<h3>Files:</h3>
 	<ul id='files' class='unstyled'>
 		<li>Loading...</li>
@@ -19,7 +19,7 @@
 							" </li>"}).join("") 
 			}
 			else {
-				menu = "<li>(No files yet)</li>" 
+				menu = "<li>(No files yet, please add one below!)</li>" 
 			}
 			target.html(menu)
 
@@ -32,13 +32,13 @@
 	<% end %>
 	
 	<% if current_user_is_aiddata %>
-		<p class='label label-notice'>
+		<p class='badge badge-notice'>
 			<b>
 				AidData users:
 			</b>
-			<br>
+
 			manage these docs at 
-			<a href="http://aiddata-fs.herokuapp.com/#/files/china/<%= @project.id %>">
+			<a href="http://aiddata-fs.herokuapp.com/#/files/china">
 				AidDataFS
 			</a>
 		</p>

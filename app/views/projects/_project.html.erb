@@ -41,23 +41,7 @@ provide(:header_content, header_content.html_safe)
 				<%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "VisibleFlowClass", heading: "Flow Class"} %>
 
 				<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Scope", heading: "Scope" } %>
-				<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Verified", heading: "Verified"} %> 
-
-				<% if current_user_is_aiddata %>
-					<% robocode = @project.robocode %>
-				<li>
-					<span class='muted'>
-						Visible to AidData users only:
-					</span>
-					<br>
-					<b>Robocoder says:</b>
-					<%= robocode[:text] %>
-					<a href='<%= robocode[:url] %>'>
-						(Source)
-					</a>
-				</li>
-				<% end %>
-
+				<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Verified", heading: "Verified"} %>
 			
 			</ul>
 		
@@ -78,7 +62,15 @@ provide(:header_content, header_content.html_safe)
 	
 </div>
 
-<div class="row">
+<% if current_user_is_aiddata %>
+	<div class='row-fluid'>
+		<span class='span12'>
+			<%= render 'robocode' %>
+		</span>
+	</div>
+<% end %>
+
+<div class="row-fluid">
 	<h4>Description:</h4>
 	<ul class='unstyled'>
 		<%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Description", heading: ""} %>
