@@ -1,6 +1,6 @@
-<ul>
+<ul class='unstyled'>
 	<% @project.transactions.each do |t| %>
-		<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
+		<li class="flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
 		<b><span class='usd-2009'><%= t.usd_defl.present? ? "#{number_to_currency(t.usd_defl)} USD-2009" : "No deflatable value yet" %> </span></b>
 			<%= @project.year.blank? && t.currency.blank? && t.value.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} units of an unknown currency in an unknown year)" : "" %>
 			<%= @project.year.present? && t.currency.blank? && t.value.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} units of an unknown currency in #{@project.year})" : "" %>

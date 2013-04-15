@@ -1,22 +1,23 @@
 <ul class='flag-ul'>
 	<% @flags.each_with_index do |f, i| %>
-		<li class='flag-li'>
+		<li class='flag-li' data-flag-id=<%= f.id%> data-flag-index=<%= i+1 %>>
+			
 			<span>
-        <a id="flag_<%= i+1 %>"
-          style="color:<%= f.flag_type.color%>">[<%= i+1 %>]
-        </a> 
+	        <a id="flag_<%=f.id %>" href='#flag-reference_<%= f.id %>'
+	          style="color:<%= f.flag_type.color%>">[<%= i+1 %>]
+	        </a> 
 
-        <%= time_ago_in_words(f.updated_at) %> ago, 
-        <%= f.owner ? f.owner.name : "An anonymous user" %> flagged
-        <%= if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(f.flaggable_type)
-              f.flaggable_type.downcase.a_or_an 
-            else
-              # splits up the flaggable_type to something human-readable
-              f.flaggable_type.gsub(/(?<=[a-z])(?=[A-Z])/, ' ').downcase
-            end %>. <span style="color:
-            
-              
-        <%=f.flag_type.color%>">(<%=f.flag_type.name%>)</span>
+	        <%= time_ago_in_words(f.updated_at) %> ago, 
+	        <%= f.owner ? f.owner.name : "An anonymous user" %> flagged
+	        <%= if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(f.flaggable_type)
+	              f.flaggable_type.underscore.humanize.downcase.a_or_an 
+	            else
+	              # splits up the flaggable_type to something human-readable
+	              f.flaggable_type.underscore.humanize.downcase
+	            end %>. 
+	            <span style="color:<%=f.flag_type.color%>">
+	            	(<%=f.flag_type.name%>)
+	        	</span>
 			</span>
 			<ul class='flag-detail-ul'>
 				<li class='flag-detail-li'><b>Source:</b> <%= f.source %> </li>
@@ -28,3 +29,4 @@
 		</li>
 	<% end %>
 </ul>
+

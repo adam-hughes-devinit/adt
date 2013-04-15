@@ -1,14 +1,25 @@
-<ul>
+<ul class='unstyled'>
 	<% @project.participating_organizations.each do |p| %>
-		<li class="project-organization project-li flaggable" flaggable_type='ParticipatingOrganization' flaggable_id=<%= p.id %>>
-			<% if !p.organization.nil? %>
-					<b><%= link_to p.organization.name, p.organization %></b><br> 
-					Role: <%= p.role.nil? ? @unset_data : link_to(p.role.name, p.role) %><br>
-					Origin: <%= p.origin ? (link_to p.origin.name, p.origin) : @unset_data %> 
+		<li class="flaggable container-fluid" flaggable_type='ParticipatingOrganization' flaggable_id=<%= p.id %>>
+			<% if p.organization.present? %>
+				<span class='row-fluid row-no-margin'>
+					<strong class='span12'>
+						<%= link_to p.organization.name, p.organization %>
+						<% p.flags.each do |flag| %>
+								<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+						<% end %>
+					</strong>
+				</span>
+				<span class='row-fluid row-no-margin'>
+					<span class='span6'>
+						Role: <%= p.origin.present? ? (link_to p.origin.name, p.origin) : @unset_data %>
+					</span>
+					<span class='span6'> 	
+						Origin: <%= p.role.present? ? link_to(p.role.name, p.role) : @unset_data  %>
+					</span>
+				</span>
 			<% end %>
-			<% p.flags.each do |flag| %>
-					<%= render partial: 'flag_superscript', locals: { flag: flag} %>
-			<% end %>
+
 		</li>
 	<% end %>
 </ul>
