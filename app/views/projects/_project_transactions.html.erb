@@ -1,22 +1,31 @@
 <ul>
 	<% @project.transactions.each do |t| %>
 		<li class="project-transaction project-li flaggable" flaggable_type='Transaction' flaggable_id=<%= t.id %>>
-			<% if t.usd_defl.present? %>
-				<b><%= number_to_currency(t.usd_defl, unit: "$") %> 
-					<span class="usd-2009">USD-2009</span>
-				</b>
-			<% end %>
-			<% if !t.currency.nil? %>
-			 (<%= t.value.blank? ? @unset_data : number_to_currency(t.value) %>
-			  <%= t.currency.nil? ? '' : t.currency.iso3 %>
-			  <% if t.usd_current && @project.year!=2009 && t.currency.iso3 != 'USD' %>, 
-			  		<%= number_to_currency(t.usd_current, unit: "$") %>
-			  	<% end %>
-			  	<% if @project.year %>in <%= @project.year %><% end %>)
+		<b><span class='usd-2009'><%= t.usd_defl.present? ? "#{number_to_currency(t.usd_defl)} USD-2009" : "No deflatable value yet" %> </span></b>
+			<%= @project.year.blank? && t.currency.blank? && t.value.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} units of an unknown currency in an unknown year)" : "" %>
+			<%= @project.year.present? && t.currency.blank? && t.value.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} units of an unknown currency in #{@project.year})" : "" %>
+			<% if t.currency.present? %>
+				<% if t.currency.iso3=='USD' && @project.year==2009 %>
+				<% elsif t.value.present? %>
+						<% if t.currency.iso3!='USD' && t.currency.iso3.present? && @project.year!=2009 %>
+							<%= @project.year.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} #{t.currency.iso3}, #{number_to_currency(t.usd_current)} USD in #{@project.year})" : "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} #{t.currency.iso3} in an unknown year)" %>
+						<% elsif t.currency.iso3=='USD' && @project.year!=2009 %>
+							<%= @project.year.present? ? "(#{number_to_currency(t.value)} #{t.currency.iso3} in #{@project.year})" : "(#{number_to_currency(t.value)} #{t.currency.iso3})"%>
+						<% elsif t.currency.iso3.present? %>
+							<%= @project.year.present? ? "(#{number_with_precision(t.value, :precision => 2, :delimiter => ',')} #{t.currency.iso3} in #{@project.year})" : "" %>
+						<% end %>
+					<% end %>
+			<% elsif t.value.blank? %>
+				<%= "<span class='unset-data'>No transactions yet</span>".html_safe %>
 			<% end %>
 			<% t.flags.each do |flag| %>
 				<%= render partial: 'flag_superscript', locals: { flag: flag} %>
 			<% end %>
+		</li>
+	<% end %>
+	<% if @project.transactions.blank? %>
+		<li>
+			<span class='unset-data'>No transactions yet</span>
 		</li>
 	<% end %>
 </ul>

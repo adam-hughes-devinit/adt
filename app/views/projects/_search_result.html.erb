@@ -1,10 +1,11 @@
+<%# encoding: utf-8 %>
 <tr>
 	<td><%= p.id %> </td>
-	<td><%= p.donor ? p.donor.name : 'Unset' %> </td>
+	<td><%= p.donor ? p.donor.name : '—' %> </td>
 	<td><%= link_to active_or_inactive(p), p %></td> 
-	<td><%= p.year %></td>
-	<td><%= p.country_name.join(', ') %></td>
-	<td><%= p.usd_2009 %></td>
+	<td><%= p.year ? p.year : '—' %></td>
+	<td><%= p.country_name.length>0 ? p.country_name.join(', ') : '—' %></td>
+	<td><%= p.usd_2009 ? p.usd_2009 : '—' %></td>
 	<% if current_user && current_user.owner %>
 		<td>
 			<% if p.owner %>
