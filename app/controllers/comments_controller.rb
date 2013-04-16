@@ -5,9 +5,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 	def create
 		@comment = Comment.new(params[:comment])
     if not current_user
-      @review_entry = ReviewEntry.new
-      @review_entry.add_item(@comment)
-      @review_entry.save!
+      ReviewEntry.add_item(@comment)
       flash[:notice] = "Comment will be reviewed before being posted"
 
     elsif @comment.save!

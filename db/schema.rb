@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130404171757) do
+ActiveRecord::Schema.define(:version => 20130409190420) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -315,6 +315,7 @@ ActiveRecord::Schema.define(:version => 20130404171757) do
     t.text     "serialized_item"
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
+    t.string   "ar_model"
   end
 
   create_table "roles", :force => true do |t|

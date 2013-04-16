@@ -45,6 +45,7 @@ Adt::Application.routes.draw do
   get '/dashboard', to: 'static_pages#dashboard'
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
   get '/map', to: 'static_pages#map', as: "map"
+  get '/table', to: 'static_pages#table', as: "table"
 
   match '/signup', to: 'users#new'
 
@@ -59,6 +60,7 @@ Adt::Application.routes.draw do
 
   resources :exports
   resources :review_entries
+
 
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
