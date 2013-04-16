@@ -3,11 +3,13 @@
 
 - @review_sections.each do |type, entries|
   %h2= type.pluralize
-  %table{id: "#{type}", class: "table table-hover"}
+  %table{id: "#{type}", class: "table table-hover sortable"}
     - atts = entries.first.item.attributes
     %thead
       %tr
         -# headers
+        -# for the checkbox
+        %th
         %th id
         - atts.delete("id")
         - atts.delete("updated_at")
@@ -17,11 +19,11 @@
             %th= "Project"
           - else
             %th= key.humanize
-        -# for the checkbox
-        %th
     %tbody
       - entries.each_with_index do |entry,index|
         %tr{id: "#{type}#{index}"}
+          %td
+            %input{type: "checkbox", value: "yes" }
           %td= entry.id
           - atts = entry.item.attributes
           - atts.delete("id")
@@ -39,12 +41,12 @@
             - else
               %td= value
 
-          %td{class: "checkbox"}
-            %input{type: "checkbox", value: "yes"}
 
   %button{id: "#{type}-Approve"}Approve
   %button{id: "#{type}-Delete"}Delete
 
+= javascript_include_tag "bootstrap_sortable/index"
+= stylesheet_link_tag "bootstrap-sortable"
 :javascript
   // grab all the buttons
   $("button").each(function() {
@@ -60,7 +62,6 @@
         $('td', $tr).each(function() {
           
         });
-        console.log(approved);
         manageRow(this, approved);
       });
 
@@ -68,7 +69,7 @@
   });
   
   function manageRow(row, approved){
-    var id = $(row).children()[0].innerHTML;
+    var id = $(row).children()[1].innerHTML;
     if (approved == "Approve")
     {
       var approve = { "approve": true };
@@ -82,6 +83,7 @@
       }
     });
     deleteRow(row.id);
+    ApplySortability();
   }
 
   function deleteRow(rowId){
