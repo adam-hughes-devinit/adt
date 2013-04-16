@@ -45,11 +45,11 @@ Adt::Application.routes.draw do
   root to: "static_pages#home"
 	get '/analyze', to: "static_pages#analyze", as: "bubbles"
   get '/downloads', to: 'static_pages#downloads', as: "downloads"
-  get '/dashboard', to: 'static_pages#dashboard'
-  get '/csv_analyzer', to: 'static_pages#csv_analyzer'
+  get '/dashboard', to: 'static_pages#dashboard', as: "dashboard"
+  get '/csv_analyzer', to: 'static_pages#csv_analyzer', as: "csv_analyzer"
   get '/map', to: 'static_pages#map', as: "map"
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
-  get '/content/:name', to: 'contents#show_by_name'
+  get '/content/:name', to: 'contents#show_by_name', as: "content"
 
   
   match '/signup', to: 'users#new'

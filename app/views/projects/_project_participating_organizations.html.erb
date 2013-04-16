@@ -11,11 +11,11 @@
 					</strong>
 				</span>
 				<span class='row-fluid row-no-margin'>
-					<span class='span6'>
-						Role: <%= p.origin.present? ? (link_to p.origin.name, p.origin) : @unset_data %>
-					</span>
 					<span class='span6'> 	
-						Origin: <%= p.role.present? ? link_to(p.role.name, p.role) : @unset_data  %>
+						Role: <%= p.role.present? ? link_to(p.role.name, p.role) : @unset_data  %>
+					</span>
+					<span class='span6'>
+						Origin: <%= p.origin.present? ? (link_to p.origin.name, p.origin) : @unset_data %>
 					</span>
 				</span>
 			<% end %>

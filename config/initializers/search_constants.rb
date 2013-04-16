@@ -3,11 +3,11 @@
   FACETS = [
       {sym: :flow_type_name, name: "Flow Type"},
       {sym: :oda_like_name, name: "Flow Class"},
-      {sym: :status_name, name:"Status"},
-      {sym: :verified_name, name:"Verified/Unverified"},
-      {sym: :currency_name, name:"Reported Currency", multiple: true},
-      {sym: :is_commercial_string, name: "Commercial Status"},
-      {sym: :active_string, name: "Active/Inactive"},
+      {sym: :status_name, name:"Status", description: "Last known implementation status"},
+      {sym: :verified_name, name:"Verified/Unverified", description: "Is the record valid?"},
+      {sym: :currency_name, name:"Reported Currency", multiple: true, description: "Currency found in source data"},
+      {sym: :is_commercial_string, name: "Commercial Status", description: "Is the project commercial?"},
+      {sym: :active_string, name: "Active/Inactive", description: "Inactive records should not be used for analysis."},
       {sym: :country_name, name: "Recipient", multiple: true},
       {sym: :source_type_name, name: "Source Type", multiple: true},
       {sym: :document_type_name, name: "Document Type", multiple: true},
@@ -16,11 +16,11 @@
       {sym: :organization_type_name, name: "Organization Type", multiple: true},
       {sym: :organization_name, name: "Organization Name", multiple: true},
       {sym: :owner_name, name: ""},
-      {sym: :line_of_credit_string, name: "Line of Credit"},
-      {sym: :crs_sector_name, name: "CRS Sector"},
-      {sym: :year_uncertain_string, name: "Year Uncertain"},
-      {sym: :debt_uncertain_string, name: "Debt Relief Uncertain"},
-      {sym: :is_cofinanced_string, name: "Cofinance Status"},
+      {sym: :line_of_credit_string, name: "Line of Credit", description: "Is the project a line of credit?"},
+      {sym: :crs_sector_name, name: "CRS Sector", description: "Sector, using CRS high-level codes."},
+      {sym: :year_uncertain_string, name: "Year Uncertain", description: "Year could not be determined"},
+      {sym: :debt_uncertain_string, name: "Debt Relief Uncertain", description: "Unclear whether this is debt relief"},
+      {sym: :is_cofinanced_string, name: "Cofinance Status", description: "Was this project cofinanced?"},
       {sym: :recipient_iso2, name: "", multiple: true},
       {sym: :number_of_recipients, name: "Number of Recipients"},
       {sym: :year, name: "Commitment Year"},
@@ -30,7 +30,7 @@
       {sym: :maturity_band, name: "Maturity"},
       {sym: :grace_period_band, name: "Grace Period"},
       {sym: :grant_element_band, name: "Grant Element"},
-      {sym: :scope_names, name: "Scope", multiple: true}
+      {sym: :scope_names, name: "Scope", multiple: true, description: ""}
     ].sort! { |a,b| a[:name] <=> b[:name] }
     
     
