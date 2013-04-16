@@ -18,7 +18,7 @@ SitemapGenerator::Sitemap.create do
     add downloads_path
     Content.find_each do |content|
       if content.content_type == 'Page' 
-        add content_path(content.name)
+        add content_by_name_path(content.name)
       end
     end
 
