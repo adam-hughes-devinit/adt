@@ -1,44 +1,27 @@
 <% provide(:title, "#{ @project.title.blank? ? "(No Title)" : @project.title }") %>
 
 
-<div class="project-details row">	
-	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user.owner ==  Organization.find_by_name("AidData")) %>
-			<p class='edit-project-link'><b><%= link_to "Edit this project", edit_project_path(@project) %></b></p> 
-			<p class='delete-project-link'><b><%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?" %></b></p>
+<div class="row project-edit-links pull-right">	
+	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user_is_aiddata) %>
+			<%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
+			<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
+			</p>
 	<% end %>
 </div>
 
-<ul class="nav nav-tabs row" id="projectTab">
-  <li class="active"><a href="#details">Project Details</a></li>
-  <li><a id="flags_tab" href="#flags">Flags (<%= @flags.count %>)</a></li>
-  <li><a href="#history">History (<%= @history.count %>)</a></li>
-</ul>
 
 
-<div class="tab-content row">
-  <div class="tab-pane active" id="details">
-		<%= render 'project' %>
-  </div>
-  <div class="tab-pane" id="flags">
-		<h2 id='flags_header'>Flags</h2>
-		<%= render 'project_flags' %>
-	</div>
-	<div class="tab-pane" id="history">
-		<h2>History</h2>
-		<%= render 'project_history' %>
-	</div>
+
+<div class="row">
+	<%= render 'project' %>
+</div>
+<div class='row'>
+	<h1>Flags:</h1>
+	<%= render 'project_flags' %>
 </div>
 
 
-<script>
-  $(function () {
-		$('#projectTab a').click(function (e) {
-					e.preventDefault();
-			$(this).tab('show');
-		})
-		$('#projectTab a:first').tab('show');
-	})
-</script>
+
 
 
 

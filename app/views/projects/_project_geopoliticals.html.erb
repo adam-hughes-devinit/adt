@@ -1,10 +1,10 @@
 		<ul class='unstyled'>
 			<% @project.geopoliticals.each do |g| %>
-				<li class="project-li flaggable" flaggable_type='Geopolitical' flaggable_id=<%= g.id %>>
+				<li class="flaggable" flaggable_type='Geopolitical' flaggable_id=<%= g.id %>>
 					<% if !g.recipient.nil? %>
 						<b><%= link_to g.recipient.name, g.recipient %></b> 
 						<%= g.subnational.blank? ? '' : "(#{g.subnational})" %>
-						 <%= g.percent.blank? ? '' : " -- #{g.percent}%" %>
+						 <%= g.percent.blank? ? '' : " &ndash; #{g.percent}%".html_safe %>
 					<% end %>
 					<% g.flags.each do |flag| %>
 						<%= render partial: 'flag_superscript', locals: { flag: flag} %>

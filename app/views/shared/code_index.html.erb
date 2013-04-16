@@ -3,18 +3,18 @@
 
 
 
-<% hidden_attributes = ["created_at", "updated_at", "id", "color"] %>
+<% hidden_attributes = ["created_at", "updated_at", "id", "color", "content"] %>
 
 <div class="row">
 	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
-		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new", class: "btn" %>
 	<% end %>
 </div>
 <!-- Table headings for each attribute !-->
 <div class='row'>
 <% if objects.length > 0 %>
 
-<table class='table table-hover'>
+<table class='table table-hover sortable'>
 	<thead>
 		<% objects.first.attributes.each_pair do |k, v| %>
 			<% if !hidden_attributes.include?(k) %>
@@ -49,7 +49,8 @@
 <% end %>
 <br>
 	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
-		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new" %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new", class: "btn" %>
 	<% end %>
 </div>
 
+<%= javascript_include_tag "bootstrap_sortable/index" %>

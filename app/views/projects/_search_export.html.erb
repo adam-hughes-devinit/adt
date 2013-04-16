@@ -19,7 +19,7 @@
         <h3>Search Export</h3>
       </div>
       <div class="modal-body">
-      <p> 
+       
         <h4>Search Parameters</h4>
         <% 
           display_params = {}
@@ -100,7 +100,6 @@
           placeholder: placeholder_string,
           class: 'span3' %>
         <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
-      </p>
 
       </div>
       <div class="modal-footer">
@@ -108,7 +107,6 @@
       <% end %>
       <a href="#" class="btn" data-dismiss="modal">Close</a>
       </div>
-    </div> 
     </div>
   </div>
 </div>

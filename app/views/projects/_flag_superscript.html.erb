@@ -1,12 +1,7 @@
-<a inactive_href="#flag_<%= flag.id %>" class='flag-reference'
+<a href="#flag_<%= flag.id %>" class='flag-reference' id='flag-reference_<%=flag.id%>'
   title="<%= flag.comment %>" >
 
   <sup style="color:<%= flag.flag_type.color %>;">
-    [<%= @flag_counter +=1 %>]
+    [x<!-- content replaced with JS !-->]
   </sup>
 </a>
-
-<script type="text/javascript">
-  $('.flag-reference').tooltip()
-</script>
-

@@ -1,0 +1,56 @@
+- provide :title, "New Map"
+
+:ruby
+	header_content = "
+	<h1>
+		China in Africa: 
+		<span class='country_name'>
+			All Africa
+		</span>
+	</h1>"
+
+- provide :header_content, header_content.html_safe
+
+= javascript_include_tag "miso/index"
+= javascript_include_tag "leaflet/index"
+= javascript_include_tag "d3/index"
+= javascript_include_tag "finch/index"
+= javascript_include_tag "bootstrap_sortable/index"
+
+= stylesheet_link_tag "leaflet/leaflet"
+
+
+.row-fluid
+	#map.span6{style: "height:500px;"}
+	#chart.span6
+.row-fluid
+	#top_projects.span12
+		%h2 
+			Top Projects in 
+			%span.country_name
+				Africa
+		%table.table.sortable
+			%thead
+				%tr
+					%th ID
+					%th Year
+					%th Title
+					%th Amount
+					%th Sector
+			%tbody#project_rows
+
+
+%script#project_template{type: "text/template"}
+	%tr
+		%td 
+			<%= id %>
+		%td
+			<%= year %>
+		%td
+			%a{target: "_blank", href: "/projects/<%= id %>".html_safe}
+				<%= title %>
+		%td{value: "<%= usd_2009 %>".html_safe } 
+			<%= usd_2009 %>
+		%td
+			<%= crs_sector_name %>
+= javascript_include_tag "new_map/index"

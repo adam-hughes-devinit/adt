@@ -3,7 +3,15 @@
 
 <%= simple_form_for(object) do |f| %>
 	<% object.attributes.each_pair do |k, v| %>		  	
-	  		<% if !["created_at", "updated_at", "id"].include? k %>
+			<% if object.is_a?(Content) && k=='content_type' %>
+				<td>
+					<%= f.input k.to_sym, as: :select, collection: Content::CONTENT_TYPES %>
+				</td>
+			<% elsif object.is_a?(Content) && k == 'content' %>
+				<td>
+					<%= f.input k.to_sym, input_html: {style: 'font-family:courier, monospaced;' } %>
+				</td>
+	  		<% elsif !["created_at", "updated_at", "id"].include? k %>
 				  <td><%= f.input k.to_sym %></td>
 		    <% end %>
 	<% end %>

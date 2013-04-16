@@ -18,10 +18,10 @@
   background-color: #eee;
 }
 .flag-links {
-	vertical-align:text-top;
 	visibility:hidden;
 	cursor:default;
-	float:right;
+  //display:block;
+	//float:right;
 	margin: 0px 0px 0px 0px;
 }
 
@@ -75,22 +75,9 @@
 }
 
 
-.edit-project-link {
-  float: right;
-  padding:5px;
-  margin:5px;
-  border: 3px solid green;
-  background: lightgreen;
+.project-edit-links p {
+  margin: 10px;
 }
-
-.delete-project-link {
-  float: right;
-  margin:5px;
-  padding:5px;
-  border: 3px solid #d00;
-  background: #f66;
-}
-
 .unset-data {
   font-style: italic;
   font-size: 1em;

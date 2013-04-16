@@ -7,7 +7,9 @@ $baseFontSize: 13px;
 $navbarBackgroundHighlight: rgba(0,0,0,0);
 $linkColor: #1146a6;
 $sansFontFamily: Arial, Tahoma, sans-serif;
-
+$btnInfoBackground: #63a3d1;
+$btnInfoBackgroundHighlight: #4881b6;
+$infoText: #63a3d1;
 /* my stuff */
 $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
@@ -35,15 +37,24 @@ html {
   overflow-y: scroll;
 }
 
+.domain {
+  visibility:hidden;
+}
 body {
+  background-color: #f9f9f9;
   font-family: Tahoma, Arial, sans-serif;
   line-height: 14px;
 
+  .with_shadow {
+      box-shadow: rgba(50,50,50,.8) 0px 0px 9px;
+  }
   .container, .container-fluid {
 
     &.main {
+      padding: 10px 10px;
       background-color: white;
     }
+
   }
 }
 
@@ -54,11 +65,21 @@ section {
 //*/
 
 .alerts {
-  margin-top: 10px;
+  margin-top: 5px;
   display: block;
 }
+
+
 .row-fluid, .row {
   margin-left:0px;
+
+  &.row-no-margin {
+    margin: 0px;
+
+    [class*="span"] {
+      min-height: 0px
+    }
+  }
 }
 .center {
   text-align: center;
@@ -82,14 +103,14 @@ h1 {
   font-size: 3em;
   letter-spacing: -2px;
   margin-bottom: 30px;
-  text-align: center;
+  //text-align: center;
 }
 
 h2 {
   font-size: 1.7em;
   letter-spacing: -1px;
   margin-bottom: 30px;
-  text-align: center;
+  //text-align: center;
   font-weight: normal;
   color: $grayLight;
 }
@@ -141,6 +162,7 @@ footer {
 .home_thumbnails {
     .thumbnail {
       position: relative;
+      background-color: white;
       h4 {
         text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
         padding: 10px;
@@ -199,41 +221,5 @@ label {
     &:hover {
   	background-color:#d0d9f0;
   	}
-}
-
-
-																				/* Codes CSS */
-
-.code-table {
-  /*margin-left: auto;
-  margin-right: auto;*/
-  min-width:50%;
-  th {
-  border: 5px solid white;
-  text-align: center;
-  }
-  td {
-    padding: 3px 8px 2px 4px;
-    border-top: 1px solid #ddd;
-  }
-  td:first {
-    padding-left:15px;
-  }
-}
-																		/* AGGREGATE EXPORTER TABLE */
-																		
-#data_preview {
-	border: 1px solid #777;
-	
-	th {
-		border: 1px solid #777;
-		border-bottom: 1px solid #555;
-		padding: 5px;
-	}
-	
-	td {
-		padding: 5px;
-		border: 1px solid #aaa;
-	}
 }
 

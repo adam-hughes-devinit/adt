@@ -1,0 +1,12 @@
+%span.text-info
+	Visible to AidData users only:
+%br
+%b
+	Robocoder says:
+%span#robocode
+	(Loading...)
+
+:coffee
+	$.get("/projects/#{@project.id}/robocodes", (data) ->
+		$("#robocode").html(data.text + " <a href='" + data.url + "' target='_blank'>(Source)</a>")
+	)

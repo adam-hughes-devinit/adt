@@ -3,12 +3,13 @@ Adt::Application.routes.draw do
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
-  :flag_types, :loan_types
+  :flag_types, :loan_types, :contents
 
   
  
   resources :projects do
     resources :files # RDM 3_26_2013
+    resources :robocodes # RDM 4 12 2013
   end
 
   resources :organizations, :users, :scopes, :exports
@@ -28,6 +29,8 @@ Adt::Application.routes.draw do
   post '/users/:id/disown', to: 'users#disown'
   
   # Flow Classes hack 1/8/2013
+  # This should really be nested under project like files and robocodes,
+  # but gotta make sure it won't stop the existing functionality.
   get '/projects/:project_id/flow_class', to: 'flow_classes#show', as: 'flow_class'
   post '/projects/:project_id/flow_class', to: 'flow_classes#update'
   get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'
@@ -45,8 +48,10 @@ Adt::Application.routes.draw do
   get '/dashboard', to: 'static_pages#dashboard'
   get '/csv_analyzer', to: 'static_pages#csv_analyzer'
   get '/map', to: 'static_pages#map', as: "map"
-  get '/table', to: 'static_pages#table', as: "table"
+  get '/new_map', to: 'static_pages#new_map', as: "new_map"
+  get '/content/:name', to: 'contents#show_by_name'
 
+  
   match '/signup', to: 'users#new'
 
   # this is for staff log in:
