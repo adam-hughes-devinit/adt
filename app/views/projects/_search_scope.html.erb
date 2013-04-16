@@ -1,12 +1,14 @@
 <% 
 	
-	def scope_to(scope_label, scope_name)
-		scoped_url = "#{link_to scope_label,@current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope_name}"
-		if @scope && @scope.include?(scope_name)
-			"<b>#{scoped_url}</b>".html_safe
-		else
-			scoped_url.html_safe
+	def scope_to(scope)
+		scope_link = "#{link_to scope.name, @current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope.name}"
+		
+		if @scope && @scope.include?(scope.name)
+			scope_link = "<b>#{scope_link}</b>"
 		end
+
+		"<span class='scope-tooltip' title='#{scope.description}'>#{scope_link}</span>".html_safe
+
 	end
 	
 %> 
@@ -23,7 +25,7 @@
 
 		<b>Scopes:</b> 
 		<% Scope.all.each do |s| %>
-			<%= scope_to s.name, s.name %> | 
+			<%= scope_to s %> | 
 		<% end %> 
 		
 		<% if @scope %>

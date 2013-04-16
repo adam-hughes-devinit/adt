@@ -1,7 +1,7 @@
 <div class='search-facet'>
 	<% if f[:name]!= "" &&
 			rows = @all_projects.facet(f[:sym]).rows %>
-		<b class='facet-header'>
+		<b class='facet-header facet-tooltip' title='<%= f[:description] %>'>
 			<%= 
 				link_to_function f[:name], 
 				"$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle()"  

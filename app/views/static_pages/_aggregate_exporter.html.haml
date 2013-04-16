@@ -1,20 +1,20 @@
 .row-fluid
-	.span3
+	.span6
 		%h3
-			Select your fields:
+			1) Select your fields:
 		%p.muted
 			These fields will columns in the dataset 
 			%strong
 				and 
 			units of aggregation
-		-# %p.btn.btn-primary{onclick: "$('#get_input option').prop('selected', 'selected');"}
-			-# Select All
-	.span3.well
+
+	.span6.well
 		= label_tag "Data fields"
 		= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]), multiple: true, class: "aggregate_input", id: "get_input" 
-	.span3
+.row-fluid
+	.span6
 		%h3
-			Handle multiple recipients:
+			2) Handle multiple recipients:
 		%p.muted
 			Some projects have 
 			%strong
@@ -22,7 +22,7 @@
 			recipient country.
 		%p.muted
 			Choose how to split financial amounts between those countries:
-	.span3.well
+	.span6.well
 		= label_tag "Handle Multiple Recipients:" 
 		= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "aggregate_input", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint()"
 		%span#handler_hint.muted
@@ -32,9 +32,11 @@
 .row-fluid
 	.span8
 		%h3
-			Filter your dataset:
+			3) Filter your dataset:
 		%p.muted
-			You can filter the data by selecting the values you want to include. Use 
+			%strong
+				Click
+			the headings to filter. Use 
 			%strong
 				Control
 			or 
@@ -48,19 +50,16 @@
 	- third = (where_filters.length/3).round
 	%ul.span4.unstyled
 		- where_filters[0..third].each do |wf|
-			%li
-				= label_tag wf[:sym].to_s, wf[:name] 
-				= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'aggregate_input where_filter' 
+			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
+
 	%ul.span4.unstyled
 		- where_filters[third+1..(2*third)+1].each do |wf|
-			%li
-				= label_tag wf[:sym].to_s, wf[:name] 
-				= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'aggregate_input where_filter' 
+			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
+
 	%ul.span4.unstyled
 		- where_filters[(2*third)+2..-1].each do |wf|
-			%li
-				= label_tag wf[:sym].to_s, wf[:name] 
-				= select_tag wf[:sym].to_s, options_for_select(wf[:options]), multiple: true, class: 'aggregate_input where_filter' 
+			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
+
 
 
 %hr{style: "margin:0px 0px 5px 0px"}
@@ -68,7 +67,7 @@
 .row-fluid
 	%h3
 		%span.span2
-			Download:
+			4) Download:
 		%span.span5#api_download
 			%small
 				Make a selection to download your dataset.
@@ -175,5 +174,11 @@
 	$(function() {
 		show_duplication_handler_hint()
 		$('.aggregate_input').change(function() {update_previews()})
+		update_previews()
+
+		$('.where_filter').hide()
+		$('.where_filter_heading').click(function(){
+			$(this).siblings('.where_filter').toggle()
+		})
 		
 	})
