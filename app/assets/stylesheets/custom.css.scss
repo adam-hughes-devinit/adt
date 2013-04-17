@@ -9,7 +9,8 @@ $linkColor: #1146a6;
 $sansFontFamily: Arial, Tahoma, sans-serif;
 $btnInfoBackground: #63a3d1;
 $btnInfoBackgroundHighlight: #4881b6;
-$infoText: #63a3d1;
+$infoBackground: lighten(#63a3d1, 30%);
+$infoText: #4881b6;
 /* my stuff */
 $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
@@ -89,9 +90,16 @@ section {
 
 }
 
-.tab-content {
-	padding:5px;
-	}
+#vitals {
+  ul {
+    li {
+      color: #101010;
+      font-weight:  bolder;
+      font-size: 2em;
+      line-height: 1.3;
+    }
+  }
+}
 
 																											/* typography */
 
