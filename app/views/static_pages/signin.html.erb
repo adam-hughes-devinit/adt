@@ -1,7 +1,4 @@
 <% provide(:title, "Sign In") %>
-<% provide(:first_header, "Sign In") %>
+<% provide(:header_content, "<h1>Sign In Using:</h1>".html_safe) %>
 
-<div align="center">
-  <h2>Sign in using:</h2>
-</div>
 <%= render 'social_media_logins' %>

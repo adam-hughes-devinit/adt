@@ -25,7 +25,7 @@ App.display_country = (country_name) ->
 	App.this_country_data.aggregate_json = App.this_country_data.by_year.toJSON()
 
 	App.this_country_data.projects.fetch({
-		error: () -> console.log "Coggregateuldn't get top projects"
+		error: () -> console.log "Couldn't get top projects"
 		success: () ->
 			top_projects = this.toJSON()
 			console.log top_projects
@@ -64,7 +64,7 @@ App.display_country = (country_name) ->
 	y_axis = d3.svg.axis()
 		.scale(y_scale)
 		.orient('right')
-		.tickFormat(App.nice_money)
+		.tickFormat(nice_money)
 		.ticks(4)
 
 	y_axis_svg = App.svg.selectAll('.y_axis')

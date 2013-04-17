@@ -103,6 +103,17 @@ section {
   }
 }
 
+.social-thumbnail {
+  $social-thumbnail-img-size: 200px;
+
+  height: $social-thumbnail-img-size;
+  img {
+    
+    max-height: $social-thumbnail-img-size;
+    max-width: $social-thumbnail-img-size;
+  }
+}
+
 																											/* typography */
 
 h1, h2, h3, h4, h5, h6 {

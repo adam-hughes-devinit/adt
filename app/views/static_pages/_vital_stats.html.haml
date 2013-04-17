@@ -6,47 +6,50 @@
 = javascript_include_tag 'd3/index'
 
 %script#vitals-template{ type: 'text/template'}
-	%ul.unstyled.span12.alert.alert-info
-		%li
-			Chinese 
-			%strong 
-				official finance 
-			projects in database:
-			%span.official#count.text-success
-				<%= official.count %>
-		%li
-			Amounting to 
-			%strong 
-				financial commitments
-			of:
-			%span.official#usd_2009.text-success
-				$<%= nice_money(official.usd_2009) %>
-			%small 
-				(USD-2009)
-		%li
-			Financial value of all
-			%strong
-				ODA-Like 
-			projects:
-			%span.oda_like#usd_2009.text-success
-				$<%= nice_money(oda_like.usd_2009) %>
-			%small
-				(USD-2009)
-		%li
-			Percentage of projects 
-			%strong 
-				implemented or completed:
-			%span.implemented_or_completed#percent.text-success
-				<%= implemented_or_completed.percent %>%
-		%li 
-			Financial 
-			%strong 
-				value
-			of implemented and completed projects:
-			%span.implemented_or_completed#usd_2009.text-success<
-				$<%= nice_money(implemented_or_completed.usd_2009) %>
-			%small
-				(USD-2009)
+	.span12.alert.alert-info
+		%h1
+			Vital Stats:
+		%ul.unstyled
+			%li
+				Chinese 
+				%strong 
+					official finance 
+				projects in database:
+				%span.official#count.text-success
+					<%= official.count %>
+			%li
+				Amounting to 
+				%strong 
+					financial commitments
+				of:
+				%span.official#usd_2009.text-success
+					$<%= nice_money(official.usd_2009) %>
+				%small 
+					(USD-2009)
+			%li
+				Financial value of all
+				%strong
+					ODA-Like 
+				projects:
+				%span.oda_like#usd_2009.text-success
+					$<%= nice_money(oda_like.usd_2009) %>
+				%small
+					(USD-2009)
+			%li
+				Percentage of projects 
+				%strong 
+					implemented or completed:
+				%span.implemented_or_completed#percent.text-success
+					<%= implemented_or_completed.percent %>%
+			%li 
+				Financial 
+				%strong 
+					value
+				of implemented and completed projects:
+				%span.implemented_or_completed#usd_2009.text-success<
+					$<%= nice_money(implemented_or_completed.usd_2009) %>
+				%small
+					(USD-2009)
 
 
 
