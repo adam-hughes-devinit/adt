@@ -17,7 +17,7 @@ module AggregatesHelper
 		
 	
 	WHERE_FILTERS = [
-	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new {  p "Fetching where-filters"; Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
+	    	{sym: :recipient_iso2, name: "Recipient ISO2", options:  Proc.new { Country.all.map(&:iso2) } , internal_filter: "recipient_iso2"},
 	    	{sym: :recipient_name, name: "Recipient Name", options:   Proc.new { Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map(&:name) }.call, internal_filter: "recipient_name"},
 	    	{sym: :crs_sector_name, name: "CRS Sector Name", options:  Proc.new { CrsSector.all.map(&:name) }.call , internal_filter: "crs_sectors.name"},
 	    	{sym: :intent_name, name: "Intent", options:  Proc.new { Intent.all.map(&:name) }.call , internal_filter: "intents.name"},
@@ -25,7 +25,8 @@ module AggregatesHelper
 	    	{sym: :flow_type, name: "Flow Type", options:  Proc.new { FlowType.all.map(&:name) }.call, internal_filter: "flow_types.name"},
 	    	{sym: :flow_class, name: "Flow Class", options: Proc.new { OdaLike.all.map(&:name) }.call, internal_filter: "oda_likes.name" },
 	    	{sym: :status, name: "Status", options:  Proc.new { Status.all.map(&:name) }.call, internal_filter: "statuses.name" },
-	    	{sym: :year, name: "Year", options: ("2000".."2011").to_a.reverse! , internal_filter: "year" }
+	    	{sym: :year, name: "Year", options: ("2000".."2011").to_a.reverse! , internal_filter: "year" },
+	    	#{sym: :donor_name, name: "Donor Name", options:  Proc.new { Country.all.map(&:name) } , internal_filter: "donor.name"},
 	    ]
 	
 		

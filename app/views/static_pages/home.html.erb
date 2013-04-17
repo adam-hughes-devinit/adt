@@ -71,30 +71,33 @@ EOS
 		<li class='span3'>
 			<a href="<%= bubbles_path %>" class="thumbnail">
 				<h4>See the Big Picture &rarr;</h4>
-				<img src='holder.js/300x200'>
+				<%= image_tag("bubble_button.jpg", :alt => "Bubble Chart") %>
+				
 				
 			</a>
 		</li>
 		<li class='span3'>
 			<a href="<%= map_path %>" class="thumbnail">
 				<h4>Country-Level Perspective &rarr;</h4>
-				<img src='holder.js/300x200'>
+				<%= image_tag("map_button.jpg", :alt => "Map Overlay") %>
 			</a>
 		</li>
-		<li class='span3'>
+		<li class='span3' id='project_button' >
 			<a href="<%= projects_path %>" class="thumbnail">
 				<h4>Project-Level Data &rarr;</h4>
-				<img src='holder.js/300x200'>
+				<%= image_tag("project_static.gif", :alt => "Project Pages", :class => "project_button_static") %>
 			</a>
 		</li>
 		<li class='span3'>
-			<a href="<%= aggregate_export_path %>" class="thumbnail">
-				<h4>Aggregated Data &rarr;</h4>
-				<img src='holder.js/300x200'>
+			<a href="<%= content_by_name_path("downloads") %>" class="thumbnail">
+				<h4>Download Data &rarr;</h4>
+				<%= image_tag("aggregate_button.jpg", :alt => "Downloads") %>
 			</a>
 		</li>
 	</ul>
 </div>
+
+<%= render 'vital_stats' %>
 
 <div class='row-fluid' id='home_media'>
 	<div class='span12 row-fluid well'>

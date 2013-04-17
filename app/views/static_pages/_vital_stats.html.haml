@@ -1,0 +1,152 @@
+.row-fluid#vitals
+
+
+= javascript_include_tag 'underscore/index'
+-# nice_money depends on d3:
+= javascript_include_tag 'd3/index'
+
+%script#vitals-template{ type: 'text/template'}
+	%ul.unstyled.span12.alert.alert-info
+		%li
+			Chinese 
+			%strong 
+				official finance 
+			projects in database:
+			%span.official#count.text-success
+				<%= official.count %>
+		%li
+			Amounting to 
+			%strong 
+				financial commitments
+			of:
+			%span.official#usd_2009.text-success
+				$<%= nice_money(official.usd_2009) %>
+			%small 
+				(USD-2009)
+		%li
+			Financial value of all
+			%strong
+				ODA-Like 
+			projects:
+			%span.oda_like#usd_2009.text-success
+				$<%= nice_money(oda_like.usd_2009) %>
+			%small
+				(USD-2009)
+		%li
+			Percentage of projects 
+			%strong 
+				implemented or completed:
+			%span.implemented_or_completed#percent.text-success
+				<%= implemented_or_completed.percent %>%
+		%li 
+			Financial 
+			%strong 
+				value
+			of implemented and completed projects:
+			%span.implemented_or_completed#usd_2009.text-success<
+				$<%= nice_money(implemented_or_completed.usd_2009) %>
+			%small
+				(USD-2009)
+
+
+
+:coffee
+	@vitals = 
+		official: 
+			params:
+				get: "donor"
+				# only ACTIVE by default
+				verified: "Checked"
+				flow_class: [
+					"ODA-like"
+					"Official investment"
+					"OOF-like"
+					"Vague (Official Finance)"
+					].join("*")
+				status: [
+					# Everything but suspended and cancelled
+					"Completion"
+					"Implementation"
+					"Pipeline: Commitment"
+					"Pipeline/identification"
+					"Pipeline: Pledge"
+					"Pipeline: Vague"
+				].join("*")
+
+		oda_like: 
+			params:
+				get: "donor"
+				# only ACTIVE by default
+				verified: "Checked"
+				flow_class: [
+					"ODA-like"
+					].join("*")
+				status: [
+					# Everything but suspended and cancelled
+					"Completion"
+					"Implementation"
+					"Pipeline: Commitment"
+					"Pipeline/identification"
+					"Pipeline: Pledge"
+					"Pipeline: Vague"
+				].join("*")
+
+		implemented_or_completed:
+			params:
+				get: "donor"
+				# only ACTIVE by default
+				verified: "Checked"
+				flow_class: [
+					"ODA-like"
+					"Official investment"
+					"OOF-like"
+					"Vague (Official Finance)"
+					].join("*")
+				status: [
+					# Everything but suspended and cancelled
+					"Completion"
+					"Implementation"
+				].join("*")
+
+	returned_queries = 0
+
+
+	$.get '/aggregates/projects', vitals.official.params, (data) ->
+		this_set = vitals.official
+
+		data = (d for d in data when d["donor"] is "CHN")[0]
+		this_set.count = data["count"]
+		this_set.usd_2009 = data["usd_2009"]
+
+		returned_queries += 1
+		fill_template_if_finished(vitals, returned_queries)
+
+	$.get '/aggregates/projects', vitals.oda_like.params, (data) ->
+		this_set = vitals.oda_like
+
+		data = (d for d in data when d["donor"] is "CHN")[0]
+		this_set.count = data["count"]
+		this_set.usd_2009 = data["usd_2009"]
+
+		returned_queries += 1
+		fill_template_if_finished(vitals, returned_queries)
+
+	$.get '/aggregates/projects', vitals.implemented_or_completed.params, (data) ->
+		this_set = vitals.implemented_or_completed
+
+		data = (d for d in data when d["donor"] is "CHN")[0]
+		this_set.count = data["count"]
+		this_set.usd_2009 = data["usd_2009"]
+
+		returned_queries += 1
+		fill_template_if_finished(vitals, returned_queries)
+
+	fill_template_if_finished = (vitals, returned_queries) ->
+		console.log returned_queries
+		if returned_queries is 3
+			vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
+			template = _.template($('#vitals-template').html(), vitals)
+
+			$('#vitals').append(template)
+
+

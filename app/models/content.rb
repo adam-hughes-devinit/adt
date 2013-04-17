@@ -5,6 +5,7 @@ class Content < ActiveRecord::Base
   
   CONTENT_TYPES = [
   		"Page",
+      "Internal",
   		#"Team Member",
   		#"AidData Publication",
       #"Other Publication"   		

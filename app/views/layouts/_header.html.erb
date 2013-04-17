@@ -14,8 +14,8 @@
 
           <ul class="nav pull-right">
                 <li><%= link_to "Home", root_path %> </li>
-                <li><%= link_to "Team", "/content/meet_the_team" %> </li>
-                <li><%= link_to "Methods", "/content/methodology" %> </li>
+                <li><%= link_to "Team", content_by_name_path("meet_the_team") %> </li>
+                <li><%= link_to "Methods", content_by_name_path("methodology") %> </li>
                 <li class="dropdown">
                   <a href="#" class='dropdown-toggle' data-toggle='dropdown'>
                     Data
@@ -23,13 +23,13 @@
                   </a>
                   <ul class='dropdown-menu'>
                     <li><%= link_to "Visualize", "#" %></li>
-                    <li><%= link_to "Search", projects_path %></li>
-                    <li><%= link_to "Download", '#' %></li>
+                    <li><%= link_to "Search Projects",projects_path %></li>
+                    <li><%= link_to "Download Files", content_by_name_path("downloads") %></li>
                   </ul>
                 </li>
-                <li><%= link_to "Publications", "/content/publications" %> </li>
-                <li><%= link_to "Media", "/content/media" %> </li>
-                <li><%= link_to "Contact", "/content/contact" %> </li>
+                <li><%= link_to "Publications", content_by_name_path("publications") %> </li>
+                <li><%= link_to "Media", content_by_name_path("media") %> </li>
+                <li><%= link_to "Contact", content_by_name_path("contact") %> </li>
  
                 <li><a href='#'>Old menu items &rarr;</a></li>
                 <!-- Links for anyone !-->
