@@ -101,7 +101,15 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
     @project = Project.new(params[:project])
 
     respond_to do |format|
-      if @project.save
+      if params[:suggest]
+        @project.sources.each do |src|
+          src.save!
+        end
+        @project.donor = Country.find_by_name("China")
+        ReviewEntry.add_item(@project, :sources, :donor)
+        flash[:success] = "We will review your aid project suggestion"
+        format.html { redirect_to :back }
+      elsif @project.save
         format.html { redirect_to @project }
         format.json { render json: @project, status: :created, location: @project }
       else

@@ -11,35 +11,45 @@
         -# for the checkbox
         %th
         %th id
-        - atts.delete("id")
-        - atts.delete("updated_at")
-        - atts.each do |key,value|
-          - case key
-          - when "flaggable_id"
-            %th= "Project"
-          - else
-            %th= key.humanize
+        - if type == "Project"
+          %th Title
+          %th Sources
+        - else 
+          - atts.delete("id")
+          - atts.delete("updated_at")
+          - atts.each do |key,value|
+            - case key
+            - when "flaggable_id"
+              %th= "Project"
+            - else
+              %th= key.humanize
     %tbody
       - entries.each_with_index do |entry,index|
         %tr{id: "#{type}#{index}"}
           %td
             %input{type: "checkbox", value: "yes" }
           %td= entry.id
-          - atts = entry.item.attributes
-          - atts.delete("id")
-          - atts.delete("updated_at")
-          - atts.each do |att|
-            - key = att[0]
-            - value = att[1]
-            - case key
-            - when "created_at"
-              %td= entry.created_at.to_s(:short)
-            - when "project_id"
-              %td= link_to(value, "/projects/#{value}")
-            - when "flaggable_id"
-              %td= link_to(value, "/projects/#{value}")
-            - else
-              %td= value
+          - if type == "Project"
+            %td= entry.item.title
+            - url_list = ""
+            - entry.item.sources.each do |src|
+              %td= link_to(src.url, src.url)
+          - else
+            - atts = entry.item.attributes
+            - atts.delete("id")
+            - atts.delete("updated_at")
+            - atts.each do |att|
+              - key = att[0]
+              - value = att[1]
+              - case key
+              - when "created_at"
+                %td= entry.created_at.to_s(:short)
+              - when "project_id"
+                %td= link_to(value, "/projects/#{value}")
+              - when "flaggable_id"
+                %td= link_to(value, "/projects/#{value}")
+              - else
+                %td= value
 
 
   %button{id: "#{type}-Approve"}Approve

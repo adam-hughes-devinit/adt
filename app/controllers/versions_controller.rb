@@ -27,7 +27,7 @@ class VersionsController < ApplicationController
 			project = @version.reify
 			accessories = JSON.parse(@version.accessories)
 			accessories.each do |acc_type, values|
-			project.send("#{acc_type}s").clear
+			project.send("#{acc_type.pluralize}").clear
 			
 				values.each do |acc_object|
 					acc_object.delete("id")
