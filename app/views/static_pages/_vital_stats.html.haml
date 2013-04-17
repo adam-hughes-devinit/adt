@@ -2,38 +2,52 @@
 
 
 = javascript_include_tag 'underscore/index'
+-# nice_money depends on d3:
+= javascript_include_tag 'd3/index'
 
 %script#vitals-template{ type: 'text/template'}
 	%ul.unstyled.span12.alert.alert-info
 		%li
-			Chinese official finance projects in database:
+			Chinese 
+			%strong 
+				official finance 
+			projects in database:
 			%span.official#count.text-success
 				<%= official.count %>
 		%li
-			Commitments amounting to:
+			Amounting to 
+			%strong 
+				financial commitments
+			of:
 			%span.official#usd_2009.text-success
 				$<%= nice_money(official.usd_2009) %>
 			%small 
 				(USD-2009)
 		%li
-			Including 
-			%span.oda_like#count.text-success
-				<%= oda_like.count %>
-			ODA-like projects amounting to
+			Financial value of all
+			%strong
+				ODA-Like 
+			projects:
 			%span.oda_like#usd_2009.text-success
 				$<%= nice_money(oda_like.usd_2009) %>
 			%small
 				(USD-2009)
 		%li
-			Implemented/Completed: 
+			Percentage of projects 
+			%strong 
+				implemented or completed:
 			%span.implemented_or_completed#percent.text-success
 				<%= implemented_or_completed.percent %>%
-			(
-			%span.implemented_or_completed#usd_2009.text-success
+		%li 
+			Financial 
+			%strong 
+				value
+			of implemented and completed projects:
+			%span.implemented_or_completed#usd_2009.text-success<
 				$<%= nice_money(implemented_or_completed.usd_2009) %>
-			%small 
-				USD-2009
-			)
+			%small
+				(USD-2009)
+
 
 
 :coffee

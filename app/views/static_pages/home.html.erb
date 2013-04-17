@@ -85,21 +85,13 @@ EOS
 		<li class='span3' id='project_button' >
 			<a href="<%= projects_path %>" class="thumbnail">
 				<h4>Project-Level Data &rarr;</h4>
-				<%= image_tag("project_animated.gif", :alt => "Project Pages", :class => "project_button_animated") %>
-				<script>$('.project_button_animated').hide()</script>
 				<%= image_tag("project_static.gif", :alt => "Project Pages", :class => "project_button_static") %>
 			</a>
 		</li>
-		<script>$('#project_button').mouseover(function(){
-				$('.project_button_static').hide();
-				$('.project_button_animated').show();});
-                          $('#project_button').mouseout(function(){
-                          $('.project_button_animated').hide();
-                          $('.project_button_static').show();});</script>
 		<li class='span3'>
-			<a href="<%= aggregate_export_path %>" class="thumbnail">
-				<h4>Aggregated Data &rarr;</h4>
-				<%= image_tag("aggregate_button.jpg", :alt => "Aggregates") %>
+			<a href="<%= content_by_name_path("downloads") %>" class="thumbnail">
+				<h4>Download Data &rarr;</h4>
+				<%= image_tag("aggregate_button.jpg", :alt => "Downloads") %>
 			</a>
 		</li>
 	</ul>
