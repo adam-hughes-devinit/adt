@@ -10,7 +10,10 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 	
 	def create
 		@flag = Flag.new(params[:flag])
-		if @flag.save!
+		if not current_user
+		  ReviewEntry.add_item(@flag)
+      flash[:notice] = "Comment will be reviewed before being posted"
+    elsif @flag.save!
 			AiddataAdminMailer.delay.flag_notification(@flag)
 			flash[:success] = "Flag added"
 		else

@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+#ruby '2.0.0'
 gem 'rails', '3.2.13'
 gem 'capistrano'
 gem 'bcrypt-ruby', '3.0.1'
@@ -34,6 +34,7 @@ group :development, :test do
   gem 'sunspot_solr'
   gem 'launchy'
   gem 'spork', '0.9.2'
+  gem 'brakeman', require: false
 end
 
 
