@@ -323,6 +323,7 @@ ActiveRecord::Schema.define(:version => 20130409214127) do
     t.text     "serialized_item"
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
+    t.string   "ar_model"
   end
 
   create_table "roles", :force => true do |t|

@@ -1,3 +1,92 @@
-- @review_entries.each do |r|
-  =r.status
-  =r.serialized_item
+- provide :title, "Review Items"
+- provide :first_header, "Review Items"
+
+- @review_sections.each do |type, entries|
+  %h2= type.pluralize
+  %table{id: "#{type}", class: "table table-hover sortable"}
+    - atts = entries.first.item.attributes
+    %thead
+      %tr
+        -# headers
+        -# for the checkbox
+        %th
+        %th id
+        - atts.delete("id")
+        - atts.delete("updated_at")
+        - atts.each do |key,value|
+          - case key
+          - when "flaggable_id"
+            %th= "Project"
+          - else
+            %th= key.humanize
+    %tbody
+      - entries.each_with_index do |entry,index|
+        %tr{id: "#{type}#{index}"}
+          %td
+            %input{type: "checkbox", value: "yes" }
+          %td= entry.id
+          - atts = entry.item.attributes
+          - atts.delete("id")
+          - atts.delete("updated_at")
+          - atts.each do |att|
+            - key = att[0]
+            - value = att[1]
+            - case key
+            - when "created_at"
+              %td= entry.created_at.to_s(:short)
+            - when "project_id"
+              %td= link_to(value, "/projects/#{value}")
+            - when "flaggable_id"
+              %td= link_to(value, "/projects/#{value}")
+            - else
+              %td= value
+
+
+  %button{id: "#{type}-Approve"}Approve
+  %button{id: "#{type}-Delete"}Delete
+
+= javascript_include_tag "bootstrap_sortable/index"
+= stylesheet_link_tag "bootstrap-sortable"
+:javascript
+  // grab all the buttons
+  $("button").each(function() {
+    $(this).click(function() {
+      //figure out the table name they are associated with
+      var split = this.id.split('-');
+      var class_name = split[0];
+      var approved = split[1];
+      var str = '#' + class_name + ' tr';
+      // send all the checked rows
+      $(str).filter(':has(:checkbox:checked)').each(function() {
+        $tr = $(this)
+        $('td', $tr).each(function() {
+          
+        });
+        manageRow(this, approved);
+      });
+
+    });
+  });
+  
+  function manageRow(row, approved){
+    var id = $(row).children()[1].innerHTML;
+    if (approved == "Approve")
+    {
+      var approve = { "approve": true };
+    }
+    else { var approve = "approve"; }
+    $.ajax({
+      url: id,
+      data: approve,
+      type: 'DELETE',
+      success: function(result) {
+      }
+    });
+    deleteRow(row.id);
+    ApplySortability();
+  }
+
+  function deleteRow(rowId){
+    var row = document.getElementById(rowId);
+    row.parentNode.removeChild(row);
+  }

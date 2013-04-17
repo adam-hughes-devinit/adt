@@ -4,13 +4,17 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
 	def create
 		@comment = Comment.new(params[:comment])
-		if @comment.save!
-			AiddataAdminMailer.delay.comment_notification(@comment)
-			flash[:success] = "Comment added."
-			redirect_to :back
-		else
-			flash[:notice] = "Comment failed."
-		end
+    if not current_user
+      ReviewEntry.add_item(@comment)
+      flash[:notice] = "Comment will be reviewed before being posted"
+
+    elsif @comment.save!
+      AiddataAdminMailer.delay.comment_notification(@comment)
+      flash[:success] = "Comment added."
+    else
+      flash[:notice] = "Comment failed."
+    end
+    redirect_to :back
 		
 	end
 

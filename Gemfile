@@ -34,6 +34,7 @@ group :development, :test do
   gem 'sunspot_solr'
   gem 'launchy'
   gem 'spork', '0.9.2'
+  gem 'brakeman', require: false
 end
 
 
@@ -45,6 +46,7 @@ end
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
   gem 'jquery-rails'
+  gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
 
 # end
 
