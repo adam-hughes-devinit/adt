@@ -13,21 +13,21 @@ carousel = <<EOS
 		  </ol>
 		  <div class='carousel-inner'>
 		    <div class='active item'>
-	    	    <img src='holder.js/900x500'>
+	    	    <img src='holder.js/600x300'>
 		    	<div class='carousel-caption'>
 		    		<h4>Your Home Page</h4>
 		    		<p>Guess what, we're starting on the new home page!!</p>
 		    	</div>
 		    </div>
 		    <div class='item'>
-		    	<img src='holder.js/900x500'>
+		    	<img src='holder.js/600x300'>
 		    	<div class='carousel-caption'>
 		    		<h4>Random Picture</h4>
 		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
 		    	</div>
 		    </div>
 		    <div class='item'>
-		    	<img src='holder.js/900x500'>
+		    	<img src='holder.js/600x300'>
 		    	<div class='carousel-caption'>
 		    		<h4>Random Picture</h4>
 		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
@@ -53,43 +53,72 @@ download_data = <<EOS
 EOS
 	header_content = <<EOS
 
-<div class='container-fluid'>
-	<div class='row'><br><br></div>
-	<div class='row-fluid'>
-		<div class='span9 container-fluid'>
-			#{carousel}
-		</div>
-		<div class='span3 home_thumbnails'>
-			<ul class='thumbnails'>
-				<li class=''>
-					<a href="/content/using_the_data" class="with_shadow thumbnail">
-						<h4>How to Use the Data</h4>
-						<img src='holder.js/250x250'>
-					</a>
-				</li>
-				<li>
-					<a href="/content/improving_the_data" class="with_shadow thumbnail">
-						<h4>Help us Improve the Data</h4>
-						<img src='holder.js/250x250'>
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-</div>
 
 EOS
 
+home_thumbnails = <<EOS
+			<div class='home_thumbnails'>
+				<ul class='thumbnails row-fluid'>
+					<li class='span6'>
+						<a href="/content/using_the_data" class="with_shadow thumbnail">
+							<h4>How to Use the Data</h4>
+							<img src='holder.js/100x100'>
+						</a>
+					</li>
+					<li class='span6'>
+						<a href="/content/improving_the_data" class="with_shadow thumbnail">
+							<h4>Help us Improve the Data</h4>
+							<img src='holder.js/100x100'>
+						</a>
+					</li>
+				</ul>
+			</div>
+EOS
+home_data_list = <<EOS
+			
+				<ul class='unstyled inline row-fluid'>
+					<li class='span6'>
+						<a href="/content/using_the_data">
+							<h3>How to Use the Data</h4>
+						</a>
+					</li>
+					<li class='span6'>
+						<a href="/content/improving_the_data">
+							<h3>Help us Improve the Data</h4>
+						</a>
+					</li>
+				</ul>
+
+EOS
 
 %>
 
 <% provide(:header_content, header_content.html_safe) %>
 
+<div class='container-fluid'>
+
+	<div class='row-fluid'>
+		<div class='span7 container-fluid'>
+			<%= carousel.html_safe %>
+			<%= home_data_list.html_safe %>
+
+		</div>
+		<div class='span5 container-fluid'>
+
+			<div class='row-fluid'>
+				<div class='well well-small'>
+					<%= render 'vital_stats' %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 <div class='row-fluid home_thumbnails'>
 	<ul class='thumbnails '>
 		<li class='span3'>
-			<a href="<%= bubbles_path %>" class="thumbnail">
+			<a href="<%= bubbles_path %>" class="thumbnail with_shadow">
 				<h4>See the Big Picture &rarr;</h4>
 				<%= image_tag("bubble_button.jpg", :alt => "Bubble Chart") %>
 				
@@ -97,27 +126,25 @@ EOS
 			</a>
 		</li>
 		<li class='span3'>
-			<a href="<%= map_path %>" class="thumbnail">
+			<a href="<%= map_path %>" class="thumbnail with_shadow">
 				<h4>Country-Level Perspective &rarr;</h4>
 				<%= image_tag("map_button.jpg", :alt => "Map Overlay") %>
 			</a>
 		</li>
 		<li class='span3' id='project_button' >
-			<a href="<%= projects_path %>" class="thumbnail">
+			<a href="<%= projects_path %>" class="thumbnail with_shadow">
 				<h4>Project-Level Data &rarr;</h4>
 				<%= image_tag("project_static.gif", :alt => "Project Pages") %>
 			</a>
 		</li>
 		<li class='span3'>
-			<a href="<%= content_by_name_path("downloads") %>" class="thumbnail">
+			<a href="<%= content_by_name_path("downloads") %>" class="thumbnail with_shadow">
 				<h4>Download Data &rarr;</h4>
 				<%= image_tag("aggregate_button.jpg", :alt => "Downloads") %>
 			</a>
 		</li>
 	</ul>
 </div>
-
-<%= render 'vital_stats' %>
 
 <div class='row-fluid' id='home_media'>
 	<div class='span12 row-fluid well'>
