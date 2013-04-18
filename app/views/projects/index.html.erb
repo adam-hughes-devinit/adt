@@ -28,7 +28,7 @@ end %>
 <%= render 'search' %>
 
 <div class='row'>
-	<div style='display:none;text-align:center;' class='span12' id='project-facets-button'>
+	<div class='well well-small' style='display:none;text-align:center;' class='span12' id='project-facets-button'>
 
 		<button class='btn btn-primary' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Search Box</button>
 	</div>
@@ -76,7 +76,7 @@ end %>
       </th>
       
       <th>
-      	<%= link_to "Amount",
+      	<%= link_to "Amount (USD-2009)",
     	  "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
         %>
       </th>
@@ -137,7 +137,7 @@ end %>
 			facet_button.slideUp()
 		}
 	}
-	<% if (params[:page].to_i || 1) > 1 %>
+	<% if (params[:page].to_i || 0) >= 0 %>
 		toggle_search_params()
 	<% end %>
 </script>

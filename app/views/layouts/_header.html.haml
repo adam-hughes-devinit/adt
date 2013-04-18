@@ -1,0 +1,64 @@
+%header
+  .container
+    .navbar.row-fluid
+      .navbar-inner
+        %a#logo{ href: "http://aiddata.org", style: "position:absolute;"}
+          = image_tag "adt.png"
+        %nav
+          %ul.nav.pull-right
+            %li 
+              = link_to "Home", root_path
+            %li.dropdown
+              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                About the Project
+                %i.caret
+              %ul.dropdown-menu
+                %li 
+                  = link_to "Meet the team", content_by_name_path("meet_the_team")
+                %li
+                  = link_to "Methodology", content_by_name_path("methodology")
+                %li
+                  = link_to "Contact", content_by_name_path("contact")
+            %li.dropdown
+              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                Get Data
+                %i.caret
+              %ul.dropdown-menu
+                %li
+                  = link_to "Search Projects", projects_path
+                %li 
+                  = link_to "Download Files", content_by_name_path("downloads")
+                %li
+                  = link_to "Aggregate Data", aggregate_export_path
+            %li.dropdown
+              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                Visualize
+                %i.caret
+              %ul.dropdown-menu
+                %li
+                  = link_to "Country-level map", map_path
+                %li 
+                  = link_to "Project bubbles", bubbles_path
+            %li
+              = link_to "Publications", content_by_name_path("publications")
+            %li
+              = link_to "Media", content_by_name_path("media")
+            
+            - if signed_in? && current_user_is_aiddata
+              = render 'layouts/project_menu'
+              %li
+                = link_to "Edit site content", contents_path
+              %li
+                = link_to "Sign out", signout_path, method: "delete"
+            - else
+              %li
+                = link_to "Sign In", signin_path
+
+            - if Rails.env.development? 
+              -# %p.pull-right{ style: "margin:5px;color:#fcc;font-size:20px" }
+                -# %strong
+                  -# DEVELOPMENT
+
+    #header_content.row-fluid
+      .span10.offset2
+        = yield(:header_content)

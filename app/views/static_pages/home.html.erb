@@ -3,12 +3,9 @@
 <%= javascript_include_tag "holder/holder" %>
 
 <%
-	header_content = <<EOS
 
-<div class='container-fluid'>
-	<div class='row'><br><br></div>
-	<div class='row-fluid'>
-		<div id='home_carousel' class='span9 carousel slide with_shadow'>
+carousel = <<EOS
+		<div id='home_carousel' class='carousel slide with_shadow'>
 		  <ol class='carousel-indicators'>
 		    <li data-target='#home_carousel' data-slide-to='0' class='active'></li>
 		    <li data-target='#home_carousel' data-slide-to='1'></li>
@@ -40,6 +37,28 @@
 		  <a class='carousel-control left' href='#home_carousel' data-slide='prev'>&lsaquo;</a>
 		  <a class='carousel-control right' href='#home_carousel' data-slide='next'>&rsaquo;</a>
 		</div>
+EOS
+
+vitals = <<EOS
+	<div class='row-fluid'>
+		#{render 'vital_stats'}
+	</div>
+EOS
+
+
+download_data = <<EOS
+	<div class='row-fluid'>
+		#{render 'download_data'}
+	</div>
+EOS
+	header_content = <<EOS
+
+<div class='container-fluid'>
+	<div class='row'><br><br></div>
+	<div class='row-fluid'>
+		<div class='span9 container-fluid'>
+			#{carousel}
+		</div>
 		<div class='span3 home_thumbnails'>
 			<ul class='thumbnails'>
 				<li class=''>
@@ -61,6 +80,7 @@
 </div>
 
 EOS
+
 
 %>
 
