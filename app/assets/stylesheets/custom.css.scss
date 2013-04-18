@@ -198,7 +198,31 @@ footer {
     text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
   }
 }
+#home_carousel {
+  $carousel_height: 300px;
+  $carousel_width: 600px;
+  //max-width: 900px;
+  //max-height: 500px;
+  margin: 20px auto 0px auto;
+  //padding: 10px;
 
+  .carousel-inner {
+
+    .item {
+
+      overflow:hidden;
+      h1 {
+        position:absolute;
+      }
+      img {
+        min-height: $carousel_height !important;
+        //max-width: $carousel_width !important;
+        margin: auto auto;
+        clip:rect(0px $carousel_width $carousel_height 0)
+      }
+    }
+  }
+}
 .team-image {
   max-height: 200px;
   border: 1px solid #333;

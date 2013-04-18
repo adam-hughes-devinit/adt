@@ -56,9 +56,11 @@ namespace :aggregator do
 		# function
 		def test_code(code_class, get_call, filter_name=get_call)
 			p "Test #{get_call}"
-				code_api_data = get_aggregate_data "get=#{get_call}&#{filter_name}=#{
-				code_class.all.map { |c| "#{CGI::escape(c.name)}"}.join "*"}"
-			
+				code_api_data = get_aggregate_data("get=#{get_call}&#{filter_name}=#{
+				code_class.all.map { |c| "#{CGI::escape(c.name)}"}.join "*"}")
+				
+				p code_api_data
+
 				code_api_sum = 0
 				code_api_data.map{|d| code_api_sum += d["usd_2009"].to_f}
 			
