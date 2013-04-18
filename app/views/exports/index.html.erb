@@ -1,9 +1,9 @@
 <% provide(:title, "Exports") %>
-<% provide(:first_header, "All Exports") %>
+<% provide(:header_content, "<h1>All Exports</h1>".html_safe ) %>
 <%# <% @proj %1> %>
 <div class="row">
   <div>
-    <table class='code-index-table' cellpadding="10">
+    <table class='table sortable' cellpadding="10">
       <thead>
         <tr>
           <th>Export Id</th>
@@ -35,3 +35,4 @@
     </table>
   </div>
 <div>
+<%= javascript_include_tag "bootstrap_sortable/index" %>

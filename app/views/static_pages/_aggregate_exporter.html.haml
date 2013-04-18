@@ -86,6 +86,7 @@
 		
 
 
+= javascript_include_tag "d3/index"
 
 :javascript
 	var handler_names = [#{duplication_handler_hints.map {|h| "['#{h[0]}' , '#{h[1].gsub(/'/, '"')}']"}.join(",").html_safe}]  
@@ -152,7 +153,7 @@
 		json.forEach(function(j) {
 			table_html += "<tr>"
 			for (key in j) 
-				{table_html += "<td>"+j[key]+"</td>" }
+				{table_html += "<td>"+ ( (key == "usd_current" || key == "usd_2009") ?  d3.format(",2f")(j[key]) : j[key] )+"</td>" }
 			table_html += "</tr>"
 		})
 		table_html += "</tbody></table>"
@@ -168,7 +169,7 @@
 			api_call = build_api_params()
 			$('#api_query_preview').html("<a target='_blank' href='/aggregates/projects?"+api_call+"'>"+
 			"API Query "+ "</a>")
-			$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Download your CSV.</a>")
+			$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Download your CSV</a>")
 		}
 
 	$(function() {
