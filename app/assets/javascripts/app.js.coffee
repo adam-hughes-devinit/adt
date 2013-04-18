@@ -14,11 +14,11 @@ Array.prototype.getUnique = () ->
     if 1000 >= amount 
       "#{d3.format("0,r")(d3.round(amount,0))}"
     else if 1000000 > amount >= 1000
-      "#{d3.round((amount/1000),0)}K"
+      "#{d3.round((amount/1000),0)} K"
     else if 1000000000 > amount >= 1000000
-      "#{d3.round((amount/1000000),1)}M"
+      "#{d3.round((amount/1000000),1)} M"
     else if amount >= 1000000000
-      "#{d3.format("0,r")(d3.round((amount/1000000000),2))}B"
+      "#{d3.format("0,r")(d3.round((amount/1000000000),2))} B"
     else
       amount
   else

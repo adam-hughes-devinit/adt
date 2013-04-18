@@ -27,13 +27,6 @@ end %>
 
 <%= render 'search' %>
 
-<div class='row'>
-	<div class='well well-small' style='display:none;text-align:center;' class='span12' id='project-facets-button'>
-
-		<button class='btn btn-primary' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Filter Options</button>
-	</div>
-</div>
-
 <div class='row' >
  	<%= render 'search_export' %>
  </div>
@@ -124,7 +117,7 @@ end %>
 	update_all_check_counts()
 
 	function toggle_search_params() {
-		var facet_box = $('#project-facets')
+		var facet_box = $('#facets')
 		var facet_button = $('#project-facets-button')
 		if (facet_box.is(":visible"))
 		{
