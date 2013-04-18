@@ -6,7 +6,7 @@ Adt::Application.routes.draw do
   :flag_types, :loan_types, :contents
 
   
- 
+  get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
   resources :projects do
     resources :files # RDM 3_26_2013
     resources :robocodes # RDM 4 12 2013

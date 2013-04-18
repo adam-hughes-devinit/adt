@@ -4,5 +4,7 @@
 .row-fluid
 	.span12.site_content{style: "margin: auto, auto;"}
 
-		:markdown
-			#{@content.content}
+		- if @content.content_type == "Complex Page"
+			#{eval(@content.content).html_safe}
+		- else
+			= Markdown.new(@content.content).to_html.html_safe

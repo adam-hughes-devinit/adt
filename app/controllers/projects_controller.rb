@@ -181,6 +181,10 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
     flash[:notice] = "Project deleted! #{undo_link}"
   end
 
+  def suggest
+    # suggest.html.haml
+  end
+
   private
 
     def lock_editing_except_for_admins

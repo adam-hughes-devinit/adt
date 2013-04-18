@@ -2,7 +2,8 @@ class Project < ActiveRecord::Base
   include ProjectCache
   include ProjectExporters
   extend  ProjectExporterHeaders
-
+  include ActionView::Helpers::NumberHelper
+  
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
     :is_commercial, :media_id, 
@@ -66,8 +67,14 @@ class Project < ActiveRecord::Base
 
   validates :donor, presence: true
 
+  def to_english(options={})
+    exclude_title = options[:exclude_title] || false
+    "#{exclude_title ? "" : "#{title}: "}" +
+    "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" +
+    " to #{country_name.to_sentence}" +
+    " in #{year}"
+  end
 
-  
   # I'm adding string methods for these codes for Sunspot Facets
   belongs_to :status
   def status_name

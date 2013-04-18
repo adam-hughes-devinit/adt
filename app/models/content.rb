@@ -4,11 +4,13 @@ class Content < ActiveRecord::Base
   has_paper_trail
   
   CONTENT_TYPES = [
-  		"Page",
-      "Internal",
-  		#"Team Member",
-  		#"AidData Publication",
-      #"Other Publication"   		
+  		"Page", # Markdown content
+      "Complex Page", # Ruby content, must return HTML
+      "Internal", # Markdown content
+  		"Faculty/Staff",
+      "Research Assistant",
+  		"AidData Publication",
+      "Other Publication"   		
   	]
 
   validates_inclusion_of :content_type, in: CONTENT_TYPES
