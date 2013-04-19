@@ -13,6 +13,7 @@ Adt::Application.routes.draw do
   end
 
   resources :organizations, :users, :scopes, :exports
+  resources :datasets, id: /[0-9\.]+/
 
   # limited access
   resources :comments, only: [:create, :destroy, :show]

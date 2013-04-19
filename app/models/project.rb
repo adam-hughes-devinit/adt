@@ -70,7 +70,7 @@ class Project < ActiveRecord::Base
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
     "#{exclude_title ? "" : "#{title}: "}" +
-    "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" +
+    "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
     " to #{country_name.to_sentence}" +
     " in #{year}"
   end
