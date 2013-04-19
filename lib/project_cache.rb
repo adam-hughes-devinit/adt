@@ -1,10 +1,14 @@
 module ProjectCache
   include ProjectExporters
   require 'fileutils'
+  require 'open-uri'
 
 
   # scope_name is a symbol
   def cache_files(scope_symbol=nil)
+
+    # go ahead and load csv_text in memory:
+    Project.find_each do |p| p.csv_text end
 
     downloads_directory = 'public/downloads'
     # make directory if not there
@@ -12,71 +16,34 @@ module ProjectCache
       FileUtils.mkdir_p(downloads_directory)
     end
     
+    root = Rails.env.production? ? "http://china.aiddata.org" : 'http://localhost:3000'
+    def make_file_for_scope(scope, downloads_directory, root)  
+      name = scope.name
+      File.open("#{downloads_directory}/#{name}.csv", 'w') do |file|
+        file.puts open(URI.encode(root + "/projects.csv?scope_names[]=#{name}"))
+      end
+    end
+
+    
+
+    
     if !scope_symbol
       #Remove all the old csv files
       FileUtils.rm_rf Dir["#{downloads_directory}/*.csv"]
 
-      # create a csv file for each scope
+      # create a csv file for each scope 
       scopes = Scope.all
-      file_hash = {}
-      scopes.each do |scope_object|
-        name = scope_object.symbol.to_s.capitalize
-        file_hash[scope_object.symbol.to_sym] = 
-          File.open("#{downloads_directory}/#{name}.csv", 'w')
-      end
-      all_proj_file = File.open("#{downloads_directory}/All_Projects.csv",'w')
-
-      # add the csv_header to each file
-      file_hash.each do |name, file|
-        file.puts Project.csv_header
-      end
-      all_proj_file.puts Project.csv_header
-
-      #grab all the projects
-      all_project = Project.search do
-        paginate per_page: 10**6
-      end.results
-
-      # iterate through the projects and place the info in the
-      # appropriate files
-      all_project.each do |project|
-        proj_scopes = project.scope
-        proj_scopes.each do |proj_scope|
-          file = file_hash[proj_scope]
-          file.puts project.csv_text
-        end
-        all_proj_file.puts project.csv_text
-      end
-
-      #close all the files
-      file_hash.each do |name, file|
-        file.close
+      scopes.each do |scope|
+        make_file_for_scope(scope, downloads_directory,root)
       end
     else
-      file_prefix = "/#{scope_symbol.to_s.capitalize}"
 
-      target_file = "#{downloads_directory}#{file_prefix}.csv"
+      make_file_for_scope(Scope.find_by_symbol(scope_symbol), downloads_directory, root)
+    end
 
-      FileUtils.rm_rf Dir.glob(target_file)
-
-      p "Creating #{target_file}"
-
-      these_projects = Project.search do 
-        with :scope, scope_symbol
-        paginate per_page: 10**5
-      end.results
-
-      if !these_projects.blank?
-        File.open( target_file ,"w") do |f|
-          
-          f.puts "#{Project.csv_header}"
-
-          these_projects.each do |project|
-            f.puts "#{project.csv_text}"
-          end
-        end
-      end
-
+    # Always remake the whole file
+    File.open("#{downloads_directory}/All_Projects.csv",'w') do |file|
+      file.puts open(root +"/projects.csv")
     end
   end
 

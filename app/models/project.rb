@@ -29,7 +29,9 @@ class Project < ActiveRecord::Base
     :donor_id, :owner_id, :intent_id, :crs_sector_id
 
   before_save :set_verified_to_raw_if_null
-  after_destroy :remake_scope_files
+  # after_save :remake_scope_files
+  # after_destroy :remake_scope_files
+
 
   def remake_scope_files
     scope.each do |s|

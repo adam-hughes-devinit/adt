@@ -9,6 +9,7 @@ module ProjectExporters
      Rails.cache.fetch("project_csv_text/#{self.id}") do
           self.create_csv_text
      end
+     
   end
 
   def expire_csv_text

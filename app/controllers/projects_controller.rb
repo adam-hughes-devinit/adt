@@ -163,7 +163,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
     @accessories = @project.accessories
     
     @project.destroy
-    @cache.destroy
+   
     
     @last_version = @project.versions.scoped.last
     @last_version.accessories = @accessories

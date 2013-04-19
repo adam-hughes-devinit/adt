@@ -21,10 +21,6 @@ class StaticPagesController < ApplicationController
     render 'csv_analyzer'
   end
 
-  def downloads
-    render file: '/static_pages/_download_data'
-  end
-
   def dashboard 
     render 'dashboard'
   end
@@ -40,11 +36,6 @@ class StaticPagesController < ApplicationController
   def signup
     render file: '/static_pages/signup'
   end
-
-  def table
-    render 'table'
-  end
-
 
 
   def ajax
