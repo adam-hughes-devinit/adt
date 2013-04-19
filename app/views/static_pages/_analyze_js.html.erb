@@ -12,12 +12,14 @@
           </div>
           <p>Loading data...</p>
       </div>
-
+      <div id="legend" style='position:absolute;background-color: rgb(255, 255, 255); border: 1px solid rgb(128, 128, 128); opacity: 0.9; padding: 1px 5px; margin-top: 5px; display: none;'>
+        <h3>Legend</h3>
+      </div>
       <div id="vis2" >
       </div>
     </div>
     <div class='row'>
-      <p>Chinese Official Finance, USD-2009.</p>
+      <a href="#" id="legend" class="btn">Legend <%= image_tag("tinygraph.gif") %></a>
     </div>
   </div>
   <%= javascript_include_tag 'bubbles/index' %>
@@ -31,6 +33,13 @@
             toggle_view(view_type);
             return false;
           });
+          $('a#legend').click(function(){
+            $('div#legend').toggle();
+            $('a#legend').toggleClass('active');
+            return false;});
+          $('div#legend').click(function(){
+            $('div#legend').toggle();
+            $('a#legend').toggleClass('active');});
         });
     });
   </script>
