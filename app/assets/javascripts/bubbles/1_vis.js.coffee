@@ -333,14 +333,14 @@ $ ->
 
 
   page = 1
-  page_size = 1000
-  max_count = 2000
+  page_size = 10
+  max_count = 2400
   percent_loaded = 0
   percent_step = 100 / ( max_count/page_size )
   csv = []
-
+  $('#loading-bar .progress .bar').css("width", "1%")
   load_projects = (page, page_size, percent_loaded,percent_step) ->
-    console.log "Getting #{page_size} projects from page #{page}"
+    # console.log "Getting #{page_size} projects from page #{page}"
     d3.csv "/projects.csv?active_string=Active&page=#{page}&max=#{page_size}", (data) ->
       percent_loaded += percent_step
       $('#loading-bar .progress .bar').css("width", "#{percent_loaded}%")
@@ -353,6 +353,14 @@ $ ->
         console.log "Found #{csv.length} active projects"
         render_vis csv
         $('#loading-bar').slideUp().remove()
-
-  load_projects page, page_size, percent_loaded, percent_step
+  
+  load_projects_all_at_once = () ->
+     d3.csv "/projects.csv?active_string=Active", (csv) ->
+        $('#loading-bar').css("width", "100%")
+        console.log "Found #{csv.length} active projects"
+        render_vis csv
+        $('#loading-bar').slideUp().remove()      
+  
+  # load_projects page, page_size, percent_loaded, percent_step
+  load_projects_all_at_once()
 
