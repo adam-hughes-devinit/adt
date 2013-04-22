@@ -1,6 +1,6 @@
 %h2 Suggest a new project
 - @project = Project.new
-= form_for @project do |f|
+= form_for @project, url: '/projects/suggest' do |f|
   #suggest
     = hidden_field_tag 'suggest', 'true'
     = f.label :title, 'Title'

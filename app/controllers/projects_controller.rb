@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController  
+skip_before_filter :signed_in_user, only: [:suggest]
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
 
-before_filter :lock_editing_except_for_admins, except: [:index, :show]
+before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 
 include SearchHelper
 
@@ -120,6 +121,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
   end
 
+
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
@@ -182,6 +184,17 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
   end
 
   def suggest
+    if request.post?
+      @project = Project.new(params[:project])
+
+      @project.sources.each do |src|
+        src.save!
+      end
+      @project.donor = Country.find_by_name("China")
+      ReviewEntry.add_item(@project, :sources, :donor)
+      flash[:success] = "We will review your aid project suggestion"
+      redirect_to :back
+    end
     # suggest.html.haml
   end
 
