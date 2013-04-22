@@ -5,13 +5,14 @@
 -# nice_money depends on d3:
 = javascript_include_tag 'd3/index'
 
+
 %script#vitals-template{ type: 'text/template'}
 	.row-fluid
 		.span12
 			-#.alert.alert-info
 			%h3.text-info
 				Vital Stats:
-			%ul.unstyled
+			%ul.unstyled.marquee
 				%li
 					Chinese 
 					%strong 
@@ -51,14 +52,6 @@
 						$<%= nice_money(implemented_or_completed.usd_2009) %>
 					-# %small
 						-# (USD-2009)
-				%li
-					%strong more...
-				%li
-					%strong more...
-				%li
-					%strong more...
-
-
 
 
 :coffee
@@ -157,7 +150,9 @@
 		if returned_queries is 3
 			vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
 			template = _.template($('#vitals-template').html(), vitals)
+			
 
 			$('#vitals').append(template)
+
 
 

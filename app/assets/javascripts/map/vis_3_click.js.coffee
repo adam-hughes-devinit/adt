@@ -217,12 +217,12 @@ make_sector_graph = (overlay, active_country) ->
 					#{s.key}
 				</td>
 				<td>
-					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&sector_name=#{s.key}'>
+					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}'>
 						$#{window.vis_config.nicemoney(Math.round(s.values.value))}
 					</a>
 				</td>
 				<td>
-					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&sector_name=#{s.key}'>
+					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}'>
 						#{s.values.count} 
 					</a>
 				</td>

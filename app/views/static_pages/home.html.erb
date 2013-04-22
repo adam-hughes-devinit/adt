@@ -13,25 +13,24 @@ carousel = <<EOS
 		  </ol>
 		  <div class='carousel-inner'>
 		    <div class='active item'>
-	    	    <h1>Read the Working Paper</h1>
-	    	    #{image_tag "chinese_and_african_workers.jpg"}
+	    	    #{image_tag "home/darfur_map_zoom.png"}
 		    	<div class='carousel-caption'>
-		    		<h4>Your Home Page</h4>
-		    		<p>Guess what, we're starting on the new home page!!</p>
+		    		<h4>Geocoding: Coming Soon!</h4>
+		    		<p>See #{link_to "preliminary maps", "#"} of Chinese finance in Africa &rarr;</p>
 		    	</div>
 		    </div>
 		    <div class='item'>
-		    	<img src='holder.js/600x300'>
+		    	#{image_tag "loan lifecycle.png"}
 		    	<div class='carousel-caption'>
-		    		<h4>Random Picture</h4>
-		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
+		    		<h4>Media-Based Data Collection</h4>
+		    		<p>Learn more about the #{link_to "methodology", content_by_name_path("Methodology")} behind AidData's work &rarr;</p>
 		    	</div>
 		    </div>
 		    <div class='item'>
-		    	<img src='holder.js/600x300'>
+		    	#{image_tag "oiliraq.jpg"}
 		    	<div class='carousel-caption'>
-		    		<h4>Random Picture</h4>
-		    		<p>This is some random picture with a significantly longer caption text, just in case it makes a difference </p>
+		    		<h4>Contribute to the Project</h4>
+		    		<p>Help us improve and expand the database!  #{link_to "Learn more here", content_by_name_path("improving_the_data")}.</p>
 		    	</div>
 		    </div>
 		  </div>
@@ -77,17 +76,22 @@ home_thumbnails = <<EOS
 EOS
 
 home_buttons = <<EOS
-			<div class='home_thumbnails'>
-				<div class='inline  row-fluid'>
-					<span class='span6'>
-						<a href="/content/using_the_data" class="with_shadow ">
-							<h4>How to Use the Data</h4>
-						</a>
+			<div >
+				<div class='row-fluid' style="margin: 10px 0px 10px 0px;">
+					<span class='span4'>
+						<h4>
+							#{ link_to "How to Use the Data", content_by_name_path("using_the_data"), class: "btn btn-large btn-info" }
+						</h4>
 					</span>
-					<span class='span6'>
-						<a href="/content/improving_the_data" class="with_shadow ">
-							<h4>Help us Improve the Data</h4>
-						</a>
+					<span class='span4'>
+						<h4>
+							#{link_to "Help us Improve the Data", content_by_name_path("improving_the_data"), class: "btn btn-large btn" }
+						</h4>
+					</span>
+					<span class='span4'>
+						<h4>
+							#{link_to "Coming Soon: Geocoding", content_by_name_path("geocoding"), class: "btn btn-large btn-warning" }
+						</h4>
 					</span>
 				</div>
 			</div>
@@ -96,14 +100,14 @@ home_data_list = <<EOS
 			
 				<ul class='unstyled inline row-fluid'>
 					<li class='span6'>
-						<a href="/content/using_the_data">
-							<h3>How to Use the Data</h4>
-						</a>
+						<h3>
+							#{ link_to "How to Use the Data", content_by_name_path("using_the_data") }
+						</h3>
 					</li>
 					<li class='span6'>
-						<a href="/content/improving_the_data">
-							<h3>Help us Improve the Data</h4>
-						</a>
+							<h3>
+								#{link_to "Help us Improve the Data", content_by_name_path("improving_the_data") }
+							</h3>
 					</li>
 				</ul>
 
@@ -116,21 +120,20 @@ home_paragraph = ""
 <% provide(:header_content, header_content.html_safe) %>
 
 <div class='container-fluid'>
-
 	<div class='row-fluid'>
-		<div class='span7 container-fluid'>
-			<div class='row-fluid'>
-				<h1 class='page-header'>Chinese Finance in Africa</h1>
-		
-				<p class='lead'>
-					In 2012, <a href='#'>AidData</a> set out to answer a fundamental question:
-				</p>
-				<p>
-					How can researchers and policymakers draw accurate conclusions about the nature, scope and effects of resource flows given that many “non-traditional” suppliers of development finance do not publish their project-level data? AidData began by developing a <strong>media-based data collection</strong> methodology to systematically track official Chinese development finance to Africa. This methodology relies on news reports and other publicly-available sources. The resulting database contains 1,7xx announced, initiated, and completed projects between 2000 and 2011, worth approximately $131 billion (2009 USD).  This china.aiddata.org site provides a multitude of resources for scholars, policymakers, and the general public to study and scrutinize China's development finance activities in Africa.
-				</p>
-			</div>
+		<div class='span12'>
+			<h1 class='page-header'>
+				Chinese Finance in Africa
+			</h1>
+	
 		</div>
-		<div class='span5 container-fluid'>
+	</div>
+	<div class='row-fluid'>
+		<div class='span6 container-fluid'>
+			<%= carousel.html_safe 
+			%>
+		</div>
+		<div class='span6 container-fluid'>
 
 			<div class='row-fluid'>
 				<div class='well well-small'>
