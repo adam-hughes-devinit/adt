@@ -66,6 +66,7 @@ class BubbleChart
       "Vague (Com)" : {x: @width / 2, y: @height / 2},
       "Official Investment" : {x:300, y: @height / 2}
     }
+    console.log @flow_centers
     # used when setting up force and
     # moving around nodes
     @layout_gravity = -0.01
@@ -77,8 +78,9 @@ class BubbleChart
     @force = null
     @circles = null
 
-    # nice looking colors - no reason to buck the trend
-    @fill_color = d3.scale.category20c()
+    @fill_color = d3.scale.ordinal()
+    .domain(["ODA-like","Vague (Official Finance)","OOF-like","Official Investment","NGO Aid","CA -Gov","CA +Gov","JV -Gov","JV +Gov","FDI -Gov","FDI +Gov","Vague (Com)","Military"])
+    .range(["#3182bd","#65a5d3","#a5cae4","#9784e0","#5ce5cd","#5edf73","#49a959","#f7fc76","#f9e21b","#fd8d3c","#e6550d","#fe4444","#ff0000"]);
 
     # use the max total_amount in the data as the max in the scale's domain
     max_amount = d3.max(@data, (d) -> parseInt(d.usd_defl))
@@ -116,6 +118,11 @@ class BubbleChart
     @vis = d3.select("#vis2").append("svg")
       .attr("width", @width)
       .attr("height", @height)
+      .attr("id", "svg_vis")
+    
+    @legend = d3.select("div#legend").append("svg")
+      .attr("width", @width/4)
+      .attr("height", @height-55)
       .attr("id", "svg_vis")
 
     @circles = @vis.selectAll("circle")
@@ -177,12 +184,18 @@ class BubbleChart
     
     max_amount = d3.max(@data, (d) -> parseInt(d.usd_defl))
     min_amount = d3.min(@data, (d) -> parseInt(d.usd_defl))
-    exampleArr = [{"r":@radius_scale(d3.round(max_amount,-9)),"amount":@readable(d3.round(max_amount,-9))},{"r":@radius_scale(d3.round(max_amount/2,-9)),"amount":@readable(d3.round(max_amount/2,-9))},{"r":@radius_scale(d3.round(max_amount/6,-7)),"amount":@readable(d3.round(max_amount/6,-7))},{"r":@radius_scale(d3.round(min_amount,-2)),"amount":@readable(d3.round(min_amount,-2))}]       
-    @vis.selectAll("circle#example")
+    exampleArr = [{"r":@radius_scale(d3.round(max_amount,-9)),"amount":@readable(d3.round(max_amount,-9))},{"r":@radius_scale(d3.round(max_amount/2,-9)),"amount":@readable(d3.round(max_amount/2,-9))},{"r":@radius_scale(d3.round(max_amount/10,-7)),"amount":@readable(d3.round(max_amount/10,-7))},{"r":@radius_scale(d3.round(min_amount*1000,-2)),"amount":@readable(d3.round(min_amount*1000,-2))}]       
+    @legend.append("text")
+      .attr("x",0)
+      .attr("y",20)
+      .attr("id","legendtitle")
+      .attr("style","font-size:18;text-decoration:underline")
+      .text("Bubble Area - Project Value")
+    @legend.selectAll("circle#example")
       .data(exampleArr)
       .enter().append("circle")
-      .attr("cx",(d) -> 0 + d.r)
-      .attr("cy",(d) -> 595- d.r)
+      .attr("cx",(d) -> 5 + d.r)
+      .attr("cy",(d) -> 140- d.r)
       .attr("r",(d) -> d.r)
       .attr("fill","white")
       .attr("style","stroke-dasharray: 2, 2")
@@ -190,13 +203,46 @@ class BubbleChart
       .attr("fill-opacity","1.0")
       .attr("id","example")
       .attr("stroke-opacity","0.5")
-    @vis.selectAll("text#example")
+    @legend.selectAll("text#example")
       .data(exampleArr)
       .enter().append("text")
-      .attr("x", (d) -> 0 + 2*d.r)
-      .attr("y", (d) -> 600-d.r)
+      .attr("x", (d) -> 5 + 2*d.r)
+      .attr("y", (d) -> 145-d.r)
       .attr("id","example")
       .text((d) ->return "-----$"+d.amount)
+    @legend.append("text")
+      .attr("x",60)
+      .attr("y",160)
+      .attr("id","example")
+      .text("Constant 2009 USD")
+    @legend.append("text")
+      .attr("x",0)
+      .attr("y",190)
+      .attr("id","legendtitle")
+      .attr("style","font-size:18;text-decoration:underline")
+      .text("Bubble Color - Flow Class")
+    @legend.selectAll("rect#example")
+    .data(d3.keys(@flow_centers))
+    .enter()
+    .append("rect")
+    .attr("fill",(d) => @fill_color(d))
+    .attr("x",0)
+    .attr("y",(d,i) -> 210+i*25)
+    .attr("width",20)
+    .attr("id",(d) -> d)
+    .attr("height",20)
+    .attr("rx",5)
+    .attr("ry",5)
+    .attr("stroke","black")
+    .attr("stroke-width",1);
+    @legend.selectAll("text#flowexamples")
+    .data(d3.keys(@flow_centers))
+    .enter()
+    .append("text")
+    .attr("x",25)
+    .attr("y",(d,i) -> 225+i*25)
+    .attr("id", "flowexamples")
+    .text((d) -> d);
 
     this.hide_years()
     this.hide_flows()
@@ -312,7 +358,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.crs_sector_name!=""
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.crs_sector_name!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
