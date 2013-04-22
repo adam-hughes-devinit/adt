@@ -13,6 +13,7 @@ carousel = <<EOS
 		  </ol>
 		  <div class='carousel-inner'>
 		    <div class='active item'>
+		    	<h1>Location, location...</h1>
 	    	    #{image_tag "home/darfur_map_zoom.png"}
 		    	<div class='carousel-caption'>
 		    		<h4>Geocoding: Coming Soon!</h4>
@@ -198,17 +199,8 @@ home_paragraph = ""
 			<h3>
 				Recent Tweets:
 			</h3>
-			<ul class='unstyled'>
-				<li>
-					<a href='#'>Exciting News article featuring our work!</a>
-				</li>
-				<li>
-					<a href='#'>Exciting News article featuring our work!</a>
-				</li>
-				<li>
-					<a href='#'>Exciting News article featuring our work!</a>
-				</li>
-			</ul>
+			<%= render '/shared/twitter' %>
+			<%# render '/shared/twitter_hashtag' %>
 		</div>
 		<div class='span4'>
 			<h3>
@@ -228,7 +220,4 @@ home_paragraph = ""
 		</div>
 	</div>	
 </div>
-<div>
-<%= render '/shared/twitter' %>
-<%# render '/shared/twitter_hashtag' %>
-</div>
+

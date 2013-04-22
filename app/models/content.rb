@@ -10,7 +10,8 @@ class Content < ActiveRecord::Base
   		"Faculty/Staff",
       "Research Assistant",
   		"AidData Publication",
-      "Other Publication"   		
+      "Other Publication",
+      "News Article"  		
   	]
 
   validates_inclusion_of :content_type, in: CONTENT_TYPES
