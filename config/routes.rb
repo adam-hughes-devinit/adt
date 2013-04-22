@@ -7,6 +7,8 @@ Adt::Application.routes.draw do
 
   
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
+  post '/projects/suggest', to: "projects#suggest"
+
   resources :projects do
     resources :files # RDM 3_26_2013
     resources :robocodes # RDM 4 12 2013
