@@ -37,6 +37,10 @@ class StaticPagesController < ApplicationController
     render file: '/static_pages/signup'
   end
 
+  def recent
+    render :partial => 'shared/recent'
+  end
+
 
   def ajax
     require 'open-uri'
