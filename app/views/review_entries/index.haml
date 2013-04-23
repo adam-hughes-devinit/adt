@@ -79,14 +79,17 @@
   });
   
   function manageRow(row, approved){
+    console.log(row)
+    console.log(approved)
     var id = $(row).children()[1].innerHTML;
+    var review_url = "/review_entries/" + id
     if (approved == "Approve")
     {
       var approve = { "approve": true };
     }
     else { var approve = "approve"; }
     $.ajax({
-      url: id,
+      url: review_url,
       data: approve,
       type: 'DELETE',
       success: function(result) {
