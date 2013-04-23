@@ -28,6 +28,8 @@
 # Ignore sensitive info
 /config/app_config.yml
 /config/omniauth_config.yml
+
+
 #And rvmrc files
 .rvmrc
 
