@@ -7,8 +7,13 @@ include AggregatesHelper
 		@recipient_field_names = ["name", "iso2", "iso3"]
 		# Use "XR" for Africa, regional's ISO2
 		def	africa_regional_iso2(fn)
-			 fn == 'iso2' ? "'XR'" : "'Africa, regional'"
+			 if fn == 'iso2' 
+			 	"'XR'" 
+			 else
+			 	"'Africa, regional'"
+			 end
 		end
+
 
 		
 		@duplication_scheme = DUPLICATION_HANDLERS.select { |h| h[:external] == "#{params[:multiple_recipients]}" }[0] || DUPLICATION_HANDLERS[0] 
