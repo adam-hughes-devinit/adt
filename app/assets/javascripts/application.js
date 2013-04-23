@@ -15,3 +15,4 @@
 //= require bootstrap
 //= require ./app
 //= require rails.validations
+//= require bootstrap_teaser

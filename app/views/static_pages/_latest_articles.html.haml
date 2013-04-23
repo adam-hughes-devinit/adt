@@ -3,12 +3,13 @@
 %ul.unstyled
 	- latest_articles.each do |a|
 		%li
-			%p
+			%div
 				%strong
 					%a{ href: a.data["url"]}
 						= a.name
 				%span.muted
 					= "&ndash; #{a.data["publisher"]}, #{time_ago_in_words(a.data["date"])} ago".html_safe
-				%br
-				= a.data["teaser"]
-				= link_to "Read all...", a.data["url"]
+				%p.teaser
+					= a.data["teaser"]
+					%br
+					= link_to "Read all...", a.data["url"]
