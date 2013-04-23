@@ -34,7 +34,7 @@
 
         url = link_to_related_project(object)
         # link to subheader
-        url << "##{type}" unless type == "Project"
+        url << "##{type}" unless (type == "Project" || type.nil?)
         project = related_project(object)
         link = link_to(project.title, url) unless project.nil?
       %li.change
