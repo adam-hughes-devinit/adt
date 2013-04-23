@@ -13,7 +13,7 @@ $(function() {
 				"</span>" +
 				'<span class="teaser-short">' +
 				short_text +
-				"<br><span class='teaser-see-more text-info' style='cursor:pointer;' " +
+				"<span class='teaser-see-more text-info' style='cursor:pointer;margin-top:5px;display:block;' " +
 				"onclick='$(this).parent().hide();$(this).parent().siblings(\".teaser-long\").show();'> See more...</span>" +
 				"</span>"
 				)

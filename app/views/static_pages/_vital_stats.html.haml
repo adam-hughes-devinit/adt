@@ -18,7 +18,7 @@
 				%li
 					Chinese 
 					%strong
-						%a{href: "/projects?scope_names[]=Official Finance"}<
+						%a{href: "/projects?scope_names[]=Official Finance"}<>
 							official finance projects 
 						=":"
 					%span.official#count.text-success
@@ -52,11 +52,10 @@
 					%span.implemented_or_completed#percent.text-success
 						<%= implemented_or_completed.percent %>%
 				%li 
-					%strong 
-						Value
-					of 
-					%a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<
-						implemented/completed 
+					Value of
+					%strong 	
+						%a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<
+							implemented/completed 
 					projects:
 					%span.implemented_or_completed#usd_2009.text-success<
 						$<%= nice_money(implemented_or_completed.usd_2009) %>
@@ -188,7 +187,7 @@
 			marquee.state = 'stopped'
 		
 
-		period: 2000
+		period: 3000
 		start: () ->		
 			marquee.state = 'started'
 			marquee.hide_all()

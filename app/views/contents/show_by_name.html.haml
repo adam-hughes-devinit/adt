@@ -1,6 +1,10 @@
 - provide :title, @content.name.titleize
-- provide :header_content, "<h1>#{@content.name.titleize}</h1>".html_safe
+-# provide :header_content, "<h1>#{@content.name.titleize}</h1>".html_safe
 
+.row-fluid
+	.span12
+		%h1.page-header
+			= @content.name.titleize
 .row-fluid
 	.span12.site_content{style: "margin: auto, auto;"}
 

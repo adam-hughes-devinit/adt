@@ -5,8 +5,8 @@
 <%= link_to "New User", new_user_path%>
 <div>
 <% hidden_fields = ["created_at", "updated_at", "id", "password_digest", "remember_token", "owner_id"] %>
-
-<table class='code-index-table'>
+<%= javascript_include_tag 'bootstrap_sortable/index' %>
+<table class='table table-hover sortable'>
 	<thead>
 		<% @users.first.attributes.each_pair do |k, v| %>
 			<% if !hidden_fields.include?(k) %>

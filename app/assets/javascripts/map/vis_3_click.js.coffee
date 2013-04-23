@@ -172,7 +172,7 @@ make_sector_graph = (overlay, active_country) ->
 	sector_area_x = d3.scale.linear().domain([d3.min(years), d3.max(years)]).range([0,sector_area_w])
 	highest_label = (1/16)*h
 	lowest_label = h-((1/16)*h)
-	label_left_position = (5/8)*w
+	label_left_position = (4.5/8)*w
 	label_height = d3.scale.linear().domain([0,sectorSums.length]).range([highest_label, lowest_label])
 	label_increment = d3.min([label_height(1) - label_height(0), 35]) 
 
@@ -192,37 +192,41 @@ make_sector_graph = (overlay, active_country) ->
 		.attr('id', 'headers')
 		.append("svg:foreignObject")
 			.attr("height", (label_increment * (sectorSums.length+2)) + 10)
-			.attr("width", (3/8)*w)
+			.attr("width", (3.5/8)*w)
 			.attr("x", label_left_position-20)
-			.attr("y", highest_label - 35)
+			.attr("y", highest_label + 45)
 			.append("xhtml:body")
 				.attr('id', 'sectors_body')
 				.style("padding-top", "5px")
-				.style("background-color", "transparent")
+				.style("background-color", "hsla(360, 0%, 100%, 0.95)")
 	# get the body content, then load it
 	headers_html = "
-		<table style='font-size:#{window.vis_config.bigger_font_size}px'>
+		<table style='margin:3px;font-size:#{window.vis_config.bigger_font_size}px' class='table table-hover'>
 			<thead>
 				<tr>
-					<th style='color:white;margin-right:4px;'>Sector</th>
-					<th style='color:white;margin-right:4px;'>Amount</th>
-					<th style='color:white;margin-right:4px;'>Projects</th>
+					<th>Sector</th>
+					<th>Amount</th>
+					<th>Projects</th>
 				</tr>
 			</thead>
 			<tbody>"
+	td_style = 'padding:2px;line-height:14px;'
 	sectorSums.forEach((s) ->
+		url = "/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}"
 		headers_html += "
-			<tr style='padding:3px 3px;border-top: 1px solid #888;'>
-				<td style='color:#{window.vis_config.c_sector(s.key)}'>
-					#{s.key}
+			<tr>
+				<td style='#{td_style}'>
+					<a href='#{url}'>
+					<strong style='color:#{window.vis_config.c_sector(s.key)}'>#{s.key}<strong>
+					</a>
 				</td>
-				<td>
-					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}'>
+				<td style='#{td_style}'>
+					<a href='#{url}'>
 						$#{window.vis_config.nicemoney(Math.round(s.values.value))}
 					</a>
 				</td>
-				<td>
-					<a style='color:#bbb' href='/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}'>
+				<td style='#{td_style}'>
+					<a href='#{url}'>
 						#{s.values.count} 
 					</a>
 				</td>
@@ -231,6 +235,7 @@ make_sector_graph = (overlay, active_country) ->
 	headers_html += "</tbody></table>"
 	# load the headers 
 	headers.html(headers_html)
+	ApplySortability()
 	# paint the area chart
 	# hold it it a g
 	area_chart = overlay.append('svg:g')
@@ -561,6 +566,7 @@ window.click = () ->
 	overlay = drop_overlay()
 	window.active_params.get = 'crs_sector_name,year'
 	window.active_params.recipient_iso2 = active_country.iso2
+	window.active_params.multiple_recipients = 'percent_then_share'
 	$.get("aggregates/projects", window.active_params, (json) ->
 		active_country.data = json
 		#console.log(active_country)

@@ -1,7 +1,7 @@
 
 var CRS_SECTOR_COLORS = 
 [{"code":"110",
-"color" : "cyan", "created_at":"2013-03-26T15:36:26-04:00","id":1,"name":"Education","updated_at":"2013-03-26T15:36:26-04:00"},
+"color" : "dodgerblue", "created_at":"2013-03-26T15:36:26-04:00","id":1,"name":"Education","updated_at":"2013-03-26T15:36:26-04:00"},
 {"code":"120",
 "color" : "red", "created_at":"2013-03-26T15:37:19-04:00","id":2,"name":"Health","updated_at":"2013-03-26T15:37:19-04:00"},
 {"code":"130",
@@ -9,7 +9,7 @@ var CRS_SECTOR_COLORS =
 {"code":"140",
 "color" : "orange", "created_at":"2013-03-26T15:37:54-04:00","id":4,"name":"Water Supply and Sanitation","updated_at":"2013-03-26T15:37:54-04:00"},
 {"code":"150",
-"color" : "yellow", "created_at":"2013-03-26T15:38:04-04:00","id":5,"name":"Government and Civil Society","updated_at":"2013-03-26T15:38:04-04:00"},
+"color" : "goldenrod", "created_at":"2013-03-26T15:38:04-04:00","id":5,"name":"Government and Civil Society","updated_at":"2013-03-26T15:38:04-04:00"},
 {"code":"160",
 "color" : "pink", "created_at":"2013-03-26T15:38:49-04:00","id":6,"name":"Other Social infrastructure and services","updated_at":"2013-03-26T15:38:49-04:00"},
 {"code":"210",
@@ -19,7 +19,7 @@ var CRS_SECTOR_COLORS =
 {"code":"230",
 "color" : "lightgreen", "created_at":"2013-03-26T15:40:14-04:00","id":9,"name":"Energy Generation and Supply","updated_at":"2013-03-26T15:40:14-04:00"},
 {"code":"240",
-"color" : "lightblue", "created_at":"2013-03-26T15:40:38-04:00","id":10,"name":"Banking and Financial Services","updated_at":"2013-03-26T15:40:38-04:00"},
+"color" : "darkturquoise", "created_at":"2013-03-26T15:40:38-04:00","id":10,"name":"Banking and Financial Services","updated_at":"2013-03-26T15:40:38-04:00"},
 {"code":"250",
 "color" : "maroon", "created_at":"2013-03-26T15:40:41-04:00","id":11,"name":"Business and Other Services","updated_at":"2013-03-26T15:40:41-04:00"},
 {"code":"310",
@@ -47,7 +47,7 @@ var CRS_SECTOR_COLORS =
 {"code":"910",
 "color" : "purple", "created_at":"2013-03-26T15:43:51-04:00","id":23,"name":"Administrative Costs of Donors","updated_at":"2013-03-26T15:43:51-04:00"},
 {"code":"920",
-"color" : "lightgray", "created_at":"2013-03-26T15:43:51-04:00","id":24,"name":"Support to Non-governmental Organizations (NGOs) and Government Organizations","updated_at":"2013-03-26T15:43:51-04:00"},
+"color" : "indianred", "created_at":"2013-03-26T15:43:51-04:00","id":24,"name":"Support to Non-governmental Organizations (NGOs) and Government Organizations","updated_at":"2013-03-26T15:43:51-04:00"},
 {"code":"998",
 "color" : "darkgray", "created_at":"2013-03-26T15:43:52-04:00","id":25,"name":"Unallocated / Unspecified","updated_at":"2013-03-26T15:43:52-04:00"}
 ]
