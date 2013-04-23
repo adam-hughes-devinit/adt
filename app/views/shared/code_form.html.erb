@@ -1,5 +1,8 @@
 <% provide(:title, "#{type}") %>
-<% provide(:first_header, "#{type}") %>
+
+<h1 class='page-header'>
+	<%= type %>
+</h1>
 
 <%= simple_form_for(object) do |f| %>
 	<% object.attributes.each_pair do |k, v| %>		  	

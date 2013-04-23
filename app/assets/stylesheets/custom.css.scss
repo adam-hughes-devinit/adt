@@ -55,10 +55,10 @@ body {
 
 
     .nav-pills {
-      position:absolute;
-      bottom: 0px;
+
       margin-bottom:0px;
-      
+      position:absolute;
+      bottom: 0px;      
 
       li {
 
@@ -130,7 +130,7 @@ body {
     
   }
 
-  .with_shadow {
+  .with_shadow, .with_shadow:hover {
       box-shadow: rgba(50,50,50,.8) 0px 0px 9px;
   }
   .container, .container-fluid {
@@ -146,6 +146,7 @@ body {
 .page-header {
   color: $aiddataBlue;
   border-bottom: 2px solid $aiddataBlue; 
+  margin: 10px 0px 20px 0px;
 }
 /*
 section {
@@ -186,20 +187,26 @@ section {
       font-size: 1.3em;
       margin-bottom: 8px;
       border-bottom: 1px solid #ddd;
-
-
     }
   }
 }
 
 .social-thumbnail {
   $social-thumbnail-img-size: 200px;
-
+  border-radius: 10px;
   height: $social-thumbnail-img-size;
+
+  background-size: contain;
+  background-origin:content-box;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-clip: border-box;
+
   img {
     
     max-height: $social-thumbnail-img-size;
     max-width: $social-thumbnail-img-size;
+    width: auto;
   }
 }
 

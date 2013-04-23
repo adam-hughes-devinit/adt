@@ -1,6 +1,8 @@
 <% provide(:title, "#{@organization.name}") %>
-<% provide(:first_header, "#{@organization.name}") %>
-
+<% provide(:first_header, "") %>
+<h1 class='page-header'>
+  <%= @organization.name %>
+</h1>
 <p>
   <b>Description:</b>
   <%= @organization.description %>

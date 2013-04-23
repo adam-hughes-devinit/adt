@@ -1,7 +1,11 @@
 <% provide(:title, "#{type}: #{object.name}") %>
-<% provide(:header_content, "<h1> #{type}: #{object.name} </h1>".html_safe ) %>
 
 <% hidden_attributes = ["created_at", "updated_at", "id"] %>
+
+<h1 class='page-header'> 
+	<%= type %>: 
+	<%= object.name %>
+</h1>
 
 <% object.attributes.each_pair do |k, v| %>
 	<% if !hidden_attributes.include?(k) %>

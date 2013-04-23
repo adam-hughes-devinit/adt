@@ -1,5 +1,14 @@
 <% provide(:title, "Edit #{@project.title}") %>
-<% provide(:first_header, "Edit #{@project.title}") %>
+
+<h1 class='page-header'>
+	Edit 
+	<%= @project.title %>
+	<% if !@project.active %>
+		<span class='text-danger'>
+			-- Inactive --
+		</span>
+	<% end %>
+</h1>
 
 <%= render 'project_form' %>
 
@@ -43,10 +52,6 @@
 
 	$('#project-form-nav').scrollspy()
 	
-	<% if !@project.active %>
-		$('#first_header').css("color", "#942").append(" -- INACTIVE -- ")
-	<% end %>
-
 	$('#project_active').change(function(e) {
 		$('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
 	})

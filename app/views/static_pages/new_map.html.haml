@@ -1,15 +1,11 @@
 - provide :title, "New Map"
 
-:ruby
-	header_content = "
-	<h1>
-		China in Africa: 
-		<span class='country_name'>
-			All Africa
-		</span>
-	</h1>"
 
-- provide :header_content, header_content.html_safe
+%h1.page-header
+	China in Africa: 
+	%span.country_name
+		All Africa
+	
 
 = javascript_include_tag "miso/index"
 = javascript_include_tag "leaflet/index"

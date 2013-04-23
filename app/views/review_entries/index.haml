@@ -1,5 +1,6 @@
 - provide :title, "Review Items"
-- provide :first_header, "Review Items"
+%h1.page-header
+  Review Items
 
 - @review_sections.each do |type, entries|
   %h2= type.pluralize
