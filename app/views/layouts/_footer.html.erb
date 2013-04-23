@@ -1,11 +1,11 @@
-<footer class="footer row">
+<footer class="footer row-fluid">
   <small>
     <a href="http://aiddata.org/"><%= image_tag "adt2_blue.png" %></a>
   </small>
   <nav>
     <ul>
-      <li><%= link_to "About",   '#' %></li>
-      <li><%= mail_to "china@aiddata.org", "Contact" %></li>
+      <li><%= link_to "About",   content_by_name_path("methodology") %></li>
+      <li><%= link_to "Contact", content_by_name_path("contact") %></li>
       <li><%= link_to "Blog", "http://blog.aiddata.org/" %></li>
       <li><%= link_to "Staff Login", staff_login_path %></li>
     </ul>
