@@ -8,22 +8,26 @@
 
 %script#vitals-template{ type: 'text/template'}
 	.row-fluid
-		.span12
-			-#.alert.alert-info
+		.span12.alert.alert-info
+			-#
 			%h3.text-info
-				Vital Stats:
+				Current Stats:
+				%small.pull-right
+					%i Hover to see all stats
 			%ul.unstyled.marquee
 				%li
 					Chinese 
-					%strong 
-						official finance 
-					projects in database:
+					%strong
+						%a{href: "/projects?scope_names[]=Official Finance"}<
+							official finance projects 
+						=":"
 					%span.official#count.text-success
 						<%= official.count %>
 				%li
 					Amounting to 
 					%strong 
-						financial commitments
+						%a{href: "/projects?scope_names[]=Official Finance"}<> 
+							financial commitments
 					of:
 					%span.official#usd_2009.text-success
 						$<%= nice_money(official.usd_2009) %>
@@ -32,8 +36,9 @@
 				%li
 					Financial value of all
 					%strong
-						ODA-Like 
-					projects:
+						%a{href: "/projects?&active_string=Active&oda_like_name=ODA-like"}<> 
+							ODA-Like projects
+						= ":"
 					%span.oda_like#usd_2009.text-success
 						$<%= nice_money(oda_like.usd_2009) %>
 					-# %small
@@ -41,13 +46,18 @@
 				%li
 					Projects 
 					%strong 
-						implemented or completed:
+						%a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<>
+							implemented or completed
+						= ":"
 					%span.implemented_or_completed#percent.text-success
 						<%= implemented_or_completed.percent %>%
 				%li 
 					%strong 
 						Value
-					of implemented/completed projects:
+					of 
+					%a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<
+						implemented/completed 
+					projects:
 					%span.implemented_or_completed#usd_2009.text-success<
 						$<%= nice_money(implemented_or_completed.usd_2009) %>
 					-# %small
@@ -153,6 +163,59 @@
 			
 
 			$('#vitals').append(template)
+			marquee.create('.marquee')
+
+	@marquee =
+
+		create: (selector) ->
+			this.selector = selector
+			this.step = 0
+			this.length = $(selector+ ' li').length
+			this.start()
+			this.phase = this.period * .1
+
+			m = this
+			$(selector).parent()
+				.mouseenter(marquee.reveal)
+				.mouseleave(marquee.continue)
+
+		hide_all: () ->
+			$(this.selector + ' li').hide()
+		show_all: () ->
+			$(this.selector + ' li').show()
+
+		stop: () ->
+			marquee.state = 'stopped'
+		
+
+		period: 2000
+		start: () ->		
+			marquee.state = 'started'
+			marquee.hide_all()
+			$(marquee.selector + ' li:eq(' + marquee.step + ')').fadeIn(marquee.phase, () ->
+				marquee.cycling = setInterval(marquee.increment, marquee.period)
+			)	
+
+		increment: () ->	
+			m = marquee
+			if m.state != 'stopped'
+				step_from = m.step
+				step_to = (step_from + 1) % (m.length)
+				console.log("increment", step_from, step_to)
+				$(m.selector+ ' li:eq(' + step_from + ')').fadeOut(marquee.phase, () ->
+					$(m.selector+' li:eq(' + step_to + ')').fadeIn(marquee.phase)				
+				)
+
+				m.step = step_to
+
+		continue: () ->
+			marquee.hide_all()
+			$(marquee.selector + ' li:eq(' + marquee.step + ')').show()
+			marquee.state ='started'
+		reveal: (m) ->
+			marquee.stop()
+			marquee.show_all()
+			
 
 
 
