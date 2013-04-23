@@ -2,9 +2,6 @@
 
 <%= javascript_include_tag "holder/holder" %>
 
-<div class='recent'>
-  <%= render 'shared/recent' %>
-</div>
 <%
 
 carousel = <<EOS
@@ -212,12 +209,3 @@ home_paragraph = ""
 		</div>
 	</div>	
 </div>
-
-<script>
-  $(document).ready(
-        function() {
-        setInterval(function() {
-          $('.recent').load('/recent');
-      }, 3000);
-  });
-</script>

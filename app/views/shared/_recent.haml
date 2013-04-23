@@ -1,29 +1,40 @@
-- count = 0
--Version.last(10).reverse.each do |act|
-  - type = act.item_type
-  - next unless ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(type) or type == 'Project'
-  -# don't want loandetails
-  - next if type == "LoanDetail"
+.recent
+  - count = 0
+  -Version.last(10).reverse.each do |act|
+    - type = act.item_type
+    - next unless ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(type) or type == 'Project'
+    -# don't want loandetails
+    - next if type == "LoanDetail"
 
-  -# only want 5
-  - next if count > 4 
+    -# only want 5
+    - next if count > 4 
 
-  - class_name = type.constantize
-  - id = act.item_id
-  - object = class_name.find_by_id(id)
-  - next if object.nil?
+    - class_name = type.constantize
+    - id = act.item_id
+    - object = class_name.find_by_id(id)
+    - next if object.nil?
 
-  - case act.event
-  - when "update"
-    = "Updated "
-  - when "destroy"
-    - next
-  - else
-    ="New "
-  = "#{type.titleize}:"
+    - case act.event
+    - when "update"
+      = "Updated "
+    - when "destroy"
+      - next
+    - else
+      ="New "
+    = "#{type.titleize}:"
 
-  - url = link_to_related_project(object)
-  - project = related_project(object)
-  = link_to(project.to_english, url) unless project.nil?
-  %br
-  - count += 1
+    - url = link_to_related_project(object)
+    -# link to subheader
+    - url << "##{type}" unless type == "Project"
+    - project = related_project(object)
+    = link_to(project.to_english, url) unless project.nil?
+    %br
+    - count += 1
+
+:javascript
+  $(document).ready(
+        function() {
+        setInterval(function() {
+          $('.recent').load('/recent');
+      }, 5000);
+  });
