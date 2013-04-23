@@ -37,16 +37,17 @@
         url << "##{type}" unless (type == "Project" || type.nil?)
         project = related_project(object)
         link = link_to(project.title, url) unless project.nil?
-      %li.change
-        %p
-          %strong 
-            = "#{action} #{type.titleize}:"
-          = "#{link}".html_safe
-        
-          %span.muted
-            = "(#{project.to_english(exclude_title: true)})"
-          %span
-            = "#{ time_ago_in_words act.created_at} ago"
+      - if project && link && type && action && act.created_at
+        %li.change
+          %p
+            %strong 
+              = "#{action} #{type.titleize}:"
+            = "#{link}".html_safe
+          
+            %span.muted
+              = "(#{project.to_english(exclude_title: true)})"
+            %span
+              = "#{ time_ago_in_words act.created_at} ago"
       - count += 1
 
 :javascript
