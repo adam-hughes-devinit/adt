@@ -1,4 +1,4 @@
-.recent
+%ul.recent
   - count = 0
   -Version.last(10).reverse.each do |act|
     - type = act.item_type
@@ -16,19 +16,21 @@
 
     - case act.event
     - when "update"
-      = "Updated "
+      - action = "Updated "
     - when "destroy"
       - next
     - else
-      ="New "
-    = "#{type.titleize}:"
+      - action = "New "
+    
 
     - url = link_to_related_project(object)
     -# link to subheader
     - url << "##{type}" unless type == "Project"
     - project = related_project(object)
-    = link_to(project.to_english, url) unless project.nil?
-    %br
+    - link = link_to(project.to_english, url) unless project.nil?
+    %li
+      = "#{action} #{type.titleize}: #{link}".html_safe
+
     - count += 1
 
 :javascript
