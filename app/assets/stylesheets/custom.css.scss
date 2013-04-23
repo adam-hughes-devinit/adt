@@ -53,6 +53,7 @@ body {
     min-height: 100px;
     position: relative;
 
+
     .nav-pills {
       position:absolute;
       bottom: 0px;
@@ -79,6 +80,8 @@ body {
           }
 
          a {
+          padding-left: 8px;
+          padding-right: 8px;
           border-radius:0px;
           color: white;
           .caret {
@@ -106,10 +109,12 @@ body {
           }
         }
       }
-    #logo {
+    }
 
+    #logo {
+        max-height: 100%;
         img {
-          height:100px;
+          //height:100%;
         }
     }
 
@@ -122,7 +127,7 @@ body {
         text-align:center;
       }
     }
-    }
+    
   }
 
   .with_shadow {
