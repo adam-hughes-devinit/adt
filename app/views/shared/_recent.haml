@@ -1,44 +1,61 @@
-%ul.recent
-  - count = 0
-  - Version.last(10).reverse.each do |act|
-    :ruby
-      type = act.item_type
-      next unless ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(type) or type == 'Project'
-      # don't want loandetails
-      next if type == "LoanDetail"
+#recent-changes
+  %h3.text-warning
+    Recent Changes
+    %small.pull-right
+      %i Hover to see all changes
+  %ul.unstyled
+    - count = 0
+    - Version.last(10).reverse.each do |act|
+      :ruby
+        type = act.item_type
+        next unless ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(type) or type == 'Project'
+        # don't want loandetails
+        next if type == "LoanDetail"
 
-      # only want 5
-      next if count > 4 
+        # only want 5
+        next if count > 4 
 
-      class_name = type.constantize
-      id = act.item_id
-      object = class_name.find_by_id(id)
-      next if object.nil?
+        class_name = type.constantize
+        id = act.item_id
+        object = class_name.find_by_id(id)
+        next if object.nil?
 
-      case act.event
-      when "update"
-        action = "Updated "
-      when "destroy"
-        next
-      else
-        action = "New "
-      end
-      
+        case act.event
+        when "update"
+          action = "Updated "
+        when "destroy"
+          next
+        else
+          action = "New "
+        end
+        
 
-      url = link_to_related_project(object)
-      # link to subheader
-      url << "##{type}" unless type == "Project"
-      project = related_project(object)
-      link = link_to(project.to_english, url) unless project.nil?
-    %li
-      = "#{action} #{type.titleize}: #{link}".html_safe
+        url = link_to_related_project(object)
+        # link to subheader
+        url << "##{type}" unless type == "Project"
+        project = related_project(object)
+        link = link_to(project.to_english, url) unless project.nil?
+      %li
+        = "#{action} #{type.titleize}: #{link}".html_safe
 
-  - count += 1
+    - count += 1
 
 :javascript
-  $(document).ready(
-        function() {
-        setInterval(function() {
-          $('.recent').load('/recent');
-      }, 5000);
-  });
+  div = $('#recent-changes')
+  div.find('li').hide()
+  $('#recent-changes li:first-child').show()
+  
+  div
+    .mouseenter(function() {
+      $(this).find('li').show()
+    })
+    .mouseleave(function() {
+      $(this).find('li').hide()
+      $('#recent-changes li:first-child').show()
+    })
+
+  setTimeout(function() {
+      console.log("fetching!")
+      $('#recent-changes').load('/recent');
+  }, 5000);
+

@@ -11,10 +11,16 @@ $baseFontSize: 13px;
 //$navbarBackgroundHighlight: rgba(0,0,0,0);
 $linkColor: #1146a6;
 $sansFontFamily: Arial, Tahoma, sans-serif;
+
 $btnInfoBackground: #63a3d1;
 $btnInfoBackgroundHighlight: #4881b6;
 $infoBackground: lighten(#63a3d1, 30%);
 $infoText: #4881b6;
+
+$btnWarningBackground: rgb(251, 180, 80);
+$btnWarningBackgroundHighlight: rgb(248, 148, 6);
+$warningBackground: rgb(251, 238, 213);
+$warningText: #c09853;
 
 
 @import "bootstrap";
@@ -180,6 +186,7 @@ section {
 }
 
 #vitals {
+  min-height: 120px;
   ul {
     li {
       color: #101010;
@@ -189,6 +196,10 @@ section {
       border-bottom: 1px solid #ddd;
     }
   }
+}
+
+#recent-changes {
+
 }
 
 .social-thumbnail {
