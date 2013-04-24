@@ -197,7 +197,7 @@ make_sector_graph = (overlay, active_country) ->
 			.attr("y", highest_label + 45)
 			.append("xhtml:body")
 				.attr('id', 'sectors_body')
-				.style("padding-top", "5px")
+				.style("padding", "5px")
 				.style("background-color", "hsla(360, 0%, 100%, 0.95)")
 	# get the body content, then load it
 	headers_html = "
@@ -212,7 +212,9 @@ make_sector_graph = (overlay, active_country) ->
 			<tbody>"
 	td_style = 'padding:2px;line-height:14px;'
 	sectorSums.forEach((s) ->
-		url = "/projects?active_string=Active&country_name=#{active_country.name}&crs_sector_name=#{s.key}"
+		url = "/projects?active_string=Active" +
+			(if current_scope.name != "All Active Projects" then "&scope_names[]=" + current_scope.name else "") +
+			"&country_name=#{active_country.name}&crs_sector_name=#{s.key}"
 		headers_html += "
 			<tr>
 				<td style='#{td_style}'>
@@ -313,7 +315,7 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 				.html("<p><b>Loading top projects...</b></p>")
 
 	top_projects_path = '/projects.json?max=5' + 
-		"&scope_names[]=" + current_scope.name +
+		(if current_scope.name != "All Active Projects" then "&scope_names[]=" + current_scope.name else "") +
 		"&active_string=Active" +
 		"&order_by=usd_2009&dir=desc" +
 		"&recipient_iso2=" + active_country.iso2
@@ -537,7 +539,7 @@ create_line_graph = (line_chart, gni_data, oda_array, worldbank_gni_url) ->
 			.text((d) ->  d.name)
 			.style('fill', (d) ->  d.color)
 			.attr('text-anchor', 'bottom')
-			.attr('x', (d,i) -> ((3+(i*8))/80)*window.vis_config.w )        
+			.attr('x', (d,i) -> ((3+(i*10))/80) * window.vis_config.w )        
 			.attr('y', line_chart.height + line_chart.text_margin)
 
 	# paint the heading
@@ -571,10 +573,16 @@ window.click = () ->
 	
 	active_country = get_active_country(this) # returns .iso2 and .name
 	overlay = drop_overlay()
-	window.active_params.get = 'crs_sector_name,year'
-	window.active_params.recipient_iso2 = active_country.iso2
-	window.active_params.multiple_recipients = 'percent_then_share'
-	$.get("aggregates/projects", window.active_params, (json) ->
+	sector_data_path = '/aggregates/projects?get=crs_sector_name,year' + 
+		current_scope.aggregate_params +
+		"&recipient_iso2=" +active_country.iso2 +
+		"&multiple_recipients=percent_then_share"
+	# window.active_params.get = 'crs_sector_name,year'
+	# window.active_params.recipient_iso2 = active_country.iso2
+	# window.active_params.multiple_recipients = 'percent_then_share'
+	
+	# $.get("aggregates/projects", window.active_params, (json) ->
+	$.get(sector_data_path, (json) ->
 		active_country.data = json
 		#console.log(active_country)
 		make_sector_graph(overlay, active_country)

@@ -1,4 +1,4 @@
-#vis, #vis_controls {
+#vis_controls {
   text-align:center;
 }
 #africa-map {
@@ -24,12 +24,6 @@
   }
   li {
     margin-left:5px;
-  }
-  a {
-  color: darkblue;
-    &:hover {
-      color:#ccc;
-    }
   }
 }
 

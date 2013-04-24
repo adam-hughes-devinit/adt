@@ -134,7 +134,7 @@ end %>
 			facet_button.slideUp()
 		}
 	}
-	<% if (params[:page].to_i || 0) >= 0 %>
+	<% if params[:utf8].blank? %>
 		toggle_search_params()
 	<% end %>
 </script>
