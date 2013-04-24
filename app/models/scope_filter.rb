@@ -50,7 +50,7 @@ class ScopeFilter < ActiveRecord::Base
       param_string += "&#{field}[]=#{value}"
     end
 
-    param_string
+    param_string.gsub(/\+/, "%2B")
   end
 
   def to_aggregate_query_params
@@ -65,7 +65,7 @@ class ScopeFilter < ActiveRecord::Base
       param_string += "&#{aggregate_query_name}=#{must_have_values.join(AggregatesHelper::VALUE_DELIMITER)}"
     end
 
-    param_string
+    param_string.gsub(/\+/, "%2B")
   end
 
 

@@ -428,7 +428,9 @@ make_gni_chart = (overlay, active_country) ->
 	window.worldbank_gni_url = wbi_call active_country.iso2, "NY.GNP.ATLS.CD"
 	window.worldbank_dacoda_url = wbi_call active_country.iso2, "DC.DAC.TOTL.CD"
 	window.worldbank_usaoda_url = wbi_call active_country.iso2, "DC.DAC.USAL.CD"
-	cdf_path = "/aggregates/projects?get=year&flow_class=ODA-like*OOF-like*Vague%20(Official%20Finance)&recipient_iso2=#{active_country.iso2}"
+	cdf_path = "/aggregates/projects?get=year" + 
+		$("#scope_Official_Finance").attr("data-aggregate-params") +
+		"&recipient_iso2=#{active_country.iso2}"
 	
 	# Right now, these ajax called are made in sequence -- can they be made in parallel?
 	#console.log( "starting wdi calls")
@@ -436,7 +438,7 @@ make_gni_chart = (overlay, active_country) ->
 		d3.json("/ajax?url=#{encodeURIComponent(worldbank_dacoda_url)}", (dacoda_data) ->
 			d3.json("/ajax?url=#{encodeURIComponent(worldbank_usaoda_url)}", (usaoda_data) ->
 				d3.json(cdf_path, (cdf_data) ->
-					create_line_graph(line_chart, gni_data, [{name: "Chinese Finance", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
+					create_line_graph(line_chart, gni_data, [{name: "Chinese O.F.", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
 					{name: "DAC ODA", data: dacoda_data, source: worldbank_dacoda_url, color: "#6699ff"}, 
 					{name:"USA ODA", data: usaoda_data, source: worldbank_usaoda_url, color: "cccc66"}
 					], worldbank_gni_url)
