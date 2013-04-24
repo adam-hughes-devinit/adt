@@ -16,14 +16,14 @@ carousel = <<EOS
 	    	    #{image_tag "home/darfur_map_zoom.png"}
 		    	<div class='carousel-caption'>
 		    		<h4>Geocoding: Coming Soon!</h4>
-		    		<p>See #{link_to "preliminary maps", "#"} of Chinese finance in Africa &rarr;</p>
+		    		<p>See #{link_to "preliminary maps", content_by_name_path("geocoding")} of Chinese finance in Africa &rarr;</p>
 		    	</div>
 		    </div>
 		    <div class='item'>
 		    	#{image_tag "loan lifecycle.png"}
 		    	<div class='carousel-caption'>
 		    		<h4>Media-Based Data Collection</h4>
-		    		<p>Learn more about the #{link_to "methodology", content_by_name_path("Methodology")} behind AidData's work &rarr;</p>
+		    		<p>Learn more about the #{link_to "methodology", content_by_name_path("methodology")} behind AidData's work &rarr;</p>
 		    	</div>
 		    </div>
 		    <div class='item'>
@@ -90,7 +90,7 @@ home_buttons = <<EOS
 					</span>
 					<span class='span4'>
 						<h4>
-							#{link_to "Coming Soon: Geocoding", content_by_name_path("geocoding"), class: "btn btn-large btn-warning" }
+							#{link_to "Coming Soon: Geocoded Data", content_by_name_path("geocoding"), class: "btn btn-large btn-warning" }
 						</h4>
 					</span>
 				</div>
@@ -129,11 +129,11 @@ home_paragraph = ""
 		</div>
 	</div>
 	<div class='row-fluid'>
-		<div class='span6 container-fluid'>
+		<div class='span6'>
 			<%= carousel.html_safe 
 			%>
 		</div>
-		<div class='span6 container-fluid'>
+		<div id='stats-box' class='span6 container-fluid'>
 
 			<div class='row-fluid'>
 				<div class=''>
