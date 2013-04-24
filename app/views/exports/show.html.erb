@@ -50,12 +50,14 @@
     if (progress == 100){
       bar.parent().removeClass("active");
 
-      $(document.createElement("BUTTON"));
-      var $finished_button = document.createElement('a');
-      $finished_button.setAttribute('class', 'btn btn-primary');
-      $finished_button.setAttribute('href', export_path);
-      $finished_button.innerHTML = "Download Your Export";
-      $("#centered_div_lower").append($finished_button);
+      $("#centered_div_lower").append("check your email inbox for the export");
+      
+      <%# $(document.createElement("BUTTON")); %>
+      <%# var $finished_button = document.createElement('a'); %>
+      <%# $finished_button.setAttribute('class', 'btn btn-primary'); %>
+      <%# $finished_button.setAttribute('href', export_path); %>
+      <%# $finished_button.innerHTML = "Download Your Export"; %>
+      <%# $("#centered_div_lower").append($finished_button); %>
 
       clearInterval(interval_id)
     }
