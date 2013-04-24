@@ -64,10 +64,15 @@ send_params = (params) ->
 	#
 	# I'm leaving this off... a different feeling!
 	#
-	post_params = params ? {}
-	post_params.get = "recipient_iso2"
-	post_params.multiple_recipients = "percent_then_merge"
-	$.get('/aggregates/projects', post_params, color_the_map, "json")
+	$('.overlay').remove()
+	if typeof params == "string"
+		$.get('/aggregates/projects?get=recipient_iso2&multiple_recipients=percent_then_merge'+params, color_the_map, "json")
+	
+	else
+		post_params = params ? {}
+		post_params.get = "recipient_iso2"
+		post_params.multiple_recipients = "percent_then_merge"
+		$.get('/aggregates/projects', post_params, color_the_map, "json")
 
 color_the_map = (json) ->
 	# Edit this duration or delay to
@@ -232,9 +237,33 @@ highlight = () ->
 window.vis_config.gather_inputs = gather_inputs
 
 
+window.load_scope = (button) ->
+	# pass me a jQuery scope button!
+	$('.scope-button').removeClass("btn-success")
+	button.addClass("btn-success")
+	window.current_scope = 
+		name: button.attr("data-scope-name")
+		project_params: button.attr("data-project-params")
+		aggregate_params: button.attr("data-aggregate-params")
+
+	query_string = "?get=" + current_scope.aggregate_params
+	# console.log(query_string)
+	send_params(query_string)
+
+window.load_this_scope = (e) ->
+	button = $(this)
+	load_scope(button)
+
+	
+
+
+window.load_scope_by_name = (name) ->
+	button = $('#scope_' + name.replace(/\s/g, "_"))
+	load_scope(button)
+
 $('.vis_input').change(() -> 
 	#console.log 'triggered new params'
-	$('.overlay').remove()
+	
 	
 	if params = gather_inputs()
 		window.active_params = params
@@ -247,10 +276,10 @@ $(document).mousemove((event) ->
 	mousePosition = {left: event.pageX, top: event.pageY}
 	$('div#tooltip').css('left',mousePosition.left+10)
 	$('div#tooltip').css('top',mousePosition.top-25))
-
-send_params()
-
-
+$(() ->
+	send_params()
+	load_scope_by_name("Official Finance")
+)
 
 
 

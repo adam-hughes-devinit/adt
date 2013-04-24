@@ -1,3 +1,4 @@
+<!--
 <div id = "vis_controls" class='row-fluid'>
   <div  class="span10 ">
     <%= form_for Project.new, html: {class: ""} do |f| %>
@@ -9,6 +10,7 @@
     <% end %>
   </div>
 </div>
+-->
 
 <div class="row-fluid">
   <!--[if IE 6]>
@@ -30,9 +32,12 @@
     <div id="vis"></div>
   <![endif]-->  
   <![if !IE]>
-    <div class='span12' id="vis">
+    <div class='span10' id="vis">
     </div>
   <![endif]>
+  <div class='span2' id='scope-buttons'>
+    <%= render partial: 'scope_buttons', locals: {scopes: Scope.where("name in(?)", ["Official Finance","Unofficial Finance", "Military"])} %>
+  </div>
 </div>
 
 <div id="tooltip"><p id="tooltiptext"></p></div>
@@ -40,8 +45,12 @@
 <%= javascript_include_tag   "map/index" %>
 
 <script>
-  $(function() {
-    $('#tooltip').hide()
-  })
+  $('#tooltip').hide()
+
+  $('.scope-button')
+    .addClass("btn")
+    .css("display", "block")
+    .click(load_this_scope) // defined in map/index
+
 </script>
 
