@@ -312,19 +312,26 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 				.style('color', 'black')
 				.html("<p><b>Loading top projects...</b></p>")
 
-	top_projects_path = '/projects.json'
-	top_projects_params = @active_params || {}
-	top_projects_params.active_string =  "Active"
-	top_projects_params.order_by = "usd_2009"
-	top_projects_params.dir = "desc"
-	top_projects_params.max = top_projects_number = 5
-	top_projects_params.recipient_iso2 = active_country.iso2
-	delete top_projects_params?.get
+	top_projects_path = '/projects.json?max=5' + 
+		"&scope_names[]=" + current_scope.name +
+		"&active_string=Active" +
+		"&order_by=usd_2009&dir=desc" +
+		"&recipient_iso2=" + active_country.iso2
+
+	# top_projects_params = @active_params || {}
+	# top_projects_params.active_string =  "Active"
+	# top_projects_params.order_by = "usd_2009"
+	# top_projects_params.dir = "desc"
+	# top_projects_params.max = top_projects_number = 5
+	top_projects_number = 5
+	# top_projects_params.recipient_iso2 = active_country.iso2
+	# delete top_projects_params?.get
 	c_projects = d3.scale.linear()
 		.domain([0, ((top_projects_number-1)/2), top_projects_number-1])
 		.range(['#2A5C0B', '#55760f','#808f12'])
 
-	$.get(top_projects_path, top_projects_params, (top_projects_data) -> 
+	# $.get(top_projects_path, top_projects_params, (top_projects_data) -> 
+	$.get(top_projects_path, (top_projects_data) -> 
 		#console.log(top_projects_data)
 		plot_top_projects(top_projects_data, sectorSums, c_projects, sector_area_x, sector_area_y, area_chart)
 		create_top_projects_box(active_country, top_projects_data, "top_projects_body", top_projects_height, c_projects)
@@ -427,7 +434,7 @@ make_gni_chart = (overlay, active_country) ->
 		d3.json("/ajax?url=#{encodeURIComponent(worldbank_dacoda_url)}", (dacoda_data) ->
 			d3.json("/ajax?url=#{encodeURIComponent(worldbank_usaoda_url)}", (usaoda_data) ->
 				d3.json(cdf_path, (cdf_data) ->
-					create_line_graph(line_chart, gni_data, [{name: "CDF", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
+					create_line_graph(line_chart, gni_data, [{name: "Chinese Finance", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
 					{name: "DAC ODA", data: dacoda_data, source: worldbank_dacoda_url, color: "#6699ff"}, 
 					{name:"USA ODA", data: usaoda_data, source: worldbank_usaoda_url, color: "cccc66"}
 					], worldbank_gni_url)

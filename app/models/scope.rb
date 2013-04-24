@@ -18,7 +18,7 @@ class Scope < ActiveRecord::Base
 		scope_channels.map { |c| c.filters }
 	end
 
-	def to_query_params(project_or_aggregate)
+	def to_query_params(project_or_aggregate, allow_many_channels=false)
 		param_array = scope_channels.map do |channel|
 
 			channel_string = ""
@@ -35,6 +35,14 @@ class Scope < ActiveRecord::Base
 
 			channel_string
 		end
+
+		# Yikes, won't work
+		if allow_many_channels
+			param_array
+		else
+			param_array[0]
+		end
+		
 
 	end
 
