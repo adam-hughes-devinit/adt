@@ -19,7 +19,8 @@ include AggregatesHelper
 		@duplication_scheme = DUPLICATION_HANDLERS.select { |h| h[:external] == "#{params[:multiple_recipients]}" }[0] || DUPLICATION_HANDLERS[0] 
 		
 		@fields_to_get = []
-	
+		@get = ["donor"] #overwritten if params provided in request
+
 		if params[:get].class == String
 			@get = params[:get].split(",")
 		elsif params[:get].class == Array
