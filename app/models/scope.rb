@@ -18,6 +18,34 @@ class Scope < ActiveRecord::Base
 		scope_channels.map { |c| c.filters }
 	end
 
+	def to_query_params(project_or_aggregate)
+		param_array = scope_channels.map do |channel|
+
+			channel_string = ""
+
+			channel.scope_filters.each do |filter|
+				
+					if project_or_aggregate == "aggregate"
+						channel_string += filter.to_aggregate_query_params
+					else 
+						channel_string += filter.to_aggregate_query_params
+					end
+
+			end
+
+			channel_string
+		end
+
+	end
+
+	def to_aggregate_query_params
+		to_query_params("aggregate")
+	end
+
+	def to_project_query_params
+		to_query_params("project")
+	end
+
 	has_many :scope_channels, dependent: :destroy
 	accepts_nested_attributes_for :scope_channels, allow_destroy: true 
 
