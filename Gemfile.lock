@@ -71,6 +71,7 @@ GEM
       execjs
     coffee-script-source (1.6.2)
     daemons (1.1.9)
+    dalli (2.6.2)
     delayed_job (3.0.5)
       activesupport (~> 3.0)
     delayed_job_active_record (0.4.3)
@@ -79,6 +80,7 @@ GEM
     diff-lcs (1.2.1)
     erubis (2.7.0)
     eventmachine (1.0.3)
+    eventmachine (1.0.3-x86-mingw32)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.2.0)
@@ -117,6 +119,7 @@ GEM
     markdown-rails (0.2.1)
       rails
       rdiscount (>= 1.6.8, < 2.0)
+    memcachier (0.0.2)
     mime-types (1.21)
     multi_json (1.7.2)
     multipart-post (1.2.0)
@@ -279,6 +282,7 @@ DEPENDENCIES
   capybara (= 1.1.2)
   coffee-rails (= 3.2.2)
   daemons
+  dalli
   delayed_job
   delayed_job_active_record
   factory_girl_rails
@@ -287,6 +291,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   markdown-rails
+  memcachier
   multipart-post
   omniauth
   omniauth-facebook
