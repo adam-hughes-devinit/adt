@@ -1,7 +1,7 @@
 include ApplicationHelper
 
 class AiddataAdminMailer < ActionMailer::Base
-  default from: "adamparkerfrey@gmail.com"
+  default from: "rmosolgo@aiddata.org"
   default to: "adamparkerfrey@gmail.com"
 
   def comment_notification(comment)

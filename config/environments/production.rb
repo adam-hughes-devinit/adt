@@ -4,7 +4,7 @@ Adt::Application.configure do
 
   # Code is not reloaded between requests
   config.cache_classes = true
-    config.cache_store = :dalli
+
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
@@ -41,7 +41,7 @@ Adt::Application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production
-  # config.cache_store = :memory_store, :size => 64.megabytes
+  config.cache_store = :dalli_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
