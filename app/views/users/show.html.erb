@@ -1,5 +1,8 @@
 <% provide(:title, @user.name) %>
-<% provide(:first_header, "User: #{@user.name}") %>
+
+<h1 class='page-header'>
+	User: <%= @user.name %>
+</h1>
 
 <div class="row">
 <section>
@@ -13,26 +16,5 @@
 	<b>Owner:</b> <%= @user.owner.nil? ? 'None' : @user.owner.name %>
 	</p>
 </section>
-<section>
-	<!--
-	<% if signed_in? %>
-		<%= render partial: 'shared/follow_form', locals: {object: @user} %>
-	<% end %>
-	!-->
-</section>
 </div>
-<div class="row">
-<hr class="row span8">
-<br>
-</div>
-<div class="row">
-<p><b>Most recent activity:</b> </p>
-<% if current_user %>
-	<% cutoff = @feed.length > 30 ? -30 : 0
-	active_feed = @feed.sort!{ |a,b| a[:created_at] <=> b[:created_at]}[cutoff..-1].reverse	%>
-	<%= render partial: 'shared/generate_feed_items', locals: {feed: active_feed} %>
-<% else %>
-	<p> <%= link_to "Sign in", signin_path %> or <%= link_to "sign up", signup_path %> to see recent activity.</p>
-<% end %>
 
-</div>

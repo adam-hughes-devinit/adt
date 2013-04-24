@@ -17,7 +17,15 @@ class Content < ActiveRecord::Base
   validates_inclusion_of :content_type, in: CONTENT_TYPES
 
   def data
-  	YAML.load(content)
+    
+    begin
+      data = YAML.load(content)
+    rescue
+      # in case YAML is malformed
+      data = {}
+    end
+
+    data
   end
 
 end
