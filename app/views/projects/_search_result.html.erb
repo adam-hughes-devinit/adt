@@ -1,25 +1,27 @@
 <%# encoding: utf-8 %>
-<tr>
-	<td><%= p.id %> </td>
-	<td><%= p.donor ? p.donor.name : '—' %> </td>
-	<td><%= link_to active_or_inactive(p), p %></td> 
-	<td><%= p.year ? p.year : '—' %></td>
-	<td><%= p.country_name.length>0 ? p.country_name.join(', ') : '—' %></td>
-	<td><%= p.usd_2009 ? "$#{number_with_precision(p.usd_2009, :precision => 2, :delimiter => ',')}" : '—' %></td>
-	<% if current_user && current_user.owner %>
-		<td>
-			<% if p.owner %>
-				<% if p.owner == current_user.owner %>
-					<%= link_to "Edit", edit_project_path(p) %>
+<% cache(p, cache_path: "projects/#{p.id}/search_result/#{current_user_is_aiddata ? "aiddata" : "non_aiddata" }") do %>
+	<tr>
+		<td><%= p.id %> </td>
+		<td><%= p.donor ? p.donor.name : '—' %> </td>
+		<td><%= link_to active_or_inactive(p), p %></td> 
+		<td><%= p.year ? p.year : '—' %></td>
+		<td><%= p.country_name.length>0 ? p.country_name.join(', ') : '—' %></td>
+		<td><%= p.usd_2009 ? "$#{number_with_precision(p.usd_2009, :precision => 2, :delimiter => ',')}" : '—' %></td>
+		<% if current_user && current_user.owner %>
+			<td>
+				<% if p.owner %>
+					<% if p.owner == current_user.owner %>
+						<%= link_to "Edit", edit_project_path(p) %>
+					<% else %>
+						Owner: <%= link_to p.owner.name, p.owner %> 
+					<% end %>
 				<% else %>
-					Owner: <%= link_to p.owner.name, p.owner %> 
+					No owner 
 				<% end %>
-			<% else %>
-				No owner 
-			<% end %>
 
-		</td>
-	<% else %>
-		<td></td>
-	<% end %>
-</tr>
+			</td>
+		<% else %>
+			<td></td>
+		<% end %>
+	</tr>
+<% end %>
