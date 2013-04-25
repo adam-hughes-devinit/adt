@@ -1,5 +1,5 @@
 <%# encoding: utf-8 %>
-<% cache(p, cache_path: "projects/#{p.id}/search_result/#{current_user_is_aiddata ? "aiddata" : "non_aiddata" }") do %>
+<% cache "projects/#{p.id}/search_result/#{current_user_is_aiddata ? "aiddata" : "non_aiddata" }" do %>
 	<tr>
 		<td><%= p.id %> </td>
 		<td><%= p.donor ? p.donor.name : '—' %> </td>

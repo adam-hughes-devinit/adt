@@ -120,21 +120,5 @@ end %>
 
 	update_all_check_counts()
 
-	function toggle_search_params() {
-		var facet_box = $('#facets')
-		var facet_button = $('#project-facets-button')
-		if (facet_box.is(":visible"))
-		{
-			facet_box.hide()
-			facet_button.show()
 
-		}
-		else {
-			facet_box.slideDown()
-			facet_button.slideUp()
-		}
-	}
-	<% if params[:utf8].blank? %>
-		toggle_search_params()
-	<% end %>
 </script>

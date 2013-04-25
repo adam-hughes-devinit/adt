@@ -37,7 +37,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       expire_fragment("projects/#{project.id}/search_result/aiddata")
       expire_fragment("projects/#{project.id}/search_result/non_aiddata")
       # Expire the index page(s) now that a project has changed
-      expire_fragment(%r{.*index.*}) 
+      expire_action action: :index 
       # expire the CSV text
       project.expire_csv_text
     end
