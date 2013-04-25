@@ -380,7 +380,7 @@ $ ->
 
   page = 1
   page_size = 10
-  max_count = 2400
+  max_count = 2350
   percent_loaded = 0
   percent_step = 100 / ( max_count/page_size )
   csv = []
@@ -407,6 +407,6 @@ $ ->
         render_vis csv
         $('#loading-bar').slideUp().remove()      
   
-  # load_projects page, page_size, percent_loaded, percent_step
-  load_projects_all_at_once()
+  load_projects page, page_size, percent_loaded, percent_step
+  # load_projects_all_at_once()
 

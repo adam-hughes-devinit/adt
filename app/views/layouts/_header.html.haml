@@ -20,7 +20,8 @@
                   = link_to "Methodology", content_by_name_path("methodology")
                 %li
                   = link_to "Contact", content_by_name_path("contact")
-
+                %li 
+                  = link_to "Frequently Asked Questions", content_by_name_path("frequently_asked_questions")  
             %li.dropdown
               %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
                 Data
@@ -31,7 +32,7 @@
                 %li 
                   = link_to "Download Files", content_by_name_path("downloads")
                 %li
-                  = link_to "Aggregate Data", aggregate_export_path
+                  = link_to "Aggregate Exporter", aggregate_export_path
                 %li 
                   = link_to "Geocoded Data <span class='text-warning'>Coming soon!</span>".html_safe, content_by_name_path("geocoding")
                 %li
@@ -41,8 +42,7 @@
                   = link_to "Using the Data", content_by_name_path("using_the_data")
                 %li
                   = link_to "Improving the Data", content_by_name_path("improving_the_data")  
-                %li 
-                  = link_to "Frequently Asked Questions", content_by_name_path("frequently_asked_questions")  
+
                 %li
                   = link_to "Glossary", content_by_name_path("glossary")               
             %li.dropdown

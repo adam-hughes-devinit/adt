@@ -1,7 +1,7 @@
 - desired_scopes = ((defined? scopes) ? scopes : Scope.all)
 %ul.unstyled
-	%li.scope-button{id: 'scope_All Active Projects', "data-scope-name" => "All Active Projects", "data-project-params" => "", "data-aggregate-params" => ""}
-		All Active Projects
+	%li.scope-button.btn.btn-block{id: 'scope_All_Projects', "data-scope-name" => "All Active Projects", "data-project-params" => "", "data-aggregate-params" => ""}
+		All Projects
 	- desired_scopes.each do |scope|
-		%li.scope-button{id: "scope_#{scope.name.gsub(/\s/, "_")}", "data-scope-name" => scope.name, "data-project-params" => scope.to_project_query_params, "data-aggregate-params" => scope.to_aggregate_query_params }
+		%li.scope-button.btn.btn-block{id: "scope_#{scope.name.gsub(/\s/, "_")}", "data-scope-name" => scope.name, "data-project-params" => scope.to_project_query_params, "data-aggregate-params" => scope.to_aggregate_query_params }
 			= scope.name

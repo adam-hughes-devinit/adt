@@ -78,8 +78,8 @@ color_the_map = (json) ->
 	# Edit this duration or delay to
 	# Change the speed of the update animation
 	# It's abstracted bc it's used to calculate the unfuzz time
-	item_duration = 200
-	item_delay = 10
+	item_duration = 75
+	item_delay = 5
 	window.map_data.forEach((d,i) ->
 		# For each map_data, find the json that goes with it
 		if (n = json.filter((j)->j.recipient_iso2 == d.key)[0]) 
@@ -176,9 +176,10 @@ make_a_legend = () ->
 			.style("padding-top", "0px")
 			.style("background-color", "transparent")
 			.html("<p style='color:black;'>" + 
-				"<b>Chinese Finance, 2000-2011<b><br><i>USD-2009</i> || <a style='color:#333;'href='/projects'>See the Data</a></p>")
+				"Chinese Finance, 2000-2011<br><i>USD-2009</i> || <a style href='/projects'>See the Data</a></p>")
 
 unfuzz_and_add_mouse_listeners = (delay, duration) ->
+	
 	d3.selectAll('.fuzz')
 		.transition()
 		.delay(delay ? 100)

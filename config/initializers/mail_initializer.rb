@@ -1,5 +1,5 @@
 require 'yaml'
-if !ENV["smtp_username"]
+if !Rails.env.production?
 	APP_CONFIG = YAML.load(File.read(Rails.root.to_s + "/config/app_config.yml"))
 	p "Make sure you put mailer information in /config/app_config.yml!"
 else
