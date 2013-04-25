@@ -1,81 +1,96 @@
 %header
   .container
-    .row-fluid
-      .span2
+    .row-fluid.header-upper
+      .span3.hidden-phone
         %a#logo{ href: "http://aiddata.org"}
-          = image_tag "adt_cropped.png"
-      %div.span10
-        %nav
-          %ul.nav.nav-pills.main-links
-            %li 
-              = link_to "Home", root_path
-            %li.dropdown
-              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
-                About the Project
-                %i.caret
-              %ul.dropdown-menu
-                %li 
-                  = link_to "Meet the team", content_by_name_path("meet_the_team")
-                %li
-                  = link_to "Methodology", content_by_name_path("methodology")
-                %li
-                  = link_to "Contact", content_by_name_path("contact")
-                %li 
-                  = link_to "Frequently Asked Questions", content_by_name_path("frequently_asked_questions")  
-            %li.dropdown
-              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
-                Data
-                %i.caret
-              %ul.dropdown-menu
-                %li
-                  = link_to "Search Projects", projects_path
-                %li 
-                  = link_to "Download Files", content_by_name_path("downloads")
-                %li
-                  = link_to "Aggregate Exporter", aggregate_export_path
-                %li 
-                  = link_to "Geocoded Data <span class='text-warning'>Coming soon!</span>".html_safe, content_by_name_path("geocoding")
-                %li
-                  = link_to "Web Service API", content_by_name_path("api_docs")
-                %li.divider
-                %li
-                  = link_to "Using the Data", content_by_name_path("using_the_data")
-                %li
-                  = link_to "Improving the Data", content_by_name_path("improving_the_data")  
+          = image_tag "adt_cropped.png"       
+      
+      .span6.aiddata-blue.visible-phone
+        %a#logo{ href: "http://aiddata.org"}
+          = image_tag "adt_cropped.png" 
+      
+      .span9.hidden-phone
+        %h1#tagline
+          Tracking Chinese Development Finance to Africa
+      .span6.visible-phone
+        %h3#tagline-non-desktop
+          Tracking Chinese Development Finance to Africa
 
-                %li
-                  = link_to "Glossary", content_by_name_path("glossary")               
-            %li.dropdown
-              %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
-                Visualize
-                %i.caret
-              %ul.dropdown-menu
-                %li
-                  = link_to "Country-level map", map_path
-                %li 
-                  = link_to "Project bubbles", bubbles_path
-            %li
-              = link_to "Publications", content_by_name_path("publications")
-            %li
-              = link_to "Media", content_by_name_path("media")
-            
-            - if signed_in? 
-              %li
-                = link_to "Sign out", signout_path, method: "delete"
-            - else
-              %li
-                = link_to "Sign In", signin_path
+  .container-fluid.no-padding
+    .row-fluid.aiddata-blue
+      .container  
+        .row-fluid
+          %nav.span12
+            %ul.nav.nav-pills.header-links
+              %li 
+                = link_to "Home", root_path
+              %li.dropdown
+                %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                  About the Project
+                  %i.caret
+                %ul.dropdown-menu
+                  %li 
+                    = link_to "Meet the team", content_by_name_path("meet_the_team")
+                  %li
+                    = link_to "Methodology", content_by_name_path("methodology")
+                  %li
+                    = link_to "Contact", content_by_name_path("contact")
+                  %li 
+                    = link_to "Frequently Asked Questions", content_by_name_path("frequently_asked_questions")  
+              %li.dropdown
+                %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                  Data
+                  %i.caret
+                %ul.dropdown-menu
+                  %li
+                    = link_to "Search Projects", projects_path
+                  %li 
+                    = link_to "Download Files", content_by_name_path("downloads")
+                  %li
+                    = link_to "Aggregate Exporter", aggregate_export_path
+                  %li 
+                    = link_to "Geocoded Data <span class='text-warning'>Coming soon!</span>".html_safe, content_by_name_path("geocoding")
+                  %li
+                    = link_to "Web Service API", content_by_name_path("api_docs")
+                  %li.divider
+                  %li
+                    = link_to "Using the Data", content_by_name_path("using_the_data")
+                  %li
+                    = link_to "Improving the Data", content_by_name_path("improving_the_data")  
 
-            - if Rails.env.development? 
-              %li{ style: "margin:5px;color:#fcc;font-size:20px" }
-                %strong
-                  DEV
-    - if current_user_is_aiddata
-      %div.row-fluid
-        %nav.span12
-          %ul.nav.nav-pills
-            = render 'layouts/project_menu'
-            %li
-              = link_to "Edit site content", contents_path
-            %li 
-              = link_to "Users", users_path
+                  %li
+                    = link_to "Glossary", content_by_name_path("glossary")               
+              %li.dropdown
+                %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
+                  Visualize
+                  %i.caret
+                %ul.dropdown-menu
+                  %li
+                    = link_to "Country-level map", map_path
+                  %li 
+                    = link_to "Project bubbles", bubbles_path
+              %li
+                = link_to "Publications", content_by_name_path("publications")
+              %li
+                = link_to "Media", content_by_name_path("media")
+              
+              - if signed_in? 
+                %li
+                  = link_to "Sign out", signout_path, method: "delete"
+              - else
+                %li
+                  = link_to "Sign In", signin_path
+
+              - if Rails.env.development? 
+                %li{ style: "margin:5px;color:#fcc;font-size:20px" }
+                  %strong
+                    DEV
+        - if current_user_is_aiddata
+          %div.row-fluid
+            %nav.span12
+              %ul.nav.nav-pills
+                = render 'layouts/project_menu'
+                %li
+                  = link_to "Edit site content", contents_path
+                %li 
+                  = link_to "Users", users_path

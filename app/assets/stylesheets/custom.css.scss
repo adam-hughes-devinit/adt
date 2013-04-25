@@ -48,6 +48,12 @@ html {
 .domain {
   visibility:hidden;
 }
+.no-padding {
+  padding: 0;
+}
+.aiddata-blue {
+  background-color: $aiddataBlue !important;
+}
 body {
   background-color: white; //#f9f9f9;
   font-family: Tahoma, Arial, sans-serif;
@@ -55,18 +61,57 @@ body {
 
   header {
     font-size: 1.2em;
-    background-color: $aiddataBlue;
+    //background-color: $aiddataBlue;
     min-height: 100px;
     position: relative;
+    
+    .header-upper {
+      $header_height: 80px;
+      .hidden-phone {
+        height: $header_height;
 
-
+        #tagline{
+          font-style: italic;
+          font-weight: 400;
+          font-weight: 400;
+          font-size: 30px;
+          position: absolute;
+          bottom: 0;
+          float: right;
+          font-family: Helvetica, Arial, sans-serif;
+        }
+      }
+      position: relative;
+      #logo {
+          //position:absolute;
+          //bottom:0px;
+          //top: 0px;
+          //max-height: 100%;
+          //min-width:100%;
+          img {
+            //max-width:150px;
+            height: $header_height;
+            max-width: none !important;
+            width: auto !important;
+            //height:100%;
+          }
+      }
+      #tagline-non-desktop {
+        //color: white;
+        //margin: 0px;
+        //min-height: 0px;
+        font-style:italic;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+    }
     ul.nav {
+      width:100%;
       margin-bottom: 0px !important;
     }
     .nav-pills {
 
-      &.main-links{
-        margin-top: 70px;
+      &.header-links{
+        //margin-top: 70px;
         background-color: $aiddataBlue;
       }
       li {
@@ -120,23 +165,6 @@ body {
       }
     }
 
-    #logo {
-        max-height: 100%;
-        min-width:100%;
-        img {
-          //height:100%;
-        }
-    }
-
-
-    #header_content {
-      h1 {
-        margin: auto, 180px;
-        color: white;
-        text-shadow: black 2px 2px 10px;
-        text-align:center;
-      }
-    }
     
   }
 
@@ -313,6 +341,7 @@ $carousel_height: 300px;
 .team-image {
   max-height: 200px;
   border: 1px solid $aiddataBlue;
+  margin: 10px;
 }
 
 #stats-box {

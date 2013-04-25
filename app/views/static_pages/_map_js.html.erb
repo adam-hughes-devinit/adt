@@ -13,6 +13,13 @@
 -->
 
 <div class="row-fluid">
+  <div class='span3' id='scope-buttons'>
+    <div class='well well-small'>
+      <h2> Choose a scope </h2>
+      <%= render partial: 'scope_buttons', locals: {scopes: Scope.where("name in(?)", ["Official Finance","Unofficial Finance", "Military"])} %>
+    </div>
+
+  </div>
   <!--[if IE 6]>
     <div id="error"></div>
     <div id="vis" style="display:none;"></div>
@@ -35,10 +42,7 @@
     <div class='span8' id="vis">
     </div>
   <![endif]>
-  <div class='span3' id='scope-buttons'>
-    <h2> Choose a scope </h2>
-    <%= render partial: 'scope_buttons', locals: {scopes: Scope.where("name in(?)", ["Official Finance","Unofficial Finance", "Military"])} %>
-  </div>
+
 </div>
 
 <div id="tooltip"><p id="tooltiptext"></p></div>

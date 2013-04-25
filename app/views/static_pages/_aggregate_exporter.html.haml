@@ -33,7 +33,7 @@
 	.span6.well
 		= label_tag "Handle Multiple Recipients:" 
 		= select_tag "multiple_recipients", options_for_select(duplication_handler_options) , multiple: false, class: "aggregate_input", id: "multiple_recipients_input", onchange: "show_duplication_handler_hint()"
-		%span#handler_hint.muted
+		%span#handler_hint
 
 %hr{style: "margin:0px 0px 5px 0px"}
 

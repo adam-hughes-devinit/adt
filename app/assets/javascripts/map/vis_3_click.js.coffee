@@ -42,10 +42,10 @@ remove_overlay = () ->
 			.attr("filter", ""); 
 
 get_active_country = (item) ->
-	active_country = {}
-	active_country.iso2 = item.id
-	active_country.name = $(item).attr("name")
-	active_country
+	active_country =
+			iso2: item.id
+			name: $(item).attr("name")
+
 
 make_header = (overlay, active_country) ->
 	h = window.vis_config.h
@@ -54,7 +54,7 @@ make_header = (overlay, active_country) ->
 	country_header = overlay.append('svg:g')
 		.attr("id", "country_header")
 		.append("svg:foreignObject")
-			.attr("x", 100)
+			.attr("x", 120)
 			.attr("y", 20)
 			.attr("height", h/6)
 			.attr("width", w/2.1)  
@@ -69,8 +69,13 @@ make_header = (overlay, active_country) ->
 		.style("font-size", 50)	      	 
 		.style("font-family", "Georgia")		 
 		.style("font-weight", "bold") 
+		# style='color:#{label_green.brighter()};border-color:#{label_green.brighter()}'
 		.html("<div id='country_header_body' style='line-height:40px;font-size:40px;opacity:1; "+ 
-			"height:#{h/6}; width:#{w/2.1}'><span>#{active_country.name}</span></div>")
+			"height:#{h/6}; width:#{w/2.1}'>
+			<h1 style='color:#{label_green.brighter()};border-color:#{label_green.brighter()}' class='page-header country-header'>
+				#{active_country.name}
+				</h1>
+				</div>")
 
 make_pie_chart = (overlay, active_country) ->
 	pie = d3.layout.pie().sort(d3.ascending)
@@ -591,6 +596,6 @@ window.click = () ->
 		#console.log(active_country)
 		make_sector_graph(overlay, active_country)
 		make_pie_chart(overlay, active_country)
-		make_gni_chart(overlay, active_country)
+		# make_gni_chart(overlay, active_country)
 	, "json")
 	make_header(overlay, active_country)
