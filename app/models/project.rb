@@ -497,7 +497,7 @@ class Project < ActiveRecord::Base
           "#{s.source_type  ? s.source_type.name : ''}",
           "#{s.document_type ? s.document_type.name  : ''}",
           "#{s.date ? s.date.strftime('%d %B %Y') : ''}",
-          "#{s.url.split(/\.|\/|\+|\%20/)}"]
+          "#{s.url.split(/\.|\/|\+|\%20|_/)}"]
       end
     end
 

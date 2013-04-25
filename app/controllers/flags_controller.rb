@@ -2,7 +2,7 @@ class FlagsController < ApplicationController
 
 skip_before_filter :signed_in_user, only: [:create]
 
-# cache_sweeper :project_sweeper # app/models/project_sweeper.rb
+cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
 	def new 
 		@flag = Flag.new

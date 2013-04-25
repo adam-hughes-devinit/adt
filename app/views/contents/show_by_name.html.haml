@@ -1,6 +1,6 @@
 - provide :title, @content.name.titleize
 
-- cache(@content) do
+- cache(@content, expires_in: 20.minutes ) do
 
 	.row-fluid
 		.span12
