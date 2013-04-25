@@ -1,4 +1,5 @@
 Adt::Application.routes.draw do
+
   # codes
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
@@ -73,4 +74,9 @@ Adt::Application.routes.draw do
 
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
+
+  #404
+  unless Rails.application.config.consider_all_requests_local
+    match '*not_found', to: 'errors#error_404'
+  end
 end
