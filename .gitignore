@@ -28,6 +28,7 @@
 # Ignore sensitive info
 /config/app_config.yml
 /config/omniauth_config.yml
+/config/secrets.rb
 
 
 #And rvmrc files
