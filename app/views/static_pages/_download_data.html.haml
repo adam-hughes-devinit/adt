@@ -14,4 +14,4 @@
 				%td
 					= scope.description
 				%td
-					= link_to "CSV file", "/projects.csv?scope_names[]=#{scope.name}"
+					= link_to "<img src='#{AggregatesHelper::SPREADSHEET_ICON}'> CSV".html_safe, "/projects.csv?scope_names[]=#{scope.name}"

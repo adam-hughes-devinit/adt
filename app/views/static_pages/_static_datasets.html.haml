@@ -16,7 +16,7 @@
 				%td
 					= version = link.gsub(/.*aiddata_china_/, "").gsub(/\.xlsx/, "").gsub(/_/, ".")
 				%td
-					= link_to("XLSX file", "/datasets/#{version}" )
+					= link_to("<img src='#{AggregatesHelper::SPREADSHEET_ICON}'> XLSX".html_safe, "/datasets/#{version}" )
 				%td
 					= (File.size(link)/1000)
 				-# %td
