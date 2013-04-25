@@ -379,7 +379,7 @@ $ ->
 
 
   page = 1
-  page_size = 10
+  page_size = 120
   max_count = 2350
   percent_loaded = 0
   percent_step = 100 / ( max_count/page_size )
