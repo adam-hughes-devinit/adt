@@ -28,6 +28,7 @@ gem 'omniauth-linkedin'
 gem 'haml'
 gem 'multipart-post'
 gem 'sitemap_generator'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
