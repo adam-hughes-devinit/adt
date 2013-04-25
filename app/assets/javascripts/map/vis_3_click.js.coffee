@@ -213,7 +213,7 @@ make_sector_graph = (overlay, active_country) ->
 	td_style = 'padding:2px;line-height:14px;'
 	sectorSums.forEach((s) ->
 		url = "/projects?active_string=Active" +
-			(if current_scope.name != "All Active Projects" then "&scope_names[]=" + current_scope.name else "") +
+			(if current_scope.name != "All Projects" then "&scope_names[]=" + current_scope.name else "") +
 			"&country_name=#{active_country.name}&crs_sector_name=#{s.key}"
 		headers_html += "
 			<tr>
@@ -315,7 +315,7 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 				.html("<p><b>Loading top projects...</b></p>")
 
 	top_projects_path = '/projects.json?max=5' + 
-		(if current_scope.name != "All Active Projects" then "&scope_names[]=" + current_scope.name else "") +
+		(if current_scope.name != "All Projects" then "&scope_names[]=" + current_scope.name else "") +
 		"&active_string=Active" +
 		"&order_by=usd_2009&dir=desc" +
 		"&recipient_iso2=" + active_country.iso2
@@ -424,7 +424,9 @@ make_gni_chart = (overlay, active_country) ->
 
 	# request related data, then call a function to draw the line chart
 	wbi_call = (country_iso, indicator_code) ->
-		"http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
+		encodeURIComponent(
+			"http://api.worldbank.org/countries/#{country_iso}/indicators/#{indicator_code}?per_page=50&date=1999:2012&format=json"
+		)
 	window.worldbank_gni_url = wbi_call active_country.iso2, "NY.GNP.ATLS.CD"
 	window.worldbank_dacoda_url = wbi_call active_country.iso2, "DC.DAC.TOTL.CD"
 	window.worldbank_usaoda_url = wbi_call active_country.iso2, "DC.DAC.USAL.CD"
@@ -434,9 +436,9 @@ make_gni_chart = (overlay, active_country) ->
 	
 	# Right now, these ajax called are made in sequence -- can they be made in parallel?
 	#console.log( "starting wdi calls")
-	d3.json("/ajax?url=#{encodeURIComponent(worldbank_gni_url)}", (gni_data) ->
-		d3.json("/ajax?url=#{encodeURIComponent(worldbank_dacoda_url)}", (dacoda_data) ->
-			d3.json("/ajax?url=#{encodeURIComponent(worldbank_usaoda_url)}", (usaoda_data) ->
+	d3.json("/ajax?url=#{worldbank_gni_url}", (gni_data) ->
+		d3.json("/ajax?url=#{worldbank_dacoda_url}", (dacoda_data) ->
+			d3.json("/ajax?url=#{worldbank_usaoda_url}", (usaoda_data) ->
 				d3.json(cdf_path, (cdf_data) ->
 					create_line_graph(line_chart, gni_data, [{name: "Chinese O.F.", data: cdf_data, source: cdf_path, color: "#cc3333"}, 
 					{name: "DAC ODA", data: dacoda_data, source: worldbank_dacoda_url, color: "#6699ff"}, 
