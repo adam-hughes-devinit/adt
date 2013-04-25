@@ -15,10 +15,11 @@ SitemapGenerator::Sitemap.create do
     # The root path '/' and sitemap index file are added automatically for you.
     add bubbles_path
     add map_path
-    add downloads_path
+
+    # add content pages
     Content.find_each do |content|
-      if content.content_type == 'Page' 
-        add content_by_name_path(content.name)
+      if ["Page", "Complex Page"].include? content.content_type
+        add content_by_name_path(content.name), :changefreq => 'weekly'
       end
     end
 
@@ -29,7 +30,7 @@ SitemapGenerator::Sitemap.create do
   # Add all projects:
 
     Project.find_each do |project|
-       add project_path(project), :lastmod => project.updated_at
+       add project_path(project), :lastmod => project.updated_at, :changefreq => 'daily'
     end
 
     
