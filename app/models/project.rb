@@ -39,7 +39,6 @@ class Project < ActiveRecord::Base
     end
   end 
 
-  # before_save :increment_iteration MOVED TO FORM
 
   def increment_iteration # DUH, version was already taken by paper_trail
     iteration ||= 0
@@ -497,7 +496,8 @@ class Project < ActiveRecord::Base
         ["#{s.url}",
           "#{s.source_type  ? s.source_type.name : ''}",
           "#{s.document_type ? s.document_type.name  : ''}",
-          "#{s.date ? s.date.strftime('%d %B %Y') : ''}"]
+          "#{s.date ? s.date.strftime('%d %B %Y') : ''}",
+          "#{s.url.split(/\.|\/|\+|\%20/)}"]
       end
     end
 

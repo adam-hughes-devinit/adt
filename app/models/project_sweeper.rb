@@ -1,5 +1,5 @@
 class ProjectSweeper < ActionController::Caching::Sweeper
-  # observe Project, Flag, Comment # This sweeper is going to keep an eye on the Project model
+  observe Project #, Flag, Comment # This sweeper is going to keep an eye on the Project model
  
   # If our sweeper detects that a Project was created call this
   def after_create(this)
@@ -31,7 +31,8 @@ class ProjectSweeper < ActionController::Caching::Sweeper
 
     if project
       # expire the Show page(s) no that it is changed
-      expire_fragment(%r{projects/#{project.id}.*})
+      expire_fragment("projects/#{project.id}/aiddata")
+      expire_fragment("projects/#{project.id}/non_aiddata")
       # Expire the index page(s) now that a project has changed
       expire_fragment(%r{.*index.*}) 
       # expire the CSV text
