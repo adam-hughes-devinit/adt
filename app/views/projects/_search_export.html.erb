@@ -31,6 +31,11 @@
 
           params.each do |param|
             unless %w(action controller scope utf8 search).include?(param[0])
+              #format
+              if param[1].is_a? Array
+                param[1] = param[1].join(", ")
+              end
+
               key = param[0].to_s.gsub('_',' ').titleize
               value = param[1].to_s.gsub('_',' ').titleize
               key.gsub!(' String', '')

@@ -28,6 +28,7 @@ gem 'omniauth-linkedin'
 gem 'haml'
 gem 'multipart-post'
 gem 'sitemap_generator'
+gem 'hashie'
 gem 'aws-sdk'
 
 group :development, :test do

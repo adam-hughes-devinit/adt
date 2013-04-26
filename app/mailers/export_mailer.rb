@@ -1,4 +1,5 @@
 include ApplicationHelper
+include AmazonHelper
 require 'fileutils'
 
 class ExportMailer < ActionMailer::Base
@@ -60,6 +61,10 @@ class ExportMailer < ActionMailer::Base
     end
     export_file.close
 
+    #send export csv to Amazon s3
+    s3_upload(ENV['EXPORT_BUCKET'], export_file, "#{filename}.csv")
+
+    #mail it
     mail.attachments["#{filename}.csv"] = {mime_type: 'text/csv',
                                               content: File.read(export_file_name)}
     mail( to: email, subject: "Your AidData export is ready!")
