@@ -9,6 +9,7 @@
 	%>
 <% @current_url_without_scope = @current_url.gsub(/\&?scope_names[^=]*=.+[\&\?]?/, '') %>
 
+<% filters_hidden = params[:utf8].blank? && params[:scope_names].blank? %>
 
 <div id='project-facets' class='well well-small'>
 	<div class="row-fluid">
@@ -26,7 +27,7 @@
 
 		
 
-		<div id='project-facets-button' class='row-fluid' style='display:none;text-align:center;'>
+		<div id='project-facets-button' class='row-fluid' style='<%= !filters_hidden ? "display:none" : "" %>;text-align:center;'>
 			<div class='span12'>
 
 				<span class='btn btn-info' style='text-align:center;margin:5px;' onclick='toggle_search_params()'>Show Filter Options</span>
@@ -41,7 +42,7 @@
 
 			end 
 		%>
-		<div id='facets'>
+		<div id='facets' style="<%= filters_hidden ? "display:none" : "" %>" >
 			<div class='row-fluid'>
 				<div class='span12'>
 					<p class='row-fluid'>
@@ -86,7 +87,15 @@
 					</ol>					
 				</div>
 			<% end %>
-			<%= submit_tag "Submit", name: nil, class: "btn btn-primary" %>	
+			<div class='row-fluid'>
+				<div class='span2'>
+					<%= submit_tag "Submit", name: nil, class: "btn btn-primary" %>	
+				</div>
+				<div class='span2'>
+					<span class='btn btn-info pull-right'  onclick='toggle_search_params()'>Hide Filter Options</span>
+				</div>
+
+			</div>
 		</div>
 			
 	<% end %>
@@ -95,18 +104,17 @@
 	function toggle_search_params() {
 		var facet_box = $('#facets')
 		var facet_button = $('#project-facets-button')
-		if (facet_box.is(":visible"))
-		{
-			facet_box.hide()
-			facet_button.show()
+		facet_box.slideToggle('fast')
+		facet_button.slideToggle('fast')
+		// if (facet_box.is(":visible"))
+		// {
+		// 	facet_box.hide()
+		// 	facet_button.show()
 
-		}
-		else {
-			facet_box.slideDown()
-			facet_button.slideUp()
-		}
+		// }
+		// else {
+		// 	facet_box.slideDown()
+		// 	facet_button.slideUp()
+		// }
 	}
-	<% if params[:utf8].blank? %>
-		toggle_search_params()
-	<% end %>
 </script>
