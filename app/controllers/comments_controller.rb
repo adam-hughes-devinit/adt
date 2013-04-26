@@ -19,13 +19,16 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 	end
 
 	def destroy
+
 		@comment = Comment.find(params[:id])
+		@project = @comment.project
+
 		if @comment.destroy
 			flash[:success] = "Comment deleted."
 		else 
 			flash[:notice] = "Comment not deleted."
 		end
-		redirect_to :back
+		redirect_to @project
 	end
 
 	def show 

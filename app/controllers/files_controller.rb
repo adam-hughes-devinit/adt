@@ -1,8 +1,10 @@
 class FilesController < ApplicationController
 skip_before_filter :signed_in_user, only: [:create]
-before_filter :is_project_owner?, only: [:edit, :destroy]
+before_filter :correct_owner?, only: [:edit, :destroy]
 
-	AIDDATA_FS ='http://aiddata-fs.herokuapp.com/files/china'
+	AIDDATA_FS_ROOT = 'aiddata-fs.herokuapp.com'
+	AIDDATA_FS ="http://#{AIDDATA_FS_ROOT}/files/china"
+
 	AIDDATA_FS_PASSWORD = ENV['AIDDATA_FS_PASSWORD']
 	AIDDATA_FS_USERNAME = ENV['AIDDATA_FS_USERNAME']
 
@@ -69,15 +71,20 @@ before_filter :is_project_owner?, only: [:edit, :destroy]
 		redirect_to Project.find(params[:project_id])
 	end
 
-	def delete
+	def destroy
 		require 'net/http'
 
-		url = URI.parse("#{AIDDATA_FS}/#{params[:project_id]}/#{params[:file_id]}")	
 		
-		req = Net::HTTP::Delete.new(url)
-		req.basic_auth AIDDATA_FS_USERNAME, AIDDATA_FS_PASSWORD
-
-		Net::HTTP.request(req)
+		
+		http = Net::HTTP.new(AIDDATA_FS_ROOT)
+		this_file_path = "/files/china/#{params[:project_id]}/#{params[:id]}"
+		
+		request = Net::HTTP::Delete.new(this_file_path)
+		request.basic_auth AIDDATA_FS_USERNAME, AIDDATA_FS_PASSWORD
+		
+		response = http.request(request)
+		flash[:success] = this_file_path
+		flash[:warning] = response.body.html_safe
 
 		flash[:notice] = "File deleted."
 		redirect_to Project.find(params[:project_id])

@@ -1,5 +1,5 @@
 
-- latest_publications = Content.find_all_by_content_type("AidData Publication").sort {|a, b| b.data["date"] <=> a.data["date"]}[0..2]
+- latest_publications = Content.where('content_type in(?)', ["Affiliate Publication", "AidData Publication"]).sort {|a, b| b.data["date"] <=> a.data["date"]}[0..2]
 %ul.unstyled.recent_resources
 	- latest_publications.each do |a|
 		%li

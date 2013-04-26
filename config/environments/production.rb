@@ -49,7 +49,7 @@ Adt::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   #config.assets.precompile += %w( *.js *.scss *.coffee *.css )
 
-  # don't precompile Boostrap partials /(^[:
+  # don't precompile Boostrap partials 
   config.assets.precompile << /(^[^_\/]|\/[^_]|[^_])[^\/]*$/
 
   # Disable delivery errors, bad email addresses will be ignored

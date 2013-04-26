@@ -11,34 +11,39 @@
 			    <li data-target='#home_carousel' data-slide-to='0' class='active'></li>
 			    <li data-target='#home_carousel' data-slide-to='1'></li>
 			    <li data-target='#home_carousel' data-slide-to='2'></li>
+			    <li data-target='#home_carousel' data-slide-to='3'></li>
 			  </ol>
 			  <div class='carousel-inner'>
 			    <div class='active item' >
 			    	<iframe width="550" height="309" src="http://www.youtube.com/embed/2t8QH_q2PGs?rel=0" frameborder="0" allowfullscreen></iframe>
-
-			    </div>
-			    <div class='item'>
-			    	<%=image_tag "improve_the_data.png"%>
 			    	<div class='carousel-caption'>
-			    		<h4>Contribute to the Project</h4>
-			    		<p>Help us improve and expand the database!  <%=link_to "Learn more here", content_by_name_path("improving_the_data")%>.</p>
+			    		<p>
+			    			 Co-Executive Director Brad Parks talks about the Media-Based Data Collection project.
+			    		</p>
 			    	</div>
 			    </div>
+
 			    <div class='item'>
 		    	    <%=image_tag "home/drc_map.png"%>
 			    	<div class='carousel-caption'>
-			    		<h4>Geocoded Data: Coming Soon!</h4>
+			    		<h4>Coming Soon: Geocoded Data!</h4>
 			    		<p>See <%=link_to "preliminary maps", content_by_name_path("geocoding")%> of Chinese finance in Africa &rarr;</p>
 			    	</div>
 			    </div>
 			    <div class='item'>
 			    	<%=image_tag "loan lifecycle.png"%>
 			    	<div class='carousel-caption'>
-			    		<h4>Media-Based Data Collection</h4>
-			    		<p>Learn more about the <%=link_to "methodology", content_by_name_path("methodology")%> behind AidData's work &rarr;</p>
+			    		<h4>Learn more about the initiative</h4>
+			    		<p>See the <%=link_to "methodology", content_by_name_path("methodology")%> behind AidData's work &rarr;</p>
 			    	</div>
 			    </div>
-
+			    <div class='item'>
+			    	<%=image_tag "improve_the_data.png"%>
+			    	<div class='carousel-caption'>
+			    		<h4>Help us improve our dataset</h4>
+			    		<p>Help us expand the database!  <%=link_to "Learn more here", content_by_name_path("improving_the_data")%>.</p>
+			    	</div>
+			    </div>
 			  </div>
 			  <a class='carousel-control left' href='#home_carousel' data-slide='prev'>&lsaquo;</a>
 			  <a class='carousel-control right' href='#home_carousel' data-slide='next'>&rsaquo;</a>

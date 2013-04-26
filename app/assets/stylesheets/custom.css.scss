@@ -322,14 +322,6 @@ footer {
 
                                             /* miscellaneous */
 
-.debug_dump {
-  clear: both;
-  float: left;
-  width: 100%;
-  margin-top: 45px;
-  @include box_sizing;
-}
-
 #home_first_row {
   background-repeat: repeat-x;
   background-size: 100% 110%;
@@ -351,10 +343,11 @@ footer {
 
       }
       img {
-        min-height: $thumbnail-height;
-        width: auto;
-        min-width: none;
-        clip:rect(0px 100px $thumbnail-height 0)
+        height: $thumbnail-height;
+        //max-height: $thumbnail-height;
+        width: 100%;
+        //min-width: none;
+        clip:rect(0px 100% $thumbnail-height 0)
       }
     }
 
@@ -437,6 +430,14 @@ $carousel_height: 300px;
 }
 
                     										/* forms */
+
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  @include box_sizing;
+}
 
 
 input, textarea, select, .uneditable-input {

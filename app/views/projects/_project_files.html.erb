@@ -11,9 +11,11 @@
 		function print_data(data) {
 			var target = $('#files')
 			if(data["contents"] && data.contents.length > 0) {
-				menu = data.contents.map(function(d) { return "<li id='"+d.type+"-"+d.key+"' class='document'>" +
+				menu = data.contents.map(function(d) { 
+					url = "http://aiddata-fs.herokuapp.com/documents/"+ d.key
+					return "<li data-id=" + d.key + " id='"+d.type+"-"+d.key+"' class='document'>" +
 							(d.type == 'document' ? '<img src="'+d.icon+'" />' : '<i class="icon-folder-close"></i>')  +
-							"&ensp;<a href='http://aiddata-fs.herokuapp.com/documents/"+ d.key + "' onclick=\"App.navigate_to('"+d.type+"','"+d.key+"')\">" +
+							"&ensp;<a href='" + url + "'>" +
 							d.name + 
 							"</a>" +
 							" </li>"}).join("") 
@@ -22,8 +24,17 @@
 				menu = "<li>(No files yet, please add one below!)</li>" 
 			}
 			target.html(menu)
+			<% if current_user_is_aiddata %>
+				$('.document').each(function(i) {
+					doc = $(this)
+					doc_id = doc.attr("data-id")
+					doc.append("<a class='text-warning' data-method='delete' href='/projects/<%= @project.id %>/files/"+doc_id + "''>Delete</a>")
+				})
+			<% end %>
 
 		}
+
+
 	</script>
 
 	<%= form_tag "#{project_path @project}/files", :multipart => true do %>
