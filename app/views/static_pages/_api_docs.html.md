@@ -11,7 +11,6 @@ __Endpoint:__ `GET /projects.json?`.
 
 ### Query
 
-If you're familiar with [Apache Solr](http://lucene.apache.org/solr/) or the [Sunspot](http://sunspot.github.io/) gem, you've got a head start.
 
 #### Facets
 
