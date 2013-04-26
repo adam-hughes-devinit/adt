@@ -1,6 +1,5 @@
 $(function() {
 	$('.teaser').each(function() {
-		console.log("tease!")
 		var el = $(this);
 		el.removeClass('teaser')
 		var long_text = el.html()

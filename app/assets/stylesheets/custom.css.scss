@@ -2,7 +2,8 @@
 /* my stuff */
 $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
-$aiddataBlue: #172137;//#1c2a43;
+$aiddataBlue: #1c273b;//#1c2a43;
+$backgroundGray: #f1f1f1;
 
 /* Bootstrap overrides */
 
@@ -26,13 +27,11 @@ $warningText: #c09853;
 @import "bootstrap";
 @import "bootstrap-responsive";
 @import "project/styles";
-
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700");
 
 
 
 /* mixins, variables, etc. */
-
-$grayMediumLight: #eaeaea;
 
 
 @mixin box_sizing {
@@ -46,6 +45,24 @@ html {
   overflow-y: scroll;
 }
 
+.home-button {
+  $home-button-height: 80px;
+  $home-button-font-size: 1.3em;
+  font-size: $home-button-font-size;
+  height: $home-button-height;
+  text-transform: uppercase;
+  border-radius: 0px !important;
+  padding-top: $home-button-height * 0.4;
+  color: #555;
+  &.btn-info {
+    color: #1c273b;
+  }
+
+  &.btn-warning {
+    color: white;
+  }
+
+}
 .recent_resources {
 
   li {
@@ -66,6 +83,16 @@ body {
   font-family: Tahoma, Arial, sans-serif;
   line-height: 14px;
 
+  .gray-background {
+    background-color: $backgroundGray;
+    //width: 100%;
+    //min-height: 500px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: -500;
+  }
+
   header {
     font-size: 1.2em;
     //background-color: $aiddataBlue;
@@ -74,20 +101,30 @@ body {
     
     .header-upper {
       $header_height: 80px;
-      .hidden-phone {
+      &.hidden-phone {
         height: $header_height;
-
-        #tagline{
-          font-style: italic;
-          font-weight: 400;
-          font-weight: 400;
-          font-size: 30px;
-          position: absolute;
-          bottom: 0;
-          float: right;
-          font-family: Helvetica, Arial, sans-serif;
+      }
+      &.visible-phone {
+        #logo {
+          //border-bottom: 3px solid $aiddataBlue;
         }
       }
+      #tagline{
+          color: $aiddataBlue;
+          font-family: "Open Sans", sans-serif;          
+          font-weight: 400;
+          font-size: 30px;
+          margin-top: $header_height * 0.3;
+          //position: absolute;
+          //bottom: 0;
+          //float: right;
+
+          .beta-note {
+            color: #999;
+            text-transform: uppercase;
+          }
+          
+        }
       position: relative;
       #logo {
           //position:absolute;
@@ -95,21 +132,17 @@ body {
           //top: 0px;
           //max-height: 100%;
           //min-width:100%;
+          
           img {
+            margin-top: $header_height * 0.1;
             //max-width:150px;
-            height: $header_height;
-            max-width: none !important;
-            width: auto !important;
+            //height: $header_height;
+            //max-width: nune !important;
+            //width: auto !important;
             //height:100%;
           }
       }
-      #tagline-non-desktop {
-        //color: white;
-        //margin: 0px;
-        //min-height: 0px;
-        font-style:italic;
-        font-family: Helvetica, Arial, sans-serif;
-      }
+
     }
     ul.nav {
       width:100%;
@@ -326,6 +359,12 @@ $carousel_height: 300px;
       overflow:hidden;
       h1 {
         position:absolute;
+      }
+
+      &.active iframe {
+        // required to center iframe
+        display:block;
+        margin: auto auto;
       }
       img {
         //min-height: $carousel_height !important;

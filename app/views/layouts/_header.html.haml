@@ -1,20 +1,25 @@
 %header
   .container
-    .row-fluid.header-upper
-      .span3.hidden-phone
+    .row-fluid.visible-phone.header-upper      
+      .span6
         %a#logo{ href: "http://aiddata.org"}
-          = image_tag "adt_cropped.png"       
-      
-      .span6.aiddata-blue.visible-phone
-        %a#logo{ href: "http://aiddata.org"}
-          = image_tag "adt_cropped.png" 
-      
-      .span9.hidden-phone
+          = image_tag "open_adt_small.png" 
+      .span6
+        %h3#tagline
+          Tracking Chinese Development Finance to Africa -
+          %span.beta-note
+            Beta
+    .row-fluid.hidden-phone.header-upper                       
+      .span9
         %h1#tagline
-          Tracking Chinese Development Finance to Africa
-      .span6.visible-phone
-        %h3#tagline-non-desktop
-          Tracking Chinese Development Finance to Africa
+          Tracking Chinese Development Finance to Africa - 
+          %span.beta-note
+            Beta      
+      .span3
+        %a#logo{ href: "http://aiddata.org"}
+          = image_tag "open_adt_small.png"       
+      
+
 
   .container-fluid.no-padding
     .row-fluid.aiddata-blue

@@ -163,7 +163,7 @@
 		fill_template_if_finished(vitals, returned_queries)
 
 	fill_template_if_finished = (vitals, returned_queries) ->
-		console.log returned_queries
+		# console.log returned_queries
 		if returned_queries is 3
 			vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
 			template = _.template($('#vitals-template').html(), vitals)

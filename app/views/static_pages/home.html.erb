@@ -1,9 +1,8 @@
 <% provide(:title, 'Home') %>
 
+<div class='container-fluid' class='gray-background'>
 
-<div class='container-fluid'>
-
-	<div class='row-fluid'>
+	<div class='row-fluid' >
 		<div class='span6'>
 			<div id='home_carousel' class='carousel slide with_shadow'>
 			  <ol class='carousel-indicators'>
@@ -60,17 +59,17 @@
 		<div class='row-fluid' style="margin: 10px 0px 10px 0px;">
 			<span class='span4'>
 				<h4>
-					<%= link_to "How to Use the Data", content_by_name_path("using_the_data"), class: "btn btn-large btn-info" %>
+					<%= link_to "How to Use the Data", content_by_name_path("using_the_data"), class: "btn btn-large btn-info btn-block  home-button" %>
 				</h4>
 			</span>
 			<span class='span4'>
 				<h4>
-					<%=link_to "Help us Improve the Data", content_by_name_path("improving_the_data"), class: "btn btn-large btn" %>
+					<%=link_to "Help us Improve the Data", content_by_name_path("improving_the_data"), class: "btn btn-large btn-block home-button" %>
 				</h4>
 			</span>
 			<span class='span4'>
 				<h4>
-					<%=link_to "Coming Soon: Geocoded Data", content_by_name_path("geocoding"), class: "btn btn-large btn-warning" %>
+					<%=link_to "Coming Soon: Geocoded Data", content_by_name_path("geocoding"), class: "btn btn-large btn-warning btn-block home-button" %>
 				</h4>
 			</span>
 		</div>

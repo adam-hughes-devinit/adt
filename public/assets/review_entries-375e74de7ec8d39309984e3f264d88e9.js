@@ -1,1 +1,0 @@
-((function(){jQuery(function(){return $(".review_entries").dataTable()})})).call(this);

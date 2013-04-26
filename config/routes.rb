@@ -5,6 +5,8 @@ Adt::Application.routes.draw do
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
   :flag_types, :loan_types, :contents
+  resources :exports
+  resources :review_entries
 
   
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
@@ -27,8 +29,8 @@ Adt::Application.routes.draw do
   resources :relationships
 
 
-  match '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
-  match '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
+  get '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
+  get '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
   
@@ -55,21 +57,20 @@ Adt::Application.routes.draw do
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
   get '/content/:name', to: 'contents#show_by_name', as: "content_by_name"
   get '/recent', to: 'static_pages#recent', as: "recent"
+  get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
 
   
-  match '/signup', to: 'users#new'
+  get '/signup', to: 'users#new'
 
   # this is for staff log in:
-  match '/login', to: 'sessions#new', as: "staff_login" 
+  get '/login', to: 'sessions#new', as: "staff_login" 
 
   match '/signout', to: 'sessions#destroy', via: :delete
 
   # this is for external log in:
-  match '/signin', to: 'static_pages#signin'
+  get '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
 
-  resources :exports
-  resources :review_entries
 
 
   #openauth

@@ -17,6 +17,11 @@ class StaticPagesController < ApplicationController
     render 'bubbles'
   end
 
+  def codebook
+    require 'open-uri' 
+    send_file open('/codebook/AidData_MBDC_Methodology_1.0.pdf')
+  end
+
   def csv_analyzer
     render 'csv_analyzer'
   end

@@ -320,7 +320,7 @@ make_top_projects = (overlay, active_country, sectorSums, sector_area_x, sector_
 				.html("<p><b>Loading top projects...</b></p>")
 
 	top_projects_path = '/projects.json?max=5' + 
-		(if current_scope.name != "All Projects" then "&scope_names[]=" + current_scope.name else "") +
+		(if ((current_scope.name != "All Projects") && (current_scope.name != "All Active Projects")) then "&scope_names[]=" + current_scope.name else "") +
 		"&active_string=Active" +
 		"&order_by=usd_2009&dir=desc" +
 		"&recipient_iso2=" + active_country.iso2
