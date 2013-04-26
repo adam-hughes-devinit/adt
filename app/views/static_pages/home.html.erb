@@ -1,8 +1,10 @@
 <% provide(:title, 'Home') %>
+<script>
+	$('body')
+		.css('background-image', 'url("<%= image_path "gray_to_white.png" %>")')
+</script>
 
-<div class='container-fluid' class='gray-background'>
-
-	<div class='row-fluid' >
+	<div class='row-fluid' id='home_first_row' >
 		<div class='span6'>
 			<div id='home_carousel' class='carousel slide with_shadow'>
 			  <ol class='carousel-indicators'>
@@ -14,6 +16,13 @@
 			    <div class='active item' >
 			    	<iframe width="550" height="309" src="http://www.youtube.com/embed/2t8QH_q2PGs?rel=0" frameborder="0" allowfullscreen></iframe>
 
+			    </div>
+			    <div class='item'>
+			    	<%=image_tag "improve_the_data.png"%>
+			    	<div class='carousel-caption'>
+			    		<h4>Contribute to the Project</h4>
+			    		<p>Help us improve and expand the database!  <%=link_to "Learn more here", content_by_name_path("improving_the_data")%>.</p>
+			    	</div>
 			    </div>
 			    <div class='item'>
 		    	    <%=image_tag "home/drc_map.png"%>
@@ -29,13 +38,7 @@
 			    		<p>Learn more about the <%=link_to "methodology", content_by_name_path("methodology")%> behind AidData's work &rarr;</p>
 			    	</div>
 			    </div>
-			    <div class='item'>
-			    	<%=image_tag "home/drc_map.png"%>
-			    	<div class='carousel-caption'>
-			    		<h4>Contribute to the Project</h4>
-			    		<p>Help us improve and expand the database!  <%=link_to "Learn more here", content_by_name_path("improving_the_data")%>.</p>
-			    	</div>
-			    </div>
+
 			  </div>
 			  <a class='carousel-control left' href='#home_carousel' data-slide='prev'>&lsaquo;</a>
 			  <a class='carousel-control right' href='#home_carousel' data-slide='next'>&rsaquo;</a>
@@ -55,26 +58,24 @@
 			</div>
 		</div>
 	</div>
-	<div >
-		<div class='row-fluid' style="margin: 10px 0px 10px 0px;">
-			<span class='span4'>
-				<h4>
-					<%= link_to "How to Use the Data", content_by_name_path("using_the_data"), class: "btn btn-large btn-info btn-block  home-button" %>
-				</h4>
-			</span>
-			<span class='span4'>
-				<h4>
-					<%=link_to "Help us Improve the Data", content_by_name_path("improving_the_data"), class: "btn btn-large btn-block home-button" %>
-				</h4>
-			</span>
-			<span class='span4'>
-				<h4>
-					<%=link_to "Coming Soon: Geocoded Data", content_by_name_path("geocoding"), class: "btn btn-large btn-warning btn-block home-button" %>
-				</h4>
-			</span>
-		</div>
+
+	<div class='row-fluid' style="margin: 10px 0px 10px 0px;">
+		<span class='span4'>
+			<h4>
+				<%= link_to "How to Use the Data", content_by_name_path("using_the_data"), class: "btn btn-large btn-info btn-block  home-button" %>
+			</h4>
+		</span>
+		<span class='span4'>
+			<h4>
+				<%=link_to "Help us Improve the Data", content_by_name_path("improving_the_data"), class: "btn btn-large btn-block home-button" %>
+			</h4>
+		</span>
+		<span class='span4'>
+			<h4>
+				<%=link_to "Coming Soon: Geocoded Data", content_by_name_path("geocoding"), class: "btn btn-large btn-warning btn-block home-button" %>
+			</h4>
+		</span>
 	</div>
-</div>
 
 <div class='row-fluid home_thumbnails'>
 	<ul class='thumbnails '>
@@ -89,7 +90,7 @@
 		<li class='span3'>
 			<a href="<%= map_path %>" class="thumbnail with_shadow">
 				<h4>Country-Level Perspective &rarr;</h4>
-				<%= image_tag("map_button.jpg", :alt => "Map Overlay") %>
+				<%= image_tag("map_button.png", :alt => "Map Overlay") %>
 			</a>
 		</li>
 		<li class='span3' id='project_button' >

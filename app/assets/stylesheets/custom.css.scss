@@ -4,7 +4,7 @@ $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
 $aiddataBlue: #1c273b;//#1c2a43;
 $backgroundGray: #f1f1f1;
-
+$header_height: 80px;
 /* Bootstrap overrides */
 
 $baseFontSize: 13px; 
@@ -79,6 +79,10 @@ html {
   background-color: $aiddataBlue !important;
 }
 body {
+  padding: 0 0 0 0;
+  background-position:0px $header_height;
+  background-repeat:repeat-x;
+
   background-color: white; //#f9f9f9;
   font-family: Tahoma, Arial, sans-serif;
   line-height: 14px;
@@ -98,9 +102,11 @@ body {
     //background-color: $aiddataBlue;
     min-height: 100px;
     position: relative;
+    background-color: white;
     
     .header-upper {
-      $header_height: 80px;
+      padding: 0 20px 0 20px;
+      
       &.hidden-phone {
         height: $header_height;
       }
@@ -214,8 +220,8 @@ body {
   .container, .container-fluid {
 
     &.main {
-      padding: 10px 10px;
-      background-color: white;
+     padding: 10px 0 0 0px;
+      //background-color: white;
     }
 
   }
@@ -324,18 +330,36 @@ footer {
   @include box_sizing;
 }
 
-
+#home_first_row {
+  background-repeat: repeat-x;
+  background-size: 100% 110%;
+}
 .home_thumbnails {
+  $thumbnail-height: 200px;
     .thumbnail {
       position: relative;
       background-color: white;
       h4 {
         text-shadow: rgba(18, 30, 50, .4) 2px 2px 5px;
-        padding: 10px;
+        padding: 20px 10px 10px 10px;
         position: absolute;
+        background-color: white;
+        margin: 0 0 0 0;
+        top: 0;
+        left: 0;
+        right: 0;
+
+      }
+      img {
+        min-height: $thumbnail-height;
+        width: auto;
+        min-width: none;
+        clip:rect(0px 100px $thumbnail-height 0)
+      }
     }
-  }
-}
+
+ }
+
 
 #home_media {
   h1,h2,h3,h4 {
@@ -357,6 +381,7 @@ $carousel_height: 300px;
     .item {
       height: $carousel_height !important;
       overflow:hidden;
+      background-color: white;
       h1 {
         position:absolute;
       }
