@@ -18,8 +18,7 @@ class StaticPagesController < ApplicationController
   end
 
   def codebook
-    require 'open-uri' 
-    send_file open('/codebook/AidData_MBDC_Methodology_1.0.pdf')
+    send_file Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf"
   end
 
   def csv_analyzer
