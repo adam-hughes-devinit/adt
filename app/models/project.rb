@@ -515,7 +515,7 @@ class Project < ActiveRecord::Base
           "#{c.organization ? c.organization.name : ''}"]
       end
     end
-
+ 
     # All the facets are defined in initializers/search_constants
     (FACETS + WORKFLOW_FACETS).each do |facet|
       string facet[:sym], multiple: (facet[:multiple] || false ) do 
@@ -571,11 +571,11 @@ class Project < ActiveRecord::Base
         :recipient_condensed
     ],
       include: [
-        {geopoliticals: {include: [recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}], only: [:percent]}},
-        {transactions: {include: [currency: {only: [:name, :iso3]}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
+        {geopoliticals: {include: [{recipient: {only: [:name, :iso2, :iso3, :cow_code, :oecd_code]}}], only: [:percent]}},
+        {transactions: {include: [{currency: {only: [:name, :iso3]}}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
         {contacts: {only: [:name, :position], include: [organization: {only: [:name, :organization_type]}]}},
-        {sources: {only: [:url, :date], include: [source_type: {only: [:name]}, document_type: {only:[:name]}]}},
-        {participating_organizations: {only: [], include: [origin: {only: [:name]}, organization: {only: [:name, :organization_type]}, role: {only: [:name]}]}}
+        {sources: {only: [:url, :date], include: [{source_type: {only: [:name]}}, {document_type: {only:[:name]}}]}},
+        {participating_organizations: {only: [], include: [{origin: {only: [:name]}}, {organization: {only: [:name, :organization_type]}}, {role: {only: [:name]}}]}}
     ]) 
   end
 

@@ -9,6 +9,19 @@ module SearchHelper
 
 	  @search = Project.search do
 	  	
+	  	# Catch "sector_name" and turn it into crs sector name
+	  	if params[:sector_name] && params[:crs_sector_name].nil?
+	  		params[:crs_sector_name] = params[:sector_name]
+	  		params.delete(:sector_name)
+	  	end
+
+	  	# catch "oda_like_name" and turn it into "flow_class_name"
+	  	if params[:flow_class_name] && params[:oda_like_name].nil?
+	  		params[:oda_like_name] = params[:flow_class_name]
+	  		params.delete(:flow_class_name)
+	  	end
+
+
 	  	# Default to official finance if the user is coming from somewhere else
 	  	if (options[:default_to_official_finance]==true) && # if defaulting is enabled
 	  		!(request.env['HTTP_REFERER'] =~ /projects/) && # and it's coming from somewhere other than /projects/

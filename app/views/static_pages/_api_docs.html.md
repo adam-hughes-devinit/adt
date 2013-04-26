@@ -1,6 +1,3 @@
-# Web Service API
-
-
 ## Project Data Feed
 
 __Endpoint:__ `GET /projects.json?`. 
@@ -14,41 +11,26 @@ __Endpoint:__ `GET /projects.json?`.
 
 ### Query
 
-If you're familiar with [Apache Solr](http://lucene.apache.org/solr/) or the (Sunspot)[http://sunspot.github.io/] gem, you've got a head start.
+If you're familiar with [Apache Solr](http://lucene.apache.org/solr/) or the [Sunspot](http://sunspot.github.io/) gem, you've got a head start.
 
 #### Facets
 
-Each may take one value or multiple values.
+Each may take one value or multiple values. A full list of allowed values is forthcoming -- in the meantime, you can check the list of values at the [project search page](http://china.aiddata.org/projects).
 
-- recipient_iso2
-  - ISO2 of a country
-- active_string
-  - Active
-  - Inactive
-- crs_sector_name
-  - name of a 3-digit CRS sector
-- year
-  - 4-digit year
-- oda_like_name
-  - __Misnomer__ -- should be "Flow class"
-  - Takes a Flow class name
-- flow_type_name
-  - takes a Flow Type name
-- intent_name
-  - takes an Intent name
-- organization_name
-  - takes a name of an involved Organization
-- role_name
-  - takes a Role name (and matches projects which have an org of that role)
-- country_name
-  - full name of Recipient Country
-- currency_name
-  - name or reported currency
-- scope_names
-  - One of our __Scopes__
-- status_name
-  - takes a Status name
-- year_uncertain_string
+- __recipient_iso2__: ISO2 of a country
+- __active_string__: "Active" or "Inactive" _Inactive records should not be used for analysis_
+- __sector_name__: name of a CRS sector _Alias: crs_sector_name_
+- __year__: 4-digit year
+- __flow_class_name__: Takes a Flow class name _Alias: oda_like_name_
+- __flow_type_name__: takes a Flow Type name
+- __intent_name__: takes an Intent name
+- __organization_name__: takes a name of an involved Organization
+- __role_name__: takes a Role name (and matches projects which have an org of that role)
+- __country_name__: full name of Recipient Country
+- __currency_name__: name or reported currency
+- __scope_names__: One of our __Scopes__
+- __status_name__: takes a Status name
+
 
 
 #### Text Search
@@ -58,41 +40,168 @@ Each may take one value or multiple values.
 
 #### Response
 
-- Responds with JSON representation of the project.
+<pre class='teaser'>
+The response is a JSON representation of the projects. For example:
+<code>
+  [
+    {
+      "active":true,
+      "debt_uncertain":false,
+      "id":2027,
+      "is_cofinanced":false,
+      "is_commercial":false,
+      "line_of_credit":false,
+      "title":"China grants Ghana 300m dollars to boost rural electrification",
+      "year":2010,
+      "year_uncertain":false,
+      "usd_2009":278902889.56,
+      "donor_name":"China",
+      "crs_sector_name":"Energy Generation and Supply",
+      "flow_type_name":"Monetary Grant (excluding debt forgiveness)",
+      "oda_like_name":"ODA-like",
+      "status_name":"Implementation",
+      "recipient_condensed":"Ghana",
+      "geopoliticals":
+        [
+          {
+          "percent":100,
+          "recipient":
+            {
+              "cow_code":452,
+              "iso2":"GH",
+              "iso3":"GHA",
+              "name":"Ghana",
+              "oecd_code":241
+            }
+          }
+        ],
+      "transactions":
+        [
+          {
+            deflated_at":"2012-11-20T10:35:25-05:00",
+            "deflator":1.0756432121391,
+            "exchange_rate":1.0,
+            "usd_current":300000000.0,
+            "usd_defl":278902889.56,
+            "value":300000000.0,
+            "currency":
+              {
+                "iso3":"USD",
+                "name":"US Dollar"
+              }
+            }
+        ],
+      "contacts":
+        [
+          {
+            "name":"Dr. Francis Bawana Dankurah",
+            "position":""
+          }
+        ],
+      "sources":
+        [
+          {
+            "date":"2010-08-20",
+            "url":"http://global.factiva.com/aa/?ref=BBCAP00020100821e68l000jj&pp=1&fcpil=en&napc=S&sa_from=",
+            "source_type":
+              {"name":"Factiva"},
+            "document_type":
+              {"name":"Recipient media or official"}
+          },
+          {
+            "date":"2011-01-20",
+            "url":"http://global.factiva.com/aa/?ref=BBCAP00020110120e71k001jn&pp=1&fcpil=en&napc=S&sa_from=",
+            "source_type":
+              {"name":"Factiva"},
+            "document_type":
+              {"name":"Recipient media or official"}
+          }
+        ],
+      "participating_organizations":
+        [
+          {
+            "origin":
+              {"name":"Recipient"},
+            "organization":
+              {"name":"Energy Commission of Ghana"},
+            role":
+              {"name":"Implementing"}
+          }
+        ]
+    },
+    ...
+  ]
 
-### Aggregate Data Feed
+</code>
+</pre>
 
-#### What it does
+</p>
+
+## Aggregate Data Feed
+
+An aggregate data feed is available at `GET /aggregates/projects`.
+
+### What it does
+
 A user may specify which dimensions to aggregate by and how to filter and he or she will receive a list of data records with those dimensions and the aggregated USD-2009, the aggregated USD current (ie, not adjusted for inflation) and the count of projects.
-#### Query
+
+### Query
 
 ##### Select attributes
 The aggregate data feed has one mandatory parameter, `get`. `get` takes any of the following field names: 
 
 - donor
+- status
+- intent
 - year
-- sector_name
+- crs_sector_name
 - flow_class
 - recipient_name
 - recipient_iso2
 - recipient_iso3
 
-_These field names are somewhat subject to change (according to our needs). I should update this again before the launch._
+For example, you could request 
+  
+    ?get=donor,year
+
+and you would receive:
+
+    [
+        {"donor":"CHN","year":"2011","usd_2009":"34893163505.19","usd_current":"42093185582.31","count":"221"},
+        {"donor":"CHN","year":"2010","usd_2009":"52246044755.12","usd_current":"56198103402.03","count":"264"},
+        {"donor":"CHN","year":"2009","usd_2009":"40084730266.30","usd_current":"40084730266.30","count":"252"},
+        {"donor":"CHN","year":"2008","usd_2009":"32547140114.71","usd_current":"32183744289.11","count":"197"},
+        {"donor":"CHN","year":"2007","usd_2009":"38081059582.42","usd_current":"31911731329.68","count":"286"}
+        ...
+    ]
 
 ##### Filter by attribute values
 Besides using `get`, a user may also filter by attribute value:
 
 - recipient_iso2
+- recipient_name
+- recipient_
 - flow_class
-- sector_name
+- crs_sector_name
+- intent_name
 - flow_type
-- year
-- verified
+- status
+- year        
 
-_These filter names are somewhat subject to change (according to our needs). I should update this again before the launch._
+The filters may be a single value:
+    
+    &recipient_iso=KE
 
-The filters may be a single value (eg., `&recipient_iso=KE`) or many values (eg., `&recipient_iso2=KE*TZ*ZW`) (joined with "*"). Also, the filters may be combined (eg., `&recipient_iso=KE&flow_clas=ODA-like`).
+or many values, joined with `*`
+    
+    &recipient_iso2=KE*TZ*ZW
+
+Also, the filters may be combined:
+    
+    `&recipient_iso=KE*TZ*ZWflow_class=ODA-like`
+
 ##### Handle projects with multiple recipients
+
 Some projects have more than one recipient. Sometimes, amounts may be divided among those recipients -- but sometimes they cannot. Users may select how to handle this problem with the `multiple_recipients` argument. A user may pass one of five values:
 
 - `merge` __(Default if no value is passed)__ If a project has multiple recipients, the recipients are 'merged' and the amount is attributed to "Africa, regional". There is no risk of double-counting, but accuracy is lost.
@@ -101,21 +210,19 @@ Some projects have more than one recipient. Sometimes, amounts may be divided am
 - `percent_then_share` If a project has multiple recipients and the _percent_ variable sums to 100% for that project, the amount is divided among recipients according to the _percent_ variable. Otherwise it divided among those recipients equally.
 - `duplicate` If a project has multiple recipients, the full amount is attributed to each recipient. __This introduces double-counting: the same amount is multiplied by the number of recipients.__ It is offered here for advanced users.
 
-##### Merge World Bank's World Development Indicators with your data
-If your data is aggregated by recipient-year, you can also request data from World Bank's Indicator API. Be warned that this kind of request is not efficient and will add quite a bit of time to your query. To add WDI data to your request:
 
-- include `year` and `recipient_iso3` in your `&get=` string.
-- add `&wdi=` with any number of comma-separated indicator codes from http://data.worldbank.org (eg, `NY.GNP.ATLS.CD` or `DC.DAC.USAL.CD`)
 
 #### Response
+
 _The data below is for example only_
+
 The response is an array of JSON objects including aggregated USD-2009, current USD and project count by each field name. For example,
     
 	/aggregates/projects?get=donor
 	
 returns an array with one object: 
     
-	[{"donor":"CHN","usd_2009":"360180650450.82","usd_current":"326709526680.62","count":"2489"}]
+	[{"donor":"CHN","usd_2009":"296501502995.56","usd_current":"269933245392.20","count":"2322"}]
 
 A more complicated request returns a more detailed dataset:
 
@@ -124,11 +231,11 @@ A more complicated request returns a more detailed dataset:
 which yields:
 
     [
-			{"year":"2003","recipient_name":"Algeria","usd_2009":"423075585.45","usd_current":"262604080.93","count":"3"},
-			{"year":"2011","recipient_name":"Gabon","usd_2009":"109047754.69","usd_current":"131549189.42","count":"2"},
-			{"year":"2005","recipient_name":"Djibouti","usd_2009":"1751749.33","usd_current":"1220358.01","count":"1"},
-			{"year":"2005","recipient_name":"Niger","usd_2009":"14071208.39","usd_current":"9802722.09","count":"5"},
-    	...
+        {"donor":"CHN","recipient_name":"Africa, regional","usd_2009":"21710513962.88","usd_current":"23563630384.69","count":"37"},
+        {"donor":"CHN","recipient_name":"Algeria","usd_2009":"305887799.05","usd_current":"253841103.40","count":"16"},
+        {"donor":"CHN","recipient_name":"Angola","usd_2009":"20877198922.85","usd_current":"16490164155.69","count":"45"},
+        {"donor":"CHN","recipient_name":"Benin","usd_2009":"57197870.42","usd_current":"48403045.48","count":"11"},
+    	  ...
     ]
 
 
@@ -138,8 +245,7 @@ Here is an example of filtering:
 	
 which yields:
 
-    [{"recipient_iso2":"KE","usd_2009":"2093704869.17","usd_current":"1813886723.69","count":"99"}]
-	
+    [{"recipient_iso2":"KE","usd_2009":"1644741163.61","usd_current":"1397473824.13","count":"91"}]
 
 Beyond this, you can combine filters and groups, like this:
 
@@ -148,26 +254,10 @@ Beyond this, you can combine filters and groups, like this:
 which yields:
 
 	[
-		{"recipient_name":"Kenya","flow_class":"CA +Gov","usd_2009":"2963815.82","usd_current":"2064745.40","count":"2"},
-		{"recipient_name":"Kenya","flow_class":"ODA-like","usd_2009":"36672592.42","usd_current":"25548000.00","count":"3"},
-		{"recipient_name":"Kenya","flow_class":"OOF-like","usd_2009":"34450533.04","usd_current":"24000000.00","count":"2"},
-		{"recipient_name":"Kenya","flow_class":"Vague (Com)","usd_2009":"4306316.63","usd_current":"3000000.00","count":"1"},
-		{"recipient_name":"Kenya","flow_class":"Vague (ODF)","usd_2009":"179807007.33","usd_current":"125262740.38","count":"4"}
+    {"flow_class":"CA +Gov","recipient_name":"Kenya","usd_2009":"2963815.82","usd_current":"2064745.40","count":"2"},
+    {"flow_class":"FDI -Gov","recipient_name":"Kenya","usd_2009":"4306316.63","usd_current":"3000000.00","count":"1"},
+    {"flow_class":"ODA-like","recipient_name":"Kenya","usd_2009":"4586384.37","usd_current":"3195109.49","count":"2"},
+    {"flow_class":"OOF-like","recipient_name":"Kenya","usd_2009":null,"usd_current":null,"count":"2"},
+    {"flow_class":"Vague (Official Finance)","recipient_name":"Kenya","usd_2009":"246343748.42","usd_current":"171615630.89","count":"5"}
 	]
 	
-	
-### Deflator 
-The deflator web service has been expanded to support JSON data response which includes:
-
-
-- deflated_amount
-- current_amount
-- input_amount
-- year
-- original_currency
-- exchange_rate
-- country
-- deflator
-
-
-See http://data.itpir.wm.edu/deflate for more background on this service.
