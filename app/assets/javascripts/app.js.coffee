@@ -1,3 +1,7 @@
+$(() ->
+  $('.dropdown-toggle').dropdown()
+)
+
 Array.prototype.getUnique = () ->
   u = {}
   a = []

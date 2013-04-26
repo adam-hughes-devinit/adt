@@ -1,6 +1,6 @@
 
 - latest_articles = Content.find_all_by_content_type("News Article").sort {|a, b| b.data["date"] <=> a.data["date"]}[0..2]
-%ul.unstyled
+%ul.unstyled.recent_resources
 	- latest_articles.each do |a|
 		%li
 			%div

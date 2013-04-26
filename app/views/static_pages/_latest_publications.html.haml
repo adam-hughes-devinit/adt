@@ -1,0 +1,14 @@
+
+- latest_publications = Content.find_all_by_content_type("AidData Publication").sort {|a, b| b.data["date"] <=> a.data["date"]}[0..2]
+%ul.unstyled.recent_resources
+	- latest_publications.each do |a|
+		%li
+			%div
+				%strong
+					= "#{a.data["author"]}:"
+				%span<
+					%a{ href: a.data["url"]}><
+						= a.name
+					= "."
+				%span.muted
+					= "#{a.data["type"]} &ndash; #{a.data["publisher"]}, #{a.data["date"]}".html_safe

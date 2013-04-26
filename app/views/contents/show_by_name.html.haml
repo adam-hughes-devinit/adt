@@ -1,15 +1,17 @@
 - provide :title, @content.name.titleize
 
-- cache(@content, expires_in: 20.minutes ) do
 
-	.row-fluid
-		.span12
-			%h1.page-header
-				= @content.name.titleize
-	.row-fluid
-		.span12.site_content{style: "margin: auto, auto;"}
 
-			- if @content.content_type == "Complex Page"
+.row-fluid
+	.span12
+		%h1.page-header
+			= @content.name.titleize
+.row-fluid
+	.span12.site_content{style: "margin: auto, auto;"}
+
+		- if @content.content_type == "Complex Page"
+			- cache(@content, expires_in: 1.minute ) do
 				#{eval(@content.content).html_safe}
-			- else
+		- else
+			- cache(@content, expires_in: 20.minutes ) do
 				= Markdown.new(@content.content).to_html.html_safe
