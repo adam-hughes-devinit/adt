@@ -343,8 +343,8 @@ footer {
 
       }
       img {
-        height: $thumbnail-height;
-        //max-height: $thumbnail-height;
+        min-height: $thumbnail-height;
+        //height: $thumbnail-height;
         width: 100%;
         //min-width: none;
         clip:rect(0px 100% $thumbnail-height 0)
