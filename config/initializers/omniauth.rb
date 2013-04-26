@@ -1,6 +1,6 @@
 OmniAuth.config.logger = Rails.logger
 
-if !ENV["facebook_key"]
+if !Rails.env.production?
 	OMNIAUTH_CONFIG = YAML.load(File.read(Rails.root.to_s + "/config/omniauth_config.yml"))
 else
 	OMNIAUTH_CONFIG = {}
