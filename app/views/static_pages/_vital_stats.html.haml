@@ -186,10 +186,14 @@
 				.mouseenter(marquee.reveal)
 				.mouseleave(marquee.continue)
 
-		hide_all: () ->
-			$(this.selector + ' li').hide()
+		hide_all: (method=null) ->
+			if method is 'slide'
+				$(this.selector + ' li').slideUp(300)
+			else
+				$(this.selector + ' li').hide()
+	
 		show_all: () ->
-			$(this.selector + ' li').show()
+			$(this.selector + ' li').slideDown('slow')
 
 		stop: () ->
 			marquee.state = 'stopped'

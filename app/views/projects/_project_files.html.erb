@@ -12,13 +12,15 @@
 			var target = $('#files')
 			if(data["contents"] && data.contents.length > 0) {
 				menu = data.contents.map(function(d) { 
-					url = "http://aiddata-fs.herokuapp.com/documents/"+ d.key
-					return "<li data-id=" + d.key + " id='"+d.type+"-"+d.key+"' class='document'>" +
-							(d.type == 'document' ? '<img src="'+d.icon+'" />' : '<i class="icon-folder-close"></i>')  +
+					url = ("/projects/<%= @project.id %>/files/" + d.key)
+					
+					return "<li data-id=" + d.key + " class='document'>" +
+							'<img src="'+d.icon+'" />'  +
 							"&ensp;<a href='" + url + "'>" +
 							d.name + 
 							"</a>" +
-							" </li>"}).join("") 
+							" </li>"
+						}).join("") 
 			}
 			else {
 				menu = "<li>(No files yet, please add one below!)</li>" 
@@ -28,7 +30,7 @@
 				$('.document').each(function(i) {
 					doc = $(this)
 					doc_id = doc.attr("data-id")
-					doc.append("<a class='text-warning' data-method='delete' href='/projects/<%= @project.id %>/files/"+doc_id + "''>Delete</a>")
+					doc.append("<a class='text-warning' data-method='delete' href='/projects/<%= @project.id %>/files/"+doc_id + "'>Delete</a>")
 				})
 			<% end %>
 

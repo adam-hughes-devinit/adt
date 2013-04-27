@@ -60,7 +60,17 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 	end
 
 	def show
-		redirect_to Project.find(params[:project_id])
+		require 'net/http'
+		# redirect_to Project.find(params[:project_id])
+		this_file_path = "/files/china/#{params[:project_id]}/#{params[:id]}"
+
+		http = Net::HTTP.new(AIDDATA_FS_ROOT)
+
+		request = Net:HTTP::Get.new(this_file_path)
+		response = http.request(request)
+
+		send_data response.body
+
 	end
 
 	def edit
@@ -83,8 +93,8 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 		request.basic_auth AIDDATA_FS_USERNAME, AIDDATA_FS_PASSWORD
 		
 		response = http.request(request)
-		flash[:success] = this_file_path
-		flash[:warning] = response.body.html_safe
+		# flash[:success] = this_file_path
+		# flash[:warning] = response.body.html_safe
 
 		flash[:notice] = "File deleted."
 		redirect_to Project.find(params[:project_id])

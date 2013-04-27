@@ -72,8 +72,8 @@ class Project < ActiveRecord::Base
     exclude_title = options[:exclude_title] || false
     "#{exclude_title ? "" : "#{title}: "}" +
     "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
-    " to #{country_name.to_sentence}" +
-    " in #{year}"
+    (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
+    (year.present? ? " in #{year}" : "")
   end
 
   # I'm adding string methods for these codes for Sunspot Facets

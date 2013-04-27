@@ -12,13 +12,13 @@ class ApplicationController < ActionController::Base
   end
 
   def force_proper_domain
-    if Rails.env.production?
-      if (params[:host] !~ /china\.aiddata\.org/) && (params[:host] !~ /aiddatachina/)
-        params[:host] = 'china.aiddata.org'
-        params[:port] = nil
-        redirect_to url_for(params), :status => 301 
-      end
-    end
+    # if Rails.env.production?
+    #   if (params[:host] !~ /china\.aiddata\.org/) && (params[:host] !~ /aiddatachina/)
+    #     params[:host] = 'china.aiddata.org'
+    #     params[:port] = nil
+    #     redirect_to url_for(params), :status => 301 
+    #   end
+    # end
   end
 
   def mailer_set_url_options
