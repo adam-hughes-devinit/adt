@@ -12,7 +12,13 @@ module SessionsHelper
 		# this finds out whether the current user is signed_in, admin, and belongs to AidData
 		current_user_is_aiddata && current_user.admin? 
 	end
-	
+
+  def aiddata_only!
+    if !current_user_is_aiddata
+      redirect_to signin_url
+    end
+  end
+
 	def current_user_is_project_owner
 		signed_in? && @project && @project.owner && current_user.owner && @project.owner_id == current_user.owner_id
 	end 

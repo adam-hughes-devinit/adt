@@ -1,4 +1,6 @@
 class ReviewEntriesController < ApplicationController
+  before_filter :aiddata_only!
+
   def index
     @review_entries = ReviewEntry.all
     @review_sections = {}
