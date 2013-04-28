@@ -1,18 +1,33 @@
 <% provide(:title, "Users") %>
-<% provide(:first_header, "All Users") %>
+<h1 class='page-header'>
+	All Users
+</h1>
 
 <div class="row">
-<%= link_to "New User", new_user_path%>
+<%= link_to "New User", new_user_path, class: "btn" %>
 <div>
 <% hidden_fields = ["created_at", "updated_at", "id", "password_digest", "remember_token", "owner_id"] %>
-<%= javascript_include_tag 'bootstrap_sortable/index' %>
-<table class='table table-hover sortable'>
+<% dir = (params[:dir] == "ASC" ? "DESC" : "ASC") %>
+
+<table class='table table-hover'>
 	<thead>
 		<% @users.first.attributes.each_pair do |k, v| %>
 			<% if !hidden_fields.include?(k) %>
-				<th><b><%= k.capitalize %></b></th>
+				<th>
+					
+						<b>
+							
+							<%= link_to k.capitalize, params.merge(order: k, dir: dir) %>
+						</b>
+					
+				</th>
 			<% end %>
 		<% end %>
+		<th>
+			<b>
+				<%= link_to "Owner", params.merge(order: "owner_id", dir: dir ) %>
+			</b>
+		</th>
 		<th>Links</th>
 	</thead>
 	<tbody>
@@ -23,6 +38,9 @@
 							  <td><%= v %></td>
 						<% end %>
 					<% end %>
+					<td>
+						<%= o.owner.present? ? o.owner.name : "" %>
+					</td>
 					<td> 
 						<%= link_to "View", o %> 
 						<% if (current_user.admin? || current_user==o) && o.owner == current_user.owner %> 
@@ -42,6 +60,8 @@
 </table>
 
 <br>
-<%= link_to "New User", new_user_path%>
+<%= will_paginate @users %>
+
+<%= link_to "New User", new_user_path, class: "btn" %>
 
  

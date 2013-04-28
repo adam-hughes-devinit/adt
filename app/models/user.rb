@@ -16,54 +16,15 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: {minimum: 6}
   validates :password_confirmation, presence: true
 
-  default_scope order: "email"
+  # default_scope order: "email"
 
   belongs_to :owner, class_name: "Organization"
 
   has_many :actions, class_name: "Version", foreign_key: :whodunnit
   # following architecture
-  has_many :relationships, foreign_key: "follower_id"
   has_many :flags, as: :owner
 
-  def followed_user_ids
-    relationships.map do |i| 
-      if i.followed_type == "User"
-        User.find_by_id(i.followed_id).id
-      end
-    end
-  end
-
-  def followed_project_ids
-    relationships.map do |i| 
-      if i.followed_type == "Project"
-        Project.find_by_id(i.followed_id).id
-      end
-    end
-  end
-
-  # def followed_all 
-  #   self.followed_users + self.followed_projects
-  # end
-
-  def feed 
-    Version.where("whodunnit=? or whodunnit in (?) or (item_type='Project' and item_id in (?))", id, followed_user_ids, followed_project_ids)
-  end
-
-
-
-
-
-
-  def follow!(user_or_project)
-      relationships.create!(follower_id: self.id, followed_id: user_or_project.id, followed_type: user_or_project.class.name)
-  end
-  def following?(user_or_project)
-    Relationship.find_by_followed_id_and_followed_type(user_or_project.id, user_or_project.class.name)
-  end
-
-  def unfollow!(user_or_project)
-      Relationship.find_by_followed_id_and_followed_type(user_or_project.id, user_or_project.class.name).destroy
-  end
+  self.per_page = 100
 
   def self.create_with_omniauth(auth)
     user = User.new
@@ -76,6 +37,7 @@ class User < ActiveRecord::Base
     #return
     user
   end
+
 
 private 
 

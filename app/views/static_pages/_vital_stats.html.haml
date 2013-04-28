@@ -212,7 +212,7 @@
 			if m.state != 'stopped'
 				step_from = m.step
 				step_to = (step_from + 1) % (m.length)
-				console.log("increment", step_from, step_to)
+				# console.log("increment", step_from, step_to)
 				$(m.selector+ ' li:eq(' + step_from + ')').fadeOut(marquee.phase, () ->
 					$(m.selector+' li:eq(' + step_to + ')').fadeIn(marquee.phase)				
 				)

@@ -32,5 +32,14 @@
 									%i 
 										or 
 								= v
-
+.row-fluid
+	%p.span12
+		%a{href: "/projects?scope_names[]=#{s.name}"}
+			See Projects
+		|
+		%a{href: "/projects.json?scope_names[]=#{s.name}"}
+			See Project Data
+		|
+		%a{href: "aggregates/projects?get=recipient_name,year,flow_class#{s.to_aggregate_query_params}"}
+			See Aggregate Data
 		

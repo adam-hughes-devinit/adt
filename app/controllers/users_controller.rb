@@ -3,7 +3,11 @@ before_filter :signed_in_user, except: [:new, :create]
 before_filter :signed_in_and_same_owner, only: [:show]
 
   def index
-    @users = User.all
+
+    order_by = params[:order]
+    dir = params[:dir] # ASC / DESC
+
+    @users = User.order("#{order_by} #{dir}").page(params[:page])
   end
 
   def new
@@ -12,7 +16,6 @@ before_filter :signed_in_and_same_owner, only: [:show]
 
   def show
     @user=User.find(params[:id])
-    @feed = Version.where("whodunnit = ?", "#{@user.id}")
   end  
 
   def edit
@@ -65,5 +68,13 @@ before_filter :signed_in_and_same_owner, only: [:show]
     @user.update_attribute(:owner, nil)
     redirect_to users_path
   end
+
+  def destroy
+    @user = User.find_by_id(params[:id])
+    @user.destroy
+    flash[:notice] = "User deleted."
+    redirect_to users_path
+  end
+  
 
 end

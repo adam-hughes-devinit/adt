@@ -18,3 +18,10 @@
 </section>
 </div>
 
+<% if current_user_is_aiddata_admin %>
+	<p class='row'>
+		<%= link_to "Delete User", @user, method: :delete, confirm: "Are you sure?", class: "btn btn-danger" %>
+	</p>
+<% end %>
+
+
