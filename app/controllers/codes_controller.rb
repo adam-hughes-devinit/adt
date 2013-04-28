@@ -1,5 +1,5 @@
 class CodesController < ApplicationController
-  before_filter :aiddata_only!, except: [:index, :show]
+  before_filter :aiddata_only!, only: [:new, :edit, :create, :update, :destroy]
   
   include IndexAndCacheHelper
   
