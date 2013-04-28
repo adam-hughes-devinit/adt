@@ -28,9 +28,13 @@
 			target.html(menu)
 			<% if current_user_is_aiddata %>
 				$('.document').each(function(i) {
+					render_delete_link = function(el, id) {
+						$(el).text("")
+						$(el).append("<a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/files/"+ id + "'>DELETE!</a>")
+					}	
 					doc = $(this)
 					doc_id = doc.attr("data-id")
-					doc.append("<a class='text-warning' data-method='delete' href='/projects/<%= @project.id %>/files/"+doc_id + "'>Delete</a>")
+					doc.append("<span class='text-warning' onclick='render_delete_link(this," + doc_id + ")'>Delete?</span>")
 				})
 			<% end %>
 
@@ -44,17 +48,4 @@
 	  <%= submit_tag 'Add file', class: "btn btn-info" %>
 	<% end %>
 	
-	<% if current_user_is_aiddata %>
-		<p class='badge badge-notice'>
-			<b>
-				AidData users:
-			</b>
-
-			manage these docs at 
-			<a href="http://aiddata-fs.herokuapp.com/#/files/china">
-				AidDataFS
-			</a>
-		</p>
-	<% end %>
-
 </div>
