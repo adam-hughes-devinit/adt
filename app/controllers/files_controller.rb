@@ -2,7 +2,8 @@ class FilesController < ApplicationController
 skip_before_filter :signed_in_user, only: [:create]
 before_filter :correct_owner?, only: [:edit, :destroy]
 
-	AIDDATA_FS_ROOT = 'aiddata-fs.herokuapp.com'
+	# AIDDATA_FS_ROOT = 'aiddata-fs.herokuapp.com'
+	AIDDATA_FS_ROOT = 'files.aiddatachina.org'
 	AIDDATA_FS ="http://#{AIDDATA_FS_ROOT}/files/china"
 
 	AIDDATA_FS_PASSWORD = ENV['AIDDATA_FS_PASSWORD']

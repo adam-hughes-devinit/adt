@@ -29,12 +29,12 @@
 			<% if current_user_is_aiddata %>
 				$('.document').each(function(i) {
 					render_delete_link = function(el, id) {
-						$(el).text("")
+						$(el).text("").removeClass("btn btn-warning btn-small")
 						$(el).append("<a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/files/"+ id + "'>DELETE!</a>")
 					}	
 					doc = $(this)
 					doc_id = doc.attr("data-id")
-					doc.append("<span class='text-warning' onclick='render_delete_link(this," + doc_id + ")'>Delete?</span>")
+					doc.append("<span class='btn btn-warning btn-small' style='margin:5px;' onclick='render_delete_link(this," + doc_id + ")'>Delete?</span>")
 				})
 			<% end %>
 
