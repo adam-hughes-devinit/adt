@@ -12,7 +12,7 @@
         next if type == "LoanDetail"
 
         # only want 5
-        next if count > 4 
+        next if count > 2 
 
         class_name = type.constantize
         id = act.item_id
