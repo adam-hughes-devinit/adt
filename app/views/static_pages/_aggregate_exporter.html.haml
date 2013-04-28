@@ -1,7 +1,7 @@
 .row-fluid
 	.span6
 		%h3
-			1) Select your fields:
+			1) Select columns for your dataset:
 		%p.muted
 			These will be the 
 			%strong
@@ -19,6 +19,9 @@
 	.span6.well
 		= label_tag "Data fields"
 		= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]), multiple: true, class: "aggregate_input", id: "get_input" 
+
+%hr{style: "margin:0px 0px 5px 0px"}
+
 .row-fluid
 	.span6
 		%h3
@@ -55,19 +58,11 @@
 		%span.btn.btn-info{onclick: "$('.where_filter').val('');update_previews();"}
 			Clear filters
 .row-fluid
-	- third = (where_filters.length/3).round
-	%ul.span4.unstyled
-		- where_filters[0..third].each do |wf|
-			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
-
-	%ul.span4.unstyled
-		- where_filters[third+1..(2*third)+1].each do |wf|
-			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
-
-	%ul.span4.unstyled
-		- where_filters[(2*third)+2..-1].each do |wf|
-			= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
-
+	- third = (where_filters.length/3 + 0.5).round
+	- where_filters.each_slice(third) do |slice|
+		%ul.span4.unstyled
+			- slice.each do |wf|
+				= render partial: "aggregate_exporter_where_filter", locals: {where_filter: wf}
 
 
 %hr{style: "margin:0px 0px 5px 0px"}
@@ -85,12 +80,12 @@
 				See the API docs &rarr;
 
 .row-fluid
-	.span12
-		%h2
+	.span12.well.well-small
+		%h4
 			Preview:
 			%small#data_preview_note
 
-		%table#data_preview.table.table-bordered
+		%table#data_preview.table.table-bordered{style: "background:white"}
 		
 
 
@@ -164,6 +159,11 @@
 				{table_html += "<td>"+ ( (key == "usd_current" || key == "usd_2009") ?  d3.format(",2f")(j[key]) : j[key] )+"</td>" }
 			table_html += "</tr>"
 		})
+
+		more_rows = length - 8
+		if (more_rows > 0) {
+			table_html += "<tr class='text-info'><td><strong>" + more_rows + " more rows in the dataset</strong><td><strong>...</strong></td><td><strong>...</strong></td></td><td><strong>...</strong></td></tr>" 
+		}	
 		table_html += "</tbody></table>"
 		
 		$("#data_preview").html(table_html)

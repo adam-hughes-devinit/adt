@@ -60,6 +60,8 @@ include SearchHelper
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
+
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @project }
