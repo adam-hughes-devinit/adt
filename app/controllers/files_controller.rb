@@ -66,10 +66,10 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 
 		http = Net::HTTP.new(AIDDATA_FS_ROOT)
 
-		request = Net:HTTP::Get.new(this_file_path)
+		request = Net::HTTP::Get.new(this_file_path)
 		response = http.request(request)
-
-		send_data response.body
+		filename = response['content-disposition'].gsub(/.*=/, "").gsub(/"/, "")
+		send_data response.body, filename: filename
 
 	end
 

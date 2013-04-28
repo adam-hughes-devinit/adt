@@ -51,6 +51,9 @@
                 %ul.dropdown-menu
                   %li
                     = link_to "Search Projects", projects_path
+                  %li
+                    = link_to_function "Find by Project ID", 'id = prompt("ID:");if (id) {window.location = ("/projects/"+id)}' 
+
                   %li 
                     = link_to "Download Files", content_by_name_path("downloads")
                   %li
@@ -104,3 +107,5 @@
                   = link_to "Edit site content", contents_path
                 %li 
                   = link_to "Users", users_path
+                %li
+                  = link_to "<i>Pending Content</i>".html_safe, review_entries_path

@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
 skip_before_filter :signed_in_user, only: [:suggest]
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
+before_filter :aiddata_only!, only: [:create]
 
 before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 

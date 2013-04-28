@@ -1,5 +1,6 @@
 class CodesController < ApplicationController
-
+  before_filter :aiddata_only!, except: [:index, :show]
+  
   include IndexAndCacheHelper
   
   cache_sweeper :project_sweeper # app/models/project_sweeper.rb

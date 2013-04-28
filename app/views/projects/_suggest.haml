@@ -8,7 +8,7 @@
     %br
     = f.label :sources, 'Sources'
     %br
-    %input{id: "add", type: "button", class: "btn",
+    %input{id: "add", type: "button", class: "btn btn-small",
     value: "Add another source", onClick: "addInput('suggest')"}
     %br
     = fields_for :sources do |srcs| 
@@ -21,7 +21,7 @@
 
 :javascript
   var counter = 1;
-  var limit = 20;
+  var limit = 5;
   function addInput(divName){
       if (counter == limit)  {
             alert("You have reached the limit of adding " + counter + " sources");
