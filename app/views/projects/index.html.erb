@@ -17,11 +17,17 @@ end
 end %>
 
 <% 
-	if params[:scope_names] && (params[:scope_names].is_a? Array)
-	  flash.now[:success] =  
-	  	"You are viewing <b>#{
-	  		params[:scope_names].map {|s| Scope.find_by_name(s).name}.join(' and ')
-	  		}</b>. Click the filters below to change your settings.".html_safe 
+	scope_names = params[:scope_names]
+	if scope_names.present? && (scope_names.is_a? Array)
+		if scope_names.include?("Official Finance")
+			flash.now[:success] =  
+				"You are viewing <b>#{
+					scope_names.map {|s| Scope.find_by_name(s).name}.to_sentence
+					}</b>. Click the filters below to change your settings.".html_safe 
+		end
+		if (incomplete_scopes = scope_names.select {|s| s != "Official Finance" }).length > 0
+			flash.now[:notice] = "Data for #{incomplete_scopes.map {|s| "<strong>#{s}</strong>"}.to_sentence } are not comprehensive, please see the #{link_to "methodology", content_by_name_path("methodology")} for details."
+		end
 	end
 %> 	
 

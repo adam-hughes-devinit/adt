@@ -280,9 +280,9 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
-  bcrypt-ruby (= 3.0.1)
+  bcrypt-ruby
   bootstrap-sass
-  bootstrap-will_paginate (= 0.0.6)
+  bootstrap-will_paginate
   brakeman
   capistrano
   capybara (= 1.1.2)
@@ -319,4 +319,4 @@ DEPENDENCIES
   sunspot_solr
   thin
   uglifier (= 1.2.3)
-  will_paginate (= 3.0.3)
+  will_paginate

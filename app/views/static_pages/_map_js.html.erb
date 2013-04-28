@@ -16,7 +16,7 @@
   <div class='span3' id='scope-buttons'>
     <div class='well well-small'>
       <h2> Choose a scope </h2>
-      <%= render partial: 'scope_buttons', locals: {scopes: Scope.where("name in(?)", ["Official Finance","Unofficial Finance", "Military"])} %>
+      <%= render partial: 'scope_buttons', locals: {scopes: Scope.where("name in(?)", ["Official Finance"])} %>
     </div>
 
   </div>

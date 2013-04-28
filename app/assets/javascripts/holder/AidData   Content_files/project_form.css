@@ -1,0 +1,71 @@
+/* line 15, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form hr {
+  margin: 2px;
+}
+/* line 19, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form .control-group, .project-form label {
+  margin: 0px 0px 5px 5px;
+}
+/* line 23, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form label {
+  line-height: 15px;
+}
+/* line 26, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form .add-one {
+  margin-left: 25px;
+}
+/* line 30, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form .on-nav-bar {
+  position: fixed;
+  top: 5px;
+}
+/* line 36, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form .project-form-anchor:before {
+  display: block;
+  content: "";
+  height: 50px;
+  margin: -50px 0 0;
+}
+/* line 44, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-nav-wrapper #project-form-nav {
+  position: fixed;
+}
+/* line 47, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-nav-wrapper #project-form-nav a {
+  padding: 4px 8px;
+}
+/* line 55, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content .fields {
+  border-bottom: 2px solid #333;
+  margin-bottom: 10px;
+}
+/* line 59, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content .project-accessory-fields {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+/* line 63, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content .project-accessory-fields b {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #555;
+}
+/* line 72, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content #project-form-project .dates-box select {
+  max-width: 80px;
+}
+/* line 76, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content #project-form-project .active-project-check {
+  background-color: #afc;
+}
+/* line 79, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content #project-form-project .inactive-project-check {
+  background-color: #fca;
+}
+/* line 84, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content #project-form-flow-class {
+  background-color: #B9CAFA;
+}
+/* line 88, ../../../app/assets/stylesheets/project/project_form.css.scss */
+.project-form #project-form-content #project-form-loan-detail {
+  background-color: #FFE3E3;
+}

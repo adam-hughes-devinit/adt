@@ -1,0 +1,31 @@
+/* line 2, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+.scope-form .scope-channel-form {
+  background-color: #f0c0c0;
+}
+/* line 5, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+.scope-form .scope-filter-form {
+  background-color: #a0f0c0;
+}
+/* line 8, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+.scope-form .scope-filter-value-form {
+  background-color: #a9a;
+}
+
+/* line 17, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+#scopes span.scope-editable {
+  width: 200px;
+}
+/* line 21, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+#scopes input.scope-edit {
+  display: inline;
+  max-width: 200px !important;
+}
+
+/* line 27, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+.scope_channel {
+  margin-left: 40px;
+}
+/* line 29, ../../../app/assets/stylesheets/scopes/styles.css.scss */
+.scope_channel ul {
+  margin-left: 40px;
+}

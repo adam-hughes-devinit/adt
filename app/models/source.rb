@@ -6,6 +6,12 @@ class Source < ActiveRecord::Base
   has_many :flags, as: :flaggable, dependent: :destroy
   accepts_nested_attributes_for :flags
 
+  def source_type_name
+  	if source_type && source_type.name 
+  		source_type.name
+  	end
+  end
+
   belongs_to :document_type
   belongs_to :source_type 
   belongs_to :project 

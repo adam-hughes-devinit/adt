@@ -1,0 +1,44 @@
+/* Project Index */
+/* line 5, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-search-results td {
+  padding: 2px;
+}
+
+/* line 9, ../../../app/assets/stylesheets/project/project_index.css.scss */
+.pagination {
+  vertical-align: center;
+  text-align: center;
+}
+
+/* line 14, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets {
+  margin-bottom: 10px;
+}
+/* line 17, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets .facet-list {
+  list-style: none;
+  display: none;
+}
+/* line 22, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets .search-facet {
+  margin: 10px 0px 0px 0px;
+  border-left: 2px solid #111;
+}
+/* line 27, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets .search-facet .facet-header {
+  padding: 0 4px 0 4px;
+  margin: 15px 0px 5px 0px;
+}
+/* line 33, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets .search-facet .facet-list-item {
+  display: block;
+  padding: 0 4px 0 10px;
+  margin: 4px 0 4px 10px;
+  border-left: 2px solid #fff;
+}
+/* line 39, ../../../app/assets/stylesheets/project/project_index.css.scss */
+#project-facets .search-facet .facet-controller {
+  font-style: italic;
+  font-size: 90%;
+  display: none;
+}
