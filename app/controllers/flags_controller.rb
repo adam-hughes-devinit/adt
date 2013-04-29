@@ -13,14 +13,13 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 		if not current_user
 			p "Making review entry"
 			ReviewEntry.add_item(@flag)
-     		flash[:notice] = "Comment will be reviewed before being posted"
-     		@flag.project.touch
-     		
+     		flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
+     		ProjectSweeper.instance.expire_cache_for(@flag) # Otherwise the user won't see the flash -- it would be served straight from cache!
     	elsif @flag.save!
 			AiddataAdminMailer.delay.flag_notification(@flag)
-			flash[:success] = "Flag added"
+			flash[:success] = "Thanks for your contribution! Your flag was added."
 		else
-			flash[:message] = "Flag failed"
+			flash[:message] = "Sorry -- this operation failed. please try again."
 		end
 		p "flash: #{flash.inspect}"
 		redirect_to :back
