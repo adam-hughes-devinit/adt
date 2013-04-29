@@ -39,6 +39,7 @@
     	{sym: :flow_class_1, name: "Flow Class - 1"},
     	{sym: :flow_class_2, name: "Flow Class - 2"},
     	{sym: :flagged, name: "Flagged", multiple: true },
+      {sym: :commented, name: "Commented"}
     	# {sym: :commented, name: "Commented"},
     ]
 

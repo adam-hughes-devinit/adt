@@ -447,6 +447,10 @@ class Project < ActiveRecord::Base
      all_flags.map(&:name)
   end
 
+  def commented
+    comments.present? ? "Has Comments" : nil
+  end
+
   def recipient_iso2
     self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
   end
