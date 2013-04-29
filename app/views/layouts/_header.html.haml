@@ -58,8 +58,7 @@
                     = link_to "Download Files", content_by_name_path("downloads")
                   %li
                     = link_to "Aggregate Exporter", aggregate_export_path
-                  %li
-                    = link_to "Web Service API", content_by_name_path("api_docs")
+
                   %li.divider
                   %li
                     = link_to "Methodology", content_by_name_path("methodology")
@@ -70,7 +69,10 @@
                   %li 
                     = link_to "Frequently Asked Questions", content_by_name_path("frequently_asked_questions")  
                   %li
-                    = link_to "Glossary", content_by_name_path("glossary")               
+                    = link_to "Glossary", content_by_name_path("glossary") 
+                  %li.divider
+                  %li
+                    = link_to "Web Service API", content_by_name_path("api_docs")              
               %li.dropdown
                 %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
                   Visualize
