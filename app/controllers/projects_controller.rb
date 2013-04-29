@@ -8,7 +8,7 @@ before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 
 include SearchHelper
 
- caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{current_user_is_aiddata ? "aiddata" : "non_aiddata"}" }
+ caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? "signed_in" : "not_signed_in"}/#{current_user_is_aiddata ? "aiddata" : "non_aiddata"}" }
  #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 
  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
