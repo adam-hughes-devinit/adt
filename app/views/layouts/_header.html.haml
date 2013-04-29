@@ -78,12 +78,13 @@
                   Visualize
                   %i.caret
                 %ul.dropdown-menu
-                  %li 
-                    = link_to "Geocoded Data", content_by_name_path("geocoding")
+                  
                   %li
                     = link_to "Country-level Map", map_path
                   %li 
                     = link_to "Project bubbles", bubbles_path
+                  %li 
+                    = link_to "Geocoded Data", content_by_name_path("geocoding")
               %li
                 = link_to "Publications", content_by_name_path("publications")
               %li
