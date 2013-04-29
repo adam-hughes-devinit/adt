@@ -2,27 +2,18 @@
 <% @flag_counter = 0 %>
 <div class="project-page ">
 
-<% 
-header_content = <<EOS
+
+<div class='row-fluid'>
 <h1 class='project-header page-header'>
-	#{@project.title}
-	#{ if !@project.active
-		'<span id="inactive-project">(Inactive Record)</span>'
-	 end} 
+	<%= @project.title %>
+	<% if !@project.active %>
+		<span id="inactive-project">(Inactive Record)</span>
+	<% end %>
 	 <br>
 	 <small>
-	 	#{@project.to_english(exclude_title: true)}
+	 	<%= @project.to_english(exclude_title: true) %> |  ID: <%= @project.id %>
 	</small>
 </h1>
-
-EOS
-
-# MOVED TO PAGE CONTENT
-# provide(:header_content, "<h1>Project Details</h1>".html_safe)
-
-%>
-<div class='row-fluid'>
-	<%= header_content.html_safe %>
 </div>
 <div class="row-fluid">
 

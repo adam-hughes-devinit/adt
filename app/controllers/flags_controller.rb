@@ -11,6 +11,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 	def create
 		@flag = Flag.new(params[:flag])
 		if not current_user
+			p "Making review entry"
 			ReviewEntry.add_item(@flag)
      		flash[:notice] = "Comment will be reviewed before being posted"
     	elsif @flag.save!
@@ -19,6 +20,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 		else
 			flash[:message] = "Flag failed"
 		end
+		p "flash: #{flash.inspect}"
 		redirect_to :back
 	end
 
