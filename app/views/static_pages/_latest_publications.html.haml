@@ -11,4 +11,4 @@
 						= a.name
 					= "."
 				%span.muted
-					= "#{a.data["type"]} &ndash; #{a.data["publisher"]}, #{a.data["date"]}".html_safe
+					= "#{a.data["type"]} &ndash; #{a.data["publisher"] ? "#{a.data["publisher"]}," : "" } #{a.data["date"]}".html_safe
