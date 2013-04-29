@@ -5,7 +5,7 @@
       %i Hover to see all changes
   %ul.unstyled
     - count = 0
-    - Version.where("item_type in(?)", (ApplicationHelper::PROJECT_ACCESSORY_OBJECTS + ['Project'])).last(10).reverse.each do |act|
+    - Version.where("item_type in(?)", (ApplicationHelper::PROJECT_ACCESSORY_OBJECTS + ['Project'])).last(20).reverse.each do |act|
       :ruby
         type = act.item_type
         # don't want loandetails
