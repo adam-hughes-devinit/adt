@@ -14,7 +14,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 			p "Making review entry"
 			ReviewEntry.add_item(@flag)
      		flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
-     		ProjectSweeper.instance.expire_cache_for(@flag) # Otherwise the user won't see the flash -- it would be served straight from cache!
+     		
     	elsif @flag.save!
 			AiddataAdminMailer.delay.flag_notification(@flag)
 			flash[:success] = "Thanks for your contribution! Your flag was added."
@@ -22,6 +22,8 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 			flash[:message] = "Sorry -- this operation failed. please try again."
 		end
 		p "flash: #{flash.inspect}"
+		ProjectSweeper.instance.expire_cache_for(@flag) 
+		# Otherwise the user won't see the flash -- it would be served straight from cache!
 		redirect_to :back
 	end
 
