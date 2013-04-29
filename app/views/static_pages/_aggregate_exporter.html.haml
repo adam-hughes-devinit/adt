@@ -8,17 +8,30 @@
 				columns
 			in your dataset.
 		%p.muted
-			Use the
 			%strong
-				Control 
-			or
-			%strong 
-				Shift
-			keys to select multiple options.
+				Click
+			to add or remove columns.
+		/ %p.muted
+		/ 	Use the
+		/ 	%strong
+		/ 		Control 
+		/ 	or
+		/ 	%strong 
+		/ 		Shift
+		/ 	keys to select multiple options.
 
-	.span6.well
-		= label_tag "Data fields"
-		= select_tag "get", options_for_select(valid_field_options, valid_field_options[0]), multiple: true, class: "aggregate_input", id: "get_input" 
+	.span6.well.well-small
+		.container-fluid
+			.row-fluid
+				= label_tag "Fields in your data:"
+
+			- valid_field_options.each_slice(3) do |slice|
+				.row-fluid
+					- slice.each do |option| 
+						%span.span4.btn.aggregate_input.get_input{ "data-field-name" => option[1]}
+							= option[0]
+
+		-# = select_tag "get", options_for_select(valid_field_options, valid_field_options[0]), multiple: true, class: "aggregate_input", id: "get_input" 
 
 %hr{style: "margin:0px 0px 5px 0px"}
 
@@ -69,12 +82,12 @@
 
 .row-fluid
 	%h3
-		%span.span2
+		%span.span4
 			4) Download:
-		%span.span5#api_download
+		%span.span4#api_download
 			%small
 				Make a selection to download your dataset.
-		%span.span3#api_query_preview
+		%span.span2#api_query_preview
 		%small.span2
 			%a{href: "/content/api_docs"}
 				See the API docs &rarr;
@@ -101,13 +114,17 @@
 		}
 
 	function build_api_params () {
-		if ($('#get_input').val()) {
-			get_values = $('#get_input').val().join(",") }
-		else 
-			{ get_values = [] }
+		get_values = $('.get_input.btn-success')
+			.map(function(){return $(this).attr("data-field-name") }).get()
+			//.join(",")
+		if (get_values.length==0) {
+			get_values = ['donor']
+		}
+		console.log(get_values)
+		
 		
 		param_values = 		[
-			{name: "get", value: get_values }, 
+			{name: "get", value: get_values.join(",") }, 
 			{name: "multiple_recipients", value: $('#multiple_recipients_input').val() }
 			]
 		
@@ -123,15 +140,7 @@
 		if (filter_values.length>0)
 			{ filter_values.forEach(function(v) {param_values.push(v) }) }
 		
-		if ($('#wdi_input').val())
-			{ 
-				wdi_input = $('#wdi_input').val()
-				if (wdi_input.constructor.name == "String")
-					{ param_values.push( { name:"wdi", value : wdi_input }) }
-				else if (wdi_input.constructor.name == "Array")
-				 {param_values.push( { name:"wdi", value : wdi_input.join(value_delimiter) }) }
-			}
-				
+						
 		param_string=decodeURIComponent($.param(param_values)).replace(/\+\+/g, "+%2B") // for CA +SOE which is turned into CA++SOE without this.
 		return  param_string
 	}
@@ -182,6 +191,9 @@
 
 	$(function() {
 		show_duplication_handler_hint()
+		$('[data-field-name="crs_sector_name"],[data-field-name="year"], [data-field-name="recipient_name"], [data-field-name="flow_class"]').addClass('btn-success')
+		$('.get_input').click(function() {$(this).toggleClass("btn-success"); update_previews()})
+
 		$('.aggregate_input').change(function() {update_previews()})
 		update_previews()
 
