@@ -6,14 +6,14 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 		@comment = Comment.new(params[:comment])
     if not current_user
       ReviewEntry.add_item(@comment)
-      flash[:notice] = "Comment will be reviewed before being posted"
-     	@comment.project.touch # Otherwise the user won't see the flash -- it would be served straight from cache!
+      flash[:notice] = "Thanks for your contribution! Your comment will be reviewed before being posted."
+     ProjectSweeper.instance.expire_cache_for(@comment) # Otherwise the user won't see the flash -- it would be served straight from cache!
 
     elsif @comment.save!
       AiddataAdminMailer.delay.comment_notification(@comment)
-      flash[:success] = "Comment added."
+      flash[:success] = "Thanks for your contribution! Your comment has been added."
     else
-      flash[:notice] = "Comment failed."
+      flash[:notice] = "Sorry -- that operation failed, please try again."
     end
     redirect_to :back
 		
