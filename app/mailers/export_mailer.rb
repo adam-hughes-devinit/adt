@@ -62,7 +62,15 @@ class ExportMailer < ActionMailer::Base
     export_file.close
 
     #send export csv to Amazon s3
-    s3_upload(ENV['EXPORT_BUCKET'], export_file, "#{filename}.csv")
+    # RDM 4/28 threw an error
+
+    # 2013-04-29T02:53:53.147155+00:00 app[worker.1]: "Uploading file to S3 china_exports"
+    # 2013-04-29T02:53:53.147748+00:00 app[worker.1]: [Worker(host:b104afbc-be6e-4b96-8272-528f02f64e53 pid:2)] Class#export_request failed with IOError: closed stream - 0 failed attempts
+    # 2013-04-29T02:53:53.163284+00:00 app[worker.1]: [Worker(host:b104afbc-be6e-4b96-8272-528f02f64e53 pid:2)] 1 jobs processed at 0.0066 j/s, 1 failed ...
+    # 2013-04-29T02:57:22.599935+00:00 app[worker.1]: "Uploading file to S3 china_exports"
+    # 2013-04-29T02:57:22.600421+00:00 app[worker.1]: [Worker(host:b104afbc-be6e-4b96-8272-528f02f64e53 pid:2)] Class#export_request failed with IOError: closed stream - 1 failed attempts
+
+    # s3_upload(ENV['EXPORT_BUCKET'], export_file, "#{filename}.csv")
 
     #mail it
     mail.attachments["#{filename}.csv"] = {mime_type: 'text/csv',

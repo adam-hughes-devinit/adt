@@ -35,7 +35,7 @@ skip_before_filter :signed_in_user, only: [:create]
 
     @export = Export.new(params[:export])
     if @export.save
-			 ExportMailer.delay.export_request(@export, params[:export][:email])
+			ExportMailer.delay.export_request(@export, params[:export][:email])
       redirect_to(@export)
     else
       redirect_to session[:return_to], :flash => {:error => "Sorry. Invalid email address."}

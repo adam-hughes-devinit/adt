@@ -29,10 +29,11 @@ class ApplicationController < ActionController::Base
     rescue_from Exception, 
       with: lambda { |exception| render_error 500, exception }
 
-    rescue_from ActionController::RoutingError, 
-                ActionController::UnknownController, 
-                ::AbstractController::ActionNotFound, 
-                ActiveRecord::RecordNotFound, 
+    # rescue_from ActionController::RoutingError, 
+    #             ActionController::UnknownController, 
+    #             ::AbstractController::ActionNotFound, 
+    #             ActiveRecord::RecordNotFound, 
+    rescue_from ActiveRecord::RecordNotFound, 
                 with: lambda { |exception| render_error 404, exception }
   end
 
