@@ -42,7 +42,8 @@ class StaticPagesController < ApplicationController
   end
 
   caches_action :recent, cache_path: "recent"
-
+  # Make sure this gets expired in models/project_sweeper !
+  
   def recent
     latest_changes = Version.where("item_type='Project' and event in('create', 'update')").last(3)
 
