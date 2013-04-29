@@ -56,7 +56,7 @@ class StaticPagesController < ApplicationController
         }
     end
 
-    render json: recent_changes_data
+    render text: recent_changes_data.to_json
   end
 
 

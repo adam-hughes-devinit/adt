@@ -36,6 +36,7 @@
   function load_recent() {
 
       $.get('/recent', function(data) {
+        data = $.parseJSON(data)
         $('#recent-changes ul').html("")
         data.forEach(function(d) {
         template_text = $("#recent-item").html()
