@@ -14,6 +14,8 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 			p "Making review entry"
 			ReviewEntry.add_item(@flag)
      		flash[:notice] = "Comment will be reviewed before being posted"
+     		@flag.project.touch
+     		
     	elsif @flag.save!
 			AiddataAdminMailer.delay.flag_notification(@flag)
 			flash[:success] = "Flag added"

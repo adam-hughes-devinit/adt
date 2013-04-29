@@ -16,8 +16,6 @@ class ProjectSweeper < ActionController::Caching::Sweeper
     expire_cache_for(this)
   end
  
-  private
-
   def expire_cache_for(this)
     p "Expiring cache for #{this.inspect}"
 

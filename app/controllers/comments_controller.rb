@@ -7,6 +7,7 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
     if not current_user
       ReviewEntry.add_item(@comment)
       flash[:notice] = "Comment will be reviewed before being posted"
+     	@comment.project.touch # Otherwise the user won't see the flash -- it would be served straight from cache!
 
     elsif @comment.save!
       AiddataAdminMailer.delay.comment_notification(@comment)
