@@ -41,8 +41,22 @@ class StaticPagesController < ApplicationController
     render file: '/static_pages/signup'
   end
 
+  caches_action :recent, cache_path: "recent"
+
   def recent
-    render :partial => 'shared/recent'
+    latest_changes = Version.where("item_type='Project' and event in('create', 'update')").last(3)
+
+    recent_changes_data = latest_changes.reverse.map do |version|
+        project = Project.find(version.item_id)
+        json = {
+          id: project.id,
+          title: project.title,
+          info: project.to_english(exclude_title: true),
+          action: "#{version.event.capitalize}d #{view_context.time_ago_in_words(version.created_at)} ago",
+        }
+    end
+
+    render json: recent_changes_data
   end
 
 

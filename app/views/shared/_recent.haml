@@ -4,51 +4,19 @@
     %small.pull-right
       %i Hover to see all changes
   %ul.unstyled
-    - count = 0
-    - Version.where("item_type in(?)", (ApplicationHelper::PROJECT_ACCESSORY_OBJECTS + ['Project'])).last(20).reverse.each do |act|
-      :ruby
-        type = act.item_type
-        # don't want loandetails
-        next if type == "LoanDetail"
 
-        # only want 5
-        next if count > 2 
+%script#recent-item{type: 'text/template'}
+  %li.change
+    %a{href:'/projects/<%= id %>'.html_safe}
+      %strong
+        <%= title %>
+    %br
+    %span.muted
+      <%= info.length > 0 ? info + "," : "" %>
+    %span<>
+      <%= action %>
 
-        class_name = type.constantize
-        id = act.item_id
-        object = class_name.find_by_id(id)
-        next if object.nil?
-
-        case act.event
-        when "update"
-          action = "Updated "
-        when "destroy"
-          next
-        else
-          action = "New "
-        end
-        
-        if type == 'Geopolitical'
-          type = 'Recipient'
-        end
-
-        url = link_to_related_project(object) || ""
-        # link to subheader
-        url << "##{type}" unless (type == "Project" || type.nil?)
-        project = related_project(object)
-        link = link_to(project.title, url) unless project.nil?
-      - if project && link && type && action && act.created_at
-        %li.change
-          %p
-            %strong 
-              = "#{action} #{type.titleize}:"
-            = "#{link}".html_safe
-          
-            %span.muted
-              = "(#{project.to_english(exclude_title: true)})"
-            %span
-              = "#{ time_ago_in_words act.created_at} ago"
-      - count += 1
+= javascript_include_tag 'underscore/index'
 
 :javascript
   
@@ -56,8 +24,6 @@
     $('.change').hide()
     $('.change:first-child').show()
   }
-
-  normal_state()
 
   $("#recent-changes").parent()
     .mouseenter(function() {
@@ -67,8 +33,19 @@
       normal_state()
     })
 
-  setTimeout(function() {
-      // console.log("fetching!")
-      $('#recent-changes').load('/recent');
-  }, 5000);
+  function load_recent() {
+
+      $.get('/recent', function(data) {
+        $('#recent-changes ul').html("")
+        data.forEach(function(d) {
+        template_text = $("#recent-item").html()
+        $('#recent-changes ul').append(
+          _.template(template_text, d)
+          )
+        normal_state()
+      })
+  })}
+  load_recent()
+
+  setTimeout(load_recent, 5000);
 
