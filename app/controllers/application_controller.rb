@@ -7,9 +7,11 @@ class ApplicationController < ActionController::Base
   
   include SessionsHelper
   
-  if Rails.env.production?
-  	http_basic_authenticate_with name:'aiddata_china', password: 'a1dd4t4'
-  end
+  # WE'RE LIVE
+  #
+  # if Rails.env.production?
+  # 	http_basic_authenticate_with name:'aiddata_china', password: 'a1dd4t4'
+  # end
 
   def force_proper_domain
     # if Rails.env.production?
