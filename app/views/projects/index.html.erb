@@ -102,8 +102,10 @@ end %>
 
 	$('.scope-tooltip, .facet-tooltip').tooltip()
 
-	<% params[:scope_names].each do |scope_name| %>
-		$('.facet-list-item .scope_names[value="<%= scope_name %>"]').prop("checked", "true")
+	<% if (scopes = params[:scope_names]) && scopes.is_a?(Array) %>
+		<% scopes.each do |scope_name| %>
+			$('.facet-list-item .scope_names[value="<%= scope_name %>"]').prop("checked", "true")
+		<% end %>
 	<% end %>
 
 	$('.facet-list-item').click(function() {
