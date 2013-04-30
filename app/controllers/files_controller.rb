@@ -15,10 +15,15 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 	def index
 		require 'net/http'
 
-		uri = URI("#{AIDDATA_FS}/#{params[:project_id]}")
-		res = Net::HTTP.get_response(uri)
+		this_project_path = "/files/china/#{params[:project_id]}"
 		
-		render json: JSON.parse(res.body)
+		http = Net::HTTP.new(AIDDATA_FS_ROOT)
+		http.read_timeout = 500
+
+		request = Net::HTTP::Get.new(this_project_path)
+		response = http.request(request)
+
+		render json: JSON.parse(response.body)
 	end
 
 	def new
@@ -66,7 +71,8 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 		this_file_path = "/files/china/#{params[:project_id]}/#{params[:id]}"
 
 		http = Net::HTTP.new(AIDDATA_FS_ROOT)
-
+		http.read_timeout = 500
+		
 		request = Net::HTTP::Get.new(this_file_path)
 		response = http.request(request)
 		filename = response['content-disposition'].gsub(/.*=/, "").gsub(/"/, "")

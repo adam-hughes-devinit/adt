@@ -34,8 +34,10 @@ module SearchHelper
 	  	end
 	  	
 	    # Text search
-	    fulltext params[:search]
-	    
+	    if params[:search].present?
+		    fulltext params[:search]
+		end
+		    
 	    # Filter by params
 	    (FACETS + WORKFLOW_FACETS).each do |f|
 	        facet f[:sym]

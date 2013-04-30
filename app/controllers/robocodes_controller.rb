@@ -11,7 +11,7 @@ class RobocodesController < ApplicationController
     if code_text != " "
       robocode_url= URI.encode("http://aid-robocoder.herokuapp.com/classify/#{code_text}")
       begin
-        res = open(robocode_url){|io| io.read}
+        res = open(robocode_url, read_timeout: 5){|io| io.read}
         code = JSON.parse(res)
         robocode = {
           text: "#{code['guess_name']} (#{code["guess_code"]})",
