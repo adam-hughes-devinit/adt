@@ -45,6 +45,9 @@ end %>
 <div class='row' >
  	<%= render 'search_export' %>
  </div>
+
+
+
 <div class='row' >
 	<%= will_paginate @projects %>	
 </div>
@@ -88,10 +91,7 @@ end %>
     	  "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
         %>
       </th>
-		<% if current_user %>
-			<th>Links</th>
-		<% end %>
-		</tr>
+	</tr>
 	</thead>
 	<tbody>
 	    <% @projects.each do |p| %>
