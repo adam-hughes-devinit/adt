@@ -20,6 +20,32 @@ include SearchHelper
         @full_results = custom_search(paginate: false)
    			@projects = custom_search
         @export = Export.new(params[:export])
+
+        @project_facet_counts = Rails.cache.fetch("projects/faceted") do
+          # wipe it in ProjectSweeper!
+          p "---------------- STARTING CACHE -------------------------"
+          facets = (WORKFLOW_FACETS + FACETS)
+          
+          all_projects = Project.search do
+            facets.each do |f|
+              facet f[:sym]
+            end
+          end
+         
+          facet_counts = {}
+          
+          facets.each do |f|
+            facet_values = all_projects.facet(f[:sym]).rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
+
+            facet_counts[f[:sym]] = facet_values
+
+          end
+
+
+          p facet_counts
+
+        end 
+
         render html: @projects
       end
       format.json do

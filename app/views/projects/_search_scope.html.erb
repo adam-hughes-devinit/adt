@@ -3,7 +3,7 @@
 	def scope_to(scope)
 		scope_link = "#{link_to scope.name, @current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope.name}"
 		
-		if @scope && @scope.include?(scope.name)
+		if @scope_names.present? && @scope_names.include?(scope.name)
 			scope_link = "<b>#{scope_link}</b>"
 		end
 
@@ -13,22 +13,13 @@
 	
 %> 
 <p>
-		<% if params[:scope_names] %>
-			<% 
-				# it's possible that params[:scope] was set in custom_search
-				# by default_to_official_finance,
-				# but if that happened, it isn't in the URL
-
-				@scope = params[:scope_names]
-			%>
-		<% end %>
 
 		<b>Scopes:</b> 
 		<% Scope.all.each do |s| %>
 			<%= scope_to s %> | 
 		<% end %> 
 		
-		<% if @scope %>
+		<% if @scope_names.present? %>
 			 <i><%= link_to "Remove scope", @current_url_without_scope, style: "color:#C96D6D" %> </i>
 		<% end %> 
 		

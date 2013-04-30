@@ -34,14 +34,6 @@
 			</div>
 		</div>
 
-		<% 
-			@all_projects = Project.search do
-				(WORKFLOW_FACETS + FACETS).each do |f|
-					facet f[:sym]
-				end
-
-			end 
-		%>
 		<div id='facets' style="<%= filters_hidden ? "display:none" : "" %>" >
 			<div class='row-fluid'>
 				<div class='span12'>
@@ -106,15 +98,5 @@
 		var facet_button = $('#project-facets-button')
 		facet_box.slideToggle('fast')
 		facet_button.slideToggle('fast')
-		// if (facet_box.is(":visible"))
-		// {
-		// 	facet_box.hide()
-		// 	facet_button.show()
-
-		// }
-		// else {
-		// 	facet_box.slideDown()
-		// 	facet_button.slideUp()
-		// }
 	}
 </script>

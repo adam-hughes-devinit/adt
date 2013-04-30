@@ -39,6 +39,8 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       # Expire the index page(s) now that a project has changed
       # expire_action action: :index 
 
+      # expire cache of Search results
+      Rails.cache.delete("projects/faceted")
       # expire /recent
       expire_fragment("recent")
       # expire the CSV text

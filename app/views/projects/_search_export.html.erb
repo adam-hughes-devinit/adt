@@ -26,7 +26,7 @@
           display_params = {}
 
           #if no scope is present, scope defaults to all
-          scope_val = (params["scope_names"] || ["All"] ).join(", ")
+          scope_val = (@scope_names || ["All"] ).join(", ")
           display_params["scope_names"] = scope_val
 
           params.each do |param|
