@@ -8,7 +8,9 @@ Adt::Application.routes.draw do
   resources :exports
   resources :review_entries
 
-  
+  # Link from DG email
+  match "/utm_*other" => redirect("/")
+
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
   post '/projects/suggest', to: "projects#suggest"
 
@@ -75,6 +77,7 @@ Adt::Application.routes.draw do
 
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
+
 
   #404
   unless Rails.application.config.consider_all_requests_local
