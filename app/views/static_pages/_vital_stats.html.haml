@@ -8,7 +8,9 @@
 				%small.pull-right
 					%i Hover to see all stats
 			%ul.unstyled.marquee
-
+				%li
+					%i.muted 
+						Loading...
 = javascript_include_tag 'underscore/index'
 -# nice_money depends on d3:
 = javascript_include_tag 'd3/index'
@@ -168,7 +170,7 @@
 			vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
 			template = _.template($('#vitals-template').html(), vitals)
 			
-
+			$('#vitals ul').html('')
 			$('#vitals ul').append(template)
 			marquee.create('.marquee')
 

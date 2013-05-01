@@ -147,6 +147,7 @@
 	</div>
 </div>
 <% if current_user_is_aiddata %>
+	<% p "Rendering flags project #{@project.id}" %>
 	<div class='row-fluid '>
 		<div class='well span6'>
 			<h4>Flow Class Code Rounds:</h4>
@@ -162,4 +163,5 @@
 <% end %>
 
 </div>
+<% p "Rendering project_flaggable project #{@project.id}" %>
 <%= render('project_flaggable')  %>

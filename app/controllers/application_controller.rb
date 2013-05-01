@@ -33,6 +33,7 @@ class ApplicationController < ActionController::Base
   private
   def render_error(status, exception)
     respond_to do |format|
+      p exception
       format.html { render template: "errors/error_#{status}", 
                     layout: 'layouts/application', status: status }
       format.all { render nothing: true, status: status }

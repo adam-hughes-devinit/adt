@@ -16,7 +16,7 @@ class Organization < ActiveRecord::Base
 
   def cached_organization_type_name
     organization_types_hash =
-      Rails.cache.fetch("global/organizationtypes", expires_in: 20.minutes ) do
+      Rails.cache.fetch("global/organizationtypes") do
         OrganizationType.all.map{ |ot| ot.as_json }
       end
 
