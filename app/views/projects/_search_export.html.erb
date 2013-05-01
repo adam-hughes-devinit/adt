@@ -107,7 +107,7 @@
         <%= f.email_field :email, 
           value_or_placeholder.to_sym => placeholder_string,
           class: 'span3' %>
-        <%= f.input :projects, as: :hidden, input_html: {value: @full_results.map(&:id)} %>
+        <%= f.input :projects, as: :hidden, input_html: {value: @full_result_ids} %>
 
       </div>
       <div class="modal-footer">

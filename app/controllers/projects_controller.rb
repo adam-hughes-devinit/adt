@@ -17,7 +17,7 @@ include SearchHelper
    
     respond_to do |format|
       format.html do
-        @full_results = custom_search(paginate: false)
+        @full_result_ids = custom_search(paginate: false).map(&:id)
    			@projects = custom_search
         @export = Export.new(params[:export])
 
