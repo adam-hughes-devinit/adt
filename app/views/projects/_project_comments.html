@@ -1,4 +1,4 @@
-<% p "Comments for project #{@project.id}"
+<% p "Comments for project #{@project.id}" %>
 <% @project.comments.each do |c| %>
 	<div class='comment'>
 		<p class='comment-header'><%= distance_of_time_in_words_to_now(c.created_at) %> ago, <b><%= c.name.blank? ? 'Anonymous' : c.name %></b> said... </p>

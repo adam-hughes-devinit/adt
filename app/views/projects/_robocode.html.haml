@@ -7,7 +7,7 @@
 %span#robocode
 	(Loading...)
 
-:coffee
-	$.get("/projects/#{@project.id}/robocodes", (data) ->
-		$("#robocode").html(data.text + " <a href='" + data.url + "' target='_blank'>(Source)</a>")
-	)
+%script
+	$.get("/projects/#{@project.id}/robocodes", function(data) {
+	$("#robocode").html(data.text + " <a href='" + data.url + "' target='_blank'>(Source)</a>")
+	})
