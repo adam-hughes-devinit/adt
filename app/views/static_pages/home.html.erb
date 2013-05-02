@@ -27,28 +27,40 @@
 			    			of Chinese development finance in Africa &rarr;</p>
 			    	</div>
 			    </div>
-			    <div class='item' >
+				<div class='item' >
 			    	<script>
 						var tag = document.createElement('script');
 
 						tag.src = "https://www.youtube.com/iframe_api";
 						var firstScriptTag = document.getElementsByTagName('script')[0];
 						firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-						var player;
-					      function onYouTubeIframeAPIReady() {
-					        player = new YT.Player('player', {
-					          height: '321',
-					          width: '570',
-					          videoId: '2t8QH_q2PGs',
-					          playerVars: {
-					          	'wmode' : 'opaque',
-					          	//'origin' :
-					          },
-					          events: {
-					            'onStateChange': on_youtube_play
-					          }
-					        });
-					      }
+						var player_cgd, player_bcp;
+						function onYouTubeIframeAPIReady() {
+							player_cgd = new YT.Player('player_cgd', {
+								  height: '321',
+								  width: '570',
+								  videoId: 'h1pLIQ_fsls',
+								  playerVars: {
+								  	'wmode' : 'opaque',
+								  	//'origin' :
+								  },
+								  events: {
+								    'onStateChange': on_youtube_play
+								  }
+							});
+					        player_bcp = new YT.Player('player_bcp', {
+						          height: '321',
+						          width: '570',
+						          videoId: '2t8QH_q2PGs',
+						          playerVars: {
+						          	'wmode' : 'opaque',
+						          	//'origin' :
+						          },
+						          events: {
+						            'onStateChange': on_youtube_play
+						          }
+						      })
+						}
 			    		function on_youtube_play(event) {
 			    			//console.log("state Change!", event)
 			    			if (event.data == YT.PlayerState.PLAYING ) {
@@ -65,10 +77,26 @@
 
 			    		
 			    	</script>
+					<div id='player_cgd'></div>
+			    	<div class='carousel-caption youtube-caption'>
+			    		<p>
+			    			 Couldn't make it to the launch?  
+			    			 <%= link_to "Watch the presentation, panel, and Q&amp;A here! &rarr;".html_safe,
+			    			 	"http://youtu.be/h1pLIQ_fsls", target: "_blank" %>
+
+			    		</p>
+			    	</div>
+
+			    </div>
+			    <div class='item' >
+			    	<script>
+
+	    		
+			    	</script>
 			    	<!--iframe id="player" type="text/html" width="570" height="320.625"
 						src="http://www.youtube.com/embed/2t8QH_q2PGs?enablejsapi=1&wmode=opaque"
 						frameborder="0" allowfullscreen ></iframe-->
-						<div id='player'></div>
+						<div id='player_bcp'></div>
 				  
 			    	<div class='carousel-caption youtube-caption'>
 			    		<p>
