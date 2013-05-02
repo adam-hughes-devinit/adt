@@ -13,3 +13,7 @@
 					= a.data["teaser"]
 					%br
 					= link_to "Read all...", a.data["url"]
+%p
+	%i
+		= link_to "See all articles &rarr;".html_safe, content_by_name_path('media')
+%hr

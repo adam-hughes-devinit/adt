@@ -64,14 +64,17 @@ include SearchHelper
         # flash[:warning] = "#{YAML::dump params}"
         # redirect_to projects_path
 
-   			@projects = custom_search(paginate: @paginate, default_to_official_finance: false)
+   			projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
-        @csv_data = @projects.map{|p| p.csv_text } .join("\n")				
+        csv_data = projects.map{|p| p.csv_text } .join("\n")				
 				
-        @csv_header = Project.csv_header
+        csv_header = Project.csv_header
+        csv_data = (csv_header + "\n" + csv_data)
 
+        send_data csv_data,
+          :type => 'text/csv; charset=utf-8; header=present',
+          :disposition => "attachment; filename=AidData_China_custom_#{Time.now.strftime("%y-%m-%d-%H:%M:%S-%L")}.csv"
 
-        send_data((@csv_header + "\n" + @csv_data), filename: "AidData_China_custom_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv")
 
       end
     end

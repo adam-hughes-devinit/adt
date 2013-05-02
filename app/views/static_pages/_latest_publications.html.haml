@@ -12,3 +12,7 @@
 					= "."
 				%span.muted
 					= "#{a.data["type"]} &ndash; #{a.data["publisher"] ? "#{a.data["publisher"]}," : "" } #{a.data["date"]}".html_safe
+%p
+	%i
+		= link_to "See all related publications &rarr;".html_safe, content_by_name_path('publications')
+%hr

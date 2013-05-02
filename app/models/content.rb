@@ -12,7 +12,8 @@ class Content < ActiveRecord::Base
   		"AidData Publication",
       "Affiliate Publication",
       "Other Publication",
-      "News Article" 
+      "News Article",
+      "Blog Post"
        		
   	]
 
