@@ -4,7 +4,7 @@
 		.css('background-image', 'url("<%= image_path "gray_to_white.png" %>")')
 </script>
 	
-<% cache do %>
+<% cache expires_in: 1.hour do %>
 	<div class='row-fluid' id='home_first_row' >
 		<div class='span6'>
 			<div id='home_carousel' class='carousel slide xwith_shadow'>
@@ -89,15 +89,7 @@
 
 			    </div>
 			    <div class='item' >
-			    	<script>
-
-	    		
-			    	</script>
-			    	<!--iframe id="player" type="text/html" width="570" height="320.625"
-						src="http://www.youtube.com/embed/2t8QH_q2PGs?enablejsapi=1&wmode=opaque"
-						frameborder="0" allowfullscreen ></iframe-->
-						<div id='player_bcp'></div>
-				  
+					<div id='player_bcp'></div>
 			    	<div class='carousel-caption youtube-caption'>
 			    		<p>
 			    			 Co-Executive Director 
