@@ -124,18 +124,18 @@ C.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes: {}
 	routes:
 		"" : "root"
-		"graph/:x/:y/:x_val/:y_val" : "show_projects_by_x_y"
-		"graph/:x/:y" : "graph_by_x_y"
+		"graph/:x/:y/:z/:x_val/:y_val" : "show_projects_by"
+		"graph/:x/:y/:z" : "graph_by"
 
 
 	root: () ->
-		this.graph_by_x_y("sector_name", "recipient_name")
+		this.graph_by("sector_name", "recipient_name", "value")
 
-	show_projects_by_x_y: (x, y, x_val, y_val) ->
-		C.correlate(x,y, {also_show_projects: [x_val, y_val]})
+	show_projects_by: (x, y, z, x_val, y_val) ->
+		C.correlate(x,y,z {also_show_projects: [x_val, y_val]})
 
-	graph_by_x_y: (x, y=null) ->
-		C.correlate(x,y)
+	graph_by: (x, y, z) ->
+		C.correlate(x,y,z)
 })
 
 C.show_projects = (d, i) ->
@@ -144,11 +144,12 @@ C.show_projects = (d, i) ->
 	x_axis = $("#x_axis").val()
 	y_value = d[1]
 	y_axis = $("#y_axis").val()
+	z_axis = $("#z_axis").val()
 
 	$("#x-axis-header").text(x_value)
 	$("#y-axis-header").text(y_value)
 
-	C.router.navigate("graph/" + x_axis + "/" + y_axis +  "/" + x_value + "/" + y_value, {trigger: false})
+	C.router.navigate("graph/" + x_axis + "/" + y_axis +  "/" + z_axis + "/"+ x_value + "/" + y_value, {trigger: false})
 
 	projects = C.data.where((table, row) ->
 		table.get(x_axis, row) is x_value and table.get(y_axis, row) is y_value
@@ -166,15 +167,14 @@ C.show_projects = (d, i) ->
 	
 	C.projects_region.show(project_modal)
 
-C.correlate = (x,y,options={}) ->
-
-	# console.log(x,y)
+C.correlate = (x,y,z,options={}) ->
 	$("#x_axis").val(x)
 	$("#y_axis").val(y)
+	$("#z_axis").val(z)
 	
-	C.router.navigate("graph/" + x + "/" + y, {trigger: true})
+	C.router.navigate("graph/" + x + "/" + y + "/" + z, {trigger: true})
 
-	dims = [x ,y]
+	dims = [x,y]
 	graph_data = C.data.query(
 		dims: dims
 		vals: [dv.sum("usd_2009"), dv.count()]
@@ -184,21 +184,18 @@ C.correlate = (x,y,options={}) ->
 	# console.log "graph_data", graph_data
 
 	x_vals = _.uniq(graph_data[0])
-	if y?
-		y_pos = 1
-		y_vals = _.uniq(graph_data[1])
-		amounts = graph_data[2]
-	else
-		amounts = graph_data[1]
+
+	y_vals = _.uniq(graph_data[1])
+
+	if x is y
+		y_vals = [x]
+
+
 
 	# resize some stuff 
 	C.vis.h = (y_vals.length) * C.vis.label_height
 	C.vis.w =  (x_vals.length) * C.vis.label_height
 
-	max_amount = d3.max amounts
-	total_amount = d3.sum amounts
-
-	# console.log "max", max_amount, "total", total_amount
 	box_size = Math.round( 
 		Math.max(
 			C.vis.label_height,
@@ -266,16 +263,31 @@ C.correlate = (x,y,options={}) ->
 					.style("font-size", C.vis.label_font_size + "px")
 					.style("line-height", C.vis.label_font_size + "px")
 	
+	# set z on graph_data[5]
+	graph_data.push([])
+	if z == 'value'	
+		graph_data[4] = graph_data[2]
+	else if z == "count"
+		graph_data[4] = graph_data[3]
+	else if z == "average_value"
+		graph_data[4] = ( Math.round((graph_data[2][i] || 0)/(graph_data[3][i] || 1)) for d,i in graph_data[0])
+	else
+		graph_data[4] = (graph_data[2])
+	
+	# console.log graph_data[5]
+	amount_scale_max = d3.max(graph_data[4])
+	# console.log amount_scale_max
 	amount_scale = d3.scale.linear()
-		.domain([0,.0001, max_amount/2, max_amount])
+		.domain([0,.0001, amount_scale_max/2, amount_scale_max])
 		.range(['white', 'blue','purple','red'])
 	
 	max_radius = box_size
 	
 	radius_scale = d3.scale.linear()
-		.domain([0,.0001, max_amount/2, max_amount])
+		.domain([0,.0001, amount_scale_max/2, amount_scale_max])
 		.range([0, max_radius * .2, max_radius * .5, max_radius])
 
+	console.log graph_data
 	data = _.zip.apply(null, graph_data) # each to array
 
 	# console.log data 
@@ -283,7 +295,7 @@ C.correlate = (x,y,options={}) ->
 	highlight = (d,i) ->
 		x_value = $(this).attr("data-x-value")
 		y_value = $(this).attr("data-y-value")
-		color = amount_scale(d[2])
+		color = amount_scale(d[4])
 		
 		guidelines = C.boxes_g
 			.insert("g", ":first-child")
@@ -315,6 +327,7 @@ C.correlate = (x,y,options={}) ->
 				y_value: d[1]
 				amount: d[2]
 				count: d[3]
+				value: d[5]
 			}})
 
 
@@ -325,10 +338,6 @@ C.correlate = (x,y,options={}) ->
 		$('.label-holder').find("p").css("color", "inherit")
 		C.tooltip_region.close()
 		C.boxes_g.select(".guidelines").remove()
-
-
-
-
 
 	boxes = C.boxes_g.selectAll(".box")
 			.data(data, (d) -> clean_value(d[0])+" "+clean_value(d[1]) + " box" )
@@ -360,8 +369,8 @@ C.correlate = (x,y,options={}) ->
 		.transition()
 			.delay((d,i) -> Math.random() * 500 )
 			.duration(200)
-			.attr("r", (d) -> radius_scale(d[2]))
-			.style("fill", (d) -> amount_scale(d[2]))
+			.attr("r", (d) -> radius_scale(d[4]))
+			.style("fill", (d) -> amount_scale(d[4]))
 	
 	if options?.also_show_projects
 
@@ -387,7 +396,8 @@ C.Controls = Backbone.Marionette.ItemView.extend(
 	make_new_graph: () ->
 		x = $('#x_axis :selected').val()
 		y = $('#y_axis :selected').val()
-		C.correlate(x, y)
+		z = $('#z_axis :selected').val()
+		C.correlate(x, y, z)
 
 )
 

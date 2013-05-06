@@ -57,7 +57,7 @@ Adt::Application.routes.draw do
   get '/csv_analyzer', to: 'static_pages#csv_analyzer', as: "csv_analyzer"
   get '/map', to: 'static_pages#map', as: "map"
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
-  get '/circle_grid', to: 'static_pages#circle_grid', as: "circle_grid"
+  get '/correlate', to: 'static_pages#circle_grid', as: "circle_grid"
   get '/content/:name', to: 'contents#show_by_name', as: "content_by_name"
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"

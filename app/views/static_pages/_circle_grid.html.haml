@@ -65,10 +65,12 @@
 %script#tooltip_template{type: "text/template"}
 	%em
 		<%= x_value %> 
+	<% if(x_value!=y_value) { %>
 	& 
 	%em 
 		<%= y_value %>
 	= ":"
+	<% } %>
 	%br
 	$<%= nice_money(amount, {full_label: true}) %> in <%= count %> projects.
 
@@ -87,11 +89,20 @@
 				<% y_options.forEach(function(o) { %>
 				<%= '<option value="' + o.value + '">'+ o.name + '</option>' %> 
 				<% }) %>
+	.span3
+		%p
+			Circle Size:
+			%select#z_axis{name: "z_axis"}
+				%option{value: "value"} Value (USD-2009)
+				%option{value: "count"} Count 
+				%option{value: "average_value"} Average Value (Value/Count)
 
 %script#project_table{type: "text/template"}
 	%table.table.sortable
 		%thead
 			%tr
+				%td 
+					Year
 				%td
 					Title
 				%td
@@ -105,6 +116,8 @@
 		%tbody#project_trs
 
 %script#project_tr{type: "text/template"}
+	%td
+		<%= year %>
 	%td
 		<a target='_blank' href='http://china.aiddata.org/projects/<%= project_id %>'><%= title %></a>
 	%td
