@@ -145,6 +145,9 @@ C.show_projects = (d, i) ->
 	y_value = d[1]
 	y_axis = $("#y_axis").val()
 
+	$("#x-axis-header").text(x_value)
+	$("#y-axis-header").text(y_value)
+
 	C.router.navigate("graph/" + x_axis + "/" + y_axis +  "/" + x_value + "/" + y_value, {trigger: false})
 
 	projects = C.data.where((table, row) ->

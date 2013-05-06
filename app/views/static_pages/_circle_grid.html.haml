@@ -14,6 +14,10 @@
 		border-top: 1px solid #999;
 		background-color: transparent;
 	}
+
+	.axis-header {
+		color: #1146a6;
+	}
 	.modal {
 		width: 80%;
 		margin: auto;
@@ -40,13 +44,19 @@
 				Underlying data is derived from
 				= "#{link_to "China in Africa, 1.0", "/datasets/1.0"}, official finance only.".html_safe
 	#grid_vis
-#grid_tooltip
+	#grid_tooltip{style: "display:none;"}
+
 #project_modal.modal.hide.fade
 	.modal-header
 		%button.close{type: "button", "data-dismiss" => "modal"}
 			&times;
-		%h3
-			Projects in this bubble:
+		%h4>
+			Projects
+			found in 
+			%i#x-axis-header.axis-header
+			&
+			%i#y-axis-header.axis-header
+			=":"
 	#project-body.modal-body
 	.modal-footer
 		%button.close{type: "button", "data-dismiss" => "modal"}
