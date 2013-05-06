@@ -13,18 +13,27 @@ Array.prototype.getUnique = () ->
   a
 
 
-@nice_money = (amount) ->
+@nice_money = (amount, options={}) ->
+  # Props to akmiller for original code -- I'm using it all the time though so hosting it here.
+  full_label = options?.full_label || false
   if d3?
     if 1000 >= amount 
-      "#{d3.format("0,r")(d3.round(amount,0))}"
+      label = ""
+      money = d3.format("0,r")(d3.round(amount,0))
     else if 1000000 > amount >= 1000
-      "#{d3.round((amount/1000),0)} K"
+      label = (if full_label then "Thousand" else "K" )
+      money = d3.round((amount/1000),0)
     else if 1000000000 > amount >= 1000000
-      "#{d3.round((amount/1000000),1)} M"
+      label = (if full_label then "Million" else "M")
+      money = d3.round((amount/1000000),1)
     else if amount >= 1000000000
-      "#{d3.format("0,r")(d3.round((amount/1000000000),2))} B"
+      label = (if full_label then "Billion" else "B")
+      money = d3.format("0,r")(d3.round((amount/1000000000),2))
     else
-      amount
+      label = ""
+      money = amount
+
+    money + " " + label
   else
     console.log "nice_money requires D3"
     amount

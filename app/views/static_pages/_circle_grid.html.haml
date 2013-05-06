@@ -1,0 +1,112 @@
+:css
+	#grid_tooltip {
+		position: absolute;
+		background-color: white;
+		padding: 5px;
+		box-shadow: rgba(50,50,50, 0.5) 0px 0px 10px;
+	}
+
+	#grid_vis {
+		padding:5px;
+	}
+	.label-holder body {
+		padding: 2px;
+		border-top: 1px solid #999;
+		background-color: transparent;
+	}
+	.modal {
+		width: 80%;
+		margin: auto;
+		left: 10%;
+	}
+	.modal-body {
+		max-height: 500px;
+	}
+
+	.guidelines line {
+		stroke-width: 1px;
+		stroke: rgba(0,0,0,0.4);
+
+	}
+
+%h1.page-header 
+	Correlates of Chinese Finance
+.row-fluid
+	.span12.container-fluid.well.well-small
+		.row-fluid
+			#controls.span-12
+		.row-fluid	
+			%p.muted.span-12
+				Underlying data is derived from
+				= "#{link_to "China in Africa, 1.0", "/datasets/1.0"}, official finance only.".html_safe
+	#grid_vis
+#grid_tooltip
+#project_modal.modal.hide.fade
+	.modal-header
+		%button.close{type: "button", "data-dismiss" => "modal"}
+			&times;
+		%h3
+			Projects in this bubble:
+	#project-body.modal-body
+	.modal-footer
+		%button.close{type: "button", "data-dismiss" => "modal"}
+			&times;
+
+%script#tooltip_template{type: "text/template"}
+	%em
+		<%= x_value %> 
+	& 
+	%em 
+		<%= y_value %>
+	= ":"
+	%br
+	$<%= nice_money(amount, {full_label: true}) %> in <%= count %> projects.
+
+%script#controls_template{type: "text/template"}
+	.span3
+		%p
+			X-Axis:
+			%select#x_axis{name: "x_axis" }
+				<% x_options.forEach(function(o) { %>
+				<%= '<option value="' + o.value + '">'+ o.name + '</option>' %> 
+				<% }) %>
+	.span3
+		%p
+			Y-Axis:
+			%select#y_axis{name: "y_axis" }
+				<% y_options.forEach(function(o) { %>
+				<%= '<option value="' + o.value + '">'+ o.name + '</option>' %> 
+				<% }) %>
+
+%script#project_table{type: "text/template"}
+	%table.table.sortable
+		%thead
+			%tr
+				%td
+					Title
+				%td
+					Recipient
+				%td
+					Amount
+				%td
+					Sector
+				%td Intent
+				%td Flow Class
+		%tbody#project_trs
+
+%script#project_tr{type: "text/template"}
+	%td
+		<a target='_blank' href='http://china.aiddata.org/projects/<%= project_id %>'><%= title %></a>
+	%td
+		<%= recipient_name %>
+	%td
+		$<%= nice_money(usd_2009) %>
+	%td 
+		<%= sector_name %>
+	%td 
+		<%= intent_name %>
+	%td 
+		<%= flow_class_name %>	
+
+
+= javascript_include_tag "circle_grid/index"

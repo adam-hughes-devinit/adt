@@ -29,6 +29,10 @@ class StaticPagesController < ApplicationController
     render 'dashboard'
   end
 
+  def circle_grid
+    render "circle_grid"
+  end
+
   def map
     render 'map'
   end
