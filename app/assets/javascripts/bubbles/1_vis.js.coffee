@@ -31,8 +31,31 @@ class BubbleChart
       $('#bubbletooltip').html(content);
       $('#bubbletooltip').show();
       window.updatePosition(event);
-      
-
+    @datanest = d3.nest().key((d) -> d.crs_sector_code).map(@data)
+    @crskeys = []
+    for code of @datanest
+      @projectarray = @datanest[code]
+      projarrlen = @projectarray.length
+      totalusd = 0
+      i = 0
+      while i < projarrlen
+        totalusd += parseFloat(@projectarray[i].usd_defl)
+        i++
+      @obj =
+        code: code
+        usd_defl: totalusd
+      @crskeys.push @obj
+    compare = (a, b) ->
+      return 1  if a.usd_defl < b.usd_defl
+      return -1  if a.usd_defl > b.usd_defl
+      0
+    @crskeys.sort compare
+    @sortedcrs = []
+    i = 0
+    while i < @crskeys.length
+      @sortedcrs.push @crskeys[i].code
+      i++
+    
     # locations the nodes will move towards
     # depending on which view is currently being
     # used
@@ -66,7 +89,39 @@ class BubbleChart
       "Vague (Com)" : {x: @width / 2, y: @height / 2},
       "Official Investment" : {x:300, y: @height / 2}
     }
-    console.log @flow_centers
+    @sector_locat = [
+      {x:220, y: @height / 3},
+      {x:270, y: @height / 3},
+      {x:320, y: @height / 3},
+      {x:370, y: @height / 3},
+      {x:420, y: @height / 3},
+      {x:470, y: @height / 3},
+      {x:@width-430, y: @height / 3},
+      {x:@width-380, y: @height / 3},
+      {x:@width-330, y: @height / 3},
+      {x:@width-280, y: @height / 3},
+      {x:@width-230, y: @height / 3},
+      {x:@width-180, y: @height / 3},
+      {x:@width-180, y: 2*(@height / 3)},
+      {x:@width-230, y: 2*(@height / 3)},
+      {x:@width-280, y: 2*(@height / 3)},
+      {x:@width-330, y: 2*(@height / 3)},
+      {x:@width-380, y: 2*(@height / 3)},
+      {x:@width-430, y: 2*(@height / 3)},
+      {x:470, y: 2*(@height / 3)},
+      {x:420, y: 2*(@height / 3)},
+      {x:370, y: 2*(@height / 3)},
+      {x:320, y: 2*(@height / 3)},
+      {x:270, y: 2*(@height / 3)},
+      {x:220, y: 2*(@height / 3)}
+      {x:220, y: 2*(@height / 3)},
+    ]
+    @sector_centers = {}
+    i = 0
+    while i<@sortedcrs.length
+      @sector_centers[@sortedcrs[i]] = @sector_locat[i]
+      i++
+    console.log @sector_centers
     # used when setting up force and
     # moving around nodes
     @layout_gravity = -0.01
@@ -104,6 +159,7 @@ class BubbleChart
         year: d.year
         recipient: d.recipient_condensed
         sector: d.crs_sector_name
+        sectorcode: d.crs_sector_code
         x: Math.random() * 900
         y: Math.random() * 800
       }
@@ -246,6 +302,7 @@ class BubbleChart
 
     this.hide_years()
     this.hide_flows()
+    this.hide_sectors()
 
   # Moves all circles towards the @center
   # of the visualization
@@ -268,6 +325,7 @@ class BubbleChart
 
     this.display_years()
     this.hide_flows()
+    this.hide_sectors()
 
   # move all circles to their associated @year_centers 
   move_towards_year: (alpha) =>
@@ -307,6 +365,7 @@ class BubbleChart
 
     this.display_flows()
     this.hide_years()
+    this.hide_sectors()
 
   # move all circles to their associated @flow_centers 
   move_towards_flow: (alpha) =>
@@ -332,6 +391,52 @@ class BubbleChart
   # Method to hide flow titles
   hide_flows: () =>
     flows = @vis.selectAll(".flows").remove()
+    
+  #Sector
+  display_by_sector: () =>
+    @force.gravity(@layout_gravity)
+      .charge(this.charge)
+      .friction(0.9)
+      .on "tick", (e) =>
+        @circles.each(this.move_towards_sector(e.alpha))
+          .attr("cx", (d) -> d.x)
+          .attr("cy", (d) -> d.y)
+    @force.start()
+
+    this.display_sectors()
+    this.hide_years()
+    this.hide_flows()
+
+  # move all circles to their associated @sector_centers 
+  move_towards_sector: (alpha) =>
+    (d) =>
+      target = @sector_centers[d.sectorcode]
+      d.x = d.x + (target.x - d.x) * (@damper + 0.02) * alpha * 1.1
+      d.y = d.y + (target.y - d.y) * (@damper + 0.02) * alpha * 1.1
+
+  # Method to display sector titles
+  display_sectors: () =>
+    #sectors_x = {"Official":[160,@height*.62], "Unofficial":[240,@height*.62],"Military":[320,@height*.62]}
+    #sectors_data = d3.keys(sectors_x)
+    #sectors = @vis.selectAll(".sectors")
+      #.data(sectors_data)
+
+    #sectors.enter().append("text")
+      #.attr("class", "sectors")
+      #.attr("x", (d) -> sectors_x[d][0] )
+      #.attr("y", (d) -> sectors_x[d][1] )
+      #.attr("text-anchor", "middle")
+      #.text((d) -> d)
+    #sectors.enter().append("text")
+      #.attr("class", "sectors")
+      #.attr("x", @width*0.5)
+      #.attr("y", @height*0.5)
+      #.attr("text-anchor", "middle")
+      #.text(")
+
+  # Method to hide sector titles
+  hide_sectors: () =>
+    flows = @vis.selectAll(".sectors").remove()
 
   show_details: (data, i, element) =>
     d3.select(element).attr("stroke", "black")
@@ -358,7 +463,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.crs_sector_name!=""
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.crs_sector_code!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
@@ -368,6 +473,8 @@ $ ->
     chart.display_by_year()
   root.display_flow = () =>
     chart.display_by_flow()
+  root.display_sector = () =>
+    chart.display_by_sector()
   root.toggle_view = (view_type) =>
     if view_type == 'year'
       root.display_year()
@@ -375,7 +482,10 @@ $ ->
       if view_type == 'flow'
         root.display_flow()
       else
-        root.display_all()
+        if view_type== 'sector'
+          root.display_sector()
+        else
+          root.display_all()
 
 
   page = 1
