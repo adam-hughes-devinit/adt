@@ -49,15 +49,14 @@ class StaticPagesController < ApplicationController
   # Make sure this gets expired in models/project_sweeper !
   
   def recent
-    latest_changes = Version.where("item_type='Project' and event in('create', 'update')").last(3)
+    latest_changes = Project.order("updated_at ASC").last(3)
 
-    recent_changes_data = latest_changes.reverse.map do |version|
-        project = Project.find(version.item_id)
+    recent_changes_data = latest_changes.reverse.map do |project|
         json = {
           id: project.id,
           title: project.title,
           info: project.to_english(exclude_title: true),
-          action: "#{version.event.capitalize}d #{view_context.time_ago_in_words(version.created_at)} ago",
+          action: "updated at #{view_context.time_ago_in_words(project.updated_at)} ago",
         }
     end
 
