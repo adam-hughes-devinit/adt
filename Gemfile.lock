@@ -297,7 +297,7 @@ DEPENDENCIES
   delayed_job_active_record
   factory_girl_rails
   faker (= 1.1.2)
-  haml
+  haml (~> 4.0)
   hashie
   jquery-rails
   launchy
