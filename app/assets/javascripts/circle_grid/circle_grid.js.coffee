@@ -11,7 +11,7 @@ $(() ->
 padding = 10
 C.vis = 
 	padding: padding
-	h: 2000 + (padding * 3)
+	h: 3000 + (padding * 3)
 	w: $('#grid_vis').parent().parent().width() + (padding * 3)
 	el: "#grid_vis"
 	base_opacity: "0.5"
@@ -132,7 +132,7 @@ C.Router = Backbone.Marionette.AppRouter.extend({
 		this.graph_by("sector_name", "recipient_name", "value")
 
 	show_projects_by: (x, y, z, x_val, y_val) ->
-		C.correlate(x,y,z {also_show_projects: [x_val, y_val]})
+		C.correlate(x,y,z ,{also_show_projects: [x_val, y_val]})
 
 	graph_by: (x, y, z) ->
 		C.correlate(x,y,z)
@@ -146,10 +146,9 @@ C.show_projects = (d, i) ->
 	y_axis = $("#y_axis").val()
 	z_axis = $("#z_axis").val()
 
-	$("#x-axis-header").text(x_value)
-	$("#y-axis-header").text(y_value)
 
-	C.router.navigate("graph/" + x_axis + "/" + y_axis +  "/" + z_axis + "/"+ x_value + "/" + y_value, {trigger: false})
+
+	C.router.navigate("graph/" + x_axis + "/" + y_axis +  "/" + z_axis + "/"+ encodeURIComponent(x_value) + "/" + encodeURIComponent(y_value), {trigger: false})
 
 	projects = C.data.where((table, row) ->
 		table.get(x_axis, row) is x_value and table.get(y_axis, row) is y_value
@@ -158,6 +157,10 @@ C.show_projects = (d, i) ->
 	projects = projects.toJSON()
 	projects = _.sortBy(projects, (d) -> -1 * d["usd_2009"])
 	# console.log "json", projects
+	$("#projects-header-count").text(projects.length)
+	$("#x-axis-header").text(x_value)
+	if x_value is not y_value
+		$("#y-axis-header").text(" & " + y_value)
 	projects = new C.ProjectCollection(projects)
 	# console.log "collection", projects
 	

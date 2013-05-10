@@ -51,10 +51,9 @@
 		%button.close{type: "button", "data-dismiss" => "modal"}
 			&times;
 		%h4>
-			Projects
-			found in 
+			%span#projects-header-count
+			projects found in 
 			%i#x-axis-header.axis-header
-			&
 			%i#y-axis-header.axis-header
 			=":"
 	#project-body.modal-body
@@ -73,6 +72,11 @@
 	<% } %>
 	%br
 	$<%= nice_money(amount, {full_label: true}) %> in <%= count %> projects.
+	%br
+	%span.muted
+		%em
+			Average:
+		$<%= nice_money(amount/count) %> per project.
 
 %script#controls_template{type: "text/template"}
 	.span3
