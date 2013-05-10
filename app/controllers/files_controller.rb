@@ -53,6 +53,8 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 					"file" => UploadIO.new(file, uploaded_io.content_type, uploaded_io.original_filename)
 				req.basic_auth AIDDATA_FS_USERNAME, AIDDATA_FS_PASSWORD
 
+        @project = Project.find_by_id(params[:project_id]); 
+        @project.touch
 				res = Net::HTTP.start(url.host, url.port) do |http|
 					http.request(req)
 				end

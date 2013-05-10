@@ -89,6 +89,10 @@ include SearchHelper
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
+    old_version = @project.versions.last
+    @previous = old_version.reify
+
+
 
 
     respond_to do |format|
@@ -151,6 +155,9 @@ include SearchHelper
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
+
+    #for versioning
+    @project.save_state
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
