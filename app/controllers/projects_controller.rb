@@ -89,8 +89,6 @@ include SearchHelper
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
-    old_version = @project.versions.last
-    @previous = old_version.reify
 
 
 
