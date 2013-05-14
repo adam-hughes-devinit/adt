@@ -26,12 +26,76 @@ class Project < ActiveRecord::Base
     :accessories, :iteration,
     # hidden fields
     :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
-    :donor_id, :owner_id, :intent_id, :crs_sector_id
+    :donor_id, :owner_id, :intent_id, :crs_sector_id,
+    :last_state
 
   before_save :set_verified_to_raw_if_null
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
+  def project_logger
+    @@project_logger ||= Logger.new("#{Rails.root}/log/project.log")
+  end
+
+
+  def association_hash
+    assoc_hash = {}
+    class_name = self.class.name
+    association_keys = class_name.constantize.reflections.keys
+    association_keys.each do |assoc_sym|
+      next if assoc_sym == :versions
+      value = self.send(assoc_sym)
+      ids = []
+      if value.respond_to?(:map)
+        ids = value.map {|item| item.id}
+      else
+        if value
+          ids << value.id
+        else
+          ids << value
+        end
+      end
+      assoc_hash[assoc_sym.to_s] = ids
+    end
+    assoc_hash
+  end
+
+  def attribute_hash
+    att_hash = self.attributes
+    att_hash.delete('last_state')
+    att_hash
+  end
+
+  def full_hash
+    association_hash.merge(attribute_hash)
+  end
+
+  def save_state
+    self.assign_attributes({last_state: full_hash.to_yaml})
+  end
+
+  def association_changed?
+    if YAML.load(last_state) == association_hash
+      return false
+    else
+      return true
+    end
+  end
+
+  def changes
+    changes_hash = {}
+    return changes_hash if last_state == nil
+    last_hash = YAML.load(last_state)
+    current_hash = full_hash
+    current_hash.each_pair do |key, current_value|
+      #unrelevant details
+      next if key == 'updated_at' || key == 'iteration'
+      if current_value != last_hash[key]
+        changes_hash[key] = [last_hash[key], current_value]
+      end
+    end
+    changes_hash
+  end
 
   def remake_scope_files
     scope.each do |s|
@@ -611,6 +675,7 @@ class Project < ActiveRecord::Base
   def set_verified_to_raw_if_null
     self.verified = Verified.find_by_name("Raw") if verified.blank?
   end
+
 
   def update_geocodes
     #

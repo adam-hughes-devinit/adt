@@ -47,7 +47,6 @@ Adt::Application.routes.draw do
   
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
-  get '/recent_activity', to: 'versions#index', as: 'versions'
   
   # static pages
   root to: "static_pages#home"

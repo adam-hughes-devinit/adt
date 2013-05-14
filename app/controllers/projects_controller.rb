@@ -91,6 +91,8 @@ include SearchHelper
 
 
 
+
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @project }
@@ -151,6 +153,9 @@ include SearchHelper
   # PUT /Projects/1.json
   def update
     @project = Project.find(params[:id])
+
+    #for versioning
+    @project.save_state
 
     respond_to do |format|
       if @project.update_attributes(params[:project])

@@ -53,11 +53,17 @@ class StaticPagesController < ApplicationController
     latest_changes = Project.order("updated_at ASC").last(3)
 
     recent_changes_data = latest_changes.reverse.map do |project|
+      changes = project.changes
+      update_sentence = "updated "
+      # state the items that were updated
+      if changes.size < 5
+        update_sentence << changes.keys.map{|t| t.titleize}.map{|t| t.downcase}.join(', ')
+      end
         json = {
           id: project.id,
           title: project.title,
           info: project.to_english(exclude_title: true),
-          action: "updated at #{view_context.time_ago_in_words(project.updated_at)} ago",
+          action: "#{update_sentence} #{view_context.time_ago_in_words(project.updated_at)} ago",
         }
     end
 

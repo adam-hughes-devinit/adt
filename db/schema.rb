@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130409214127) do
+ActiveRecord::Schema.define(:version => 20130509205950) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(:version => 20130409214127) do
     t.integer  "iteration",      :default => 0
     t.integer  "intent_id"
     t.integer  "crs_sector_id"
+    t.text     "last_state"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"
@@ -475,6 +476,7 @@ ActiveRecord::Schema.define(:version => 20130409214127) do
     t.text     "object"
     t.datetime "created_at"
     t.text     "accessories"
+    t.text     "children"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
