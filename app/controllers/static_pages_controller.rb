@@ -18,7 +18,8 @@ class StaticPagesController < ApplicationController
   end
 
   def codebook
-    send_file Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf"
+    pdf_data = File.open(Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 
   def csv_analyzer
@@ -45,7 +46,7 @@ class StaticPagesController < ApplicationController
     render file: '/static_pages/signup'
   end
 
-  caches_action :recent, cache_path: "recent"
+  # caches_action :recent, cache_path: "recent"
   # Make sure this gets expired in models/project_sweeper !
   
   def recent
