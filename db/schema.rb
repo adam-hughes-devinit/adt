@@ -319,6 +319,12 @@ ActiveRecord::Schema.define(:version => 20130509205950) do
     t.datetime "updated_at",    :null => false
   end
 
+  create_table "remittances", :id => false, :force => true do |t|
+    t.string  "year"
+    t.string  "country"
+    t.decimal "amount",  :precision => 255, :scale => 0
+  end
+
   create_table "review_entries", :force => true do |t|
     t.string   "status",          :default => "OPEN"
     t.text     "serialized_item"
