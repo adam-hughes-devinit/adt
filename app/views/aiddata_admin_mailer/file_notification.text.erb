@@ -1,0 +1,15 @@
+NEW FILE:
+============================
+
+A new file was posted on Project #<%= @project.id %>.
+
+See the file and the project:
+<%= project_url @project,
+host: Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>
+
+
+You receied this email because you are an AidData admin at 
+<%= Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>.
+Contact rmosolgo@aiddata.org to unsubscribe.
+
+============================

@@ -43,10 +43,15 @@
 
 
 	</script>
-
-	<%= form_tag "#{project_path @project}/files", :multipart => true do %>
-	  <%= file_field_tag 'file' %>
-	  <%= submit_tag 'Add file', class: "btn btn-info" %>
+	<% if current_user %>
+		<%= form_tag "#{project_path @project}/files", :multipart => true do %>
+			<%= file_field_tag 'file' %>
+		  	<%= submit_tag 'Add file', class: "btn btn-info" %>
+		<% end %>
+	<% else %>
+		<p><i> Please
+			<%= link_to "sign in", signin_path %>
+			to contribute files!</i>
+		</p>
 	<% end %>
-	
 </div>

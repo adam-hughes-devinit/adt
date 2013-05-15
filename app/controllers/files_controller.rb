@@ -1,5 +1,6 @@
 class FilesController < ApplicationController
-skip_before_filter :signed_in_user, only: [:create]
+# RDM 5-15-13 Require sign in for files
+# skip_before_filter :signed_in_user, only: [:create]
 before_filter :correct_owner?, only: [:edit, :destroy]
 
 	# AIDDATA_FS_ROOT = 'aiddata-fs.herokuapp.com'
@@ -53,11 +54,14 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 					"file" => UploadIO.new(file, uploaded_io.content_type, uploaded_io.original_filename)
 				req.basic_auth AIDDATA_FS_USERNAME, AIDDATA_FS_PASSWORD
 
-        @project = Project.find_by_id(params[:project_id]); 
-        @project.touch
+		        @project = Project.find_by_id(params[:project_id]); 
+		        @project.touch
+				AiddataAdminMailer.delay.file_notification(@project)
+
 				res = Net::HTTP.start(url.host, url.port) do |http|
 					http.request(req)
 				end
+
 			end
 
 		end
@@ -107,6 +111,7 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 
 		flash[:notice] = "File deleted."
 		redirect_to Project.find(params[:project_id])
+	
 	end
 
 	private

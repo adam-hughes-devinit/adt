@@ -500,11 +500,6 @@ class Project < ActiveRecord::Base
     participating_organizations.map { |p| p.organization.present? ? p.organization.name : 'Unset'}
   end
 
-
-  # has_many :identifiers, dependent: :destroy
-  # has_many :classifications, dependent: :destroy
-  # has_many :followers, dependent: :destroy
-
   # These used to be done inside the search block, now that FACETS are integrated, 
   # I had to move the code down here.
   def flagged 

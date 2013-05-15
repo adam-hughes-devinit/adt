@@ -24,4 +24,12 @@ class AiddataAdminMailer < ActionMailer::Base
     end
   end
 
+  def file_notification(project)
+    @project = project
+    if true #Rails.env.production?
+      mail subject: "New file on Project #{@project.id}"
+    end
+  end
+
+
 end
