@@ -176,14 +176,14 @@
 	function update_previews() {
 			load_data_preview()
 			api_call = build_api_params()
-			$('#api_query_preview').html("<a target='_blank' href='/aggregates/projects?"+api_call+"'>"+
+			$('#api_query_preview').html("<a target='_blank' href=\"/aggregates/projects?"+api_call+"\">"+
 			"API Query "+ "</a>")
-			$('#api_download').html("<a href='/aggregates/projects.csv?"+api_call+"'>Download your CSV</a>")
+			$('#api_download').html("<a href=\"/aggregates/projects.csv?"+api_call+"\">Download your CSV</a>")
 		}
 
 	$(function() {
 		show_duplication_handler_hint()
-		$('[data-field-name="crs_sector_name"],[data-field-name="year"], [data-field-name="recipient_name"], [data-field-name="flow_class"]').addClass('btn-success')
+		$('[data-field-name="crs_sector_name"],[data-field-name="year"], [data-field-name="recipient_name"], [data-field-name="intent"]').addClass('btn-success')
 		$('.get_input').click(function() {$(this).toggleClass("btn-success"); update_previews()})
 
 		$('.aggregate_input').change(function() {update_previews()})
