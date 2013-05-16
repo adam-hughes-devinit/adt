@@ -83,7 +83,7 @@ include AggregatesHelper
 		    # 	joins: ["INNER JOIN countries donors ON donors.id = projects.donor_id ", 
 		    # 			:transactions, :geopoliticals, :sector],
 		    # 	limit: 100,
-		    # 	order: nil
+		    # 	order: nil 
 		    # 	    	)
 
 		 	sql = "select #{@duplication_scheme[:amounts]}, count(*) as count,"+
@@ -110,7 +110,7 @@ include AggregatesHelper
 			 			INNER JOIN countries donors on p.donor_id = donors.id 
 			 			LEFT OUTER JOIN (select sum(usd_current) as sum_usd_current, sum(usd_defl) as sum_usd_defl, project_id from transactions group by project_id) as t on p.id = t.project_id
 			 		where 
-			 		#{@filters.join(' and ')}
+			 		#{@filters.join(' and ').gsub(/(\w)'(\w)/, '\1\'\'\2')}
 					group by #{@fields_to_get.select{|f| Rails.env.production? || Rails.env.development? ? f[:internal] : f[:group] }
 						.map{|f| Rails.env.production?  || Rails.env.development? ? f[:internal] : f[:group]}.join(', ')} 
 					order by #{@sorter}"
