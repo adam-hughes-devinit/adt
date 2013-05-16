@@ -124,17 +124,21 @@
 		
 		$('.where_filter').each(function(i,f) { if (f.value) {
 						filter_values
-							.push({ name: f.name.replace(/[\[\]]/g, ''), value: $(f).val()
-							.join(value_delimiter)})						
+							.push({ 
+								name: f.name.replace(/[\[\]]/g, ''), 
+								value: $(f).val()
+									.map(function(val) { console.log(val); return val.replace(/&/, "%26") }) // For sao tome & principe
+									.join(value_delimiter)
+							})						
 						}}) 
 		
 		
 		if (filter_values.length>0)
-			{ filter_values.forEach(function(v) {param_values.push(v.replace(/&/, "%26") ) }) } // For sao tome & principe
+			{ filter_values.forEach(function(v) {param_values.push(v ) }) } 
 		
 						
 		param_string=decodeURIComponent($.param(param_values)).replace(/\+\+/g, "+%2B") // for CA +SOE which is turned into CA++SOE without this.
-
+		param_string=param_string
 		
 		return  param_string
 	}
