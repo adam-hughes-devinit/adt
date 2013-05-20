@@ -1,0 +1,25 @@
+<% provide(:title, "#{type}: #{object.name}") %>
+
+<% hidden_attributes = ["created_at", "updated_at", "id"] %>
+
+<h1 class='page-header'> 
+	<%= type %>: 
+	<%= object.name %>
+</h1>
+
+<% object.attributes.each_pair do |k, v| %>
+	<% if !hidden_attributes.include?(k) %>
+		<p class='row'><b><%= k.gsub(/_/, ' ').capitalize %>:</b> <%= v.to_s %> </p>
+	<% end %>
+<% end %>
+<% if @has_projects %>
+	<p class='span12'> Referenced by <b><%= link_to pluralize(object.projects.map(&:id).uniq.count, "project"), "/projects?#{type.downcase.gsub(/\s/, '_')}_name=#{CGI.escape object.name}" %></b>. </p>
+<% end %>
+<p class='row'>
+	<% if current_user_is_aiddata %>
+		<%= link_to "Edit", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}/edit" %> |
+		<%= link_to "Destroy", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/#{object.id}", method: :delete, confirm: "Are you sure? All codes with this value will become 'Unset'. " %> | 
+	<% end %> 
+	
+	<%= link_to "See All #{type.pluralize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}" %>
+</p>

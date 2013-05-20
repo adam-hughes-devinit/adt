@@ -1,0 +1,27 @@
+- files_directory = Rails.root.join('public', 'static_datasets') + '*.xlsx'
+- files_links = Dir.glob(files_directory) 
+
+= javascript_include_tag 'bootstrap_sortable/index'
+
+%table.table.sortable
+	%thead
+		%tr 
+			%th Version
+			%th File Type
+			%th Size (kb)
+			-# %th Last Updated
+	%tbody		
+		- files_links.each do |link|
+			%tr
+				%td
+					= version = link.gsub(/.*aiddata_china_/, "").gsub(/\.xlsx/, "").gsub(/_/, ".")
+				%td
+					= link_to("<img src='#{AggregatesHelper::SPREADSHEET_ICON}'> XLSX".html_safe, "/datasets/#{version}" )
+				%td
+					= (File.size(link)/1000)
+				-# %td
+					-# = time_ago_in_words File.atime(link)
+					-# ago
+
+
+

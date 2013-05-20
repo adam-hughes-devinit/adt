@@ -1,0 +1,28 @@
+<% provide(:title, @user.name) %>
+
+<h1 class='page-header'>
+	User: <%= @user.name %>
+</h1>
+
+<div class="row">
+<section>
+	<p>
+	<b>Name:</b> <%= @user.name %> 
+	</p>
+	<p>
+	<b>Email:</b> <%= @user.email %> 
+	</p>
+	<p>
+	<b>Owner:</b> <%= @user.owner.nil? ? 'None' : @user.owner.name %>
+	</p>
+</section>
+</div>
+
+<% if current_user_is_aiddata_admin %>
+	<p class='row'>
+		<%= link_to "Delete User", @user, method: :delete, confirm: "Are you sure?", class: "btn btn-danger" %>
+		<%= link_to "Edit User", edit_user_path(@user), class: "btn btn-info" %>
+	</p>
+<% end %>
+
+

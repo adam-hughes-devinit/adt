@@ -1,0 +1,6 @@
+<div class='fields row-fluid'>
+	<%= f.input :name, label: "Contact name", wrapper_html: {class: "span4"} %>
+	<%= f.input :position, label: "Contact position", wrapper_html: {class: "span3"} %>
+	<%= render partial: 'field_for_organization', locals: {f: f, wrapper_class: "span4"} %>
+	<%= link_to_remove_fields "<i class='icon-trash'></i>", f %>
+</div>

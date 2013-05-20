@@ -1,0 +1,18 @@
+
+- latest_publications = Content.where('content_type in(?)', ["Affiliate Publication", "AidData Publication"]).sort {|a, b| (b.data['date'] && a.data['date']) ? b.data["date"] <=> a.data["date"] : ( a.data["date"] ? -1 : 1 )}[0..2]
+%ul.unstyled.recent_resources
+	- latest_publications.each do |a|
+		%li
+			%div
+				%strong
+					= "#{a.data["author"]}:"
+				%span<
+					%a{ href: a.data["url"]}><
+						= a.name
+					= "."
+				%span.muted
+					= "#{a.data["type"]} &ndash; #{a.data["publisher"] ? "#{a.data["publisher"]}," : "" } #{a.data["date"]}".html_safe
+%p
+	%i
+		= link_to "See all related publications &rarr;".html_safe, content_by_name_path('publications')
+%hr

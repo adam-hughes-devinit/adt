@@ -1,0 +1,10 @@
+  	<%= f.label :oda_like_1, "Flow Class (1)" %>
+    <%= select "flow_class", "oda_like_1_id", OdaLike.all.collect {|o| [ o.name, o.id ] }, include_blank: true  %>
+    
+  	<%= f.label :oda_like_2, "Flow Class (2)" %>
+    <%= select "flow_class", "oda_like_2_id", OdaLike.all.collect {|o| [ o.name, o.id ] }, include_blank: true  %>
+    <br>
+    
+  	<%= f.label :oda_like_master, "Flow Class (MASTER)" %>
+    <%= select "flow_class", "oda_like_master_id", OdaLike.all.collect {|o| [ o.name, o.id ] }, include_blank: true  %>
+    <span style="color:#999">Will be autoarbitrated on Save if both flow_classes match</span>

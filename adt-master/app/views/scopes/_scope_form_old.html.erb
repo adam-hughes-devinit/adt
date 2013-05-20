@@ -1,0 +1,28 @@
+<%= simple_form_for @scope, html: {class: "scope-form"} do |f| %>
+	<div class='row-fluid'>
+		<div class='span6'>
+			<%= f.input :name %>
+			<%= f.input :symbol, hint: "Use only lowercase letters and underscores." %>
+			<%= f.input :description, input_html: { rows: "3"} %>
+		</div>
+		<div class='span6'>
+			<p class='row-fluid'>
+				<b>Channels:</b><%= link_to_add_fields "<i class='icon-plus'></i> Add Channel", f, :scope_channels %>
+			</p>
+			<% @channel_counter = 0 %>
+
+			<%= f.simple_fields_for :scope_channels do |channel_f| %>
+				
+				<% @channel_counter += 1 %>
+				
+				<div class='row-fluid scope-channel-form fields'>
+					<p>Channel <%= @channel_counter %></p>
+
+					<%= link_to_remove_fields "<i class='icon-trash'></i> Remove Channel", channel_f %>	
+				</div>
+
+			<% end %>
+		</div>
+	</div>
+	<%= f.button :submit, "Save" %>
+<% end %>

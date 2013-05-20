@@ -1,0 +1,15 @@
+- provide(:title, "500") 
+%h1.page-header 
+  Oops!
+  %small 
+    error code: 500
+%div
+  %h2 Something went wrong on our end
+  %p
+    You can either
+    %a{href: root_path} go back to the home page,
+  %p
+    or send us an
+    =link_to("email", "mailto:china@aiddata.org?subject=Error 500 at #{request.fullpath}")
+    to let us know.
+    

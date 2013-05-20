@@ -1,0 +1,7 @@
+<% provide(:first_header, "Edit #{@organization.name}") %>
+<% provide(:title, "#{@organization.name}") %>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @organization %> |
+<%= link_to 'Back', organizations_path %>

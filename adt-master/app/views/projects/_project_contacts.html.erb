@@ -1,0 +1,20 @@
+<ul class='unstyled container-fluid'>
+	<% @project.contacts.each do |c| %>
+		
+		<li class="flaggable row-fluid row-no-margin" flaggable_type='Contact' flaggable_id=<%= c.id %>>
+			<% if c.name.present? %>
+				<span class='span11'>
+					<b><%= c.name.blank? ? "Name "+unset_data : c.name %></b> 
+					<%= c.position.blank? ? '' : ", #{c.position}" %> 
+					<%= c.organization.nil? ? '' : link_to(" (#{c.organization.name})", c.organization) %>
+				</span>
+			<% end %>
+			<span class='span1'>
+				<% c.flags.each do |flag| %>
+						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+				<% end %>
+			</span>
+		</li>
+		
+	<% end %>
+</ul>

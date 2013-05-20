@@ -1,0 +1,67 @@
+<% provide(:title, "Users") %>
+<h1 class='page-header'>
+	All Users
+</h1>
+
+<div class="row">
+<%= link_to "New User", new_user_path, class: "btn" %>
+<div>
+<% hidden_fields = ["created_at", "updated_at", "id", "password_digest", "remember_token", "owner_id"] %>
+<% dir = (params[:dir] == "ASC" ? "DESC" : "ASC") %>
+
+<table class='table table-hover'>
+	<thead>
+		<% @users.first.attributes.each_pair do |k, v| %>
+			<% if !hidden_fields.include?(k) %>
+				<th>
+					
+						<b>
+							
+							<%= link_to k.capitalize, params.merge(order: k, dir: dir) %>
+						</b>
+					
+				</th>
+			<% end %>
+		<% end %>
+		<th>
+			<b>
+				<%= link_to "Owner", params.merge(order: "owner_id", dir: dir ) %>
+			</b>
+		</th>
+		<th>Links</th>
+	</thead>
+	<tbody>
+			<% @users.each do |o| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+	  					<% if !hidden_fields.include?(k) %>
+							  <td><%= v %></td>
+						<% end %>
+					<% end %>
+					<td>
+						<%= o.owner.present? ? o.owner.name : "" %>
+					</td>
+					<td> 
+						<%= link_to "View", o %> 
+						<% if (current_user.admin? || current_user==o) && o.owner == current_user.owner %> 
+							 | <%= link_to"Edit", edit_user_path(o) %>
+						<% end %>
+						<% if current_user.admin? && o!=current_user && o.owner!=current_user.owner && o.owner.nil? %>
+							 | <%= link_to("Add to #{current_user.owner.name}", "/users/#{o.id}/own/#{current_user.owner.id}", method: :post) %>
+						<% end %>
+						<% if current_user.admin? && o!=current_user && current_user.owner && o.owner==current_user.owner %>
+							 | <%= link_to("Remove from #{current_user.owner.name}", "/users/#{o.id}/disown", method: :post) %>
+						<% end %>
+					</td> 
+				  </tr>
+
+			<% end %>
+	</tbody>
+</table>
+
+<br>
+<%= will_paginate @users %>
+
+<%= link_to "New User", new_user_path, class: "btn" %>
+
+ 

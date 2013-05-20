@@ -1,0 +1,4 @@
+-# Send it a where_filter...
+%li
+	= label_tag where_filter[:sym].to_s, where_filter[:name] , class: 'where_filter_heading'
+	= select_tag where_filter[:sym].to_s, options_for_select(where_filter[:options]), multiple: true, class: 'aggregate_input where_filter' 

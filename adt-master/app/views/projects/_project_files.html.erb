@@ -1,0 +1,57 @@
+<% p "Files for #{@project.id}" %>
+<div class='well well-small'>
+	<h3>Files:</h3>
+	<ul id='files' class='unstyled'>
+		<li>Loading...</li>
+	</ul>
+
+	<script>
+		var url = window.location + "/files"
+		$.get(url, print_data)
+
+		function print_data(data) {
+			var target = $('#files')
+			if(data["contents"] && data.contents.length > 0) {
+				menu = data.contents.map(function(d) { 
+					url = ("/projects/<%= @project.id %>/files/" + d.key)
+					
+					return "<li data-id=" + d.key + " class='document'>" +
+							'<img src="'+d.icon+'" />'  +
+							"&ensp;<a href='" + url + "'>" +
+							d.name + 
+							"</a>" +
+							" </li>"
+						}).join("") 
+			}
+			else {
+				menu = "<li>(No files yet, please add one below!)</li>" 
+			}
+			target.html(menu)
+			<% if current_user_is_aiddata %>
+				$('.document').each(function(i) {
+					render_delete_link = function(el, id) {
+						$(el).text("").removeClass("btn btn-warning btn-small")
+						$(el).append("<a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/files/"+ id + "'>DELETE!</a>")
+					}	
+					doc = $(this)
+					doc_id = doc.attr("data-id")
+					doc.append("<span class='btn btn-warning btn-small' style='margin:5px;' onclick='render_delete_link(this," + doc_id + ")'>Delete?</span>")
+				})
+			<% end %>
+
+		}
+
+
+	</script>
+	<% if current_user %>
+		<%= form_tag "#{project_path @project}/files", :multipart => true do %>
+			<%= file_field_tag 'file' %>
+		  	<%= submit_tag 'Add file', class: "btn btn-info" %>
+		<% end %>
+	<% else %>
+		<p><i> Please
+			<%= link_to "sign in", signin_path %>
+			to contribute files!</i>
+		</p>
+	<% end %>
+</div>

@@ -1,0 +1,47 @@
+<% provide(:title, "#{@organization.name}") %>
+<% provide(:first_header, "") %>
+<h1 class='page-header'>
+  <%= @organization.name %>
+</h1>
+<p>
+  <b>Description:</b>
+  <%= @organization.description %>
+</p>
+<p>
+  <b>Origin:</b>
+  <%= @organization.origins.map{|o| link_to o.name, o}.uniq.join(', ').html_safe %>
+</p>
+<p>
+  <b>Type:</b>
+  <%= @organization.organization_type.name unless @organization.organization_type.nil? %>
+</p>
+
+<p>
+	Participating in 
+  <b>
+    <% 
+      #list only active projects
+      project_count = 0
+      @organization.projects.each do |p|
+        project_count += 1 if p.active?
+      end
+    %>
+
+    <%= link_to pluralize(project_count, "project"), 
+      "/projects?organization_name=#{CGI.escape(@organization.name)}&active_string[]=Active" %>. 
+  </b>
+</p>
+<p>
+Owns  
+  <b>
+    <%
+      owned_count = 0
+      @organization.owned_projects.each do |p|
+        owned_count += 1 if p.active?
+      end
+    %>
+  <%= pluralize(owned_count, "project") %>. 
+  </b>
+</p>
+<%= current_user_is_aiddata ? link_to('Edit', edit_organization_path(@organization)) : '' %> |
+<%= link_to 'See all Organizations', organizations_path %>
