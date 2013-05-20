@@ -1,0 +1,11 @@
+<div class='row-fluid scope-filter-form fields'>
+	<p>Field: <%= f.input :field %></p>
+	<p class='row-fluid'>
+		<b>Filter <%= @filter_counter %> -- Values:</b><%= link_to_add_fields "<i class='icon-plus'></i> Add Value", f, :scope_filter_values %>
+	</p>
+	<% f.simple_fields_for :scope_filter_values do |value_f | %>
+		<%= render 'fields_for_scope_filter_value', f: value_f %>
+	<% end %>
+	<%= link_to_remove_fields "<i class='icon-trash'></i>", f %>
+	<hr>
+</div>

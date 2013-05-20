@@ -1,0 +1,64 @@
+<%
+  # Requires @project and locals:{ containter_tag: "string", 
+  # class_name: "String", heading: "String for <b/>" }
+  # Optional local :units - with options :years, :percentage
+%>
+
+<<%= container_tag %> class='flaggable' flaggable_type='<%= class_name %>' 
+  flaggable_id=<%= @project.id %> >
+
+	<b>
+		<%= "#{heading}:" unless heading.blank?  %>
+	</b> 
+
+		<% current_object = (@project.send(class_name.underscore) || nil) %>
+		
+		<% if current_object.blank? %>
+			<%= @unset_data %>
+		<% elsif class_name == "Scope" %>
+			<%= current_object
+					.map{|s| link_to(s.to_s.humanize, Scope.find_by_symbol(s)) }
+					.join(', ')
+					.html_safe %>
+		<% elsif class_name == "VisibleFlowClass" && current_object.class == Array %>
+			<%= link_to(current_object[0].name, current_object[0]) %> (<%= current_object[1] %>)
+		<% elsif [BigDecimal, Fixnum, String, Integer, TrueClass, FalseClass].include? current_object.class  %>
+			
+			<% if class_name == "YearUncertain" %>
+				<i>(Year Uncertain)</i>
+			<% elsif class_name == "Description" %>
+				<%= current_object.gsub(/\n/, "<br>").gsub(/\t/, "&emsp;").html_safe %>
+			<% else %>
+				<%= current_object %>
+			<% end %>
+
+		<% elsif current_object.class == Float %>
+      		<% if class_name=="Usd_2009" %>
+	      		<%= number_to_currency(current_object, unit: "$") %>
+	      	<% else %>
+	      		<%= current_object %>
+	      	<% end %>
+		<% elsif [Date, DateTime].include? current_object.class %>
+			<%= current_object.strftime("%d %B %Y") %>
+		<% elsif !current_object.nil? %>
+			<%= link_to(current_object.name, current_object) %>
+		<% else %>
+			<%=  @unset_data  %> 
+		<% end %>
+
+    <% if defined? units and current_object.present? %>
+      <% if units == :years %>
+        <% plural_string = pluralize(current_object, "year") %>
+        <% plural_array = plural_string.split(/\W+/) %>
+        <%= plural_array[1] %>
+
+      <% elsif units == :percentage %>
+        %
+      <% end %>
+    <% end %>
+
+	<% project_detail_flags(class_name).each do |flag| %>
+		<%= render(partial: 'flag_superscript', locals: { flag: flag}) %>
+	<% end %>
+	
+</<%= container_tag %> >

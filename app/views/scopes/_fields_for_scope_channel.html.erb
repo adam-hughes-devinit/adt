@@ -1,0 +1,14 @@
+<div class='row-fluid scope-channel-form fields'>
+	<% @filter_counter = 0 %>
+	<p class='row-fluid'>
+		<b>Channel <%= @channel_counter %> -- Filters:</b><%= link_to_add_fields "<i class='icon-plus'></i> Add Field", f, :scope_filters %>
+	</p>
+	<% f.simple_fields_for :scope_filters do |filter_f | %>
+		<p> filters </p>
+		<%= render 'fields_for_scope_filter', f: filter_f %>
+	<% end %>
+	<%= link_to_remove_fields "<i class='icon-trash'></i>", f %>
+	<hr>
+</div>
+
+

@@ -1,0 +1,60 @@
+<% provide(:title, "#{type.pluralize.capitalize}") %>
+<% provide(:first_header, "") %>
+
+
+
+<% hidden_attributes = ["created_at", "updated_at", "id", "color", "content"] %>
+
+<h1 class='page-header'>
+	View all 
+	<%= type.pluralize.capitalize %>
+</h1>
+<div class="row">
+	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new", class: "btn" %>
+	<% end %>
+</div>
+<!-- Table headings for each attribute !-->
+<div class='row'>
+<% if objects.length > 0 %>
+
+<table class='table table-hover sortable'>
+	<thead>
+		<% objects.first.attributes.each_pair do |k, v| %>
+			<% if !hidden_attributes.include?(k) %>
+				<th><b><%= k.capitalize %></b></th>
+			<% end %>
+		<% end %>
+		<th>Links</th>
+	</thead>
+	<tbody>
+			<% objects.each do |o| %>
+				  <tr>
+				  	<% o.attributes.each_pair do |k, v| %>
+				  		<% if !hidden_attributes.include?(k) %>
+							  <% if k == "name" %>
+							  	<td> <%= link_to v, o %> </td>
+							  <% else %>
+								  <td><%= v %></td>
+							  <% end %>
+						<% end %>
+					<% end %>
+					<td> 
+						<%= link_to "View", o %>
+						<% if current_user.present? && current_user.admin? %>
+						  | <%= link_to "Edit", "/#{type.downcase.gsub(/\s/, '_')}/#{o.id}/edit" %> 
+						<% end %>
+					</td> 
+				  </tr>
+
+			<% end %>
+	</tbody>
+</table>
+<% end %>
+<br>
+	<% if current_user && current_user.owner==Organization.find_by_name("AidData") %>
+		<%= link_to "New #{type.singularize}", "/#{type.pluralize.downcase.gsub(/\s/, '_')}/new", class: "btn" %>
+	<% end %>
+</div>
+
+<%= javascript_include_tag "bootstrap_sortable/index" %>

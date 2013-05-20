@@ -1,0 +1,53 @@
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+  
+<style>
+	#facets li {
+	  padding:3px;
+		margin:3px;
+
+	}
+	
+	.chart-target {
+
+		height:100px;
+		padding:3px;
+		margin:3px;
+
+	}
+
+</style>
+<script >
+	$(function() {
+		$('.facet').draggable({
+			revert: "invalid"
+			})
+		
+		$('.chart-target').droppable({
+         });
+	});
+</script>		
+<div id="chart-container">	
+<div id="facets" >
+	<ul>
+	<%= ["Flow Class", "Sector", "Year", "Recipient"].map {|i| "<li class='facet' >#{i}</li>"}.join("").html_safe %>
+	</ul>
+</div>
+
+<div id="y-target" class='chart-target '>
+	<ol> 
+		<li class="placeholder" >Y target</li>
+	</ol>
+	
+</div>
+
+<div id="x-target" class='chart-target'>
+	<ol> 
+		<li  class="placeholder">X target</li>
+	</ol>
+	
+</div>
+
+
+</div>
+

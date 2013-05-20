@@ -1,0 +1,138 @@
+<% provide(:title, "Projects") %>
+
+<% # @current_url and @joiner are set in _project_search.html.erb %>
+
+<% def order_by_params(field)
+	"order_by=#{field}&dir=#{params[:dir]=="asc" ? "desc" : "asc"}"
+end
+%>
+<% def active_or_inactive(project)
+	project_display_name = project.title.blank? ? "#{project.id} (No title)" : project.title
+	if !project.active 
+		"<span class='inactive-project-title'>#{project_display_name} (Inactive)</span>".html_safe
+	else
+		project_display_name
+	end
+end %>
+
+<% 
+	@scope_names = params[:scope_names]
+	# force it to be an array
+	if @scope_names.present? && !@scope_names.is_a?(Array)
+		@scope_names = [@scope_names]
+	end
+
+	if @scope_names.present? 
+		if @scope_names.include?("Official Finance")
+			flash.now[:success] =  
+				"You are viewing <b>#{
+					@scope_names.map {|s| Scope.find_by_name(s).name}.to_sentence
+					}</b>. Click the filters below to change your settings.".html_safe 
+		end
+		if (incomplete_scopes = @scope_names.select {|s| s != "Official Finance" }).length > 0
+			flash.now[:notice] = "Data for #{incomplete_scopes.map {|s| "<strong>#{s}</strong>"}.to_sentence } are not comprehensive, please see the #{link_to "methodology", content_by_name_path("methodology")} for details."
+		end
+	end
+%> 	
+
+<h1 class='page-header'>
+	Search Projects
+</h1>
+
+<%= render 'search' %>
+
+<div class='row' >
+ 	<%= render 'search_export' %>
+ </div>
+
+
+
+<div class='row' >
+	<%= will_paginate @projects %>	
+</div>
+<br>
+<table id="project-search-results" class="table table-hover" >
+	<thead>
+		<tr>
+			<% current_url_with_joiner_without_ordering = "#{@current_url.gsub(/&?dir=[a-z]+/, '').gsub(/&?order_by=[0-9a-z_]+/, '')}#{@joiner}" %>
+     	<th>
+	      	<%= link_to "ID", 
+	      	"#{current_url_with_joiner_without_ordering}#{order_by_params("id")}" 
+	        %> 
+    	</th>
+
+      	<th>
+      		<%= link_to "Donor",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("donor_name")}"  
+       		 %>
+       	</th>
+
+      <th>
+      		<%= link_to "Title",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("title")}"  
+      		%>
+  	  </th>
+
+      <th>
+      		<%= link_to "Year",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("year")}"  
+      		%>
+  	  </th>
+
+      <th>
+      		<%= link_to "Recipients",
+      		"#{current_url_with_joiner_without_ordering}#{order_by_params("recipient_condensed")}"  
+      		%>
+      </th>
+      
+      <th>
+      	<%= link_to "Amount (USD-2009)",
+    	  "#{current_url_with_joiner_without_ordering}#{order_by_params("usd_2009")}"  
+        %>
+      </th>
+	</tr>
+	</thead>
+	<tbody>
+	    <% @projects.each do |p| %>
+				<%= render partial: 'projects/search_result', locals: {p: p} %>
+	    <% end %>
+	</tbody>
+</table>
+<%= will_paginate @projects %>
+
+
+
+<script type='text/javascript'>
+
+	$('.scope-tooltip, .facet-tooltip').tooltip()
+
+	<% if (scopes = params[:scope_names]) && scopes.is_a?(Array) %>
+		<% scopes.each do |scope_name| %>
+			$('.facet-list-item .scope_names[value="<%= scope_name %>"]').prop("checked", "true")
+		<% end %>
+	<% end %>
+
+	$('.facet-list-item').click(function() {
+		this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+		update_check_counter_for(this_facet)
+	})
+
+	function update_check_counter_for(this_facet) {
+		checked_boxes = $(".search_check."+this_facet+":checked")
+		check_count = checked_boxes.length
+		counter = $('.check_count.'+this_facet)
+		counter_text = check_count > 0 ? "("+check_count+")" : ""
+		counter.text(counter_text)
+		
+	}
+
+	function update_all_check_counts() {
+		<% (FACETS + WORKFLOW_FACETS).each do |f| %>
+			<%= "update_check_counter_for('#{f[:sym].to_s}')".html_safe %>
+		<% end %>
+	}
+
+	update_all_check_counts()
+
+
+</script>

@@ -1,0 +1,107 @@
+@mixin project_form_box {
+	margin: 8px 8px 8px 8px;
+	padding: 8px;
+	border-right: 2px solid #ccc;
+	border-bottom: 2px solid #ddd;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#project-form-wrapper{
+	
+}
+.project-form {
+	hr {
+		margin:2px;
+	}
+
+	.control-group, label {
+		margin: 0px 0px 5px 5px;
+	}
+
+	label {
+		line-height:15px;
+	}
+	.add-one {
+		margin-left:25px;
+	}
+
+	.on-nav-bar {
+		position: fixed;
+		top: 5px;
+
+	}
+
+	.project-form-anchor:before  {
+		    display:block; 
+		    content:""; 
+		    height:50px; 
+		    margin:-50px 0 0; 
+	}
+	#project-form-nav-wrapper {
+
+		#project-form-nav {
+			position:fixed;
+
+			a {
+				padding: 4px 8px;
+			}
+		}
+	}
+
+	#project-form-content {
+
+		.fields {
+			border-bottom: 2px solid #333;
+			margin-bottom: 10px;
+		}
+		.project-accessory-fields {
+			max-height: 200px;
+			overflow-y: scroll;
+
+			b {
+				margin-bottom: 5px;
+				border-bottom: 1px solid #555;
+			}
+		}
+
+
+		#project-form-project {
+
+			.dates-box select {
+				max-width:80px;
+			}
+
+			.active-project-check {
+				background-color: #afc;
+			}
+			.inactive-project-check {
+				background-color: #fca;
+			}
+		}
+
+		#project-form-flow-class {
+			background-color: #B9CAFA;
+		}
+
+		#project-form-loan-detail {
+			background-color: #FFE3E3;
+		}
+		#project-form-sources {
+		}
+
+		#project-form-recipients {
+		}
+
+		#project-form-transactions {
+		}
+
+		#project-form-organizations {
+		}
+
+		#project-form-contacts {
+		}
+	}
+}
+

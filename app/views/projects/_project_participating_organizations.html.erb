@@ -1,0 +1,25 @@
+<ul class='unstyled'>
+	<% @project.participating_organizations.each do |p| %>
+		<li class="flaggable container-fluid" flaggable_type='ParticipatingOrganization' flaggable_id=<%= p.id %>>
+			<% if p.organization.present? %>
+				<span class='row-fluid row-no-margin'>
+					<strong class='span12'>
+						<%= link_to p.organization.name, p.organization %>
+						<% p.flags.each do |flag| %>
+								<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+						<% end %>
+					</strong>
+				</span>
+				<span class='row-fluid row-no-margin'>
+					<span class='span6'> 	
+						Role: <%= p.role.present? ? link_to(p.role.name, p.role) : @unset_data  %>
+					</span>
+					<span class='span6'>
+						Origin: <%= p.origin.present? ? (link_to p.origin.name, p.origin) : @unset_data %>
+					</span>
+				</span>
+			<% end %>
+
+		</li>
+	<% end %>
+</ul>

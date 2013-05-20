@@ -1,0 +1,18 @@
+<% provide :title, "Scopes" %>
+
+<h1 class='page-header'>
+	Scopes
+</h1>
+
+<p>
+	Scopes provide convenient, meaningful groupings for project records. They are intended to help users find the window of projects they're looking for.
+</p>
+<% if current_user_is_aiddata_admin %>
+	<p>
+		<%= link_to "New Scope", new_scope_path, class: "btn btn-success" %>
+	</p>
+<% end %>
+
+<% @scopes.each do |s| %>
+	<%= render partial: "scope", locals: {s: s} %>
+<% end %>

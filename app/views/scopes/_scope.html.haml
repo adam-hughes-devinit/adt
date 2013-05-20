@@ -1,0 +1,45 @@
+.row-fluid
+	%h3
+		= s.name
+	- if current_user_is_aiddata_admin
+		%p
+			= link_to "Edit", edit_scope_path(s), class: "btn"
+			= link_to "Delete", scope_path(s), class: "btn btn-danger", method: :delete, confirm: "Are you sure you want to delete this scope? (No Undo) "
+	%p
+		= s.description
+	%ul.unstyled
+		- s.channels.each_with_index do |c, i|
+			%li.scope_channel
+				- if i > 0 
+					%i
+						or
+					%br
+				%b
+					Must have:
+					-#Channel
+					-#= i + 1
+				- c.each_with_index do |f, f_i|
+					%ul.unstyled.inline
+						- if f_i > 0 
+							-# %i
+								-# (and) 
+						%b
+							= "#{f[:field]}:"
+							
+						- f[:values].each_with_index do |v, v_i|
+							%li
+								- if v_i > 0 
+									%i 
+										or 
+								= v
+.row-fluid
+	%p.span12
+		%a{href: "/projects?scope_names[]=#{s.name}"}
+			See Projects
+		|
+		%a{href: "/projects.json?scope_names[]=#{s.name}"}
+			See Project Data
+		|
+		%a{href: "aggregates/projects?get=recipient_name,year,flow_class#{s.to_aggregate_query_params}"}
+			See Aggregate Data
+		

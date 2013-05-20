@@ -1,0 +1,13 @@
+- provide(:title, "404")
+%h1.page-header 
+  Page Not Found
+  %small
+    error code: 404
+%div
+  %h2 We're Sorry
+  %p
+    You tried to access '#{@not_found_path}', which is not a valid page.
+  %p
+    Want to
+    %a{href: root_path} go back to the home page
+    and try again?
