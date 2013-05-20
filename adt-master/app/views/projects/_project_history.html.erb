@@ -1,7 +1,0 @@
-<% if current_user %>
-	<% cutoff = @history.length > 10 ? -10 : 0
-	active_feed = @history.sort!{ |a,b| a[:created_at] <=> b[:created_at]}[cutoff..-1].reverse	%>
-	<%= render partial: 'shared/generate_feed_items', locals: {feed: active_feed} %>
-<% else %>
-	<p> <%= link_to "Sign in", signin_path %> or <%= link_to "sign up", signup_path %> to see recent activity.</p>
-<% end %>
