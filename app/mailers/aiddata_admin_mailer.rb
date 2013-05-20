@@ -26,10 +26,20 @@ class AiddataAdminMailer < ActionMailer::Base
 
   def file_notification(project)
     @project = project
-    if true #Rails.env.production?
+    if Rails.env.production?
       mail subject: "New file on Project #{@project.id}"
     end
   end
+
+  def review_entry_notification(review_entry, was_approved=false)
+    @review_entry = review_entry
+    @was_approved = was_approved
+    @handled = @was_approved ? "confirmed" : "denied"
+    if true # Rails.env.production?
+      mail subject: "Pending content was #{@handled}"
+    end
+  end
+
 
 
 end

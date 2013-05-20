@@ -1,0 +1,17 @@
+Pending content <%= @handled %>.
+============================
+
+A pending <%= @review_entry.ar_model %>
+was just <%= @handled %> by <%= current_user.email %>.
+
+(Since this item was handled, it's no longer available at china.aiddata.org/review_entries)
+
+Here's a data dump of the item:
+<%= @review_entry.serialized_item %>
+
+
+You receied this email because you are an AidData admin at 
+<%= Rails.env.production? ? "China.Aiddata.Org" : "localhost:3000" %>.
+Contact rmosolgo@aiddata.org to unsubscribe.
+
+============================
