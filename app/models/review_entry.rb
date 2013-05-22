@@ -1,6 +1,10 @@
 class ReviewEntry < ActiveRecord::Base
   attr_accessible :serialized_item, :status, :ar_model
 
+  scope :comments, where(ar_model: "Comment")
+  scope :flags, where(ar_model: "Flag")
+  scope :projects, where(ar_model: "Project")
+
   def self.add_item(review_item, *options)
     att_hash = review_item.attributes
     options.each do |sym|
