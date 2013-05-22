@@ -19,12 +19,20 @@ class ReviewEntriesController < ApplicationController
   end
 
   def destroy
-    if params[:approve]
-      @review_entry = ReviewEntry.find(params[:id])
+    @review_entry = ReviewEntry.find(params[:id])
+    was_approved = params[:approve]
+
+    if was_approved
+      was_approved = true
       @item = @review_entry.item
       @item.save
+    else
+      was_approved = false
     end
-    ReviewEntry.destroy(params[:id])
+    #TODO add delay
+    DBG.info AiddataAdminMailer.review_notification(@review_entry.dup, was_approved).deliver
+    
+    @review_entry.destroy
     render :json => true
   end
 

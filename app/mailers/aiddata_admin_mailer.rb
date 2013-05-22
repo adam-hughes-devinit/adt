@@ -32,9 +32,22 @@ class AiddataAdminMailer < ActionMailer::Base
     mail subject: "New file on Project #{@project.id}"
   end
 
-  def review_notification(review_item)
+  def review_notification(review_item, was_approved=nil)
     @review = review_item
-    mail subject: "New Review Item"
+    @was_approved = was_approved
+    @handled = 
+      if @was_approved
+        "confirmed"
+      else
+        if @was_approved == false
+          "denied"
+        else
+          "submitted"
+        end
+      end
+    mail subject: "Pending content was #{@handled}"
   end
+
+
 
 end

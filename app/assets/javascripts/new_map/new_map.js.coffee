@@ -52,6 +52,7 @@ App.collection.fetch({
 			})
 
 		countries.addTo(App.map)
+		App.fetch_country_data()
 	})
 
 
@@ -68,22 +69,23 @@ App.data =
 		]
 		})
 
-App.data.full.fetch({
-	error: () -> alert("couldn't load finance data.")
-	success: () ->
-		# log this.toJSON()
-		# with more params, have to groupBy
+App.fetch_country_data = ->
+	App.data.full.fetch({
+		error: () -> alert("couldn't load finance data.")
+		success: () ->
+			# log this.toJSON()
+			# with more params, have to groupBy
 
-		App.data.by_country = App.data.full.groupBy("recipient_iso2", ["usd_2009"])
-		
-		by_country = App.data.by_country
+			App.data.by_country = App.data.full.groupBy("recipient_iso2", ["usd_2009"])
+			
+			by_country = App.data.by_country
 
-		max_amount =  (by_country.max("usd_2009"))
-		country_color = d3.scale.linear()
-			.domain([0, max_amount/3, max_amount ])
-			.range(['#FAEDD9', '#808F12', '#2A5C0B'])
+			max_amount =  (by_country.max("usd_2009"))
+			country_color = d3.scale.linear()
+				.domain([0, max_amount/3, max_amount ])
+				.range(['#FAEDD9', '#808F12', '#2A5C0B'])
 
-		by_country.each (row) ->
-			if this_country = App.layers[row["recipient_iso2"]]
-				this_country.setStyle({color: country_color(row["usd_2009"])})
-	})
+			by_country.each (row) ->
+				if this_country = App.layers[row["recipient_iso2"]]
+					this_country.setStyle({color: country_color(row["usd_2009"])})
+		})

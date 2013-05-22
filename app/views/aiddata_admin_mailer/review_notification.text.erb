@@ -1,11 +1,21 @@
-NEW FILE:
+PENDING USER CONTENT 
 ============================
 
-A user has submitted content which must be reviewed
+A pending <%= @review.ar_model %>
+was just <%= @handled %> 
+<%# current_user ? current_user.email : "an anonymous user"%>.
 
-See the content
-<%# link_to host: Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>
-<%= review_entry_url(@review) %>
+<% if not @was_approved.nil? %>
+(Since this item was handled, it's no longer available at china.aiddata.org/review_entries)
+
+Here's a data dump of the item:
+<%= @review.serialized_item %>
+
+<% else %>
+  See the content
+  <%# link_to host: Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>
+  <%= review_entry_url(@review) %>
+<% end %>
 
 You received this email because you are an AidData admin at 
 <%= Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>.

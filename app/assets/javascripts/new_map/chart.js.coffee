@@ -23,15 +23,17 @@ App.display_country = (country_name) ->
 
 	App.this_country_data.by_year = App.this_country_data.aggregate.groupBy("year", ["usd_2009"])
 	App.this_country_data.aggregate_json = App.this_country_data.by_year.toJSON()
-
+	
+	top_projects_target = $('#project_rows')
+	top_projects_target.html('')
+	
 	App.this_country_data.projects.fetch({
 		error: () -> console.log "Couldn't get top projects"
 		success: () ->
 			top_projects = this.toJSON()
 			console.log top_projects
 
-			top_projects_target = $('#project_rows')
-			top_projects_target.html('')
+
 			( top_projects_target.append(
 					_.template(
 						$("#project_template").html()
