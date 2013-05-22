@@ -6,6 +6,8 @@ class Flag < ActiveRecord::Base
   after_destroy :touch_project
   after_save :touch_project
 
+  validates_presence_of :flaggable_type
+
   belongs_to :flag_type
   belongs_to :flaggable, polymorphic: true
   belongs_to :owner, class_name: User

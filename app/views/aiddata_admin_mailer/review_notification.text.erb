@@ -1,0 +1,14 @@
+NEW FILE:
+============================
+
+A user has submitted content which must be reviewed
+
+See the content
+<%# link_to host: Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>
+<%= review_entry_url(@review) %>
+
+You received this email because you are an AidData admin at 
+<%= Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>.
+Contact rmosolgo@aiddata.org to unsubscribe.
+
+============================

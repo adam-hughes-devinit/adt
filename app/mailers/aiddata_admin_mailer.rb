@@ -1,14 +1,16 @@
 include ApplicationHelper
 
 class AiddataAdminMailer < ActionMailer::Base
-  default from: "rmosolgo@aiddata.org"
-  default to: "china@aiddata.org"
+  default from: ENV['admin_mailer']
+  default to: ENV['admin_mail_receiver']
+  
+  def mail_logger
+    @@mail_logger ||= Logger.new("#{Rails.root}/log/mail.log")
+  end
 
   def comment_notification(comment)
     @comment = comment
-    if Rails.env.production?
-      mail subject: "New Comment on Project #{@comment.project.id}"
-    end
+    mail subject: "New Comment on Project #{@comment.project.id}"
   end
 
   def flag_notification(flag)
@@ -19,17 +21,20 @@ class AiddataAdminMailer < ActionMailer::Base
       proj_id = @flag.flaggable_id
     end
     @flag = flag
-    if Rails.env.production?
-      mail subject: "New Flag on Project #{proj_id}"
-    end
+    mail subject: "New Flag on Project #{proj_id}"
+    mail_logger.info ENV['admin_mailer']      
+    mail_logger.info ENV['admin_mail_receiver']
+
   end
 
   def file_notification(project)
     @project = project
-    if true #Rails.env.production?
-      mail subject: "New file on Project #{@project.id}"
-    end
+    mail subject: "New file on Project #{@project.id}"
   end
 
+  def review_notification(review_item)
+    @review = review_item
+    mail subject: "New Review Item"
+  end
 
 end

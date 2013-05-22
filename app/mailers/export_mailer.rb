@@ -3,7 +3,7 @@ include AmazonHelper
 require 'fileutils'
 
 class ExportMailer < ActionMailer::Base
-  default from: "Adamparkerfrey@gmail.com"
+  default from: ENV['admin_mailer']
 
   def export_request(export, email)
     # open up a file on the filesystem and write the export to that file

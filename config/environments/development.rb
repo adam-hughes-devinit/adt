@@ -42,6 +42,9 @@ Adt::Application.configure do
     :host => "localhost",
     :port => 3000
   }
+
+  #logger
+  require "debug_log"
 end
 
 # Mailer settings removed

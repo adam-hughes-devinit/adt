@@ -9,6 +9,7 @@ class ReviewEntry < ActiveRecord::Base
     @review = ReviewEntry.new(serialized_item: att_hash.to_yaml,
                               ar_model:        review_item.class.name)
     @review.save!
+    AiddataAdminMailer.delay.review_notification(@review)
   end
 
   def item

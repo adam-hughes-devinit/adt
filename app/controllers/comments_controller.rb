@@ -4,15 +4,16 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
 	def create
 		@comment = Comment.new(params[:comment])
-    if not current_user
+    if (not current_user) && @comment.valid?
       ReviewEntry.add_item(@comment)
       flash[:success] = "Thanks for your contribution! Your comment will be reviewed before being posted."
 
-    elsif @comment.save!
+    elsif @comment.save
       AiddataAdminMailer.delay.comment_notification(@comment)
       flash[:success] = "Thanks for your contribution! Your comment has been added."
     else
-      flash[:notice] = "Sorry -- that operation failed, please try again."
+      DBG.info "sorry"
+      flash[:error] = "Sorry -- that operation failed, please try again."
     end
     ProjectSweeper.instance.expire_cache_for(@comment) 
     # Otherwise the user won't see the flash -- it would be served straight from cache!
@@ -39,7 +40,5 @@ cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 		@project = Project.find(@comment.project_id)
 		redirect_to @project
 	end
-
-
 
 end
