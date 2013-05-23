@@ -15,7 +15,7 @@ class ReviewEntriesController < ApplicationController
   end
 
   def show
-    @review_entry = ReviewEntry.find(params[:id])
+    @content = ReviewEntry.find(params[:id])
   end
 
   def destroy
@@ -30,7 +30,7 @@ class ReviewEntriesController < ApplicationController
       was_approved = false
     end
     #TODO add delay
-    DBG.info AiddataAdminMailer.review_notification(@review_entry.dup, was_approved).deliver
+    AiddataAdminMailer.review_notification(@review_entry.dup, was_approved).deliver
     
     @review_entry.destroy
     render :json => true
