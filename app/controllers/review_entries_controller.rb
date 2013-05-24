@@ -25,7 +25,14 @@ class ReviewEntriesController < ApplicationController
     if was_approved
       was_approved = true
       @item = @review_entry.item
-      @item.save
+      if @item.valid?
+        @item.save
+      else
+        #invalid item. Can't be saved
+        flash[:error] = "Item can not be approved as is. Please contact China.aiddata.org admin."
+        redirect_to review_entries_path
+        return
+      end
     else
       was_approved = false
     end
