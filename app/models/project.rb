@@ -89,7 +89,7 @@ class Project < ActiveRecord::Base
     current_hash = full_hash
     current_hash.each_pair do |key, current_value|
       #unrelevant details
-      next if key == 'updated_at' || key == 'iteration'
+      next if key == 'updated_at' || key == 'iteration' || key == 'exports'
       if current_value != last_hash[key]
         changes_hash[key] = [last_hash[key], current_value]
       end
