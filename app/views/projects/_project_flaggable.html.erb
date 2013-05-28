@@ -22,40 +22,29 @@
 			 		else
 			 			"info"
 			 		end
-			 	} flag-link flag-link-#{ft.name}'> " +
+			 	} flag-link' data-flag-type-name=\'#{ft.name}\' data-flag-type-id=\'#{ft.id}\'> " +
 			 	"#{ft.name}</a> " 
 			}.join("  ").html_safe %> \
 			  </span>")
 		
-
-		
-		<%= FlagType.all.map { |ft| "$('.flag-link-#{ft.name}').popover(
-				{
-					placement: 'top',
-					title: '<span style=\\'color:#{ft.color};\\'>#{ft.name}</span>', 
-					trigger: 'manual',
-					html: true, 
-					content: '#{render(
-						partial: 'project_flag_form',
-						 locals: {flag_type: ft.name, flag_type_id: ft.id}).gsub(/\n/, ' ')
-					}'});"
-			}.join(" 
-		").html_safe %>
-		
 		$('.flag-link')
 			.click(function(link) {
 				link.preventDefault()
-				$('.flag-link').popover('hide')
-				$(this).popover('show')
+				flag = {}
+				flag.flag_type_id = $(this).attr("data-flag-type-id")
+				flag.flag_type_name = $(this).attr("data-flag-type-name")
+				flag_target = $(this).parent().parent()
+				flag.flaggable_type = flag_target.attr("flaggable_type")
+				flag.flaggable_id = flag_target.attr("flaggable_id")
+				flag.label_class = flag.flag_type_name=='Confirm' ? 'success' : (flag.flag_type_name == 'Challenge' ? 'error' : "" )
+				flag.container_id = flag.flag_type_id + "-" + flag.flaggable_id + "-" + flag.flaggable_type
 
-				$(".flag-popover").append('<input id="flag_flaggable_id" name="flag[flaggable_id]" size="10" type="hidden" value="'+$(this).parent().parent().attr('flaggable_id')+'">' +
-					'<input id="flag_flaggable_type" name="flag[flaggable_type]" size="10" type="hidden" value="'+$(this).parent().parent().attr('flaggable_type')+'">'
-					)
+				modal_html = _.template($("#flag-form-template").html(), flag).replace(/CONTAINER_ID/, flag.container_id) // Was having trouble escaping the ID attribute from HAML
+				$('body').append(modal_html)
+				console.log("modal", flag)
+				$("#" + flag.container_id).modal('show')
 
-				$(".cancel_flag").click(function(link) {
-					link.preventDefault()
-					$(".flag-link").popover("hide")
-				})
+
 			})
 	
 		$('.flaggable')

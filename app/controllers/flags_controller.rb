@@ -9,6 +9,12 @@ class FlagsController < ApplicationController
   end
 
   def create
+    # A chill hack to try to prevent spam...
+    unless params[:definitely_came_from_web_form]
+      flash[:error] = "Sorry -- you have to use the web form to submit flags!"
+      redirect_to :back
+    end
+
     @flag = Flag.new(params[:flag])
     if not current_user && @flag.valid?
       p "Making review entry"
