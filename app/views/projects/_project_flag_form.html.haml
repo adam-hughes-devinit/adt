@@ -16,11 +16,15 @@
 				%input{name: "flag[owner_id]", type: "hidden", value: "#{ signed_in? ? current_user.id : nil }"}
 				- if current_user.nil?
 					%p
-						You are not currently signed in. Flags from non-signed in users must
-						first be reviewed before being posted. Consider
-						= link_to("signing in.", signin_path) 
+						Unless you 
+						= link_to("sign in", signin_path) + ","
+						your flag will be
+						%strong
+							reviewed 
+						before being posted.
+						
 				%input{name: "flag[source]", placeholder: "Source URL"}
 				%textarea{name: "flag[comment]", placeholder: "Your message...", rows: 2}
 				%input.btn.btn-primary{type: "submit", value: "Submit"}
 		.modal-footer
-			%button.close{type: "button", "data-dismiss" => "modal"} Cancel
+			%button.close{type: "button", "data-dismiss" => "modal"} &times;
