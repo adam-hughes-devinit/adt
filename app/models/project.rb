@@ -34,7 +34,13 @@ class Project < ActiveRecord::Base
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
-  default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
+  # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
+  scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
+  
+  def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
+    ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
+  end
+ 
 
   def project_logger
     @@project_logger ||= Logger.new("#{Rails.root}/log/project.log")
@@ -517,9 +523,6 @@ class Project < ActiveRecord::Base
     self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
   end
 
-  def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
-    ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
-  end
 
 
   searchable do 
@@ -682,7 +685,7 @@ class Project < ActiveRecord::Base
   def set_owner_to_aiddata_if_null
     self.owner = Organization.find_by_name("AidData") if owner.blank?
   end
-  
+
   def update_geocodes
     #
     # Needs validation

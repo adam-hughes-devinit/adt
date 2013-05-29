@@ -1,5 +1,3 @@
-
-  
   FACETS = [
       {sym: :flow_type_name, name: "Flow Type"},
       {sym: :oda_like_name, name: "Flow Class"},

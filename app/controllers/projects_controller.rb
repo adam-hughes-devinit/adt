@@ -25,25 +25,17 @@ include SearchHelper
           # wipe it in ProjectSweeper!
           p "---------------- STARTING CACHE -------------------------"
           facets = (WORKFLOW_FACETS + FACETS)
-          
           all_projects = Project.search do
             facets.each do |f|
               facet f[:sym]
             end
           end
-         
-          facet_counts = {}
-          
+          facet_counts = {}          
           facets.each do |f|
             facet_values = all_projects.facet(f[:sym]).rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
-
             facet_counts[f[:sym]] = facet_values
-
           end
-
-
-          p facet_counts
-
+          facet_counts
         end 
 
         render html: @projects
@@ -59,10 +51,6 @@ include SearchHelper
         else
           @paginate = false
         end
-
-        # Fer troubleshooting
-        # flash[:warning] = "#{YAML::dump params}"
-        # redirect_to projects_path
 
    			projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
