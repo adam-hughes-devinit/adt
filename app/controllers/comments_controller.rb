@@ -3,22 +3,28 @@ skip_before_filter :signed_in_user, only: [:create]
 cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
 	def create
+		
+	    unless params[:definitely_came_from_web_form]
+	      flash[:error] = "Sorry -- you have to use the web form to submit flags!"
+	      redirect_to :back
+	    end
+	    
 		@comment = Comment.new(params[:comment])
-    if (not current_user) && @comment.valid?
-      ReviewEntry.add_item(@comment)
-      flash[:success] = "Thanks for your contribution! Your comment will be reviewed before being posted."
+	    if (not current_user) && @comment.valid?
+	      ReviewEntry.add_item(@comment)
+	      flash[:success] = "Thanks for your contribution! Your comment will be reviewed before being posted."
 
-    elsif @comment.save
-      AiddataAdminMailer.delay.comment_notification(@comment)
-      flash[:success] = "Thanks for your contribution! Your comment has been added."
-    else
-      DBG.info "sorry"
-      flash[:error] = "Sorry -- that operation failed, please try again."
-    end
-    ProjectSweeper.instance.expire_cache_for(@comment) 
-    # Otherwise the user won't see the flash -- it would be served straight from cache!
+	    elsif @comment.save
+	      AiddataAdminMailer.delay.comment_notification(@comment)
+	      flash[:success] = "Thanks for your contribution! Your comment has been added."
+	    else
+	      DBG.info "sorry"
+	      flash[:error] = "Sorry -- that operation failed, please try again."
+	    end
+	    ProjectSweeper.instance.expire_cache_for(@comment) 
+	    # Otherwise the user won't see the flash -- it would be served straight from cache!
 
-    redirect_to :back
+	    redirect_to :back
 		
 	end
 
