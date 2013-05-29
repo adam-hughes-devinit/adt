@@ -15,24 +15,13 @@
   background-color: #eee;
 }
 .flag-links {
-	visibility:hidden;
-	cursor:default;
-  //display:block;
-	//float:right;
 	margin: 0px 0px 0px 0px;
 }
 
-.flag-links-hover {
-	visibility:visible;
-	cursor:pointer;
-}
-
-.flag-reference {
-
-}
 .flag-ul, .flag-detail-ul {
 	list-style:none;
 	}
+  
 .flag-detail-ul {
   margin: 2px 2px 10px 20px;
   padding: 2px 2px 2px 16px;

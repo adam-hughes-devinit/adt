@@ -11,7 +11,7 @@
 		})
 
 
-		$('.flaggable').append("<span class='flag-links pull-right'> \
+		$('.flaggable').append("<span class='flag-links hidden-desktop pull-right'> \
 			 <%= FlagType.all.map { |ft|  
 			 	"<a href='#' " + 
 			 	"class='btn-small btn-#{
@@ -22,7 +22,7 @@
 			 		else
 			 			"info"
 			 		end
-			 	} flag-link' data-flag-type-name=\'#{ft.name}\' data-flag-type-id=\'#{ft.id}\'> " +
+			 	} flag-link ' data-flag-type-name=\'#{ft.name}\' data-flag-type-id=\'#{ft.id}\'> " +
 			 	"#{ft.name}</a> " 
 			}.join("  ").html_safe %> \
 			  </span>")
@@ -50,7 +50,7 @@
 		$('.flaggable')
 			.hover(function() { 
 				$(this).toggleClass('flaggable-hover')
-					.children('.flag-links').toggleClass('flag-links-hover')
+					.children('.flag-links').toggleClass('hidden-desktop')
 				})
 			//.click()
 	})
