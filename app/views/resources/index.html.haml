@@ -1,0 +1,28 @@
+
+%h1.page-header All Resources
+
+%a.btn.btn-success{href: new_resource_path }
+    New Resource
+
+%table.table.table-hover
+    %thead
+        %tr
+            %td Title
+            %td Authors
+            %td Publisher
+            %td Retrieved at
+            %td Resource type
+    %tbody
+        -  @resources.each do |resource|
+            %tr
+                %td 
+                    = link_to resource.title, resource
+                %td
+                    = resource.authors
+                %td
+                    = "#{resource.publisher || '(No publisher)'}: #{resource.publisher_location} (#{resource.publish_date || "No date"})"
+                %td
+                    = resource.dont_fetch ? "Not fetching." : resource.fetched_at
+                %td
+                    = resource.resource_type
+

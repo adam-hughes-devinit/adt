@@ -1,5 +1,4 @@
 Adt::Application.routes.draw do
-
   # codes
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
@@ -7,6 +6,8 @@ Adt::Application.routes.draw do
   :flag_types, :loan_types, :contents
   resources :exports
   resources :review_entries
+  resources :resources
+
 
   # Link from DG email
   match "/utm_*other" => redirect("/")

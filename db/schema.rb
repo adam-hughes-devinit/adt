@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130509205950) do
+ActiveRecord::Schema.define(:version => 20130530210548) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -323,6 +323,21 @@ ActiveRecord::Schema.define(:version => 20130509205950) do
     t.string  "year"
     t.string  "country"
     t.decimal "amount",  :precision => 255, :scale => 0
+  end
+
+  create_table "resources", :force => true do |t|
+    t.string   "title"
+    t.text     "authors"
+    t.string   "publisher"
+    t.date     "publish_date"
+    t.string   "publisher_location"
+    t.datetime "fetched_at"
+    t.string   "download_url"
+    t.boolean  "dont_fetch"
+    t.string   "resource_type"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "source_url"
   end
 
   create_table "review_entries", :force => true do |t|

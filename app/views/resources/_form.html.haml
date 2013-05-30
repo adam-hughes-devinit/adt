@@ -1,0 +1,32 @@
+
+.container-fluid
+  = simple_form_for(@resource) do |f|
+    = f.error_notification
+
+    .row-fluid
+      .span3
+        = f.input :title, placeholder: "Name of article, report or other document"
+      .span3
+        = f.input :authors, as: :string, placeholder: "Authors' names, A-Z order"
+      .span3
+        = f.input :source_url, placeholder: "Where did you find this?"
+      .span3
+        = f.input :resource_type, as: :radio_buttons, collection: Resource.resource_types
+    .row-fluid
+      .span3
+        = f.input :publisher, placeholder: "Who supports this publication?"
+      .span3.row-fluid
+        = f.input :publish_date, as: :date, start_year: 1980, end_year: Date.today.year + 5, input_html: {class: "span4"}
+      .span3
+        = f.input :publisher_location, placeholder: "Where is the publisher headquartered?"
+      .span3
+        = f.input :dont_fetch, label: "Don't fetch this resource", hint: "By default, we'll save a copy of this."
+    .row-fluid
+      %hr
+    .row-fluid
+      .span2
+        = f.button :submit, class: "btn btn-success"
+      .span2
+        = link_to "Cancel", resources_path, class: "btn btn-danger"
+
+
