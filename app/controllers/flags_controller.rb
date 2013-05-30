@@ -10,8 +10,8 @@ class FlagsController < ApplicationController
 
   def create
     # A chill hack to try to prevent spam...
-    unless params[:definitely_came_from_web_form]
-      flash[:error] = "Sorry -- you have to use the web form to submit flags!"
+    unless params[:definitely_came_from_web_form] && params[:flag][:flaggable_id]
+      flash[:error] = "Please use the web form to submit flags!"
     else
       @flag = Flag.new(params[:flag])
       if not current_user && @flag.valid?
@@ -23,7 +23,7 @@ class FlagsController < ApplicationController
         AiddataAdminMailer.delay.flag_notification(@flag)
         flash[:success] = "Thanks for your contribution! Your flag was added."
       else
-        flash[:message] = "Sorry -- this operation failed. please try again."
+        flash[:message] = "Sorry - your flag wasn't saved. Please try again!"
       end
       p "flash: #{flash.inspect}"
       ProjectSweeper.instance.expire_cache_for(@flag) 
