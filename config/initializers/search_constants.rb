@@ -6,7 +6,8 @@
       {sym: :is_commercial_string, name: "", description: "Is the project commercial?"}, #"Commercial Status"
       {sym: :active_string, name: "Active/Inactive", description: "Inactive records should not be used for analysis."},
       {sym: :country_name, name: "Recipient", multiple: true},
-      {sym: :source_type_name, name: "Source Type", multiple: true},
+      {sym: :source_type_name, name: "", multiple: true},
+      {sym: :search_engine_type_name, name: "Search Engine Type", multiple: true, description: "How did we find this source?"},
       {sym: :document_type_name, name: "Document Type", multiple: true},
       {sym: :origin_name, name: "Organization Origin", multiple: true},
       {sym: :role_name, name: "Organization Role", multiple: true},

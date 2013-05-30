@@ -491,6 +491,11 @@ class Project < ActiveRecord::Base
     s = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
   end
 
+  def search_engine_type_name
+    # alias for search interface & URLs
+    source_type_name
+  end
+
   has_many :participating_organizations, dependent: :destroy
   accepts_nested_attributes_for :participating_organizations, allow_destroy: true, :reject_if => proc { |a| a['organization_id'].blank? }
   def origin_name
