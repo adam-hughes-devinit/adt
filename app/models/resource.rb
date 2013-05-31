@@ -1,14 +1,17 @@
 class Resource < ActiveRecord::Base
 	attr_accessible :authors, :dont_fetch, :download_url, 
 	:fetched_at, :publish_date, :publisher, 
-	:publisher_location, :resource_type, :title, :source_url
+	:publisher_location, :resource_type, :title, :source_url,
+	:project_ids
 
 	validates_uniqueness_of :source_url
 	validates_presence_of :source_url, :title, :authors
 	RESOURCE_TYPES = ["Journal Article", "News Report"]
 	validates_inclusion_of :resource_type, in: RESOURCE_TYPES
 
-	before_save :fetch!
+	after_save :fetch!
+
+	has_and_belongs_to_many :projects
 
 	def self.resource_types
 		RESOURCE_TYPES

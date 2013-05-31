@@ -1,0 +1,69 @@
+- provide :title, @resource.title
+.row-fluid
+	%h1.page-header
+		= @resource.title
+.row-fluid
+	.span6.container-fluid
+		.row-fluid
+			.span6
+				%h4 
+					About:
+				%ul.unstyled
+					%li
+						%strong
+							Authors:
+						= @resource.authors
+					%li
+						%strong
+							Source URL:
+						= link_to @resource.source_url, (@resource.source_url[0..6] == "http://" ? "" : "http://") + @resource.source_url
+			.span6
+				%h4 
+					Publisher:
+				%ul.unstyled
+					%li
+						%strong
+							Publisher:
+						= @resource.publisher + ","
+						%em
+							= @resource.publisher_location
+					%li
+						%strong
+							Publish Date:
+						= @resource.publish_date
+		
+		
+		%hr
+
+		
+		%h4.text-info 
+			Download this Resource:
+
+		.row-fluid
+			.span5
+				%strong
+					Last stored:
+				= time_ago_in_words @resource.fetched_at
+				ago.
+			.span4
+				- if @resource.download_url.present? && @resource.download_url[0..6] == 'http://'
+					%strong
+						= link_to "Click here", @resource.download_url
+				- else
+					%em
+						No link!
+
+
+	.span4
+		.well.well-small
+			%h4 
+				Pinned to 
+				= pluralize(@resource.projects.count, "project") + ":"
+			%ol
+				- @resource.projects.each do |p|
+					%li
+						= link_to "#{p.to_english} (#{p.id})".html_safe, p, target: "_blank"
+
+
+
+

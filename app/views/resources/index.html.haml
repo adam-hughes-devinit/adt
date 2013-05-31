@@ -12,6 +12,7 @@
             %td Publisher
             %td Retrieved at
             %td Resource type
+            %td # Linked Projects
     %tbody
         -  @resources.each do |resource|
             %tr
@@ -25,4 +26,6 @@
                     = resource.dont_fetch ? "Not fetching." : resource.fetched_at
                 %td
                     = resource.resource_type
+                %td
+                    = resource.projects.length
 
