@@ -33,6 +33,7 @@
 
 #And rvmrc files
 .rvmrc
+.rbenv-version
 
 # Ignore sql dumps
 /*.sql
