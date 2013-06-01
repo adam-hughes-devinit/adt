@@ -3,17 +3,10 @@ class Transaction < ActiveRecord::Base
   attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, 
   :usd_current, :deflator_used, :exchange_rate, :deflated_at, :deflator, :created_at, :updated_at
   before_save :deflate_and_round_value
+  include ProjectAccessory
 
-
-  has_paper_trail
-  
- 
   belongs_to :currency
-  belongs_to :project, touch: :updated_at
   
-  has_many :flags, as: :flaggable, dependent: :destroy
-  accepts_nested_attributes_for :flags
-
 	def deflate_and_round_value
       if self.project && self.project.year && self.project.donor
         donor_iso3 = self.project.donor.iso3

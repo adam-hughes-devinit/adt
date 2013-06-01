@@ -150,54 +150,31 @@ class Project < ActiveRecord::Base
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
-  belongs_to :status
-  def status_name
-    status.present?  ? status.name : 'Unset'
+  CODES = [:status, :verified, :tied, :intent, :crs_sector, :sector]
+  CODES.each do |c|
+    belongs_to c
+    define_method "#{c}_name" do
+      this_code = self.send(c)
+      this_code.present? ? this_code.name : "Unset"
+    end
   end
 
-  belongs_to :verified
-  def verified_name
-    verified.present? ? verified.name : 'Unset'
-  end
-
-  belongs_to :tied
-  def tied_name
-    tied.present? ? tied.name : 'Unset'
-  end
-
-  belongs_to :intent
-  def intent_name
-    intent.present? ? intent.name : 'Unset'
+  # This is really the only one where the code also matters.
+  def crs_sector_code
+    crs_sector ? crs_sector.code : nil
   end
 
   belongs_to :flow_type
   def flow_type_name
-    unless flow_type.nil?
-      flow_type.name
-    else
-      "Unset"
-    end
+    flow_type.present? ? flow_type.name : "Unset"
   end
 
   # 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
   #
   # Replacing oda_like with a double-code + arbitrated FlowClass
 
-  # OLD:
-  #belongs_to :oda_like
-
-  def old_oda_like
-    if oda_like_id
-      OdaLike.find(oda_like_id)
-    end
-  end
-
   def oda_like_name
-    unless oda_like.nil?
-      oda_like.name
-    else
-      "Unset"
-    end
+    oda_like.present? ? oda_like.name : "Unset"
   end 
 
   # NEW:
@@ -299,15 +276,15 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def interest_rate
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.interest_rate
-    end
-  end
+  delegate  :grant_element, 
+            :grace_period, 
+            :maturity, 
+            :interest_rate,
+      to: :loan_detail, 
+      allow_nil: true
 
 
+  # could I metaprogram these _band methods in a graceful way?
   def interest_rate_band
     # don't use "%" -- it screws up the search URLs
     if (!loan_detail.nil?) && (m = loan_detail.interest_rate)
@@ -321,13 +298,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def maturity
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.maturity
-    end
-  end
+
 
   def maturity_band
     if (!loan_detail.nil?) && (m = loan_detail.maturity)
@@ -345,14 +316,6 @@ class Project < ActiveRecord::Base
   end
         
 
-  def grace_period
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.grace_period
-    end
-  end
-
   def grace_period_band
     if (!loan_detail.nil?) && (m = loan_detail.grace_period)
       if m <= 5
@@ -367,14 +330,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def grant_element
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.grant_element
-    end
-  end
-  
   def grant_element_band
     if (!loan_detail.nil?) && (m = loan_detail.grant_element)
       if m < 25
@@ -395,34 +350,14 @@ class Project < ActiveRecord::Base
   #  End restructuring
   #
 
-  # Deprecated in favor of CrsSectors
-  belongs_to :sector
-  def sector_name
-    unless sector.nil?  
-      sector.name
-    else
-      "Unset"
-    end 
-  end
 
-  belongs_to :crs_sector
-  def crs_sector_name
-    crs_sector ? crs_sector.name : nil
-  end
 
-  def crs_sector_code
-    crs_sector ? crs_sector.code : nil
-  end
 
   belongs_to :donor, class_name: "Country"
-  def donor_name 
-    donor ? donor.name : nil
-  end
+  delegate :name, to: :donor, allow_nil: true, prefix: true
 
   belongs_to :owner, class_name: "Organization"
-  def owner_name
-    owner ? owner.name : nil
-  end
+  delegate :name, to: :owner, allow_nil: true, prefix: true
 
   # for filtering
   def active_string 
@@ -657,16 +592,16 @@ class Project < ActiveRecord::Base
         {participating_organizations: {only: [], include: [{origin: {only: [:name]}}, {organization: {only: [:name, :organization_type]}}, {role: {only: [:name]}}]}}
     ]) 
   end
-
-  def history
-    [self.versions \
-      + self.transactions.map(&:versions) \
-      + self.sources.map(&:versions) \
-      + self.contacts.map(&:versions) \
-      + self.comments.map(&:versions) \
-      + self.participating_organizations.map(&:versions) \
-      + self.geopoliticals.map(&:versions)].flatten
-  end
+  # I'll leave this here just in case.
+  # def history
+  #   [self.versions \
+  #     + self.transactions.map(&:versions) \
+  #     + self.sources.map(&:versions) \
+  #     + self.contacts.map(&:versions) \
+  #     + self.comments.map(&:versions) \
+  #     + self.participating_organizations.map(&:versions) \
+  #     + self.geopoliticals.map(&:versions)].flatten
+  # end
 
   def all_flags
     [
@@ -691,44 +626,4 @@ class Project < ActiveRecord::Base
     self.owner = Organization.find_by_name("AidData") if owner.blank?
   end
 
-  def update_geocodes
-    #
-    # Needs validation
-    #
-    # require 'open-uri'
-    # this_projects_geocodes_url= URI.encode("https://services1.arcgis.com/" +
-    # "4AWkjqgSzd8pqxQA/arcgis/rest/services/all_cdf_africa_geo/FeatureServer/" +
-    # "query?f=json&layerDefs={'0':'Project_ID=#{id}'}")
-    # p response = JSON.parse(open(this_projects_geocodes_url){|io| io.read})
-
-
-    # codes = response["layers"][0]["features"]
-    # if ! codes.blank?
-    #   codes.map{|f|
-    #     {
-    #       latitude: "#{f["Latitude"]}",
-    #       longitude: "#{f["Longitude"]}",
-    #       geoname: "#{f["Geoname"]}",
-    #       geoname_id: "#{f["Geoname_id"]}",
-    #       adm1: "#{f["ADM1"]}",
-    #       adm2: "#{f["ADM2"]}",
-    #       adm3: "#{f["ADM3"]}",
-    #       adm4: "#{f["ADM4"]}",
-    #       adm5: "#{f["ADM5"]}",
-    #       adm1_id: "#{f["ADM1_ID"]}",
-    #       adm2_id: "#{f["ADM2_ID"]}",
-    #       adm3_id: "#{f["ADM3_ID"]}",
-    #       adm4_id: "#{f["ADM4_ID"]}",
-    #       adm5_id: "#{f["ADM5_ID"]}",
-    #       precision: "#{f["Precision"]}", 
-    #       timestamp: "#{f["Timestamp"]}", 
-    #       source: "#{f["Source"]}",
-    #       source_url: "#{f["sourceURL"]}", 
-    #       fid: "#{f["FID"]}",
-    #     }
-    #   }
-    # end
-
-    "not implemented"
-  end
 end

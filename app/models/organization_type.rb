@@ -6,6 +6,8 @@ class OrganizationType < ActiveRecord::Base
 
   has_many :organizations
   
+  # Stub this method out
+  # so that I can still use the default view
   def projects
   	[]
   end
