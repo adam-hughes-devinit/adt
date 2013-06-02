@@ -3,7 +3,9 @@ class Organization < ActiveRecord::Base
   include OrganizationsHelper
   include IndexAndCacheHelper
 
-  attr_accessible :description, :name, :organization_type_id, :organization_type
+  attr_accessible :description, :name, 
+  :organization_type_id, :organization_type
+
   has_paper_trail
   default_scope order: "name"
   after_save :destroy_organizations_hash
@@ -36,6 +38,8 @@ class Organization < ActiveRecord::Base
 
 
   belongs_to :organization_type
+  delegate :name, to: :organization_type, allow_nil: true, prefix: true
+  
   has_many :participating_organizations
   has_many :origins, through: :participating_organizations
   has_many :projects, through: :participating_organizations

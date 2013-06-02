@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   include ProjectCache
+  include ProjectSearch
   include ProjectExporters
   extend  ProjectExporterHeaders
   include ActionView::Helpers::NumberHelper
@@ -150,7 +151,7 @@ class Project < ActiveRecord::Base
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
-  CODES = [:status, :verified, :tied, :intent, :crs_sector, :sector]
+  CODES = %i{status verified intent crs_sector sector}
   CODES.each do |c|
     belongs_to c
     define_method "#{c}_name" do
@@ -408,7 +409,7 @@ class Project < ActiveRecord::Base
   end
   def currency_name
     transactions.map do |t| 
-      t.currency ? t.currency.name : 'Unset'
+     t.currency_name || 'Unset'
     end
   end
 
@@ -419,11 +420,11 @@ class Project < ActiveRecord::Base
   has_many :sources, dependent: :destroy
   accepts_nested_attributes_for :sources, allow_destroy: true, :reject_if => proc { |a| a['url'].blank? }
   def document_type_name
-    d = sources.map {|s| s.document_type.present? ? s.document_type.name : 'Unset'}
+    d = sources.map {|s| s.document_type_name || 'Unset'}
   end
 
   def source_type_name
-    s = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
+    s = sources.map {|s| s.source_type_name || 'Unset'}
   end
 
   def search_engine_type_name
@@ -434,19 +435,19 @@ class Project < ActiveRecord::Base
   has_many :participating_organizations, dependent: :destroy
   accepts_nested_attributes_for :participating_organizations, allow_destroy: true, :reject_if => proc { |a| a['organization_id'].blank? }
   def origin_name
-    participating_organizations.map {|p| p.origin.present? ? p.origin.name : 'Unset'}
+    participating_organizations.map {|p| p.origin_name || 'Unset'}
   end
 
   def organization_type_name
-    participating_organizations.map {|p| p.organization.present? && p.organization.organization_type.present? ? p.organization.organization_type.name : 'Unset'}
+    participating_organizations.map {|p|  p.organization_type_name || 'Unset'}
   end
 
   def role_name
-    participating_organizations.map {|p| p.role.present? ? p.role.name : 'Unset'}
+    participating_organizations.map {|p|  p.role_name || 'Unset'}
   end
 
   def organization_name
-    participating_organizations.map { |p| p.organization.present? ? p.organization.name : 'Unset'}
+    participating_organizations.map { |p|  p.organization_name || 'Unset'}
   end
 
   # These used to be done inside the search block, now that FACETS are integrated, 
@@ -460,7 +461,7 @@ class Project < ActiveRecord::Base
   end
 
   def recipient_iso2
-    self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
+    self.geopoliticals.map { |g| g.recipient_iso2 || "Unset" }
   end
 
 
@@ -491,25 +492,25 @@ class Project < ActiveRecord::Base
       geopoliticals.map do |g| 
         if g
           ["#{g.subnational}",
-            "#{g.recipient ? g.recipient.name : ''}",
-            "#{g.recipient ? g.recipient.iso3 : '' }"]
+            "#{g.recipient_name }",
+            "#{g.recipient_iso3 }"]
         end
       end
     end
 
     text :participating_organizations do
       participating_organizations.map do |o| 
-        ["#{o.organization ? o.organization.name : '' }",
-          "#{o.role ?  o.role.name : ''}",
-          "#{o.organization && o.organization.organization_type ? o.organization.organization_type.name : ''}"] 
+        ["#{o.organization_name }",
+          "#{o.role_name }",
+          "#{o.organization_type_name}"] 
       end
     end
 
     text :sources do
       sources.map do |s| 
         ["#{s.url}",
-          "#{s.source_type  ? s.source_type.name : ''}",
-          "#{s.document_type ? s.document_type.name  : ''}",
+          "#{s.source_type_name}",
+          "#{s.document_type_name}",
           "#{s.date ? s.date.strftime('%d %B %Y') : ''}",
           "#{s.url.split(/\.|\/|\+|\%20|_/)}"]
       end
@@ -517,7 +518,7 @@ class Project < ActiveRecord::Base
 
     text :transactions do
       transactions.map do |t| 
-        ["#{t.currency ? t.currency.name +  ' '+ t.currency.iso3 : ''}",
+        ["#{t.currency_name}",
           "#{t.value}"]
       end
     end
@@ -526,7 +527,7 @@ class Project < ActiveRecord::Base
       contacts.map do |c| 
         ["#{c.name}",
           "#{c.position}",
-          "#{c.organization ? c.organization.name : ''}"]
+          "#{c.organization_name}"]
       end
     end
  
@@ -563,7 +564,7 @@ class Project < ActiveRecord::Base
     end
     scope_array
   end
-  #test_scope should be a symbol. Check the SCOPE constant for possibilites
+  #test_scope should be a symbol. 
   def contains_scope?(test_scope)
     scope_array = scope
     if scope_array.include?(test_scope)

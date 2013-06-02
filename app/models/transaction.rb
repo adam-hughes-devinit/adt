@@ -6,6 +6,7 @@ class Transaction < ActiveRecord::Base
   include ProjectAccessory
 
   belongs_to :currency
+  delegate :name, to: :currency, allow_nil: true, prefix: true
   
 	def deflate_and_round_value
       if self.project && self.project.year && self.project.donor
@@ -17,10 +18,8 @@ class Transaction < ActiveRecord::Base
             deflator_query = "#{self.value.to_s}#{self.currency.iso3}#{yr}#{donor_iso3}" # This is defined at oscar.itpir.wm.edu/deflate
             deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
             deflator_string = open(deflator_url){|io| io.read}
-            # p "JSON Response: #{deflator_string}"
             
             deflator_object = ActiveSupport::JSON.decode(deflator_string)
-            # p "Parsed JSON: #{deflator_object.inspect}"
            
             # This is me being lazy because there might be an error
             begin  
@@ -54,7 +53,6 @@ class Transaction < ActiveRecord::Base
                 self.exchange_rate=nil
                 self.deflated_at=nil
           end
-          # p "TRANSACTION: #{self.inspect}"
       end
    end
    
