@@ -201,7 +201,7 @@ include SearchHelper
     flash[:notice] = "Project deleted! #{undo_link}"
   end
 
-  def suggest
+  def suggest 
     if request.post?
       @project = Project.new(params[:project])
 

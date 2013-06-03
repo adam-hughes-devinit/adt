@@ -7,4 +7,5 @@ module ProjectAccessory
 		accepts_nested_attributes_for :flags
 		belongs_to :project
 	end
+	
 end
