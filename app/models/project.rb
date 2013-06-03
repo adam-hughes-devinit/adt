@@ -375,16 +375,6 @@ class Project < ActiveRecord::Base
 
   has_many :sources, dependent: :destroy
   accepts_nested_attributes_for :sources, allow_destroy: true, :reject_if => proc { |a| a['url'].blank? }
-<<<<<<< HEAD
-  def document_type_name
-    d = sources.map {|s| s.document_type.present? ? s.document_type.name : 'Unset'}
-  end
-
-  def source_type_name
-    src = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
-  end
-=======
->>>>>>> 7b794f6afb16ead3ac8a4448c06cfc2fb68346c4
 
   has_many :participating_organizations, dependent: :destroy
   accepts_nested_attributes_for :participating_organizations, allow_destroy: true, :reject_if => proc { |a| a['organization_id'].blank? }
@@ -405,32 +395,6 @@ class Project < ActiveRecord::Base
 
 
 
-<<<<<<< HEAD
-    text :transactions do
-      transactions.map do |t| 
-        ["#{t.currency ? t.currency.name +  ' '+ t.currency.iso3 : ''}",
-          "#{t.value}"]
-      end
-    end
-
-    text :contacts do
-      contacts.map do |c| 
-        ["#{c.name}",
-          "#{c.position}",
-          "#{c.organization ? c.organization.name : ''}"]
-      end
-    end
-
-    # All the facets are defined in initializers/search_constants
-    (FACETS + WORKFLOW_FACETS).each do |facet|
-      string facet[:sym], multiple: (facet[:multiple] || false ) do 
-        facet[:code] || self.send(facet[:sym]) 
-      end
-    end
-
-  end
-=======
->>>>>>> 7b794f6afb16ead3ac8a4448c06cfc2fb68346c4
 
 
   def scope
