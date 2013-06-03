@@ -6,6 +6,8 @@ Adt::Application.routes.draw do
   :source_types, :document_types, :organization_types, :currencies, 
   :flag_types, :loan_types, :contents
   resources :exports
+
+  get '/review_entries/:review_entry_scope', to: 'review_entries#index', as: "scoped_review_entries"
   resources :review_entries
 
   # Link from DG email

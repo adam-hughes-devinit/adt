@@ -2,14 +2,22 @@ class ReviewEntriesController < ApplicationController
   before_filter :aiddata_only!
 
   def index
-    @review_entries = ReviewEntry.all
     @review_sections = {}
-    @review_entries.each do |r|
-      type = r.ar_model
-      if not @review_sections.include?(type)
-        @review_sections[type] = []
+
+    if %w{projects comments flags}.include? params[:review_entry_scope]   
+      this_scope = params[:review_entry_scope] 
+      @review_entries = ReviewEntry.send(this_scope)
+      @review_sections[this_scope] = []
+      @review_entries.each { |r| @review_sections[this_scope] << r }
+    else 
+      @review_entries = ReviewEntry.all 
+      @review_entries.each do |r|
+        type = r.ar_model
+        if not @review_sections.include?(type)
+          @review_sections[type] = []
+        end
+        @review_sections[type] << r
       end
-      @review_sections[type] << r
     end
 
   end

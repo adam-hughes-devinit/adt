@@ -3,7 +3,8 @@
   Pending Content
 
 - @review_sections.each do |type, entries|
-  %h2= type.pluralize
+  %h2
+    = link_to(type.pluralize.capitalize, scoped_review_entries_path(type.pluralize.downcase))
   %table{id: "#{type}", class: "table table-hover sortable"}
     - atts = entries.first.item.attributes
     %thead
@@ -12,7 +13,7 @@
         -# for the checkbox
         %th
         %th id
-        - if type == "Project"
+        - if type.downcase.singularize == "project"
           %th Title
           %th Sources
         - else 
@@ -31,7 +32,7 @@
           %td
             %input{type: "checkbox", value: "yes" }
           %td= link_to(entry.id, review_entry_path(entry))
-          - if type == "Project"
+          - if type.downcase.singularize == "project"
             %td= entry.item.title
             - url_list = ""
             - entry.item.sources.each do |src|
