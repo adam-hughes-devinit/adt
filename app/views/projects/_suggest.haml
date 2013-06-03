@@ -4,7 +4,7 @@
   #suggest
     = hidden_field_tag 'suggest', 'true'
     = f.label :title, 'Title'
-    = f.text_field :title, class: "span4"
+    = f.text_field :title, placeholder: "Suggested Project Title", class: "span4"
     %br
     = f.label :sources, 'Sources'
     %br
@@ -12,11 +12,13 @@
     value: "Add another source", onClick: "addInput('suggest')"}
     %br
     = fields_for :sources do |srcs| 
-      = srcs.text_field :url, class: "span4", placeholder: "url",
+      = srcs.text_field :url, class: "span4", placeholder: "URL",
                         name: "project[sources_attributes][][url]"
     %br
   #submit
     = f.submit class: "btn btn-primary", value: "Submit"
+    %a.btn.btn-danger{href: "/"}
+      Cancel
 
 
 :javascript
@@ -28,7 +30,7 @@
       }
       else {
             var newdiv = document.createElement('div');
-            newdiv.innerHTML = "<input id='sources_url' class='span4' type='text' placeholder='url' name='project[sources_attributes][][url]'><br>";
+            newdiv.innerHTML = "<input id='sources_url' class='span4' type='text' placeholder='URL' name='project[sources_attributes][][url]'><br>";
             document.getElementById(divName).appendChild(newdiv);
             counter++;
       }
