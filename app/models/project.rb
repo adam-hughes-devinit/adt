@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   include ProjectCache
+  include ProjectSearch
   include ProjectExporters
   extend  ProjectExporterHeaders
   include ActionView::Helpers::NumberHelper
@@ -11,7 +12,6 @@ class Project < ActiveRecord::Base
     :is_cofinanced,
     # belongs_to fields
     :status, :verified, 
-    ## :tied, :tied_id, -- removed so that it will break if it's used somewhere. 
     :flow_type, :oda_like, :sector,
     #convoluted fields
     :donor, :owner, 
@@ -30,8 +30,17 @@ class Project < ActiveRecord::Base
     :last_state
 
   before_save :set_verified_to_raw_if_null
+  before_save :set_owner_to_aiddata_if_null
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
+
+  # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
+  scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
+  
+  def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
+    ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
+  end
+ 
 
   def project_logger
     @@project_logger ||= Logger.new("#{Rails.root}/log/project.log")
@@ -141,54 +150,31 @@ class Project < ActiveRecord::Base
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
-  belongs_to :status
-  def status_name
-    status.present?  ? status.name : 'Unset'
+  CODES = %i{status verified intent crs_sector sector}
+  CODES.each do |c|
+    belongs_to c
+    define_method "#{c}_name" do
+      this_code = self.send(c)
+      this_code.present? ? this_code.name : "Unset"
+    end
   end
 
-  belongs_to :verified
-  def verified_name
-    verified.present? ? verified.name : 'Unset'
-  end
-
-  belongs_to :tied
-  def tied_name
-    tied.present? ? tied.name : 'Unset'
-  end
-
-  belongs_to :intent
-  def intent_name
-    intent.present? ? intent.name : 'Unset'
+  # This is really the only one where the code also matters.
+  def crs_sector_code
+    crs_sector ? crs_sector.code : nil
   end
 
   belongs_to :flow_type
   def flow_type_name
-    unless flow_type.nil?
-      flow_type.name
-    else
-      "Unset"
-    end
+    flow_type.present? ? flow_type.name : "Unset"
   end
 
   # 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
   #
   # Replacing oda_like with a double-code + arbitrated FlowClass
 
-  # OLD:
-  #belongs_to :oda_like
-
-  def old_oda_like
-    if oda_like_id
-      OdaLike.find(oda_like_id)
-    end
-  end
-
   def oda_like_name
-    unless oda_like.nil?
-      oda_like.name
-    else
-      "Unset"
-    end
+    oda_like.present? ? oda_like.name : "Unset"
   end 
 
   # NEW:
@@ -290,15 +276,15 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def interest_rate
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.interest_rate
-    end
-  end
+  delegate  :grant_element, 
+            :grace_period, 
+            :maturity, 
+            :interest_rate,
+      to: :loan_detail, 
+      allow_nil: true
 
 
+  # could I metaprogram these _band methods in a graceful way?
   def interest_rate_band
     # don't use "%" -- it screws up the search URLs
     if (!loan_detail.nil?) && (m = loan_detail.interest_rate)
@@ -312,13 +298,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def maturity
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.maturity
-    end
-  end
+
 
   def maturity_band
     if (!loan_detail.nil?) && (m = loan_detail.maturity)
@@ -336,14 +316,6 @@ class Project < ActiveRecord::Base
   end
 
 
-  def grace_period
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.grace_period
-    end
-  end
-
   def grace_period_band
     if (!loan_detail.nil?) && (m = loan_detail.grace_period)
       if m <= 5
@@ -355,14 +327,6 @@ class Project < ActiveRecord::Base
       end
     else
       "(None)"
-    end
-  end
-
-  def grant_element
-    if loan_detail.nil?
-      ""
-    else
-      loan_detail.grant_element
     end
   end
 
@@ -386,87 +350,24 @@ class Project < ActiveRecord::Base
   #  End restructuring
   #
 
-  # Deprecated in favor of CrsSectors
-  belongs_to :sector
-  def sector_name
-    unless sector.nil?  
-      sector.name
-    else
-      "Unset"
-    end 
-  end
 
-  belongs_to :crs_sector
-  def crs_sector_name
-    crs_sector ? crs_sector.name : nil
-  end
 
-  def crs_sector_code
-    crs_sector ? crs_sector.code : nil
-  end
 
   belongs_to :donor, class_name: "Country"
-  def donor_name 
-    donor ? donor.name : nil
-  end
+  delegate :name, to: :donor, allow_nil: true, prefix: true
 
   belongs_to :owner, class_name: "Organization"
-  def owner_name
-    owner ? owner.name : nil
-  end
+  delegate :name, to: :owner, allow_nil: true, prefix: true
 
-  # for filtering
-  def active_string 
-    active? ? 'Active' : 'Inactive'
-  end
 
-  def is_commercial_string
-    is_commercial? ? 'Commercial' : 'Not Commercial'
-  end
-
-  def year_uncertain_string
-    year_uncertain? ? "Year Uncertain" : "Year Certain"
-  end
-
-  def debt_uncertain_string
-    debt_uncertain ? "Debt Relief Uncertain" : "Not Uncertain"
-  end
-
-  def line_of_credit_string
-    line_of_credit ? "Line of Credit" : "Not Line of Credit"
-  end
-
-  def is_cofinanced_string
-    is_cofinanced ? "Cofinanced" : "Not Cofinanced"
-  end
 
   # project accessories
   has_many :geopoliticals, dependent: :destroy
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
-  def country_name
-    geopoliticals.map do |g|
-      g.recipient ? g.recipient.name : 'Unset'
-    end.sort
-  end
-  def recipient_condensed
-    country_name.count > 1 ? "Africa, regional" : country_name[0]
-  end
-  def number_of_recipients
-    country_name.length
-  end
+
 
   has_many :transactions, dependent: :destroy
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
-  def usd_2009
-    sum = 0
-    transactions.map { |t| sum += t.usd_defl unless t.usd_defl.nil?} 
-    sum > 0 ? sum : nil
-  end
-  def currency_name
-    transactions.map do |t| 
-      t.currency ? t.currency.name : 'Unset'
-    end
-  end
 
 
   has_many :contacts, dependent: :destroy  
@@ -474,6 +375,7 @@ class Project < ActiveRecord::Base
 
   has_many :sources, dependent: :destroy
   accepts_nested_attributes_for :sources, allow_destroy: true, :reject_if => proc { |a| a['url'].blank? }
+<<<<<<< HEAD
   def document_type_name
     d = sources.map {|s| s.document_type.present? ? s.document_type.name : 'Unset'}
   end
@@ -481,24 +383,12 @@ class Project < ActiveRecord::Base
   def source_type_name
     src = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
   end
+=======
+>>>>>>> 7b794f6afb16ead3ac8a4448c06cfc2fb68346c4
 
   has_many :participating_organizations, dependent: :destroy
   accepts_nested_attributes_for :participating_organizations, allow_destroy: true, :reject_if => proc { |a| a['organization_id'].blank? }
-  def origin_name
-    participating_organizations.map {|p| p.origin.present? ? p.origin.name : 'Unset'}
-  end
 
-  def organization_type_name
-    participating_organizations.map {|p| p.organization.present? && p.organization.organization_type.present? ? p.organization.organization_type.name : 'Unset'}
-  end
-
-  def role_name
-    participating_organizations.map {|p| p.role.present? ? p.role.name : 'Unset'}
-  end
-
-  def organization_name
-    participating_organizations.map { |p| p.organization.present? ? p.organization.name : 'Unset'}
-  end
 
   # These used to be done inside the search block, now that FACETS are integrated, 
   # I had to move the code down here.
@@ -510,60 +400,12 @@ class Project < ActiveRecord::Base
     comments.present? ? "Has Comments" : nil
   end
 
-  def recipient_iso2
-    self.geopoliticals.map { |g| g.recipient ? g.recipient.iso2 : "Unset" }
-  end
 
-  searchable do 
 
-    integer :id # for sorting
-    double :usd_2009 # for sorting
-    string :title # for sorting
-    string :donor_name # for sorting
-    string :recipient_condensed # fir sorting
 
-    # for text search:
-    text :id
-    text :title
-    text :description
-    text :capacity
-    text :sector_comment
-    text :year
-    text :donor_name
-    text :comments do 
-      comments.map do |c|
-        ["#{c.name}",
-          "#{c.content}"]
-      end
-    end
-    text :geopoliticals do
-      geopoliticals.map do |g| 
-        if g
-          ["#{g.subnational}",
-            "#{g.recipient ? g.recipient.name : ''}",
-            "#{g.recipient ? g.recipient.iso3 : '' }"]
-        end
-      end
-    end
 
-    text :participating_organizations do
-      participating_organizations.map do |o| 
-        ["#{o.organization ? o.organization.name : '' }",
-          "#{o.role ?  o.role.name : ''}",
-          "#{o.organization && o.organization.organization_type ? o.organization.organization_type.name : ''}"] 
-      end
-    end
 
-    text :sources do
-      sources.map do |s| 
-        ["#{s.url}",
-          "#{s.source_type  ? s.source_type.name : ''}",
-          "#{s.document_type ? s.document_type.name  : ''}",
-          "#{s.date ? s.date.strftime('%d %B %Y') : ''}",
-          "#{s.url.split(/\.|\/|\+|\%20|_/)}"]
-      end
-    end
-
+<<<<<<< HEAD
     text :transactions do
       transactions.map do |t| 
         ["#{t.currency ? t.currency.name +  ' '+ t.currency.iso3 : ''}",
@@ -587,6 +429,8 @@ class Project < ActiveRecord::Base
     end
 
   end
+=======
+>>>>>>> 7b794f6afb16ead3ac8a4448c06cfc2fb68346c4
 
 
   def scope
@@ -612,7 +456,7 @@ class Project < ActiveRecord::Base
     end
     scope_array
   end
-  #test_scope should be a symbol. Check the SCOPE constant for possibilites
+  #test_scope should be a symbol. 
   def contains_scope?(test_scope)
     scope_array = scope
     if scope_array.include?(test_scope)
@@ -642,16 +486,6 @@ class Project < ActiveRecord::Base
     ]) 
   end
 
-  def history
-    [self.versions \
-      + self.transactions.map(&:versions) \
-      + self.sources.map(&:versions) \
-      + self.contacts.map(&:versions) \
-      + self.comments.map(&:versions) \
-      + self.participating_organizations.map(&:versions) \
-      + self.geopoliticals.map(&:versions)].flatten
-  end
-
   def all_flags
     [
       self.transactions.map(&:flags) + 
@@ -671,45 +505,8 @@ class Project < ActiveRecord::Base
     self.verified = Verified.find_by_name("Raw") if verified.blank?
   end
 
-
-  def update_geocodes
-    #
-    # Needs validation
-    #
-    # require 'open-uri'
-    # this_projects_geocodes_url= URI.encode("https://services1.arcgis.com/" +
-    # "4AWkjqgSzd8pqxQA/arcgis/rest/services/all_cdf_africa_geo/FeatureServer/" +
-    # "query?f=json&layerDefs={'0':'Project_ID=#{id}'}")
-    # p response = JSON.parse(open(this_projects_geocodes_url){|io| io.read})
-
-
-    # codes = response["layers"][0]["features"]
-    # if ! codes.blank?
-    #   codes.map{|f|
-    #     {
-    #       latitude: "#{f["Latitude"]}",
-    #       longitude: "#{f["Longitude"]}",
-    #       geoname: "#{f["Geoname"]}",
-    #       geoname_id: "#{f["Geoname_id"]}",
-    #       adm1: "#{f["ADM1"]}",
-    #       adm2: "#{f["ADM2"]}",
-    #       adm3: "#{f["ADM3"]}",
-    #       adm4: "#{f["ADM4"]}",
-    #       adm5: "#{f["ADM5"]}",
-    #       adm1_id: "#{f["ADM1_ID"]}",
-    #       adm2_id: "#{f["ADM2_ID"]}",
-    #       adm3_id: "#{f["ADM3_ID"]}",
-    #       adm4_id: "#{f["ADM4_ID"]}",
-    #       adm5_id: "#{f["ADM5_ID"]}",
-    #       precision: "#{f["Precision"]}", 
-    #       timestamp: "#{f["Timestamp"]}", 
-    #       source: "#{f["Source"]}",
-    #       source_url: "#{f["sourceURL"]}", 
-    #       fid: "#{f["FID"]}",
-    #     }
-    #   }
-    # end
-
-    "not implemented"
+  def set_owner_to_aiddata_if_null
+    self.owner = Organization.find_by_name("AidData") if owner.blank?
   end
+
 end

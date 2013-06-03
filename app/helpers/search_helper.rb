@@ -9,6 +9,10 @@ module SearchHelper
 
 	  @search = Project.search do
 	  	
+	  	# if not aiddata, don't let 'em see stage one projects
+	  	
+	  	params[:is_stage_one] = "Is not Stage One" unless current_user_is_aiddata
+	  	
 	  	# Catch "sector_name" and turn it into crs sector name
 	  	if params[:sector_name] && params[:crs_sector_name].nil?
 	  		params[:crs_sector_name] = params[:sector_name]

@@ -9,21 +9,27 @@ class FlagsController < ApplicationController
   end
 
   def create
-    @flag = Flag.new(params[:flag])
-    if not current_user && @flag.valid?
-      p "Making review entry"
-      ReviewEntry.add_item(@flag)
-      flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
-
-    elsif @flag.save!
-      AiddataAdminMailer.delay.flag_notification(@flag)
-      flash[:success] = "Thanks for your contribution! Your flag was added."
+    # A chill hack to try to prevent spam...
+    unless params[:definitely_came_from_web_form] && params[:flag][:flaggable_id]
+      flash[:error] = "Please use the web form to submit flags!"
     else
-      flash[:message] = "Sorry -- this operation failed. please try again."
+      @flag = Flag.new(params[:flag])
+      if not current_user && @flag.valid?
+        p "Making review entry"
+        ReviewEntry.add_item(@flag)
+        flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
+
+      elsif @flag.save!
+        AiddataAdminMailer.delay.flag_notification(@flag)
+        flash[:success] = "Thanks for your contribution! Your flag was added."
+      else
+        flash[:message] = "Sorry - your flag wasn't saved. Please try again!"
+      end
+      p "flash: #{flash.inspect}"
+      ProjectSweeper.instance.expire_cache_for(@flag) 
+      # Otherwise the user won't see the flash -- it would be served straight from cache!
     end
-    p "flash: #{flash.inspect}"
-    ProjectSweeper.instance.expire_cache_for(@flag) 
-    # Otherwise the user won't see the flash -- it would be served straight from cache!
+
     redirect_to :back
   end
 

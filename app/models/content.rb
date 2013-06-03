@@ -7,6 +7,7 @@ class Content < ActiveRecord::Base
   		"Page", # Markdown content
       "Complex Page", # Ruby content, must return HTML
       "Internal", # Markdown content
+      # Used in building other views:
   		"Faculty/Staff",
       "Research Assistant",
   		"AidData Publication",

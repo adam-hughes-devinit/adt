@@ -1,10 +1,7 @@
 class Contact < ActiveRecord::Base
   attr_accessible :name, :organization_id, :position, :organization, :project_id
-  has_paper_trail
-  
-  has_many :flags, as: :flaggable, dependent: :destroy
-  accepts_nested_attributes_for :flags
+  include ProjectAccessory
 
   belongs_to :organization
-  belongs_to :project
+  delegate :name, to: :organization, allow_nil: true, prefix: true
 end

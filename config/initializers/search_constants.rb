@@ -1,21 +1,18 @@
-
-  
   FACETS = [
       {sym: :flow_type_name, name: "Flow Type"},
       {sym: :oda_like_name, name: "Flow Class"},
       {sym: :status_name, name:"Status", description: "Last known implementation status"},
-      {sym: :verified_name, name: "", description: "Is the record valid?"}, #"Verified/Unverified"
       {sym: :currency_name, name:"Reported Currency", multiple: true, description: "Currency found in source data"},
       {sym: :is_commercial_string, name: "", description: "Is the project commercial?"}, #"Commercial Status"
       {sym: :active_string, name: "Active/Inactive", description: "Inactive records should not be used for analysis."},
       {sym: :country_name, name: "Recipient", multiple: true},
-      {sym: :source_type_name, name: "Source Type", multiple: true},
+      {sym: :source_type_name, name: "", multiple: true},
+      {sym: :search_engine_type_name, name: "Search Engine Type", multiple: true, description: "How did we find this source?"},
       {sym: :document_type_name, name: "Document Type", multiple: true},
       {sym: :origin_name, name: "Organization Origin", multiple: true},
       {sym: :role_name, name: "Organization Role", multiple: true},
       {sym: :organization_type_name, name: "Organization Type", multiple: true},
       {sym: :organization_name, name: "Organization Name", multiple: true},
-      {sym: :owner_name, name: ""},
       {sym: :line_of_credit_string, name: "Line of Credit", description: "Is the project a line of credit?"},
       {sym: :crs_sector_name, name: "Sector", description: "Sector, using CRS high-level codes."},
       {sym: :year_uncertain_string, name: "Year Uncertain", description: "Year could not be determined"},
@@ -39,7 +36,11 @@
     	{sym: :flow_class_1, name: "Flow Class - 1"},
     	{sym: :flow_class_2, name: "Flow Class - 2"},
     	{sym: :flagged, name: "Flagged", multiple: true },
-      {sym: :commented, name: "Commented"}
+      {sym: :commented, name: "Commented"},
+      {sym: :verified_name, name: "Verified", description: "Is the record valid? (\"Raw\" is invisible to non-AidData)"}, #"Verified/Unverified"
+      {sym: :is_stage_one, name: "Is Stage One?", description: '"Raw" & "Active"'},
+      {sym: :owner_name, name: "Record Owner", description: "Who created this record?"},
+
     	# {sym: :commented, name: "Commented"},
     ]
 

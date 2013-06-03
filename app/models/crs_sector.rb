@@ -1,9 +1,7 @@
 class CrsSector < ActiveRecord::Base
   attr_accessible :code, :name
+  include ProjectLevelCode
 
-  has_paper_trail
-
-  has_many :projects
 
   def full_name
     "#{code} - #{name}"

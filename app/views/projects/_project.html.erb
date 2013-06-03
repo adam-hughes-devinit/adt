@@ -10,8 +10,13 @@
 		<span id="inactive-project">(Inactive Record)</span>
 	<% end %>
 	 <br>
-	 <small>
+	 <small class="<%= @project.is_stage_one == "Is Stage One" ?  'alert alert-warning' : "" %>" >
 	 	<%= @project.to_english(exclude_title: true) %> |  ID: <%= @project.id %>
+	 	<% if @project.is_stage_one == "Is Stage One" %>
+	 		<strong>
+	 			(This record is in <%= link_to "Stage One", content_by_name_path("methodology") %>)
+	 		</strong>
+	 	<% end %>
 	</small>
 </h1>
 </div>

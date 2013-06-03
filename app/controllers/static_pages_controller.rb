@@ -50,7 +50,7 @@ class StaticPagesController < ApplicationController
   # Make sure this gets expired in models/project_sweeper !
   
   def recent
-    latest_changes = Project.where("active = 't'").order("updated_at ASC").last(3)
+    latest_changes = Project.past_stage_one.where("active = 't'").order("updated_at ASC").last(3)
 
     recent_changes_data = latest_changes.reverse.map do |project|
       changes = project.changes

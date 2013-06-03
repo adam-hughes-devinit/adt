@@ -25,25 +25,17 @@ include SearchHelper
           # wipe it in ProjectSweeper!
           p "---------------- STARTING CACHE -------------------------"
           facets = (WORKFLOW_FACETS + FACETS)
-          
           all_projects = Project.search do
             facets.each do |f|
               facet f[:sym]
             end
           end
-         
-          facet_counts = {}
-          
+          facet_counts = {}          
           facets.each do |f|
             facet_values = all_projects.facet(f[:sym]).rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
-
             facet_counts[f[:sym]] = facet_values
-
           end
-
-
-          p facet_counts
-
+          facet_counts
         end 
 
         render html: @projects
@@ -59,10 +51,6 @@ include SearchHelper
         else
           @paginate = false
         end
-
-        # Fer troubleshooting
-        # flash[:warning] = "#{YAML::dump params}"
-        # redirect_to projects_path
 
    			projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
@@ -82,7 +70,7 @@ include SearchHelper
 
 
   def show
-    @project = Project.find(params[:id])
+    @project = Project.unscoped.find(params[:id])
     @comment = Comment.new
     @flags = @project.all_flags
     @flag = Flag.new
@@ -125,7 +113,7 @@ include SearchHelper
 
     warn_that_data_is_frozen
     
-    @project = Project.find(params[:id])
+    @project = Project.unscoped.find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
@@ -152,7 +140,7 @@ include SearchHelper
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
-    @project = Project.find(params[:id])
+    @project = Project.unscoped.find(params[:id])
 
     #for versioning
     @project.save_state
@@ -182,7 +170,7 @@ include SearchHelper
   def destroy
   	
   
-    @project = Project.find(params[:id])
+    @project = Project.unscoped.find(params[:id])
     
     # The big problem here was that in @project.destroy, 
     # all the accessory objects were destroyed _first_,
@@ -242,7 +230,7 @@ include SearchHelper
     end
 
     def correct_owner? 
-      project_owner = Project.find(params[:id]).owner 
+      project_owner = Project.unscoped.find(params[:id]).owner 
       if ( 
           (project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
           (current_user_is_aiddata && project_owner.nil?)

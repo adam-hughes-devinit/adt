@@ -10,9 +10,6 @@ class Scope < ActiveRecord::Base
 
 	after_save :touch_projects
 	after_destroy :touch_projects
-	
-	
-
 
 	def channels
 		scope_channels.map { |c| c.filters }

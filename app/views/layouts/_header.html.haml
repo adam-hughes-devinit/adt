@@ -53,6 +53,8 @@
                     = link_to "Search Projects", projects_path
                   %li
                     = link_to_function "Find by Project ID", 'id = prompt("ID:");if (id) {window.location = ("/projects/"+id)}' 
+                  %li
+                    = link_to "Suggest a Project", suggest_a_project_path
 
                   %li 
                     = link_to "Download Files", content_by_name_path("downloads")

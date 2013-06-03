@@ -4,7 +4,7 @@
 <%= simple_form_for(@comment, method: :post, 
                               url: comments_path,
                               input_html: { align: "center" }) do |f| %>
-
+    <input name='definitely_came_from_web_form' type='hidden' value='true'/ >
     <%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",
       input_html: {style: "display:none;", value: @project.id} %>
     <div class='row-fluid'>

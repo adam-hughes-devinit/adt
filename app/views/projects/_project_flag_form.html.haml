@@ -1,0 +1,30 @@
+%script#flag-form-template{type: "text/template"}
+	#CONTAINER_ID.flag-modal.hide.fade.modal{role: "dialog", tabindex:"-1"}
+		.modal-header
+			%button.close{type: "button", "data-dismiss" => "modal"} &times;
+			%h3
+				Add a flag:
+				! <span class="text-<%= label_class %>">
+				! <%= flag_type_name %>
+				! </span>
+		.modal-body
+			%form{action: "/flags", method: "post"}
+				%input{name: "definitely_came_from_web_form", type: "hidden", value: "True"}
+				%input{name: "flag[flaggable_id]", type: "hidden", value: "<%= flaggable_id %>".html_safe }
+				%input{name: "flag[flaggable_type]", type: "hidden", value: "<%= flaggable_type %>".html_safe}
+				%input{name: "flag[flag_type_id]", type: "hidden", value: "<%= flag_type_id %>".html_safe}
+				%input{name: "flag[owner_id]", type: "hidden", value: "#{ signed_in? ? current_user.id : nil }"}
+				- if current_user.nil?
+					%p
+						Unless you 
+						= link_to("sign in", signin_path) + ","
+						your flag will be
+						%strong
+							reviewed 
+						before being posted.
+						
+				%input{name: "flag[source]", placeholder: "Source URL"}
+				%textarea{name: "flag[comment]", placeholder: "Your message...", rows: 2}
+				%input.btn.btn-primary{type: "submit", value: "Submit"}
+		.modal-footer
+			%button.close{type: "button", "data-dismiss" => "modal"} &times;
