@@ -17,7 +17,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   end
  
   def expire_cache_for(this)
-    p "Expiring cache for #{this.inspect}"
+    #p "Expiring cache for #{this.inspect}"
 
     if this.respond_to? :project 
       project = this.project

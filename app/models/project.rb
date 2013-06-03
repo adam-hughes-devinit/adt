@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
   include ProjectExporters
   extend  ProjectExporterHeaders
   include ActionView::Helpers::NumberHelper
-  
+
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
     :is_commercial, :media_id, 
@@ -135,9 +135,9 @@ class Project < ActiveRecord::Base
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
     "#{exclude_title ? "" : "#{title}: "}" +
-    "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
-    (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
-    (year.present? ? " in #{year}" : "")
+      "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
+      (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
+      (year.present? ? " in #{year}" : "")
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
@@ -334,7 +334,7 @@ class Project < ActiveRecord::Base
       "(None)"
     end
   end
-        
+
 
   def grace_period
     if loan_detail.nil?
@@ -365,7 +365,7 @@ class Project < ActiveRecord::Base
       loan_detail.grant_element
     end
   end
-  
+
   def grant_element_band
     if (!loan_detail.nil?) && (m = loan_detail.grant_element)
       if m < 25
@@ -479,7 +479,7 @@ class Project < ActiveRecord::Base
   end
 
   def source_type_name
-    s = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
+    src = sources.map {|s| s.source_type.present? ? s.source_type.name : 'Unset'}
   end
 
   has_many :participating_organizations, dependent: :destroy
@@ -503,7 +503,7 @@ class Project < ActiveRecord::Base
   # These used to be done inside the search block, now that FACETS are integrated, 
   # I had to move the code down here.
   def flagged 
-     all_flags.map(&:name)
+    all_flags.map(&:name)
   end
 
   def commented
@@ -578,7 +578,7 @@ class Project < ActiveRecord::Base
           "#{c.organization ? c.organization.name : ''}"]
       end
     end
- 
+
     # All the facets are defined in initializers/search_constants
     (FACETS + WORKFLOW_FACETS).each do |facet|
       string facet[:sym], multiple: (facet[:multiple] || false ) do 
@@ -588,17 +588,17 @@ class Project < ActiveRecord::Base
 
   end
 
-	
-	def scope
-	  scope_array = []
+
+  def scope
+    scope_array = []
     # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
-	  Scope.all.each do |scope|
+    Scope.all.each do |scope|
       # Scope_hash is implemented in Scope#includes_project?
       if scope.includes_project? self
         scope_array << scope.symbol.to_sym
       end
     end
-	   
+
     return scope_array
   end
 
@@ -623,9 +623,9 @@ class Project < ActiveRecord::Base
   end
 
 
- 
 
-   def as_json(options={})
+
+  def as_json(options={})
     super(
       only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
       methods: [:usd_2009, :donor_name,

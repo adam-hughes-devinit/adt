@@ -83,4 +83,6 @@ Adt::Application.routes.draw do
   unless Rails.application.config.consider_all_requests_local
     match '*not_found', to: 'errors#error_404'
   end
+  get 'error_404', to: 'errors#error_404'
+  get 'error_500', to: 'errors#error_500'
 end

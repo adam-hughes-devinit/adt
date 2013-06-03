@@ -22,7 +22,11 @@ module IndexAndCacheHelper
 
 
 	def remake_files
- 		Project.all.sample.cache_files # sending no scope should remake all
+	  all_projects = Project.all
+    unless all_projects.empty?
+      all_projects.sample.cache_files #sending no scope should remake all
+    end
+ 		#Project.all.sample.cache_files # sending no scope should remake all
 	end
 	
 	# handle_asynchronously :remake_files

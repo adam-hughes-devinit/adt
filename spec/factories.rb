@@ -1,10 +1,4 @@
 FactoryGirl.define do
-  factory :comment do |c|
-    c.name 'Brad Parks'
-    c.email 'bparks@aiddata.org'
-    c.content 'Lorem ipsum'
-  end
-
 
   factory :status do |s|
     s.name 'Cancelled'
@@ -148,7 +142,6 @@ FactoryGirl.define do
     owner FactoryGirl.create(:organization)
 
     trait :offic do
-      comment FactoryGirl.create(:comment)
       oda_like FactoryGirl.create(:oda_like, )#name: "ODA-like")
       active true
       verified FactoryGirl.create(:verified, name: "Checked")
@@ -201,5 +194,12 @@ FactoryGirl.define do
       f.owner FactoryGirl.create(:user, email: "flag_email#{Random.rand(0..1000000).round}@example.com")
       f.comment 'I have something to say'
       f.source 'www.cnn.com/facts'
+  end
+
+  factory :comment do |c|
+    c.name 'Brad Parks'
+    c.email 'bparks@aiddata.org'
+    c.content 'Lorem ipsum'
+    c.project FactoryGirl.create(:project)
   end
 end
