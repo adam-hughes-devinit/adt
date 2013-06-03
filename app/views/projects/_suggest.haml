@@ -1,24 +1,45 @@
-%h2 Suggest a new project
-- @project = Project.new
-= form_for @project, url: '/projects/suggest' do |f|
-  #suggest
-    = hidden_field_tag 'suggest', 'true'
-    = f.label :title, 'Title'
-    = f.text_field :title, placeholder: "Suggested Project Title", class: "span4"
-    %br
-    = f.label :sources, 'Sources'
-    %br
-    %input{id: "add", type: "button", class: "btn btn-small",
-    value: "Add another source", onClick: "addInput('suggest')"}
-    %br
-    = fields_for :sources do |srcs| 
-      = srcs.text_field :url, class: "span4", placeholder: "URL",
-                        name: "project[sources_attributes][][url]"
-    %br
-  #submit
-    = f.submit class: "btn btn-primary", value: "Submit"
-    %a.btn.btn-danger{href: "/"}
-      Cancel
+.row-fluid
+  %h1.page-header Suggest a New Project
+
+
+.row-fluid
+  .span6
+    .plain
+      %h4 Know about something we don't?
+      %p
+        Why not share your knowledge with the community? 
+      %p
+        Just leave a 
+        %strong
+          title 
+        and some 
+        %strong
+          links to sources 
+        here, and we'll review the entry and add it to
+        = (link_to "the database", projects_path) + "."
+
+
+  .span6.well
+    - @project = Project.new
+    = form_for @project, url: '/projects/suggest' do |f|
+      #suggest
+        = hidden_field_tag 'suggest', 'true'
+        = f.label :title, 'Title'
+        = f.text_field :title, placeholder: "Suggested Project Title"
+        %br
+        = f.label :sources, 'Sources'
+        %br
+        %input{id: "add", type: "button", class: "btn btn-small",
+        value: "Add another source", onClick: "addInput('suggest')"}
+        %br
+        = fields_for :sources do |srcs| 
+          = srcs.text_field :url, placeholder: "URL",
+                            name: "project[sources_attributes][][url]"
+        %br
+      #submit
+        = f.submit class: "btn btn-primary", value: "Submit"
+        %a.btn.btn-danger{href: "/"}
+          Cancel
 
 
 :javascript
@@ -30,7 +51,7 @@
       }
       else {
             var newdiv = document.createElement('div');
-            newdiv.innerHTML = "<input id='sources_url' class='span4' type='text' placeholder='URL' name='project[sources_attributes][][url]'><br>";
+            newdiv.innerHTML = "<input id='sources_url' type='text' placeholder='URL' name='project[sources_attributes][][url]'><br>";
             document.getElementById(divName).appendChild(newdiv);
             counter++;
       }
