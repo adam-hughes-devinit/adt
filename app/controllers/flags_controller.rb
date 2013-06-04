@@ -10,7 +10,7 @@ class FlagsController < ApplicationController
 
   def create
     # A chill hack to try to prevent spam...
-    unless params[:definitely_came_from_web_form] && params[:flag][:flaggable_id]
+    unless params[:definitely_came_from_web_form]
       flash[:error] = "Please use the web form to submit flags!"
     else
       @flag = Flag.new(params[:flag])
