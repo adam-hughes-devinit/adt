@@ -1,7 +1,9 @@
-%h1 
+- provide :title, @resource.title
+%h1.page-header 
 	Editing 
-	%i
-		= @resource.title
+	%small
+		%i
+			= @resource.title
 
 = render 'form' 
 

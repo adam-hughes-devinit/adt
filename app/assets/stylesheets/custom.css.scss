@@ -3,6 +3,7 @@
 $invalidRed: #942;
 $whiteShadow: rgb(18, 30, 50) 3px 3px 3px;
 $aiddataBlue: #1c273b;//#1c2a43;
+$ligherAiddataBlue: lighten($aiddataBlue, 20%);
 $backgroundGray: #f1f1f1;
 $header_height: 80px;
 /* Bootstrap overrides */
@@ -483,3 +484,57 @@ label {
   	}
 }
 
+
+.twitter-typeahead {
+  min-width: 300px;
+}
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 300px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+  line-height: 13px;
+  font-size: 12px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: $aiddataBlue;
+  background-image: -moz-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($aiddataBlue), to($aiddataBlue));
+  background-image: -webkit-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+  background-image: -o-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+  background-image: linear-gradient(to bottom, $aiddataBlue, $aiddataBlue);
+  background-repeat: repeat-x;
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}

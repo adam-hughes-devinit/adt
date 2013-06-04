@@ -44,7 +44,7 @@ class ResourcesController < ApplicationController
 
     respond_to do |format|
       if @resource.save
-        format.html { redirect_to @resource, notice: 'Resource was successfully created.' }
+        format.html { redirect_to @resource, notice: 'Resource was successfully created -- now fetching...' }
         format.json { render json: @resource, status: :created, location: @resource }
       else
         format.html { render action: "new" }
@@ -81,29 +81,6 @@ class ResourcesController < ApplicationController
     end
   end
 
-  def projects
-    @resource = Resource.find(params[:id])
-    render json: @resource.project_ids
-  end
 
-  def add_project
-    @resource = Resource.find(params[:id])
-    @resource.projects << Project.find(params[:project_id])
-    if @resource.save
-      render json: {"status" =>  "success"}
-    else
-      render json: {"status" =>  "failed"}
-    end
-  end
-
-  def remove_project
-    @resource = Resource.find(params[:id])
-    @resource.projects.delete Project.find(params[:project_id])
-    if @resource.save
-      render json: {"status" => "success"}
-    else
-      render json: {"status" =>  "failed"}
-    end
-  end
 
 end

@@ -1,8 +1,9 @@
-
+- provide :title, "Resources"
 %h1.page-header All Resources
 
-%a.btn.btn-success{href: new_resource_path }
-    New Resource
+- if current_user_is_aiddata
+    %a.btn.btn-success{href: new_resource_path }
+        New Resource
 
 %table.table.table-hover
     %thead
@@ -21,7 +22,7 @@
                 %td
                     = resource.authors
                 %td
-                    = "#{resource.publisher || '(No publisher)'}: #{resource.publisher_location} (#{resource.publish_date || "No date"})"
+                    = "#{resource.publisher || '(No publisher)'}#{ resource.publisher_location.blank? ? "" : ": #{resource.publisher_location}"} (#{resource.publish_date || "No date"})"
                 %td
                     = resource.dont_fetch ? "Not fetching." : resource.fetched_at
                 %td

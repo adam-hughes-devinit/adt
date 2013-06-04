@@ -12,6 +12,11 @@ Array.prototype.getUnique = () ->
     u[item] = 1
   a
 
+@typeahead_engine = 
+  compile: (template) ->
+    compiled = _.template(template)
+    {render: (context) -> compiled(context)}
+
 
 @nice_money = (amount, options={}) ->
   # Props to akmiller for original code -- I'm using it all the time though so hosting it here.

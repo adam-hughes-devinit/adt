@@ -7,22 +7,26 @@ Adt::Application.routes.draw do
   resources :exports
   resources :review_entries
 
-  resources :resources
-  # how to do nested routes for a resource that already exists?
-  get "/resources/:id/projects", to: "resources#projects"
-  post "/resources/:id/projects", to: "resources#add_project"
-  delete "/resources/:id/projects", to: "resources#remove_project"
+  resources :resources do
+    resources :pinned_projects
+  end
+
 
   # Link from DG email
   match "/utm_*other" => redirect("/")
 
+  get '/projects/english', to: "projects#to_english", as: "projects_to_english"
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
   post '/projects/suggest', to: "projects#suggest"
 
   resources :projects do
     resources :files # RDM 3_26_2013
     resources :robocodes # RDM 4 12 2013
+    resources :pinned_resources # RDM 6 4 2013
+    resources :flow_classes
   end
+
+
 
   resources :organizations, :users, :scopes, :exports
   resources :datasets, id: /[0-9\.]+/
@@ -41,14 +45,6 @@ Adt::Application.routes.draw do
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
   
-  # Flow Classes hack 1/8/2013
-  # This should really be nested under project like files and robocodes,
-  # but gotta make sure it won't stop the existing functionality.
-  get '/projects/:project_id/flow_class', to: 'flow_classes#show', as: 'flow_class'
-  post '/projects/:project_id/flow_class', to: 'flow_classes#update'
-  get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'
-  post '/projects/:project_id/flow_class/edit', to: 'flow_classes#update'
-
   
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'

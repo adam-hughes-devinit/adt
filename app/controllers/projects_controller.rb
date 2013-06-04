@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController  
-skip_before_filter :signed_in_user, only: [:suggest]
+skip_before_filter :signed_in_user, only: [:suggest, :to_english]
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
 before_filter :aiddata_only!, only: [:create]
@@ -13,6 +13,15 @@ include SearchHelper
 
  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
+  def to_english
+    @projects=custom_search(default_to_official_finance: false, active: true)
+    if params[:typeahead]
+      render json: @projects.map{|p|{value: p.id, english: p.to_english, tokens: p.to_english.split(" ") } }
+    else  
+      render json: @projects.map{|p| {id: p.id, english: p.to_english} }
+    end
+  end
+  
   def index
    
     respond_to do |format|

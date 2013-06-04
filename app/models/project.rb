@@ -34,8 +34,10 @@ class Project < ActiveRecord::Base
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
+
   # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
   scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
+  scope :active, where("active= 't' ")
   
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
     ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
@@ -120,6 +122,7 @@ class Project < ActiveRecord::Base
 
 
   has_and_belongs_to_many :exports
+  has_and_belongs_to_many :resources
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true

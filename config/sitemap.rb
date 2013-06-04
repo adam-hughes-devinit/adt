@@ -12,26 +12,27 @@ SitemapGenerator::Sitemap.create do
   #
   # Add static pages
 
-    # The root path '/' and sitemap index file are added automatically for you.
+  # The root path '/' and sitemap index file are added automatically for you.
     add bubbles_path
     add map_path
 
-    # add content pages
+  # add content pages
     Content.find_each do |content|
       if ["Page", "Complex Page"].include? content.content_type
         add content_by_name_path(content.name), :changefreq => 'weekly'
       end
     end
 
-  # Add '/projects'
-  
-     add projects_path, :priority => 0.7, :changefreq => 'daily'
-  
-  # Add all projects:
-
+  # Add '/projects' and all projects:
+    add projects_path, :priority => 0.7, :changefreq => 'daily'
     Project.find_each do |project|
        add project_path(project), :lastmod => project.updated_at, :changefreq => 'daily'
     end
 
+  # Add resources
+    add resources_path, priority: 0.7, changefreq: 'daily'
+    Resource.find_each do |resource|
+      add resource_path(resource), lastmod: resource.updated_at, changefreq: "weekly"
+    end
     
 end

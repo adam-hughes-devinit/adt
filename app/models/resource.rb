@@ -9,10 +9,22 @@ class Resource < ActiveRecord::Base
 
 	validates_uniqueness_of :source_url
 	validates_presence_of :source_url, :title, :authors
-	RESOURCE_TYPES = ["Journal Article", "News Report"]
+	RESOURCE_TYPES = [
+		"Government Source (Donor/Recipient)",
+		"Implementing/Intermediary Agency Source",
+		"Other Official Source (non-Donor, non-Recipient)",
+		"NGO/Civil Society/Advocacy",
+		"Acacemic Journal Article", 
+		"Other Academic (Working Paper, Dissertation)",
+		"Media Report, including Wikileaks",
+		"Social Media, including Unofficial Blogs",
+		"Other"
+	]
+
+
 	validates_inclusion_of :resource_type, in: RESOURCE_TYPES
 
-	before_save :fetch!, if: Proc.new {|r| r.source_url_changed? }
+	after_save :fetch!, if: Proc.new {|r| r.source_url_changed? }
 
 	has_and_belongs_to_many :projects
 
@@ -21,7 +33,11 @@ class Resource < ActiveRecord::Base
 	end
 
 	def to_citation
-		# implement.
+		# Author's last name, first name. Book title. Additional information. City of publication: Publishing company, publication date.
+		# Author's last name, first name. "Title of Article." Title of Encyclopedia. Date. 
+		# Author's last name, first name. "Article title." Periodical title Volume # Date: inclusive pages. 
+
+		"#{authors}.\"#{title}.\" <i>#{publisher}</i>. #{publish_date}. Accessed: #{dont_fetch ? created_at : fetched_at}. <a href='#{source_url}'>#{source_url}</a>.".html_safe
 	end
 
 	def fetch!
@@ -33,10 +49,14 @@ class Resource < ActiveRecord::Base
 
 	  		begin 
 	  			resource_copy = open(source_url) 
-	  			s3_filename = "#{id}_#{title.gsub(/[\s]/, '_')}"
-	  			p "Saving #{s3_filename} from #{source_url}"
+	  			# pull the last bit from the URL
+	  			s3_filename = source_url.gsub(/^.*\/(.*)$/, '\1')
+	  			
+	  			# if pulling name from URL doesn't work:
+	  			s3_filename = "#{id}_#{title.gsub(/[\s]/, '_')}" if s3_filename.blank?
+	  			
+	  			p "RESOURCE: Saving #{s3_filename} from #{source_url}"
  				filename = s3_upload "china_resources", resource_copy, s3_filename
- 				p filename
  				new_download_url = "http://s3.amazonaws.com/china_resources/#{s3_filename}"
  			rescue Exception => e 
  				p e.message

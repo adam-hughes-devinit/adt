@@ -1,0 +1,50 @@
+
+.row-fluid
+	%h4
+		Resources:
+	%ul#resources.unstyled
+		- @project.resources.each do |r|
+			%li.resource{"data-resource-id" => r.id}
+				= link_to r.to_citation, r
+		- if @project.resources.blank?
+			%em.muted#no_resources
+				No resources yet!
+	- if current_user_is_aiddata
+		%input#new_resource{placeholder: "Enter a resource ID"}
+		%a.btn.btn-success.btn-mini#add_resource
+			Add!
+		:coffeescript
+			@pinned_resources_path = "/projects/#{@project.id}/pinned_resources"
+			@unlink_button = "<a  class='btn btn-mini btn-danger unlink-resource'>Unlink</a>"
+			@unlink_resource = ->
+				resource = $(this).parent()
+				console.log resource
+				resource_id = resource.attr("data-resource-id")
+				$.ajax 
+					url: pinned_resources_path + "/" + resource_id
+					method: "DELETE"
+					success: (response) ->
+						if response["status"] == "success"
+							resource.remove()
+
+			add_resource = ->
+				this_input = $('#new_resource')
+				this_input.slideUp() 
+				resource_id = this_input.val()
+				$.post(pinned_resources_path, {resource_id: resource_id}, (response) ->
+					if response["status"] == "success"
+						$("#no_resources").remove()
+						$("#resources").append("<li data-resource-id='" + resource_id + "'><a href='/resources/" + resource_id + "'>" +
+							response["resource"] + "</a>" + unlink_button + "</li>"
+						)
+						this_input.val('')
+						$('.unlink-resource').off().click(unlink_resource)
+					this_input.slideDown()
+
+				)
+			$('#add_resource').click add_resource
+			$('.resource').append(unlink_button)
+			$('.unlink-resource').click(unlink_resource)
+			
+
+
