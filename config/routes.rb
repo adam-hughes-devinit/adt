@@ -7,8 +7,10 @@ Adt::Application.routes.draw do
   :flag_types, :loan_types, :contents
   resources :exports
 
-  get '/review_entries/:review_entry_scope', to: 'review_entries#index', as: "scoped_review_entries"
-  resources :review_entries
+  get '/pending_content', to: 'pending_content#index'
+  get '/pending_content/:pending_content_scope', to: 'pending_content#index', as: "scoped_pending_content"
+  post '/pending_content/approve', to: 'pending_content#approve'
+  post '/pending_content/destroy', to: 'pending_content#destroy'
 
   # Link from DG email
   match "/utm_*other" => redirect("/")

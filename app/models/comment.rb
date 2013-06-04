@@ -1,6 +1,8 @@
 class Comment < ActiveRecord::Base
-  attr_accessible :content, :email, :name, :project_id, :created_at
+  attr_accessible :content, :email, :name, :project_id, :created_at, :published
   has_paper_trail
+
+  default_scope where(published: true)
 
   after_destroy :touch_project
   after_save :touch_project

@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
     # hidden fields
     :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
     :donor_id, :owner_id, :intent_id, :crs_sector_id,
-    :last_state
+    :last_state, :published
 
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
@@ -35,6 +35,7 @@ class Project < ActiveRecord::Base
   # after_destroy :remake_scope_files
 
   # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
+  default_scope where(published: true) 
   scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
   
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!

@@ -21,39 +21,40 @@
 
   .span6.well
     - @project = Project.new
+    -# - @project.sources << Source.new
+    -# - @project.sources << Source.new
     = form_for @project, url: '/projects/suggest' do |f|
       #suggest
         = hidden_field_tag 'suggest', 'true'
         = f.label :title, 'Title'
         = f.text_field :title, placeholder: "Suggested Project Title"
         %br
+        %a.btn.btn-mini{id: "new_source"}
+          +
+        Add Another Source
         = f.label :sources, 'Sources'
-        %br
-        %input{id: "add", type: "button", class: "btn btn-small",
-        value: "Add another source", onClick: "addInput('suggest')"}
-        %br
-        = fields_for :sources do |srcs| 
-          = srcs.text_field :url, placeholder: "URL",
-                            name: "project[sources_attributes][][url]"
-        %br
+        -# = f.fields_for :sources do |srcs_fields|
+        -#   = srcs_fields.text_field :url, placeholder: "URL"
+
       #submit
         = f.submit class: "btn btn-primary", value: "Submit"
         %a.btn.btn-danger{href: "/"}
           Cancel
 
+    %script#source_form{type: "text/template"}
+      %input{id: "project_sources_attributes_url", type: "text", 
+      size: "30", placeholder: "URL",
+      name: "project[sources_attributes][][url]"}
 
 :javascript
-  var counter = 1;
-  var limit = 5;
-  function addInput(divName){
-      if (counter == limit)  {
-            alert("You have reached the limit of adding " + counter + " sources");
-      }
-      else {
-            var newdiv = document.createElement('div');
-            newdiv.innerHTML = "<input id='sources_url' type='text' placeholder='URL' name='project[sources_attributes][][url]'><br>";
-            document.getElementById(divName).appendChild(newdiv);
-            counter++;
-      }
+  function addSource() {
+    
+    form = $('#source_form').html()
+    $('#suggest').append(form)
   }
+  addSource();
 
+  $('#new_source').click(function() {
+    addSource();
+  });
+  

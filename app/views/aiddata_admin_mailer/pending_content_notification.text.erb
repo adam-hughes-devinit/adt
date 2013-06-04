@@ -1,7 +1,7 @@
 PENDING USER CONTENT 
 ============================
 
-A pending <%= @review.ar_model %>
+A pending <%= @content.class.name %>
 was just <%= @handled %> 
 <%# current_user ? current_user.email : "an anonymous user"%>.
 
@@ -9,12 +9,11 @@ was just <%= @handled %>
 (Since this item was handled, it's no longer available at china.aiddata.org/review_entries)
 
 Here's a data dump of the item:
-<%= @review.serialized_item %>
+<%= @content.attributes %>
 
 <% else %>
-  See the content
-  <%# link_to host: Rails.env.production? ? "china.aiddata.org" : "localhost:3000" %>
-  <%= review_entry_url(@review) %>
+  See
+  <%= link_to "the content", @content %>
 <% end %>
 
 You received this email because you are an AidData admin at 

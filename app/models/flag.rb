@@ -1,8 +1,10 @@
 class Flag < ActiveRecord::Base
   attr_accessible :comment, :flag_type, :flag_type_id, :flaggable_id, 
-    :flaggable_type, :owner_id, :owner, :source, :updated_at, :created_at
+    :flaggable_type, :owner_id, :owner, :source, :updated_at, :created_at,
+    :published
   
-  default_scope order: "updated_at"	
+  default_scope where(published: true)
+  default_scope order: "updated_at"
   after_destroy :touch_project
   after_save :touch_project
 
