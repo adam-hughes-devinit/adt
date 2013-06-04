@@ -14,7 +14,7 @@ class FlagsController < ApplicationController
       flash[:error] = "Please use the web form to submit flags!"
     else
       @flag = Flag.new(params[:flag])
-      if not current_user && @flag.valid?
+      if (not current_user) && (@flag.valid?)
         p "Making review entry"
         ReviewEntry.add_item(@flag)
         flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
