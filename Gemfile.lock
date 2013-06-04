@@ -177,6 +177,8 @@ GEM
     progress_bar (1.0.0)
       highline (~> 1.6.1)
       options (~> 2.3.0)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -313,6 +315,7 @@ DEPENDENCIES
   paper_trail
   pg
   progress_bar
+  quiet_assets
   rails (= 3.2.13)
   rspec-rails
   sass-rails (= 3.2.5)

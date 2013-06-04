@@ -40,6 +40,7 @@ group :development, :test do
   gem 'sunspot_solr'
   gem 'launchy'
   gem 'spork', '0.9.2'
+  gem 'quiet_assets'
   gem 'brakeman', require: false
 end
 

@@ -6,8 +6,12 @@ Adt::Application.routes.draw do
   :flag_types, :loan_types, :contents
   resources :exports
   resources :review_entries
-  resources :resources
 
+  resources :resources
+  # how to do nested routes for a resource that already exists?
+  get "/resources/:id/projects", to: "resources#projects"
+  post "/resources/:id/projects", to: "resources#add_project"
+  delete "/resources/:id/projects", to: "resources#remove_project"
 
   # Link from DG email
   match "/utm_*other" => redirect("/")

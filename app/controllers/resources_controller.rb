@@ -80,4 +80,30 @@ class ResourcesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def projects
+    @resource = Resource.find(params[:id])
+    render json: @resource.project_ids
+  end
+
+  def add_project
+    @resource = Resource.find(params[:id])
+    @resource.projects << Project.find(params[:project_id])
+    if @resource.save
+      render json: {"status" =>  "success"}
+    else
+      render json: {"status" =>  "failed"}
+    end
+  end
+
+  def remove_project
+    @resource = Resource.find(params[:id])
+    @resource.projects.delete Project.find(params[:project_id])
+    if @resource.save
+      render json: {"status" => "success"}
+    else
+      render json: {"status" =>  "failed"}
+    end
+  end
+
 end

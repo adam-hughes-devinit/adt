@@ -2,6 +2,11 @@
 .row-fluid
 	%h1.page-header
 		= @resource.title
+- if current_user_is_aiddata
+	.row-fluid
+		.span12
+			%a.btn{href: edit_resource_path(@resource)}
+				Edit
 .row-fluid
 	.span6.container-fluid
 		.row-fluid
@@ -43,8 +48,12 @@
 			.span5
 				%strong
 					Last stored:
-				= time_ago_in_words @resource.fetched_at
-				ago.
+				- if @resource.fetched_at.present?
+					= time_ago_in_words @resource.fetched_at
+					ago.
+				- else
+					%em
+						Not fetched.
 			.span4
 				- if @resource.download_url.present? && @resource.download_url[0..6] == 'http://'
 					%strong
@@ -63,6 +72,42 @@
 				- @resource.projects.each do |p|
 					%li
 						= link_to "#{p.to_english} (#{p.id})".html_safe, p, target: "_blank"
+						- if current_user_is_aiddata
+							|
+							%a.btn.btn-mini.btn-danger.unpin-project{"data-project-id" => p.id}
+								Remove
+			
+			- if current_user_is_aiddata				
+				%form#add_project{method: 'post', action: "/resources/#{@resource.id}/projects"}
+					Add a project:		
+					%input#new_project_id{name: "project_id", placeholder: "Enter a project ID"}
+					%input.btn.btn-small.btn-success{type: "submit", value: "Add!"}
+				:coffeescript
+					@resource_projects_path = "/resources/#{@resource.id}/projects"
+					$('.unpin-project').click(()->
+						if confirm('Are you sure you want to unpin this resource?')
+							project_id = $(this).attr("data-project-id")
+							this_line = $(this).parent()
+							$.ajax
+								url: resource_projects_path
+								method: 'delete'
+								data: {project_id: project_id}
+								success: (response) ->
+									if response["status"] == "success"
+										this_line.remove()
+
+					)
+					post_data_in_place = (e)->
+						e.preventDefault()
+						new_p_id = $('#new_project_id')
+						project_id = new_p_id.val()
+						new_p_id.slideUp()
+						$.post(resource_projects_path, {project_id: project_id}, (response) ->
+							if response["status"] is "success"
+								new_p_id.val('')
+							new_p_id.slideDown()
+						)
+					$('#add_project').on("submit", post_data_in_place)
 
 
 
