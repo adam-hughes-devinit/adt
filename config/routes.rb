@@ -7,6 +7,7 @@ Adt::Application.routes.draw do
   resources :exports
   resources :review_entries
 
+  get "/resources/search", to: "resources#search", as: "resources_search"
   resources :resources do
     resources :pinned_projects
   end

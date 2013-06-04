@@ -69,4 +69,9 @@ class Resource < ActiveRecord::Base
 	end
 	handle_asynchronously :fetch!
 
+	searchable do 
+		text :title, :authors, :publisher_location, :publisher, :source_url, :id
+	end
+
+
 end

@@ -1,13 +1,31 @@
 class ResourcesController < ApplicationController
+  skip_before_filter :signed_in, only: [:search]
   # GET /resources
   # GET /resources.json
   def index
-    @resources = Resource.all
+    order_by = params[:order]
+    dir = params[:dir] # ASC / DESC
+    @resources = Resource.order("#{order_by} #{dir}").page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @resources }
     end
+  end
+
+  def search
+    @search = Resource.search do
+      fulltext params[:search]
+      paginate :page => params[:page] || 1, :per_page => params[:max] || 50
+    end
+    @resources = @search.results
+    
+    if params[:typeahead]
+      render json: @resources.map{ |r| {value: r.id, english: r.to_citation, tokens: r.to_citation.split(" ")}}
+    else
+      render 'index'
+    end
+
   end
 
   # GET /resources/1

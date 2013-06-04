@@ -4,16 +4,19 @@
 - if current_user_is_aiddata
     %a.btn.btn-success{href: new_resource_path }
         New Resource
-
+- dir = (params[:dir] == "ASC" ? "DESC" : "ASC") 
 %table.table.table-hover
     %thead
         %tr
-            %td Title
-            %td Authors
-            %td Publisher
-            %td Retrieved at
-            %td Resource type
-            %td # Linked Projects
+            %th
+                = link_to "Title", params.merge(order: "title", dir: dir)
+            %th Authors
+            %th Publisher
+            %th 
+                = link_to "Retrieved at", params.merge(order: "fetched_at", dir: dir)
+            %th 
+                = link_to "Resource type", params.merge(order: "resource_type", dir: dir)
+            %th # Linked Projects
     %tbody
         -  @resources.each do |resource|
             %tr
@@ -29,4 +32,5 @@
                     = resource.resource_type
                 %td
                     = resource.projects.length
+= will_paginate @resources
 
