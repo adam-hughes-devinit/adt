@@ -151,7 +151,7 @@ class Project < ActiveRecord::Base
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
-  CODES = %i{status verified intent crs_sector sector}
+  CODES = %w{status verified intent crs_sector sector}
   CODES.each do |c|
     belongs_to c
     define_method "#{c}_name" do
