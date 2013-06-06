@@ -34,8 +34,10 @@ class Project < ActiveRecord::Base
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
+
   # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
   scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
+  scope :active, where("active= 't' ")
   
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
     ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
@@ -120,6 +122,7 @@ class Project < ActiveRecord::Base
 
 
   has_and_belongs_to_many :exports
+  has_and_belongs_to_many :resources
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
@@ -143,10 +146,15 @@ class Project < ActiveRecord::Base
 
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
-    "#{exclude_title ? "" : "#{title}: "}" +
-    "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
-    (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
-    (year.present? ? " in #{year}" : "")
+    english = Rails.cache.fetch("projects/#{id}/to_english/#{exclude_title ? "no_title" : "title" }") do
+      "#{exclude_title ? "" : "#{title}: "}" +
+      "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
+      (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
+      (year.present? ? " in #{year}" : "")
+    end
+
+    english
+
   end
 
   # I'm adding string methods for these codes for Sunspot Facets

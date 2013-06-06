@@ -3,9 +3,11 @@ class Source < ActiveRecord::Base
   :url, :project_id, :source_type, :document_type
   
   default_scope order: "date"
+
   include ProjectAccessory
   delegate :name, to: :source_type, allow_nil: true, prefix: true
   delegate :name, to: :document_type, allow_nil: true, prefix: true
+
   belongs_to :document_type
   belongs_to :source_type 
 end

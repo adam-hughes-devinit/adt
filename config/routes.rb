@@ -1,5 +1,4 @@
 Adt::Application.routes.draw do
-
   # codes
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
@@ -10,16 +9,28 @@ Adt::Application.routes.draw do
   get '/review_entries/:review_entry_scope', to: 'review_entries#index', as: "scoped_review_entries"
   resources :review_entries
 
+  post "resources/:id/get_devoured", to: "resources#get_devoured", as: "get_devoured_resource"
+  get "/resources/typeahead", to: "resources#twitter_typeahead"
+  resources :resources do
+    resources :pinned_projects
+  end
+
+
   # Link from DG email
   match "/utm_*other" => redirect("/")
 
+  get '/projects/typeahead', to: "projects#twitter_typeahead"
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
   post '/projects/suggest', to: "projects#suggest"
 
   resources :projects do
     resources :files # RDM 3_26_2013
     resources :robocodes # RDM 4 12 2013
+    resources :pinned_resources # RDM 6 4 2013
+    resources :flow_classes
   end
+
+
 
   resources :organizations, :users, :scopes, :exports
   resources :datasets, id: /[0-9\.]+/
@@ -38,14 +49,6 @@ Adt::Application.routes.draw do
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
   
-  # Flow Classes hack 1/8/2013
-  # This should really be nested under project like files and robocodes,
-  # but gotta make sure it won't stop the existing functionality.
-  get '/projects/:project_id/flow_class', to: 'flow_classes#show', as: 'flow_class'
-  post '/projects/:project_id/flow_class', to: 'flow_classes#update'
-  get '/projects/:project_id/flow_class/edit', to: 'flow_classes#edit'
-  post '/projects/:project_id/flow_class/edit', to: 'flow_classes#update'
-
   
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'

@@ -1,0 +1,12 @@
+- provide :title, @resource.title
+%h1.page-header 
+	Editing 
+	%small
+		%i
+			= @resource.title
+
+= render 'form' 
+
+= link_to 'Show', @resource
+|
+= link_to 'Back', resources_path 

@@ -28,6 +28,10 @@ class ProjectSweeper < ActionController::Caching::Sweeper
     end
 
     if project
+      # expire the to_english method
+      expire_fragment("projects/#{project.id}/to_english/no_title")
+      expire_fragment("projects/#{project.id}/to_english/title")
+
       # expire the Show page(s) no that it is changed
       expire_fragment("projects/#{project.id}/signed_in/aiddata")
       expire_fragment("projects/#{project.id}/signed_in/non_aiddata")

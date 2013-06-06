@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController  
-skip_before_filter :signed_in_user, only: [:suggest]
+skip_before_filter :signed_in_user, only: [:suggest, :to_english]
 before_filter :set_owner, only: [:create, :new]
 before_filter :correct_owner?, only: [:edit, :destroy]
 before_filter :aiddata_only!, only: [:create]
@@ -7,12 +7,13 @@ before_filter :aiddata_only!, only: [:create]
 # before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 
 include SearchHelper
-
+extend Typeaheadable
+enable_typeahead Project, facets: {active_string: "Active"}
  #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
  #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 
  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
-
+  
   def index
    
     respond_to do |format|

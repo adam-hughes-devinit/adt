@@ -1,0 +1,40 @@
+- provide :title, "Resources"
+%h1.page-header All Resources
+
+- if current_user_is_aiddata
+    = link_to "New Resource", new_resource_path, class: "btn btn-success"
+
+
+= will_paginate @resources
+- dir = (params[:dir] == "ASC" ? "DESC" : "ASC") 
+
+%table.table.table-hover
+    %thead
+        %tr
+            %th
+                = link_to "Title", params.merge(order: "title", dir: dir)
+            %th Authors
+            %th Publisher
+            %th 
+                = link_to "Retrieved at", params.merge(order: "fetched_at", dir: dir)
+            %th 
+                = link_to "Resource type", params.merge(order: "resource_type", dir: dir)
+            %th 
+                = link_to "# Linked Projects", params.merge(order: "projects_count", dir: dir)
+    %tbody
+        -  @resources.each do |resource|
+            %tr
+                %td 
+                    = link_to resource.title, resource
+                %td
+                    = resource.authors
+                %td
+                    = "#{resource.publisher || '(No publisher)'}#{ resource.publisher_location.blank? ? "" : ": #{resource.publisher_location}"} (#{resource.publish_date || "No date"})"
+                %td
+                    = resource.dont_fetch ? "Not fetching." : resource.fetched_at
+                %td
+                    = resource.resource_type
+                %td
+                    = resource.projects_count
+= will_paginate @resources
+

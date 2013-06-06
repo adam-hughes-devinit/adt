@@ -13,6 +13,30 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require ./underscore/index
 //= require ./app
 //= require rails.validations
 //= require bootstrap_teaser
+//= require ./twitter_typeahead/index
+$(function() {
+$('#header_search').typeahead([{
+	name: "projects",
+	remote: "/projects/typeahead?search=%QUERY",
+	template: $('#typeahead_template').html(),
+	engine: typeahead_engine,
+	limit: 20,
+	}]).on("typeahead:selected", function(e, datum) {		
+		window.location = datum.target
+	}).on("keyup", function(e) {
+		if (e.which == 13 && $("*:focus").is("#header_search")) {
+			value = $(this).val()
+			if (Number(value)) {
+				target = "/projects/" + value
+			}
+			else {
+				target = "/projects?search=" + value
+			}
+			window.location = target
+		}
+	})
+})
