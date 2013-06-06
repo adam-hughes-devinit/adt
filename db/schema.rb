@@ -11,11 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130606141817) do
-=======
-ActiveRecord::Schema.define(:version => 20130603214945) do
->>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
+
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -331,7 +328,6 @@ ActiveRecord::Schema.define(:version => 20130603214945) do
     t.datetime "updated_at",    :null => false
   end
 
-<<<<<<< HEAD
   create_table "remittances", :id => false, :force => true do |t|
     t.string  "year"
     t.string  "country"
@@ -354,8 +350,6 @@ ActiveRecord::Schema.define(:version => 20130603214945) do
     t.integer  "projects_count",     :default => 0
   end
 
-=======
->>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
   create_table "review_entries", :force => true do |t|
     t.string   "status",          :default => "OPEN"
     t.text     "serialized_item"
