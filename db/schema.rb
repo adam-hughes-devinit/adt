@@ -11,15 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130606141817) do
+=======
+ActiveRecord::Schema.define(:version => 20130603214945) do
+>>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
 
   create_table "comments", :force => true do |t|
     t.text     "content"
     t.integer  "project_id"
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.boolean  "published",  :default => true
   end
 
   add_index "comments", ["project_id"], :name => "index_comments_on_project_id"
@@ -134,8 +139,9 @@ ActiveRecord::Schema.define(:version => 20130606141817) do
     t.string   "source"
     t.text     "comment"
     t.integer  "owner_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.boolean  "published",      :default => true
   end
 
   add_index "flags", ["flag_type_id"], :name => "index_flags_on_flag_type_id"
@@ -297,6 +303,7 @@ ActiveRecord::Schema.define(:version => 20130606141817) do
     t.integer  "intent_id"
     t.integer  "crs_sector_id"
     t.text     "last_state"
+    t.boolean  "published",      :default => true
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"
@@ -324,6 +331,7 @@ ActiveRecord::Schema.define(:version => 20130606141817) do
     t.datetime "updated_at",    :null => false
   end
 
+<<<<<<< HEAD
   create_table "remittances", :id => false, :force => true do |t|
     t.string  "year"
     t.string  "country"
@@ -346,6 +354,8 @@ ActiveRecord::Schema.define(:version => 20130606141817) do
     t.integer  "projects_count",     :default => 0
   end
 
+=======
+>>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
   create_table "review_entries", :force => true do |t|
     t.string   "status",          :default => "OPEN"
     t.text     "serialized_item"

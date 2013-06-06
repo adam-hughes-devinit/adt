@@ -24,15 +24,20 @@
 # Ignore all logfiles and tempfiles.
 /log
 /tmp
+/spec/log/
 
 # Ignore sensitive info
 /config/app_config.yml
 /config/omniauth_config.yml
 /config/secrets.rb
 
+#binstubs
+/bin
+
 
 #And rvmrc files
 .rvmrc
+.rbenv-version
 
 # Ignore sql dumps
 /*.sql

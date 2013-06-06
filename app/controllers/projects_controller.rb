@@ -205,13 +205,13 @@ enable_typeahead Project, facets: {active_string: "Active"}
   def suggest 
     if request.post?
       @project = Project.new(params[:project])
-
-      @project.sources.each do |src|
-        src.save!
-      end
+      @project.published = false
       @project.donor = Country.find_by_name("China")
-      ReviewEntry.add_item(@project, :sources, :donor)
-      flash[:success] = "We will review your aid project suggestion"
+      if @project.save
+        flash[:success] = "We will review your aid project suggestion"
+      else
+        flash[:error] = "Sorry -- that operation failed, please try again."
+      end
       redirect_to :back
     end
     # suggest.html.haml

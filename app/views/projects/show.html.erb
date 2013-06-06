@@ -3,12 +3,20 @@
 <%  if @project.sources.any? {|s| s.source_type_name == 'Factiva'}
       flash.now[:notice] = "This project has some sources from #{link_to "Factiva", "https://global.factiva.com/"}. Your university or local library may offer access to that resource."
     end
+
+    if not @project.published
+      flash.now[:error] = "This project is pending content, not yet published"
+    end
 %>
+
 
 <div class="row project-edit-links pull-right">	
 	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user_is_aiddata) %>
 			<%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
 			<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
+      <% if not @project.published %>
+        <button class="span3 btn btn-success" id="approve">Approve This Project </button>
+      <% end %>
 			</p>
 	<% end %>
 </div>
@@ -26,8 +34,22 @@
 <%= javascript_include_tag "underscore/index" %>
 <%= render 'project_flag_form' %>
 
+<script>
+  $('#approve').click(function () {
+    var id = <%= params[:id] %>;
+    var post_url = '/pending_content/approve';
+    var post_data = { "id": id, "class_name": "Project" };
+    $.ajax({
+      url: post_url,
+      data: post_data,
+      type: 'POST',
+      success: function(result) {
+        location.reload();
+      }
+    });
 
-
+  });
+</script>
 
 
 

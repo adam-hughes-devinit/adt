@@ -2,55 +2,56 @@
 %h1.page-header
   Pending Content
 
-- @review_sections.each do |type, entries|
+- @pending_content.each do |content_array|
+  - next if content_array.empty?
+  - first = content_array.first
+  - type = first.class.name
+  - atts = first.attributes
+  - irrelevant = %w(id updated_at owner_id published)
   %h2
-    = link_to(type.pluralize.capitalize, scoped_review_entries_path(type.pluralize.downcase))
+    = type.pluralize
   %table{id: "#{type}", class: "table table-hover sortable"}
-    - atts = entries.first.item.attributes
     %thead
       %tr
-        -# headers
-        -# for the checkbox
+        -# headers, first is blank for checkbox
         %th
         %th id
-        - if type.downcase.singularize == "project"
+        - irrelevant.each {|x| atts.delete(x) }
+        - if type == "Project"
           %th Title
           %th Sources
-        - else 
-          - atts.delete("id")
-          - atts.delete("updated_at")
-          - atts.delete("owner_id")
+        - else
+          - if type == "Flag"
+            %th Project
           - atts.each do |key,value|
-            - case key
-            - when "flaggable_id"
-              %th= "Project"
-            - else
-              %th= key.humanize
+            %th= key.humanize
     %tbody
-      - entries.each_with_index do |entry,index|
-        %tr{id: "#{type}#{index}"}
+      - content_array.each do |content|
+        %tr{id: "#{content.id}"}
           %td
             %input{type: "checkbox", value: "yes" }
-          %td= link_to(entry.id, review_entry_path(entry))
-          - if type.downcase.singularize == "project"
-            %td= entry.item.title
+          - if type == "Project"
+            %td= link_to content.id, project_path(content)
+            %td= content.title
             - url_list = ""
-            - entry.item.sources.each do |src|
+            - content.sources.each do |src|
               %td= link_to(src.url, src.url)
           - else
-            - atts = entry.item.attributes
-            - atts.delete("id")
-            - atts.delete("updated_at")
-            - atts.delete("owner_id")
-            - atts.each do |att|
+            %td= content.id
+            - indiv_atts = content.attributes
+            - irrelevant.each {|x| indiv_atts.delete(x) }
+
+            - if type == "Flag"
+              - project = content.project
+              %td= link_to project.id, project
+
+            - indiv_atts.each do |att|
               - key = att[0]
               - value = att[1]
               - case key
               - when "created_at"
-                %td= entry.created_at.to_s(:short)
+                %td= content.created_at.to_s(:short)
               - when "project_id"
-                %td= link_to(value, "/projects/#{value}")
-              - when "flaggable_id"
                 %td= link_to(value, "/projects/#{value}")
               - else
                 %td= value
@@ -76,29 +77,31 @@
         $('td', $tr).each(function() {
           
         });
-        manageRow(this, approved);
+        manageRow(this, approved, class_name);
       });
 
     });
   });
   
-  function manageRow(row, approved){
+  function manageRow(row, approved, class_name){
     var id = $(row).children()[1].textContent;
-    var review_url = "/review_entries/" + id
-    if (approved == "Approve")
-    {
-      var approve = { "approve": true };
+    var post_url = "/pending_content/";
+    if (approved == "Approve") {
+      post_url = post_url + "approve";
+    } 
+    else { 
+      post_url = post_url + "destroy";
     }
-    else { var approve = "approve"; }
+    content_data = { "id": id, "class_name": class_name };
     $.ajax({
-      url: review_url,
-      data: approve,
-      type: 'DELETE',
+      url: post_url,
+      data: content_data,
+      type: 'POST',
       success: function(result) {
+        deleteRow(row.id);
+        ApplySortability();
       }
     });
-    deleteRow(row.id);
-    ApplySortability();
   }
 
   function deleteRow(rowId){

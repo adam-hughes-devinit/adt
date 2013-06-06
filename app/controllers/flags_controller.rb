@@ -14,18 +14,21 @@ class FlagsController < ApplicationController
       flash[:error] = "Please use the web form to submit flags!"
     else
       @flag = Flag.new(params[:flag])
-      if (not current_user) && (@flag.valid?)
-        p "Making review entry"
-        ReviewEntry.add_item(@flag)
-        flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
 
-      elsif @flag.save!
+      if not current_user
+        @flag.published = false
+      end
+
+      if @flag.save!
         AiddataAdminMailer.delay.flag_notification(@flag)
-        flash[:success] = "Thanks for your contribution! Your flag was added."
+        if current_user
+          flash[:success] = "Thanks for your contribution! Your flag was added."
+        else
+          flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."
+        end
       else
         flash[:message] = "Sorry - your flag wasn't saved. Please try again!"
       end
-      p "flash: #{flash.inspect}"
       ProjectSweeper.instance.expire_cache_for(@flag) 
       # Otherwise the user won't see the flash -- it would be served straight from cache!
     end

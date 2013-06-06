@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
   include ProjectExporters
   extend  ProjectExporterHeaders
   include ActionView::Helpers::NumberHelper
-  
+
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
     :is_commercial, :media_id, 
@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
     # hidden fields
     :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
     :donor_id, :owner_id, :intent_id, :crs_sector_id,
-    :last_state
+    :last_state, :published
 
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
@@ -36,6 +36,7 @@ class Project < ActiveRecord::Base
 
 
   # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
+  default_scope where(published: true) 
   scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
   scope :active, where("active= 't' ")
   
@@ -146,6 +147,7 @@ class Project < ActiveRecord::Base
 
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
+<<<<<<< HEAD
     english = Rails.cache.fetch("projects/#{id}/to_english/#{exclude_title ? "no_title" : "title" }") do
       "#{exclude_title ? "" : "#{title}: "}" +
       "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
@@ -155,6 +157,12 @@ class Project < ActiveRecord::Base
 
     english
 
+=======
+    "#{exclude_title ? "" : "#{title}: "}" +
+      "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
+      (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
+      (year.present? ? " in #{year}" : "")
+>>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
@@ -322,7 +330,7 @@ class Project < ActiveRecord::Base
       "(None)"
     end
   end
-        
+
 
   def grace_period_band
     if (!loan_detail.nil?) && (m = loan_detail.grace_period)
@@ -391,7 +399,7 @@ class Project < ActiveRecord::Base
   # These used to be done inside the search block, now that FACETS are integrated, 
   # I had to move the code down here.
   def flagged 
-     all_flags.map(&:name)
+    all_flags.map(&:name)
   end
 
   def commented
@@ -404,17 +412,17 @@ class Project < ActiveRecord::Base
 
 
 
-	
-	def scope
-	  scope_array = []
+
+  def scope
+    scope_array = []
     # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
-	  Scope.all.each do |scope|
+    Scope.all.each do |scope|
       # Scope_hash is implemented in Scope#includes_project?
       if scope.includes_project? self
         scope_array << scope.symbol.to_sym
       end
     end
-	   
+
     return scope_array
   end
 
@@ -439,9 +447,9 @@ class Project < ActiveRecord::Base
   end
 
 
- 
 
-   def as_json(options={})
+
+  def as_json(options={})
     super(
       only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
       methods: [:usd_2009, :donor_name,

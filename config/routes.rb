@@ -6,8 +6,10 @@ Adt::Application.routes.draw do
   :flag_types, :loan_types, :contents
   resources :exports
 
-  get '/review_entries/:review_entry_scope', to: 'review_entries#index', as: "scoped_review_entries"
-  resources :review_entries
+  get '/pending_content', to: 'pending_content#index'
+  get '/pending_content/:pending_content_scope', to: 'pending_content#index', as: "scoped_pending_content"
+  post '/pending_content/approve', to: 'pending_content#approve'
+  post '/pending_content/destroy', to: 'pending_content#destroy'
 
   post "resources/:id/get_devoured", to: "resources#get_devoured", as: "get_devoured_resource"
   get "/resources/typeahead", to: "resources#twitter_typeahead"
@@ -88,4 +90,6 @@ Adt::Application.routes.draw do
   unless Rails.application.config.consider_all_requests_local
     match '*not_found', to: 'errors#error_404'
   end
+  get 'error_404', to: 'errors#error_404'
+  get 'error_500', to: 'errors#error_500'
 end

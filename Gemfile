@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.0.0'
+#ruby  '>=2.0.0'
 gem 'rails', '3.2.13'
 gem 'capistrano'
 gem 'bcrypt-ruby'
@@ -41,6 +41,7 @@ group :development, :test do
   gem 'launchy'
   gem 'spork', '0.9.2'
   gem 'quiet_assets'
+  gem 'spork-rails'
   gem 'brakeman', require: false
 end
 
