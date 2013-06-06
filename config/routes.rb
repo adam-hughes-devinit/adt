@@ -7,7 +7,8 @@ Adt::Application.routes.draw do
   resources :exports
   resources :review_entries
 
-  get "/resources/search", to: "resources#search", as: "resources_search"
+  post "resources/:id/get_devoured", to: "resources#get_devoured", as: "get_devoured_resource"
+  get "/resources/typeahead", to: "resources#twitter_typeahead"
   resources :resources do
     resources :pinned_projects
   end
@@ -16,7 +17,7 @@ Adt::Application.routes.draw do
   # Link from DG email
   match "/utm_*other" => redirect("/")
 
-  get '/projects/english', to: "projects#to_english", as: "projects_to_english"
+  get '/projects/typeahead', to: "projects#twitter_typeahead"
   get '/projects/suggest', to: "projects#suggest", as: "suggest_a_project"
   post '/projects/suggest', to: "projects#suggest"
 

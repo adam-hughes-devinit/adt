@@ -9,7 +9,7 @@
       .span3
         = f.input :authors, as: :string, placeholder: "Authors' names, A-Z order"
       .span3
-        = f.input :source_url, placeholder: "Where did you find this?", hint: "If it begins with <strong>http</strong>, we'll try to store a copy.".html_safe
+        = f.input :source_url, as: :string, placeholder: "Where did you find this?", hint: "If it begins with <strong>http</strong>, we'll try to store a copy.".html_safe
       .span3
         = f.input :resource_type,  collection: Resource.resource_types
     .row-fluid

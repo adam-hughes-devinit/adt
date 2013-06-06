@@ -9,8 +9,15 @@ class Source < ActiveRecord::Base
   def source_type_name
   	if source_type && source_type.name 
   		source_type.name
+    else
+      "Unset"
   	end
   end
+
+  def document_type_name
+    (document_type && document_type.name) ? document_type.name : "Unset"
+  end
+
 
   belongs_to :document_type
   belongs_to :source_type 

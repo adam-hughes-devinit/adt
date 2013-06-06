@@ -142,7 +142,9 @@
 			<h4>Sources:</h4>
 			<%= render 'project_sources' %>
 		</div>
-		<%= render 'resources' %>
+		<% if current_user_is_aiddata %>
+			<%= render 'resources' %>
+		<% end %>
 	</div>
 
 	<div class='span6 well'>

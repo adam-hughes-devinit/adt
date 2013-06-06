@@ -31,4 +31,9 @@ class Content < ActiveRecord::Base
     data
   end
 
+  searchable do 
+    text :id, :name, :content, :content_type
+  end
+  
+
 end

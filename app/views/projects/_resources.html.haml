@@ -26,7 +26,7 @@
 			$('.resource-tooltip').tooltip()
 			$('#new_resource').typeahead
 				name: "resources"
-				remote: "/resources/search?typeahead=true&search=%QUERY"
+				remote: "/resources/typeahead?search=%QUERY"
 				template: $("#typeahead_template").html()
 				engine: typeahead_engine
 				limit: 20

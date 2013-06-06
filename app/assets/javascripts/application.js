@@ -19,14 +19,14 @@
 //= require bootstrap_teaser
 //= require ./twitter_typeahead/index
 $(function() {
-$('#header_search').typeahead({
+$('#header_search').typeahead([{
 	name: "projects",
-	remote: "/projects/english?typeahead=true&search=%QUERY",
+	remote: "/projects/typeahead?search=%QUERY",
 	template: $('#typeahead_template').html(),
 	engine: typeahead_engine,
 	limit: 20,
-	}).on("typeahead:selected", function(e, datum) {		
-		window.location = "/projects/" + datum.value
+	}]).on("typeahead:selected", function(e, datum) {		
+		window.location = datum.target
 	}).on("keyup", function(e) {
 		if (e.which == 13 && $("*:focus").is("#header_search")) {
 			value = $(this).val()

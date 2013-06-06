@@ -7,20 +7,12 @@ before_filter :aiddata_only!, only: [:create]
 # before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 
 include SearchHelper
-
+extend Typeaheadable
+enable_typeahead Project, facets: {active_string: "Active"}
  #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
  #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 
  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
-
-  def to_english
-    @projects=custom_search(default_to_official_finance: false, active: true)
-    if params[:typeahead]
-      render json: @projects.map{|p|{value: p.id, english: p.to_english, tokens: p.to_english.split(" ") } }
-    else  
-      render json: @projects.map{|p| {id: p.id, english: p.to_english} }
-    end
-  end
   
   def index
    

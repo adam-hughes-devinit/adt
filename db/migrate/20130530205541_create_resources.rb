@@ -7,7 +7,7 @@ class CreateResources < ActiveRecord::Migration
       t.date :publish_date
       t.string :publisher_location
       t.datetime :fetched_at
-      t.string :download_url
+      t.text :download_url
       t.boolean :dont_fetch
       t.string :resource_type
 

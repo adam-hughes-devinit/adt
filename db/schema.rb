@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530220957) do
+ActiveRecord::Schema.define(:version => 20130606141817) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -337,12 +337,13 @@ ActiveRecord::Schema.define(:version => 20130530220957) do
     t.date     "publish_date"
     t.string   "publisher_location"
     t.datetime "fetched_at"
-    t.string   "download_url"
+    t.text     "download_url"
     t.boolean  "dont_fetch"
     t.string   "resource_type"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-    t.string   "source_url"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.text     "source_url"
+    t.integer  "projects_count",     :default => 0
   end
 
   create_table "review_entries", :force => true do |t|

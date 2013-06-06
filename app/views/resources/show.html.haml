@@ -1,15 +1,17 @@
 - provide :title, @resource.title
-.row-fluid
-	%h1.page-header
-		= @resource.title
+
 .row-fluid
 	.span4
 		%strong
-			= link_to "&larr; All resources".html_safe, resources_path, class: "text-info"
-	- if current_user_is_aiddata
-		.span4
-			%a.btn{href: edit_resource_path(@resource)}
-				Edit
+			= link_to "&larr; All resources".html_safe, resources_path
+.row-fluid
+	%h1.page-header
+		= @resource.title
+		- if current_user_is_aiddata
+			= link_to "Edit", edit_resource_path(@resource), class: "btn"
+
+			= link_to "Destroy", @resource, method: :delete, confirm: "Are you sure you want to delete this resource?", class: "btn btn-danger"
+
 .row-fluid
 	.span6.container-fluid
 		.row-fluid
@@ -21,7 +23,7 @@
 						%strong
 							Authors:
 						= @resource.authors
-					%li
+					%li{style: "overflow-x:scroll;"}
 						%strong
 							Source URL:
 						= link_to @resource.source_url, (@resource.source_url[0..6] == "http://" ? "" : "http://") + @resource.source_url
@@ -32,9 +34,11 @@
 					%li
 						%strong
 							Publisher:
-						= @resource.publisher + ","
-						%em
-							= @resource.publisher_location
+						= @resource.publisher 
+					%li
+						%strong
+							Location:
+						= @resource.publisher_location
 					%li
 						%strong
 							Publish Date:
@@ -42,37 +46,49 @@
 		
 		
 		%hr
-
-		
-		%h4.text-info 
-			Download this Resource:
-
-		.row-fluid
-			.span6
-				%strong
-					Last stored:
-				- if @resource.fetched_at.present?
-					= time_ago_in_words @resource.fetched_at
-					ago.
-				- else
+		.row-fluid		
+			%h4.text-info 
+				Download this Resource:
+		- if @resource.dont_fetch
+			.row-fluid
+				%p 
 					%em
-						Not fetched.
-			.span6
-				- if @resource.download_url.present? && @resource.download_url[0..6] == 'http://'
+						This resource isn't being fetched.
+		- else
+			.row-fluid
+				.span6
 					%strong
-						Link:
-						= link_to @resource.title, @resource.download_url, target: "_blank"
-				- else
-					%em
-						No link!
+						Last stored:
+					- if @resource.fetched_at.present?
+						= time_ago_in_words @resource.fetched_at
+						ago.
+					- else
+						%em
+							No link!
+				.span6
+					- if @resource.download_url.present? && @resource.download_url[0..6] == 'http://'
+						%strong
+							Link:
+							= link_to @resource.title, @resource.download_url, target: "_blank"
+					- else
+						%em
+							Couldn't be fetched!
 
 
 	.span6.container-fluid
 		.row-fluid
-			%h4 Citation
+			%h4 Citation:
 			%p
 				= @resource.to_citation
 			%hr
+		- if current_user_is_aiddata
+			.row-fluid
+				.alert.alert-warning
+					%h4 Merge into another resource:
+					%form{method: 'post', action: get_devoured_resource_path(@resource), onsubmit: "return confirm('Are you sure you want to merge this resource into the other one?')"}
+						%input{name: "devourer_id", type: "text", placeholder:"Enter the ID of the target Resource."}
+						%input{type: "submit", value: "Merge!", class: "btn btn-warning"}
+
 		.row-fluid.well.well-small
 			%h4 
 				Pinned to 

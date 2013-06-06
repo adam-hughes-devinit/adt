@@ -110,8 +110,9 @@
                 %li{ style: "margin:5px;color:#fcc;font-size:20px" }
                   %strong
                     DEV
-              %li.pull-right
-                %input#header_search{type: "text", placeholder: "Search the data or find a project..."}
+              - if current_user_is_aiddata
+                %li.pull-right
+                  %input#header_search{type: "text", placeholder: "Search the data or find a project..."}
         - if current_user_is_aiddata
           %div.row-fluid
             %nav.span12

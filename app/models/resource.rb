@@ -1,14 +1,8 @@
 class Resource < ActiveRecord::Base
 	
 	include AmazonHelper
+	include ResourceSearchable
 
-	attr_accessible :authors, :dont_fetch, :download_url, 
-	:fetched_at, :publish_date, :publisher, 
-	:publisher_location, :resource_type, :title, :source_url,
-	:project_ids
-
-	validates_uniqueness_of :source_url
-	validates_presence_of :source_url, :title, :authors
 	RESOURCE_TYPES = [
 		"Government Source (Donor/Recipient)",
 		"Implementing/Intermediary Agency Source",
@@ -21,15 +15,29 @@ class Resource < ActiveRecord::Base
 		"Other"
 	]
 
+	attr_accessible :authors, :dont_fetch, :download_url, 
+	:fetched_at, :publish_date, :publisher, 
+	:publisher_location, :resource_type, :title, :source_url,
+	:project_ids, :projects_count
 
+	validates_uniqueness_of :source_url
+	validates_presence_of :source_url, :title
 	validates_inclusion_of :resource_type, in: RESOURCE_TYPES
 
 	after_save :fetch!, if: Proc.new {|r| r.source_url_changed? }
+	after_save :set_projects_count
 
-	has_and_belongs_to_many :projects
+	has_and_belongs_to_many :projects, uniq: true
+	# I Wish. delegate :title, :description, to: :projects, prefix: true
+
 
 	def self.resource_types
 		RESOURCE_TYPES
+	end
+
+	def set_projects_count
+		# homebrewed counter_cache since not supported for habtm
+		self.update_column :projects_count, self.projects.count
 	end
 
 	def to_citation
@@ -37,8 +45,28 @@ class Resource < ActiveRecord::Base
 		# Author's last name, first name. "Title of Article." Title of Encyclopedia. Date. 
 		# Author's last name, first name. "Article title." Periodical title Volume # Date: inclusive pages. 
 
-		"#{authors}.\"#{title}.\" <i>#{publisher}</i>. #{publish_date}. Accessed: #{dont_fetch ? created_at : fetched_at}. <a href='#{source_url}'>#{source_url}</a>.".html_safe
+		citation = "#{authors.present? ? "#{authors}." : ""} \"#{title}.\"" +
+			" #{publisher.present? ? "<i>#{publisher}</i>." : ""}" +
+			" #{publish_date.present? ? "#{publish_date}." : ""}" +
+			" Accessed: #{dont_fetch ? created_at : fetched_at}. " +
+			" <a href='#{source_url}'>#{source_url}</a>.".html_safe
+
+			citation
 	end
+
+	alias :to_english :to_citation
+
+	def devour!(other_resource)
+		other_resource.projects.each do |project|
+			projects << project
+		end
+		
+		success = self.save!
+		other_resource.destroy if success
+		return success
+
+	end
+
 
 	def fetch!
 		update_column :fetched_at, nil
@@ -48,16 +76,23 @@ class Resource < ActiveRecord::Base
 	  		require 'open-uri'
 
 	  		begin 
+	  			bucket_name = Rails.env.production? ? 'china_resources' : 'china_resources_dev'
 	  			resource_copy = open(source_url) 
 	  			# pull the last bit from the URL
 	  			s3_filename = source_url.gsub(/^.*\/(.*)$/, '\1')
 	  			
 	  			# if pulling name from URL doesn't work:
-	  			s3_filename = "#{id}_#{title.gsub(/[\s]/, '_')}" if s3_filename.blank?
+	  			s3_filename = "#{title}".gsub(/\//, '-') if s3_filename.blank?
 	  			
-	  			p "RESOURCE: Saving #{s3_filename} from #{source_url}"
- 				filename = s3_upload "china_resources", resource_copy, s3_filename
- 				new_download_url = "http://s3.amazonaws.com/china_resources/#{s3_filename}"
+	  			timestamp = Time.new.to_s.gsub(/[\s:]+/, '_')
+	  			s3_filename =  "#{timestamp}_#{s3_filename}" #.gsub(/[\s:]/, '_')
+	  			
+	  			# store it in bucket/id/filename
+	  			p "RESOURCE: Saving #{s3_filename} from #{source_url} to #{bucket_name}/#{id}"
+ 				filename = s3_upload bucket_name, resource_copy, "#{id}/#{s3_filename}"
+
+				new_download_url = "http://s3.amazonaws.com/#{bucket_name}/#{id}/#{CGI::escape s3_filename}"
+ 			
  			rescue Exception => e 
  				p e.message
  				new_download_url = nil
@@ -68,10 +103,5 @@ class Resource < ActiveRecord::Base
 		self.update_column :download_url, new_download_url
 	end
 	handle_asynchronously :fetch!
-
-	searchable do 
-		text :title, :authors, :publisher_location, :publisher, :source_url, :id
-	end
-
 
 end
