@@ -15,7 +15,7 @@
 			<%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
 			<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
       <% if not @project.published %>
-        <button class="span3 btn btn-success" id="approve">Approve This Project </button>
+        <button class="span3 btn btn-info" id="approve">Approve This Project </button>
       <% end %>
 			</p>
 	<% end %>
