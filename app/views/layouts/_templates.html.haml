@@ -1,6 +1,6 @@
 
 %script#typeahead_template{type: "text/template"}
-	.row-fluid
+	.row-fluid{"data-target" => "<%= target %>".html_safe}
 
 		%p
 			<%= english %>

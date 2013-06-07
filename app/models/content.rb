@@ -33,7 +33,7 @@ class Content < ActiveRecord::Base
   end
 
   def to_english
-    "#{name.capitalize}"
+    "#{name.titleize}"
   end
 
   searchable do 

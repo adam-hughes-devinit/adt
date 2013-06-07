@@ -3,6 +3,7 @@ module Typeaheadable
 	def enable_typeahead(active_record_model, options={})
 		# pass facets: {facet: value, facet: value}
 		facets = options[:facets] || []
+		max = options[:max] || 15
 
 		raise NoMethodError, "Model must be searchable" unless active_record_model.respond_to?(:search)
 		
@@ -12,7 +13,7 @@ module Typeaheadable
 				facets.each{ |k,v| with k,v  }
 
 				
-				paginate page: 1, per_page: 15
+				paginate page: 1, per_page: max
 			end
 
 			models = search.results
@@ -24,8 +25,9 @@ module Typeaheadable
 
 				typeahead_array = models.map do |model|
 
+					value_method = options[:value_method] || :id
 					typeahead_object = {
-						value: model.id,
+						value: model.send(value_method),
 						tokens: model.to_english.split(" "),
 						english: model.to_english,
 						type: model_name,
