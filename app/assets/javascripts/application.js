@@ -46,10 +46,11 @@ $('#header_search').typeahead([
 		window.location = datum.target
 	}).on("keyup", function(e) {
 		if (e.which == 13 && $("*:focus").is("#header_search")) {
-			value = $(this).val()
-			target = $('.tt-is-under-cursor').children().attr("data-target")
-			if (target.length > 1) {
-				window.location = target
+			var target;
+			var value = $(this).val()
+			var tt_target = String($('.tt-is-under-cursor').children().attr("data-target"))
+			if (tt_target!= 'undefined') {
+				target = tt_target
 			}
 			else if (Number(value)) {
 				target = "/projects/" + value
