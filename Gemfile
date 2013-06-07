@@ -39,7 +39,6 @@ group :development, :test do
   #gem 'factory_girl_rails', '1.4.0'
   gem 'sunspot_solr'
   gem 'launchy'
-  gem 'spork', '0.9.2'
   gem 'quiet_assets'
   gem 'spork-rails'
   gem 'brakeman', require: false

@@ -49,9 +49,9 @@ class Resource < ActiveRecord::Base
 			" #{publisher.present? ? "<i>#{publisher}</i>." : ""}" +
 			" #{publish_date.present? ? "#{publish_date}." : ""}" +
 			" Accessed: #{dont_fetch ? created_at : fetched_at}. " +
-			" <a href='#{source_url}'>#{source_url}</a>.".html_safe
+			" <a href='#{source_url}'>#{source_url}</a>."
 
-			citation
+		citation.html_safe
 	end
 
 	alias :to_english :to_citation

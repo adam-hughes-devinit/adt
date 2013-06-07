@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130606141817) do
-
+ActiveRecord::Schema.define(:version => 20130606230614) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -335,11 +334,11 @@ ActiveRecord::Schema.define(:version => 20130606141817) do
   end
 
   create_table "resources", :force => true do |t|
-    t.string   "title"
+    t.text     "title"
     t.text     "authors"
-    t.string   "publisher"
+    t.text     "publisher"
     t.date     "publish_date"
-    t.string   "publisher_location"
+    t.text     "publisher_location"
     t.datetime "fetched_at"
     t.text     "download_url"
     t.boolean  "dont_fetch"

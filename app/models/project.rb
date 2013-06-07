@@ -147,7 +147,6 @@ class Project < ActiveRecord::Base
 
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
-<<<<<<< HEAD
     english = Rails.cache.fetch("projects/#{id}/to_english/#{exclude_title ? "no_title" : "title" }") do
       "#{exclude_title ? "" : "#{title}: "}" +
       "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
@@ -157,12 +156,6 @@ class Project < ActiveRecord::Base
 
     english
 
-=======
-    "#{exclude_title ? "" : "#{title}: "}" +
-      "#{ usd_2009.present? && usd_2009 > 0 ? "$#{number_with_precision(usd_2009, precision: 2, delimiter: ",")}" : ""}" +
-      (geopoliticals.blank? ? "" : " to #{country_name.to_sentence}" ) +
-      (year.present? ? " in #{year}" : "")
->>>>>>> 177bf779f721b16bcb68e1813483610b13cdcd42
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
