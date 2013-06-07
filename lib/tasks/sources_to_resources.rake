@@ -18,7 +18,7 @@ namespace :projects do
 
  		Source.find_each do |source|
 			
-			if source.url.present?
+			if source.url.present? && source.project.present?
 				resource = Resource.find_or_initialize_by_source_url(source.url)
 				
 				if resource.publish_date.blank?
@@ -45,17 +45,16 @@ namespace :projects do
 		end
 	end
 
-	desc "Flush resources in development"
+	desc "Flush resources"
 	task :flush_resources => :environment do
-		if Rails.env.development?
-			progress_bar = ProgressBar.new(Resource.count)
-			
-			Resource.all.each do |r|
-				r.destroy
-				progress_bar.increment!
-			end
 
+		progress_bar = ProgressBar.new(Resource.count)
+		
+		Resource.all.each do |r|
+			r.destroy
+			progress_bar.increment!
 		end
+
 	end
 
 end
