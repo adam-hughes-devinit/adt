@@ -44,22 +44,24 @@ $('#header_search').typeahead([
 
 	]).on("typeahead:selected", function(e, datum) {		
 		window.location = datum.target
-	}).on("keyup", function(e) {
-		if (e.which == 13 && $("*:focus").is("#header_search")) {
-			var target;
-			var value = $(this).val()
-			var tt_target = String($('.tt-is-under-cursor').children().attr("data-target"))
-			alert(tt_target)
-			if (tt_target!= 'undefined') {
-				target = tt_target
-			}
-			else if (Number(value)) {
-				target = "/projects/" + value
-			}
-			else {
-				target = "/projects?search=" + value
-			}
-			window.location = target
-		}
 	})
+	// .on("keyup", function(e) {
+	// 	console.log(e)
+	// 	// if (e.which == 13 && $("*:focus").is("#header_search")) {
+	// 	// 	var target;
+	// 	// 	var value = $(this).val()
+	// 	// 	var tt_target = String($('.tt-is-under-cursor').children().attr("data-target"))
+	// 	// 	alert(tt_target)
+	// 	// 	if (tt_target != 'undefined') {
+	// 	// 		target = tt_target
+	// 	// 	}
+	// 	// 	else if (Number(value)) {
+	// 	// 		target = "/projects/" + value
+	// 	// 	}
+	// 	// 	else {
+	// 	// 		target = "/projects?search=" + value
+	// 	// 	}
+	// 	// 	window.location = target
+	// 	// }
+	// })
 })
