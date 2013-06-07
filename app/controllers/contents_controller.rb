@@ -2,6 +2,8 @@ class ContentsController < CodesController
 skip_before_filter :signed_in_user, only: [:show_by_name, :search]
 
 before_filter { |c| create_local_variables "Content", "Content", has_projects: false }
+extend Typeaheadable
+enable_typeahead Content
 
 	def show_by_name
 		@content = Content.find_by_name(params[:name])

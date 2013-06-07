@@ -17,20 +17,25 @@ module Typeaheadable
 
 			models = search.results
 
+			if models.length > 0
+				model_name = models.first.class.name
+				raise NoMethodError, "#{model_name} must respond to :to_english" unless models.first.respond_to?(:to_english)
+				
 
-			raise NoMethodError, "Model must respond to :to_english" unless models.first.respond_to?(:to_english)
-			model_name = models.first.class.name
+				typeahead_array = models.map do |model|
 
-			typeahead_array = models.map do |model|
-
-				typeahead_object = {
-					value: model.id,
-					tokens: model.to_english.split(" "),
-					english: model.to_english,
-					type: model_name,
-					target: url_for(model)
-				}
+					typeahead_object = {
+						value: model.id,
+						tokens: model.to_english.split(" "),
+						english: model.to_english,
+						type: model_name,
+						target: (model_name == 'Content' ? content_by_name_path(model.name) : url_for(model))
+					}
+				end
+			else
+				typeahead_array = []
 			end
+
 
 
 			render json: typeahead_array

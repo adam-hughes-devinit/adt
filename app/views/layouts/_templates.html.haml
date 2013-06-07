@@ -1,8 +1,14 @@
 
 %script#typeahead_template{type: "text/template"}
-	%p
-		<%= english %>
-		(
-		%strong<>
-			<%= value %>
-		)
+	.row-fluid
+
+		%p
+			<%= english %>
+			| 
+			%span.muted
+				<% if (type=='Content') { %>
+				Site content
+				<% } else { %>
+				<%= type %> #<%= value %>
+				<% } %>
+		

@@ -19,13 +19,30 @@
 //= require bootstrap_teaser
 //= require ./twitter_typeahead/index
 $(function() {
-$('#header_search').typeahead([{
-	name: "projects",
-	remote: "/projects/typeahead?search=%QUERY",
-	template: $('#typeahead_template').html(),
-	engine: typeahead_engine,
-	limit: 20,
-	}]).on("typeahead:selected", function(e, datum) {		
+$('#header_search').typeahead([
+	{
+		name: "contents",
+		remote: "/contents/typeahead?search=%QUERY",
+		template: $('#typeahead_template').html(),
+		engine: typeahead_engine,
+		limit: 4,
+	},
+	{
+		name: "projects",
+		remote: "/projects/typeahead?search=%QUERY",
+		template: $('#typeahead_template').html(),
+		engine: typeahead_engine,
+		limit: 8,
+	},
+	{
+		name: "resources",
+		remote: "/resources/typeahead?search=%QUERY",
+		template: $('#typeahead_template').html(),
+		engine: typeahead_engine,
+		limit: 8,
+	},
+
+	]).on("typeahead:selected", function(e, datum) {		
 		window.location = datum.target
 	}).on("keyup", function(e) {
 		if (e.which == 13 && $("*:focus").is("#header_search")) {

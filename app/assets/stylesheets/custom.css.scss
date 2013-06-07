@@ -488,6 +488,7 @@ label {
 .twitter-typeahead {
   margin: 4px;
   min-width: 300px;
+  max-width: 350px;
 }
 .twitter-typeahead .tt-query,
 .twitter-typeahead .tt-hint {
@@ -515,22 +516,24 @@ label {
           background-clip: padding-box;
 }
 
-.tt-suggestion {
+
+.tt-suggestion{
+
   display: block;
   padding: 3px 20px;
   line-height: 13px;
   font-size: 12px;
-}
 
-.tt-suggestion.tt-is-under-cursor {
-  color: #fff;
-  background-color: $aiddataBlue;
-  background-image: -moz-linear-gradient(top, $aiddataBlue, $aiddataBlue);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($aiddataBlue), to($aiddataBlue));
-  background-image: -webkit-linear-gradient(top, $aiddataBlue, $aiddataBlue);
-  background-image: -o-linear-gradient(top, $aiddataBlue, $aiddataBlue);
-  background-image: linear-gradient(to bottom, $aiddataBlue, $aiddataBlue);
-  background-repeat: repeat-x;
+  &.tt-is-under-cursor {
+    color: #fff;
+    background-color: $aiddataBlue;
+    background-image: -moz-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from($aiddataBlue), to($aiddataBlue));
+    background-image: -webkit-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+    background-image: -o-linear-gradient(top, $aiddataBlue, $aiddataBlue);
+    background-image: linear-gradient(to bottom, $aiddataBlue, $aiddataBlue);
+    background-repeat: repeat-x;
+  }
 }
 
 .tt-suggestion.tt-is-under-cursor a {

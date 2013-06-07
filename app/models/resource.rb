@@ -54,7 +54,10 @@ class Resource < ActiveRecord::Base
 		citation.html_safe
 	end
 
-	alias :to_english :to_citation
+	def to_english
+		"#{title} #{publisher.present? ? ", #{publisher}" : ""} (#{resource_type})"
+	end
+
 
 	def devour!(other_resource)
 		other_resource.projects.each do |project|

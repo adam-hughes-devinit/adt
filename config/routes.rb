@@ -3,8 +3,11 @@ Adt::Application.routes.draw do
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
-  :flag_types, :loan_types, :contents
+  :flag_types, :loan_types
   resources :exports
+
+  get '/contents/typeahead', to: 'contents#twitter_typeahead'
+  resources :contents
 
   get '/pending_content', to: 'pending_content#index'
   get '/pending_content/:pending_content_scope', to: 'pending_content#index', as: "scoped_pending_content"

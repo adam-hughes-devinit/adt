@@ -32,6 +32,10 @@ class Content < ActiveRecord::Base
     data
   end
 
+  def to_english
+    "#{name.capitalize}"
+  end
+
   searchable do 
     text :id, :name, :content, :content_type
   end
