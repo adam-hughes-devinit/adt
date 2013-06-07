@@ -49,6 +49,7 @@ $('#header_search').typeahead([
 			var target;
 			var value = $(this).val()
 			var tt_target = String($('.tt-is-under-cursor').children().attr("data-target"))
+			alert(tt_target)
 			if (tt_target!= 'undefined') {
 				target = tt_target
 			}

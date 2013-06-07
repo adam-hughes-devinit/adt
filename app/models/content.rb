@@ -36,8 +36,19 @@ class Content < ActiveRecord::Base
     "#{name.titleize}"
   end
 
-  searchable do 
-    text :id, :name, :content, :content_type
+  def page_content
+    if content_type == "Complex Page" ||  content_type == "Page"
+      require 'open-uri'
+      app_root = Rails.env.production? ? "http://china.aiddata.org" : "http://localhost:3000" 
+      pc = open("#{app_root}/content/#{name}"){|io| io.read}
+    else
+      pc = content
+    end
+    pc 
+  end
+
+  searchable if: proc { |c| ["Page", "Complex Page"].include?(c.content_type)} do 
+    text :id, :name, :page_content, :content_type
   end
   
 
