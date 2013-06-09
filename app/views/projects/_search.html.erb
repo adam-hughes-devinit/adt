@@ -53,7 +53,7 @@
 				</div>
 			</div>
 			<div class='row-fluid'>
-				<% visible_facets = FACETS.select{|f| f[:name] != ""} %>
+				<% visible_facets = ProjectSearch::FACETS.select{|f| f[:name] != ""} %>
 				<% third = (visible_facets.count/3).round + 1 %>
 				<% visible_facets.each_slice(third) do |slice| %>
 
@@ -70,7 +70,7 @@
 					<p><b>AidData Workflow Filters:</b><p>
 					<ol>
 						<%= 
-							render partial: 'projects/search_facet', collection: WORKFLOW_FACETS
+							render partial: 'projects/search_facet', collection: ProjectSearch::WORKFLOW_FACETS
 						%>
 					</ol>					
 				</div>

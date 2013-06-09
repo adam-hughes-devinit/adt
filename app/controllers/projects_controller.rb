@@ -25,7 +25,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
         @project_facet_counts = Rails.cache.fetch("projects/faceted") do
           # wipe it in ProjectSweeper!
           p "---------------- STARTING CACHE -------------------------"
-          facets = (WORKFLOW_FACETS + FACETS)
+          facets = (ProjectSearch::WORKFLOW_FACETS + ProjectSearch::FACETS)
           all_projects = Project.search do
             facets.each do |f|
               facet f[:sym]

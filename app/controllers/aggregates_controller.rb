@@ -27,34 +27,19 @@ include AggregatesHelper
 			@get = params[:get]
 		end
 		
-		#  &wdi=#{wdi_code} 
-
-		if @get && @get.include?("year") && @get.include?("recipient_iso3")
-			if params[:wdi].class== String
-				@wdi = params[:wdi].split(VALUE_DELIMITER)
-			elsif params[:wdi].class== Array
-				@wdi = params[:wdi]
-			else 
-				@wdi = []
-			end
-			@wdi = @wdi.map do |wdi_input| 
-				if wdi_input.upcase == wdi_input.upcase[/[A-Z0-9\.]+/]
-					wdi_input.upcase
-				end 
-			end
-		end
+		
 
 		VALID_FIELDS.each do |field|
 	      	if @get.include?(field[:external]) 
 	      		@fields_to_get.push field
 	      		@sorter = field[:sorter]
 	      	end
-	 end
+		end
 
 	    @filters = ["active = 't' "]
 
 			# defined in AggregateHelper
-	  WHERE_FILTERS.each do |wf|
+		WHERE_FILTERS.each do |wf|
 	    	param_values = params[wf[:sym]] 
 		    if param_values		    	
 		    	if param_values.class == String 
@@ -119,53 +104,12 @@ include AggregatesHelper
 			@data = ActiveRecord::Base.connection.execute(sql)
 
 
-			# HANDLING WDI
-			if @wdi  # && @data.last["year"] && @data.last["recipient_iso3"]
-				p "Trying"
-				active_recipients = @data.map {|d| d["recipient_iso3"] }
-				wdi_recipient_year_nest = {}
-				
-				active_recipients.each do |recipient_iso3|
-					if recipient_iso3.length == 3
-						wdi_recipient_year_nest[recipient_iso3]={} 
-				
-						("2000".."2012").each do |y|
-							wdi_recipient_year_nest[recipient_iso3][y] = {}
-						end
-				
-						@wdi.each do |wdi_code|
-				
-							request_url = "http://api.worldbank.org/countries/#{recipient_iso3}/indicators/#{wdi_code}?per_page=50&format=json&date=2000:2012"
-							wdi_response_string = open(request_url){|io| io.read} 
-							response_feed = ActiveSupport::JSON.decode(wdi_response_string)
-							# go through for each year and drop it in "nest"
-							response_feed[1].each do |wdi_point|
-								# then drop it by _nest[recipient][year]
-								wdi_recipient_year_nest[recipient_iso3][wdi_point["date"]][wdi_point["indicator"]["id"]] = wdi_point["value"]
-							end
-						end
-					end
-				end
-				p wdi_recipient_year_nest.inspect
-				p @wdi.inspect
-				if wdi_recipient_year_nest
-					@data.each do |d|
-						if wdi_values = wdi_recipient_year_nest[d["recipient_iso3"]] 
-							if wdi_values_iso3_year = wdi_values[d["year"].to_s]
-								wdi_values_iso3_year.each_pair do |k,v|
-									d[k] = v
-								end
-							end
-						end
-					end
-				end
-			end
+
 		
 				
 			
 			
 			@column_names = @fields_to_get.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] + (@wdi || [])
-		  p @column_names
 		  
 		  respond_to do |format|
 		    # default: render json
@@ -173,10 +117,9 @@ include AggregatesHelper
 		    # if asking for CSV, send an on-the-fly CSV
 		    format.csv { send_data data_to_csv, filename: "AidData_China_Aggregates_#{Time.now.strftime("%y-%m-%d-%H:%M:%S.%L")}.csv"}
 		  end
-		  p @column_names
 		else	
 			render json: params
-	  end  		
+		end  		
 	
 	end
 	

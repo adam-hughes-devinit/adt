@@ -52,7 +52,7 @@ module SearchHelper
 		end
 		    
 	    # Filter by params
-	    (FACETS + WORKFLOW_FACETS).each do |f|
+	    (ProjectSearch::FACETS + ProjectSearch::WORKFLOW_FACETS).each do |f|
 	        facet f[:sym]
 	        if requested_values = params[f[:sym]]
 	        	if requested_values.class == String
