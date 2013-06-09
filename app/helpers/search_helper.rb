@@ -1,6 +1,14 @@
 module SearchHelper
 	include AggregatesHelper
 	
+	def active_or_inactive(project)
+	project_display_name = project.title.blank? ? "#{project.id} (No title)" : project.title
+		if !project.active 
+			"<span class='inactive-project-title'>#{project_display_name} (Inactive)</span>".html_safe
+		else
+			project_display_name
+		end
+	end
 	# Constants in an initializer
 
 	def custom_search(options = {})

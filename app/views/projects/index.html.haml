@@ -1,0 +1,80 @@
+- provide(:title, "Projects") 
+- dir = (params[:dir] == "ASC" ? "DESC" : "ASC")
+
+%h1.page-header
+	Search Projects 
+
+= render 'search' 
+
+.row-fluid
+	= render 'search_export'
+
+.row-fluid
+	= will_paginate @projects
+
+
+.row-fluid
+	%table.table.table-hover
+		%thead
+			%tr
+				%th
+					= link_to "ID", params.merge(dir: dir, order_by: "id")
+				%th
+					= link_to "Donor", params.merge(dir: dir, order_by: "donor_name")
+				%th
+					= link_to "Title", params.merge(dir: dir, order_by: "title")
+				%th
+					= link_to "Year", params.merge(dir: dir, order_by: "year")
+				%th 
+					= link_to "Recipients", params.merge(dir: dir, order_by: "recipient_condensed")
+				%th
+					= link_to "Amount (USD-2009)", params.merge(dir: dir, order_by: "usd_2009")
+		%tbody
+			= render partial: "projects/search_result", collection: @projects
+
+.row-fluid
+	= will_paginate @projects
+
+
+
+:javascript
+
+	$('.scope-tooltip, .facet-tooltip').tooltip()
+
+	#{
+	js = ""
+	 if (scopes = params[:scope_names]) && scopes.is_a?(Array) 
+		scopes.each do |scope_name| 
+			js << %!$('.facet-list-item .scope_names[value="#{scope_name}"]').prop("checked", "true");!
+		end
+	end
+	js.html_safe
+	}
+
+	$('.facet-list-item').click(function() {
+		this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+		update_check_counter_for(this_facet)
+	})
+
+	function update_check_counter_for(this_facet) {
+		checked_boxes = $(".search_check."+this_facet+":checked")
+		check_count = checked_boxes.length
+		counter = $('.check_count.'+this_facet)
+		counter_text = check_count > 0 ? "("+check_count+")" : ""
+		counter.text(counter_text)
+		
+	}
+
+	function update_all_check_counts() {
+		#{
+		js = ""
+		 (FACETS + WORKFLOW_FACETS).each do |f| 
+			js << "update_check_counter_for('#{f[:sym].to_s}');" 
+		end 
+		js.html_safe
+		}
+	}
+
+	update_all_check_counts()
+
+
