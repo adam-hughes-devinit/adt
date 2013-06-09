@@ -59,9 +59,7 @@
 
 					<div class='span4 pull-left'>
 						<ol>
-						<% slice.each do |f| %>
-							<%= render partial: 'projects/search_facet', locals: {f: f} %>
-						<% end %>
+						<%= render partial: 'projects/search_facet', collection: slice %>
 						</ol>
 					</div>
 					
@@ -71,11 +69,9 @@
 				<div class='row-fluid'>			
 					<p><b>AidData Workflow Filters:</b><p>
 					<ol>
-						<% WORKFLOW_FACETS.each do |f| %>
-							<%= 
-								render partial: 'projects/search_facet', locals: {f: f} 
-							%>
-						<% end %>
+						<%= 
+							render partial: 'projects/search_facet', collection: WORKFLOW_FACETS
+						%>
 					</ol>					
 				</div>
 			<% end %>

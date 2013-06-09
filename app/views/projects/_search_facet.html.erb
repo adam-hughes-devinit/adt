@@ -1,37 +1,37 @@
 <div class='search-facet'>
-	<% if (these_facet_values = @project_facet_counts[f[:sym]]) %>
-		<b class='facet-header facet-tooltip' title='<%= f[:description] %>'>
+	<% if (these_facet_values = @project_facet_counts[search_facet[:sym]]) %>
+		<b class='facet-header facet-tooltip' title='<%= search_facet[:description] %>'>
 			<%= 
-				link_to_function f[:name], 
+				link_to_function search_facet[:name], 
 				"$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle()"  
 			%>
 		</b> 
-		<span class='check_count <%= f[:sym].to_s %>'>
+		<span class='check_count <%= search_facet[:sym].to_s %>'>
 
 		</span>
 		<%= link_to_function "Select all", 
-			"$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('#{f[:sym].to_s}')", 
+			"$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('#{search_facet[:sym].to_s}')", 
 			class: "facet-controller" %>
-		<%= link_to_function "Unselect all", "$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('#{f[:sym].to_s}')", class: "facet-controller" %>
+		<%= link_to_function "Unselect all", "$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('#{search_facet[:sym].to_s}')", class: "facet-controller" %>
 		<ul class='unstyled facet-list'>
 			<% these_facet_values.each do |value| %>
 				<li class='facet-list-item'>
 					<label class='checkbox'>
 						<input 
 							type="checkbox" 
-							name="<%= f[:sym].to_s %>[]" 
+							name="<%= search_facet[:sym].to_s %>[]" 
 							value="<%= value %>"
-							class="search_check boolean <%= f[:sym].to_s %>"
+							class="search_check boolean <%= search_facet[:sym].to_s %>"
 							<% if (
-									@current_url_human_readable.include?("#{f[:sym].to_s}[]=#{value}")||
-									@current_url_human_readable.include?("#{f[:sym].to_s}=#{value}")
+									@current_url_human_readable.include?("#{search_facet[:sym].to_s}[]=#{value}")||
+									@current_url_human_readable.include?("#{search_facet[:sym].to_s}=#{value}")
 									) %>
 								checked='true'
 							<% end %>
 						>
 						<%= value %>
 						<span style='font-weight:normal;'>
-							<% if @search.facet(f[:sym]) && this_row = @search.facet(f[:sym]).rows.select { |r| r.value == value}[0]  %>
+							<% if @search.facet(search_facet[:sym]) && this_row = @search.facet(search_facet[:sym]).rows.select { |r| r.value == value}[0]  %>
 								(<%= this_row.count %>)
 							<% else %>
 								(0)

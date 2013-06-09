@@ -93,9 +93,7 @@ end %>
 	</tr>
 	</thead>
 	<tbody>
-	    <% @projects.each do |p| %>
-				<%= render partial: 'projects/search_result', locals: {p: p} %>
-	    <% end %>
+		<%= render partial: 'projects/search_result', collection: @projects %>
 	</tbody>
 </table>
 <%= will_paginate @projects %>
