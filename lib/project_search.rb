@@ -129,12 +129,13 @@ module ProjectSearch
 		end
 
 		searchable do 
-
-			integer :id # for sorting
-			double :usd_2009 # for sorting
-			string :title # for sorting
-			string :donor_name # for sorting
-			string :recipient_condensed # fir sorting
+			# for sorting
+			integer :id 
+			double :usd_2009 
+			string :title 
+			string :donor_name 
+			string :recipient_condensed 
+			date :updated_at
 
 			# for text search:
 			text :id
@@ -193,7 +194,6 @@ module ProjectSearch
 			  end
 			end
 
-			# All the facets are defined in initializers/search_constants
 			(FACETS + WORKFLOW_FACETS).each do |facet|
 				string facet[:sym], multiple: (facet[:multiple] || false ) do 
 					facet[:code] || self.send(facet[:sym]) 

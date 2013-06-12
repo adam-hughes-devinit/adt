@@ -12,6 +12,12 @@ class Organization < ActiveRecord::Base
   after_save :recache_and_reindex_this_organizations_projects
   after_destroy :destroy_organizations_hash
 
+  def self.aiddata
+    Rails.cache.fetch("organizations/aiddata", expires_in: 1.hour) do 
+      Organization.find_by_name("AidData")
+    end
+  end
+
   def name_with_type
   	"#{self.name} (#{self.cached_organization_type_name })"
   end

@@ -24,7 +24,7 @@ module SessionsHelper
 	end 
 	
 	def current_user_is_aiddata
-		signed_in? && current_user.owner && Organization.find_by_name("AidData") && current_user.owner_id = Organization.find_by_name("AidData").id
+		signed_in? && current_user.owner && current_user.owner_id == Organization.aiddata.id
 	end
 	
   def sign_in(user)

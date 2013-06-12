@@ -33,8 +33,10 @@ enable_typeahead Project, facets: {active_string: "Active"}
           end
           facet_counts = {}          
           facets.each do |f|
-            facet_values = all_projects.facet(f[:sym]).rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
-            facet_counts[f[:sym]] = facet_values
+            if this_facet = all_projects.facet(f[:sym])
+              facet_values = this_facet.rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
+              facet_counts[f[:sym]] = facet_values
+            end
           end
           facet_counts
         end 

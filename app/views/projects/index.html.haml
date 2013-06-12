@@ -1,5 +1,5 @@
 - provide(:title, "Projects") 
-- dir = (params[:dir] == "ASC" ? "DESC" : "ASC")
+- dir = (params[:dir] == "asc" ? "desc" : "asc")
 
 %h1.page-header
 	Search Projects 
@@ -29,6 +29,9 @@
 					= link_to "Recipients", params.merge(dir: dir, order_by: "recipient_condensed")
 				%th
 					= link_to "Amount (USD-2009)", params.merge(dir: dir, order_by: "usd_2009")
+				- if current_user_is_aiddata
+					%th
+						= link_to "Last Updated", params.merge(dir: dir, order_by: "updated_at")
 		%tbody
 			= render partial: "projects/search_result", collection: @projects
 

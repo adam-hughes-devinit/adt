@@ -27,7 +27,7 @@ class ScopeFilter < ActiveRecord::Base
     
     if (dv = disallowed_values) && dv.length > 0
       whole_dataset = Project.search do
-        (WORKFLOW_FACETS + FACETS).each do |f|
+        (ProjectSearch::WORKFLOW_FACETS + ProjectSearch::FACETS).each do |f|
           facet f[:sym]
         end
       end 
@@ -75,7 +75,7 @@ class ScopeFilter < ActiveRecord::Base
 
   # Fields have to be
   validates :field, 
-    inclusion: { in: (WORKFLOW_FACETS + FACETS).map {|f| f[:sym].to_s},
+    inclusion: { in: (ProjectSearch::WORKFLOW_FACETS + ProjectSearch::FACETS).map {|f| f[:sym].to_s},
     message: "Not a valid field!"}
 
   def build_scope_filter_scaffold

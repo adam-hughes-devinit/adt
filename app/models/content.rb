@@ -37,10 +37,16 @@ class Content < ActiveRecord::Base
   end
 
   def page_content
-    if content_type == "Complex Page" ||  content_type == "Page"
-      require 'open-uri'
-      app_root = Rails.env.production? ? "http://china.aiddata.org" : "http://localhost:3000" 
-      pc = open("#{app_root}/content/#{name}"){|io| io.read}
+    if content_type == "Complex Page" 
+      if persisted?
+        require 'open-uri'
+        app_root = Rails.env.production? ? "http://china.aiddata.org" : "http://localhost:3000" 
+        pc = open("#{app_root}/content/#{CGI::escape(name)}"){|io| io.read}
+      else
+        pc = content
+      end
+    elsif  content_type == "Page"
+      pc = Markdown.new(content).to_html      
     else
       pc = content
     end

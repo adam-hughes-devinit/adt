@@ -37,7 +37,7 @@ class Project < ActiveRecord::Base
 
   # default_scope where("verified_id != ?", Verified.find_by_name("Raw").id)
   default_scope where(published: true) 
-  scope :past_stage_one, where("active = 't' AND verified_id != ?", Verified.find_by_name("Raw").id)
+  scope :past_stage_one, where("active = 't' AND verified_id != ?", ((v = Verified.find_by_name("Raw")).present? ? v.id : 0 ))
   scope :active, where("active= 't' ")
   
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!

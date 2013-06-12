@@ -18,10 +18,10 @@ describe "Owner and admin system" do
 		end
 
 
-		it {should have_link("Sign in")}
+		it {should have_link("Sign In")}
 		it {should_not have_link("Users")}
 
-		it {should have_link("Codes")}
+		it {should_not have_link("Codes")}
 		it {should have_link("Projects")}
 		it {should_not have_link(edit_project_link_text)}
 
@@ -30,7 +30,7 @@ describe "Owner and admin system" do
 			it {response.should redirect_to(projects_path)}
 		end
 
-		describe "should be able to create a comment" do
+		describe "should not be able to create a comment" do
 			before do
 				visit project_path(project)
 				fill_in "Name" , with: comment.name
@@ -39,7 +39,8 @@ describe "Owner and admin system" do
 				click_button "Submit"
 			end
 
-			it {should have_content(comment.content)}
+			it {should_not have_content(comment.content)}
+
 		end
 	end
 
@@ -92,12 +93,11 @@ describe "Owner and admin system" do
 		specify {response.should redirect_to(signin_path)}
 	end
 
-	# can't visit the projects_path without solr :/
-	#
-	# describe "unsigned visit to project index page" do
-	#	 before {visit projects_path}
-	#	 it {should_not have_link("Edit")}
-	# end
+
+	describe "unsigned visit to project index page" do
+		 before {visit projects_path}
+		 it {should_not have_link("Edit")}
+	end
 
 
 
@@ -121,7 +121,7 @@ describe "Owner and admin system" do
 
 	describe "sign in a non-owning user " do
 		before do
-			visit signin_path
+			visit staff_login_path
 			fill_in "Email", with: user.email
 			fill_in "Password", with: user.password
 			click_button "Sign in"
@@ -130,7 +130,7 @@ describe "Owner and admin system" do
 		describe "signed visit to project page" do
 			before {visit project_path(project)}
 			it {should_not have_link("Sign in")}
-			it {should have_link("Users")}
+			it {should_not have_link("Users")}
 			it {should_not have_link(edit_project_link_text)}
 			it {should_not have_content("Delete comment")}
 		end
@@ -147,7 +147,7 @@ describe "Owner and admin system" do
 		before do 
 			user.save unless User.find_by_email(user.email)
 			project.update_attribute(:owner_id, user.owner.id)
-			visit signin_path
+			visit staff_login_path
 			fill_in "Email", with: user.email
 			fill_in "Password", with: user.password
 			click_button "Sign in"
@@ -165,26 +165,15 @@ describe "Owner and admin system" do
 				visit project_path(project)
 			end
 
-			it {should have_content(user.owner.name)}
+			# it {should have_content(user.owner.name)}
+			# This info isn't on the page anymore
+
 			it {should_not have_link("Sign in")}
-			it {should have_link("Users")}
+			it {should_not have_link("Users")}
 			it {should have_link(edit_project_link_text)}
 
 		end
 
-		describe "visit to users page" do
-			before do 
-				unowned_user = user.dup
-				unowned_user.name= "Unowned User"
-				unowned_user.email= "Unowneduser@aiddata.org"
-				unowned_user.owner_id = nil
-				unowned_user.save!
-				visit users_path
-			end
-
-			it {should have_content("Unowned User")}
-			it {should_not have_link("Add to #{user.owner.name}")}
-		end
 
 		describe "making an admin user" do
 			before do
