@@ -3,7 +3,7 @@ require 'spec_helper'
 
 
 describe User do
-	before  { @user = FactoryGirl.create(:user)}
+	before  { @user = FactoryGirl.build(:user)}
 
 	subject {@user}
 
@@ -85,7 +85,7 @@ describe User do
 	describe "when email address is already taken" do 
 		before do
 			user_with_same_email = @user.dup
-      user_with_same_email.email = @user.email.upcase
+    		user_with_same_email.email = @user.email.upcase
 			user_with_same_email.save!
 		end
 

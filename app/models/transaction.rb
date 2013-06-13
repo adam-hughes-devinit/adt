@@ -1,7 +1,8 @@
 class Transaction < ActiveRecord::Base
 	include VersionsHelper
   attr_accessible :currency_id, :usd_defl, :value, :project_id, :currency, 
-  :usd_current, :deflator_used, :exchange_rate, :deflated_at, :deflator, :created_at, :updated_at
+  :usd_current, :deflator_used, :exchange_rate, 
+  :deflated_at, :deflator, :created_at, :updated_at
   before_save :deflate_and_round_value
   include ProjectAccessory
 
@@ -21,7 +22,6 @@ class Transaction < ActiveRecord::Base
             
             deflator_object = ActiveSupport::JSON.decode(deflator_string)
            
-            # This is me being lazy because there might be an error
             begin  
               
               deflated_amount = deflator_object["deflated_amount"]

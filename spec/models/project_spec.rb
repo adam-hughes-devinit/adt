@@ -13,13 +13,6 @@ describe Project do
   describe "have a valid Factory" do
   	it {should be_valid}
   end
-  
-#  Not requiring title anymore
-#
-#  describe "requires title" do
-#  	before {project.title = ''}
-#  	it {should_not be_valid}
-#  end 
 
   it { should respond_to :transactions}
   it { should respond_to :geopoliticals}

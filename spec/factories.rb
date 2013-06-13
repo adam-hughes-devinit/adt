@@ -66,15 +66,6 @@ FactoryGirl.define do
     s.date 1.day.ago
   end
 
-
-  #factory :user do |user|
-  #  user.name                  "rmosolgo"
-  #	sequence(:email) { |n| "user#{n}@example.com" }
-  #  user.password              "foobar"
-  #  user.password_confirmation "foobar"
-  #  user.owner FactoryGirl.create(:organization)
-  #end
-
   FactoryGirl.define do
     sequence :email do |n|
       "email#{n}@example.com"
@@ -90,7 +81,7 @@ FactoryGirl.define do
   end
 
   factory :currency do |currency|
-    iso3 = ["CNY", "USD", "EUR", "KES", "XAF"].sample
+    iso3 = ["CNY", "JPY", "EUR", "KES", "XAF"].sample
     currency_name = Faker::Lorem.words[0]
     currency.name "#{iso3} #{currency_name.capitalize}"
     currency.iso3 iso3
@@ -189,8 +180,8 @@ FactoryGirl.define do
 
   factory :flag do |f|
       f.flag_type FactoryGirl.create(:flag_type)
-      f.flaggable_type "Transaction"
-      f.flaggable_id FactoryGirl.create(:transaction).id
+      f.flaggable_type "Project"
+      f.flaggable_id FactoryGirl.create(:project).id
       f.owner FactoryGirl.create(:user, email: "flag_email#{Random.rand(0..1000000).round}@example.com")
       f.comment 'I have something to say'
       f.source 'www.cnn.com/facts'
@@ -202,4 +193,19 @@ FactoryGirl.define do
     c.content 'Lorem ipsum'
     c.project FactoryGirl.create(:project)
   end
+
+  
+  FactoryGirl.define do 
+    sequence :source_url do |n|
+      "http://aiddatachina.org/projects/#{n}"
+    end
+  
+    factory :resource do |r|
+      r.title "China in Africa Stuff"
+      r.authors "Hu Jintao, Xi Jinping"
+      source_url 
+      r.resource_type Resource.resource_types.sample
+    end
+  end
+
 end

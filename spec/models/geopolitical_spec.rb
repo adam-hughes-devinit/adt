@@ -9,5 +9,4 @@ describe Geopolitical do
 		it { should be_valid}
 	end
 
-	# describe "have proper deflators"
 end

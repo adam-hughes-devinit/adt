@@ -41,7 +41,7 @@ group :development, :test do
   gem 'launchy'
   gem 'quiet_assets'
   gem 'spork-rails'
-  gem 'brakeman', require: false
+  # gem 'brakeman', require: false
 end
 
 

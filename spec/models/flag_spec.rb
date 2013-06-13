@@ -7,7 +7,7 @@ describe Flag do
  subject { flag }
  
 	describe "have valid factories" do
-	 it {should be_valid}
+		it {should be_valid}
 	end
 
 end

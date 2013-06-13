@@ -95,15 +95,17 @@ class Resource < ActiveRecord::Base
  				filename = s3_upload bucket_name, resource_copy, "#{id}/#{s3_filename}"
 
 				new_download_url = "http://s3.amazonaws.com/#{bucket_name}/#{id}/#{CGI::escape s3_filename}"
- 			
+ 				success = true
  			rescue Exception => e 
  				p e.message
  				new_download_url = nil
+ 				success = false
  			end
 		end
 
 		self.update_column :fetched_at, new_fetched_at 
 		self.update_column :download_url, new_download_url
+		return success
 	end
 	handle_asynchronously :fetch!
 
