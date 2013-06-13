@@ -24,14 +24,14 @@
 
 		#en.tab-pane.active
 			- if @content.content_type == "Complex Page"
-				- cache("content/#{@content.name}/en", expires_in: 1.minute ) do
+				- cache("content/#{@content.name}/{@content.updated_at}/en/#", expires_in: 1.minute ) do
 					#{eval(@content.content).html_safe}
 			- else
-				- cache("content/#{@content.name}/en", expires_in: 20.minutes ) do
+				- cache("content/#{@content.name}/{@content.updated_at}/en", expires_in: 20.minutes ) do
 					= Markdown.new(@content.content).to_html.html_safe
 		- if @content.chinese_content.present?
 			#zh.tab-pane
-				- cache("content/#{@content.name}/zh", expires_in: 20.minutes ) do
+				- cache("content/#{@content.name}/{@content.updated_at}/zh", expires_in: 20.minutes ) do
 					= Markdown.new(@content.chinese_content).to_html.html_safe			
 :javascript
 	// Javascript to enable link to tab
