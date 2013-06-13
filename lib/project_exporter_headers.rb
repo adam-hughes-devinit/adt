@@ -13,9 +13,8 @@ module ProjectExporterHeaders
     recipient_un_code recipient_imf_code 
     debt_uncertian line_of_credit is_cofinanced loan_type interest_rate 
     maturity grace_period
-    grant_element]
+    grant_element updated_at]
 
-    # Removed at brians request 3-28 is_commercial is_commercital 
     
     csv_header_string = ""
     csv_header_array.each {|v| csv_header_string << "\"#{v}\"," }

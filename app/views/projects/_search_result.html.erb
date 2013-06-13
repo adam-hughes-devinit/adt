@@ -8,9 +8,9 @@
 		<td><%= search_result.country_name.length>0 ? search_result.country_name.join(', ') : '—' %></td>
 		<td><%= search_result.usd_2009 ? "$#{number_with_precision(search_result.usd_2009, :precision => 2, :delimiter => ',')}" : '—' %></td>
 		
-		<% if current_user_is_aiddata %>
-			<td> <%= search_result.updated_at %></td>
-		<% end %>
+
+		<td> <%= current_user_is_aiddata ? search_result.updated_at : "" %></td>
+
 
 		<% if current_user && current_user.owner %>
 			<td>
