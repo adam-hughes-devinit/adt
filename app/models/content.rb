@@ -1,5 +1,5 @@
 class Content < ActiveRecord::Base
-  attr_accessible :content, :name, :content_type, :chinese_content
+  attr_accessible :content, :name, :chinese_name, :content_type, :chinese_content
   
   has_paper_trail
   
