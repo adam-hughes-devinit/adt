@@ -33,7 +33,7 @@ class Content < ActiveRecord::Base
   end
 
   def to_english
-    "#{name.titleize}"
+    "#{name.titleize} #{chinese_name.present? ? "(#{chinese_name})" : ""}"
   end
 
   def page_content
@@ -55,7 +55,7 @@ class Content < ActiveRecord::Base
   end
 
   searchable if: proc { |c| ["Page", "Complex Page"].include?(c.content_type)} do 
-    text :id, :name, :page_content, :content_type
+    text :id, :name, :chinese_name, :page_content, :content_type
   end
   
 
