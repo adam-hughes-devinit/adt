@@ -1,17 +1,54 @@
+-# encoding: utf-8 
+
 - provide :title, @content.name.titleize
 
 
 
 .row-fluid
-	.span12
-		%h1.page-header
+	%h1.page-header{style: "overflow-y:auto;"}
+		.span10
 			= @content.name.titleize
-.row-fluid
-	.span12.site_content{style: "margin: auto, auto;"}
+	
+		- if @content.chinese_content.present?
+			%small.span2{style: "height:30px;"}
+				%ul.nav.nav-tabs.inline
+					%li.pull-right
+						%a{href: "#zh", "data-toggle" => "tab"}
+							中文
+					%li.pull-right
+						%a{href: "#en", "data-toggle" => "tab"}
+							EN
 
-		- if @content.content_type == "Complex Page"
-			- cache(@content, expires_in: 1.minute ) do
-				#{eval(@content.content).html_safe}
-		- else
-			- cache(@content, expires_in: 20.minutes ) do
-				= Markdown.new(@content.content).to_html.html_safe
+.row-fluid
+	.tab-content.span12.site_content{style: "margin: auto, auto;"}
+
+		#en.tab-pane.active
+			- if @content.content_type == "Complex Page"
+				- cache("content/#{@content.name}/en", expires_in: 1.minute ) do
+					#{eval(@content.content).html_safe}
+			- else
+				- cache("content/#{@content.name}/en", expires_in: 20.minutes ) do
+					= Markdown.new(@content.content).to_html.html_safe
+		- if @content.chinese_content.present?
+			#zh.tab-pane
+				- cache("content/#{@content.name}/zh", expires_in: 20.minutes ) do
+					= Markdown.new(@content.chinese_content).to_html.html_safe			
+:javascript
+	// Javascript to enable link to tab
+	var url = document.location.toString();
+	if (url.match('#')) {
+	    $('.nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+	} 
+
+	// Change hash for page-reload
+	$('.nav-tabs a').on('shown', function (e) {
+		new_hash = e.target.hash;
+
+		if(history.pushState) {
+		    history.pushState(null, null, new_hash);
+		}
+		else {
+		    location.hash = new_hash;
+		}
+	    
+	})

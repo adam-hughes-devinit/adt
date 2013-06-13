@@ -1,5 +1,5 @@
 class Content < ActiveRecord::Base
-  attr_accessible :content, :name, :content_type
+  attr_accessible :content, :name, :content_type, :chinese_content
   
   has_paper_trail
   
@@ -46,7 +46,8 @@ class Content < ActiveRecord::Base
         pc = content
       end
     elsif  content_type == "Page"
-      pc = Markdown.new(content).to_html      
+      pc = Markdown.new(content).to_html
+      pc << Markdown.new(chinese_content).to_html      
     else
       pc = content
     end
