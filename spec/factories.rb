@@ -230,4 +230,30 @@ FactoryGirl.define do
     l.maturity 25
   end
 
+  factory :scope do |s|
+
+    # This scope requires donor=china
+    # and year in (2009, 2010)
+
+    scope_name = "Cancelled Certain Years"
+    s.name scope_name
+    s.description Faker::Lorem.words(10).join(" ")
+    s.symbol "cancelled_certain_years"
+
+    scope_channels = [
+      [
+        {
+          field: "status_name",
+          values: ["Cancelled"]
+        },
+        {
+          field: "year",
+          values: [2009,2010]
+        }
+      ]
+    ]
+
+    s.channels scope_channels
+  end
+
 end

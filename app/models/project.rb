@@ -363,7 +363,7 @@ class Project < ActiveRecord::Base
 
 
   belongs_to :donor, class_name: "Country"
-  delegate :name, to: :donor, allow_nil: true, prefix: true
+  delegate :name, :iso3, to: :donor, allow_nil: true, prefix: true
 
   belongs_to :owner, class_name: "Organization"
   delegate :name, to: :owner, allow_nil: true, prefix: true
@@ -400,44 +400,46 @@ class Project < ActiveRecord::Base
   end
 
 
-
-
-
-
-
-
-  def scope
-    scope_array = []
-    # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
-    Scope.all.each do |scope|
-      # Scope_hash is implemented in Scope#includes_project?
-      if scope.includes_project? self
-        scope_array << scope.symbol.to_sym
-      end
-    end
-
-    return scope_array
-  end
-
-  def scope_names
+  def scopes
     scope_array = []
     Scope.all.each do |scope|
-      # Scope_hash is implemented in Scope#includes_project?
       if scope.includes_project? self
-        scope_array << scope.name
+        scope_array << scope
       end
     end
     scope_array
   end
-  #test_scope should be a symbol. 
-  def contains_scope?(test_scope)
-    scope_array = scope
-    if scope_array.include?(test_scope)
-      true
-    else
-      false
-    end
+
+
+
+
+
+  # def scope
+  #   scope_array = []
+  #   # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
+  #   Scope.all.each do |scope|
+  #     # Scope_hash is implemented in Scope#includes_project?
+  #     if scope.includes_project? self
+  #       scope_array << scope.symbol.to_sym
+  #     end
+  #   end
+
+  #   return scope_array
+  # end
+
+  def scope_names
+    scopes.map(&:name)
   end
+
+  # #test_scope should be a symbol. 
+  # def contains_scope?(test_scope)
+  #   scope_array = scope
+  #   if scope_array.include?(test_scope)
+  #     true
+  #   else
+  #     false
+  #   end
+  # end
 
 
 
