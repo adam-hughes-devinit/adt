@@ -22,6 +22,8 @@ describe Project do
 
   it {should respond_to :comments}
 
+  it {should respond_to(:to_english)}
+
   describe "should accept a transaction" do
     before {project.transactions << transaction }
     it {should be_valid}

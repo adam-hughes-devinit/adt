@@ -12,6 +12,9 @@ describe Resource do
 		it { should be_valid}
 	end
 
+	it {should respond_to(:to_english)}
+
+
 	describe "accepts projects" do
 		before do 
 
@@ -24,11 +27,13 @@ describe Resource do
 
 	describe "can be devour!ed" do
 		before do 
+			# set the stage...
 			resource.projects << project
 			resource.save!
 			other_resource.projects << other_project
 			other_resource.save!
 			
+			# chomp chomp chomp!
 			resource.devour! other_resource
 		end
 
@@ -39,6 +44,6 @@ describe Resource do
 		it {should respond_to(:fetch!)}
 		its(:fetch_without_delay!) {should be true}
 	end
-	
+
 
 end

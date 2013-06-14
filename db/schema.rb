@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613153240) do
+ActiveRecord::Schema.define(:version => 20130614153200) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -200,8 +200,8 @@ ActiveRecord::Schema.define(:version => 20130613153240) do
     t.integer  "project_id"
     t.integer  "loan_type_id"
     t.float    "interest_rate"
-    t.integer  "maturity"
-    t.integer  "grace_period"
+    t.float    "maturity"
+    t.float    "grace_period"
     t.float    "grant_element"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false

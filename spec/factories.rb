@@ -1,3 +1,4 @@
+# encoding: UTF-8
 FactoryGirl.define do
 
   factory :status do |s|
@@ -126,7 +127,6 @@ FactoryGirl.define do
     is_commercial false
 
     flow_type FactoryGirl.create(:flow_type)
-    #project.tied FactoryGirl.create(:tied)
     crs_sector FactoryGirl.create(:crs_sector)
 
     donor FactoryGirl.create(:country)
@@ -206,6 +206,28 @@ FactoryGirl.define do
       source_url 
       r.resource_type Resource.resource_types.sample
     end
+  end
+
+  factory :content do |c|
+    c.content_type "Page"
+    c.name "meet_the_team"
+    c.chinese_name "大家好"
+    c.content "# Hey, everyone's here!"
+    c.chinese_content "# 大家好"
+  end
+
+  factory :loan_type do |l|
+    l.name %w{Interest-Free Concessional Commercial}.sample
+    l.description Faker::Lorem.words(10).join(" ")
+  end
+
+
+  factory :loan_detail do |l|
+    l.project FactoryGirl.create(:project)
+    l.loan_type  FactoryGirl.create(:loan_type)
+    l.grace_period  5
+    l.interest_rate  5
+    l.maturity 25
   end
 
 end

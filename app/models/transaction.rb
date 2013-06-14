@@ -18,6 +18,7 @@ class Transaction < ActiveRecord::Base
 
             deflator_query = "#{self.value.to_s}#{self.currency.iso3}#{yr}#{donor_iso3}" # This is defined at oscar.itpir.wm.edu/deflate
             deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
+            p "Deflating #{deflator_url}"
             deflator_string = open(deflator_url){|io| io.read}
             
             deflator_object = ActiveSupport::JSON.decode(deflator_string)
