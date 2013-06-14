@@ -7,9 +7,9 @@ module ScopeToQueryParams
 
 			channel.each do |filter|
 					# The field name for this filter
-					field = filter[:field]
+					field = filter["field"]
 					# now process the values:
-					values = filter[:values]
+					values = filter["values"]
 
 					required_values = values.select { |v| v !~ /^not/}
 					disallowed_values = values.select { |v| v =~ /^not/}.map{ |v| v.gsub(/^not\s/, '')}

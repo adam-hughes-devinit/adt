@@ -400,6 +400,10 @@ class Project < ActiveRecord::Base
   end
 
 
+
+
+
+
   def scopes
     scope_array = []
     Scope.all.each do |scope|
@@ -410,22 +414,11 @@ class Project < ActiveRecord::Base
     scope_array
   end
 
-
-
-
-
-  # def scope
-  #   scope_array = []
-  #   # RDM 2-26-2013 -- Updated for Scope model instead of SCOPES constant
-  #   Scope.all.each do |scope|
-  #     # Scope_hash is implemented in Scope#includes_project?
-  #     if scope.includes_project? self
-  #       scope_array << scope.symbol.to_sym
-  #     end
-  #   end
-
-  #   return scope_array
-  # end
+  def scope
+    # dood, should be deprecated in favor
+    # of #scopes above.
+    scopes.map{ |s| s.symbol.to_sym }
+  end
 
   def scope_names
     scopes.map(&:name)

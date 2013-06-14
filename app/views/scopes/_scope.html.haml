@@ -24,13 +24,14 @@
 							-# %i
 								-# (and) 
 						%b
-							= "#{f[:field]}:"
+							= "#{f["field"]}:"
 							
-						- f[:values].each_with_index do |v, v_i|
+						- f["values"].each_with_index do |v, v_i|
+							- if v_i > 0 
+								%i 
+									or 
 							%li
-								- if v_i > 0 
-									%i 
-										or 
+
 								= v
 .row-fluid
 	%p.span12
@@ -40,6 +41,6 @@
 		%a{href: "/projects.json?scope_names[]=#{s.name}"}
 			See Project Data
 		|
-		%a{href: "aggregates/projects?get=recipient_name,year,flow_class#{s.to_aggregate_query_params}"}
+		%a{href: "/aggregates/projects?get=recipient_name,year,flow_class#{s.to_aggregate_query_params}"}
 			See Aggregate Data
 		

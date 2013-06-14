@@ -5,7 +5,7 @@ class ScopeChannel < ActiveRecord::Base
   #after_initialize :build_scope_channel_scaffold
   
   def filters
-    scope_filters.map { |f| { field: f.field, values: f.values } }
+    scope_filters.map { |f| { "field" => f.field, "values" => f.values } }
   end
 
 

@@ -3,8 +3,8 @@ class Scope < ActiveRecord::Base
 	include ScopesHelper	
 	include ScopeToQueryParams
 	include ScopeIncludesProject
-
-	attr_accessible :description, :name, :symbol
+ 
+	attr_accessible :description, :name, :symbol, :channels
 	# :scope_channels, :scope_channels_attributes
 	serialize :channels, Array
 

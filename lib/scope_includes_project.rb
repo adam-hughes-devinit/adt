@@ -25,7 +25,7 @@ module ScopeIncludesProject
 				
 				# if [value1, value2] doesn't include project.field,
 				# then the project doesn't fit!
-				value_for_this_project = project.send(filter[:field]) 
+				value_for_this_project = project.send(filter["field"]) 
 
 				# For example, country_name returns an array. 
 				if value_for_this_project.class != Array
@@ -36,8 +36,8 @@ module ScopeIncludesProject
 
 
 				# ScopeFilter does this itself, but since I'm using the hash, I have to redo it.
-				required_values =   filter[:values].select { |v| v !~ /^not/}
-				disallowed_values =  filter[:values].select { |v| v =~ /^not/}.map{ |v| v.gsub(/^not\s/, '')}
+				required_values =   filter["values"].select { |v| v !~ /^not/}
+				disallowed_values =  filter["values"].select { |v| v =~ /^not/}.map{ |v| v.gsub(/^not\s/, '')}
 
 				values_for_this_project.each do |this_value|
 					if ( 

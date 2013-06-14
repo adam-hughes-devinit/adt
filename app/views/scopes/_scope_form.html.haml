@@ -1,0 +1,9 @@
+- @scope.channels = YAML.dump(@scope.channels)
+= simple_form_for @scope do |f| 
+	
+	= f.input :name
+	= f.input :symbol
+	= f.input :description, as: :string
+	= f.input :channels, as: :text, input_html: {style: 'font-family:courier, monospaced;' }, hint: "YAML representation of Scope"
+
+	= f.button :submit 
