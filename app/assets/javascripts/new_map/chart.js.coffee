@@ -10,7 +10,6 @@ App.svg = d3.select("#chart").append('svg:svg')
 
 
 App.display_country = (country_name) ->
-	$('.country_name').text(country_name)
 
 	App.this_country_data = 
 		aggregate: App.data.full.where(
@@ -24,16 +23,15 @@ App.display_country = (country_name) ->
 				&max=10
 				&country_name=#{country_name}"
 			})
-		line: App.data.full.where(
-			rows: (row) -> row.recipient_name == country_name
-			)
-
-	window.line_data = App.this_country_data.line
-	console.log line_data
 
 	App.this_country_data.by_year = App.this_country_data.aggregate.groupBy("year", ["usd_2009", "count"])
 	App.this_country_data.aggregate_json = App.this_country_data.by_year.toJSON()
-	
+	project_count = d3.sum(d["count"] for d in App.this_country_data.aggregate_json)
+	total_amount = d3.sum(d["usd_2009"] for d in App.this_country_data.aggregate_json)
+
+	$('.country_name').text(country_name)
+	$('.country_detail').text("#{project_count} projects, $#{d3.format(',f')(total_amount)}.")
+
 	top_projects_target = $('#project_rows')
 	top_projects_target.html('')
 	
@@ -140,7 +138,7 @@ App.display_country = (country_name) ->
 		.attr("id", (d) -> "bar-#{d.year}")
 		.attr("class", "bar")
 		.attr("title", (d) -> "To <b>#{country_name}</b> in <b>#{d.year}</b>: <br> 
-				$#{nice_money(d.usd_2009)}, #{d.count} projects <br>
+				$#{nice_money(d.usd_2009)}, #{d.count} project#{( if d.count > 1 then "s" else "" )} <br>
 				<em>Click for detail</em>")
 		.attr("data-html", true)
 		.attr("data-container", "body")
@@ -152,6 +150,7 @@ App.display_country = (country_name) ->
 
 	bars.transition()
 			.delay((d,i) -> i*10 )
+			.duration(500)
 			.attr("x", (d,i) -> "#{ x_scale(d.year) }px")
 			.attr("y", (d) -> "#{ y_scale(d.usd_2009) }px" )
 			.attr("width", bar_width + 'px' )
