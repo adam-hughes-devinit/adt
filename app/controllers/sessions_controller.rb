@@ -1,13 +1,14 @@
 class SessionsController < ApplicationController
-skip_before_filter :signed_in_user
+  skip_before_filter :signed_in_user
 
-	def new 
-	end
+  def new
+  end
 
-	def create 
-	  auth =  request.env["omniauth.auth"]
-    
+  def create
+    auth =  request.env["omniauth.auth"]
+
     if auth
+      auth["uid"] = auth["uid"].to_s
       user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
       sign_in user
       redirect_back_or root_url
@@ -19,14 +20,13 @@ skip_before_filter :signed_in_user
       else
         flash.now[:error] = 'Invalid email/password combination' # Not quite right!
         render 'new'
-      end	
+      end
     end
-    
-	end
+  end
 
-	def destroy 
-		sign_out
-		redirect_to root_url
-	end
+  def destroy
+    sign_out
+    redirect_to root_url
+  end
 
 end
