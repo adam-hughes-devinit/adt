@@ -49,4 +49,43 @@
 			<%= usd_2009 %>
 		%td
 			<%= crs_sector_name %>
+
+%script#details_template{type: "text/template"}
+	.projects-modal.modal.hide.fade
+		.modal-header
+			%button.close{type: "Button", "data-dismiss" => "modal"} &times;
+			%h3 
+				Chinese projects in <%= country_name %>, <%= year %>:
+		.modal-body#projects-details
+			.well
+				Loading projects...
+
+		.modal-footer
+			%button.close{type: "Button", "data-dismiss" => "modal"} &times;
+
+%script#projects_template{type: 'text/template'}
+	%table.table
+		%thead	
+			%tr 
+				%th 
+					Title
+				%th
+					Sector
+				%th
+					Amount
+		%tbody
+			<% projects.forEach(function(p) { %>
+			%tr
+				%td
+					<a target= "_blank", href="/projects/<%= p.id %>" >
+					<%= p.title %>
+					</a>
+				%td 
+					<%= p.crs_sector_name %>
+				%td
+					$<%= d3.format(",f")(p.usd_2009) %>
+			
+			<% }) %>
+	
+
 = javascript_include_tag "new_map/index"

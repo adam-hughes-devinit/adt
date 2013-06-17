@@ -18,6 +18,14 @@ App.collection = new Miso.Dataset({
 		data.features
 })
 
+App.zoom_to = (iso2) ->
+	this_layer = App.layers[iso2]
+	App.map.fitBounds(this_layer.getBounds())
+	this_name = this_layer.feature.properties.name
+	if this_name is "Central African Republic"
+		this_name = "Central African Rep."
+	App.display_country(this_name)
+
 App.collection.fetch({
 	error: () -> alert("couldn't fetch countries")
 	success: () ->
@@ -45,9 +53,8 @@ App.collection.fetch({
 								fillOpacity: .45
 								})
 						click: (e) ->
-							country_name = e.target.feature.properties.name
-							App.display_country(country_name)
-							App.map.fitBounds(e.target.getBounds())
+							country_iso2 = e.target.feature.properties.id
+							Finch.navigate "/#{country_iso2}"
 					}
 			})
 
@@ -88,4 +95,19 @@ App.fetch_country_data = ->
 			by_country.each (row) ->
 				if this_country = App.layers[row["recipient_iso2"]]
 					this_country.setStyle({color: country_color(row["usd_2009"])})
+
+			Finch.listen()
 		})
+
+
+
+
+Finch.route "/:country_iso2", (bindings) ->
+	App.zoom_to bindings.country_iso2
+
+
+Finch.route "[/:country_iso2]/:year", (bindings) ->
+	country_name = App.layers[bindings.country_iso2].feature.properties.name
+	if country_name is "Central African Republic"
+		country_name = "Central African Rep."
+	App.details_for country_name, bindings.year

@@ -1,8 +1,12 @@
 @App = @App || {}
 
+App.config = 
+	h: 500
+
 App.svg = d3.select("#chart").append('svg:svg')
-	.attr("height", "500px")
+	.attr("height", "#{App.config.h}px")
 	.attr("width", "100%")
+
 
 
 App.display_country = (country_name) ->
@@ -20,8 +24,14 @@ App.display_country = (country_name) ->
 				&max=10
 				&country_name=#{country_name}"
 			})
+		line: App.data.full.where(
+			rows: (row) -> row.recipient_name == country_name
+			)
 
-	App.this_country_data.by_year = App.this_country_data.aggregate.groupBy("year", ["usd_2009"])
+	window.line_data = App.this_country_data.line
+	console.log line_data
+
+	App.this_country_data.by_year = App.this_country_data.aggregate.groupBy("year", ["usd_2009", "count"])
 	App.this_country_data.aggregate_json = App.this_country_data.by_year.toJSON()
 	
 	top_projects_target = $('#project_rows')
@@ -83,12 +93,10 @@ App.display_country = (country_name) ->
 	y_axis_svg
 		.call(y_axis)
 
-
+	min_year = App.this_country_data.by_year.min("year")
+	max_year = App.this_country_data.by_year.max("year")
 	x_scale = d3.scale.linear()
-		.domain([
-			App.this_country_data.by_year.min("year"),
-			App.this_country_data.by_year.max("year")
-			])
+		.domain([min_year, max_year])
 		.range([
 			50,
 			$('#chart').width() - 50
@@ -96,7 +104,7 @@ App.display_country = (country_name) ->
 	
 	x_axis = d3.svg.axis()
 		.scale(x_scale)
-		.tickFormat((d) -> d)
+		.tickFormat(d3.format('d'))
 		.orient('bottom')
 
 	x_axis_svg = App.svg.selectAll('.x_axis')
@@ -112,13 +120,33 @@ App.display_country = (country_name) ->
 
 	x_axis_svg
 		.call(x_axis)
+	
+	show_this_year = (d) ->
+		h = window.location.hash.replace(/\/\d{4}/, '')
+		h += "/" + d.year
+		Finch.navigate h
 
+
+
+	bar_data = App.this_country_data.aggregate_json
+	bar_margin = 10
+	number_of_bars = max_year - min_year
+	bar_width = (App.config.h - (bar_margin * number_of_bars))/number_of_bars
+	
 	bars = App.svg.selectAll(".bar")
-		.data(App.this_country_data.aggregate_json, (d) -> d.year )
+		.data(bar_data, (d) -> d.year )
 		
 	bars.enter().append('rect')
+		.attr("id", (d) -> "bar-#{d.year}")
 		.attr("class", "bar")
+		.attr("title", (d) -> "To <b>#{country_name}</b> in <b>#{d.year}</b>: <br> 
+				$#{nice_money(d.usd_2009)}, #{d.count} projects <br>
+				<em>Click for detail</em>")
+		.attr("data-html", true)
+		.attr("data-container", "body")
 		.style("cursor", "pointer")
+		.style("opacity", "0")	
+		.on("click", show_this_year)	
 
 	bars.exit().remove()
 
@@ -126,6 +154,43 @@ App.display_country = (country_name) ->
 			.delay((d,i) -> i*10 )
 			.attr("x", (d,i) -> "#{ x_scale(d.year) }px")
 			.attr("y", (d) -> "#{ y_scale(d.usd_2009) }px" )
-			.attr("width", '20px' )
+			.attr("width", bar_width + 'px' )
 			.attr("height", (d) -> "#{ 450 - y_scale(d.usd_2009) }px" )
+			.style("opacity", "1")
 			.style("fill", (d) -> color_scale(d.usd_2009) )
+	
+	$('.bar').tooltip()	
+
+
+
+	line_json = App.this_country_data.aggregate.toJSON()
+	sectors = _.uniq(d["crs_sector_name"] for d in line_json)
+	console.log sectors
+
+
+App.details_for = (country_name, year) ->
+	projects = new Miso.Dataset({
+		url: "/projects.json
+			?order_by=usd_2009
+			&dir=desc
+			&active_string=Active
+			&year=#{year}
+			&country_name=#{country_name}"
+		})
+	template_data =
+		country_name: country_name
+		year: year
+
+	modal_template = $("#details_template").html()
+	new_modal = _.template(modal_template, template_data )
+	$('.projects-modal').remove()
+	$('body').append(new_modal)
+	$('.projects-modal').modal('show')	
+
+	projects.fetch
+		success: ->
+			projects = this.toJSON()
+			projects_template = $("#projects_template").html()
+			projects_table = _.template(projects_template, {projects: projects})
+			$("#projects-details").html(projects_table)
+			
