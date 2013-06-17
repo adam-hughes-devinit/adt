@@ -15,4 +15,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
                         (ENV["google_secret"] || OMNIAUTH_CONFIG['google_secret'])
     provider :linkedin, (ENV["linkedin_key"] || OMNIAUTH_CONFIG['linkedin_key']),
                         (ENV["linkedin_secret"] || OMNIAUTH_CONFIG['linkedin_secret'])
+    provider :weibo, (ENV["weibo_key"] || OMNIAUTH_CONFIG['webio_key']),
+                        (ENV["weibo_secret"] || OMNIAUTH_CONFIG['weibo_secret'])
 end
