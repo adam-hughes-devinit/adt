@@ -131,15 +131,14 @@ App.display_country = (country_name) ->
 	number_of_bars = max_year - min_year
 	bar_width = (App.config.h - (bar_margin * number_of_bars))/number_of_bars
 	
+	$('.bar').tooltip("destroy")
 	bars = App.svg.selectAll(".bar")
 		.data(bar_data, (d) -> d.year )
 		
 	bars.enter().append('rect')
 		.attr("id", (d) -> "bar-#{d.year}")
 		.attr("class", "bar")
-		.attr("title", (d) -> "To <b>#{country_name}</b> in <b>#{d.year}</b>: <br> 
-				$#{nice_money(d.usd_2009)}, #{d.count} project#{( if d.count > 1 then "s" else "" )} <br>
-				<em>Click for detail</em>")
+
 		.attr("data-html", true)
 		.attr("data-container", "body")
 		.style("cursor", "pointer")
@@ -157,6 +156,11 @@ App.display_country = (country_name) ->
 			.attr("height", (d) -> "#{ 450 - y_scale(d.usd_2009) }px" )
 			.style("opacity", "1")
 			.style("fill", (d) -> color_scale(d.usd_2009) )
+	
+	bars.each (d, i) -> 
+		$(this).attr("title", "To <b>#{country_name}</b> in <b>#{d.year}</b>: <br> 
+					$#{nice_money(d.usd_2009)}, #{d.count} project#{( if d.count > 1 then "s" else "" )} <br>
+					<em>Click for detail</em>")
 	
 	$('.bar').tooltip()	
 
