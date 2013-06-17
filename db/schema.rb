@@ -329,12 +329,6 @@ ActiveRecord::Schema.define(:version => 20130614163747) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "remittances", :id => false, :force => true do |t|
-    t.string  "year"
-    t.string  "country"
-    t.decimal "amount",  :precision => 255, :scale => 0
-  end
-
   create_table "resources", :force => true do |t|
     t.text     "title"
     t.text     "authors"
