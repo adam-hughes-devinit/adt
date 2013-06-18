@@ -201,5 +201,7 @@ module ProjectSearch
 			end
 
 		end
+
+		handle_asynchronously :solr_index if Rails.env.production?
 	end
 end

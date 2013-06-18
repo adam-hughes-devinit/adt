@@ -15,6 +15,8 @@ module ResourceSearchable
 				string :project_ids, multiple: true
 				string :publisher
 		end
+
+		handle_asynchronously :solr_index if Rails.env.production?
 	end
 
 
