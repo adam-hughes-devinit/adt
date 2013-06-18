@@ -1,12 +1,4 @@
-@mixin project_form_box {
-	margin: 8px 8px 8px 8px;
-	padding: 8px;
-	border-right: 2px solid #ccc;
-	border-bottom: 2px solid #ddd;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-}
+
 
 #project-form-wrapper{
 	
@@ -29,16 +21,10 @@
 
 	.on-nav-bar {
 		position: fixed;
-		top: 5px;
+		top: 0px;
 
 	}
 
-	.project-form-anchor:before  {
-		    display:block; 
-		    content:""; 
-		    height:50px; 
-		    margin:-50px 0 0; 
-	}
 	#project-form-nav-wrapper {
 
 		#project-form-nav {
@@ -59,6 +45,7 @@
 		.project-accessory-fields {
 			max-height: 200px;
 			overflow-y: scroll;
+			resize:vertical;
 
 			b {
 				margin-bottom: 5px;
@@ -87,21 +74,9 @@
 
 		#project-form-loan-detail {
 			background-color: #FFE3E3;
-		}
-		#project-form-sources {
-		}
-
-		#project-form-recipients {
+			overflow-y:auto;
 		}
 
-		#project-form-transactions {
-		}
-
-		#project-form-organizations {
-		}
-
-		#project-form-contacts {
-		}
 	}
 }
 

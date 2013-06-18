@@ -22,6 +22,7 @@ class Project < ActiveRecord::Base
     :sources, :sources_attributes,
     :flow_class_attributes,
     :loan_detail_attributes,
+    :resources, :resources_attributes,
     # for version control
     :accessories, :iteration,
     # hidden fields
@@ -124,6 +125,7 @@ class Project < ActiveRecord::Base
 
   has_and_belongs_to_many :exports
   has_and_belongs_to_many :resources
+  accepts_nested_attributes_for :resources, allow_destroy: false
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true

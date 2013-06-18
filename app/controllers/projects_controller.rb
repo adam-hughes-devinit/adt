@@ -103,7 +103,6 @@ enable_typeahead Project, facets: {active_string: "Active"}
     @loan_detail = @project.loan_detail = LoanDetail.new
 
 
-    warn_that_data_is_frozen
 
     respond_to do |format|
       format.html # new.html.erb
@@ -114,7 +113,6 @@ enable_typeahead Project, facets: {active_string: "Active"}
   # GET /Projects/1/edit
   def edit
 
-    warn_that_data_is_frozen
     
     @project = Project.unscoped.find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
@@ -221,16 +219,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
 
   private
 
-    def lock_editing_except_for_admins
-      warn_that_data_is_frozen
 
-      if !current_user_is_aiddata_admin
-        redirect_to Project.find(params[:id])
-      else
-        flash[:notice] = "You have access because you are an AidData admin."
-      end
-
-    end
 
     def correct_owner? 
       project_owner = Project.unscoped.find(params[:id]).owner 
@@ -255,8 +244,6 @@ enable_typeahead Project, facets: {active_string: "Active"}
     end
   
 
-    def warn_that_data_is_frozen
-      flash[:danger] = "This dataset is <b>frozen</b> until release! <b>You can't add or edit</b> any data."
-    end
+
 
 end

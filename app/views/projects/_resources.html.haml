@@ -13,56 +13,16 @@
 			%em.muted#no_resources
 				No resources yet!
 - if current_user_is_aiddata
-	.row-fluid{style: "margin-bottom: 8px;"}
-		.span7
-			%input#new_resource{placeholder: "Search or enter a resource ID" }
-		.span1
-			%button.btn.btn-success.btn-small#add_resource
-				Add!
-		.span4
-			= link_to "Create a new resource &rarr;".html_safe, new_resource_path, target: "_blank", class: "resource-tooltip", title: "Create the resource in a new window, then it will be searchable here."
-		
-		:coffeescript
-			$('.resource-tooltip').tooltip()
-			$('#new_resource').typeahead
-				name: "resources"
-				remote: "/resources/typeahead?search=%QUERY"
-				template: $("#typeahead_template").html()
-				engine: typeahead_engine
-				limit: 20
+	%script#resource-template{type: 'text/template'}
+		%li{"data-resource-id" => "<%= resource_id %>".html_safe}
+			%p
+				<%= resource %>
+			%span
+				%a{href: "/resources/<%= resource_id %>".html_safe}
+					More about this resource &rarr;
+			<%= unlink_button %>
 
-			@pinned_resources_path = "/projects/#{@project.id}/pinned_resources"
-			@unlink_button = "<a  class='pull-right btn btn-small btn-danger unlink-resource'>Unlink</a>"
-			@unlink_resource = ->
-				resource = $(this).parent()
-				console.log resource
-				resource_id = resource.attr("data-resource-id")
-				$.ajax 
-					url: pinned_resources_path + "/" + resource_id
-					method: "DELETE"
-					success: (response) ->
-						if response["status"] == "success"
-							resource.remove()
-
-			add_resource = ->
-				this_input = $('#new_resource')
-				this_input.slideUp() 
-				resource_id = this_input.val()
-				$.post(pinned_resources_path, {resource_id: resource_id}, (response) ->
-					if response["status"] == "success"
-						$("#no_resources").remove()
-						$("#resources").append("<li data-resource-id='" + resource_id + "'><p>" +
-							response["resource"] + "</p><span><a href='/resources/" + resource_id + "'>More about this resource &rarr;</a></span>" + unlink_button + "</li>"
-						)
-						this_input.val('')
-						$('.unlink-resource').off().click(unlink_resource)
-					this_input.slideDown()
-
-				)
-
-			$('#add_resource').click add_resource
-			$('.resource').append(unlink_button)
-			$('.unlink-resource').click(unlink_resource)
+	= render 'resources_for_aiddata'
 				
 
 

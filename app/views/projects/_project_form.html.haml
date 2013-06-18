@@ -1,0 +1,155 @@
+
+#project-form-wrapper.project-form
+	= simple_form_for(@project) do |f|
+		= f.error_notification
+		#project-form-content
+
+			#project-form-project.container-fluid
+				.row-fluid
+					%h3.span8 
+						Project
+						= @project.id || "(New)"
+					.well.well-small.span4
+						.row-fluid
+							= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
+							= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
+				.row-fluid
+					= f.association :donor, wrapper_html: {class: "span2"}, label: 'Donor country' 
+					= f.input :title, wrapper_html: {class: "span6"} 
+					= f.input :year, label: "Com. year", wrapper_html: {class: "span2"} 
+					= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span2"} 
+
+				.row-fluid
+					= f.association :verified, wrapper_html: {class: "span3"} 
+					= f.association :status, wrapper_html: {class: "span3"} 
+					= f.association :intent, wrapper_html: {class: "span3"} 
+				.row-fluid
+					= f.input :description, input_html: {rows: "8", cols: "30" }, wrapper_html: {class: "span12"}
+				.row-fluid
+					= f.input :capacity, wrapper_html: {class: "span3"} 
+					= f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span3"} 
+					= f.input :sector_comment, wrapper_html: {class: "span3"} #hint: "If multisector, add details" 
+					= f.association :flow_type, wrapper_html: {class: "span3"} 
+				
+				.row-fluid
+					#project-form-flow-class.span3
+						= f.simple_fields_for :flow_class do |flow_class_form| 
+							= flow_class_form.association :oda_like_1 
+							= flow_class_form.association :oda_like_2 
+							= flow_class_form.association :oda_like_master 
+							%span.muted 
+								Will be autoarbitrated on Save if there is no Master and both flow_classes match
+
+					.span9.container-fluid
+						.row-fluid
+							.span4
+								.row-fluid
+									= f.input :is_commercial, label: false, inline_label: "Commercial?", wrapper_html: {class: "span6"}
+									=f.input :line_of_credit, label: false, wrapper_html: {class: "span6"}, inline_label: "Credit Line?"
+								.row-fluid
+									= f.input :is_cofinanced, label: false, inline_label: "Cofinanced?", wrapper_html: {class: "span6"}
+									= f.input :debt_uncertain, label: false, inline_label: "Debt uncertain?", wrapper_html: {class: "span6"}
+							.dates-box.span8
+								.row-fluid
+									- @date_defaults = { include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: 2020, wrapper_html: {class: "project-date"} }
+									.span6
+										= f.input :start_planned, @date_defaults
+										= f.input :start_actual, @date_defaults
+									.span6
+										= f.input :end_planned, @date_defaults
+										= f.input :end_actual, @date_defaults
+
+						.row-fluid
+							#project-form-loan-detail
+								= f.simple_fields_for :loan_detail do |loan_detail_form|
+									= loan_detail_form.association :loan_type,wrapper_html: {class: "span2"} 
+									= loan_detail_form.input :interest_rate,wrapper_html: {class: "span2"}, hint: "In %" 
+									= loan_detail_form.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %." 
+									= loan_detail_form.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment." 
+									= loan_detail_form.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment." 
+									%span.muted.span2 
+										The grant element will be 
+										%a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
+											calculated automatically
+										if 
+										%strong
+											maturity, interest rate, and transaction value 
+										are present.
+			- add_one_label = "<i class='icon-plus'></i>Add One"
+			.row-fluid
+				#project-form-organizations.span6.project-accessory-fields
+					%p
+						%strong
+							Participating Organizations:
+						= link_to_add_fields add_one_label, f, :participating_organizations
+					= f.simple_fields_for :participating_organizations do |orgs|
+						= render 'fields_for_participating_organization', f: orgs
+				#project-form-sources.span5.project-accessory-fields
+					%p
+						%strong
+							Sources:
+						= link_to_add_fields add_one_label, f, :sources
+					= f.simple_fields_for :sources do |srcs|
+						= render 'fields_for_source', f: srcs
+			.row-fluid
+				#project-form-recipients.span6.project-accessory-fields
+					%p
+						%strong
+							Recipients:
+						= link_to_add_fields add_one_label, f, :geopoliticals
+					= f.simple_fields_for :geopoliticals do |geos|
+						= render 'fields_for_geopolitical', f: geos
+				#project-form-transactions.span5.project-accessory-fields
+					%p
+						%strong
+							Transactions:
+						= link_to_add_fields add_one_label, f, :transactions
+					= f.simple_fields_for :transactions do |amts|
+						= render 'fields_for_transaction', f: amts
+			.row-fluid
+				#project-form-contacts.span7.project-accessory-fields
+					%p 
+						%strong
+							Contacts:
+						= link_to_add_fields add_one_label, f, :contacts
+					= f.simple_fields_for :contacts do |cons|
+						= render 'fields_for_contact', f: cons
+			.row-fluid
+				%hr
+				#project-form-resources.span12.container-fluid
+					.row-fluid{style: "overflow-y: auto;"}
+						.well
+							%h4.span2
+								Resources:
+							.span10.alert.alert-warning
+								%strong 
+									Editing a resource will affect other projects which draw from that resource!
+					.row-fluid.project-accessory-fields
+						= f.simple_fields_for :resources do |resource_form|
+							= render "resources/fields", f: resource_form
+					.well.well-small
+						%script#resource-template{type: 'text/template'}
+							%div{"data-resource-id" => "<%= resource_id %>".html_safe}
+								%p
+									%strong
+										Added:
+									<%= resource %>
+								%span
+									%a{href: "/resources/<%= resource_id %>".html_safe}
+										More about this resource &rarr;
+								<%= unlink_button %>
+						= render 'resources_for_aiddata'
+						#resources
+							You can link to new resources here, but you'll have to edit the project again to edit a new resource.
+
+
+
+			#flavors.row-fluid
+				%p
+					Choose a flavor for this page:
+			.row-fluid
+				= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
+				= f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)
+				= f.button :submit, "Save", class: 'submit-button' 
+				= f.button :submit, "Save", class: 'submit-button on-nav-bar'
+

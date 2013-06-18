@@ -50,7 +50,6 @@
 		}
 	};
 
-	$('#project-form-nav').scrollspy()
 	
 	$('#project_active').change(function(e) {
 		$('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
@@ -77,7 +76,10 @@ function colorize(flavor) {
 		{ selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred" },
 		{ selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred" },
 		{ selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred"  },
+		{ selector: "#project-form-resources", neon: "#dd5",  pastel: "#F5E355", classic: "steelblue"  },
+
 	]
+
 
 	if (flavor != "plain" && flavor != false ) {
 
