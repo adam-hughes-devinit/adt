@@ -1,9 +1,9 @@
 OmniAuth.config.logger = Rails.logger
 
 if !Rails.env.production?
-	OMNIAUTH_CONFIG = YAML.load(File.read(Rails.root.to_s + "/config/omniauth_config.yml"))
+  OMNIAUTH_CONFIG = YAML.load(File.read(Rails.root.to_s + "/config/omniauth_config.yml"))
 else
-	OMNIAUTH_CONFIG = {}
+  OMNIAUTH_CONFIG = {}
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
