@@ -8,7 +8,7 @@ class Resource < ActiveRecord::Base
 		"Implementing/Intermediary Agency Source",
 		"Other Official Source (non-Donor, non-Recipient)",
 		"NGO/Civil Society/Advocacy",
-		"Acacemic Journal Article", 
+		"Academic Journal Article", 
 		"Other Academic (Working Paper, Dissertation)",
 		"Media Report, including Wikileaks",
 		"Social Media, including Unofficial Blogs",

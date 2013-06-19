@@ -31,9 +31,9 @@
         %tbody
             -  @resources.each do |resource|
                 %tr
-                    %td 
-                        = link_to((resource.title.length > 70 ? "#{resource.title[0..70]}..." : resource.title), resource)
-                    %td
+                    %td{style: "overflow:hidden;text-overflow: ellipsis;max-width:300px"}
+                        = link_to(resource.title, resource)
+                    %td{style: "overflow:hidden;text-overflow: ellipsis;max-width:300px"}
                         = resource.authors
                     %td
                         = "#{resource.publisher || '(No publisher)'}#{ resource.publisher_location.blank? ? "" : ": #{resource.publisher_location}"} (#{resource.publish_date || "No date"})"

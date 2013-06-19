@@ -7,4 +7,6 @@ describe "Static Pages" do
 		before { visit root_path }
 		it { should have_content("Projects")}
 	end
+
+	
 end
