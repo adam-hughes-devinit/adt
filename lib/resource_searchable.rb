@@ -5,15 +5,22 @@ module ResourceSearchable
 		projects.map(&:title)
 	end
 
+	def url_searchable
+		source_url.gsub(/[:.\/\?=_]/, " ")
+	end
+
+
 	included do		
 
 		searchable do 
 				text :title, :authors, :publisher_location, 
-				:publisher, :source_url, :id, :resource_type
-				text :project_titles
+				:publisher, :source_url, :id, :resource_type,
+				:url_searchable, :project_titles
 				string :resource_type
 				string :project_ids, multiple: true
 				string :publisher
+				string :title
+				integer :projects_count
 		end
 
 		handle_asynchronously :solr_index if Rails.env.production?

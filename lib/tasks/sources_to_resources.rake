@@ -50,11 +50,28 @@ namespace :projects do
 
 		progress_bar = ProgressBar.new(Resource.count)
 		
-		Resource.all.each do |r|
+		Resource.find_each do |r|
 			r.destroy
 			progress_bar.increment!
 		end
 
+	end
+
+	desc "clean out %25252520..."
+	task :clean_garbled_url_escapes => :environment do
+
+		progress_bar = ProgressBar.new(Resource.count)
+
+		def clean_up(url)
+			url.gsub(/(25){2,}/, "")
+		end
+
+		Resource.find_each do |r|
+			r.title = clean_up(r.title)
+			r.source_url = clean_up(r.source_url)
+			r.save
+			progress_bar.increment!
+		end
 	end
 
 end

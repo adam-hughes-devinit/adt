@@ -1,14 +1,19 @@
 class ResourcesController < ApplicationController
   skip_before_filter :signed_in, only: [:search]
-  # GET /resources
-  # GET /resources.json
-extend Typeaheadable
-enable_typeahead Resource
+
+  extend Typeaheadable
+  enable_typeahead Resource
 
   def index
-    order_by = params[:order]
-    dir = params[:dir] # ASC / DESC
-    @resources = Resource.order("#{order_by} #{dir}").page(params[:page])
+
+    search = Resource.search do 
+      fulltext params[:search] if params[:search].present?
+      with :resource_type, params[:resource_type] if params[:resource_type].present? && params[:resource_type] != [""]
+      order_by params[:order] ? params[:order].to_sym : :title, params[:dir] ? params[:dir].to_sym : :asc
+      paginate page: params[:page] || 1, per_page: 30
+    end
+
+    @resources = search.results
 
     respond_to do |format|
       format.html # index.html.erb

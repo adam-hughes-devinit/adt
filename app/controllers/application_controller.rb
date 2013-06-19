@@ -5,13 +5,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   include SessionsHelper
-  
-  # WE'RE LIVE
-  #
-  # if Rails.env.production?
-  # 	http_basic_authenticate_with name:'aiddata_china', password: 'a1dd4t4'
-  # end
-
 
 
   def mailer_set_url_options
