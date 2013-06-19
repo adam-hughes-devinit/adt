@@ -3,9 +3,8 @@ Adt::Application.routes.draw do
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 
-  :flag_types, :loan_types
+  :flag_types, :loan_types, :organizations, :users, :scopes, :exports
   resources :exports
-
   get '/contents/typeahead', to: 'contents#twitter_typeahead'
   resources :contents
 
@@ -35,9 +34,6 @@ Adt::Application.routes.draw do
     resources :flow_classes
   end
 
-
-
-  resources :organizations, :users, :scopes, :exports
   resources :datasets, id: /[0-9\.]+/
 
   # limited access
@@ -46,7 +42,6 @@ Adt::Application.routes.draw do
   
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
-  resources :relationships
 
 
   get '/aggregates/export', to: 'static_pages#aggregator', as: "aggregate_export"
