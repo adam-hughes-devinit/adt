@@ -20,7 +20,13 @@ class AggregateFlow
 		WHERE_FILTERS.each do |filter|
 			if values = where[filter[:sym]]
 				(raise TypeError, "where values must be Array!" unless values.is_a? Array)
-				valid_values = (values & filter[:options])
+				
+				options = filter[:options]
+				if options.is_a? Proc 
+					options = options.call 
+				end
+
+				valid_values = (values & options)
 				@validated_filters.push "#{filter[:internal_filter]} in ('#{valid_values.join("','")}')"
 			end
 		end
