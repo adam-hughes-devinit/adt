@@ -203,5 +203,26 @@ module ProjectSearch
 		end
 
 		handle_asynchronously :solr_index if Rails.env.production?
+
+        def self.facet_counts
+        	Rails.cache.fetch("projects/faceted") do
+				# wipe it in ProjectSweeper!
+				facets = (WORKFLOW_FACETS + FACETS)
+				all_projects = Project.search do
+					facets.each do |f|
+						facet f[:sym]
+					end
+				end
+				facet_counts = {}          
+				facets.each do |f|
+					if this_facet = all_projects.facet(f[:sym])
+						facet_values = this_facet.rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
+					facet_counts[f[:sym]] = facet_values
+					end
+				end
+				facet_counts
+			end
+		end
+
 	end
 end

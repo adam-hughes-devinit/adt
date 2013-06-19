@@ -17,38 +17,21 @@ enable_typeahead Project, facets: {active_string: "Active"}
   def index
    
     respond_to do |format|
+      
       format.html do
         @full_result_ids = custom_search(paginate: false).map(&:id)
    			@projects = custom_search
         @export = Export.new(params[:export])
-
-        @project_facet_counts = Rails.cache.fetch("projects/faceted") do
-          # wipe it in ProjectSweeper!
-          p "---------------- STARTING CACHE -------------------------"
-          facets = (ProjectSearch::WORKFLOW_FACETS + ProjectSearch::FACETS)
-          all_projects = Project.search do
-            facets.each do |f|
-              facet f[:sym]
-            end
-          end
-          facet_counts = {}          
-          facets.each do |f|
-            if this_facet = all_projects.facet(f[:sym])
-              facet_values = this_facet.rows.sort!{|a,b| a.value <=> b.value}.map(&:value)
-              facet_counts[f[:sym]] = facet_values
-            end
-          end
-          facet_counts
-        end 
-
         render html: @projects
       end
+      
       format.json do
 				@projects = custom_search({default_to_official_finance: false})
         render json: @projects
       end
+      
       format.csv do
-        p params.inspect
+        
         if params[:page]
           @paginate = true
         else
@@ -57,16 +40,16 @@ enable_typeahead Project, facets: {active_string: "Active"}
 
    			projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
-        csv_data = projects.map{|p| p.csv_text } .join("\n")				
-				
-        csv_header = Project.csv_header
-        csv_data = (csv_header + "\n" + csv_data)
+        csv_data = Project.csv_header + "\n"
+
+        projects.each do |p| 
+          csv_data << p.csv_text 
+          csv_data << "\n"
+        end				
 
         send_data csv_data,
           :type => 'text/csv; charset=utf-8; header=present',
           :disposition => "attachment; filename=AidData_China_custom_#{Time.now.strftime("%y-%m-%d-%H:%M:%S-%L")}.csv"
-
-
       end
     end
   end

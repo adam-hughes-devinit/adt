@@ -1,5 +1,5 @@
 <div class='search-facet'>
-	<% if (these_facet_values = @project_facet_counts[search_facet[:sym]]) %>
+	<% if (these_facet_values = Project.facet_counts[search_facet[:sym]]) %>
 		<b class='facet-header facet-tooltip' title='<%= search_facet[:description] %>'>
 			<%= 
 				link_to_function search_facet[:name], 
