@@ -34,10 +34,10 @@ module ScopeToQueryParams
 					if project_or_aggregate == "aggregate"
 					    if field != 'active_string' &&
 					      # Agg gives active by default
-					      aggregate_query_name = AggregatesHelper::WHERE_FILTERS
+					      aggregate_query_name = AggregateValidators::WHERE_FILTERS
 					        .select{|f| f[:sym] == field.to_sym || f[:search_constant_sym] == field.to_sym }[0][:sym].to_s
 
-					      filter_string = "&#{aggregate_query_name}=#{required_values.join(AggregatesHelper::VALUE_DELIMITER)}"
+					      filter_string = "&#{aggregate_query_name}=#{required_values.join(AggregateValidators::VALUE_DELIMITER)}"
 					    else
 					    	filter_string = ""
 					    end

@@ -56,8 +56,7 @@ module SearchHelper
 	        facet f[:sym]
 	        if requested_values = params[f[:sym]]
 	        	if requested_values.class == String
-		        	# VALUE DELIMITER defined in Aggregates helper
-		        	requested_values = requested_values.split(VALUE_DELIMITER) 
+		        	requested_values = requested_values.split(AggregateValidators::VALUE_DELIMITER) 
 		        end
 		        with f[:sym], requested_values
 	        end			      
