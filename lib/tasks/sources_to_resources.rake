@@ -1,82 +1,5 @@
 namespace :projects do
-	desc "Migrate sources to Resources"
-	task :sources_to_resources => :environment do
 
-		progress_bar = ProgressBar.new(Source.count)
-
-		sources_data = {}
-		spreadsheet = Rails.root.join "lib/tasks/sources_data.csv"
-		p spreadsheet
-		CSV.foreach(spreadsheet, col_sep: "\t", headers: true) do |row|
-			sources_data["#{row["source_id"]}"] = {
-				title: row["headline"],
-				publisher: row["agency"]
-			}
-		end
-		p sources_data["2676"]
-
-
- 		Source.find_each do |source|
-			
-			if source.url.present? && source.project.present?
-				resource = Resource.find_or_initialize_by_source_url(source.url)
-				
-				if resource.publish_date.blank?
-					resource.publish_date = source.date 
-				end
-
-				if resource.new_record? 
-					source_metadata = sources_data["#{source.id}"] || {}
-
-					resource.title = source_metadata[:title] || "#{source.url}"
-					resource.authors = source_metadata[:publisher] 
-					resource.publisher = source_metadata[:publisher]
-					resource.resource_type = "Other"
-
-					resource.dont_fetch = true if resource.source_url.downcase =~ /factiva/
-				end
-
-
-				resource.projects << source.project
-				resource.save!
-			end
-			progress_bar.increment!
-
-		end
-	end
-
-	desc "Flush resources"
-	task :flush_resources => :environment do
-
-		progress_bar = ProgressBar.new(Resource.count)
-		
-		Resource.find_each do |r|
-			r.destroy
-			progress_bar.increment!
-		end
-
-	end
-
-	desc "clean out %25252520..."
-	task :clean_garbled_url_escapes => :environment do
-
-		progress_bar = ProgressBar.new(Resource.count)
-
-		def clean_up(url)
-			url.gsub(/(25){2,}/, "")
-		end
-
-		Resource.find_each do |r|
-			r.title = clean_up(r.title)
-			r.source_url = clean_up(r.source_url)
-			r.save
-			progress_bar.increment!
-		end
-	end
-
-
-	desc "Set resource_type by URL"
-	task :set_resource_type_by_url => :environment do
 
 	URLS_TO_RESOURCE_TYPES = [
 		{ url: "global.factiva.com", resource_type: "Media Report, including Wikileaks" },
@@ -1256,12 +1179,143 @@ namespace :projects do
 	]
 
 
+	desc "Migrate sources to Resources"
+	task :sources_to_resources => :environment do
+
+		progress_bar = ProgressBar.new(Source.count)
+
+		sources_data = {}
+		spreadsheet = Rails.root.join "lib/tasks/sources_data.csv"
+		p spreadsheet
+		CSV.foreach(spreadsheet, col_sep: "\t", headers: true) do |row|
+			sources_data["#{row["source_id"]}"] = {
+				title: row["headline"],
+				publisher: row["agency"]
+			}
+		end
+		p sources_data["2676"]
+
+
+ 		Source.find_each do |source|
+			
+			if source.url.present? && source.project.present?
+				resource = Resource.find_or_initialize_by_source_url(source.url)
+				
+				if resource.publish_date.blank?
+					resource.publish_date = source.date 
+				end
+
+				if resource.new_record? 
+					source_metadata = sources_data["#{source.id}"] || {}
+
+					resource.title = source_metadata[:title] || "#{source.url}"
+					resource.authors = source_metadata[:publisher] 
+					resource.publisher = source_metadata[:publisher]
+					resource.resource_type = "Other"
+
+					resource.dont_fetch = true if resource.source_url.downcase =~ /factiva/
+				end
+
+
+				resource.projects << source.project
+				resource.save!
+			end
+			progress_bar.increment!
+
+		end
+	end
+
+	desc "update resources"
+	task :update_resources => :environment do
+
+		new_sources = Source.where("created_at > ?", Resource.last(order: "created_at desc", limit: "1").created_at)
+
+		progress_bar = ProgressBar.new(new_sources.count)
+
+		sources_data = {}
+		spreadsheet = Rails.root.join "lib/tasks/sources_data.csv"
+		p spreadsheet
+		CSV.foreach(spreadsheet, col_sep: "\t", headers: true) do |row|
+			sources_data["#{row["source_id"]}"] = {
+				title: row["headline"],
+				publisher: row["agency"]
+			}
+		end
+
+		new_sources.each do |source|
+
+			if source.url.present? && source.project.present?
+				resource = Resource.find_or_initialize_by_source_url(source.url)
+				
+				if resource.publish_date.blank?
+					resource.publish_date = source.date 
+				end
+
+				if resource.new_record? 
+					source_metadata = sources_data["#{source.id}"] || {}
+
+					resource.title = source_metadata[:title] || "#{source.url}"
+					resource.authors = source_metadata[:publisher] 
+					resource.publisher = source_metadata[:publisher]
+					if first_match =  URLS_TO_RESOURCE_TYPES.select{|rt| resource.source_url.downcase =~ /#{rt[:url]}/}.first
+						resource.resource_type = first_match[:resource_type]
+					else
+						resource.resource_type = "Other"
+					end
+
+					resource.dont_fetch = true if resource.source_url.downcase =~ /factiva/
+				end
+
+
+				resource.projects << source.project
+				resource.save!
+			end
+			progress_bar.increment!
+
+		end
+
+	end
+	desc "Flush resources"
+	task :flush_resources => :environment do
+
+		progress_bar = ProgressBar.new(Resource.count)
+		
+		Resource.find_each do |r|
+			r.destroy
+			progress_bar.increment!
+		end
+
+	end
+
+	desc "clean out %25252520..."
+	task :clean_garbled_url_escapes => :environment do
+
+		progress_bar = ProgressBar.new(Resource.count)
+
+		def clean_up(url)
+			url.gsub(/(25){2,}/, "")
+		end
+
+		Resource.find_each do |r|
+			r.title = clean_up(r.title)
+			r.source_url = clean_up(r.source_url)
+			r.save
+			progress_bar.increment!
+		end
+	end
+
+
+	desc "Set resource_type by URL"
+	task :set_resource_type_by_url => :environment do
+
+
+
 		progress_bar = ProgressBar.new(Resource.count)
 
 		Resource.find_each do |r|
 			this_url = r.source_url
 
-			if first_match = URLS_TO_RESOURCE_TYPES.select{|rt| this_url =~ /#{rt[:url]}/}.first
+			if first_match = URLS_TO_RESOURCE_TYPES.select{|rt| this_url.downcase =~ /#{rt[:url].downcase}/}.first
 				r.update_column :resource_type, first_match[:resource_type]
 				Sunspot.index! r
 			end
