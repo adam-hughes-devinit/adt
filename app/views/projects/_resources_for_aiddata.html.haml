@@ -20,15 +20,16 @@
 		@pinned_resources_path = "/projects/#{@project.id}/pinned_resources"
 		@unlink_button = "<a  class='pull-right btn btn-small btn-danger unlink-resource'>Unlink</a>"
 		@unlink_resource = ->
-			resource = $(this).parent()
-			console.log resource
-			resource_id = resource.attr("data-resource-id")
-			$.ajax 
-				url: pinned_resources_path + "/" + resource_id
-				method: "DELETE"
-				success: (response) ->
-					if response["status"] == "success"
-						resource.remove()
+			if confirm "Are you sure you want to remove this resource? (No undo!)"
+				resource = $(this).parent()
+				console.log resource
+				resource_id = resource.attr("data-resource-id")
+				$.ajax 
+					url: pinned_resources_path + "/" + resource_id
+					method: "DELETE"
+					success: (response) ->
+						if response["status"] == "success"
+							resource.remove()
 
 		add_resource = ->
 			this_input = $('#new_resource')

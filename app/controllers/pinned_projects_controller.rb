@@ -2,6 +2,12 @@ class PinnedProjectsController < ApplicationController
 
   def index
     @resource = Resource.find(params[:resource_id])
+    if current_user_is_aiddata
+      @projects = @resource.projects
+    else
+      @projects = @resource.projects.active
+    end
+    
     render json: @resource.projects
   end
 

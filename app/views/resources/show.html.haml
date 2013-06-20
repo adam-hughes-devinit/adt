@@ -89,22 +89,30 @@
 			.row-fluid
 				.alert.alert-warning
 					%h4 Merge into another resource:
-					%form{method: 'post', action: get_devoured_resource_path(@resource), onsubmit: "return confirm('Are you sure you want to merge this resource into the other one?')"}
-						%input{name: "devourer_id", type: "text", placeholder:"Enter the ID of the target Resource."}
+					%form{method: 'post', action: get_devoured_resource_path(@resource), onsubmit: 'return confirm("Are you sure you want to \n - DESTROY this resource \n      and  \n - give its projects to the other one?")'}
+						%input#devourer_id{name: "devourer_id", type: "text", placeholder:"Search or enter the ID of the target resource."}
 						%input{type: "submit", value: "Merge!", class: "btn btn-warning"}
-
+				:coffeescript
+					$('#devourer_id').typeahead
+						name: "resources"
+						remote: "/resources/typeahead?search=%QUERY"
+						template: $("#typeahead_template").html()
+						engine: typeahead_engine
+						limit: 20
 		.row-fluid.well.well-small
 			%h4 
-				Pinned to 
-				= pluralize(@resource.projects.count, "project") + ":"
+				- unless current_user_is_aiddata
+					Active
+				Projects Linked to this Resource:
 			%ol#projects
 				- @resource.projects.each do |p|
-					%li
-						= link_to "#{p.to_english} (#{p.id})".html_safe, p, target: "_blank"
-						- if current_user_is_aiddata
-							|
-							%a.btn.btn-mini.btn-danger.unpin-project{"data-project-id" => p.id}
-								Remove
+					- if p.active?
+						%li
+							= link_to "#{p.to_english} (#{p.id})".html_safe, p, target: "_blank"
+							- if current_user_is_aiddata
+								|
+								%a.btn.btn-mini.btn-danger.unpin-project{"data-project-id" => p.id}
+									Remove
 			
 			- if current_user_is_aiddata
 

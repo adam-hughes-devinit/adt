@@ -56,7 +56,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
 
 
   def show
-    @project = Project.unscoped.find(params[:id])
+    @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
     @comment = Comment.new
     @flags = @project.all_flags
     @flag = Flag.new
@@ -97,7 +97,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
   def edit
 
     
-    @project = Project.unscoped.find(params[:id])
+    @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 

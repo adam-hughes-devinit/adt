@@ -116,28 +116,30 @@
 						= render 'fields_for_contact', f: cons
 			.row-fluid
 				%hr
-				#project-form-resources.span12.container-fluid
-					.row-fluid{style: "overflow-y: auto;"}
-						.well
-							%h4.span2
-								Resources:
-							.span10.alert.alert-warning
-								%strong 
-									Editing a resource will affect other projects which draw from that resource!
+				#project-form-resources.span12.container-fluid{style: "border:1px solid #124; margin:10px"}
+					
+					.row-fluid{style: "overflow-y: auto;border-bottom:1px solid #124"}
+						%h4.span2
+							Resources:
+						.span10.text-warning{style: "margin-top:10px;"}
+							%strong 
+								Editing a resource will affect other projects which draw from that resource!
 					.row-fluid.project-accessory-fields
-						= f.simple_fields_for :resources do |resource_form|
-							= render "resources/fields", f: resource_form
-					.well.well-small
-						%script#resource-template{type: 'text/template'}
-							%div{"data-resource-id" => "<%= resource_id %>".html_safe}
-								%p
-									%strong
-										Added:
-									<%= resource %>
-								%span
-									%a{href: "/resources/<%= resource_id %>".html_safe}
-										More about this resource &rarr;
-								<%= unlink_button %>
+						.well
+							= f.simple_fields_for :resources do |resource_form|
+								= render "resources/fields", f: resource_form
+
+					%script#resource-template{type: 'text/template'}
+						%div{"data-resource-id" => "<%= resource_id %>".html_safe}
+							%p
+								%strong
+									Added:
+								<%= resource %>
+							%span
+								%a{href: "/resources/<%= resource_id %>".html_safe}
+									More about this resource &rarr;
+							<%= unlink_button %>
+					.row-fluid{style: "border-top:1px solid #124; padding:8px"}
 						= render 'resources_for_aiddata'
 						#resources
 							You can link to new resources here, but you'll have to edit the project again to edit a new resource.
