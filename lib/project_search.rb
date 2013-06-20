@@ -201,8 +201,9 @@ module ProjectSearch
 			end
 
 		end
-
-		handle_asynchronously :solr_index if Rails.env.production?
+		
+		# Nice idea, but I need it to show up in the search bar ~pronto~
+		# handle_asynchronously :solr_index if Rails.env.production?
 
         def self.facet_counts
         	Rails.cache.fetch("projects/faceted") do

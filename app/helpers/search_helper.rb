@@ -15,7 +15,7 @@ module SearchHelper
 	  options.reverse_merge! paginate: true
  	  options.reverse_merge! default_to_official_finance: true
  	  
-	  @search = Project.search do
+	  @search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions).search do
 	  	
 	  	# if not aiddata, don't let 'em see stage one projects
 	  	
