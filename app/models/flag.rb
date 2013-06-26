@@ -10,6 +10,7 @@ class Flag < ActiveRecord::Base
 
   validates_presence_of :flaggable_type
   validates_presence_of :flaggable_id
+  validates_presence_of :comment
 
   belongs_to :flag_type
   belongs_to :flaggable, polymorphic: true
