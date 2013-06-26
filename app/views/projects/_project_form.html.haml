@@ -20,7 +20,7 @@
 					= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span2"} 
 
 				.row-fluid
-					= f.association :verified, wrapper_html: {class: "span3"} 
+					= f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status <span class='muted'>(was <em>Verified</em>)</span>".html_safe
 					= f.association :status, wrapper_html: {class: "span3"} 
 					= f.association :intent, wrapper_html: {class: "span3"} 
 				.row-fluid
