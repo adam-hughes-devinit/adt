@@ -4,7 +4,7 @@ namespace :flags do
 	task :fill_in_null_comments => :environment do
 
 		flags_with_empty_comments = Flag.unscoped.where("comment is NULL or comment='' ")
-		progress_bar = ProgressBar.new(flags_with_empty_comments)
+		progress_bar = ProgressBar.new(flags_with_empty_comments.count)
 		DEFAULT_COMMENT = '[No message]'
 
 		flags_with_empty_comments.find_each do |flag|
