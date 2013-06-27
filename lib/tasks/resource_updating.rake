@@ -817,7 +817,13 @@ namespace :resources do
 
   desc "Replace factiva sources with originals"
   task :replace_factiva => :environment do
+
+    progress_bar = ProgressBar.new(REPLACE_SOURCES.count)
+
+
     REPLACE_SOURCES.each do |item|
+
+      progress_bar.increment!
       id = item[:source_id]
       url = item[:url]
       if url[0..3] != 'http'
@@ -827,14 +833,21 @@ namespace :resources do
       next if source.nil?
 
       source_url = source.url
-      resource = Resource.find_by_source_url(source_url)
 
+      resource = Resource.find_by_source_url(source_url)
       next if resource.nil?
+
+      #deal with already existing resources
+      existing_r = Resource.find_by_source_url(url)
+      if existing_r
+        existing_r.devour!(resource)
+        next
+      end
+
 
       resource.source_url = url
       resource.dont_fetch = false
       resource.save!
-      p resource
     end
   end
 end
