@@ -60,7 +60,12 @@ module ProjectExporters
     end
     
     cached_recipients = []
-    geopoliticals.each {|g| g.recipient ? cached_recipients.push(g.recipient) : nil }
+    location_details = ""
+    geopoliticals.each_with_index do |g, i| 
+        g.recipient ? cached_recipients.push(g.recipient) : nil 
+        location_details << (g.subnational ? "#{location_details.present? ? ", " : ""}#{g.subnational}" : "")
+    end
+
     
     csv_array = %W[
     #{id}
@@ -119,7 +124,8 @@ module ProjectExporters
     #{maturity}
     #{grace_period}
     #{grant_element}
-    #{updated_at}]
+    #{updated_at}
+    #{location_details}]
 
 
 
