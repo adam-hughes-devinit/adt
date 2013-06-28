@@ -5,7 +5,7 @@ module SpamHelper
 		"</a>", # Humans won't be posting HTML, I promise.
 	]
 
-	class String
+	class ::String
 		def is_spam_content?
 			SPAM_TEXT_FLAGS.each do |flag|
 				return true if self.include?(flag)
