@@ -10,26 +10,26 @@
 %>
 
 
-<div class="row project-edit-links pull-right">	
-	<% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user_is_aiddata) %>
-			<%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
-			<%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
+<div class="row project-edit-links pull-right"> 
+  <% if (signed_in? && current_user.owner == @project.owner) || (@project.owner.nil? && current_user_is_aiddata) %>
+      <%= link_to "Edit this project", edit_project_path(@project), class: "span3 btn btn-success" %>
+      <%= link_to "Delete this project", @project, method: :delete, confirm: "Are you sure?", class: "span3 btn btn-danger" %>
       <% if not @project.published %>
         <button class="span3 btn btn-info" id="approve">Approve This Project </button>
       <% end %>
-			</p>
-	<% end %>
+      </p>
+  <% end %>
 </div>
 
 
 
 
 <div class="row">
-	<%= render 'project' %>
+  <%= render 'project' %>
 </div>
 <div class='row'>
-	<h1>Flags:</h1>
-	<%= render 'project_flags' %>
+  <h1>Flags:</h1>
+  <%= render 'project_flags' %>
 </div>
 <%= javascript_include_tag "underscore/index" %>
 <%= render 'project_flag_form' %>
@@ -50,6 +50,3 @@
 
   });
 </script>
-
-
-

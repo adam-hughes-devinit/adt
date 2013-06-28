@@ -30,6 +30,13 @@
 /config/app_config.yml
 /config/omniauth_config.yml
 /config/secrets.rb
+.env
+
+#Foreman
+.foreman
+Procfile.dev
+zeus.json
+custom_plan.rb
 
 #binstubs
 /bin

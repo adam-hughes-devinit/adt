@@ -1,28 +1,25 @@
 
 .row-fluid
-	%h4
-		Resources:
-	%ul#resources.unstyled
-		- @project.resources.each do |r|
-			%li.resource{"data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
-				%p
-					= r.to_citation
-				%span
-					= link_to "More about this resource &rarr;".html_safe, r
-		- if @project.resources.blank?
-			%em.muted#no_resources
-				No resources yet!
+  %h4
+    Resources:
+  %ul#resources.unstyled
+    - @project.resources.each do |r|
+      %li.resource{"data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
+        %p
+          = r.to_citation
+        %span
+          = link_to "More about this resource &rarr;".html_safe, r
+    - if @project.resources.blank?
+      %em.muted#no_resources
+        No resources yet!
 - if current_user_is_aiddata
-	%script#resource-template{type: 'text/template'}
-		%li{"data-resource-id" => "<%= resource_id %>".html_safe}
-			%p
-				<%= resource %>
-			%span
-				%a{href: "/resources/<%= resource_id %>".html_safe}
-					More about this resource &rarr;
-			<%= unlink_button %>
+  %script#resource-template{type: 'text/template'}
+    %li{"data-resource-id" => "<%= resource_id %>".html_safe}
+      %p
+        <%= resource %>
+      %span
+        %a{href: "/resources/<%= resource_id %>".html_safe}
+          More about this resource &rarr;
+      <%= unlink_button %>
 
-	= render 'resources_for_aiddata'
-				
-
-
+  = render 'resources_for_aiddata'
