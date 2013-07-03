@@ -14,7 +14,7 @@
 							= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
 							= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
 				.row-fluid
-					= f.association :donor, wrapper_html: {class: "span2"}, prompt: 'China', label: 'Donor country' 
+					= f.association :donor, wrapper_html: {class: "span2"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
 					= f.input :title, wrapper_html: {class: "span6"} 
 					= f.input :year, label: "Com. year", wrapper_html: {class: "span2"} 
 					= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span2"} 
