@@ -16,7 +16,6 @@ $( ->
     new_html = html
       .replace(id_ref_finder, to_project_link("$2"))
       .replace(duplicate_finder, "$1 #{to_project_link("$2")}")
-    console.log(new_html)
     $(this).html(new_html)
   )
 
