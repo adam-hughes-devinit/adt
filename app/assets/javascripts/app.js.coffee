@@ -6,14 +6,19 @@ $( ->
   to_project_link = (id) ->
     "<a class='project_link project_link_#{id}' data-project-id=#{id} href='/projects/#{id}' target='_blank' >##{id}</a>"
   
-  initialize_project_links = ->  
+  initialize_project_links = ->
+    ids = []  
     $('.project_link').each( -> 
       id = $(this).attr("data-project-id")
+      if ids.indexOf(id) is -1
+        ids.push(id)      
+    )
+
+    ids.forEach( (id) ->
       $.get("/projects/#{id}.json", (data) ->
         links = $(".project_link.project_link_#{id}")
         links.attr("title", data["to_english"])
         links.tooltip()
-        console.log("Tootipped #{id}")
         )
     )
   id_ref_finder = /(#)(\d+)/g
