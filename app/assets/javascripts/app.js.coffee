@@ -4,10 +4,21 @@ $( ->
 
   # Replace references to projects (#\d+) with hyperlinks:
   to_project_link = (id) ->
-    "<a href='/projects/#{id}' target='_blank' >##{id}</a>"
-
+    "<a class='project_link project_link_#{id}' data-project-id=#{id} href='/projects/#{id}' target='_blank' >##{id}</a>"
+  
+  initialize_project_links = ->  
+    $('.project_link').each( -> 
+      id = $(this).attr("data-project-id")
+      $.get("/projects/#{id}.json", (data) ->
+        links = $(".project_link.project_link_#{id}")
+        links.attr("title", data["to_english"])
+        links.tooltip()
+        console.log("Tootipped #{id}")
+        )
+    )
   id_ref_finder = /(#)(\d+)/g
   duplicate_finder = /(duplicate\s+\w+)\s+(\d+)/gi
+  
   $('body a,p,i,em,strong,b,label,h1,h2,h3,h4,h5,h6').filter( ->
       this_text = $(this).text()
       this_text.match(/#\d+/) || this_text.match(duplicate_finder) ;
@@ -18,6 +29,8 @@ $( ->
       .replace(duplicate_finder, "$1 #{to_project_link("$2")}")
     $(this).html(new_html)
   )
+
+  initialize_project_links()
 
 )
 Array.prototype.getUnique = () ->

@@ -11,8 +11,6 @@ module Typeaheadable
 			search = active_record_model.search do
 				fulltext params[:search]
 				facets.each{ |k,v| with k,v  }
-
-				
 				paginate page: 1, per_page: max
 			end
 

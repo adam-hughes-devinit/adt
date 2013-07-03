@@ -442,7 +442,7 @@ class Project < ActiveRecord::Base
   def as_json(options={})
     super(
       only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
-      methods: [:usd_2009, :donor_name,
+      methods: [:usd_2009, :donor_name, :to_english,
         :crs_sector_name, :flow_type_name, :oda_like_name, :status_name, 
         # :tied_name, 
         :recipient_condensed
