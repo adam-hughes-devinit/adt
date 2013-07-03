@@ -1,0 +1,7 @@
+#project-form-contacts.project-accessory-fields
+	%p 
+		%strong
+			Contacts:
+		= link_to_add_fields add_one_label, f, :contacts
+	= f.simple_fields_for :contacts do |cons|
+		= render 'fields_for_contact', f: cons

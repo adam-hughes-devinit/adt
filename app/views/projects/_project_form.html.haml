@@ -1,4 +1,3 @@
-
 #project-form-wrapper.project-form
 	= simple_form_for(@project) do |f|
 		= f.error_notification
@@ -14,22 +13,66 @@
 							= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
 							= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
 				.row-fluid
-					= f.association :donor, wrapper_html: {class: "span2"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
-					= f.input :title, wrapper_html: {class: "span6"} 
-					= f.input :year, label: "Com. year", wrapper_html: {class: "span2"} 
-					= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span2"} 
+					.span6	
+						= render 'project_form_recipients', f: f
+					.span6
+						.row-fluid
+							= f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
+							= f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
+							= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"} 					
+						.row-fluid
 
+							= f.association :donor, wrapper_html: {class: "span3"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
+							= f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status".html_safe
+							= f.association :status, label: "Project Status", wrapper_html: {class: "span3"} 
+							= f.association :intent, wrapper_html: {class: "span3"} 
 				.row-fluid
-					= f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status <span class='muted'>(was <em>Verified</em>)</span>".html_safe
-					= f.association :status, wrapper_html: {class: "span3"} 
-					= f.association :intent, wrapper_html: {class: "span3"} 
+					.span6
+						= render 'project_form_transactions', f: f
+					.span6
+						.row-fluid
+							= f.input :capacity, wrapper_html: {class: "span6"} 
+							= f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span6"} 
+						.row-fluid
+							= f.input :sector_comment, wrapper_html: {class: "span6"} #hint: "If multisector, add details" 
+							= f.association :flow_type, wrapper_html: {class: "span6"} 
 				.row-fluid
-					= f.input :description, input_html: {rows: "8", cols: "30" }, wrapper_html: {class: "span12"}
+					.span6
+						= render 'project_form_participating_organizations', f: f
+					.span6
+						= render 'project_form_contacts', f: f
 				.row-fluid
-					= f.input :capacity, wrapper_html: {class: "span3"} 
-					= f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span3"} 
-					= f.input :sector_comment, wrapper_html: {class: "span3"} #hint: "If multisector, add details" 
-					= f.association :flow_type, wrapper_html: {class: "span3"} 
+					= f.input :description, input_html: {rows: "8"}, wrapper_html: {class: "span12"}
+				.row-fluid
+					#project-form-resources.span12{style: "border:1px solid #124; margin:10px"}
+						
+						.row-fluid{style: "overflow-y: auto;border-bottom:1px solid #124"}
+							%h4.span2
+								Resources:
+							.span10.text-warning{style: "margin-top:10px;"}
+								%strong 
+									Editing a resource will affect other projects which draw from that resource!
+						.row-fluid.project-accessory-fields
+							.well
+								= f.simple_fields_for :resources do |resource_form|
+									= render "resources/fields", f: resource_form
+
+						%script#resource-template{type: 'text/template'}
+							%div{"data-resource-id" => "<%= resource_id %>".html_safe}
+								%p
+									%strong
+										Added:
+									<%= resource %>
+								%span
+									%a{href: "/resources/<%= resource_id %>".html_safe}
+										More about this resource &rarr;
+								<%= unlink_button %>
+						.row-fluid{style: "border-top:1px solid #124; padding:8px"}
+							= render 'resources_for_aiddata'
+							#resources
+								You can link to new resources here, but you'll have to edit the project again to edit a new resource.
+
+
 				
 				.row-fluid
 					#project-form-flow-class.span3
@@ -75,74 +118,15 @@
 										%strong
 											maturity, interest rate, and transaction value 
 										are present.
-			- add_one_label = "<i class='icon-plus'></i>Add One"
-			.row-fluid
-				#project-form-organizations.span6.project-accessory-fields
-					%p
-						%strong
-							Participating Organizations:
-						= link_to_add_fields add_one_label, f, :participating_organizations
-					= f.simple_fields_for :participating_organizations do |orgs|
-						= render 'fields_for_participating_organization', f: orgs
-				#project-form-sources.span5.project-accessory-fields
-					%p
-						%strong
-							Sources:
-						= link_to_add_fields add_one_label, f, :sources
-					= f.simple_fields_for :sources do |srcs|
-						= render 'fields_for_source', f: srcs
-			.row-fluid
-				#project-form-recipients.span6.project-accessory-fields
-					%p
-						%strong
-							Recipients:
-						= link_to_add_fields add_one_label, f, :geopoliticals
-					= f.simple_fields_for :geopoliticals do |geos|
-						= render 'fields_for_geopolitical', f: geos
-				#project-form-transactions.span5.project-accessory-fields
-					%p
-						%strong
-							Transactions:
-						= link_to_add_fields add_one_label, f, :transactions
-					= f.simple_fields_for :transactions do |amts|
-						= render 'fields_for_transaction', f: amts
-			.row-fluid
-				#project-form-contacts.span7.project-accessory-fields
-					%p 
-						%strong
-							Contacts:
-						= link_to_add_fields add_one_label, f, :contacts
-					= f.simple_fields_for :contacts do |cons|
-						= render 'fields_for_contact', f: cons
-			.row-fluid
-				%hr
-				#project-form-resources.span12.container-fluid{style: "border:1px solid #124; margin:10px"}
-					
-					.row-fluid{style: "overflow-y: auto;border-bottom:1px solid #124"}
-						%h4.span2
-							Resources:
-						.span10.text-warning{style: "margin-top:10px;"}
-							%strong 
-								Editing a resource will affect other projects which draw from that resource!
-					.row-fluid.project-accessory-fields
-						.well
-							= f.simple_fields_for :resources do |resource_form|
-								= render "resources/fields", f: resource_form
+			/ .row-fluid
 
-					%script#resource-template{type: 'text/template'}
-						%div{"data-resource-id" => "<%= resource_id %>".html_safe}
-							%p
-								%strong
-									Added:
-								<%= resource %>
-							%span
-								%a{href: "/resources/<%= resource_id %>".html_safe}
-									More about this resource &rarr;
-							<%= unlink_button %>
-					.row-fluid{style: "border-top:1px solid #124; padding:8px"}
-						= render 'resources_for_aiddata'
-						#resources
-							You can link to new resources here, but you'll have to edit the project again to edit a new resource.
+			/ 	#project-form-sources.span5.project-accessory-fields
+			/ 		%p
+			/ 			%strong
+			/ 				Sources:
+			/ 			= link_to_add_fields add_one_label, f, :sources
+			/ 		= f.simple_fields_for :sources do |srcs|
+			/ 			= render 'fields_for_source', f: srcs
 
 
 

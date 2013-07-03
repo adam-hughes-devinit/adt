@@ -4,10 +4,15 @@ module ApplicationHelper
   PROJECT_ACCESSORY_OBJECTS = ['Transaction', 'Geopolitical', 'Source', 
     'ParticipatingOrganization', 'Contact','LoanDetail']
 
-  def link_to_remove_fields(name, f)
-    f.hidden_field(:_destroy) + link_to_function(name.html_safe, "remove_fields(this)")
+  def link_to_remove_fields(f)
+    button_html = "<span class='btn btn-mini btn-danger'><i class='icon-trash'></i></span>"
+    f.hidden_field(:_destroy) + link_to_function(button_html.html_safe, "remove_fields(this)")
   end
 
+  def add_one_label 
+    "<span class='btn btn-mini'><i class='icon-plus'></i>Add One</a>"
+  end
+  
   def link_to_add_fields(name, f, association)
     new_object = f.object.class.reflect_on_association(association).klass.new
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|

@@ -1,6 +1,6 @@
 <div class='fields row-fluid'>
-	<%= f.association :recipient, label: "Country", wrapper_html: {class: "span5"} %>
-	<%= f.input :subnational, label: "Detail", wrapper_html: {class: "span4"} %>
-	<%= f.input :percent, wrapper_html: {class: "span2"} %>
-	<i><%= link_to_remove_fields "<i class='icon-trash'></i>", f %></i>
+	<%= f.association :recipient, label: false, prompt: "Country", wrapper_html: {class: "span5"} %>
+	<%= f.input :subnational, label: false, placeholder: "Detail", wrapper_html: {class: "span4"} %>
+	<%= f.input :percent, label: false, placeholder: "%", wrapper_html: {class: "span2"} %>
+	<i><%= link_to_remove_fields f %></i>
 </div>

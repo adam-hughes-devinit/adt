@@ -1,0 +1,7 @@
+#project-form-organizations.project-accessory-fields
+	%p
+		%strong
+			Participating Organizations:
+		= link_to_add_fields add_one_label, f, :participating_organizations
+	= f.simple_fields_for :participating_organizations do |orgs|
+		= render 'fields_for_participating_organization', f: orgs

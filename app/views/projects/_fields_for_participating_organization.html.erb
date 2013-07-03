@@ -1,6 +1,6 @@
 <div class='fields row-fluid'>
 	<%= render partial: 'field_for_organization', locals: {f: f, wrapper_class: "span7"} %>
-	<%= f.association :role, wrapper_html: {class: "span3"} %>
-	<%= f.association :origin, wrapper_html: {class: "span2"} %>
-	<i><%= link_to_remove_fields "<i class='icon-trash'></i>", f %></i>
+	<%= f.association :role, label: false, prompt: "Role", wrapper_html: {class: "span2"} %>
+	<%= f.association :origin, label: false, prompt: "Origin", wrapper_html: {class: "span2"} %>
+	<i><%= link_to_remove_fields f %></i>
 </div>

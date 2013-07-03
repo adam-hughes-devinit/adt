@@ -4,7 +4,7 @@
 		<div class='span2'>
 			<i class='icon-share' onclick="var target=$(this).parent().siblings().find('.url-input').val(); if (target.substr(0,7) != 'http://') { target = 'http://'+target; } window.open(target, '_blank')"></i>
 		</div>
-		<i class='span1'><%= link_to_remove_fields "<i class='icon-trash'></i>", f %></i>
+		<i class='span1'><%= link_to_remove_fields f %></i>
 	</div>
 	<div class='row-fluid'>
 		<%= f.association :source_type, wrapper_html: {class: 'span3'} %>

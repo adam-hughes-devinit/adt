@@ -39,13 +39,19 @@
 	#project-form-content {
 
 		.fields {
-			border-bottom: 2px solid #333;
-			margin-bottom: 10px;
+			border-bottom: 1px solid #333;
+			margin-bottom: 5px;
 		}
 		.project-accessory-fields {
 			max-height: 200px;
 			overflow-y: scroll;
 			resize:vertical;
+			box-shadow: #aaa -2px 1px 2px;
+			border-radius: 6px;
+
+			p:first-child {
+				margin-bottom: 5px;
+			}
 
 			b {
 				margin-bottom: 5px;

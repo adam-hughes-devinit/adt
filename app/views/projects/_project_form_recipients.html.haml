@@ -1,0 +1,7 @@
+#project-form-recipients.project-accessory-fields
+	%p
+		%strong
+			Recipients:
+		= link_to_add_fields add_one_label, f, :geopoliticals
+	= f.simple_fields_for :geopoliticals do |geos|
+		= render 'fields_for_geopolitical', f: geos	

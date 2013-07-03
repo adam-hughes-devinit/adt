@@ -1,0 +1,7 @@
+#project-form-transactions.project-accessory-fields
+	%p
+		%strong
+			Transactions:
+		= link_to_add_fields add_one_label, f, :transactions
+	= f.simple_fields_for :transactions do |amts|
+		= render 'fields_for_transaction', f: amts
