@@ -1,7 +1,26 @@
-$(() ->
+$( ->
   $('.dropdown-toggle').dropdown()
-)
 
+
+  # Replace references to projects (#\d+) with hyperlinks:
+  to_project_link = (id) ->
+    "<a href='/projects/#{id}' target='_blank' >##{id}</a>"
+
+  id_ref_finder = /(#)(\d+)/g
+  duplicate_finder = /(duplicate\s+\w+)\s+(\d+)/gi
+  $('body a,p,i,em,strong,b,label,h1,h2,h3,h4,h5,h6').filter( ->
+      this_text = $(this).text()
+      this_text.match(/#\d+/) || this_text.match(duplicate_finder) ;
+  ).each(->
+    html = $(this).html()
+    new_html = html
+      .replace(id_ref_finder, to_project_link("$2"))
+      .replace(duplicate_finder, "$1 #{to_project_link("$2")}")
+    console.log(new_html)
+    $(this).html(new_html)
+  )
+
+)
 Array.prototype.getUnique = () ->
   u = {}
   a = []
