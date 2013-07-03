@@ -14,7 +14,7 @@
 							= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
 							= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
 				.row-fluid
-					= f.association :donor, wrapper_html: {class: "span2"}, label: 'Donor country' 
+					= f.association :donor, wrapper_html: {class: "span2"}, prompt: 'China', label: 'Donor country' 
 					= f.input :title, wrapper_html: {class: "span6"} 
 					= f.input :year, label: "Com. year", wrapper_html: {class: "span2"} 
 					= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span2"} 
@@ -152,6 +152,17 @@
 			.row-fluid
 				= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
 				= f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)
-				= f.button :submit, "Save", class: 'submit-button' 
-				= f.button :submit, "Save", class: 'submit-button on-nav-bar'
-
+				= f.button :submit, "Save", class: 'btn submit-button' 
+				= f.button :submit, "Save", style:"min-width:200px", class: 'submit-button btn-success btn-large on-nav-bar'
+:javascript
+	$(document).keydown(function(e) {
+		// SUBMIT FORM ON CTL-S
+	    if ( 
+	    	(e.which == '115' || e.which == '83' || String.fromCharCode(event.which).toLowerCase() == 's' ) &&
+	    	(e.ctrlKey || e.metaKey)
+	    ) {
+	        e.preventDefault();
+	        changed = false;
+	        $('.edit_project, .new_project').submit()
+	    }
+	}); 
