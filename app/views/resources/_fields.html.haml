@@ -18,6 +18,6 @@
       = f.input :publisher_location, as: :string, placeholder: "Where is the publisher headquartered?"
     .span3
       = f.input :dont_fetch, label: "Don't fetch this resource", hint: "By default, we'll save a copy of this."
-  .row-fluid
-    .span6
-      =# f.association :projects, label_method: :to_english, value_method: :id
+  =# .row-fluid
+  =#   .span6
+  =#     f.association :projects, label_method: :to_english, value_method: :id

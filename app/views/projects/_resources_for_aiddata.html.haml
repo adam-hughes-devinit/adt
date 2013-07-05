@@ -2,7 +2,7 @@
   .span7
     %input#new_resource{placeholder: "To add a Resource, search or enter a resource ID" }
   .span1
-    %a.btn.btn-success.btn-small#add_resource
+    %button.btn.btn-success.btn-small#add_resource
       Add!
   .span4
     = link_to "Create a new resource &rarr;".html_safe, new_resource_path, target: "_blank", class: "resource-tooltip", title: "Create the resource in a new window, then it will be searchable here."
@@ -36,7 +36,7 @@
       this_input.slideUp() 
       resource_id = this_input.val()
 
-      $.post(pinned_resources_path, {resource_id: resource_id}, (response) ->
+      $.post(pinned_resources_path + ".json", {resource_id: resource_id}, (response) ->
         if response["status"] == "success"
           $("#no_resources").remove()
           template_data = 

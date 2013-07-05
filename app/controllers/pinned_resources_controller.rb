@@ -15,7 +15,11 @@ class PinnedResourcesController < ApplicationController
     @resource = Resource.find(params[:resource_id])
     @project.resources << @resource
     if @project.save!
-      render json: {"status" => "success", "resource" => @resource.to_citation}
+      respond_to do |format|
+        format.html {render partial: 'resources/form_inset', locals: {resource: @resource} } 
+        format.json {render json: {"status" => "success", "resource" => @resource.to_citation}}
+      end
+
     else
       render json: {"status" => "failure"}
     end

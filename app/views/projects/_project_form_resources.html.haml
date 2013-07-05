@@ -1,0 +1,79 @@
+#project-form-resources.span12{style: "margin-bottom:10px;"}
+	
+	.row-fluid.project-accessory-fields{style: "max-height: 400px; overflow-y: auto;"}
+		%p#resources_header{style: "padding-bottom: 5px;border-bottom:1px solid #124"}
+			%strong
+				Resources:
+			
+			%span.text-info
+				Create new:
+
+			= link_to_add_fields add_one_label, f, :resources
+			|
+			%span
+				%span.text-success
+					Find existing:
+				%input#existing_resources{style: "width:300px;", placeholder: "To add a Resource, search or enter a resource ID" }
+				%input.btn.btn-success.btn-small#add_existing_resource{style: "width: auto;" , type: "button", value: "Add!"}
+			%span.pull-right.text-warning{style: "margin-top:10px;"}
+				%strong
+					Editing a resource may affect other projects!
+		= f.simple_fields_for :resources do |resource_form|
+			= render "resources/fields", f: resource_form
+	.row-fluid{style: "margin-bottom: 5px;"}
+
+
+	:coffeescript
+		pinned_resources_path = "/projects/#{@project.id}/pinned_resources"
+	
+		$('#existing_resources').typeahead
+			name: "resources"
+			remote: "/resources/typeahead?search=%QUERY"
+			template: $("#typeahead_template").html()
+			engine: typeahead_engine
+			limit: 20
+
+		add_resource_form = ->
+			this_input = $("#existing_resources")
+			resource_id = this_input.val()
+
+			$.post(pinned_resources_path + ".html", {resource_id: resource_id}, (response) ->
+				if response
+					new_form = $(response)
+
+					$("#resources_header").next().prepend(new_form.hide())
+					new_form.slideDown()
+
+					allow_unlinking()
+
+				this_input.val('')
+			)
+
+		$('#add_existing_resource').click(add_resource_form)
+		
+		unlink_button = "<a  class='pull-right btn btn-small btn-danger unlink-resource'>Unlink</a>"
+		unlink_resource = ->
+			if confirm "Are you sure you want to remove this resource? (No undo!)"
+				resource = $(this).parent()
+				# console.log resource
+				resource_id = resource.find(".controls:first-child input[type=hidden]").val()
+				console.log resource_id
+				if Number(resource_id) isnt 0
+					$.ajax 
+						url: pinned_resources_path + "/" + resource_id
+						method: "DELETE"
+						success: (response) ->
+							if response["status"] == "success"
+								resource.slideUp(-> ($(this).remove()))
+				else
+					resource.slideUp(-> ($(this).remove()))
+		
+		allow_unlinking = ->
+			$('.unlink-resource').remove()
+			$('.resource').append(unlink_button)
+			$('.unlink-resource').click(unlink_resource)
+		
+		allow_unlinking()
+		$('#project-form-resources .add-one').click(allow_unlinking)
+
+

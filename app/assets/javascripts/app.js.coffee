@@ -100,6 +100,9 @@ String.prototype.pluralize = (count, plural) ->
   @changed = true
   new_id = new Date().getTime();
   regexp = new RegExp("new_" + association, "g")
-  new_content = $(content.replace(regexp, new_id))
+  new_html = content.replace(regexp, new_id)
+  # console.log(new_html)
+  new_content = $(new_html)
+  # console.log new_content
   $(link).parent().after(new_content.hide())
   new_content.slideDown()

@@ -1,0 +1,3 @@
+= simple_form_for(resource) do |f|
+	= f.simple_fields_for(resource) do |res|
+		= render 'resources/fields', f: f
