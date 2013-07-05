@@ -28,7 +28,7 @@ describe LoanDetail do
 
 			p.year = 2009
 			p.save!
-			p "Project: #{p.donor.iso3} - #{p.year} - #{p.usd_2009}"
+			# p "Project: #{p.donor.iso3} - #{p.year} - #{p.usd_2009}"
 
 		end
 

@@ -96,7 +96,7 @@ class Resource < ActiveRecord::Base
           s3_filename =  "#{timestamp}_#{s3_filename}" #.gsub(/[\s:]/, '_')
 
           # store it in bucket/id/filename
-          p "RESOURCE: Saving #{s3_filename} from #{source_url} to #{bucket_name}/#{id}"
+          # p "RESOURCE: Saving #{s3_filename} from #{source_url} to #{bucket_name}/#{id}"
         filename = s3_upload bucket_name, resource_copy, "#{id}/#{s3_filename}"
 
         new_download_url = "http://s3.amazonaws.com/#{bucket_name}/#{id}/#{CGI::escape s3_filename}"

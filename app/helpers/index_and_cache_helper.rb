@@ -5,7 +5,7 @@ module IndexAndCacheHelper
 	# as to not break things.
 	# #######
 	def recache_and_reindex_projects
-	 	p "Recache and reindex projects at #{Time.new}"
+	 	# p "Recache and reindex projects at #{Time.new}"
 		
 	 	reindex_projects
 
@@ -13,7 +13,7 @@ module IndexAndCacheHelper
 	# handle_asynchronously :recache_and_reindex_projects
 
 	def reindex_projects(projects)
-		p "Reindex projects at #{Time.new}"
+		# p "Reindex projects at #{Time.new}"
 		Sunspot.index!(projects || Project.all)
 		# Sunspot.commit
 	end

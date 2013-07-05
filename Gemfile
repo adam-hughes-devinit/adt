@@ -13,7 +13,6 @@ gem 'sunspot_rails'
 gem 'thin'
 gem 'dalli'
 gem 'memcachier'
-# gem 'unicorn'
 gem 'markdown-rails'
 gem 'progress_bar'
 gem 'daemons'
@@ -34,14 +33,20 @@ gem 'hashie'
 gem 'aws-sdk'
 gem 'newrelic_rpm'
 
-group :development, :test do
+gem 'capybara'
+
+group :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails'
-  #gem 'factory_girl_rails', '1.4.0'
+  gem 'factory_girl_rails', :require => false
   gem 'sunspot_solr'
   gem 'launchy'
   gem 'quiet_assets'
   gem 'spork-rails'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  # gem 'ruby-debug'
   # gem 'brakeman', require: false
 end
 
@@ -58,22 +63,3 @@ end
 # end
 
 
-group :test do
-  gem 'capybara', '1.1.2'
-  gem 'factory_girl_rails', :require => false
-end
-
-group :production do
-  
-  #gem 'sunspot-client' 
-end
-
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# To use debugger
-# gem 'debugger'

@@ -1,4 +1,5 @@
 Adt::Application.configure do
+  # require "debug_log"
   # Settings specified here will take precedence over those in config/application.rb
 
   # The test environment is used exclusively to run your application's
@@ -13,7 +14,7 @@ Adt::Application.configure do
 
   # Log error messages when you accidentally call methods on nil
   config.whiny_nils = true
-
+  config.log_level = :debug 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false

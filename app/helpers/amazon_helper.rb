@@ -7,7 +7,7 @@ module AmazonHelper
         :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
         :secret_access_key => ENV['AWS_ACCESS_SECRET_KEY'] 
     )
-    p "Uploading file to S3 #{bucket}"
+    # p "Uploading file to S3 #{bucket}"
 
     # just in case 
     tempfile.rewind

@@ -1,3 +1,3 @@
-= simple_form_for(resource) do |f|
-	= f.simple_fields_for(resource) do |res|
-		= render 'resources/fields', f: f
+= simple_form_for @project do |f|
+	= f.simple_fields_for(resource) do |builder|
+		= render("projects/fields_for_resource", :f => builder)

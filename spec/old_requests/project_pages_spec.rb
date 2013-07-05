@@ -26,7 +26,7 @@ describe "Project pages" do
  
   describe "Should be editable by signed-in users" do
     before do
-          visit signin_path
+          visit staff_login_path
           fill_in "Email", with: user.email 
           fill_in "Password", with: user.password 
           click_button "Sign in"

@@ -207,7 +207,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
     def correct_owner? 
       project_owner = Project.unscoped.find(params[:id]).owner 
       if ( 
-          (project_owner && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
+          (project_owner.present? && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
           (current_user_is_aiddata && project_owner.nil?)
         )
         true

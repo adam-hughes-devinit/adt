@@ -25,7 +25,7 @@ class LoanDetail < ActiveRecord::Base
 	  	
 
 	    ge_url = "#{CALCULATOR_URL}?#{ge_query}"
-	    p "GRANT ELEMENT #{ge_url}"
+	    # p "GRANT ELEMENT #{ge_url}"
 	    ge_string = open(ge_url){|io| io.read}
 	    
 		ge_object = ActiveSupport::JSON.decode(ge_string)

@@ -69,15 +69,20 @@ FactoryGirl.define do
 
   FactoryGirl.define do
     sequence :email do |n|
-      "email#{n}@example.com"
+      "email#{n}@aiddata.org"
     end
 
     factory :user do
       email
       name "rmosolgo"
-      password "secret"
-      password_confirmation "secret"
+      password "secret123"
+      password_confirmation "secret123"
       owner FactoryGirl.create(:organization)
+
+      trait :aiddata do
+        owner Organization.find_or_create_by_name("AidData")
+      end
+
     end
   end
 
@@ -129,8 +134,12 @@ FactoryGirl.define do
     flow_type FactoryGirl.create(:flow_type)
     crs_sector FactoryGirl.create(:crs_sector)
 
-    donor FactoryGirl.create(:country)
+    donor Country.find_or_create_by_name("China", iso3: "CHN", iso2: "CN")
     owner FactoryGirl.create(:organization)
+
+    trait :aiddata do
+      owner Organization.find_or_create_by_name("AidData")
+    end
 
     trait :offic do
       oda_like FactoryGirl.create(:oda_like, )#name: "ODA-like")
@@ -243,12 +252,12 @@ FactoryGirl.define do
     scope_channels = [
       [
         {
-          field: "status_name",
-          values: ["Cancelled"]
+          "field" => "status_name",
+          "values" => ["Cancelled"]
         },
         {
-          field: "year",
-          values: [2009,2010]
+          "field" => "year",
+          "values" => [2009,2010]
         }
       ]
     ]
