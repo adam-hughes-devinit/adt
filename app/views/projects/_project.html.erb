@@ -133,12 +133,15 @@
       <%= render 'project_transactions' %>
     </div>
     <div class='row-fluid'>
-      <h4>Sources:</h4>
-      <%= render 'project_sources' %>
+      <%= render 'project_resources' %>
+      <% if current_user_is_aiddata %>
+        <h4>Sources:</h4>
+        <p class='muted'>
+          Visible to AidData users only.
+        </p>
+        <%= render 'project_sources' %>
+      <% end %>
     </div>
-    <% if current_user_is_aiddata %>
-      <%= render 'resources' %>
-    <% end %>
   </div>
 
   <div class='span6 well'>

@@ -25,7 +25,11 @@ class Flag < ActiveRecord::Base
   def project
     if ApplicationHelper::PROJECT_ACCESSORY_OBJECTS.include?(flaggable_type)
       flagged_object = flaggable_type.constantize.find(flaggable_id)
-      flagged_object.project
+      if flagged_object.respond_to? :project
+        flagged_object.project
+      elsif flagged_object.respond_to? :projects 
+        flagged_object.projects.first        
+      end
     else
       Project.find(flaggable_id)
     end

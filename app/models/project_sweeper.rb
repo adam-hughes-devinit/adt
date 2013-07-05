@@ -20,14 +20,16 @@ class ProjectSweeper < ActionController::Caching::Sweeper
     #p "Expiring cache for #{this.inspect}"
 
     if this.respond_to? :project 
-      project = this.project
+      projects = [this.project]
     elsif this.is_a? Project
-      project = this
+      projects = [this]
+    elsif this.respond_to? :projects
+      projects = this.projects
     else
-      project = nil
+      projects = []
     end
 
-    if project
+    projects.each do |project|
       # expire the to_english method
       expire_fragment("projects/#{project.id}/to_english/no_title")
       expire_fragment("projects/#{project.id}/to_english/title")

@@ -463,6 +463,7 @@ class Project < ActiveRecord::Base
       self.sources.map(&:flags) +
       self.contacts.map(&:flags) +
       self.participating_organizations.map(&:flags) +
+      self.resources.map(&:flags) +
       self.flags
     ].flatten
   end

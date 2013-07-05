@@ -3,6 +3,11 @@ class Resource < ActiveRecord::Base
   include AmazonHelper
   include ResourceSearchable
 
+  has_paper_trail 
+  has_many :flags, as: :flaggable, dependent: :destroy
+  accepts_nested_attributes_for :flags
+
+
   RESOURCE_TYPES = [
     "Government Source (Donor/Recipient)",
     "Implementing/Intermediary Agency Source",

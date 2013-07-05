@@ -4,14 +4,18 @@
     Resources:
   %ul#resources.unstyled
     - @project.resources.each do |r|
-      %li.resource{"data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
-        %p
+      %li.flaggable.resource.container-fluid{"flaggable_type" => "Resource", "flaggable_id" => r.id, "data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
+        %p.row-fluid
           = r.to_citation
-        %span
-          = link_to "More about this resource &rarr;".html_safe, r
+          - r.flags.each do |flag|
+            = render partial: 'flag_superscript', locals: {flag: flag}
+        %p.row-fluid
+          = link_to "More about this resource &rarr;".html_safe, r, class: "text-success"
+    
     - if @project.resources.blank?
       %em.muted#no_resources
         No resources yet!
+
 - if current_user_is_aiddata
   %script#resource-template{type: 'text/template'}
     %li{"data-resource-id" => "<%= resource_id %>".html_safe}

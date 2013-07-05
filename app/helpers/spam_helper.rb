@@ -4,7 +4,7 @@ module SpamHelper
 		"[url=",
 		"[URL=",
 		"[/url]",
-		"[/URL]"
+		"[/URL]",
 		"</a>", # Humans won't be posting HTML, I promise.
 		"</A>",
 		"<p>",
