@@ -18,7 +18,6 @@
 			%span.pull-right.text-warning{style: "margin-top:10px;"}
 				%strong
 					Editing a resource may affect other projects!
-		- @project.resources.build if @project.resources.empty? # if you don't do this, new ones will have nowhere to go.
 		= f.simple_fields_for :resources do |resource_form|
 			= render "resources/fields", f: resource_form
 	.row-fluid{style: "margin-bottom: 5px;"}

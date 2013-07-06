@@ -21,7 +21,7 @@
     @unlink_button = "<a  class='pull-right btn btn-small btn-danger unlink-resource'>Unlink</a>"
     @unlink_resource = ->
       if confirm "Are you sure you want to remove this resource? (No undo!)"
-        resource = $(this).parent()
+        resource = $(this).closest(".resource")
         console.log resource
         resource_id = resource.attr("data-resource-id")
         $.ajax 

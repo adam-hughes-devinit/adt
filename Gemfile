@@ -46,6 +46,7 @@ group :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'capybara-webkit'
+  gem 'selenium-webdriver'
   # gem 'ruby-debug'
   # gem 'brakeman', require: false
 end

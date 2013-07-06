@@ -64,9 +64,10 @@ describe "Project pages", js: true do
 					within "#project-form-resources" do
 						find('.add-one').click
 					end	
-					find(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("CHINESE NEWSPAPER")
-					find(:css, %{[name^="project[resources_attributes]"][name$="[source_url]"]}).set("www.china.com")
-					within %{[name^="project[resources_attributes]"][name$="[resource_type]"]} do
+					first(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("CHINESE NEWSPAPER")
+					first(:css, %{[name^="project[resources_attributes]"][name$="[source_url]"]}).set("www.china.com")
+					resource_type_input = first :css, %{[name^="project[resources_attributes]"][name$="[resource_type]"]}
+					within resource_type_input  do
 						select "Other"
 					end
 
@@ -85,14 +86,19 @@ describe "Project pages", js: true do
 					visit edit_project_path(project)
 				end
 				
-				it "should have a form for the resource" do
-					title_input = page.find(:css, %{[name^="project[resources_attributes]"][name$="[title]"]})
-					title_input.value.should eql("Existing Resource")
-				end	
+				# it "should have a form for the resource" do
+				# 	title_input = page.first(:css, %{[name^="project[resources_attributes]"][name$="[title]"]})
+				# 	title_input.value.should eql("Existing Resource")
+				# end	
+
+				it {should have_field(
+					"project_resources_attributes_0_title",  # 0 is the projects index
+					with: existing_resource.title
+				)}
 
 				describe "and clicking save" do
 					before do
-						find(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("NEW CHINESE NEWSPAPER")
+						first(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("NEW CHINESE NEWSPAPER")
 						click_save
 					end
 
@@ -101,23 +107,22 @@ describe "Project pages", js: true do
 
 			end
 
-			describe "by attaching exiting ones" do
+			describe "by attaching existing ones" do
 				before do
 					existing_resource.save!
 					existing_resource_id = existing_resource.id
+					# visit resource_path(existing_resource)
 					visit edit_project_path(project)
-					fill_in "existing_resources", with: existing_resource_id
-					click_on "add_existing_resource"		
+					fill_in "existing_resources", with: "#{existing_resource.id} "
+					find("#add_existing_resource").click
+
 				end
 
-				it "should add the form to the page" do
-					title_input = page.find(:css, %{[name^="project[resources_attributes]"][name$="[title]"]})
-					title_input.value.should eql("Existing Resource")
-				end
-				
+				it {should have_selector("#project_resources_attributes_#{existing_resource.id}_title")}
+
 				describe "and clicking save" do
 					before do
-						find(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("NEW CHINESE NEWSPAPER")
+						first(:css, %{[name^="project[resources_attributes]"][name$="[title]"]}).set("NEW CHINESE NEWSPAPER")
 						click_save
 					end
 
