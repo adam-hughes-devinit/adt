@@ -11,7 +11,7 @@
 		- elsif @object.is_a?(Content) && k == 'content'
 			%td
 				= f.input k.to_sym, input_html: {style: 'font-family:courier, monospaced;' }
-		- elsif k =~ /_id$/ && relation = k.sub(/_id$/, '').to_sym && @object.respond_to?(relation) 
+		- elsif k =~ /_id$/ && (relation = k.sub(/_id$/, '').to_sym) && @object.respond_to?(relation) 
 			%td
 				= f.association relation
 		- elsif !["created_at", "updated_at", "id"].include? k 

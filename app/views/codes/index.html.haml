@@ -50,6 +50,12 @@
 								%td
 									- if k == 'name'
 										= link_to v, o
+									- elsif k =~ /_id$/ && (relation = k.sub(/_id$/, '').to_sym) && o.respond_to?(relation)
+										- new_v = o.send(relation)
+										- if new_v.respond_to?(:name)
+											= link_to new_v.name, new_v
+										- else
+											= new_v.to_s
 									- else
 										= v
 						%td

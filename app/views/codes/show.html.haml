@@ -10,7 +10,14 @@
 			%p
 				%strong
 					= k.titleize + ":"
-				= v
+				- if k =~ /_id$/ && (relation = k.sub(/_id$/, '').to_sym) && @object.respond_to?(relation)
+					- new_v = @object.send(relation)
+					- if new_v.respond_to?(:name)
+						= link_to new_v.name, new_v
+					- else
+						= new_v.to_s
+				- else
+					= v
 - if @has_projects 
 	.row-fluid
 		%p
