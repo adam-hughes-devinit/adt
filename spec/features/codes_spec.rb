@@ -4,10 +4,11 @@ include ProjectSpecHelper
 describe 'Code pages' do
 	let(:aiddata) {Organization.find_or_create_by_name("AidData")}
 	let(:aiddata_user) {FactoryGirl.create :user, owner: aiddata}
+	let(:organization_type) {FactoryGirl.create :organization_type}
 
 	subject {page}
 
-	CODE_TYPES = [:currency, :crs_sector, :oda_like, :status, :flow_type, :verified]
+	CODE_TYPES = [:organization, :currency, :crs_sector, :oda_like, :status, :flow_type, :verified]
 	
 	CODE_TYPES.each do |code_type|
 		describe "#{code_type}" do
@@ -41,6 +42,10 @@ describe 'Code pages' do
 					if code.respond_to? :iso3
 						fill_in "Iso3", with: "XYZ"
 					end
+					if code.respond_to? :organization_type
+						select organization_type.name, from: "Organization Type"
+					end
+					
 					
 					click_button "Save"
 				end
