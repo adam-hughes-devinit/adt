@@ -46,7 +46,7 @@ class CodesController < ApplicationController
         format.html { redirect_to @object }
         format.json { render json: @object, status: :created, location: @object }
       else
-        format.html { render template: "shared/code_form",  locals: {object: @object, type: @class_type} }
+        format.html { render action: "new" }
         format.json { render json: @object.errors, status: :unprocessable_entity }
       end
     end

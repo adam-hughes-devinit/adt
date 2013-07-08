@@ -1,0 +1,5 @@
+- provide :title, "New #{@object.class.name.titleize}"
+
+= render "form"
+
+= link_to 'See All', polymorphic_path(@object.class), class: "btn"

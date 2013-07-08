@@ -7,7 +7,9 @@ describe 'Code pages' do
 
 	subject {page}
 
-	[:crs_sector, :oda_like, :status, :flow_type].each do |code_type|
+	CODE_TYPES = [:currency, :crs_sector, :oda_like, :status, :flow_type, :verified]
+	
+	CODE_TYPES.each do |code_type|
 		describe "#{code_type}" do
 			let(:code) {FactoryGirl.create code_type}
 			
@@ -36,6 +38,10 @@ describe 'Code pages' do
 				before do
 					visit new_polymorphic_path(code.class)
 					fill_in "Name", with: "Another new code name!"
+					if code.respond_to? :iso3
+						fill_in "Iso3", with: "XYZ"
+					end
+					
 					click_button "Save"
 				end
 

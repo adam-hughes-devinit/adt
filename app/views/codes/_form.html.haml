@@ -1,0 +1,25 @@
+
+%h1.page-header
+	= @object.class.name.titleize
+
+
+= simple_form_for(@object) do |f| 
+	- @object.attributes.each_pair do |k, v|   	
+		- if @object.is_a?(Content) && k=='content_type'
+			%td
+				= f.input k.to_sym, as: :select, collection: Content::CONTENT_TYPES 
+		- elsif @object.is_a?(Content) && k == 'content'
+			%td
+				= f.input k.to_sym, input_html: {style: 'font-family:courier, monospaced;' }
+		- elsif k =~ /_id$/
+			- relation = k.sub("_id$", '').to_sym
+			%td
+				= f.association relation
+		- elsif !["created_at", "updated_at", "id"].include? k 
+			%td
+				= f.input k.to_sym 
+
+	= f.button :submit, "Save", class: "btn btn-success" 
+
+
+

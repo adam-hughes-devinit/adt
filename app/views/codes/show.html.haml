@@ -1,0 +1,23 @@
+- provide(:title, "#{@object.class.name.titleize}: #{@object.name}") 
+- hidden_attributes = ["created_at", "updated_at", "id"] 
+
+%h1.page-header
+	= @object.class.name.titleize + ":"
+	= @object.name
+- @object.attributes.each_pair do |k, v| 
+	- if !hidden_attributes.include?(k) 
+		.row-fluid
+			%p
+				%strong
+					= k.titleize + ":"
+				= v
+- if @has_projects 
+	.row-fluid
+		%p
+			Referenced by
+			= link_to pluralize(@object.projects.map(&:id).uniq.count, "project"), "/projects?#{@object.class.name.underscore.downcase}_name=#{CGI.escape @object.name}"
+.row-fluid
+	- if current_user_is_aiddata
+		= link_to "Edit", edit_polymorphic_path(@object), class: "btn btn-warning"
+		= link_to "Destroy", polymorphic_path(@object), method: :delete, confirm: "Are you sure? All codes with this value will become 'Unset'.", class: "btn btn-danger"
+	= link_to "See all #{@object.class.name.titleize}", polymorphic_path(@object.class), class: "btn"

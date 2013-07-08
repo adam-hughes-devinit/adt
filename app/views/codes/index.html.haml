@@ -1,0 +1,39 @@
+- provide :title, @class_name.titleize
+- hidden_attributes = ["created_at", "updated_at", "id", "color", "content", "chinese_content"]
+
+%h1.page-header
+	View all 
+	= @class_name.titleize
+
+- if current_user_is_aiddata
+	.row-fluid
+		= link_to "New #{@class_name.titleize}", new_polymorphic_path(@class_name.constantize), class: "btn" 
+
+- if @objects.length > 0
+	.row-fluid
+		%table.table-hover.table.sortable
+			%thead
+				%tr
+					- @objects.first.attributes.each_pair do |k,v|
+						- if !hidden_attributes.include?(k)
+							%th
+								= k.titleize
+					%th
+						Links
+			%tbody
+				- @objects.each do |o|
+					%tr
+						- o.attributes.each_pair do |k, v|
+							- if !hidden_attributes.include?(k)
+								%td
+									- if k == 'name'
+										= link_to v, o
+									- else
+										= v
+						%td
+							= link_to "View", o
+							- if current_user_is_aiddata
+								= link_to "Edit", edit_polymorphic_path(o)
+
+
+= javascript_include_tag "bootstrap_sortable/index"
