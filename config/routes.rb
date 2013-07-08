@@ -8,7 +8,7 @@ Adt::Application.routes.draw do
   get '/contents/typeahead', to: 'contents#twitter_typeahead'
   resources :contents
 
-  get '/pending_content', to: 'pending_content#index'
+  get '/pending_content', to: 'pending_content#index', as: "pending_content"
   get '/pending_content/:pending_content_scope', to: 'pending_content#index', as: "scoped_pending_content"
   post '/pending_content/approve', to: 'pending_content#approve'
   post '/pending_content/destroy', to: 'pending_content#destroy'

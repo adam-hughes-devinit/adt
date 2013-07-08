@@ -1,5 +1,5 @@
 module ProjectSpecHelper
-
+	
 	def sign_in_aiddata_user
 		visit staff_login_path
 		fill_in "Email", with: aiddata_user.email 

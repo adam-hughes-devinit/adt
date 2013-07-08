@@ -18,22 +18,7 @@ describe "Project pages", js: true do
 		sign_in_aiddata_user
 	end
 	
-	describe "aiddata user" do
-		subject {aiddata_user}
-		it {should be_valid}
-		its(:owner) {should eql(aiddata)}
 
-		describe "can sign in" do
-			before do
-				sign_in_aiddata_user
-			end
-
-			it {should_not have_content("Invalid")}
-			it {should_not have_content("sign in")}
-
-		end
-
-	end
 	subject {page}
 
 	describe "edit pages"  do
