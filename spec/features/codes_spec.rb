@@ -37,15 +37,20 @@ describe 'Code pages' do
 
 			describe "can be created" do
 				before do
+
+					organization_type.save!
+
 					visit new_polymorphic_path(code.class)
 					fill_in "Name", with: "Another new code name!"
+					
 					if code.respond_to? :iso3
 						fill_in "Iso3", with: "XYZ"
 					end
+
 					if code.respond_to? :organization_type
-						select organization_type.name, from: "Organization Type"
+						select organization_type.name, from: "Organization type"
 					end
-					
+
 					
 					click_button "Save"
 				end

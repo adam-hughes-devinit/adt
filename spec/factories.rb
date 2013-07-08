@@ -44,6 +44,10 @@ FactoryGirl.define do
     d.name "International media report"
   end
 
+  factory :organization_type do |ot|
+    ot.name Faker::Company.name
+  end
+  
   factory :organization do |o|
     o.name Faker::Company.name
     o.description Faker::Company.catch_phrase
