@@ -9,7 +9,7 @@ class CodesController < ApplicationController
     @objects = @class_name.constantize.all
 
     respond_to do |format|
-      format.html {render template: 'shared/code_index', locals: {objects: @objects, type: @class_type.pluralize}}
+      format.html # index.html.haml
       format.json { render json: @objects }
     end
   end
@@ -19,7 +19,7 @@ class CodesController < ApplicationController
     @object = @class_name.constantize.find(params[:id])
 
     respond_to do |format|
-      format.html { render template: 'shared/code', locals: {object: @object, type: @class_type}}
+      format.html # show.html.haml #{ render template: 'shared/code', locals: {object: @object, type: @class_type}}
       format.json { render json: @object }
     end
   end
@@ -28,7 +28,7 @@ class CodesController < ApplicationController
     @object = @class_name.constantize.new
 	
     respond_to do |format|
-      format.html {render template: 'shared/code_form', locals: {object: @object, type: @class_type}}
+      format.html # new.html.haml
       format.json { render json: @object }
     end
   end
@@ -36,7 +36,6 @@ class CodesController < ApplicationController
 
   def edit
     @object = @class_name.constantize.find(params[:id])
-    render template: 'shared/code_form', locals: {object: @object, type: @class_type}
   end
 
   def create
