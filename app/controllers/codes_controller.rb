@@ -6,7 +6,17 @@ class CodesController < ApplicationController
   cache_sweeper :project_sweeper # app/models/project_sweeper.rb
 
   def index
-    @objects = @class_name.constantize.all
+    @query = {}
+    order = params[:order] || "id"
+    dir = params[:dir] || "asc"
+    params.each do |key, value|
+      @query[key] = value if @class_name.constantize.column_names.include? key.to_s
+    end
+
+    @objects = @class_name.constantize.where(@query).order("#{order} #{dir}").paginate(:page => params[:page], :per_page => 50)
+    
+    [:order, :dir, :page].each { |key| @query.merge!({key.to_s =>  params[key]}) if params[key] }
+
 
     respond_to do |format|
       format.html # index.html.haml

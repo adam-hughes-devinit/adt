@@ -1,23 +1,45 @@
 - provide :title, @class_name.titleize
 - hidden_attributes = ["created_at", "updated_at", "id", "color", "content", "chinese_content"]
+- dir = params[:dir] == 'asc' ? 'desc' : 'asc'
 
 %h1.page-header
 	View all 
 	= @class_name.titleize
+.row-fluid
+	- if @query.length > 0
+		.span6		
+			.well.well-small
+				%h3
+					Filters:
+				%table.table.table-condensed.table-hover
+					%tbody
+					- @query.each do |key, value|
+						%tr
+						%td
+							%strong 
+							= key
+						%td
+							= value
+						%td
+							= link_to "Remove", params.except(key).except(:page), class: "label label-important"
+				
+	- params.delete(:page)
+	.span6
+		- if current_user_is_aiddata
+			= link_to "New #{@class_name.titleize}", new_polymorphic_path(@class_name.constantize), class: "btn" 
 
-- if current_user_is_aiddata
-	.row-fluid
-		= link_to "New #{@class_name.titleize}", new_polymorphic_path(@class_name.constantize), class: "btn" 
+.row-fluid
+	= will_paginate @objects
 
 - if @objects.length > 0
 	.row-fluid
-		%table.table-hover.table.sortable
+		%table.table-hover.table
 			%thead
 				%tr
 					- @objects.first.attributes.each_pair do |k,v|
 						- if !hidden_attributes.include?(k)
 							%th
-								= k.titleize
+								= link_to k.titleize, params.merge(order: k, dir: dir)
 					%th
 						Links
 			%tbody
@@ -32,8 +54,8 @@
 										= v
 						%td
 							= link_to "View", o
+							|
 							- if current_user_is_aiddata
-								= link_to "Edit", edit_polymorphic_path(o)
+								= link_to "Edit", edit_polymorphic_path(o), class: "text-warning"
 
 
-= javascript_include_tag "bootstrap_sortable/index"
