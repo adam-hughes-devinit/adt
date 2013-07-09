@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.0.0
+env:
+  - facebook_key=Nothing facebook_secret=Nothing twitter_key=Nothing twitter_secret=Nothing google_key=Nothing google_secret=Nothing linkedin_key=Nothing linkedin_secret=Nothing weibo_key=Nothing weibo_secret=Nothing
 script: 
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
