@@ -104,9 +104,7 @@
 
 
 
-			#flavors.row-fluid
-				%p
-					Choose a flavor for this page:
+
 			.row-fluid
 				= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
 				= f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)

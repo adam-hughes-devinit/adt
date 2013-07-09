@@ -11,6 +11,11 @@
 </h1>
 
 <%= render 'project_form' %>
+<div id='flavors' class='row-fluid'>
+	<p>
+		Choose a flavor for this page:
+	</p>
+</div>
 
 <script>
 	function repopulate_organization_dropdowns(json) {
@@ -54,7 +59,7 @@
 		$('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
 	})
 
-var flavors= ["neon", "pastel", "plain", "classic"]
+var flavors= ["neon", "pastel", "plain", "classic", "starry_night"]
 flavors.forEach(function(f) {
 	$('#flavors').append("<a class='btn flavor-button' data-flavor='"+f+"'>"+f+"</a>")
 })
@@ -65,18 +70,17 @@ $('.flavor-button').click(function(){
 
 function colorize(flavor) {
 	var items = [
-		{ selector: "#project-form-wrapper", neon: "#40d040", pastel: "#B9E4B9", classic: "white"},
-		{ selector: "#project-form-content", neon: "#5090a0", pastel: "#EE9EAE", classic: "lightgray"},
-		{ selector: "#project-form-project", neon: "#ee4466" , pastel: "#EE9EAE", classic: "darkgray"},
-		{ selector: "#project-form-flow-class", neon: "#a91", pastel: "#F5F2D9", classic: "steelblue" },
-		{ selector: "#project-form-loan-detail", neon: "#1fa", pastel: "#F8E3BE", classic: "darkred" },
-		{ selector: "#project-form-sources", neon: "#44eeaa", pastel: "#F8E3BE", classic: "steelblue" },
-		{ selector: "#project-form-recipients", neon: "#7c2", pastel: "#83FFC1", classic: "steelblue" },
-		{ selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred" },
-		{ selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred" },
-		{ selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred"  },
-		{ selector: "#project-form-resources", neon: "#dd5",  pastel: "#F5E355", classic: "steelblue"  },
-
+		{ selector: "#project-form-wrapper", neon: "#40d040", pastel: "#B9E4B9", classic: "white", starry_night: "#610B0B"},
+		{ selector: "#project-form-content", neon: "#5090a0", pastel: "#EE9EAE", classic: "lightgray", starry_night: "#610B0B"},
+		{ selector: "#project-form-project", neon: "#ee4466" , pastel: "#EE9EAE", classic: "darkgray", starry_night: "#819FF7"},
+		{ selector: "#project-form-flow-class", neon: "#a91", pastel: "#F5F2D9", classic: "steelblue", starry_night: "#B18904"},
+		{ selector: "#project-form-loan-detail", neon: "#1fa", pastel: "#F8E3BE", classic: "darkred", starry_night: "#A4A4A4"},
+		{ selector: "#project-form-sources", neon: "#44eeaa", pastel: "#F8E3BE", classic: "steelblue", starry_night: "white"},
+		{ selector: "#project-form-recipients", neon: "#7c2", pastel: "#83FFC1", classic: "steelblue", starry_night: "#5858FA"},
+		{ selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred", starry_night: "#CECEF6"},
+		{ selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred", starry_night: "#F4FA58"},
+		{ selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred",  starry_night: "#FACC2E"},
+		{ selector: "#project-form-resources", neon: "#dd5",  pastel: "#F5E355", classic: "steelblue", starry_night: "#5858FA"},
 	]
 
 

@@ -1,8 +1,10 @@
 class Project < ActiveRecord::Base
   include ProjectCache
   include ProjectSearch
+  include ProjectIatiXml
   include ProjectExporters
   extend  ProjectExporterHeaders
+
   include ActionView::Helpers::NumberHelper
 
   attr_accessible :title, :active, :capacity, :description, :year,
