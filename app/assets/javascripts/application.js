@@ -18,6 +18,7 @@
 //= require rails.validations
 //= require bootstrap_teaser
 //= require ./twitter_typeahead/index
+
 $(function() {
 $('#header_search').typeahead([
 	{
