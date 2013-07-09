@@ -2,10 +2,11 @@ require 'spec_helper'
 include ProjectSpecHelper
 
 describe "Project pages" do
-	let(:project) {FactoryGirl.create :project, :aiddata, transactions: [], resources: []}
+	let(:china) {FactoryGirl.create :country, name: "China", iso3: "CHN", iso2: "CN"}
+	let(:project) {FactoryGirl.create :project, owner: aiddata, transactions: [], resources: []}
 	let(:chinese_yuan) {FactoryGirl.create :currency, iso3: "CHN", name: "Chinese Yuan"}
-	let(:aiddata_user) {FactoryGirl.create :user, :aiddata}
-	let(:aiddata) {Organization.find_by_name("AidData")}
+	let(:aiddata_user) {FactoryGirl.create :user, owner: aiddata}
+	let(:aiddata) {Organization.find_or_create_by_name("AidData")}
 	let(:resource) {FactoryGirl.create :resource}
 
 
@@ -38,10 +39,14 @@ describe "Project pages" do
 
 
 	describe "edit page" do
-
+		before do
+			china.save!
+		end
+		
 
 		describe "redirects to sign-in for strangers" do
 			before do 
+
 				visit edit_project_path(project)
 			end
 

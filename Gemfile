@@ -33,7 +33,11 @@ gem 'hashie'
 gem 'aws-sdk'
 gem 'newrelic_rpm'
 
-gem 'capybara'
+
+
+group :development do
+  gem 'quiet_assets'
+end
 
 group :test do
   gem 'sqlite3', '1.3.5'
@@ -41,7 +45,6 @@ group :test do
   gem 'factory_girl_rails', :require => false
   gem 'sunspot_solr'
   gem 'launchy'
-  gem 'quiet_assets'
   gem 'spork-rails'
   gem 'database_cleaner'
   gem 'capybara'
