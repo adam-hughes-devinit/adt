@@ -4,7 +4,7 @@ rvm:
 env:
   - smtp_username=Nothing smtp_password=Nothing AWS_ACCESS_KEY_ID=Nothing AWS_SECRET_ACCESS_KEY=Nothing AIDDATA_FS_USERNAME=Nothing AIDDATA_FS_PASSWORD=Nothing facebook_key=Nothing facebook_secret=Nothing twitter_key=Nothing twitter_secret=Nothing google_key=Nothing google_secret=Nothing linkedin_key=Nothing linkedin_secret=Nothing weibo_key=Nothing weibo_secret=Nothing
 before_script: 
-  - curl https://raw.github.com/moliware/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.5.0 bash
+  - curl https://raw.github.com/rmosolgo/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.5.0 bash
 script: 
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
