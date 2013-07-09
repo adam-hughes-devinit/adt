@@ -56,6 +56,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
 
 
   def show
+    
     @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
     @comment = Comment.new
     @flags = @project.all_flags

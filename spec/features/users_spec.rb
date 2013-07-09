@@ -20,6 +20,8 @@ describe "User permissions" do
 				sign_in_aiddata_user
 			end
 
+			subject {page}
+			
 			it {should_not have_content("Invalid")}
 			it {should_not have_content("sign in")}
 

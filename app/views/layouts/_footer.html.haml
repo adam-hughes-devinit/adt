@@ -1,14 +1,16 @@
 %footer.footer.row-fluid
-  %a{href: "http://aiddata.org"}
-    = image_tag "open_adt_small.png"
-  %nav
-    %ul
-      %li
-        = link_to "About",   content_by_name_path("about_the_project")
-      %li
-        = link_to "Contact", content_by_name_path("contact")
-      %li
-        = link_to "Blog", "http://blog.aiddata.org/"
-      %li
-        = link_to "Staff Login", staff_login_path 
+  .span6
+    %a{href: "http://aiddata.org"}
+      = image_tag "open_adt_small.png"
+  .span6
+    %nav.pull-right
+      %ul
+        %li
+          = link_to "About",   content_by_name_path("about_the_project")
+        %li
+          = link_to "Contact", content_by_name_path("contact")
+        %li
+          = link_to "Blog", "http://blog.aiddata.org/"
+        %li
+          = link_to "Staff Login", staff_login_path 
 
