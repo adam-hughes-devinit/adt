@@ -3,6 +3,7 @@
 <h1 class='page-header'>
 	Edit 
 	<%= @project.title %>
+	/ <%= @project.persisted? ? @project.id : "(new)" %>
 	<% if !@project.active %>
 		<span class='text-danger'>
 			-- Inactive --

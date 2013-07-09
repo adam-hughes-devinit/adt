@@ -4,18 +4,22 @@
 		#project-form-content
 
 			#project-form-project.container-fluid
+
 				.row-fluid
-					%h3.span8 
-						Project
-						= @project.id || "(New)"
-					.well.well-small.span4
-						.row-fluid
-							= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
-							= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
-				.row-fluid
-					.span6	
-						= render 'project_form_recipients', f: f
 					.span6
+						.row-fluid
+							= render 'project_form_recipients', f: f
+						.row-fluid	
+							= render 'project_form_transactions', f: f
+						.row-fluid
+							= render 'project_form_participating_organizations', f: f
+
+					.span6
+						.row-fluid
+							.well.well-small
+								
+								= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
+								= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
 						.row-fluid
 							= f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
 							= f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
@@ -26,21 +30,14 @@
 							= f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status".html_safe
 							= f.association :status, label: "Project Status", wrapper_html: {class: "span3"} 
 							= f.association :intent, wrapper_html: {class: "span3"} 
-				.row-fluid
-					.span6
-						= render 'project_form_transactions', f: f
-					.span6
 						.row-fluid
 							= f.input :capacity, wrapper_html: {class: "span6"} 
 							= f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span6"} 
 						.row-fluid
 							= f.input :sector_comment, wrapper_html: {class: "span6"} #hint: "If multisector, add details" 
 							= f.association :flow_type, wrapper_html: {class: "span6"} 
-				.row-fluid
-					.span6
-						= render 'project_form_participating_organizations', f: f
-					.span6
-						= render 'project_form_contacts', f: f
+						.row-fluid
+							= render 'project_form_contacts', f: f
 				.row-fluid
 					= f.input :description, input_html: {rows: "8"}, wrapper_html: {class: "span12"}
 				.row-fluid
