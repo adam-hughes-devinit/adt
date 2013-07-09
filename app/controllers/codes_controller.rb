@@ -92,10 +92,11 @@ class CodesController < ApplicationController
     @object = @class_name.constantize.find(params[:id])
     
     remove_object_from_projects_and_reindex_and_recache   
+    this_class = @object.class
     @object.destroy
 
     respond_to do |format|
-      format.html { redirect_to "/#{view_context.pluralize(2, @class_type)[2..15].downcase.gsub(/\s/, '_')}" }
+      format.html { redirect_to polymorphic_path(this_class) }
       format.json { head :no_content }
     end
 
@@ -121,7 +122,7 @@ class CodesController < ApplicationController
 			  		p.update_attribute "{@class_name.underscore.downcase}_id".to_sym, nil
 					end
 	  		end
-        Sunspot.reindex!(projects)
+        Sunspot.index!(projects)
 	  	end
 	  end
 

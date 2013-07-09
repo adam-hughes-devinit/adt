@@ -45,7 +45,7 @@ group :test do
   gem 'spork-rails'
   gem 'database_cleaner'
   gem 'capybara'
-  gem 'capybara-webkit'
+  # gem 'capybara-webkit'
   gem 'selenium-webdriver'
   # gem 'ruby-debug'
   # gem 'brakeman', require: false

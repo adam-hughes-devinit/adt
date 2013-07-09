@@ -1,7 +1,9 @@
 require 'spec_helper'
 include ProjectSpecHelper
 
-describe 'Code pages' do
+
+describe 'Code pages', js: true do
+
 	let(:aiddata) {Organization.find_or_create_by_name("AidData")}
 	let(:aiddata_user) {FactoryGirl.create :user, owner: aiddata}
 	let(:organization_type) {FactoryGirl.create :organization_type}
@@ -20,7 +22,7 @@ describe 'Code pages' do
 			
 			describe "can be displayed" do
 				before do
-					visit url_for(code)
+					visit polymorphic_path(code)
 				end
 
 				it {should have_content(code.name)}
@@ -56,6 +58,16 @@ describe 'Code pages' do
 				end
 
 				it {should have_content("Another new code name!")}
+
+				describe "and then destroyed" do
+					before do 
+						click_on "Destroy"
+						page.driver.browser.switch_to.alert.accept
+					end
+
+					it {should have_content("View all") }
+				end
+
 
 			end
 
