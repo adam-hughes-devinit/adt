@@ -28,10 +28,13 @@
 		- if current_user_is_aiddata
 			= link_to "New #{@class_name.titleize}", new_polymorphic_path(@class_name.constantize), class: "btn" 
 
-.row-fluid
-	= will_paginate @objects
+
 
 - if @objects.length > 0
+
+	.row-fluid
+		= will_paginate @objects
+		
 	.row-fluid
 		%table.table-hover.table
 			%thead
@@ -64,4 +67,5 @@
 							- if current_user_is_aiddata
 								= link_to "Edit", edit_polymorphic_path(o), class: "text-warning"
 
-
+	.row-fluid
+		= will_paginate @objects
