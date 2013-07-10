@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_filter :signed_in_user, except: [:index, :show, :twitter_typeahead]
   before_filter :mailer_set_url_options
   
-  # before_filter :redirect_if_heroku
+  before_filter :redirect_if_heroku
   
   def redirect_if_heroku
     if Rails.env.production? && ENV['PGBACKUPS_URL'] # That's a heroku plugin
