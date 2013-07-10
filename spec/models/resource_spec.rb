@@ -42,7 +42,7 @@ describe Resource do
 
 	describe "can be fetched" do 
 		it {should respond_to(:fetch!)}
-		its(:fetch_without_delay!) {should be true}
+		its(:fetch_without_delay!) {should be(ENV['TRAVIS'] ? false : true)}
 	end
 
 
