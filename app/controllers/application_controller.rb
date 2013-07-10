@@ -1,10 +1,18 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery
+  include SessionsHelper
+
   before_filter :signed_in_user, except: [:index, :show, :twitter_typeahead]
   before_filter :mailer_set_url_options
   
-  protect_from_forgery
+  before_filter :redirect_if_heroku
   
-  include SessionsHelper
+  def redirect_if_heroku
+    if Rails.env.production? && ENV['PGBACKUPS_URL'] # That's a heroku plugin
+      redirect_to "http://wm.aiddata.org#{request.fullpath}"
+    end
+  end
+
 
 
   def mailer_set_url_options
