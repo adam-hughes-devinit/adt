@@ -53,7 +53,7 @@ Array.prototype.getUnique = () ->
   form = $(form)
   checkbox = form.find("#terms_and_conditions")
   accepted_terms_and_conditions = checkbox.is(":checked")
-  console.log form, checkbox, accepted_terms_and_conditions
+  # console.log form, checkbox, accepted_terms_and_conditions
   if !accepted_terms_and_conditions 
     alert("You must accept the terms and conditions.");
     return false 

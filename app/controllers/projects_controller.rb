@@ -200,7 +200,9 @@ enable_typeahead Project, facets: {active_string: "Active"}
       @project.published = false
       @project.donor = Country.find_by_name("China")
       if @project.save
-        flash[:success] = "We will review your aid project suggestion"
+        AiddataAdminMailer.delay.contributor_notification(@project, @project, current_user)
+
+        flash[:success] = "Thanks, we will review your project suggestion!"
       else
         flash[:error] = "Sorry -- that operation failed, please try again."
       end

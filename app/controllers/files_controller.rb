@@ -64,8 +64,11 @@ before_filter :correct_owner?, only: [:edit, :destroy]
 			end
 
 		end
-		
-		redirect_to Project.find(params[:project_id])
+
+		project = Project.find(params[:project_id])
+		AiddataAdminMailer.delay.contributor_notification("File", project, current_user)
+
+		redirect_to project
 
 
 	end

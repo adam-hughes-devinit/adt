@@ -23,6 +23,7 @@ class FlagsController < ApplicationController
       if @flag.save
         AiddataAdminMailer.delay.flag_notification(@flag)
         if current_user
+          AiddataAdminMailer.delay.contributor_notification(@flag, @flag.project, current_user)
           flash[:success] = "Thanks for your contribution! Your flag was added."
         else
           flash[:success] = "Thanks for your contribution! Your flag will be reviewed before being posted."

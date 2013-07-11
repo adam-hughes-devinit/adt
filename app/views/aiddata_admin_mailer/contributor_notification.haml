@@ -1,0 +1,23 @@
+
+%h1 Thanks for your contribution!
+
+%p
+	Your 
+	= @contribution_type
+	has been posted on 
+	= link_to("project ##{@project.id}", project_url(@project)) 
+	= " (#{@project.to_english})."
+
+
+%p
+	Thanks again, and don't hesitate to 
+	= mail_to "china@aiddata.org", "contact us"
+	with any questions or comments.
+
+%hr
+
+%p
+	= link_to "AidData.org", "http://aiddata.org"
+	|
+	= link_to "China.AidData.org", "http://china.aiddata.org"
+

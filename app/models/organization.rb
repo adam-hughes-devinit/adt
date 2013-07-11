@@ -56,4 +56,19 @@ class Organization < ActiveRecord::Base
   def recache_and_reindex_this_organizations_projects
      reindex_and_recache_by_associated_object self
   end
+
+
+  def devour!(another_organization)
+    raise TypeError, "You must pass another Organization!" unless another_organization.is_a? Organization
+    raise RuntimeError, "You can't consume Organizations which own projects." if another_organization.owned_projects.any?    
+    raise RuntimeError, "You can't consume Organizations which own users." if another_organization.users.any?
+
+    Organization.transaction do
+      another_organization.participating_organizations.each do |po|
+        po.organization = self
+        po.save!
+      end
+    end
+
+  end
 end

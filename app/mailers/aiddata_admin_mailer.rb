@@ -1,8 +1,8 @@
 include ApplicationHelper
 
 class AiddataAdminMailer < ActionMailer::Base
-  default from: ENV['admin_mailer']
-  default to: ENV['admin_mail_receiver']
+  default from: (ENV['admin_mailer'] || (Rails.env.development? ? "rmosolgo@aiddata.org" : nil))
+  default to: (ENV['admin_mail_receiver'] || (Rails.env.development? ? "rmosolgo@aiddata.org" : nil))
   
   def mail_logger
     @@mail_logger ||= Logger.new("#{Rails.root}/log/mail.log")
@@ -48,6 +48,16 @@ class AiddataAdminMailer < ActionMailer::Base
     mail subject: "Pending content was #{@handled}"
   end
 
-
+  def contributor_notification(contribution, project, user)
+    if user.email
+      if contribution.is_a? String
+        @contribution_type = contribution
+      else
+        @contribution_type = contribution.class.name.titleize 
+      end
+      @project = project    
+      mail to: user.email, subject: "Thanks for your contribution to China.AidData.org"
+    end
+  end
 
 end

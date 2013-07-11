@@ -17,6 +17,7 @@ class CommentsController < ApplicationController
       if @comment.save
         AiddataAdminMailer.delay.comment_notification(@comment)
         if current_user
+          AiddataAdminMailer.delay.contributor_notification(@comment, @comment.project, current_user)
           flash[:success] = "Thanks for your contribution! Your comment has been added."
         else
           flash[:success] = "Thanks for your contribution! Your comment will be reviewed before being posted."

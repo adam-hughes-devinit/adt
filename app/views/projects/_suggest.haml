@@ -23,21 +23,26 @@
     - @project = Project.new
     -# - @project.sources << Source.new
     -# - @project.sources << Source.new
-    = form_for @project, url: '/projects/suggest' do |f|
+    = form_for @project, url: '/projects/suggest', onsubmit: "return confirm_terms_and_conditions(this)" do |f|
       #suggest
         = hidden_field_tag 'suggest', 'true'
         = f.label :title, 'Title'
         = f.text_field :title, placeholder: "Suggested Project Title"
         %br
-        %a.btn.btn-mini{id: "new_source"}
-          +
-        Add Another Source
+        %a.btn.btn-small{id: "new_source"}
+          %i.icon-plus
+          Add Another Source
         = f.label :sources, 'Sources'
         -# = f.fields_for :sources do |srcs_fields|
         -#   = srcs_fields.text_field :url, placeholder: "URL"
-
-      #submit
-        = f.submit class: "btn btn-primary", value: "Submit"
+      .row-fluid
+        .span6    
+          %input#terms_and_conditions{type: "checkbox", required: true}
+          I accept the 
+          = link_to "terms and conditions", "http://www.aiddata.org/content/index/about/terms-conditions" 
+        .span6
+          #submit
+            = f.submit class: "btn btn-primary", value: "Submit"
         %a.btn.btn-danger{href: "/"}
           Cancel
 
@@ -54,7 +59,5 @@
   }
   addSource();
 
-  $('#new_source').click(function() {
-    addSource();
-  });
+  $('#new_source').click(addSource);
   
