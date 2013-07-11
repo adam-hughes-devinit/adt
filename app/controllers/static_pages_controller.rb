@@ -51,26 +51,32 @@ class StaticPagesController < ApplicationController
   
   def recent
 
-    last_updated = Project.past_stage_one.where("active = 't'").limit(1).order("updated_at DESC")[0].updated_at
-    p last_updated
-    recent_changes = Rails.cache.fetch "recent/#{last_updated}" do
-      latest_changes = Project.past_stage_one.where("active = 't'").order("updated_at ASC").last(3)
+    most_recent_project = Project.past_stage_one.where("active = 't'").limit(1).order("updated_at DESC").first
+    if most_recent_project
+      last_updated = most_recent_project.updated_at
+      p last_updated
+      recent_changes = Rails.cache.fetch "recent/#{last_updated}" do
+        latest_changes = Project.past_stage_one.where("active = 't'").order("updated_at ASC").last(3)
 
-      recent_changes_data = latest_changes.reverse.map do |project|
-        changes = project.changes
-        update_sentence = "updated "
-        # state the items that were updated
-        if changes.size < 5
-          update_sentence << changes.keys.map{|t| t.titleize}.map{|t| t.downcase}.join(', ')
+        recent_changes_data = latest_changes.reverse.map do |project|
+          changes = project.changes
+          update_sentence = "updated "
+          # state the items that were updated
+          if changes.size < 5
+            update_sentence << changes.keys.map{|t| t.titleize}.map{|t| t.downcase}.join(', ')
+          end
+            json = {
+              id: project.id,
+              title: project.title,
+              info: project.to_english(exclude_title: true),
+              action: "#{update_sentence} #{view_context.time_ago_in_words(project.updated_at)} ago",
+            }
         end
-          json = {
-            id: project.id,
-            title: project.title,
-            info: project.to_english(exclude_title: true),
-            action: "#{update_sentence} #{view_context.time_ago_in_words(project.updated_at)} ago",
-          }
       end
+    else 
+      recent_changes = {}
     end
+    
 
     render json: recent_changes
   end

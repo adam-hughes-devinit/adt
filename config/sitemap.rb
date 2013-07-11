@@ -1,5 +1,5 @@
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "http://aiddatachina.org" #"http://china.aiddata.org"
+SitemapGenerator::Sitemap.default_host = "http://china.aiddata.org"
 
 SitemapGenerator::Sitemap.create do
   # Links are added to the Sitemap in the order they are specified.
