@@ -17,17 +17,16 @@ module ProjectExporters
   end
 
   def create_csv_text
-    project_sources = {}
-    project_sources[:all] = sources.map{|s| 
-     "#{s.url}" +
-     "#{s.source_type ? ", "+s.source_type.name : ""}" +
-      "#{s.document_type ? ", "+s.document_type.name : '' }" }
-    project_sources[:factiva] = sources.map do |s| 
-      if s.source_type = SourceType.find_by_name("Factiva")
-        "#{s.url}"+ 
-        "#{s.source_type ? ", "+s.source_type.name : ""}"+
-        "#{s.document_type ? ", "+s.document_type.name : '' }"
-      end
+    
+
+    project_sources = {
+        all: [],
+        factiva: []
+    }
+    resources.each do |r|
+        as_text = "#{r.source_url}, #{r.resource_type || "(type unknown)"}"
+        project_sources[:all] << as_text
+        project_sources[:factiva] << as_text if r.source_url.downcase =~ /factiva/
     end
 
     project_agencies = {}

@@ -3,7 +3,10 @@
 <% user_email = (user && user.email) || nil %>
 <%= simple_form_for(@comment, method: :post, 
                               url: comments_path,
-                              input_html: { align: "center" }) do |f| %>
+                              novalidate: false,
+                              defaults: {input_html: { align: "center" }},
+                              html: { onsubmit:  "return confirm_terms_and_conditions(this)"}
+          ) do |f| %>
     <input name='definitely_came_from_web_form' type='hidden' value='true'/ >
     <%= f.input :project_id, label: "Leave a comment for '#{@project.title}':",
       input_html: {style: "display:none;", value: @project.id} %>
@@ -19,6 +22,17 @@
       </p>
     <% end %>
 		<%= f.input :content, label: "Message", input_html: {class: "row", rows: 5} %>
+    <div class='row-fluid'>
+      <div class='span6'>
+        <input style='display:inline;' type='checkbox' required="true" id='terms_and_conditions'/>
+        <label style='display:inline;'>
+          I accept the <%= link_to "terms and conditions", "http://www.aiddata.org/content/index/about/terms-conditions" %>.
+        </label>
+      </div>
+      <div class='span6'>
+        <%= f.button :submit, "Submit", class: "btn btn-info" %>
+      </div>
+    </div>
 
-    <%= f.button :submit, "Submit", class: "btn btn-info" %>
+    
 <% end %>

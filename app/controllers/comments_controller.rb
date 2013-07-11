@@ -22,7 +22,7 @@ class CommentsController < ApplicationController
           flash[:success] = "Thanks for your contribution! Your comment will be reviewed before being posted."
         end
       else
-        flash[:error] = "Sorry -- that operation failed, please try again."
+        flash[:error] = "Sorry, you comment wasn't saved: #{@comment.errors.full_messages.join ", "}"
       end
       ProjectSweeper.instance.expire_cache_for(@comment) 
       # Otherwise the user won't see the flash -- it would be served straight from cache!
