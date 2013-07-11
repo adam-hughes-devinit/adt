@@ -24,6 +24,7 @@ module Adt
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    config.logger = Logger.new(Rails.root.join("log",Rails.env + ".log"), 50, 100*(1024**2))
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)

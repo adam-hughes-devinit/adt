@@ -15,7 +15,7 @@ Adt::Application.configure do
   config.action_controller.perform_caching = false
   config.cache_store =                       :memory_store
   # config.cache_store = :memory_store, size: 64.megabytes
-
+  
   # Do care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
