@@ -200,6 +200,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
       @project.published = false
       @project.donor = Country.find_by_name("China")
       if @project.save
+        
         AiddataAdminMailer.delay.contributor_notification(@project, @project, current_user)
 
         flash[:success] = "Thanks, we will review your project suggestion!"
