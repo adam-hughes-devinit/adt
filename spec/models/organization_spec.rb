@@ -61,6 +61,11 @@ describe Organization do
 			expect {exim_bank.devour!(1)}.to raise_error(TypeError)
 		end
 
+		it "but not itself" do
+			expect { exim_bank.devour! exim_bank}.to raise_error(RuntimeError)
+		end
+		
+
 		describe "and participate in its projects" do
 			before do
 				first_project.participating_organizations << ParticipatingOrganization.new(organization: exim_bank)

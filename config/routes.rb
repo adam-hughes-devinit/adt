@@ -1,5 +1,9 @@
 Adt::Application.routes.draw do
   # codes
+  
+  get '/organizations/merge', to: "organizations#merge", as: "organizations_prepare_merge"
+  get '/organizations/typeahead', to: "organizations#twitter_typeahead"
+  post '/organizations/merge', to: "organizations#merge!", as: "organizations_execute_merge"
   resources :roles, :countries, :crs_sectors, :statuses, 
   :verifieds, :oda_likes, :flow_types, :origins, :intents, # :tieds, 
   :source_types, :document_types, :organization_types, :currencies, 

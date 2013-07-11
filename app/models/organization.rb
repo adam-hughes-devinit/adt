@@ -22,6 +22,11 @@ class Organization < ActiveRecord::Base
   	"#{self.name} (#{self.cached_organization_type_name })"
   end
 
+  def to_english
+    "#{self.name} (#{self.organization_type_name}), #{self.projects.count} projects."
+  end
+
+
   def cached_organization_type_name
     organization_types_hash =
       Rails.cache.fetch("global/organizationtypes") do
@@ -60,6 +65,7 @@ class Organization < ActiveRecord::Base
 
   def devour!(another_organization)
     raise TypeError, "You must pass another Organization!" unless another_organization.is_a? Organization
+    raise RuntimeError, "Organization can't consume itself!" if another_organization == self
     raise RuntimeError, "You can't consume Organizations which own projects." if another_organization.owned_projects.any?    
     raise RuntimeError, "You can't consume Organizations which own users." if another_organization.users.any?
 
@@ -68,7 +74,26 @@ class Organization < ActiveRecord::Base
         po.organization = self
         po.save!
       end
-    end
 
+      another_organization.destroy
+    end
   end
+
+  def as_json(options)
+    super(
+      methods: [:to_english, :projects]
+    )
+  end
+
+
+  searchable do
+    text :to_english, :name, :organization_type_name, :id
+    text do
+      projects(&:to_english)
+    end
+    string :organization_type_name
+    string :origins, multiple: true
+  end
+
+
 end

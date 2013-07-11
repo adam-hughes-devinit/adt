@@ -1,0 +1,43 @@
+- provide :title, "Merge Organizations"
+
+
+.row-fluid
+	%h1.page-header
+		Merge Organizations
+
+= form_tag do 
+	.row-fluid
+		.span6
+			%h3.text-error
+				This organization is a duplicate:
+			%p
+				%input#duplicate_organization.organization_merger{name: "other_organization_id", placeholder: "Start typing to find an organization..."}
+			%p#duplicate_organization_details.organization_merger_details
+		.span6
+			%h3.text-success
+				This organization is the real thing:
+			%p
+				%input#real_organization.organization_merger{name: "organization_id", placeholder: "Start typing to find an organization..."}
+			%p#real_organization_details.organization_merger_details
+	.row-fluid#offer_merge{style: "display:none;"}
+		.span12
+			.alert.alert-warning
+				%h3.text-warning Do you want to merge these organizations?
+				%p 
+					All of the projects from the duplicate will be transfered
+					to the "real" organization.
+
+					The duplicate organization will be destroyed.
+
+					There is no undo. There is no looking back.
+				.well{style: "text-align:center;"}
+					.row-fluid
+						.span4		
+							%a.btn{href: organizations_path }
+								No, nevermind.
+						.span4.offset4
+							%input.btn.btn-warning#execute_merge{type: "submit"}
+								Yes, I've thought about it. Merge!
+
+
+= javascript_include_tag "merge_organizations/index"
