@@ -13,7 +13,7 @@ module ProjectExporterHeaders
     recipient_un_code recipient_imf_code 
     debt_uncertian line_of_credit is_cofinanced loan_type interest_rate 
     maturity grace_period
-    grant_element updated_at location_details]
+    grant_element updated_at location_details contacts]
 
     
     csv_header_string = ""

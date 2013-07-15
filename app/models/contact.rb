@@ -4,4 +4,9 @@ class Contact < ActiveRecord::Base
 
   belongs_to :organization
   delegate :name, to: :organization, allow_nil: true, prefix: true
+
+  def to_english
+  	"#{name.present? ? "#{name}, " : "" }#{position.present? ? "#{position} " : ""}#{organization_name.present? ? "(#{organization_name})" : "" }"
+  end
+  
 end

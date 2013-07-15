@@ -65,6 +65,7 @@ module ProjectExporters
         location_details << (g.subnational ? "#{location_details.present? ? ", " : ""}#{g.subnational}" : "")
     end
 
+    export_contacts = contacts.map(&:to_english).join("; ") 
     
     csv_array = %W[
     #{id}
@@ -124,7 +125,8 @@ module ProjectExporters
     #{grace_period}
     #{grant_element}
     #{updated_at}
-    #{location_details}]
+    #{location_details}
+    #{export_contacts}]
 
 
 
