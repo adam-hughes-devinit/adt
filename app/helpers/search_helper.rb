@@ -12,6 +12,11 @@ module SearchHelper
 	# Constants in an initializer
 
 	def custom_search(options = {})
+		get_search_results(options).results
+	end
+
+
+	def get_search_results(options={})
 	  options.reverse_merge! paginate: true
  	  options.reverse_merge! default_to_official_finance: true
  	  
@@ -78,7 +83,7 @@ module SearchHelper
 
 	  end
 	  
-	  @search.results
+	  @search
 	end
 
 

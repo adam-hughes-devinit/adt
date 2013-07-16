@@ -51,6 +51,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       expire_fragment("recent")
       # expire the CSV text
       project.expire_csv_text
+      project.expire_xml
     end
 
   end

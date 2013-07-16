@@ -163,7 +163,7 @@ class Project < ActiveRecord::Base
   end
 
   # I'm adding string methods for these codes for Sunspot Facets
-  CODES = %i{status verified intent crs_sector sector}
+  CODES = %i{status verified intent crs_sector sector flow_type}
   CODES.each do |c|
     belongs_to c
     define_method "#{c}_name" do
@@ -177,10 +177,16 @@ class Project < ActiveRecord::Base
     crs_sector ? crs_sector.code : nil
   end
 
-  belongs_to :flow_type
-  def flow_type_name
-    flow_type.present? ? flow_type.name : "Unset"
+  def status_code
+    status ? (status.iati_code || status.code) : nil
   end
+
+  def flow_type_iati_code
+    flow_type.present? ? flow_type.iati_code : nil
+  end
+  
+
+
 
   # 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
   #

@@ -7,8 +7,44 @@ class Transaction < ActiveRecord::Base
   include ProjectAccessory
 
   belongs_to :currency
-  delegate :name, to: :currency, allow_nil: true, prefix: true
+  delegate :name, :iso3, to: :currency, allow_nil: true, prefix: true
   
+  def to_iati
+    
+    iati_values = []
+    if usd_defl.present? && (currency_iso3!="USD") && (project.year != 2009 )
+      iati_values << %{
+        <value currency="USD" value-date="2009-01-01">
+          #{usd_defl}
+        </value>
+      }
+    end
+    if usd_current.present? && (currency_iso3!="USD")
+      iati_values << %{
+        <value currency="USD" value-date="#{date_iso8601}">
+          #{usd_current}
+        </value>
+      }
+    end
+
+    %{
+      <transaction ref="#{id}">
+        <transaction-date iso-date="#{date_iso8601}" />
+        <transaction-type code="C" />
+        <value currency="#{currency_iso3}" value-date="#{date_iso8601}">
+          #{value}
+        </value>
+        #{ iati_values.join }
+      </transaction>
+    }
+  end
+
+  def date_iso8601
+    raw_date = project.start_planned || project.start_actual || project.year.present? ? "01-01-#{project.year}".to_date : (project.end_actual || project.end_planned )
+    raw_date ? raw_date.iso8601 : nil
+  end
+
+
 	def deflate_and_round_value
       if self.project && self.project.year && self.project.donor
         donor_iso3 = self.project.donor.iso3

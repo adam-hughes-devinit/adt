@@ -8,5 +8,13 @@ class Contact < ActiveRecord::Base
   def to_english
   	"#{name.present? ? "#{name}, " : "" }#{position.present? ? "#{position} " : ""}#{organization_name.present? ? "(#{organization_name})" : "" }"
   end
+
+  def to_iati
+  	%{<contact-info>
+        <person-name>#{name}</person-name>
+        <organisation>#{organization_name}</organisation>
+    </contact-info>}
+  end
+
   
 end

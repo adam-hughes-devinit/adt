@@ -49,7 +49,7 @@ class Organization < ActiveRecord::Base
 
 
   belongs_to :organization_type
-  delegate :name, to: :organization_type, allow_nil: true, prefix: true
+  delegate :name, :iati_code, to: :organization_type, allow_nil: true, prefix: true
   
   has_many :participating_organizations
   has_many :origins, through: :participating_organizations
@@ -69,11 +69,15 @@ class Organization < ActiveRecord::Base
     raise RuntimeError, "You can't consume Organizations which own projects." if another_organization.owned_projects.any?    
     raise RuntimeError, "You can't consume Organizations which own users." if another_organization.users.any?
 
+    affected_projects = []
     Organization.transaction do
       another_organization.participating_organizations.each do |po|
         po.organization = self
         po.save!
+        affected_projects << po.project unless affected_projects.include? po.project
       end
+      Sunspot.index!(affected_projects)
+
 
       another_organization.destroy
     end

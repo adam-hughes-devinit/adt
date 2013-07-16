@@ -63,6 +63,15 @@ class Resource < ActiveRecord::Base
     "#{title} #{publisher.present? ? ", #{publisher}" : ""} (#{resource_type})"
   end
 
+  def to_iati
+    %{
+      <document-link url="#{CGI::escape source_url}" data-url-was-escaped="true">
+        <title>#{title}</title>
+        <category vocabulary="AidData-China">#{resource_type}</category>
+      </document-link>
+    }
+  end
+
 
   def devour!(other_resource)
     other_resource.projects.each do |project|

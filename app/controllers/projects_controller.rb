@@ -31,8 +31,8 @@ enable_typeahead Project, facets: {active_string: "Active"}
       end
       
       format.xml do
-        @projects = custom_search({default_to_official_finance: false})
-        render xml: @projects
+        @search_results = custom_search({default_to_official_finance: false})
+        render xml: Project.wrap_in_iati(@search_results)
       end
             
       format.csv do
@@ -76,6 +76,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @project }
+      format.xml {render xml: @project}
     end
   end
 
