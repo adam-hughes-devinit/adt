@@ -20,18 +20,20 @@
 
 <script>
 	function repopulate_organization_dropdowns(json) {
+		//console.log( json.length)
 		// This was added because loading org + type on all the fields took too long.
 		$('.organization-select option').each(function(i, d) {
-			value = $(d).text().trim()
-			new_org = json.filter(function(o) { return o.name == value})[0]
+			org_id = $(this).val()
+			//console.log(org_id)
+			new_org = json.filter(function(o) { return o.id == org_id})[0]
 			if (new_org) {
-				// console.log(value, new_org)
-				$(d).text(new_org.name_with_type)
+				//console.log(this.value, new_org)
+				$(d).text(new_org.name)
 			}
 		})
 	}
 	
-	$.get('/organizations.json', 
+	$.get('/organizations/all_json', 
 		repopulate_organization_dropdowns)
 
 	var changed = false

@@ -4,6 +4,10 @@ class OrganizationsController < CodesController
   extend Typeaheadable
   enable_typeahead Organization
   
+  def all_json
+    render json: Organization.organizations_hash
+  end
+  
   # def merge 
 
   def merge!

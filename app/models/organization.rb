@@ -1,6 +1,5 @@
 class Organization < ActiveRecord::Base
 
-  include OrganizationsHelper
   include IndexAndCacheHelper
 
   attr_accessible :description, :name, 
@@ -10,35 +9,31 @@ class Organization < ActiveRecord::Base
   default_scope order: "name"
   after_save :destroy_organizations_hash
   after_save :recache_and_reindex_this_organizations_projects
-  after_destroy :destroy_organizations_hash
 
   def self.aiddata
-    Rails.cache.fetch("organizations/aiddata", expires_in: 1.hour) do 
+    Rails.cache.fetch("/organizations/aiddata", expires_in: 1.hour) do 
       Organization.find_by_name("AidData")
     end
   end
 
   def name_with_type
-  	"#{self.name} (#{self.cached_organization_type_name })"
+    "#{self.name} (#{self.organization_type_name })"
   end
 
   def to_english
     "#{self.name} (#{self.organization_type_name}), #{self.projects.count} projects."
   end
 
-
-  def cached_organization_type_name
-    organization_types_hash =
-      Rails.cache.fetch("global/organizationtypes") do
-        OrganizationType.all.map{ |ot| ot.as_json }
-      end
-
-    if type = organization_types_hash.select {|ot| ot["id"] == self.organization_type_id }[0] 
-      type["name"]
-    else
-      "name not set"
-    end
+  def self.organizations_hash
+    Rails.cache.fetch('/organizations/all') do 
+      Organization.all.map {|o| { id: o.id, name: o.name_with_type } }
+    end   
   end
+
+  def destroy_organizations_hash
+    Rails.cache.delete('/organizations/all')
+  end
+
 
   def as_json(options={})
     super(
