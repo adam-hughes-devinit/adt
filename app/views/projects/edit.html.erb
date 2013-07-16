@@ -19,22 +19,31 @@
 </div>
 
 <script>
-	function repopulate_organization_dropdowns(json) {
+	function repopulate_organization_dropdowns() {
+		json = window.china_organizations
 		//console.log( json.length)
 		// This was added because loading org + type on all the fields took too long.
-		$('.organization-select option').each(function(i, d) {
-			org_id = $(this).val()
-			//console.log(org_id)
-			new_org = json.filter(function(o) { return o.id == org_id})[0]
-			if (new_org) {
-				//console.log(this.value, new_org)
-				$(d).text(new_org.name)
-			}
+		$('.organization-select.no-org-types').each(function(i, d) {
+			input = $(this)
+			input.removeClass("no-org-types") // It gets overlooked next time...
+			input.find('option').each(function(i, d) {
+				org_id = $(this).val()
+				//console.log(org_id)
+				new_org = json.filter(function(o) { return o.id == org_id})[0]
+				if (new_org) {
+					//console.log(this.value, new_org)
+					$(d).text(new_org.name)
+				}
+			})
 		})
 	}
 	
-	$.get('/organizations/all_json', 
-		repopulate_organization_dropdowns)
+	$.get('/organizations/all_json', function(data) {
+		window.china_organizations = data // Forgive me, father.
+		repopulate_organization_dropdowns()
+		$(".add-one").click(repopulate_organization_dropdowns)
+	})
+	
 
 	var changed = false
 
