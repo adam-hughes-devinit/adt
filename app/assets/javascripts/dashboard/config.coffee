@@ -4,11 +4,11 @@ App.config =
 	chart_title: "China in Africa"
 	chart_longer_title: "China in Africa"
 
-	vis_height: 300
+	vis_height: 400
 	vis_width: 800
 	vis_padding_left: 100
 	vis_padding_top: 10
-	vis_padding_bottom: 50
+	vis_padding_bottom: 150
 
 	# Set this to true to rescale
 	# every time the vis renders.
@@ -31,7 +31,7 @@ App.config =
 			# This is the relative path to the target data file.
 			# "aiddata2_1_donor_recipient_year_purpose.csv"
 			# "china_active.csv"
-			'/projects.csv?active_string=Active'
+			'/javascripts/aiddata_china_1_0_official.csv'
 
 		get_file_size:
 			# if true, shows loading bar
@@ -112,18 +112,7 @@ App.config =
 			},
 			{
 				name: "Purpose",
-				values_function: (data) -> (d.sector for d in data)
-						# data.map((d) ->  # d.sector)
-						# if d.coalesced_purpose_code 
-						# 	sector = "#{d.coalesced_purpose_code}, #{
-						# 		d.coalesced_purpose_name
-						# 			.toLowerCase()
-						# 			.replace(/\&/g, 'and')
-						# 			.replace(/'/g, '')
-						# 			.trim() }" 
-						# else 
-						# 	sector = "000, not coded" 
-						# sector),
+				values_function: (data) -> (d.crs_sector_name for d in data)
 				interface_type: "filter",
 				dv_type: dv.type.ordinal
 				now_showing:

@@ -101,8 +101,9 @@ table_row = (item,i) ->
 	values = []
 	
 	values = _.values(item)
-	for k,v in item	
-		values[k] = v 
+	for k,v in item
+		if k isnt "ProjectID"
+			values[k] = v 
 	
 
 	if hyperlinker = App.config.data.record_hyperlink_function
@@ -117,7 +118,7 @@ table_row = (item,i) ->
 					style='color:#28a;' 
 					href='#{href}'
 					target='_blank'>
-					#{i+1} <i class='icon-share'></i>
+					#{item.ProjectID} <i class='icon-share'></i>
 				</a>
 			</td>"
 	else

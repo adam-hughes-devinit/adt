@@ -131,8 +131,9 @@ make_filter_selector = (column_name, container_target, span_size = "3", default_
 			<span> 
 				<input type='text' class='filter_box span12' value='Type to filter...' onfocus='this.value=\"\"'>
 			</span>")
-
+	console.log column_name
 	App.projects[column_name].lut.forEach((value,i) ->
+		console.log value, i
 		$("#{target} .filters").append(
 			"<span 
 				data-searcher='#{value.toLowerCase()}' 

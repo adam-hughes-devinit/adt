@@ -191,6 +191,7 @@ App.render_dashboard = (options) ->
 	bars.enter().append('rect')
 		.attr("class", "bar")
 		.style("cursor", "pointer")
+		.style("opacity", "0")
 
 	bars.exit().remove()
 
@@ -204,6 +205,7 @@ App.render_dashboard = (options) ->
 			.attr("x", (d,i) -> "#{ App.config.vis_padding_left + x_scale(d.key) }px")
 			.attr("y", (d) -> App.config.vis_padding_top + App.amount_scale(d.value) + "px" )
 			.attr("width", x_width )
+			.style("opacity", "1")
 			.attr("height", (d) -> 
 				h = max_bar_h - App.amount_scale(d.value) 
 				if h > max_bar_h
