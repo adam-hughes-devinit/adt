@@ -13,7 +13,7 @@ module ProjectIatiXml
         <iati-activities 
           version="1.02" 
           generated-datetime="#{DateTime.now.iso8601}"
-          page="#{1 + (search_result.offset / search_result.count)}"
+          page="#{ search_result.last_page? ? search_result.total_pages :  1 + (search_result.offset / search_result.count)}"
           pages="#{search_result.total_pages}"
           per_page="#{search_result.count}"
         >
