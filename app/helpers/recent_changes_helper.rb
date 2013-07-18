@@ -12,7 +12,7 @@ module RecentChangesHelper
     article = 'an' if ['a','e','i','o'].include? item_type[0].downcase
 
     if project
-      p_link = link_to "Project #{project.id} - #{project.title}", project
+      p_link = link_to project.to_english, project
 
       i_link = "#{item_type} (id: #{id})"
 
