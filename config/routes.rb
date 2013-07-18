@@ -70,8 +70,8 @@ Adt::Application.routes.draw do
   get '/content/:name', to: 'contents#show_by_name', as: "content_by_name"
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
+  get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'
 
-  
   get '/signup', to: 'users#new'
 
   # this is for staff log in:

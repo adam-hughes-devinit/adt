@@ -1,0 +1,13 @@
+- provide(:title, 'Recent Changes')
+- provide(:first_header, 'Recent Changes')
+
+.row-fluid
+  = will_paginate @history
+  %table.table.table-bordered
+    %tbody
+      - @history.each do |item|
+        %tr
+          %td
+            - message = change_message(item)
+            = message.html_safe
+  = will_paginate @history

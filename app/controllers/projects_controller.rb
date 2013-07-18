@@ -20,13 +20,13 @@ enable_typeahead Project, facets: {active_string: "Active"}
       
       format.html do
         @full_result_ids = custom_search(paginate: false).map(&:id)
-   			@projects = custom_search
+        @projects = custom_search
         @export = Export.new(params[:export])
         render html: @projects
       end
       
       format.json do
-				@projects = custom_search({default_to_official_finance: false})
+        @projects = custom_search({default_to_official_finance: false})
         render json: @projects
       end
       
@@ -43,14 +43,14 @@ enable_typeahead Project, facets: {active_string: "Active"}
           @paginate = false
         end
 
-   			projects = custom_search(paginate: @paginate, default_to_official_finance: false)
+        projects = custom_search(paginate: @paginate, default_to_official_finance: false)
         
         csv_data = Project.csv_header + "\n"
 
         projects.each do |p| 
           csv_data << p.csv_text 
           csv_data << "\n"
-        end				
+        end       
 
         send_data csv_data,
           :type => 'text/csv; charset=utf-8; header=present',
@@ -162,7 +162,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
   # DELETE /Projects/1
   # DELETE /Projects/1.json
   def destroy
-  	
+    
   
     @project = Project.unscoped.find(params[:id])
     

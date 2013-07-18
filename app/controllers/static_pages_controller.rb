@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
   skip_before_filter :signed_in_user
   include SearchHelper
   include AggregatesHelper
-
+  require 'will_paginate/array'
   def home
     render 'home'
   end
@@ -48,7 +48,6 @@ class StaticPagesController < ApplicationController
 
   # caches_action :recent, cache_path: "recent"
   # Make sure this gets expired in models/project_sweeper !
-  
   def recent
 
     most_recent_project = Project.past_stage_one.where("active = 't'").limit(1).order("updated_at DESC").first
@@ -56,14 +55,20 @@ class StaticPagesController < ApplicationController
       last_updated = most_recent_project.updated_at
       p last_updated
       recent_changes = Rails.cache.fetch "recent/#{last_updated}" do
-        latest_changes = Project.past_stage_one.where("active = 't'").order("updated_at ASC").last(3)
+        latest_changes = Project.past_stage_one
+                                .where("active = 't'")
+                                .order("updated_at ASC")
+                                .last(3)
 
         recent_changes_data = latest_changes.reverse.map do |project|
           changes = project.changes
           update_sentence = "updated "
           # state the items that were updated
           if changes.size < 5
-            update_sentence << changes.keys.map{|t| t.titleize}.map{|t| t.downcase}.join(', ')
+            update_sentence << changes.keys
+                                      .map{|t| t.titleize}
+                                      .map{|t| t.downcase}
+                                      .join(', ')
           end
             json = {
               id: project.id,
@@ -73,12 +78,18 @@ class StaticPagesController < ApplicationController
             }
         end
       end
-    else 
+    else
       recent_changes = {}
     end
-    
 
     render json: recent_changes
+  end
+
+  def recent_changes
+    @history = Version.where("item_type != ?", 'Comment')
+                      .where("item_type != ? AND event != ?", 'Project', 'update')
+                      .order("created_at desc")
+                      .paginate(page: params[:page], per_page: 50)
   end
 
 

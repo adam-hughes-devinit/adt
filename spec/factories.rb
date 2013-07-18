@@ -208,15 +208,15 @@ FactoryGirl.define do
   end
 
   
-  FactoryGirl.define do 
+  FactoryGirl.define do
     sequence :source_url do |n|
       "http://aiddatachina.org/projects/#{n}"
     end
-  
+
     factory :resource do |r|
       r.title "China in Africa Stuff"
       r.authors "Hu Jintao, Xi Jinping"
-      source_url 
+      source_url
       r.resource_type Resource.resource_types.sample
     end
   end
