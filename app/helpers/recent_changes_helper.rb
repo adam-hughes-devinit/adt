@@ -13,23 +13,13 @@ module RecentChangesHelper
 
     if project
       p_link = link_to "Project #{project.id} - #{project.title}", project
-      begin
-      Rails.application.routes.recognize_path("/#{item_type.downcase.pluralize}/1")
-      i_link = link_to item_type, object
-      rescue ActionController::RoutingError => r
-      end
 
-      i_link ||= "#{item_type} (id: #{id})"
+      i_link = "#{item_type} (id: #{id})"
 
       @first_part = "On #{p_link}, #{article} #{i_link} "
     else
-      begin
-      Rails.application.routes.recognize_path("/#{item_type.downcase.pluralize}/1")
-      i_link = link_to item_type, object
-      rescue ActionController::RoutingError => r
-      end
 
-      i_link ||= "#{item_type} (id: #{id})"
+      i_link = "#{item_type} (id: #{id})"
       @first_part = "#{article.capitalize} #{i_link}"
     end
 
@@ -39,7 +29,10 @@ module RecentChangesHelper
       @actor_clause << " by #{user.email}" if user
     end
 
-    @last_part = " was #{item['event'] = 'destroy' ? 'destroyed' : item['event'] + 'd'} on "\
+    past_tense = "destroyed" if item['event'] == 'destroy'
+    past_tense = "updated" if item['event'] == 'update'
+    past_tense = "created" if item['event'] == 'create'
+    @last_part = " was #{past_tense} on "\
     "#{time.strftime("%m/%d")} at #{time.strftime("%l:%M %P")}"
 
     "#{@first_part}#{@last_part}#{@actor_clause}"
