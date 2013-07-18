@@ -30,7 +30,7 @@ module RecentChangesHelper
       end
 
       i_link ||= "#{item_type} (id: #{id})"
-      @first_part = "#{article.upcase} #{i_link}"
+      @first_part = "#{article.capitalize} #{i_link}"
     end
 
     @actor_clause = ""
@@ -39,7 +39,7 @@ module RecentChangesHelper
       @actor_clause << " by #{user.email}" if user
     end
 
-    @last_part = " was #{item['event'] + 'd'} on "\
+    @last_part = " was #{item['event'] = 'destroy' ? 'destroyed' : item['event'] + 'd'} on "\
     "#{time.strftime("%m/%d")} at #{time.strftime("%l:%M %P")}"
 
     "#{@first_part}#{@last_part}#{@actor_clause}"
