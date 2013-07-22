@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614163747) do
+ActiveRecord::Schema.define(:version => 20130719180028) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -268,6 +268,15 @@ ActiveRecord::Schema.define(:version => 20130614163747) do
 
   add_index "participating_organizations", ["organization_id"], :name => "index_participating_organizations_on_organization_id"
   add_index "participating_organizations", ["project_id"], :name => "index_participating_organizations_on_project_id"
+
+  create_table "project_association_changes", :force => true do |t|
+    t.integer  "project_id"
+    t.string   "association_model"
+    t.integer  "association_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "attribute_name"
+  end
 
   create_table "projects", :force => true do |t|
     t.string   "title"

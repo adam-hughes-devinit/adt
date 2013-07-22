@@ -1,40 +1,38 @@
 module RecentChangesHelper
-  def change_message(item)
-    item_type = item['item_type']
-    id = item['item_id']
-    actor = item['whodunnit']
-    time = item['created_at']
 
-    object = item_type.constantize.find_by_id(id)
-    project = object.project if object.respond_to? :project
+  def association_change_message(change)
+    if change.association?
+      model = change[:association_model]
+      model_id = change[:association_id]
 
-    article = 'a'
-    article = 'an' if ['a','e','i','o'].include? item_type[0].downcase
+      @item = "#{model.a_or_an.underscore.humanize}"
+      @item << " (id: #{model_id})" if model_id
 
-    if project
-      p_link = link_to project.to_english, project
+      project_id = change[:project_id]
+      @p = Project.find_by_id(project_id)
+      @project = @p.to_english
 
-      i_link = "#{item_type} (id: #{id})"
+      time = change[:created_at]
+      @date = time.strftime("%m/%d")
+      @time = time.strftime("%l:%M %P")
 
-      @first_part = "On #{p_link}, #{article} #{i_link} "
-    else
+      "#{@item} was added to #{link_to @project, @p} on #{@date} at #{@time}."
 
-      i_link = "#{item_type} (id: #{id})"
-      @first_part = "#{article.capitalize} #{i_link}"
+    elsif change.attribute?
+      att = change[:attribute_name]
+
+      project_id = change[:project_id]
+      @p = Project.find_by_id(project_id)
+      @project = @p.to_english
+      time = change[:created_at]
+      @date = time.strftime("%m/%d")
+      @time = time.strftime("%l:%M %P")
+
+
+      "#{att.humanize} was updated on #{link_to @project, @p} on #{@date} at #{@time}."
+
     end
 
-    @actor_clause = ""
-    if actor
-      user = User.find_by_id(actor)
-      @actor_clause << " by #{user.email}" if user
-    end
 
-    past_tense = "destroyed" if item['event'] == 'destroy'
-    past_tense = "updated" if item['event'] == 'update'
-    past_tense = "created" if item['event'] == 'create'
-    @last_part = " was #{past_tense} on "\
-    "#{time.strftime("%m/%d")} at #{time.strftime("%l:%M %P")}"
-
-    "#{@first_part}#{@last_part}#{@actor_clause}"
   end
 end

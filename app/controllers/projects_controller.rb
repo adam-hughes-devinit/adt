@@ -104,7 +104,6 @@ enable_typeahead Project, facets: {active_string: "Active"}
   # GET /Projects/1/edit
   def edit
 
-    
     @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
     @project.resources.build if @project.resources.empty?
 

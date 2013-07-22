@@ -49,6 +49,24 @@ class StaticPagesController < ApplicationController
   # caches_action :recent, cache_path: "recent"
   # Make sure this gets expired in models/project_sweeper !
   def recent
+    recent_projects = []
+    first = Rails.cache.fetch "recent/first"
+    second = Rails.cache.fetch "recent/second"
+    third = Rails.cache.fetch "recent/third"
+
+    recent_projects << first << second << third
+
+    recent_projects.each do |entry|
+      next if not entry
+      entry[:time] = view_context.time_ago_in_words(entry[:time])
+    end
+
+    recent_projects.compact!
+
+    render json: recent_projects
+
+  end
+  def recent_old
 
     most_recent_project = Project.past_stage_one.where("active = 't'").limit(1).order("updated_at DESC").first
     if most_recent_project
@@ -86,10 +104,16 @@ class StaticPagesController < ApplicationController
   end
 
   def recent_changes
-    @history = Version.where("item_type != ?", 'Comment')
-                      .where("item_type != ? AND event != ?", 'Project', 'update')
-                      .order("created_at desc")
-                      .paginate(page: params[:page], per_page: 50)
+    filtered_attribute = params[:filter]
+    if filtered_attribute && !filtered_attribute.empty?
+      @history = ProjectAssociationChange.where("attribute_name = ? OR association_model = ?", filtered_attribute,filtered_attribute)
+                                         .order("created_at desc")
+                                         .paginate(page: params[:page], per_page: 50)
+
+    else
+      @history = ProjectAssociationChange.order("created_at desc")
+                                         .paginate(page: params[:page], per_page: 50)
+    end
   end
 
 

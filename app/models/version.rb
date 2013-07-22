@@ -1,4 +1,4 @@
-class Version 
-	attr_accessible :children
-	serialize :children, Hash
+class Version
+  attr_accessible :children
+  serialize :children, Hash
 end

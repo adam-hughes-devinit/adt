@@ -34,6 +34,7 @@ class Project < ActiveRecord::Base
 
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
+  before_save :log_attribute_changes
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
@@ -42,16 +43,14 @@ class Project < ActiveRecord::Base
   default_scope where(published: true) 
   scope :past_stage_one, where("active = 't' AND verified_id != ?", ((v = Verified.find_by_name("Raw")).present? ? v.id : 0 ))
   scope :active, where("active= 't' ")
-  
+
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
     ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
   end
- 
 
   def project_logger
     @@project_logger ||= Logger.new("#{Rails.root}/log/project.log")
   end
-
 
   def association_hash
     assoc_hash = {}
@@ -97,7 +96,7 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def changes
+  def all_changes
     changes_hash = {}
     return changes_hash if last_state == nil
     last_hash = YAML.load(last_state)
@@ -112,21 +111,43 @@ class Project < ActiveRecord::Base
     changes_hash
   end
 
+  def log_association_changes(associated_thing)
+    if association_changed?
+      class_name = associated_thing.class.name
+      id = associated_thing.id
+      ProjectAssociationChange.create(project_id:        self.id,
+                                      association_model: class_name,
+                                      association_id:    id)
+    end
+  end
+
+  def log_attribute_changes
+    if self.changed?
+      self.changes.each do |att, values|
+        next if att == 'iteration'
+        next if att == 'last_state'
+        ProjectAssociationChange.create(project_id:  self.id,
+                                        attribute_name:   att)
+      end
+    end
+  end
+
+
   def remake_scope_files
     scope.each do |s|
       cache_files(s)
     end
-  end 
+  end
 
 
-  def increment_iteration # DUH, version was already taken by paper_trail
+  def increment_iteration # DUH, 'version' was already taken by paper_trail
     iteration ||= 0
     iteration += 1
   end
 
 
   has_and_belongs_to_many :exports
-  has_and_belongs_to_many :resources
+  has_and_belongs_to_many :resources, after_add: :log_association_changes
   accepts_nested_attributes_for :resources, allow_destroy: false, reject_if: proc { |r| r["title"].blank? && r["source_url"].blank? && r["authors"].blank? }
 
   has_many :comments, dependent: :destroy
@@ -295,11 +316,11 @@ class Project < ActiveRecord::Base
     end
   end
 
-  delegate  :grant_element, 
-            :grace_period, 
-            :maturity, 
+  delegate  :grant_element,
+            :grace_period,
+            :maturity,
             :interest_rate,
-      to: :loan_detail, 
+      to: :loan_detail,
       allow_nil: true
 
 
@@ -381,27 +402,27 @@ class Project < ActiveRecord::Base
 
 
   # project accessories
-  has_many :geopoliticals, dependent: :destroy
+  has_many :geopoliticals, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
 
 
-  has_many :transactions, dependent: :destroy
+  has_many :transactions, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
 
 
-  has_many :contacts, dependent: :destroy  
+  has_many :contacts, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :contacts, allow_destroy: true, :reject_if => proc { |a| a['name'].blank? && a['position'].blank? && a['organization_id'].blank?}
 
-  has_many :sources, dependent: :destroy
+  has_many :sources, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :sources, allow_destroy: true, :reject_if => proc { |a| a['url'].blank? }
 
-  has_many :participating_organizations, dependent: :destroy
+  has_many :participating_organizations, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :participating_organizations, allow_destroy: true, :reject_if => proc { |a| a['organization_id'].blank? }
 
 
   # These used to be done inside the search block, now that FACETS are integrated, 
   # I had to move the code down here.
-  def flagged 
+  def flagged
     all_flags.map(&:name)
   end
 

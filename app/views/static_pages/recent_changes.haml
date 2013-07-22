@@ -1,6 +1,21 @@
 - provide(:title, 'Recent Changes')
 - provide(:first_header, 'Recent Changes')
 
+.row
+  %form.span2{action: 'recent_changes', method: 'get'}
+    %select{name: 'filter'}
+      %option{value: ''}No filter
+      %option{value: 'Resource'} Resources
+      %option{value: 'Geopolitical'} Geopoliticals
+      %option{value: 'Transaction'} Transactions
+      %option{value: 'Contact'} Contacts
+      %option{value: 'Source'} Sources
+      %option{value: 'ParticipatingOrganization'} Participating Organizations
+      - Project.accessible_attributes.each do |key|
+        %option{value: "#{key}"} #{key.humanize}
+
+    %input.btn.btn-primary{type: 'submit', value: 'Filter'}
+
 .row-fluid
   = will_paginate @history
   %table.table.table-bordered
@@ -8,6 +23,6 @@
       - @history.each do |item|
         %tr
           %td
-            - message = change_message(item)
-            = message.html_safe
+            - text = association_change_message(item)
+            = text.html_safe
   = will_paginate @history
