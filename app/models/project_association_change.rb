@@ -1,6 +1,6 @@
 class ProjectAssociationChange < ActiveRecord::Base
   attr_accessible :association_id, :association_model, :project_id,
-                  :attribute_name
+                  :attribute_name, :user_id
 
   after_save :cache_change
 

@@ -133,6 +133,9 @@ enable_typeahead Project, facets: {active_string: "Active"}
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
+    user_id = params[:project].delete(:user_id)
+    #keep track of who changed this project
+    Rails.cache.write("last_change/#{params[:id]}", user_id.to_i)
     @project = Project.unscoped.find(params[:id])
 
     #for versioning
@@ -161,10 +164,9 @@ enable_typeahead Project, facets: {active_string: "Active"}
   # DELETE /Projects/1
   # DELETE /Projects/1.json
   def destroy
-    
-  
+
     @project = Project.unscoped.find(params[:id])
-    
+
     # The big problem here was that in @project.destroy, 
     # all the accessory objects were destroyed _first_,
     # so when @project was destroyed (and accessories were saved),

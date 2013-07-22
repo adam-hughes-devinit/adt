@@ -1,121 +1,123 @@
 #project-form-wrapper.project-form
-	= simple_form_for(@project) do |f|
-		= f.error_notification
-		#project-form-content
+  = simple_form_for(@project) do |f|
 
-			#project-form-project.container-fluid
+    = f.hidden_field :user_id, value: current_user.id
+    = f.error_notification
+    #project-form-content
 
-				.row-fluid
-					.span6
-						.row-fluid
-							= render 'project_form_recipients', f: f
-						.row-fluid	
-							= render 'project_form_transactions', f: f
-						.row-fluid
-							= render 'project_form_participating_organizations', f: f
+      #project-form-project.container-fluid
 
-					.span6
-						.row-fluid
-							.well.well-small
-								
-								= f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
-								= f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
-						.row-fluid
-							= f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
-							= f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
-							= f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"} 					
-						.row-fluid
+        .row-fluid
+          .span6
+            .row-fluid
+              = render 'project_form_recipients', f: f
+            .row-fluid  
+              = render 'project_form_transactions', f: f
+            .row-fluid
+              = render 'project_form_participating_organizations', f: f
 
-							= f.association :donor, wrapper_html: {class: "span3"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
-							= f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status".html_safe
-							= f.association :status, label: "Project Status", wrapper_html: {class: "span3"} 
-							= f.association :intent, wrapper_html: {class: "span3"} 
-						.row-fluid
-							= f.input :capacity, wrapper_html: {class: "span6"} 
-							= f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span6"} 
-						.row-fluid
-							= f.input :sector_comment, wrapper_html: {class: "span6"} #hint: "If multisector, add details" 
-							= f.association :flow_type, wrapper_html: {class: "span6"} 
-						.row-fluid
-							= render 'project_form_contacts', f: f
-				.row-fluid
-					= f.input :description, input_html: {rows: "8"}, wrapper_html: {class: "span12"}
-				.row-fluid
-					= render 'project_form_resources', f: f
+          .span6
+            .row-fluid
+              .well.well-small
 
+                = f.input :published, label: false, inline_label: "Published?", wrapper_html: { class: "span6"}
+                = f.input :active, label:false, inline_label: "Active?", wrapper_html: {class: "span6 active-check #{@project.active ? 'active-project-check' : 'inactive-project-check'}"}
+            .row-fluid
+              = f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
+              = f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
+              = f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"}           
+            .row-fluid
 
-				
-				.row-fluid
-					#project-form-flow-class.span3
-						= f.simple_fields_for :flow_class do |flow_class_form| 
-							= flow_class_form.association :oda_like_1 
-							= flow_class_form.association :oda_like_2 
-							= flow_class_form.association :oda_like_master 
-							%span.muted 
-								Will be autoarbitrated on Save if there is no Master and both flow_classes match
-
-					.span9.container-fluid
-						.row-fluid
-							.span4
-								.row-fluid
-									= f.input :is_commercial, label: false, inline_label: "Commercial?", wrapper_html: {class: "span6"}
-									=f.input :line_of_credit, label: false, wrapper_html: {class: "span6"}, inline_label: "Credit Line?"
-								.row-fluid
-									= f.input :is_cofinanced, label: false, inline_label: "Cofinanced?", wrapper_html: {class: "span6"}
-									= f.input :debt_uncertain, label: false, inline_label: "Debt uncertain?", wrapper_html: {class: "span6"}
-							.dates-box.span8
-								.row-fluid
-									- @date_defaults = { include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: 2020, wrapper_html: {class: "project-date"} }
-									.span6
-										= f.input :start_planned, @date_defaults
-										= f.input :start_actual, @date_defaults
-									.span6
-										= f.input :end_planned, @date_defaults
-										= f.input :end_actual, @date_defaults
-
-						.row-fluid
-							#project-form-loan-detail
-								= f.simple_fields_for :loan_detail do |loan_detail_form|
-									= loan_detail_form.association :loan_type,wrapper_html: {class: "span2"} 
-									= loan_detail_form.input :interest_rate,wrapper_html: {class: "span2"}, hint: "In %" 
-									= loan_detail_form.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %." 
-									= loan_detail_form.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment." 
-									= loan_detail_form.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment." 
-									%span.muted.span2 
-										The grant element will be 
-										%a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
-											calculated automatically
-										if 
-										%strong
-											maturity, interest rate, and transaction value 
-										are present.
-			/ .row-fluid
-
-			/ 	#project-form-sources.span5.project-accessory-fields
-			/ 		%p
-			/ 			%strong
-			/ 				Sources:
-			/ 			= link_to_add_fields add_one_label, f, :sources
-			/ 		= f.simple_fields_for :sources do |srcs|
-			/ 			= render 'fields_for_source', f: srcs
+              = f.association :donor, wrapper_html: {class: "span3"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
+              = f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status".html_safe
+              = f.association :status, label: "Project Status", wrapper_html: {class: "span3"} 
+              = f.association :intent, wrapper_html: {class: "span3"} 
+            .row-fluid
+              = f.input :capacity, wrapper_html: {class: "span6"} 
+              = f.association :crs_sector, label_method: lambda { |s| s.full_name }, wrapper_html: {class: "span6"} 
+            .row-fluid
+              = f.input :sector_comment, wrapper_html: {class: "span6"} #hint: "If multisector, add details" 
+              = f.association :flow_type, wrapper_html: {class: "span6"} 
+            .row-fluid
+              = render 'project_form_contacts', f: f
+        .row-fluid
+          = f.input :description, input_html: {rows: "8"}, wrapper_html: {class: "span12"}
+        .row-fluid
+          = render 'project_form_resources', f: f
 
 
+        
+        .row-fluid
+          #project-form-flow-class.span3
+            = f.simple_fields_for :flow_class do |flow_class_form| 
+              = flow_class_form.association :oda_like_1 
+              = flow_class_form.association :oda_like_2 
+              = flow_class_form.association :oda_like_master 
+              %span.muted 
+                Will be autoarbitrated on Save if there is no Master and both flow_classes match
+
+          .span9.container-fluid
+            .row-fluid
+              .span4
+                .row-fluid
+                  = f.input :is_commercial, label: false, inline_label: "Commercial?", wrapper_html: {class: "span6"}
+                  =f.input :line_of_credit, label: false, wrapper_html: {class: "span6"}, inline_label: "Credit Line?"
+                .row-fluid
+                  = f.input :is_cofinanced, label: false, inline_label: "Cofinanced?", wrapper_html: {class: "span6"}
+                  = f.input :debt_uncertain, label: false, inline_label: "Debt uncertain?", wrapper_html: {class: "span6"}
+              .dates-box.span8
+                .row-fluid
+                  - @date_defaults = { include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: 2020, wrapper_html: {class: "project-date"} }
+                  .span6
+                    = f.input :start_planned, @date_defaults
+                    = f.input :start_actual, @date_defaults
+                  .span6
+                    = f.input :end_planned, @date_defaults
+                    = f.input :end_actual, @date_defaults
+
+            .row-fluid
+              #project-form-loan-detail
+                = f.simple_fields_for :loan_detail do |loan_detail_form|
+                  = loan_detail_form.association :loan_type,wrapper_html: {class: "span2"} 
+                  = loan_detail_form.input :interest_rate,wrapper_html: {class: "span2"}, hint: "In %" 
+                  = loan_detail_form.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %." 
+                  = loan_detail_form.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment." 
+                  = loan_detail_form.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment." 
+                  %span.muted.span2 
+                    The grant element will be 
+                    %a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
+                      calculated automatically
+                    if 
+                    %strong
+                      maturity, interest rate, and transaction value 
+                    are present.
+      / .row-fluid
+
+      /   #project-form-sources.span5.project-accessory-fields
+      /     %p
+      /       %strong
+      /         Sources:
+      /       = link_to_add_fields add_one_label, f, :sources
+      /     = f.simple_fields_for :sources do |srcs|
+      /       = render 'fields_for_source', f: srcs
 
 
-			.row-fluid
-				= f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
-				= f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)
-				= f.button :submit, "Save", class: 'btn submit-button' 
-				= f.button :submit, "Save", style:"min-width:200px", class: 'submit-button btn-success btn-large on-nav-bar'
+
+
+      .row-fluid
+        = f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
+        = f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)
+        = f.button :submit, "Save", class: 'btn submit-button' 
+        = f.button :submit, "Save", style:"min-width:200px", class: 'submit-button btn-success btn-large on-nav-bar'
 :javascript
-	$(document).keydown(function(e) {
-		// SUBMIT FORM ON CTL-S
-	    if ( 
-	    	(e.which == '115' || e.which == '83' || String.fromCharCode(event.which).toLowerCase() == 's' ) &&
-	    	(e.ctrlKey || e.metaKey)
-	    ) {
-	        e.preventDefault();
-	        changed = false;
-	        $('.edit_project, .new_project').submit()
-	    }
-	}); 
+  $(document).keydown(function(e) {
+    // SUBMIT FORM ON CTL-S
+      if ( 
+        (e.which == '115' || e.which == '83' || String.fromCharCode(event.which).toLowerCase() == 's' ) &&
+        (e.ctrlKey || e.metaKey)
+      ) {
+          e.preventDefault();
+          changed = false;
+          $('.edit_project, .new_project').submit()
+      }
+  }); 

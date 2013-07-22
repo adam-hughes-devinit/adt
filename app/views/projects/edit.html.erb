@@ -1,131 +1,131 @@
 <% provide(:title, "Edit #{@project.title}") %>
 
 <h1 class='page-header'>
-	Edit 
-	<%= @project.title %>
-	/ <%= @project.persisted? ? @project.id : "(new)" %>
-	<% if !@project.active %>
-		<span class='text-danger'>
-			-- Inactive --
-		</span>
-	<% end %>
+  Edit 
+  <%= @project.title %>
+  / <%= @project.persisted? ? @project.id : "(new)" %>
+  <% if !@project.active %>
+    <span class='text-danger'>
+      -- Inactive --
+    </span>
+  <% end %>
 </h1>
 
 <%= render 'project_form' %>
 <div id='flavors' class='row-fluid'>
-	<p>
-		Choose a flavor for this page:
-	</p>
+  <p>
+    Choose a flavor for this page:
+  </p>
 </div>
 
 <script>
-	function repopulate_organization_dropdowns() {
-		json = window.china_organizations
-		//console.log( json.length)
-		// This was added because loading org + type on all the fields took too long.
-		$('.organization-select.no-org-types').each(function(i, d) {
-			input = $(this)
-			input.removeClass("no-org-types") // It gets overlooked next time...
-			input.find('option').each(function(i, d) {
-				org_id = $(this).val()
-				//console.log(org_id)
-				new_org = json.filter(function(o) { return o.id == org_id})[0]
-				if (new_org) {
-					//console.log(this.value, new_org)
-					$(d).text(new_org.name)
-				}
-			})
-		})
-	}
-	
-	$.get('/organizations/all_json', function(data) {
-		window.china_organizations = data // Forgive me, father.
-		repopulate_organization_dropdowns()
-		$(".add-one").click(repopulate_organization_dropdowns)
-	})
-	
+  function repopulate_organization_dropdowns() {
+    json = window.china_organizations
+    //console.log( json.length)
+    // This was added because loading org + type on all the fields took too long.
+    $('.organization-select.no-org-types').each(function(i, d) {
+      input = $(this)
+      input.removeClass("no-org-types") // It gets overlooked next time...
+      input.find('option').each(function(i, d) {
+        org_id = $(this).val()
+        //console.log(org_id)
+        new_org = json.filter(function(o) { return o.id == org_id})[0]
+        if (new_org) {
+          //console.log(this.value, new_org)
+          $(d).text(new_org.name)
+        }
+      })
+    })
+  }
+  
+  $.get('/organizations/all_json', function(data) {
+    window.china_organizations = data // Forgive me, father.
+    repopulate_organization_dropdowns()
+    $(".add-one").click(repopulate_organization_dropdowns)
+  })
+  
 
-	var changed = false
+  var changed = false
 
-	inputs = $('input, textarea, select')
-	
-	inputs.change(function() {
-		if (!changed) {
-			changed = true;
-		}
-	})
+  inputs = $('input, textarea, select')
+  
+  inputs.change(function() {
+    if (!changed) {
+      changed = true;
+    }
+  })
 
-	$('.submit-button').click(function(){
-		//to ignore the alert
-		changed = false
-	})
+  $('.submit-button').click(function(){
+    //to ignore the alert
+    changed = false
+  })
 
-	window.onbeforeunload = function(){
-		if (changed == true ) {
-			return 'You have edited this project!';
-		}
-	};
+  window.onbeforeunload = function(){
+    if (changed == true ) {
+      return 'You have edited this project!';
+    }
+  };
 
-	
-	$('#project_active').change(function(e) {
-		$('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
-	})
+  
+  $('#project_active').change(function(e) {
+    $('.active-check').toggleClass('active-project-check').toggleClass('inactive-project-check')
+  })
 
 var flavors= ["neon", "pastel", "plain", "classic", "starry_night", "shade", "ROYGBIV"]
 flavors.forEach(function(f) {
-	$('#flavors').append("<a class='btn flavor-button' data-flavor='"+f+"'>"+f+"</a>")
+  $('#flavors').append("<a class='btn flavor-button' data-flavor='"+f+"'>"+f+"</a>")
 })
 
 $('.flavor-button').click(function(){
-	colorize($(this).attr("data-flavor"))
+  colorize($(this).attr("data-flavor"))
 })
 
 function colorize(flavor) {
-	var items = [
-		{ selector: "#project-form-wrapper", neon: "#40d040", pastel: "#B9E4B9", classic: "white", starry_night: "#610B0B", shade: "white", ROYGBIV: "white"},
-		
-		{ selector: "#project-form-content", neon: "#5090a0", pastel: "#EE9EAE", classic: "lightgray", starry_night: "#610B0B", shade: "#0040FF", ROYGBIV: "#FE2E2E"},
-		
-		{ selector: "#project-form-project", neon: "#ee4466" , pastel: "#EE9EAE", classic: "darkgray", starry_night: "#819FF7", shade: "#E0ECF8", ROYGBIV: "#2EFEF7"},
-		
-		{ selector: "#project-form-flow-class", neon: "#a91", pastel: "#F5F2D9", classic: "steelblue", starry_night: "#B18904", shade: "#2E64FE", ROYGBIV: "#F7FE2E"},
-		
-		{ selector: "#project-form-loan-detail", neon: "#1fa", pastel: "#F8E3BE", classic: "darkred", starry_night: "#A4A4A4", shade: "#2E64FE", ROYGBIV: "#FE9A2E"},
-		
-		{ selector: "#project-form-sources", neon: "#44eeaa", pastel: "#F8E3BE", classic: "steelblue", starry_night: "white", shade: "white", ROYGBIV: "#9AFE2E"},
-		
-		{ selector: "#project-form-recipients", neon: "#7c2", pastel: "#83FFC1", classic: "steelblue", starry_night: 
-		"#5858FA", shade: "#EFF2FB", ROYGBIV: "#2E2EFE"},
-		
-		{ selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred", starry_night: "#CECEF6", shade: "#E0E6F8", ROYGBIV: "#2E9AFE"},
-		
-		{ selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred", starry_night: "#F4FA58", shade: "#CED8F6", ROYGBIV: "#2EFE9A"},
-		
-		{ selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred",  starry_night: "#FACC2E", shade: "white", ROYGBIV: "#2EFE9A"},
-		
-		{ selector: "#project-form-resources", neon: "#dd5",  pastel: "#F5E355", classic: "steelblue", starry_night: "#5858FA", shade: "#A9BCF5", ROYGBIV: "#9AFE2E"},
-	]
+  var items = [
+    { selector: "#project-form-wrapper", neon: "#40d040", pastel: "#B9E4B9", classic: "white", starry_night: "#610B0B", shade: "white", ROYGBIV: "white"},
+    
+    { selector: "#project-form-content", neon: "#5090a0", pastel: "#EE9EAE", classic: "lightgray", starry_night: "#610B0B", shade: "#0040FF", ROYGBIV: "#FE2E2E"},
+    
+    { selector: "#project-form-project", neon: "#ee4466" , pastel: "#EE9EAE", classic: "darkgray", starry_night: "#819FF7", shade: "#E0ECF8", ROYGBIV: "#2EFEF7"},
+    
+    { selector: "#project-form-flow-class", neon: "#a91", pastel: "#F5F2D9", classic: "steelblue", starry_night: "#B18904", shade: "#2E64FE", ROYGBIV: "#F7FE2E"},
+    
+    { selector: "#project-form-loan-detail", neon: "#1fa", pastel: "#F8E3BE", classic: "darkred", starry_night: "#A4A4A4", shade: "#2E64FE", ROYGBIV: "#FE9A2E"},
+    
+    { selector: "#project-form-sources", neon: "#44eeaa", pastel: "#F8E3BE", classic: "steelblue", starry_night: "white", shade: "white", ROYGBIV: "#9AFE2E"},
+    
+    { selector: "#project-form-recipients", neon: "#7c2", pastel: "#83FFC1", classic: "steelblue", starry_night: 
+    "#5858FA", shade: "#EFF2FB", ROYGBIV: "#2E2EFE"},
+    
+    { selector: "#project-form-transactions", neon: "#dda", pastel: "#F56855", classic:"darkred", starry_night: "#CECEF6", shade: "#E0E6F8", ROYGBIV: "#2E9AFE"},
+    
+    { selector: "#project-form-organizations", neon: "#1aa", pastel: "#F56855", classic:"darkred", starry_night: "#F4FA58", shade: "#CED8F6", ROYGBIV: "#2EFE9A"},
+    
+    { selector: "#project-form-contacts", neon: "#375",  pastel: "#F8E3BE", classic: "darkred",  starry_night: "#FACC2E", shade: "white", ROYGBIV: "#2EFE9A"},
+    
+    { selector: "#project-form-resources", neon: "#dd5",  pastel: "#F5E355", classic: "steelblue", starry_night: "#5858FA", shade: "#A9BCF5", ROYGBIV: "#9AFE2E"},
+  ]
 
 
-	if (flavor != "plain" && flavor != false ) {
+  if (flavor != "plain" && flavor != false ) {
 
-		items.forEach(function(item) {
-			$(item.selector).css("background-color", item[flavor] )
-		})
-	}
-	else {
-		items.forEach(function(item) {
-			$(item.selector).css('background-color', 'transparent')
-		})
-	}
+    items.forEach(function(item) {
+      $(item.selector).css("background-color", item[flavor] )
+    })
+  }
+  else {
+    items.forEach(function(item) {
+      $(item.selector).css('background-color', 'transparent')
+    })
+  }
 
-	localStorage.china_flavor = flavor;	
+  localStorage.china_flavor = flavor; 
 }
 
 
 var your_flavor = localStorage.china_flavor || false
 if (your_flavor) {
-	colorize(your_flavor)
+  colorize(your_flavor)
 }
 
 

@@ -89,10 +89,14 @@ class Project < ActiveRecord::Base
   end
 
   def association_changed?
-    if YAML.load(last_state) == association_hash
-      return false
+    return false if last_state.nil?
+    last = YAML.load(last_state)
+    if !last || !association_hash
+      false
+    elsif YAML.load(last_state) == association_hash
+      false
     else
-      return true
+      true
     end
   end
 
@@ -112,22 +116,26 @@ class Project < ActiveRecord::Base
   end
 
   def log_association_changes(associated_thing)
+    user_id = Rails.cache.fetch("last_change/#{id}")
     if association_changed?
       class_name = associated_thing.class.name
       id = associated_thing.id
       ProjectAssociationChange.create(project_id:        self.id,
                                       association_model: class_name,
-                                      association_id:    id)
+                                      association_id:    id,
+                                      user_id:           user_id)
     end
   end
 
   def log_attribute_changes
+    user_id = Rails.cache.fetch("last_change/#{id}")
     if self.changed?
       self.changes.each do |att, values|
         next if att == 'iteration'
         next if att == 'last_state'
-        ProjectAssociationChange.create(project_id:  self.id,
-                                        attribute_name:   att)
+        ProjectAssociationChange.create(project_id:       self.id,
+                                        attribute_name:   att,
+                                        user_id:          user_id)
       end
     end
   end
