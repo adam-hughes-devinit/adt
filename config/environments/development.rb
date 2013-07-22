@@ -6,7 +6,7 @@ Adt::Application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
- 
+
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
@@ -15,7 +15,7 @@ Adt::Application.configure do
   config.action_controller.perform_caching = false
   config.cache_store =                       :memory_store
   # config.cache_store = :memory_store, size: 64.megabytes
-  
+
   # Do care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
@@ -37,6 +37,7 @@ Adt::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
 
   config.action_mailer.default_url_options = {
     :host => "localhost",

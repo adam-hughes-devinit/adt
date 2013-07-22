@@ -32,6 +32,7 @@ gem 'sitemap_generator'
 gem 'hashie'
 gem 'aws-sdk'
 gem 'newrelic_rpm'
+gem 'exception_notification'
 
 
 

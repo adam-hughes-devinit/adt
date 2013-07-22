@@ -74,6 +74,9 @@ GEM
     diff-lcs (1.2.4)
     erubis (2.7.0)
     eventmachine (1.0.3)
+    exception_notification (4.0.0)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.2.0)
@@ -274,6 +277,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job
   delayed_job_active_record
+  exception_notification
   factory_girl_rails
   faker (= 1.1.2)
   haml (~> 4.0)
