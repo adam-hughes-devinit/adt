@@ -120,22 +120,35 @@ class Project < ActiveRecord::Base
     if association_changed?
       class_name = associated_thing.class.name
       id = associated_thing.id
-      ProjectAssociationChange.create(project_id:        self.id,
-                                      association_model: class_name,
-                                      association_id:    id,
-                                      user_id:           user_id)
+      p = ProjectAssociationChange.create(project_id:        self.id,
+                                          association_model: class_name,
+                                          association_id:    id,
+                                          user_id:           user_id)
+      # won't change cache if project isn't active
+      p.cache_change
     end
   end
 
   def log_attribute_changes
     user_id = Rails.cache.fetch("last_change/#{id}")
     if self.changed?
-      self.changes.each do |att, values|
+      made_inactive = false
+      changes_hash = self.changes
+
+      # don't log changes made to a project when it was made inactive
+      if changes_hash.has_key?('active')
+        active_array = changes_hash['active']
+        # we moved from  'active' to 'inactive'
+        made_inactive = true if active_array[0] == true
+      end
+
+      changes_hash.each do |att, values|
         next if att == 'iteration'
         next if att == 'last_state'
-        ProjectAssociationChange.create(project_id:       self.id,
-                                        attribute_name:   att,
-                                        user_id:          user_id)
+        p = ProjectAssociationChange.create(project_id:       self.id,
+                                            attribute_name:   att,
+                                            user_id:          user_id)
+        p.cache_change unless made_inactive
       end
     end
   end

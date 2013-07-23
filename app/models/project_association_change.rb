@@ -2,7 +2,6 @@ class ProjectAssociationChange < ActiveRecord::Base
   attr_accessible :association_id, :association_model, :project_id,
                   :attribute_name, :user_id
 
-  after_save :cache_change
 
   def association?
     if association_model
@@ -20,6 +19,8 @@ class ProjectAssociationChange < ActiveRecord::Base
     end
   end
 
+  # call this after ProjAssChange Creation to update the cache of most
+  # recent changes.
   def cache_change
     @project = Project.find_by_id(project_id)
     if @project.is_stage_one == "Is not Stage One" && @project.active == true && attribute_name != 'active'
