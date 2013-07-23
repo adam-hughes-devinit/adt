@@ -9,7 +9,7 @@
           %i Hover to see all stats
       %ul.unstyled.marquee
         %li
-          %i.muted 
+          %i.muted
             Loading...
 -# nice_money depends on d3:
 = javascript_include_tag 'd3/index'
@@ -18,28 +18,28 @@
 %script#vitals-template{ type: 'text/template'}
   %li
     %span
-      Chinese 
+      Chinese
     %strong><
       %a{href: "/projects?scope_names[]=Official Finance"}><
-        official finance projects 
+        official finance projects
     , 2000-2011:
     %span.official#count.text-success
       <%= official.count %>
   %li
-    Amounting to 
-    %strong 
-      %a{href: "/projects?scope_names[]=Official Finance"}<> 
+    Amounting to
+    %strong
+      %a{href: "/projects?scope_names[]=Official Finance"}<>
         financial commitments
     of:
     %span.official#usd_2009.text-success
       $<%= nice_money(official.usd_2009) %>
-    -# %small 
+    -# %small
       -# (USD-2009)
   %li
     %span
       Value of
     %strong<>
-      %a{href: "/projects?active_string=Active&oda_like_name=ODA-like&status_name[]=Implementation&status_name[]=Pipeline%3A+Commitment&status_name[]=Pipeline%3A+Vague"}<> 
+      %a{href: "/projects?active_string=Active&oda_like_name=ODA-like&status_name[]=Implementation&status_name[]=Pipeline%3A+Commitment&status_name[]=Pipeline%3A+Vague"}<>
         ODA-Like commitments
     %span<>
       , 2000-2011:
@@ -49,19 +49,19 @@
       -# (USD-2009)
   %li
     %span
-      Projects 
-    %strong<> 
+      Projects
+    %strong<>
       %a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<>
         implemented or completed
     %span><
       , 2000-2011:
     %span.implemented_or_completed#percent.text-success
       <%= implemented_or_completed.percent %>%
-  %li 
+  %li
     Value of
-    %strong   
+    %strong
       %a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<
-        implemented/completed 
+        implemented/completed
     projects:
     %span.implemented_or_completed#usd_2009.text-success<
       $<%= nice_money(implemented_or_completed.usd_2009) %>
@@ -70,8 +70,8 @@
 
 
 :coffeescript
-  @vitals = 
-    official: 
+  @vitals =
+    official:
       params:
         get: "donor"
         # only ACTIVE by default
@@ -93,7 +93,7 @@
         ].join("*")
         year: [2000..2011].join("*")
 
-    oda_like: 
+    oda_like:
       params:
         get: "donor"
         # only ACTIVE by default
@@ -168,7 +168,7 @@
     if returned_queries is 3
       vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
       template = _.template($('#vitals-template').html(), vitals)
-      
+
       $('#vitals ul').html('')
       $('#vitals ul').append(template)
       marquee.create('.marquee')
