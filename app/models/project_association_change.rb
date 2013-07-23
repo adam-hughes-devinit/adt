@@ -22,7 +22,8 @@ class ProjectAssociationChange < ActiveRecord::Base
 
   def cache_change
     @project = Project.find_by_id(project_id)
-    if @project.is_stage_one == "Is not Stage One" && @project.active == true
+    if @project.is_stage_one == "Is not Stage One" && @project.active == true && attribute_name != 'active'
+
 
       first = Rails.cache.fetch("recent/first")
       second = Rails.cache.fetch("recent/second")
