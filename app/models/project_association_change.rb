@@ -31,11 +31,17 @@ class ProjectAssociationChange < ActiveRecord::Base
       # if the last project was the same as this one, store it in the string
       # instead of making a new entry
       if first[:id] == project_id
-        first[:action] =
-          first[:action] << ", #{(attribute_name || "#{association_model}s").titleize.downcase}"
+        action = first[:action]
+        new_action = "#{(attribute_name || "#{association_model}s").titleize.downcase}"
 
-        first[:time] = self.updated_at
-        Rails.cache.write("recent/first", first)
+        #no duplicates
+        unless /#{new_action}/ =~ action
+          first[:action] = action << ", #{new_action}"
+          first[:time] = self.updated_at
+          Rails.cache.write("recent/first", first)
+        else
+          false
+        end
 
       else
         # add a new entry and move the old ones down
