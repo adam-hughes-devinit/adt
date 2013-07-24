@@ -1,6 +1,6 @@
 Adt::Application.routes.draw do
   # codes
-  
+  #
   get '/organizations/merge', to: "organizations#merge", as: "organizations_prepare_merge"
   get '/organizations/typeahead', to: "organizations#twitter_typeahead"
   post '/organizations/merge', to: "organizations#merge!", as: "organizations_execute_merge"
@@ -24,6 +24,14 @@ Adt::Application.routes.draw do
     resources :pinned_projects
   end
 
+  get '/projects/official', to: "projects#index",
+    defaults: {
+                year: ['2000', '2001', '2002', '2003', '2004', '2005', '2006',
+                  '2007', '2008','2009','2010','2011'],
+                oda_like_name: ['ODA-like', 'OOF-like', 'Vague (Official Finance)'],
+                scope_names: ['Official Finance'],
+                status_name: ['Completion', 'Implementation', 'Pipeline: Commitment']
+              }
 
   # Link from DG email
   match "/utm_*other" => redirect("/")
@@ -44,7 +52,7 @@ Adt::Application.routes.draw do
   # limited access
   resources :comments, only: [:create, :destroy, :show]
   resources :flags, only: [:create, :destroy, :show]
-  
+
   # special purpose
   resources :sessions, only: [:new, :create, :destroy]
 
@@ -53,14 +61,13 @@ Adt::Application.routes.draw do
   get '/aggregates/projects', to: 'aggregates#projects', as: "aggregate_api", :defaults=>{:format=>'json'}
   post '/users/:id/own/:owner_id', to: 'users#own'
   post '/users/:id/disown', to: 'users#disown'
-  
-  
+
   # Versions -- revert action, and index for all recent activity
   post '/versions/:id/revert', to: 'versions#revert', as: 'revert_version'
-  
+
   # static pages
   root to: "static_pages#home"
-	get '/analyze', to: "static_pages#analyze", as: "bubbles"
+  get '/analyze', to: "static_pages#analyze", as: "bubbles"
   get '/downloads', to: 'static_pages#downloads', as: "downloads"
   get '/dashboard', to: 'static_pages#dashboard', as: "dashboard"
   get '/csv_analyzer', to: 'static_pages#csv_analyzer', as: "csv_analyzer"
@@ -82,8 +89,6 @@ Adt::Application.routes.draw do
   # this is for external log in:
   get '/signin', to: 'static_pages#signin'
   match '/ajax', to: 'static_pages#ajax'
-
-
 
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"

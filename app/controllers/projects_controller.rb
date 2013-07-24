@@ -1,42 +1,43 @@
-class ProjectsController < ApplicationController  
-skip_before_filter :signed_in_user, only: [:suggest, :to_english]
-before_filter :set_owner, only: [:create, :new]
-before_filter :correct_owner?, only: [:edit, :destroy]
-before_filter :aiddata_only!, only: [:create]
+class ProjectsController < ApplicationController
+  skip_before_filter :signed_in_user, only: [:suggest, :to_english]
+  before_filter :set_owner, only: [:create, :new]
+  before_filter :correct_owner?, only: [:edit, :destroy]
+  before_filter :aiddata_only!, only: [:create]
 
-# before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
+  # before_filter :lock_editing_except_for_admins, except: [:index, :show, :suggest]
 
-include SearchHelper
-extend Typeaheadable
-enable_typeahead Project, facets: {active_string: "Active"}
- #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
- #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
+  include SearchHelper
+  extend Typeaheadable
+  enable_typeahead Project, facets: {active_string: "Active"}
+  #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
+  #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 
- cache_sweeper :project_sweeper # app/models/project_sweeper.rb
-  
+  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
+
   def index
-   
     respond_to do |format|
-      
+
       format.html do
+
         @full_result_ids = custom_search(paginate: false).map(&:id)
         @projects = custom_search
         @export = Export.new(params[:export])
+
         render html: @projects
       end
-      
+
       format.json do
         @projects = custom_search({default_to_official_finance: false})
         render json: @projects
       end
-      
+
       format.xml do
         @search_results = custom_search({default_to_official_finance: false})
         render xml: Project.wrap_in_iati(@search_results)
       end
-            
+
       format.csv do
-        
+
         if params[:page]
           @paginate = true
         else
@@ -44,13 +45,13 @@ enable_typeahead Project, facets: {active_string: "Active"}
         end
 
         projects = custom_search(paginate: @paginate, default_to_official_finance: false)
-        
+
         csv_data = Project.csv_header + "\n"
 
         projects.each do |p| 
           csv_data << p.csv_text 
           csv_data << "\n"
-        end       
+        end
 
         send_data csv_data,
           :type => 'text/csv; charset=utf-8; header=present',
@@ -152,11 +153,11 @@ enable_typeahead Project, facets: {active_string: "Active"}
     end
 
     undo_link = view_context.link_to( 
-    "Undo", revert_version_path(@project.versions.scoped.last
-    ),
-    #"Undo", "/versions/#{@object.versions.last.id}/revert",
-    method: :post)
-    flash[:success] = "Project updated. #{undo_link}"
+                                     "Undo", revert_version_path(@project.versions.scoped.last
+                                                                ),
+                                                                  #"Undo", "/versions/#{@object.versions.last.id}/revert",
+                                                                  method: :post)
+                                                                flash[:success] = "Project updated. #{undo_link}"
 
 
   end
@@ -174,12 +175,12 @@ enable_typeahead Project, facets: {active_string: "Active"}
     #
     # To get around this, I'm saving the accessories, deleting everything,
     # then adding the accessories by hand. 
-    
+    #
     @accessories = @project.accessories
-    
+
     @project.destroy
-   
-    
+
+
     @last_version = @project.versions.scoped.last
     @last_version.accessories = @accessories
     @last_version.save!
@@ -188,12 +189,12 @@ enable_typeahead Project, facets: {active_string: "Active"}
       format.html { redirect_to projects_url }
       format.json { head :no_content }
     end
-    
+
     undo_link = view_context.link_to( 
-    "Undo", revert_version_path(@project.versions.scoped.last
-    ),
-    method: :post)
-    flash[:notice] = "Project deleted! #{undo_link}"
+                                     "Undo", revert_version_path(@project.versions.scoped.last
+                                                                ),
+                                                                  method: :post)
+                                                                flash[:notice] = "Project deleted! #{undo_link}"
   end
 
   def suggest 
@@ -202,7 +203,7 @@ enable_typeahead Project, facets: {active_string: "Active"}
       @project.published = false
       @project.donor = Country.find_by_name("China")
       if @project.save
-        
+
         AiddataAdminMailer.delay.contributor_notification(@project, @project, current_user)
 
         flash[:success] = "Thanks, we will review your project suggestion!"
@@ -218,29 +219,24 @@ enable_typeahead Project, facets: {active_string: "Active"}
 
 
 
-    def correct_owner? 
-      project_owner = Project.unscoped.find(params[:id]).owner 
-      if ( 
-          (project_owner.present? && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
-          (current_user_is_aiddata && project_owner.nil?)
-        )
-        true
-      else
-        flash[:notice] = "Only #{project_owner.name} can edit this record."
-        redirect_to Project.find(params[:id])
+  def correct_owner? 
+    project_owner = Project.unscoped.find(params[:id]).owner 
+    if ( 
+        (project_owner.present? && (signed_in? && current_user.owner.present? && (current_user.owner == project_owner)))||
+        (current_user_is_aiddata && project_owner.nil?)
+       )
+       true
+    else
+      flash[:notice] = "Only #{project_owner.name} can edit this record."
+      redirect_to Project.find(params[:id])
 
-      end
     end
-    
-    def set_owner
-      if signed_in?
-        current_user.owner 
-      else 
-        Organization.find_by_name("AidData")
-      end
+  end
+  def set_owner
+    if signed_in?
+      current_user.owner 
+    else 
+      Organization.find_by_name("AidData")
     end
-  
-
-
-
+  end
 end

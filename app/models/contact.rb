@@ -6,15 +6,14 @@ class Contact < ActiveRecord::Base
   delegate :name, to: :organization, allow_nil: true, prefix: true
 
   def to_english
-  	"#{name.present? ? "#{name}, " : "" }#{position.present? ? "#{position} " : ""}#{organization_name.present? ? "(#{organization_name})" : "" }"
+    "#{name.present? ? "#{name}, " : "" }#{position.present? ? "#{position} " : ""}#{organization_name.present? ? "(#{organization_name})" : "" }"
   end
 
   def to_iati
-  	%{<contact-info>
+    %{<contact-info>
         <person-name>#{name}</person-name>
         <organisation>#{organization_name}</organisation>
     </contact-info>}
   end
 
-  
 end

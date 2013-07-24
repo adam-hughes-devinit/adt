@@ -1,27 +1,26 @@
 class Content < ActiveRecord::Base
   attr_accessible :content, :name, :chinese_name, :content_type, :chinese_content
-  
+
   has_paper_trail
-  
+
   CONTENT_TYPES = [
-  		"Page", # Markdown content
+      "Page", # Markdown content
       "Complex Page", # Ruby content, must return HTML
       "Internal", # Markdown content
       # Used in building other views:
-  		"Faculty/Staff",
+      "Faculty/Staff",
       "Research Assistant",
-  		"AidData Publication",
+      "AidData Publication",
       "Affiliate Publication",
       "Other Publication",
       "News Article",
       "Blog Post"
-       		
-  	]
+    ]
 
   validates_inclusion_of :content_type, in: CONTENT_TYPES
 
   def data
-    
+
     begin
       data = YAML.load(content)
     rescue
@@ -47,16 +46,15 @@ class Content < ActiveRecord::Base
       end
     elsif  content_type == "Page"
       pc = Markdown.new(content).to_html
-      pc << Markdown.new(chinese_content).to_html      
+      pc << Markdown.new(chinese_content).to_html if chinese_content
     else
       pc = content
     end
-    pc 
+    pc
   end
 
   searchable if: proc { |c| ["Page", "Complex Page"].include?(c.content_type)} do 
     text :id, :name, :chinese_name, :page_content, :content_type
   end
-  
 
 end

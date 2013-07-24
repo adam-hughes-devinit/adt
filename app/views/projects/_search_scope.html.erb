@@ -1,44 +1,47 @@
 <% 
-	@scope_names = params[:scope_names]
-	# force it to be an array
-	if @scope_names.present? && !@scope_names.is_a?(Array)
-		@scope_names = [@scope_names]
-	end
+  @scope_names = params[:scope_names]
+  # force it to be an array
+  if @scope_names.present? && !@scope_names.is_a?(Array)
+    @scope_names = [@scope_names]
+  end
 
-	if @scope_names.present? 
-		if @scope_names.include?("Official Finance")
-			flash.now[:success] =  
-				"You are viewing <b>#{
-					@scope_names.map {|s| Scope.find_by_name(s).name}.to_sentence
-					}</b>. Click the filters below to change your settings.".html_safe 
-		end
-		if (incomplete_scopes = @scope_names.select {|s| s != "Official Finance" }).length > 0
-			flash.now[:notice] = "Data for #{incomplete_scopes.map {|s| "<strong>#{s}</strong>"}.to_sentence } are not comprehensive, please see the #{link_to "methodology", content_by_name_path("methodology")} for details."
-		end
-	end
-		
-	def scope_to(scope)
-		scope_link = "#{link_to scope.name, @current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope.name}"
-		
-		if @scope_names.present? && @scope_names.include?(scope.name)
-			scope_link = "<b>#{scope_link}</b>"
-		end
+  if @scope_names.present?
+    if @scope_names.include?("Official Finance") && request.path != '/projects/official'
+      flash.now[:success] =
+        "You are viewing <b>#{
+          @scope_names.map {|s| Scope.find_by_name(s).name}.to_sentence
+          }</b>. Click the filters below to change your settings.".html_safe 
+    end
+    if request.path == '/projects/official'
+      flash[:success] = "You are viewing official non-Investment, non-Military "\
+      "projects from 2000-2011."
+    end
+    if (incomplete_scopes = @scope_names.select {|s| s != "Official Finance" }).length > 0
+      flash.now[:notice] = "Data for #{incomplete_scopes.map {|s| "<strong>#{s}</strong>"}.to_sentence } are not comprehensive, please see the #{link_to "methodology", content_by_name_path("methodology")} for details."
+    end
+  end
 
-		"<span class='scope-tooltip' title=\"#{scope.description}\">#{scope_link}</span>".html_safe
+  def scope_to(scope)
 
-	end
-	
-%> 
+    scope_link = "#{link_to scope.name, @current_url_without_scope + @joiner + 'scope_names%5B%5D=' + scope.name}"
+
+    if @scope_names.present? && @scope_names.include?(scope.name)
+      scope_link = "<b>#{scope_link}</b>"
+    end
+
+    "<span class='scope-tooltip' title=\"#{scope.description}\">#{scope_link}</span>".html_safe
+
+  end
+%>
 <p>
 
-		<b>Scopes:</b> 
-		<% Scope.all.each do |s| %>
-			<%= scope_to s %> | 
-		<% end %> 
-		
-		<% if @scope_names.present? %>
-			 <i><%= link_to "Remove scope", @current_url_without_scope, style: "color:#C96D6D" %> </i>
-		<% end %> 
-		
+    <b>Scopes:</b>
+    <% Scope.all.each do |s| %>
+      <%= scope_to s %> |
+    <% end %>
+
+    <% if @scope_names.present? %>
+       <i><%= link_to "Remove scope", @current_url_without_scope, style: "color:#C96D6D" %> </i>
+    <% end %>
 </p>
 
