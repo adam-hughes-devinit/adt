@@ -116,6 +116,7 @@ class ProjectsController < ApplicationController
   # POST /Projects
   # POST /Projects.json
   def create
+    user_id = params[:project].delete(:user_id)
     @project = Project.new(params[:project])
 
     respond_to do |format|
@@ -134,6 +135,7 @@ class ProjectsController < ApplicationController
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
+    #need to remove user_id from params
     user_id = params[:project].delete(:user_id)
     #keep track of who changed this project
     Rails.cache.write("last_change/#{params[:id]}", user_id.to_i)
@@ -197,7 +199,7 @@ class ProjectsController < ApplicationController
                                                                 flash[:notice] = "Project deleted! #{undo_link}"
   end
 
-  def suggest 
+  def suggest
     if request.post?
       @project = Project.new(params[:project])
       @project.published = false
