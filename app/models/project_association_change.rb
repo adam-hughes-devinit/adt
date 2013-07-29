@@ -30,7 +30,7 @@ class ProjectAssociationChange < ActiveRecord::Base
 
       # if the last project was the same as this one, store it in the string
       # instead of making a new entry
-      if first[:id] == project_id
+      if first && first[:id] == project_id
         action = first[:action]
         new_action = "#{(attribute_name || "#{association_model}s").titleize.downcase}"
 
