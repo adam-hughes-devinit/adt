@@ -131,7 +131,7 @@ class Project < ActiveRecord::Base
 
   def log_attribute_changes
     # don't log new project
-    return false if self.id == nil
+    return true if self.id == nil
 
     user_id = Rails.cache.fetch("last_change/#{id}")
     if self.changed?
