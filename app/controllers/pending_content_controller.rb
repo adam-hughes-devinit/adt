@@ -17,14 +17,14 @@ class PendingContentController < ApplicationController
     @content = get_content(params)
     @content.published = true
     @content.save
-    AiddataAdminMailer.pending_content_notification(@content, true).deliver
+    #AiddataAdminMailer.pending_content_notification(@content, true).deliver
     render json: true
   end
 
   def destroy
     @content = get_content(params)
     @content.destroy
-    AiddataAdminMailer.pending_content_notification(@content, false).deliver
+    #AiddataAdminMailer.pending_content_notification(@content, false).deliver
     render json: true
   end
 

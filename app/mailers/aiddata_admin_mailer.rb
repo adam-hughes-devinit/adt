@@ -3,7 +3,7 @@ include ApplicationHelper
 class AiddataAdminMailer < ActionMailer::Base
   default from: (ENV['admin_mailer'] || (Rails.env.development? ? "rmosolgo@aiddata.org" : nil))
   default to: (ENV['admin_mail_receiver'] || (Rails.env.development? ? "rmosolgo@aiddata.org" : nil))
-  
+
   def mail_logger
     @@mail_logger ||= Logger.new("#{Rails.root}/log/mail.log")
   end
@@ -22,7 +22,7 @@ class AiddataAdminMailer < ActionMailer::Base
     end
     @flag = flag
     mail subject: "New Flag on Project #{proj_id}"
-    mail_logger.info ENV['admin_mailer']      
+    mail_logger.info ENV['admin_mailer']
     mail_logger.info ENV['admin_mail_receiver']
 
   end
@@ -55,7 +55,7 @@ class AiddataAdminMailer < ActionMailer::Base
       else
         @contribution_type = contribution.class.name.titleize 
       end
-      @project = project    
+      @project = project
       mail to: user.email, subject: "Thanks for your contribution to China.AidData.org"
     end
   end
