@@ -7,7 +7,7 @@ module ProjectExporterHeaders
     donor_agency donor_agency_count recipient_agencies recipient_agencies_count
     verified verified_code flow_class flow_class_code intent intent_code
     active active_code factiva_sources amount currency deflators_used
-    exchange_rates_used usd_defl start_actual start_planned end_actual
+    exchange_rates_used usd_defl usd_current start_actual start_planned end_actual
     end_planned recipient_count recipient_condensed recipient_cow_code
     recipient_oecd_code recipient_oecd_name recipient_iso3 recipient_iso2
     recipient_un_code recipient_imf_code 

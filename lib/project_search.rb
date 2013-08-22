@@ -128,6 +128,13 @@ module ProjectSearch
       sum > 0 ? sum : nil
     end
 
+    def usd_2009_current
+      # This should be a reduce method
+      sum = 0
+      transactions.map { |t| sum += (t.usd_current || 0)}
+      sum > 0 ? sum : nil
+    end
+
     searchable do 
       # for sorting
       integer :id 
