@@ -33,7 +33,7 @@ gem 'hashie'
 gem 'aws-sdk'
 gem 'newrelic_rpm'
 gem 'exception_notification'
-
+gem 'unicorn'
 
 
 group :development do
@@ -66,5 +66,4 @@ end
   gem 'jquery-rails'
 
 # end
-
 
