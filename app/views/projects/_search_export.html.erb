@@ -1,10 +1,16 @@
 <div class='row'>
   <div class="center">
-    
+
+    <!-- This calls the dialog box that sends the csv by email. This had issues with freezing and was very slow.
+    Most of the code on this page has to do with that feature. Assuming that new straight to csv method works, we can remove this code in the future
+    -ABA 9/20/13
     <a class="btn btn-success" data-toggle="modal" href="#export_dialog">
       Export as CSV (<%= pluralize(@search.total, "Project") %>)
     </a>
-    
+    -->
+
+    <%= link_to "Export to CSV (#{pluralize(@search.total, "Project")})", params.merge(format: :csv), class: 'btn btn-success' %>
+
     <!--
     <% if current_user_is_aiddata %>
       <%= link_to "Quick Export (AidData only)", 
