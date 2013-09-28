@@ -8,7 +8,8 @@ class Transaction < ActiveRecord::Base
 
   belongs_to :currency
   delegate :name, :iso3, to: :currency, allow_nil: true, prefix: true
-  
+
+
   def to_iati
     
     iati_values = []

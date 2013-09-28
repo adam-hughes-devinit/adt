@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722161436) do
+ActiveRecord::Schema.define(:version => 20130922204155) do
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(:version => 20130722161436) do
     t.integer  "crs_sector_id"
     t.text     "last_state"
     t.boolean  "published",      :default => true
+    t.integer  "usd_2009"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"
@@ -512,8 +513,8 @@ ActiveRecord::Schema.define(:version => 20130722161436) do
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
-    t.text     "accessories"
     t.text     "children"
+    t.text     "accessories"
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
