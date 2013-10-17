@@ -3,6 +3,7 @@ class LoanDetail < ActiveRecord::Base
   	:loan_type_id, :loan_type,
   	:grace_period, :grant_element, :maturity,
     :interest_rate
+    #:transactions, :transactions_attributes
 
   before_save :get_grant_element!
 
@@ -13,10 +14,12 @@ class LoanDetail < ActiveRecord::Base
 
   #CALCULATOR_URL = 'http://aiddata-loan-calculator.herokuapp.com/calculate'
   
-  #delegate :usd_2009, to: :project, prefix: true
+  delegate :usd_2009, to: :project, prefix: true
 
   def get_grant_element!
-
+    puts 'INFO!!!!!!!!!!!!!!!'
+    puts self.project.usd_2009
+    puts self.project.accessories
   	if self.maturity && self.project.usd_2009 && self.interest_rate     # problem is usd_2009 is nil, even though it is being calculated
                                                                         # why and where is it coming from.
 

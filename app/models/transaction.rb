@@ -47,6 +47,7 @@ class Transaction < ActiveRecord::Base
 
 
 	def deflate_and_round_value
+      puts "deflating stuff!!!!!!!!!!!!!!"
       if self.project && self.project.year && self.project.donor
         donor_iso3 = self.project.donor.iso3
         yr = self.project.year
@@ -69,10 +70,11 @@ class Transaction < ActiveRecord::Base
               #p "Deflated is #{deflated_amount.class}, Currency is #{current_amount.class}"
 
               self.usd_defl= deflated_amount
-              self.usd_current= current_amount
+              self.usd_current = current_amount
               self.deflator= deflator_used
               self.exchange_rate = exchange_rate_used
               self.deflated_at = Time.now
+
 
             rescue
                 
@@ -93,5 +95,5 @@ class Transaction < ActiveRecord::Base
           end
       end
    end
-   
+
 end

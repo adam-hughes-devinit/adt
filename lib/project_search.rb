@@ -124,7 +124,7 @@ module ProjectSearch
     def usd_2009
       # This should be a reduce method
       sum = 0
-      transactions.map { |t| sum += (t.usd_defl || 0)} 
+      transactions.map { |t| sum += (t.usd_defl || 0)}
       sum > 0 ? sum : nil
     end
 
@@ -138,7 +138,7 @@ module ProjectSearch
     searchable do 
       # for sorting
       integer :id 
-      double :usd_2009 
+      double :usd_2009
       string :title 
       string :donor_name 
       string :recipient_condensed 

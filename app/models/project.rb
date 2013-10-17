@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
     :is_commercial, :media_id, 
     :year_uncertain, :debt_uncertain, :line_of_credit,
-    :is_cofinanced, :usd_2009,
+    :is_cofinanced, #:usd_2009,
     # belongs_to fields
     :status, :verified, 
     :flow_type, :oda_like, :sector,
@@ -35,7 +35,7 @@ class Project < ActiveRecord::Base
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
   before_save :log_attribute_changes
-  before_save :set_usd_2009
+  #before_save :set_usd_2009
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
@@ -45,13 +45,13 @@ class Project < ActiveRecord::Base
   scope :past_stage_one, where("active = 't' AND verified_id != ?", ((v = Verified.find_by_name("Raw")).present? ? v.id : 0 ))
   scope :active, where("active= 't' ")
 
-  def set_usd_2009
+  #def set_usd_2009
     # This should be a reduce method
-    sum = 0
-    transactions.map { |t| sum += (t.usd_defl || 0)}
-    sum > 0 ? sum : nil
-    self.usd_2009 = sum
-  end
+   # sum = 0
+   # transactions.map { |t| sum += (t.usd_defl || 0)}
+    #sum > 0 ? sum : nil
+   # self.usd_2009 = sum
+ # end
 
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
     ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
@@ -497,8 +497,6 @@ class Project < ActiveRecord::Base
   #     false
   #   end
   # end
-
-
 
 
   def as_json(options={})

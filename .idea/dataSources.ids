@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source source="LOCAL" name="Rails adt: development" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="91f241e1-2f37-483b-8840-1929fe10cc8a">
+    <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+    <jdbc-url>jdbc:postgresql:adt_development</jdbc-url>
+    <user-name>adt_user</user-name>
+    <user-password>dfcbdfc3dfcedfcedfcbdfdedfcb</user-password>
+    <libraries>
+      <library>
+        <url>file://$USER_HOME$/Library/Preferences/RubyMine50/jdbc-drivers/postgresql-driver-license.txt</url>
+      </library>
+      <library>
+        <url>jar://$USER_HOME$/Library/Preferences/RubyMine50/jdbc-drivers/postgresql-9.2-1002.jdbc3.jar!/</url>
+      </library>
+    </libraries>
+  </data-source>
+  <data-source source="LOCAL" name="Rails adt: production" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="8be8b53b-3e6f-4900-9a09-ef2b9e4f8ca9">
+    <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+    <jdbc-url>jdbc:postgresql:adt_production</jdbc-url>
+    <user-name>adt_user</user-name>
+    <user-password>dfcbdfc3dfcedfcedfcbdfdedfcb</user-password>
+    <libraries>
+      <library>
+        <url>file://$USER_HOME$/Library/Preferences/RubyMine50/jdbc-drivers/postgresql-driver-license.txt</url>
+      </library>
+      <library>
+        <url>jar://$USER_HOME$/Library/Preferences/RubyMine50/jdbc-drivers/postgresql-9.2-1002.jdbc3.jar!/</url>
+      </library>
+    </libraries>
+  </data-source>
+</component>
