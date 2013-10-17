@@ -41,6 +41,8 @@ custom_plan.rb
 #binstubs
 /bin
 
+# IDE config files
+.idea/
 
 #And rvmrc files
 .rvmrc
