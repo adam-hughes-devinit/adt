@@ -50,9 +50,9 @@
         .row-fluid
           #project-form-flow-class.span3
             = f.simple_fields_for :flow_class do |flow_class_form| 
-              = flow_class_form.association :oda_like_1 
-              = flow_class_form.association :oda_like_2 
-              = flow_class_form.association :oda_like_master 
+              = flow_class_form.association :oda_like_1, label: "Flow Class: Round 1"
+              = flow_class_form.association :oda_like_2, label: "Flow Class: Round 2"
+              = flow_class_form.association :oda_like_master, label: "Flow Class: Master"
               %span.muted 
                 Will be autoarbitrated on Save if there is no Master and both flow_classes match
 
