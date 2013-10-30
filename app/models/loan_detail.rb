@@ -16,10 +16,6 @@ class LoanDetail < ActiveRecord::Base
   delegate :usd_2009, to: :project, prefix: true
 
   def get_grant_element!
-    puts '!!!!!!!!!!!! USD_2009'
-    puts self.project_usd_2009
-    puts '!!!!!!!!!!!!! MATURITY'
-    puts self.maturity
   	if self.maturity && self.project_usd_2009 && self.interest_rate
 	  	require 'open-uri'
   	

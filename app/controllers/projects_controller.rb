@@ -85,16 +85,15 @@ class ProjectsController < ApplicationController
   # GET /Projects/new.json
   def new
     @project = Project.new(owner: @new_owner)
-    if @project.transactions.build
-      @loan_detail = @project.loan_detail = LoanDetail.new
-    end
-
+    @project.transactions.build
     @project.geopoliticals.build
     @project.participating_organizations.build
     @project.contacts.build
     # @project.sources.build
     @project.resources.build
     @flow_class = @project.flow_class = FlowClass.new
+
+    @loan_detail = @project.loan_detail = LoanDetail.new
 
 
 
@@ -123,7 +122,8 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project }
+        #format.html { redirect_to @project }   # aba
+        format.html { render "loan_detail"}  # aba
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }
@@ -133,6 +133,23 @@ class ProjectsController < ApplicationController
 
   end
 
+  # Goes to page just for loan detail
+  # TODO:
+  # Remove loan detail from the first page
+  # Make sure everything else is saved first.
+  # Then grant element is calculated and loan detail is saved
+  # Then checks and updates flow class accordingly.
+  def loan_detail
+    respond_to do |format|
+      if @project.save
+        format.html { redirect_to @project }
+        format.json { render json: @project, status: :created, location: @project }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # PUT /Projects/1
   # PUT /Projects/1.json
