@@ -18,8 +18,10 @@
 # Ignore development search engine
 /solr/data/development
 /solr/data/test
+/solr/data
 /solr/pids/development
 /solr/pids/test
+/solr/pids
 
 # Ignore all logfiles and tempfiles.
 /log
