@@ -1,3 +1,4 @@
+# fixes a bug with will_paginate and active admin.
 if defined?(WillPaginate)
   module WillPaginate
     module ActiveRecord

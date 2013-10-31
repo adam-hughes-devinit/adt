@@ -5,7 +5,7 @@ gem 'rails', '3.2.13'
 gem 'capistrano'
 gem 'bcrypt-ruby'
 gem 'faker', '1.1.2'
-gem 'will_paginate'#, '3.0.pre2' # need this version for active admin
+gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'simple_form'
 gem 'paper_trail'
@@ -62,11 +62,10 @@ end
 # group :assets do
 # not available for dynamic compiling 
 # if they're in this group
-  #gem 'sass-rails',   '3.2.5'
+  #gem 'sass-rails',   '3.2.5'  # old version used, updated for active admin. Leaving this in case a bug arises.
   gem 'bootstrap-sass'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
-  #gem 'jquery-rails'
   gem "jquery-rails", "< 3.0.0" # this version needed for active admin to work (unless you upgrade to rails 4.0)
 
 # end
