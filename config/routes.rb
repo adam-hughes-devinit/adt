@@ -1,4 +1,7 @@
 Adt::Application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  #ActiveAdmin.routes(self)
+
   # codes
   #
   get '/organizations/merge', to: "organizations#merge", as: "organizations_prepare_merge"
@@ -81,6 +84,10 @@ Adt::Application.routes.draw do
 
   get '/signup', to: 'users#new'
 
+
+  # This is for active admin
+  ActiveAdmin.routes(self)
+  #get '/admin', to: 'dashboard#index'
   # this is for staff log in:
   get '/login', to: 'sessions#new', as: "staff_login" 
 

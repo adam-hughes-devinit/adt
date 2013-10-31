@@ -22,9 +22,9 @@
     <%= render 'layouts/header' %>
 
 
-
+    <p class="notice"><%= notice %></p>
     <div class="container main">
-    
+
     <% if flash.count > 0 %>
         <div class='alerts'>
             <% flash.each do |key, value| %>

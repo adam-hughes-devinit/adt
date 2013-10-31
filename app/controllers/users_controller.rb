@@ -50,7 +50,7 @@ before_filter :signed_in_and_same_owner, only: [:show]
   def create
   	@user = User.new(params[:user])
   	if @user.save
-      sign_in @user
+      sign_in_ @user
       redirect_back_or @user
   	else
   		render 'new'

@@ -27,7 +27,7 @@ module SessionsHelper
 		signed_in? && current_user.owner && current_user.owner_id == Organization.aiddata.id
 	end
 	
-  def sign_in(user)
+  def sign_in_(user)
     cookies.permanent[:remember_token] = user.remember_token
     self.current_user = user
   end
