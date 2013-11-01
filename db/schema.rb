@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131031141216) do
+ActiveRecord::Schema.define(:version => 20131101022631) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -115,6 +115,16 @@ ActiveRecord::Schema.define(:version => 20131031141216) do
   add_index "currencies", ["iso3"], :name => "index_currencies_on_iso3"
   add_index "currencies", ["name"], :name => "index_currencies_on_name"
 
+  create_table "deflators", :force => true do |t|
+    t.float    "value"
+    t.integer  "year"
+    t.integer  "country_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "deflators", ["country_id"], :name => "index_deflators_on_country_id"
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -138,6 +148,16 @@ ActiveRecord::Schema.define(:version => 20131031141216) do
   end
 
   add_index "document_types", ["name"], :name => "index_document_types_on_name"
+
+  create_table "exchange_rates", :force => true do |t|
+    t.float    "rate"
+    t.integer  "year"
+    t.integer  "currency_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "exchange_rates", ["currency_id"], :name => "index_exchange_rates_on_currency_id"
 
   create_table "exports", :force => true do |t|
     t.string   "email"

@@ -49,39 +49,21 @@ class Transaction < ActiveRecord::Base
       if self.project && self.project.year && self.project.donor
         donor_iso3 = self.project.donor.iso3
         yr = self.project.year
-          if self.value && self.currency 
-            require 'open-uri'
+          if self.value && self.currency
 
-            deflator_query = "#{self.value.to_s}#{self.currency.iso3}#{yr}#{donor_iso3}" # This is defined at oscar.itpir.wm.edu/deflate
-            deflator_url = "https://oscar.itpir.wm.edu/deflate/api.php?val=#{deflator_query}&json=true"
-            # p "Deflating #{deflator_url}"
-            deflator_string = open(deflator_url){|io| io.read}
-            
-            deflator_object = ActiveSupport::JSON.decode(deflator_string)
-           
-            begin  
-              
-              deflated_amount = deflator_object["deflated_amount"]
-              current_amount =  deflator_object["current_amount"]
-              exchange_rate_used = deflator_object["exchange_rate"]
-              deflator_used = deflator_object["deflator"]
-              #p "Deflated is #{deflated_amount.class}, Currency is #{current_amount.class}"
+            exchange = ExchangeRate.joins(:currency).where(year: yr, currencies: {iso3: self.currency.iso3 })
+            defl = Deflator.joins(:country).where(year: yr, countries: {iso3: donor_iso3 })
 
-              self.usd_defl= deflated_amount
-              self.usd_current= current_amount
-              self.deflator= deflator_used
-              self.exchange_rate = exchange_rate_used
-              self.deflated_at = Time.now
+            exchange_rate_used = exchange[0].rate
+            usdCurrent = (self.value/exchange_rate_used)
+            deflator_used = defl[0].value/100
+            deflated_amount = (usdCurrent/deflator_used)
 
-            rescue
-                
-                self.usd_defl=nil
-                self.usd_current=nil
-                self.deflator=nil
-                self.exchange_rate=nil
-                self.deflated_at=nil
-
-            end
+            self.usd_defl= deflated_amount
+            self.usd_current= usdCurrent
+            self.deflator= deflator_used
+            self.exchange_rate = exchange_rate_used
+            self.deflated_at = Time.now
 
           else
                 self.usd_defl=nil
