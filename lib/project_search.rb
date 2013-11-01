@@ -216,7 +216,7 @@ module ProjectSearch
           Rails.cache.fetch("projects/faceted") do
         # wipe it in ProjectSweeper!
         facets = (WORKFLOW_FACETS + FACETS)
-        all_projects = Project.search do
+        all_projects = Project.solr_search do
           facets.each do |f|
             facet f[:sym]
           end

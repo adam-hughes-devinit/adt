@@ -6,7 +6,7 @@ class ResourcesController < ApplicationController
 
   def index
 
-    search = Resource.search do 
+    search = Resource.solr_search do
       fulltext params[:search] if params[:search].present?
       with :resource_type, params[:resource_type] if params[:resource_type].present? && params[:resource_type] != [""]
       order_by params[:order] ? params[:order].to_sym : :title, params[:dir] ? params[:dir].to_sym : :asc

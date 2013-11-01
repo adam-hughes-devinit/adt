@@ -8,13 +8,15 @@ module Typeaheadable
 		raise NoMethodError, "Model must be searchable" unless active_record_model.respond_to?(:search)
 		
 		define_method "twitter_typeahead" do
-			search = active_record_model.search do
+      #search = active_record_model.search do
+			search = active_record_model.solr_search do
 				fulltext params[:search]
 				facets.each{ |k,v| with k,v  }
 				paginate page: 1, per_page: max
 			end
 
-			models = search.results
+      models = search.results
+			#models = solr_search.results
 
 			if models.length > 0
 				model_name = models.first.class.name

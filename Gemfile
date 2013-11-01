@@ -67,6 +67,6 @@ end
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
   gem "jquery-rails", "< 3.0.0" # this version needed for active admin to work (unless you upgrade to rails 4.0)
-
+  #gem "jquery-rails"
 # end
 

@@ -16,7 +16,7 @@ module ScopeToQueryParams
 					
 					# add non-disallowed values to required_values
 					if (dv = disallowed_values) && dv.length > 0
-				      whole_dataset = Project.search do
+				      whole_dataset = Project.solr_search do
 				        (ProjectSearch::WORKFLOW_FACETS + ProjectSearch::FACETS).each do |f|
 				          facet f[:sym]
 				        end
