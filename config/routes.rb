@@ -84,9 +84,12 @@ Adt::Application.routes.draw do
 
   get '/signup', to: 'users#new'
 
+  # This is for active admin
+  ActiveAdmin.routes(self)
+
   #get '/admin', to: 'dashboard#index'
   # this is for staff log in:
-  get '/staff/login', to: 'sessions#new', as: "staff_login"
+  get '/login', to: 'sessions#new', as: "staff_login"
 
   match '/signout', to: 'sessions#destroy', via: :delete
 
@@ -97,8 +100,7 @@ Adt::Application.routes.draw do
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
 
-  # This is for active admin
-  ActiveAdmin.routes(self)
+
 
   #404
   unless Rails.application.config.consider_all_requests_local
