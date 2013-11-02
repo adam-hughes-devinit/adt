@@ -8,5 +8,7 @@ class ExchangeRate < ActiveRecord::Base
   validates :from_currency_id, presence: true
   validates :to_currency_id, presence: true
 
+  validates :year, :uniqueness => {:scope => [:from_currency_id, :to_currency_id]}
+
 
 end

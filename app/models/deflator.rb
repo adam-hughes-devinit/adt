@@ -5,4 +5,7 @@ class Deflator < ActiveRecord::Base
   validates :value, presence: true
   validates :year, presence: true
   validates :country_id, presence: true
+
+  validates :year, :uniqueness => {:scope => :country_id }
+
 end
