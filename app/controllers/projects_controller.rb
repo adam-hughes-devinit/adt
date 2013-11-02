@@ -123,7 +123,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         #format.html { redirect_to @project }   # aba
-        format.html { render "loan_detail"}  # aba
+        format.html { render "loan_detail" }  # aba
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }
@@ -151,6 +151,8 @@ class ProjectsController < ApplicationController
     end
   end
 
+
+
   # PUT /Projects/1
   # PUT /Projects/1.json
   def update
@@ -163,9 +165,16 @@ class ProjectsController < ApplicationController
     #for versioning
     @project.save_state
 
+    # I think the proper way to handle this is to separate loan detail from project saving
+    # When creating a project, loan detail should not be created.  Creating a new project
+    # will redirect to the new loan detail controller. And updating a project
+    # will redirect to the update loan detail controller. Then both loan detail will
+    # will redirect to project completion.  I think this will require a decent amount of
+    # restructuring in the models and projects controller.
     respond_to do |format|
       if @project.update_attributes(params[:project])
-        format.html { redirect_to @project }
+        format.html { render "loan_detail"}
+        #format.html { redirect_to @project }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -173,7 +182,7 @@ class ProjectsController < ApplicationController
       end
     end
 
-    undo_link = view_context.link_to( 
+    undo_link = view_context.link_to(
                                      "Undo", revert_version_path(@project.versions.scoped.last
                                                                 ),
                                                                   #"Undo", "/versions/#{@object.versions.last.id}/revert",

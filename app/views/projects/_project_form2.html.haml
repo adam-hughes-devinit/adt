@@ -44,7 +44,7 @@
 :javascript
   $(document).keydown(function(e) {
     // SUBMIT FORM ON CTL-S
-      if ( 
+      if (
         (e.which == '115' || e.which == '83' || String.fromCharCode(event.which).toLowerCase() == 's' ) &&
         (e.ctrlKey || e.metaKey)
       ) {
@@ -52,4 +52,4 @@
           changed = false;
           $('.edit_project, .new_project').submit()
       }
-  }); 
+  });
