@@ -44,6 +44,7 @@ class Transaction < ActiveRecord::Base
     raw_date ? raw_date.iso8601 : nil
   end
 
+  def get_exchange_rate()
 
 	def deflate_and_round_value
       if self.project && self.project.year && self.project.donor
@@ -51,12 +52,14 @@ class Transaction < ActiveRecord::Base
         yr = self.project.year
           if self.value && self.currency
 
-            exchange = ExchangeRate.joins(:currency).where(year: yr, currencies: {iso3: self.currency.iso3 })
+            # This joins assumes the "from_currency" is US Dollars.
+            exchange = ExchangeRate.joins(:from_currency, :to_currency).where(year: yr, currencies: {iso3: 'USD'}, to_currencies_exchange_rates: {iso3: self.currency.iso3 })
             defl = Deflator.joins(:country).where(year: yr, countries: {iso3: donor_iso3 })
 
             exchange_rate_used = exchange[0].rate
             usdCurrent = (self.value/exchange_rate_used)
-            deflator_used = defl[0].value/100
+            puts defl[0]
+            deflator_used = (defl[0].value / 100)
             deflated_amount = (usdCurrent/deflator_used)
 
             self.usd_defl= deflated_amount

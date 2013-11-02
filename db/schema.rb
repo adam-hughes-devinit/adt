@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131101022631) do
+ActiveRecord::Schema.define(:version => 20131102173220) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -152,12 +152,14 @@ ActiveRecord::Schema.define(:version => 20131101022631) do
   create_table "exchange_rates", :force => true do |t|
     t.float    "rate"
     t.integer  "year"
-    t.integer  "currency_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "from_currency_id"
+    t.integer  "to_currency_id"
   end
 
-  add_index "exchange_rates", ["currency_id"], :name => "index_exchange_rates_on_currency_id"
+  add_index "exchange_rates", ["from_currency_id"], :name => "index_exchange_rates_on_from_currency_id"
+  add_index "exchange_rates", ["to_currency_id"], :name => "index_exchange_rates_on_to_currency_id"
 
   create_table "exports", :force => true do |t|
     t.string   "email"

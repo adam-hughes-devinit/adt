@@ -9,4 +9,5 @@ class Currency < ActiveRecord::Base
   
   has_many :transactions
   has_many :projects, through: :transactions
+
 end
