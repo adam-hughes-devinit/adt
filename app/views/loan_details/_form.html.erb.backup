@@ -1,0 +1,18 @@
+<%= simple_form_for @loan_detail, url: {action: "create"} do |f| %>
+
+
+  <div class="form-inputs">
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
+
+
+
+
+
+        = f.input :iteration, as: :hidden, hint: "Iteration: #{@project.iteration += 1}"
+        = f.input :owner_id, as: :hidden,  hint: "Owner: "+ (@project.owner.nil? ? 'None' : @project.owner.name)

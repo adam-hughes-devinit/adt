@@ -93,7 +93,8 @@ class ProjectsController < ApplicationController
     @project.resources.build
     @flow_class = @project.flow_class = FlowClass.new
 
-    @loan_detail = @project.loan_detail = LoanDetail.new
+    #@project.loan_detail = @loan_detail
+    #@loan_detail = @project.loan_detail = LoanDetail.new
 
 
 
@@ -123,7 +124,9 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         #format.html { redirect_to @project }   # aba
-        format.html { render "loan_detail" }  # aba
+        #redirect_to params[:redirect_to] || new_project_loan_detail_path
+        format.html { redirect_to new_project_loan_detail_url(@project.id) }
+        #format.html { render "loan_detail" }  # aba
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }

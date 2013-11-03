@@ -1,6 +1,5 @@
 #project-form-wrapper.project-form
   = simple_form_for(@project) do |f|
-
     = f.hidden_field :user_id, value: current_user.id
     = f.error_notification
     #project-form-content

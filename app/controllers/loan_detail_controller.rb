@@ -1,7 +1,8 @@
 class LoanDetailController < ApplicationController  
 
-	def new 
-	  @loanDetail = LoanDetail.new
+	def new
+    #LoanDetail.new
+	  @loanDetail = @project.LoanDetail = LoanDetail.new   #aba
 	end
 
 	

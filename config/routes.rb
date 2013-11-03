@@ -48,6 +48,7 @@ Adt::Application.routes.draw do
     resources :robocodes # RDM 4 12 2013
     resources :pinned_resources # RDM 6 4 2013
     resources :flow_classes
+    resources :loan_details
   end
 
   resources :datasets, id: /[0-9\.]+/
