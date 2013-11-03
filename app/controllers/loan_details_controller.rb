@@ -46,12 +46,12 @@ class LoanDetailsController < ApplicationController
   # has to do with a double nested "loan_detail" dictionary. I'm not sure where it comes from.
   def create
     @project = Project.find(params[:project_id])
-    @loan_detail = LoanDetail.new(params[:loan_detail])
+    @loan_detail = LoanDetail.create(params[:loan_detail])
     #@loan_detail = LoanDetail.new(project: @project)
     #@loan_detail.loan_type = loan_type
     #@loan_detail = @project.loan_detail.build(params[:loan_detail])
     #@project.loan_detail = @loan_detail
-    #@loan_detail.project = @project
+    @loan_detail.project_id = @project.id
 
     respond_to do |format|
       if @loan_detail.save

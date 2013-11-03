@@ -6,22 +6,17 @@
 
       #project-form-project.container-fluid
 
-      .row-fluid
-        #project-form-loan-detail
-          = f.simple_fields_for :loan_detail, @loan_detail do |loan_detail_form|
-            = loan_detail_form.association :loan_type,wrapper_html: {class: "span2"}
-            = loan_detail_form.input :interest_rate,wrapper_html: {class: "span2"}, hint: "In %"
-            = loan_detail_form.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %."
-            = loan_detail_form.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment."
-            = loan_detail_form.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment."
-            %span.muted.span2
-              The grant element will be
-              %a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
-                calculated automatically
-              if
-              %strong
-                maturity, interest rate, and transaction value
-              are present.
+      = f.association :loan_type,wrapper_html: {class: "span2"}
+      = f.input :interest_rate,wrapper_html: {class: "span2"}, hint: "In %"
+      = f.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %."
+      = f.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment."
+      = f.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment."
+      = f.hidden_field :project_id, value: @loan_detail.project_id
+
+      %span.muted.span2
+      The grant element will be
+      %a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
+      calculated automatically if %strong maturity, interest rate, and transaction value are present.
       / .row-fluid
 
       /   #project-form-sources.span5.project-accessory-fields

@@ -4,7 +4,7 @@ class LoanDetail < ActiveRecord::Base
   	:grace_period, :grant_element, :maturity,
     :interest_rate
 
-  before_save :get_grant_element!
+  #before_save :get_grant_element!
 
   has_paper_trail
   
