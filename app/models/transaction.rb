@@ -84,5 +84,4 @@ class Transaction < ActiveRecord::Base
           end
       end
    end
-   
 end

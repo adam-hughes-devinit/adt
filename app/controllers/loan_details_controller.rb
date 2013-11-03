@@ -2,9 +2,7 @@ class LoanDetailsController < ApplicationController
   # GET /loan_details
   # GET /loan_details.json
   def index
-    #@loan_detail = @project.LoanDetail = LoanDetail.new
     @loan_details = LoanDetail.all
-    #@project = Project.find(params[:project_id])
 
 
     respond_to do |format|
@@ -38,19 +36,16 @@ class LoanDetailsController < ApplicationController
   # GET /loan_details/1/edit
   def edit
     @loan_detail = LoanDetail.find(params[:id])
+
+
+
   end
 
   # POST /loan_details
   # POST /loan_details.json
-  # It seems that its being submitted, but none of the values are being saved.
-  # has to do with a double nested "loan_detail" dictionary. I'm not sure where it comes from.
   def create
     @project = Project.find(params[:project_id])
     @loan_detail = LoanDetail.create(params[:loan_detail])
-    #@loan_detail = LoanDetail.new(project: @project)
-    #@loan_detail.loan_type = loan_type
-    #@loan_detail = @project.loan_detail.build(params[:loan_detail])
-    #@project.loan_detail = @loan_detail
     @loan_detail.project_id = @project.id
 
     respond_to do |format|
@@ -68,10 +63,10 @@ class LoanDetailsController < ApplicationController
   # PUT /loan_details/1.json
   def update
     @loan_detail = LoanDetail.find(params[:id])
-
+    @project = Project.find(params[:project_id])
     respond_to do |format|
       if @loan_detail.update_attributes(params[:loan_detail])
-        format.html { redirect_to @loan_detail, notice: 'Loan detail was successfully updated.' }
+        format.html { redirect_to project_path(@project.id), notice: 'Loan detail was successfully created.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

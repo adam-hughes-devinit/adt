@@ -1,5 +1,5 @@
 #project-form-wrapper.project-form
-  = simple_form_for @loan_detail, url: {action: "create"} do |f|
+  = simple_form_for @loan_detail, url: {action: "update"} do |f|
 
     = f.error_notification
     #project-form-content
@@ -17,10 +17,10 @@
       <p>
       The grant element will be <a href='http://aiddata-loan-calculator.herokuapp.com'>
       calculated</a> automatically if the <strong> maturity, interest rate, and transaction</strong> values are present.</p>
-
       .row-fluid
         = f.button :submit, "Save", class: 'btn submit-button'
         = f.button :submit, "Save", style:"min-width:200px", class: 'submit-button btn-success btn-large on-nav-bar'
+
 :javascript
   $(document).keydown(function(e) {
     // SUBMIT FORM ON CTL-S
@@ -33,5 +33,3 @@
           $('.edit_project, .new_project').submit()
       }
   });
-
-

@@ -70,10 +70,6 @@ class ProjectsController < ApplicationController
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
     @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
-
-
-
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @project }
@@ -93,11 +89,6 @@ class ProjectsController < ApplicationController
     @project.resources.build
     @flow_class = @project.flow_class = FlowClass.new
 
-    #@project.loan_detail = @loan_detail
-    #@loan_detail = @project.loan_detail = LoanDetail.new
-
-
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @project }
@@ -111,7 +102,7 @@ class ProjectsController < ApplicationController
     @project.resources.build if @project.resources.empty?
 
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
-    @loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
+    #@loan_detail = LoanDetail.find_or_create_by_project_id(@project.id)
 
   end
 
@@ -123,29 +114,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        #format.html { redirect_to @project }   # aba
-        #redirect_to params[:redirect_to] || new_project_loan_detail_path
         format.html { redirect_to new_project_loan_detail_url(@project.id) }
-        #format.html { render "loan_detail" }  # aba
-        format.json { render json: @project, status: :created, location: @project }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
-    end
-
-  end
-
-  # Goes to page just for loan detail
-  # TODO:
-  # Remove loan detail from the first page
-  # Make sure everything else is saved first.
-  # Then grant element is calculated and loan detail is saved
-  # Then checks and updates flow class accordingly.
-  def loan_detail
-    respond_to do |format|
-      if @project.save
-        format.html { redirect_to @project }
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }
@@ -153,7 +122,6 @@ class ProjectsController < ApplicationController
       end
     end
   end
-
 
 
   # PUT /Projects/1
@@ -164,20 +132,15 @@ class ProjectsController < ApplicationController
     #keep track of who changed this project
     Rails.cache.write("last_change/#{params[:id]}", user_id.to_i)
     @project = Project.unscoped.find(params[:id])
+    @loan_detail = LoanDetail.where(:project_id => @project.id)
 
     #for versioning
     @project.save_state
 
-    # I think the proper way to handle this is to separate loan detail from project saving
-    # When creating a project, loan detail should not be created.  Creating a new project
-    # will redirect to the new loan detail controller. And updating a project
-    # will redirect to the update loan detail controller. Then both loan detail will
-    # will redirect to project completion.  I think this will require a decent amount of
-    # restructuring in the models and projects controller.
+    # Redirects to loan_detail controller
     respond_to do |format|
       if @project.update_attributes(params[:project])
-        format.html { render "loan_detail"}
-        #format.html { redirect_to @project }
+        format.html { redirect_to edit_project_loan_detail_url(@project.id, @loan_detail[0].id) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

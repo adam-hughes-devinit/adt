@@ -11,14 +11,11 @@ class LoanDetail < ActiveRecord::Base
   belongs_to :project
   belongs_to :loan_type
 
-  #accepts_nested_attributes_for :loan_type
-
   CALCULATOR_URL = 'http://aiddata-loan-calculator.herokuapp.com/calculate'
   
   delegate :usd_2009, to: :project, prefix: true
 
   def get_grant_element!
-    puts "!!!!!!!!!!!!!!"
 
   	if self.maturity && self.project_usd_2009 && self.interest_rate
 	  	require 'open-uri'
