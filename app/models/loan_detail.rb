@@ -4,7 +4,7 @@ class LoanDetail < ActiveRecord::Base
   	:grace_period, :grant_element, :maturity,
     :interest_rate
 
-  #before_save :get_grant_element!
+  before_save :get_grant_element!
 
   has_paper_trail
   
@@ -18,6 +18,8 @@ class LoanDetail < ActiveRecord::Base
   delegate :usd_2009, to: :project, prefix: true
 
   def get_grant_element!
+    puts "!!!!!!!!!!!!!!"
+
   	if self.maturity && self.project_usd_2009 && self.interest_rate
 	  	require 'open-uri'
   	

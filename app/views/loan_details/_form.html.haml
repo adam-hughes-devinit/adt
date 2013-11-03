@@ -11,8 +11,7 @@
       = f.input :grant_element,wrapper_html: {class: "span2"}, hint: "In %."
       = f.input :grace_period,wrapper_html: {class: "span2"}, hint: "Years until first payment."
       = f.input :maturity,wrapper_html: {class: "span2"}, hint: "Years until final payment."
-      = f.hidden_field :project_id, value: @loan_detail.project_id
-
+      = f.hidden_field :project_id, :value=>params[:project_id]
       %span.muted.span2
       The grant element will be
       %a{target: '_blank', href: 'http://aiddata-loan-calculator.herokuapp.com'}
