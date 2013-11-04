@@ -114,7 +114,6 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        # Redirects to loan_detail controller
         format.html { redirect_to new_project_loan_detail_url(@project.id) }
         format.json { render json: @project, status: :created, location: @project }
       else
