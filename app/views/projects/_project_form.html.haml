@@ -27,7 +27,7 @@
               = f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"}           
             .row-fluid
 
-              = f.association :donor, wrapper_html: {class: "span3"}, selected: Country.find_by_name('China').id, label: 'Donor country' 
+              = f.association :donor, wrapper_html: {class: "span3"}, label: 'Donor country'
               = f.association :verified, wrapper_html: {class: "span3"}, label: "Stage 2 Status".html_safe
               = f.association :status, label: "Project Status", wrapper_html: {class: "span3"} 
               = f.association :intent, wrapper_html: {class: "span3"} 
