@@ -74,14 +74,14 @@ class Transaction < ActiveRecord::Base
             # This joins assumes the "from_currency" is US Dollars.
             begin
               exchange_rate_used = get_exchange_rate('USD', self.currency.iso3, yr)[0].rate
-            rescue
+            rescue  # this error messages are currently not being displayed anywhere.
               exchange_rate_used = nil
               self.rate_error = "Exchange rate for ? ? could not be found", yr, self.currency.iso3
             end
 
             begin
               defl = get_gdp_deflator(donor_iso3, yr)[0].value
-            rescue
+            rescue   # this error messages are currently not being displayed anywhere.
               defl = nil
               self.defl_error = "GDP deflator for ? ? could not be found", yr, donor_iso3
             end
