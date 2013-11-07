@@ -140,6 +140,13 @@ class ProjectsController < ApplicationController
     # Redirects to loan_detail controller
     respond_to do |format|
       if @project.update_attributes(params[:project])
+
+        # recalculate transactions when projects are saved. Otherwise usd_2009 will be wrong.
+        @transactions = Transaction.find_all_by_project_id(@project.id)
+        @transactions.each do |transaction|
+          transaction.save
+        end
+
         format.html { redirect_to edit_project_loan_detail_url(@project.id, @loan_detail[0].id) }
         format.json { head :no_content }
       else
