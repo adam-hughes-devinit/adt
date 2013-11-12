@@ -103,6 +103,8 @@ LEFT OUTER JOIN
 	on p.id = t.project_id
 where 
 	#{@validated_filters.join(' and ').gsub(/(\w)'(\w)/, '\1\'\'\2')}
+  AND oda_likes.export = 't'
+  AND verifieds.export = 't'
 group by 
 	#{@validated_gets.map{|f| Rails.env.test? ? f[:group] : f[:internal]  }.join(', ')} 
 order by 

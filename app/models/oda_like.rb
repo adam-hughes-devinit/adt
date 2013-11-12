@@ -1,5 +1,5 @@
 class OdaLike < ActiveRecord::Base
-  attr_accessible :id, :name, :code
+  attr_accessible :id, :name, :code, :export, :export_id
   has_paper_trail
   default_scope order: "name"	
   
