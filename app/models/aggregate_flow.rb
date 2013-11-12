@@ -8,8 +8,11 @@ class AggregateFlow
 
 		@validated_gets = []
 		VALID_FIELDS.each do |field|
+      if field[:external] == 'year'
+        field[:internal] = 'p.year' # Fixes bug in query where year is not explicit.
+      end
 			if get.include?(field[:external])
-				@validated_gets << field
+        @validated_gets << field
 			end
 		end
 
@@ -75,8 +78,10 @@ from
 	from projects 
 	#{@duplication_handler[:join]}
 	#{@duplication_handler[:group]}
-	) as p 
-LEFT OUTER JOIN 
+	) as p
+JOIN years on p.year = years.year
+
+LEFT OUTER JOIN
 	(select 
 		id, project_id, oda_like_1_id, oda_like_2_id, oda_like_master_id, 
 		(case 
@@ -92,7 +97,7 @@ LEFT OUTER JOIN flow_types on p.flow_type_id = flow_types.id
 LEFT OUTER JOIN verifieds on p.verified_id = verifieds.id
 LEFT OUTER JOIN statuses on p.status_id = statuses.id
 LEFT OUTER JOIN intents on p.intent_id = intents.id		 				
-INNER JOIN countries donors on p.donor_id = donors.id 
+INNER JOIN countries donors on p.donor_id = donors.id
 LEFT OUTER JOIN 
 	(select 
 		sum(usd_current) as sum_usd_current, 
@@ -105,7 +110,8 @@ where
 	#{@validated_filters.join(' and ').gsub(/(\w)'(\w)/, '\1\'\'\2')}
   AND oda_likes.export = 't'
   AND verifieds.export = 't'
-group by 
+  AND years.export = 't'
+group by
 	#{@validated_gets.map{|f| Rails.env.test? ? f[:group] : f[:internal]  }.join(', ')} 
 order by 
 	#{@sorter}
