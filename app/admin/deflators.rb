@@ -1,4 +1,6 @@
 ActiveAdmin.register Deflator do
+  menu :parent => "Financial"
+
   index do
     column :id
     column :country

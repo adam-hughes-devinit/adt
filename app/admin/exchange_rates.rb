@@ -1,4 +1,6 @@
 ActiveAdmin.register ExchangeRate do
+  menu :parent => "Financial"
+
   index do
     column :id
     column :from_currency
