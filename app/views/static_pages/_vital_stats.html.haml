@@ -22,7 +22,8 @@
     %strong><
       %a{href: "/projects/official"}><
         official finance projects
-    , 2000-2011:
+    %span<>
+      , <%= official.min_year %>-<%= official.max_year %>:
     %span.official#count.text-success
       <%= official.count %>
   %li
@@ -42,7 +43,7 @@
       %a{href: "/projects?active_string=Active&oda_like_name=ODA-like&status_name[]=Implementation&status_name[]=Pipeline%3A+Commitment&status_name[]=Pipeline%3A+Vague"}<>
         ODA-Like commitments
     %span<>
-      , 2000-2011:
+      , <%= official.min_year %>-<%= official.max_year %>:
     %span.oda_like#usd_2009.text-success
       $<%= nice_money(oda_like.usd_2009) %>
     -# %small
@@ -54,7 +55,7 @@
       %a{href: "/projects?active_string=Active&status_name[]=Completion&status_name[]=Implementation"}<>
         implemented or completed
     %span><
-      , 2000-2011:
+      , <%= official.min_year %>-<%= official.max_year %>:
     %span.implemented_or_completed#percent.text-success
       <%= implemented_or_completed.percent %>%
   %li
@@ -91,7 +92,6 @@
           # "Pipeline: Pledge"
           "Pipeline: Vague"
         ].join("*")
-        year: [2000..2011].join("*")
 
     oda_like:
       params:
@@ -110,7 +110,7 @@
           # "Pipeline: Pledge"
           "Pipeline: Vague"
         ].join("*")
-        year: [2000..2011].join("*")
+
 
     implemented_or_completed:
       params:
@@ -128,7 +128,7 @@
           "Completion"
           "Implementation"
         ].join("*")
-        year: [2000..2011].join("*")
+
 
   returned_queries = 0
 
@@ -139,6 +139,9 @@
     data = (d for d in data when d["donor"] is "CHN")[0]
     this_set.count = data["count"]
     this_set.usd_2009 = data["usd_2009"]
+    props = ( prop for prop in data)
+    this_set.min_year = data["min_year"]
+    this_set.max_year = data["max_year"]
 
     returned_queries += 1
     fill_template_if_finished(vitals, returned_queries)
@@ -149,6 +152,8 @@
     data = (d for d in data when d["donor"] is "CHN")[0]
     this_set.count = data["count"]
     this_set.usd_2009 = data["usd_2009"]
+    this_set.min_year = data["min_year"]
+    this_set.max_year = data["max_year"]
 
     returned_queries += 1
     fill_template_if_finished(vitals, returned_queries)
@@ -159,6 +164,8 @@
     data = (d for d in data when d["donor"] is "CHN")[0]
     this_set.count = data["count"]
     this_set.usd_2009 = data["usd_2009"]
+    this_set.min_year = data["min_year"]
+    this_set.max_year = data["max_year"]
 
     returned_queries += 1
     fill_template_if_finished(vitals, returned_queries)

@@ -13,8 +13,9 @@
           }</b>. Click the filters below to change your settings.".html_safe 
     end
     if request.path == '/projects/official'
-      flash[:success] = "You are viewing official non-Investment, non-Military "\
-      "projects from 2000-2011."
+      flash[:success] =    "You are viewing official non-Investment, non-Military "\
+      "projects from %s-%s." % [Year.where(export: 't').minimum("year"), Year.where(export: 't').maximum("year")]
+
     end
     if (incomplete_scopes = @scope_names.select {|s| s != "Official Finance" }).length > 0
       flash.now[:notice] = "Data for #{incomplete_scopes.map {|s| "<strong>#{s}</strong>"}.to_sentence } are not comprehensive, please see the #{link_to "methodology", content_by_name_path("methodology")} for details."

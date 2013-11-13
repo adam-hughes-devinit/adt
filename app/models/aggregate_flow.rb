@@ -58,8 +58,9 @@ class AggregateFlow
 		end
 	end
 
+   # determines field used in coffescript for vital_stats.
 	def column_names
-		@validated_gets.map{|f| f[:external]} + ["usd_2009", "usd_current", "count"] 
+		@validated_gets.map{|f| f[:external]} + ["usd_2009", "usd_current", "count", "min_year", "max_year"]
 	end
 
 	def to_sql
@@ -70,7 +71,7 @@ class AggregateFlow
 		sql = %{
 select 
 	#{@duplication_handler[:amounts]}, 
-	count(*) as count,
+	count(*) as count, max(years.year) as max_year, min(years.year) as min_year,
 	#{@validated_gets.map{|f| f[:internal] + ' as ' + f[:external]}.join(', ')}
 from 
 	(select projects.*, 

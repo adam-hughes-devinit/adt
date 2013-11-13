@@ -28,9 +28,10 @@ Adt::Application.routes.draw do
   end
 
   get '/projects/official', to: "projects#index",
+  # determines default query for "official" project search page.
     defaults: {
                 year: ['2000', '2001', '2002', '2003', '2004', '2005', '2006',
-                  '2007', '2008','2009','2010','2011'],
+                  '2007', '2008','2009','2010','2011','2012'],
                 oda_like_name: ['ODA-like', 'OOF-like', 'Vague (Official Finance)'],
                 scope_names: ['Official Finance'],
                 status_name: ['Completion', 'Implementation', 'Pipeline: Commitment']
