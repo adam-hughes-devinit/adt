@@ -71,9 +71,9 @@ class Transaction < ActiveRecord::Base
         yr = self.project.year
           if self.value && self.currency
 
-            # This joins assumes the "from_currency" is US Dollars.
+            # This joins assumes the "to_currency" is US Dollars.
             begin
-              exchange_rate_used = get_exchange_rate('USD', self.currency.iso3, yr)[0].rate
+              exchange_rate_used = get_exchange_rate(self.currency.iso3, 'USD', yr)[0].rate
             rescue  # this error messages are currently not being displayed anywhere.
               exchange_rate_used = nil
               self.rate_error = "Exchange rate for ? ? could not be found", yr, self.currency.iso3
