@@ -12,6 +12,9 @@
 # and the Exports
 /public/export_downloads/*
 
+#Ignore file storage
+public/system/
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

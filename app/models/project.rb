@@ -32,6 +32,8 @@ class Project < ActiveRecord::Base
     :donor_id, :owner_id, :intent_id, :crs_sector_id,
     :last_state, :published
 
+  has_many :media_items
+
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
   before_save :log_attribute_changes

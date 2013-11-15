@@ -45,6 +45,7 @@ Adt::Application.routes.draw do
 
   resources :projects do
     resources :files # RDM 3_26_2013
+    resources :media_items # ABA
     resources :robocodes # RDM 4 12 2013
     resources :pinned_resources # RDM 6 4 2013
     resources :flow_classes
