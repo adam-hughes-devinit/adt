@@ -38,10 +38,13 @@
       }
 
   </script>
+  <% if current_user_is_aiddata %>
 
-  <% @project.get_media_items.each do |media_item| %>
-      <%= image_tag media_item.media.url %> </br>
+    <% @project.get_media_items.each do |media_item| %>
+      <%= link_to media_item.media_file_name, media_item.media.url %>
       <a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/media_items/<%=media_item.id %>'>DELETE!</a>
+      </br>
+    <% end %>
   <% end %>
 
   <% if current_user %>

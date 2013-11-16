@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :actions, class_name: "Version", foreign_key: :whodunnit
   # following architecture
   has_many :flags, as: :owner
+  has_many :media_items
 
   self.per_page = 100
 
