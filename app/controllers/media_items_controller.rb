@@ -4,10 +4,10 @@ class MediaItemsController < ApplicationController
   def index
     @media_items = MediaItem.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @media_items }
-    end
+  #  respond_to do |format|
+  #    format.html # index.html.erb
+  #    format.json { render json: @media_items }
+  #  end
   end
 
   # GET /media_items/1
@@ -83,9 +83,10 @@ class MediaItemsController < ApplicationController
   def destroy
     @media_item = MediaItem.find(params[:id])
     @media_item.destroy
+    @project = Project.find(params[:project_id])
 
     respond_to do |format|
-      format.html { redirect_to media_items_url }
+      format.html { redirect_to @project, notice: 'Media item was deleted' }
       format.json { head :no_content }
     end
   end

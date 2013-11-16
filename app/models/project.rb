@@ -235,7 +235,7 @@ class Project < ActiveRecord::Base
   def get_media_items
     #media_items = MediaItem.find(project_id: id).where(publish: true)
 
-    media_items = MediaItem.find_all_by_project_id(id)
+    media_items = MediaItem.find_all_by_project_id(id)  # Need to condition this on publish
     return media_items
 
 

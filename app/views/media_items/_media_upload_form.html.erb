@@ -1,8 +1,5 @@
 <div class='well well-small'>
   <h3>Files:</h3>
-  <ul id='media_items' class='unstyled'>
-    <li>Loading...</li>
-  </ul>
 
   <script>
       var url = window.location + "/media_items"
@@ -44,6 +41,7 @@
 
   <% @project.get_media_items.each do |media_item| %>
       <%= image_tag media_item.media.url %> </br>
+      <a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/media_items/<%=media_item.id %>'>DELETE!</a>
   <% end %>
 
   <% if current_user %>
