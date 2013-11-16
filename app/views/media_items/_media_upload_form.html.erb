@@ -1,6 +1,7 @@
 <div class='well well-small'>
   <h3>Files:</h3>
 
+  <!-- Old code, its not needed anymore, but will keep until branch feature is complete --Aba
   <script>
       var url = window.location + "/media_items"
       $.get(url, print_data)
@@ -38,6 +39,7 @@
       }
 
   </script>
+  -->
   <% if current_user_is_aiddata %>
 
     <% @project.get_media_items.each do |media_item| %>
