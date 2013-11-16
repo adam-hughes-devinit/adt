@@ -48,6 +48,8 @@ class MediaItemsController < ApplicationController
     @media_item.project_id = @project.id
     @media_item.media = params[:media]
     @media_item.publish = 'f'
+    @media_item.downloadable ='f'
+    @media_item.url = params[:url]
 
 
     respond_to do |format|

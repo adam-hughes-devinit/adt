@@ -1,5 +1,4 @@
 <div class='well well-small'>
-  <h3>Files:</h3>
 
   <!-- Old code, its not needed anymore, but will keep until branch feature is complete --Aba
   <script>
@@ -40,15 +39,18 @@
 
   </script>
   -->
+  <h3>Files:</h3>
 
   <% if current_user_is_aiddata %>
     <% @project.get_media_items.each do |media_item| %>
+      <p>
       <%= link_to media_item.media_file_name, media_item.media.url %>
       <a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/media_items/<%=media_item.id %>'>DELETE!</a>
-      </br>
+      </p>
     <% end %>
   <% end %>
 
+  <h3>Upload:</h3>
   <% if current_user %>
       <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
          <%= file_field_tag "media" %>
@@ -60,6 +62,13 @@
             </label>
           </div>
       <% end %>
+
+      <h3>Video:</h3>
+      <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
+          <%= text_field_tag "url" %>
+          <%= submit_tag 'Share Video', class: "btn btn-info" %>
+      <% end %>
+
   <% else %>
       <p><i> Please
         <%= link_to "sign in", signin_path %>
