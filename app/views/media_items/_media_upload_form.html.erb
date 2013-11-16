@@ -42,6 +42,10 @@
 
   </script>
 
+  <% @project.get_media.each do |media| %>
+      <%= link_to media.media_file_name, media.media_file_name %> </br>
+  <% end %>
+
   <% if current_user %>
       <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
          <%= file_field_tag "media" %>
