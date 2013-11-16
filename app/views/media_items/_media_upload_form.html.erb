@@ -42,8 +42,8 @@
 
   </script>
 
-  <% @project.get_media.each do |media| %>
-      <%= link_to media.media_file_name, media.media_file_name %> </br>
+  <% @project.get_media_items.each do |media_item| %>
+      <%= image_tag media_item.media.url %> </br>
   <% end %>
 
   <% if current_user %>

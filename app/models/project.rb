@@ -232,7 +232,7 @@ class Project < ActiveRecord::Base
     flow_type.present? ? flow_type.iati_code : nil
   end
   
-  def get_media
+  def get_media_items
     #media_items = MediaItem.find(project_id: id).where(publish: true)
 
     media_items = MediaItem.find_all_by_project_id(id)
