@@ -63,8 +63,7 @@
 
   <div class="flexslider">
     <ul class="slides">
-
-      <% @project.get_publishable_media_items.each do |media_item| %>
+      <% if @project.get_publishable_media_items.each do |media_item| %>
 
           <li>
             <div class="frame">
@@ -76,6 +75,9 @@
             </div>
           </li>
 
+
+      <% end.empty? %>
+         <%= image_tag('adt.png')%>
 
       <% end %>
     </ul>
