@@ -60,6 +60,7 @@
   </script>
   -->
   <!-- Place somewhere in the <body> of your page -->
+
   <div class="flexslider">
     <ul class="slides">
 
@@ -67,7 +68,11 @@
 
           <li>
             <div class="frame">
-                    <%= image_tag media_item.media.url %>
+              <% if media_item.media_content_type == 'youtube' %>
+                  <%= raw(media_item.youtube_embed(media_item.url)) %>
+              <% else %>
+                  <%= image_tag media_item.media.url %>
+              <% end %>
             </div>
           </li>
 
@@ -116,6 +121,7 @@
       <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
           <%= text_field_tag "url" %>
           <%= hidden_field_tag( "user_id", current_user[:id]) %>
+          <%= hidden_field_tag( "video", "youtube") %>
           <%= submit_tag 'Share Video', class: "btn btn-info" %>
       <% end %>
 

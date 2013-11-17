@@ -51,6 +51,7 @@ class MediaItemsController < ApplicationController
     @media_item.downloadable ='f'
     @media_item.url = params[:url]
     @media_item.user_id  = params[:user_id]
+    @media_item.media_content_type = params[:video]
 
 
 
