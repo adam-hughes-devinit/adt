@@ -6,7 +6,6 @@ ActiveAdmin.register MediaItem do
     column :media_content_type
     column :media_file_size
     column :url
-    column :embed_code
     column :downloadable
     column :publish
     column :created_at
