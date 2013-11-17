@@ -3,6 +3,8 @@
       .flexslider {
           width: 540px;
           height: 350px;
+          border: 0 !important;
+          margin-bottom: 3em !important;
       }
       .flexslider .frame {
           text-align: center;
@@ -82,14 +84,6 @@
     </ul>
   </div>
 
-
-  <h3>Files:</h3>
-  <% @project.get_downloadable_media_items.each do |media_item| %>
-      <p>
-        <%= link_to media_item.media_file_name, media_item.media.url %>
-      </p>
-  <% end %>
-
  <!-- this code allows aiddata users to see and delete all media files that have been uploaded for the project
   <% if current_user_is_aiddata %>
     <% @project.get_all_media_items.each do |media_item| %>
@@ -104,17 +98,44 @@
    -->
 
 
-  <div class= "row-fluid">
-  <div class= "span4"><%= link_to  "<h3>Upload a File</h3>".html_safe, '#upload_file', { 'data-toggle' => 'modal', 'data-target' => "#upload_file"}%></div>
-  <div class= "span4"><%= link_to  "<h3>Share a Video</h3>".html_safe, '#share_video', { 'data-toggle' => 'modal', 'data-target' => "#share_video"}%></div>
+  <div class="row-fluid" >
+    <div class= "span4" style="text-align:center">
+      <%= link_to  "<h3>Upload File</h3>".html_safe, '#upload_file', { 'data-toggle' => 'modal', 'data-target' => "#upload_file"}%></div>
+    <div class= "span4" style="text-align:center">
+      <%= link_to  "<h3>Share Video</h3>".html_safe, '#share_video', { 'data-toggle' => 'modal', 'data-target' => "#share_video"}%></div>
+    <div class= "span4" style="text-align:center">
+      <%= link_to  "<h3>Downloads</h3>".html_safe, '#download_file', { 'data-toggle' => 'modal', 'data-target' => "#download_file"}%></div>
   </div>
 
-  <div id="upload_file" class="modal hide fade in" style="display: none;">
+  <div id="download_file" class="modal hide fade in" style="text-align:center;">
+
+  <% downloadable_media = @project.get_downloadable_media_items %>
+
+  <% if !downloadable_media.empty? %>
+      <h3>Download Files:</h3>
+  <% else %>
+      <p>
+      <h4 style="text-align:center">
+      There are currently no files to download.</h4>
+      </p>
+  <% end %>
+
+  <% downloadable_media.each do |media_item| %>
+      <p>
+        <%= link_to media_item.media_file_name, media_item.media.url %>
+      </p>
+  <% end %>
+  </div>
+
+
+
+  <div id="upload_file" class="modal hide fade in" style="text-align:center;">
+    <h3>Upload a File:</h3>
       <% if current_user %>
          <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
          <%= file_field_tag "media" %>
          <%= hidden_field_tag( "user_id", current_user[:id]) %>
-         <%= submit_tag 'Add file', class: "btn btn-info" %>
+         <%= submit_tag 'Upload', class: "btn btn-info" %>
          <div class='row-fluid'>
             <input style='display:inline;' type='checkbox' required="true" id='terms_and_conditions'/>
             <label style='display:inline;'>
@@ -124,12 +145,13 @@
       <% end %>
   </div>
 
-  <div id="share_video" class="modal hide fade in" style="display: none;">
+  <div id="share_video" class="modal hide fade in" style="text-align:center;">
+      <h3>Share a Video:</h3>
       <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
           <%= text_field_tag "url" %>
           <%= hidden_field_tag( "user_id", current_user[:id]) %>
           <%= hidden_field_tag( "video", "youtube") %>
-          <%= submit_tag 'Share Video', class: "btn btn-info" %>
+          <%= submit_tag 'Share', class: "btn btn-info" %>
       <% end %>
   </div>
 
@@ -143,12 +165,11 @@
 
 <script>
     // Can also be used with $(document).ready()
+    // Javascript for file viewer
     $(window).load(function() {
         $('.flexslider').flexslider({
             animation: "slide"
 
         });
     });
-
-
 </script>
