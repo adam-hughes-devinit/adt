@@ -232,13 +232,19 @@ class Project < ActiveRecord::Base
     flow_type.present? ? flow_type.iati_code : nil
   end
   
-  def get_media_items
-    #media_items = MediaItem.find(project_id: id).where(publish: true)
-
-    media_items = MediaItem.find_all_by_project_id(id)  # Need to condition this on publish
+  def get_all_media_items
+    media_items = MediaItem.where(project_id: id)
     return media_items
+  end
 
+  def get_downloadable_media_items
+    media_items = MediaItem.where(downloadable: true, project_id: id)
+    return media_items
+  end
 
+  def get_publishable_media_items
+    media_items = MediaItem.where(publish: true, project_id: id)
+    return media_items
   end
 
 

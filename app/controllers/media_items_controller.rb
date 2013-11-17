@@ -50,6 +50,10 @@ class MediaItemsController < ApplicationController
     @media_item.publish = 'f'
     @media_item.downloadable ='f'
     @media_item.url = params[:url]
+    user_id = params[:user_id]
+    @media_item.user = User.find(user_id)
+
+
 
 
     respond_to do |format|
