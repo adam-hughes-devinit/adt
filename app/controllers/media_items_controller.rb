@@ -58,11 +58,11 @@ class MediaItemsController < ApplicationController
 
     respond_to do |format|
       if @media_item.save
-        format.html { redirect_to @project, notice: 'Media item was successfully created.' }
+        format.html { redirect_to @project, notice: 'Media was successfully uploaded. Thank you!' }
         format.json { render json: @media_item, status: :created, location: @media_item }
       else
         #format.html { render action: "new" }
-        format.html { redirect_to @project, notice: 'Error: Media item was not saved!' }
+        format.html { redirect_to @project, notice: 'Error: Media was not saved!' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
