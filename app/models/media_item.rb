@@ -1,8 +1,12 @@
 class MediaItem < ActiveRecord::Base
+
   belongs_to :project
   belongs_to :user
   attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :embed_code, :media_type,
   :media_file_name, :media_content_type, :media_file_size, :media_updated_at
+
+  validates_presence_of :url, :unless => :media?
+  validates_presence_of :media, :unless => :url?
 
   has_attached_file :media, :styles => { :large => "540x500>", :medium => "300x300>", :thumb => "100x100>" }
 
@@ -17,5 +21,6 @@ class MediaItem < ActiveRecord::Base
 
     %Q{<iframe title="YouTube video player" width="540" height="329" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen></iframe>}
   end
+
 
 end
