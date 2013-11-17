@@ -36,9 +36,23 @@
           <% end %>
 
       }
-
+  <div style="padding-top:100px;">
+    <iframe id="player_1" src="http://player.vimeo.com/video/39683393?api=1&player_id=player_1" width="540" height="304" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+  </div>
   </script>
   -->
+  <!-- Place somewhere in the <body> of your page -->
+  <div class="flexslider">
+    <ul class="slides">
+      <% @project.get_publishable_media_items.each do |media_item| %>
+          <li>
+            <%= image_tag media_item.media.url %>
+          </li>
+      <% end %>
+    </ul>
+  </div>
+
+
   <h3>Files:</h3>
   <% @project.get_downloadable_media_items.each do |media_item| %>
       <p>
@@ -58,6 +72,8 @@
     <% end %>
   <% end %>
    -->
+
+
   <h3>Upload:</h3>
   <% if current_user %>
       <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
@@ -86,3 +102,12 @@
       </p>
   <% end %>
 </div>
+
+<script>
+    // Can also be used with $(document).ready()
+    $(window).load(function() {
+        $('.flexslider').flexslider({
+            animation: "slide"
+        });
+    });
+</script>
