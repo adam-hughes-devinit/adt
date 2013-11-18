@@ -8,6 +8,7 @@ class MediaItem < ActiveRecord::Base
   validates_presence_of :url, :unless => :media?
   validates_presence_of :media, :unless => :url?
 
+   # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
   def youtube_embed(youtube_url)

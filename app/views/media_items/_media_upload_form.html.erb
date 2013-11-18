@@ -30,6 +30,7 @@
 
   </style>
 
+  <!-- Dynamically adds images and videos to file viewer -->
   <div class="flexslider">
     <ul class="slides">
       <% if @project.get_publishable_media_items.each do |media_item| %>
@@ -43,13 +44,14 @@
               <% end %>
             </div>
           </li>
-
+      <!-- Default image, if no files/videos are published. -->
       <% end.empty? %>
          <%= image_tag('adt.png')%>
       <% end %>
     </ul>
   </div>
 
+  <!-- Links for popup boxes -->
   <div class="row-fluid" >
     <div class= "span4" style="text-align:center">
       <%= link_to  "<h3>Upload File</h3>".html_safe, '#upload_file', { 'data-toggle' => 'modal', 'data-target' => "#upload_file"}%></div>
@@ -59,6 +61,7 @@
       <%= link_to  "<h3>Downloads</h3>".html_safe, '#download_file', { 'data-toggle' => 'modal', 'data-target' => "#download_file"}%></div>
   </div>
 
+  <!-- download file popup box -->
   <div id="download_file" class="modal hide fade in" style="text-align:center;">
       <% downloadable_media = @project.get_downloadable_media_items %>
 
@@ -78,6 +81,7 @@
       <% end %>
   </div>
 
+  <!-- upload file popup box -->
   <div id="upload_file" class="modal hide fade in" style="text-align:center;">
     <h3>Upload a File</h3>
       <% if current_user %>
@@ -100,6 +104,7 @@
       <% end %>
   </div>
 
+  <!-- share video popup box -->
   <div id="share_video" class="modal hide fade in" style="text-align:center;">
       <h3>Share a Video</h3>
       <% if current_user %>
