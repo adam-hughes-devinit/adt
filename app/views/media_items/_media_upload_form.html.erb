@@ -30,49 +30,6 @@
 
   </style>
 
-  <!-- Old code, its not needed anymore, but will keep until branch feature is complete --Aba
-  <script>
-      var url = window.location + "/media_items"
-      $.get(url, print_data)
-
-      function print_data(data) {
-          var target = $('#media_items')
-          if(data["contents"] && data.contents.length > 0) {
-              menu = data.contents.map(function(d) {
-                  url = ("/projects/<%= @project.id %>/media_items/" + d.key)
-
-                  return "<li data-id=" + d.key + " class='document'>" +
-                          '<img src="'+d.icon+'" />'  +
-                          "&ensp;<a href='" + url + "'>" +
-                          d.name +
-                          "</a>" +
-                          " </li>"
-              }).join("")
-          }
-          else {
-              menu = "<li>(No files yet, please add one below!)</li>"
-          }
-          target.html(menu)
-          <% if current_user_is_aiddata %>
-          $('.document').each(function(i) {
-              render_delete_link = function(el, id) {
-                  $(el).text("").removeClass("btn btn-warning btn-small")
-                  $(el).append("<a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/media_items/"+ id + "'>DELETE!</a>")
-              }
-              doc = $(this)
-              doc_id = doc.attr("data-id")
-              doc.append("<span class='btn btn-warning btn-small' style='margin:5px;' onclick='render_delete_link(this," + doc_id + ")'>Delete?</span>")
-          })
-          <% end %>
-
-      }
-  <div style="padding-top:100px;">
-    <iframe id="player_1" src="http://player.vimeo.com/video/39683393?api=1&player_id=player_1" width="540" height="304" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-  </div>
-  </script>
-  -->
-  <!-- Place somewhere in the <body> of your page -->
-
   <div class="flexslider">
     <ul class="slides">
       <% if @project.get_publishable_media_items.each do |media_item| %>
@@ -93,19 +50,6 @@
       <% end %>
     </ul>
   </div>
-
- <!-- this code allows aiddata users to see and delete all media files that have been uploaded for the project
-  <% if current_user_is_aiddata %>
-    <% @project.get_all_media_items.each do |media_item| %>
-      <p>
-      <%= link_to media_item.media_file_name, media_item.media.url %>
-      <% if current_user_is_aiddata %>
-         <a class='btn btn-small btn-danger' data-method='delete' href='/projects/<%= @project.id %>/media_items/<%=media_item.id %>'>DELETE!</a>
-      <% end %>
-      </p>
-    <% end %>
-  <% end %>
-   -->
 
 
   <div class="row-fluid" >
@@ -143,35 +87,44 @@
     <h3>Upload a File</h3>
       <% if current_user %>
          <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
-         <%= file_field_tag "media" %>
-         <%= hidden_field_tag( "user_id", current_user[:id]) %>
-         <%= submit_tag 'Upload', class: "btn btn-info" %>
+            <%= file_field_tag "media" %>
+            <%= hidden_field_tag( "user_id", current_user[:id]) %>
+            <%= submit_tag 'Upload', class: "btn btn-info" %>
          <div class='row-fluid'>
             <input style='display:inline;' type='checkbox' required="true" id='terms_and_conditions'/>
             <label style='display:inline;'>
               I accept the <%= link_to "terms and conditions", "http://www.aiddata.org/content/index/about/terms-conditions" %>.
             </label>
          </div>
+         <% end %>
+      <% else %>
+        <p><i> Please
+          <%= link_to "sign in", signin_path %>
+          to contribute files!</i>
+        </p>
       <% end %>
   </div>
+
+
 
   <div id="share_video" class="modal hide fade in" style="text-align:center;">
       <h3>Share a Video</h3>
-      <p>Enter url here:</p>
-      <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
-          <%= text_field_tag "url" %>
-          <%= hidden_field_tag( "user_id", current_user[:id]) %>
-          <%= hidden_field_tag( "video", "youtube") %>
-          <%= submit_tag 'Share', class: "btn btn-info" %>
+      <% if current_user %>
+          <p>Enter url here:</p>
+          <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
+              <%= text_field_tag "url" %>
+              <%= hidden_field_tag( "user_id", current_user[:id]) %>
+              <%= hidden_field_tag( "video", "youtube") %>
+              <%= submit_tag 'Share', class: "btn btn-info" %>
+          <% end %>
+      <% else %>
+        <p><i> Please
+          <%= link_to "sign in", signin_path %>
+          to contribute files!</i>
+        </p>
       <% end %>
   </div>
 
-  <% else %>
-      <p><i> Please
-        <%= link_to "sign in", signin_path %>
-        to contribute files!</i>
-      </p>
-  <% end %>
 </div>
 
 <script>
