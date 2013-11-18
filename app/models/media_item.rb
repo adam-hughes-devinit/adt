@@ -8,7 +8,7 @@ class MediaItem < ActiveRecord::Base
   validates_presence_of :url, :unless => :media?
   validates_presence_of :media, :unless => :url?
 
-  has_attached_file :media, :styles => { :large => "540x500>", :medium => "300x300>", :thumb => "100x100>" }
+  has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
   def youtube_embed(youtube_url)
     if youtube_url[/youtu\.be\/([^\?]*)/]
