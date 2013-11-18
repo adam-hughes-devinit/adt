@@ -17,7 +17,11 @@ ActiveAdmin.register MediaItem do
 
     column :media_content_type
     column :media_file_size
-    column :url
+    column "Url", :url do |media_item|
+      if media_item.media_type == 'youtube'
+        link_to(media_item.url, media_item.url)
+      end
+    end
     column :downloadable
     column :publish
     column :created_at
