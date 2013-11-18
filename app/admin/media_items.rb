@@ -2,7 +2,11 @@ ActiveAdmin.register MediaItem do
   index do
     column :id
     column :project
+    column "Image" do |media_item|
+      link_to(image_tag(media_item.media.url(:thumb), :height => '100'), admin_media_item_path(media_item))
+    end
     column :media_file_name
+
     column :media_content_type
     column :media_file_size
     column :url
@@ -12,5 +16,7 @@ ActiveAdmin.register MediaItem do
     column :updated_at
     default_actions
   end
+
+
   
 end
