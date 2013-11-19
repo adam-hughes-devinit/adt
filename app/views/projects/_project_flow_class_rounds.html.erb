@@ -1,0 +1,14 @@
+<% if current_user_is_aiddata %>
+    <div class='row-fluid '>
+      <div class='well span6'>
+        <h4>Flow Class Code Rounds:</h4>
+        <ul class='unstyled'>
+          <li><b>Arbitrated Value:</b> <%= @project.flow_class.show_round("master") %> </li>
+          <li><b>Round 1:</b> <%= @project.flow_class.show_round(1) %> </li>
+          <li><b>Round 2:</b> <%= @project.flow_class.show_round(2) %> </li>
+        </ul>
+                    <span class='muted' ><i> All three code rounds are only visible to
+                      AidData-affiliated users.</i></span>
+      </div>
+    </div>
+<% end %>
