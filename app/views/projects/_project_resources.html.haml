@@ -1,7 +1,6 @@
-
 .row-fluid
+
   %h4
-    Resources:
   %ul#resources.unstyled
     - @project.resources.each do |r|
       %li.flaggable.resource.container-fluid{"flaggable_type" => "Resource", "flaggable_id" => r.id, "data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
@@ -11,7 +10,7 @@
             = render partial: 'flag_superscript', locals: {flag: flag}
         %p.row-fluid
           = link_to "More about this resource &rarr;".html_safe, r, class: "text-success"
-    
+
     - if @project.resources.blank?
       %em.muted#no_resources
         No resources yet!
@@ -21,9 +20,7 @@
     %li{"data-resource-id" => "<%= resource_id %>".html_safe}
       %p
         <%= resource %>
-      %span
+      %span6
         %a{href: "/resources/<%= resource_id %>".html_safe}
           More about this resource &rarr;
       <%= unlink_button %>
-
-  = render 'resources_for_aiddata'
