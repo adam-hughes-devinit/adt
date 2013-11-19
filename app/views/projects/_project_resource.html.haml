@@ -1,0 +1,7 @@
+%li.flaggable.resource.container-fluid{"flaggable_type" => "Resource", "flaggable_id" => r.id, "data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
+  %p.row-fluid
+    = r.to_citation
+    - r.flags.each do |flag|
+      = render partial: 'flag_superscript', locals: {flag: flag}
+  %p.row-fluid
+    = link_to "More about this resource &rarr;".html_safe, r, class: "text-success"

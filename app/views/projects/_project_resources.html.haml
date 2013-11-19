@@ -2,14 +2,13 @@
 
   %h4
   %ul#resources.unstyled
-    - @project.resources.each do |r|
-      %li.flaggable.resource.container-fluid{"flaggable_type" => "Resource", "flaggable_id" => r.id, "data-resource-id" => r.id, style: "padding:4px 0px 8px 0px;border-bottom:1px solid #aaa;"}
-        %p.row-fluid
-          = r.to_citation
-          - r.flags.each do |flag|
-            = render partial: 'flag_superscript', locals: {flag: flag}
-        %p.row-fluid
-          = link_to "More about this resource &rarr;".html_safe, r, class: "text-success"
+    // Limit renders resources for main page. Other is for popup box.
+    - if limit == true
+      -  @project.resources[0..1].each do |r|
+        = render partial: 'project_resource', locals: {r: r}
+    - else
+      -  @project.resources.each do |r|
+        = render partial: 'project_resource', locals: {r: r}
 
     - if @project.resources.blank?
       %em.muted#no_resources
