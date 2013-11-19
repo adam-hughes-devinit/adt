@@ -2,15 +2,17 @@ ActiveAdmin.register MediaItem do
   index do
     column :id
     column :project
-     # Adds image thumbnails
-    column "Image" do |media_item|
+     # Adds image thumbnails and download links.
+    column "Files" do |media_item|
       if media_item.media_content_type == 'image/png'
         link_to(image_tag(media_item.media.url, :height => '100'), admin_media_item_path(media_item))
       elsif media_item.media_content_type == 'image/jpeg'
         link_to(image_tag(media_item.media.url, :height => '100'), admin_media_item_path(media_item))
       elsif media_item.media_content_type == 'image/gif'
         link_to(image_tag(media_item.media.url, :height => '100'), admin_media_item_path(media_item))
-      elsif media_item.media_content_type == 'application/pdf'
+      elsif media_item.media_content_type.nil?
+        link_to('')
+      else
         link_to(media_item.media_file_name, media_item.media.url)
       end
     end
