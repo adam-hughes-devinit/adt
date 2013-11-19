@@ -28,6 +28,7 @@ ActiveAdmin.register MediaItem do
     end
     column :downloadable
     column :publish
+    column :featured
     column :created_at
     column :updated_at
     default_actions

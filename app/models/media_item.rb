@@ -2,7 +2,7 @@ class MediaItem < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :user
-  attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_type,
+  attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_type, :featured,
   :media_file_name, :media_content_type, :media_file_size, :media_updated_at
 
   validates_presence_of :url, :unless => :media?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131117223715) do
+ActiveRecord::Schema.define(:version => 20131119190757) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(:version => 20131117223715) do
     t.string   "url"
     t.boolean  "downloadable"
     t.string   "media_type"
+    t.boolean  "featured"
   end
 
   add_index "media_items", ["project_id"], :name => "index_media_items_on_project_id"

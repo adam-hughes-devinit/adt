@@ -243,7 +243,7 @@ class Project < ActiveRecord::Base
   end
 
   def get_publishable_media_items
-    media_items = MediaItem.where(publish: true, project_id: id)
+    media_items = MediaItem.where(publish: true, project_id: id).order('featured desc')
     return media_items
   end
 
