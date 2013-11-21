@@ -12,7 +12,7 @@ class ExchangeRate < ActiveRecord::Base
 
   after_save :calculate_associated_transactions
 
-   # Finds transactions that needed this data to calculate usd_defl
+   # Finds transactions that needed this exchange_rate to calculate usd_defl
   def calculate_associated_transactions
     transactions = Transaction.joins(:project).where(projects: { year: self.year }, currency_id: self.from_currency_id )
     transactions.each do |transaction_record|
