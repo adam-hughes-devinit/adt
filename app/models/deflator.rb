@@ -8,4 +8,16 @@ class Deflator < ActiveRecord::Base
 
   validates :year, :uniqueness => {:scope => :country_id }
 
+  after_save :calculate_associated_transactions
+
+   # Finds transactions that needed this data to calculate usd_defl
+  def calculate_associated_transactions
+    transactions = Transaction.joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
+    transactions.each do |transaction_record|
+      if Transaction.find(transaction_record.id).save
+        LoanDetail.find_by_project_id(transaction_record.project_id).save
+      end
+    end
+  end
+
 end
