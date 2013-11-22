@@ -26,6 +26,8 @@ ActiveAdmin.register MediaItem do
         link_to(media_item.url, media_item.url)
       end
     end
+    column :homepage_text
+    column :download_text
     column :downloadable
     column :publish
     column :featured

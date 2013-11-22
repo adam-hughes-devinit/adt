@@ -3,12 +3,16 @@ class MediaItem < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_type, :featured,
-  :media_file_name, :media_content_type, :media_file_size, :media_updated_at
+                  :homepage_text, :download_text,
+                  :media_file_name, :media_content_type, :media_file_size, :media_updated_at
 
   validates_presence_of :url, :unless => :media?
   validates_presence_of :media, :unless => :url?
+  validates_presence_of :homepage_text, :if => :publish
+  validates_presence_of :download_text, :if => :downloadable
 
-   # for paperclip
+
+  # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
   def youtube_embed(youtube_url)
