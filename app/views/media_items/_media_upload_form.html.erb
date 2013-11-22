@@ -62,7 +62,7 @@
   </div>
 
   <!-- download file popup box -->
-  <div id="download_file" class="modal hide fade in" style="text-align:center;">
+  <div id="download_file" class="modal hide fade in" style="text-align:center; padding:10px;">
       <% downloadable_media = @project.get_downloadable_media_items %>
 
       <% if !downloadable_media.empty? %>
@@ -74,11 +74,21 @@
           </p>
       <% end %>
 
+      <table border="1">
+          <tr>
+            <td><b>File</b></td>
+            <td><b>Size</b></td>
+            <td><b>Media Source</b></td>
+          </tr>
       <% downloadable_media.each do |media_item| %>
-          <p>
-            <%= link_to media_item.media_file_name, media_item.media.url %>
-          </p>
+          <tr>
+            <td><%= link_to media_item.download_text, media_item.media.url %></td>
+            <td><%= number_to_human_size(media_item.media_file_size) %></td>
+            <td><%= media_item.media_source_type.name %></td>
+          </tr>
+
       <% end %>
+      </table>
   </div>
 
   <!-- upload file popup box -->
