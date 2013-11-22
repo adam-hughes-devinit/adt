@@ -1,4 +1,6 @@
 ActiveAdmin.register MediaItem do
+  menu :parent => "Media"
+
   index do
     column :id
     column :project
@@ -16,21 +18,21 @@ ActiveAdmin.register MediaItem do
         link_to(media_item.media_file_name, media_item.media.url)
       end
     end
-
-    column :media_file_name
-    column :media_content_type
-    column :media_file_size
      # Makes url a hyperlink
     column "Url", :url do |media_item|
       if media_item.media_type == 'youtube'
         link_to(media_item.url, media_item.url)
       end
     end
-    column :homepage_text
-    column :download_text
     column :downloadable
     column :publish
     column :featured
+    column :homepage_text
+    column :download_text
+    column :media_source_type
+    column :media_file_name
+    column :media_content_type
+    column :media_file_size
     column :created_at
     column :updated_at
     default_actions

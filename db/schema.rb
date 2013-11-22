@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131122181632) do
+ActiveRecord::Schema.define(:version => 20131122195418) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -276,8 +276,8 @@ ActiveRecord::Schema.define(:version => 20131122181632) do
   create_table "media_items", :force => true do |t|
     t.boolean  "publish"
     t.integer  "project_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "media_file_name"
     t.string   "media_content_type"
     t.integer  "media_file_size"
@@ -289,10 +289,18 @@ ActiveRecord::Schema.define(:version => 20131122181632) do
     t.boolean  "featured"
     t.string   "homepage_text"
     t.string   "download_text"
+    t.integer  "media_source_type_id"
   end
 
+  add_index "media_items", ["media_source_type_id"], :name => "index_media_items_on_media_source_type_id"
   add_index "media_items", ["project_id"], :name => "index_media_items_on_project_id"
   add_index "media_items", ["user_id"], :name => "index_media_items_on_user_id"
+
+  create_table "media_source_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "oda_likes", :force => true do |t|
     t.string   "name"

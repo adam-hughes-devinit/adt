@@ -2,14 +2,16 @@ class MediaItem < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :user
+  belongs_to :media_source_type
   attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_type, :featured,
-                  :homepage_text, :download_text,
+                  :homepage_text, :download_text, :media_source_type_id,
                   :media_file_name, :media_content_type, :media_file_size, :media_updated_at
 
   validates_presence_of :url, :unless => :media?
   validates_presence_of :media, :unless => :url?
   validates_presence_of :homepage_text, :if => :publish
   validates_presence_of :download_text, :if => :downloadable
+  validates_presence_of :media_source_type_id, :if => :downloadable
 
 
   # for paperclip
