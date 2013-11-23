@@ -66,29 +66,27 @@
       <% downloadable_media = @project.get_downloadable_media_items %>
 
       <% if !downloadable_media.empty? %>
-          <h3>Download Files:</h3>
+        <h3>Download Files:</h3>
+        <table border="1">
+          <tr>
+            <td><b>File</b></td>
+            <td><b>Size</b></td>
+            <td><b>Media Source</b></td>
+          </tr>
+          <% downloadable_media.each do |media_item| %>
+              <tr>
+                <td><%= link_to media_item.download_text, media_item.media.url %></td>
+                <td><%= number_to_human_size(media_item.media_file_size) %></td>
+                <td><%= media_item.media_source_type.name %></td>
+              </tr>
+          <% end %>
+        </table>
       <% else %>
           <p>
           <h4 style="text-align:center">
           There are currently no files to download.</h4>
           </p>
       <% end %>
-
-      <table border="1">
-          <tr>
-            <td><b>File</b></td>
-            <td><b>Size</b></td>
-            <td><b>Media Source</b></td>
-          </tr>
-      <% downloadable_media.each do |media_item| %>
-          <tr>
-            <td><%= link_to media_item.download_text, media_item.media.url %></td>
-            <td><%= number_to_human_size(media_item.media_file_size) %></td>
-            <td><%= media_item.media_source_type.name %></td>
-          </tr>
-
-      <% end %>
-      </table>
   </div>
 
   <!-- upload file popup box -->
@@ -115,7 +113,7 @@
   </div>
 
   <!-- share video popup box -->
-  <div id="share_video" class="modal hide fade in" style="text-align:center;">
+  <div id="share_video" class="modal hide fade in" style="text-align:center; padding:20px;">
       <h3>Share a Video</h3>
       <% if current_user %>
           <p>Enter url here:</p>
