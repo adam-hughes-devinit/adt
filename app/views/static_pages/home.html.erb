@@ -62,7 +62,7 @@
     <!-- Dynamically adds images and videos to file viewer -->
     <div class="flexslider">
       <ul class="slides">
-        <% media_items = MediaItem.where(publish:true).order('random()').limit(5) %>
+        <% media_items = MediaItem.where(on_homepage:true).order('random()').limit(5) %>
         <% if media_items.each do |media_item| %>
             <li>
               <div class="frame">
