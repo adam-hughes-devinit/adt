@@ -3,120 +3,87 @@
   $('body')
     .css('background-image', 'url("<%= image_path "gray_to_white.png" %>")')
 </script>
+
+<style>
+    .flexslider {
+        width: 580px;
+        height: 350px;
+        border: 0 !important;
+        margin-bottom: 3em !important;
+    }
+    .flexslider .frame {
+        text-align: center;
+        width: 100%;
+
+    }
+    .flexslider .frame  img {
+        width:auto;
+        height: 350px;
+        max-width: 100%;
+        max-height: 100%;
+        display: inline-block;
+
+    }
+
+    .flex-direction-nav a:before  {
+        font-family: "flexslider-icon";
+        font-size: 40px;
+        line-height: 40px;
+        display: inline-block;
+        content: '\f001';
+    }
+
+
+    .flex-caption {
+        position:absolute;
+        left:50;right:50;bottom:0;
+        background:rgba(0, 0, 0,0.6);
+        z-index:1;padding:0px, 10px,10px,10px;
+        width:580px;
+        color: #FFFFFF;
+        alink: #C0C0C0;
+    }
+</style>
+
+<script>
+    // Can also be used with $(document).ready()
+    // Javascript for file viewer
+    $(window).load(function() {
+        $('.flexslider').flexslider({
+            animation: "slide"
+        });
+    });
+</script>
   
 
 <div class='row-fluid' id='home_first_row' >
   <div class='span6'>
-    <div id='home_carousel' class='carousel slide xwith_shadow'>
-      <ol class='carousel-indicators'>
-        <li data-target='#home_carousel' data-slide-to='0' class='active'></li>
-        <li data-target='#home_carousel' data-slide-to='1'></li>
-        <li data-target='#home_carousel' data-slide-to='2'></li>
-        <li data-target='#home_carousel' data-slide-to='3'></li>
-      </ol>
-      <div class='carousel-inner'>
 
-
-        <div class='active item'>
-            <%=image_tag "home/sudan_heatmap_small.jpg"%>
-          <div class='carousel-caption'>
-            <h4>Coming Soon: Geocoded Data!</h4>
-            <p>
-              See
-              <%=link_to "preliminary maps", content_by_name_path("geocoding")%>
-              of Chinese development finance in Africa &rarr;</p>
-          </div>
-        </div>
-      <div class='item' >
-          <script>
-          var tag = document.createElement('script');
-
-          tag.src = "https://www.youtube.com/iframe_api";
-          var firstScriptTag = document.getElementsByTagName('script')[0];
-          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-          var player_cgd, player_bcp;
-          function onYouTubeIframeAPIReady() {
-            player_cgd = new YT.Player('player_cgd', {
-                height: '321',
-                width: '570',
-                videoId: 'h1pLIQ_fsls',
-                playerVars: {
-                  'wmode' : 'opaque',
-                  //'origin' :
-                },
-                events: {
-                  'onStateChange': on_youtube_play
-                }
-            });
-                player_bcp = new YT.Player('player_bcp', {
-                    height: '321',
-                    width: '570',
-                    videoId: '2t8QH_q2PGs',
-                    playerVars: {
-                      'wmode' : 'opaque',
-                      //'origin' :
-                    },
-                    events: {
-                      'onStateChange': on_youtube_play
-                    }
-                })
-          }
-            function on_youtube_play(event) {
-              //console.log("state Change!", event)
-              if (event.data == YT.PlayerState.PLAYING ) {
-                //console.log("Youtube playing")
-                $('.youtube-caption').slideToggle()
-                $('#home_carousel').carousel('pause')
-              }
-              else if (event.data == YT.PlayerState.PAUSED) {
-                //console.log("Youtube paused")
-                $('.youtube-caption').slideToggle()
-                $('#home_carousel').carousel('cycle')
-              }
-            }
-
-            
-          </script>
-        <div id='player_cgd'></div>
-          <div class='carousel-caption youtube-caption'>
-            <p>
-               Couldn't make it to the launch?  
-               <%= link_to "Watch the presentation, panel, and Q&amp;A here! &rarr;".html_safe,
-                "http://youtu.be/h1pLIQ_fsls", target: "_blank" %>
-
-            </p>
-          </div>
-
-        </div>
-        <div class='item' >
-        <div id='player_bcp'></div>
-          <div class='carousel-caption youtube-caption'>
-            <p>
-               Co-Executive Director 
-               <%= link_to "Brad Parks talks about the Media-Based Data Collection project &rarr;".html_safe,
-                "http://youtu.be/2t8QH_q2PGs", target: "_blank" %>
-
-            </p>
-          </div>
-
-        </div>
-        <div class='item'>
-          <%=image_tag "home/methodology.png"%>
-          <div class='carousel-caption'>
-            <h4>Learn more about the initiative</h4>
-            <p>See the <%=link_to "methodology", content_by_name_path("methodology")%> behind AidData's work &rarr;</p>
-          </div>
-        </div>
-        <div class='item'>
-          <%=image_tag "home/improve_the_data_small.jpg"%>
-          <div class='carousel-caption'>
-            <h4>Help us improve our dataset</h4>
-            <p>Help us expand the database!  <%=link_to "Learn more here", content_by_name_path("improving_the_data")%>.</p>
-          </div>
-        </div>
-      </div>
-      <a class='carousel-control left' href='#home_carousel' data-slide='prev'>&lsaquo;</a>
-      <a class='carousel-control right' href='#home_carousel' data-slide='next'>&rsaquo;</a>
+    <!-- Dynamically adds images and videos to file viewer -->
+    <div class="flexslider">
+      <ul class="slides">
+        <% media_items = MediaItem.where(publish:true).order('random()').limit(5) %>
+        <% if media_items.each do |media_item| %>
+            <li>
+              <div class="frame">
+                <% if media_item.media_type == 'youtube' %>
+                    <%= raw(media_item.youtube_embed(media_item.url,320,580)) %>
+                    <div class="flex-caption">
+                        <p>Learn more about <b><%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></b></p>
+                    </div>
+                <% else %>
+                    <%= image_tag media_item.media.url %>
+                    <div class="flex-caption">
+                      <p>Learn more about <b><%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></b></p>
+                    </div>
+                <% end %>
+              </div>
+            </li>
+            <!-- Default image, if no files/videos are published. -->
+        <% end.empty? %>
+            <%= image_tag('aiddata_notag.png')%>
+        <% end %>
+      </ul>
     </div>
   </div>
   <div id='stats-box' class='span6 container-fluid'>
