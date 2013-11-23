@@ -27,6 +27,7 @@ ActiveAdmin.register MediaItem do
     column :downloadable
     column :publish
     column :featured
+    column :on_homepage
     column :homepage_text
     column :download_text
     column :media_source_type

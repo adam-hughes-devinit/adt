@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131122195418) do
+ActiveRecord::Schema.define(:version => 20131123214337) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20131122195418) do
     t.string   "homepage_text"
     t.string   "download_text"
     t.integer  "media_source_type_id"
+    t.boolean  "on_homepage"
   end
 
   add_index "media_items", ["media_source_type_id"], :name => "index_media_items_on_media_source_type_id"
