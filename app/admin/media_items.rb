@@ -20,11 +20,10 @@ ActiveAdmin.register MediaItem do
     end
      # Makes url a hyperlink
     column "Url", :url do |media_item|
-      if media_item.media_item_type.name == 'youtube'
+      if media_item.is_youtube(media_item.url)
         link_to(media_item.url, media_item.url)
       end
     end
-    column :media_item_type
     column :downloadable
     column :publish
     column :featured
@@ -42,14 +41,14 @@ ActiveAdmin.register MediaItem do
 
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Media Item" do
-      f.input :project
+      f.input :project, :input_html => { :disabled => true }
+      f.input :media_file_name, :input_html => { :disabled => true }
+      f.input :url, :input_html => { :disabled => true }
       f.input :media_source_type
-      f.input :url
-      f.input :media_item_type
-      f.input :downloadable
-      f.input :publish
-      f.input :featured
-      f.input :on_homepage
+      f.input :downloadable, :hint => "Makes file downloadable on project page"
+      f.input :publish, :hint => "Warning: Only publish images and youtube videos"
+      f.input :featured, :hint => "First image to appear in media viewer on project page"
+      f.input :on_homepage, :hint => "Warning: Only publish images and youtube videos on homepage"
       f.input :homepage_text
       f.input :download_text
     end

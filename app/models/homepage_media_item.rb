@@ -1,14 +1,20 @@
 class HomepageMediaItem < ActiveRecord::Base
-  belongs_to :media_item_type
   attr_accessible :banner_link, :banner_text, :banner_link_text, :banner_title,
-                  :order, :published, :url, :home_media, :media_item_type_id
+                  :order, :published, :url, :home_media
 
   has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  validates :media_item_type, :presence => true
   validates_presence_of :url, :unless => :home_media?
   validates_presence_of :home_media, :unless => :url?
   validates_presence_of :order, :if => :published
+  validates :url, :format => { :with =>  /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Must be youtube url" }, :allow_blank => true
+
+  def is_youtube(youtube_url)
+    yt_regexp = /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/
+    if yt_regexp.match(youtube_url)
+      return true
+    end
+  end
 
   def youtube_embed(youtube_url,height,width)
     if youtube_url[/youtu\.be\/([^\?]*)/]

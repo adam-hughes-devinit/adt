@@ -19,12 +19,11 @@ ActiveAdmin.register HomepageMediaItem do
     end
     # Makes url a hyperlink
     column "Url", :url do |home_media_item|
-      if home_media_item.media_item_type.name == 'youtube'
+      if home_media_item.is_youtube(home_media_item.url)
         link_to(home_media_item.url, home_media_item.url)
       end
     end
     column :order
-    column :media_item_type
     column :published
     column :banner_title
     column :banner_text
@@ -43,8 +42,7 @@ ActiveAdmin.register HomepageMediaItem do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Home Media" do
       f.input :home_media, :as => :file
-      f.input :url, :label => "Media Url", :hint => "Must be youtube url"
-      f.input :media_item_type
+      f.input :url, :label => "Media Url"
       f.input :banner_title, :hint => "Appears above other text"
       f.input :banner_text, :hint => "Appears to left of link"
       f.input :banner_link

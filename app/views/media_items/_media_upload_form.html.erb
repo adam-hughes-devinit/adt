@@ -37,7 +37,7 @@
 
           <li>
             <div class="frame">
-              <% if media_item.media_item_type.name == 'youtube' %>
+              <% if !media_item.url.blank? %>
                   <%= raw(media_item.youtube_embed(media_item.url, 329, 540)) %>
               <% else %>
                   <%= image_tag media_item.media.url %>
@@ -120,7 +120,6 @@
           <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
               <%= text_field_tag "url" %>
               <%= hidden_field_tag( "user_id", current_user[:id]) %>
-              <%= hidden_field_tag( "video", "youtube") %>
               <%= submit_tag 'Share', class: "btn btn-info" %>
           <% end %>
       <% else %>

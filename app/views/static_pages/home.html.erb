@@ -68,7 +68,7 @@
         <% home_media_items.each do |home_media_item| %>
             <li>
               <div class="frame">
-                <% if home_media_item.media_item_type.name == 'youtube' %>
+                <% if !home_media_item.url.blank? %>
                     <%= raw(home_media_item.youtube_embed(home_media_item.url,320,580)) %>
                     <div class="flex-caption">
                       <p><h4 style="color:#ffffff"><%= home_media_item.banner_title %></h4></p>
@@ -92,7 +92,7 @@
         <% media_items.each do |media_item| %>
             <li>
               <div class="frame">
-                <% if media_item.media_item_type.name == 'youtube' %>
+                <% if !media_item.url.blank? %>
                     <%= raw(media_item.youtube_embed(media_item.url,320,580)) %>
                     <div class="flex-caption">
                         <p>Learn more about <b><%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></b></p>
