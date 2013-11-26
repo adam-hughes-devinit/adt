@@ -51,7 +51,7 @@ class MediaItemsController < ApplicationController
     @media_item.downloadable ='f'
     @media_item.url = params[:url]
     @media_item.user_id  = params[:user_id]
-    @media_item.media_type = params[:video]
+    @media_item.media_item_type.name = params[:video]
 
     respond_to do |format|
       if @media_item.save

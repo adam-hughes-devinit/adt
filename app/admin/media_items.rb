@@ -20,10 +20,11 @@ ActiveAdmin.register MediaItem do
     end
      # Makes url a hyperlink
     column "Url", :url do |media_item|
-      if media_item.media_type == 'youtube'
+      if media_item.media_item_type.name == 'youtube'
         link_to(media_item.url, media_item.url)
       end
     end
+    column :media_item_type
     column :downloadable
     column :publish
     column :featured
@@ -37,6 +38,22 @@ ActiveAdmin.register MediaItem do
     column :created_at
     column :updated_at
     default_actions
+  end
+
+  form :html => { :enctype => "multipart/form-data" } do |f|
+    f.inputs "Media Item" do
+      f.input :project
+      f.input :media_source_type
+      f.input :url
+      f.input :media_item_type
+      f.input :downloadable
+      f.input :publish
+      f.input :featured
+      f.input :on_homepage
+      f.input :homepage_text
+      f.input :download_text
+    end
+    f.buttons
   end
 
 

@@ -37,7 +37,7 @@
 
           <li>
             <div class="frame">
-              <% if media_item.media_type == 'youtube' %>
+              <% if media_item.media_item_type.name == 'youtube' %>
                   <%= raw(media_item.youtube_embed(media_item.url, 329, 540)) %>
               <% else %>
                   <%= image_tag media_item.media.url %>

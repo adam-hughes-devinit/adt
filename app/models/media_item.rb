@@ -3,8 +3,9 @@ class MediaItem < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   belongs_to :media_source_type
-  attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_type, :featured,
-                  :homepage_text, :download_text, :media_source_type_id, :on_homepage,
+  belongs_to :media_item_type
+  attr_accessible :project_id, :publish, :media, :user_id, :downloadable, :url, :media_item_type, :featured,
+                  :homepage_text, :download_text, :media_source_type_id, :on_homepage, :media_item_type_id,
                   :media_file_name, :media_content_type, :media_file_size, :media_updated_at
 
   validates_presence_of :url, :unless => :media?
