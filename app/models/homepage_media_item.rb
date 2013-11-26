@@ -7,7 +7,7 @@ class HomepageMediaItem < ActiveRecord::Base
   validates_presence_of :url, :unless => :home_media?
   validates_presence_of :home_media, :unless => :url?
   validates_presence_of :order, :if => :published
-  validates :url, :format => { :with =>  /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Must be youtube url" }, :allow_blank => true
+  validates :url, :format => { :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Must be youtube url" }, :allow_blank => true
 
   def is_youtube(youtube_url)
     yt_regexp = /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/
