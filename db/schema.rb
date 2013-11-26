@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131125222615) do
+ActiveRecord::Schema.define(:version => 20131126003424) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(:version => 20131125222615) do
     t.integer  "home_media_file_size"
     t.datetime "home_media_updated_at"
     t.integer  "media_item_type_id"
+    t.string   "banner_title"
+    t.string   "banner_link_text"
   end
 
   add_index "homepage_media_items", ["media_item_type_id"], :name => "index_homepage_media_items_on_media_item_type_id"

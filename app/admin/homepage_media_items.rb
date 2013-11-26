@@ -26,7 +26,9 @@ ActiveAdmin.register HomepageMediaItem do
     column :order
     column :media_item_type
     column :published
+    column :banner_title
     column :banner_text
+    column :banner_link_text
     column "Banner Link", :banner_link do |home_media_item|
       link_to(home_media_item.banner_link)
     end
@@ -43,8 +45,10 @@ ActiveAdmin.register HomepageMediaItem do
       f.input :home_media, :as => :file
       f.input :url, :label => "Media Url", :hint => "Must be youtube url"
       f.input :media_item_type
-      f.input :banner_text
+      f.input :banner_title, :hint => "Appears above other text"
+      f.input :banner_text, :hint => "Appears to left of link"
       f.input :banner_link
+      f.input :banner_link_text, :hint => "This replaces the link url with text"
       f.input :order
       f.input :published
     end

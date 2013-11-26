@@ -1,6 +1,7 @@
 class HomepageMediaItem < ActiveRecord::Base
   belongs_to :media_item_type
-  attr_accessible :banner_link, :banner_text, :order, :published, :url, :home_media, :media_item_type_id
+  attr_accessible :banner_link, :banner_text, :banner_link_text, :banner_title,
+                  :order, :published, :url, :home_media, :media_item_type_id
 
   has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
@@ -8,8 +9,6 @@ class HomepageMediaItem < ActiveRecord::Base
   validates_presence_of :url, :unless => :home_media?
   validates_presence_of :home_media, :unless => :url?
   validates_presence_of :order, :if => :published
-  validates_presence_of :banner_text, :if => :published
-  validates_presence_of :banner_text, :if => :banner_link
 
   def youtube_embed(youtube_url,height,width)
     if youtube_url[/youtu\.be\/([^\?]*)/]
