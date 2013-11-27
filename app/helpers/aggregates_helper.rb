@@ -28,11 +28,7 @@ module AggregatesHelper
   def get_home_media
     home_media = HomepageMediaItem.where(published: true).order('"order" asc').limit(5)
 
-    home_media.each do |item|
-      if !item.url.blank?
-        item.url = item.youtube_embed(item.url,320,580)
-      end
-    end
+
     return home_media
   end
 
