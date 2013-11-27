@@ -64,12 +64,11 @@
     <!--  Adds homepage items to media viewer -->
     <div class="flexslider">
       <ul class="slides">
-        <% home_media_items = HomepageMediaItem.where(published: true).order('"order" asc').limit(5) %>
-        <% home_media_items.each do |home_media_item| %>
+        <% @home_media.each do |home_media_item| %>
             <li>
               <div class="frame">
                 <% if !home_media_item.url.blank? %>
-                    <%= raw(home_media_item.youtube_embed(home_media_item.url,320,580)) %>
+                    <%= raw(home_media_item.url) %>
                     <div class="flex-caption">
                       <p><h4 style="color:#ffffff"><%= home_media_item.banner_title %></h4></p>
                       <p><b><%= home_media_item.banner_text %> <%= link_to home_media_item.banner_link_text, home_media_item.banner_link,{:style=>'color:#3BB9FF;'} %></b></p>
@@ -87,9 +86,7 @@
         <% end %>
 
         <!-- Adds random media items from projects to media viewer -->
-        <% record_limit = 5 - home_media_items.count() %>
-        <% media_items = MediaItem.where(on_homepage:true).order('random()').limit(record_limit) %>
-        <% media_items.each do |media_item| %>
+        <% @project_media.each do |media_item| %>
             <li>
               <div class="frame">
                 <% if !media_item.url.blank? %>
