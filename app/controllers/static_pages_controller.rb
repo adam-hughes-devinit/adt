@@ -4,10 +4,12 @@ class StaticPagesController < ApplicationController
   include AggregatesHelper
   require 'will_paginate/array'
   def home
-    @home_media = get_home_media
-    record_limit = 5 - @home_media.count()
-    if (record_limit > 0)
-      @project_media = get_project_media(record_limit)
+    # Gets records for the media viewer
+    max_records = 5
+    @home_media = get_home_media(max_records)
+    project_limit = max_records - @home_media.count()
+    if (project_limit > 0)
+      @project_media = get_project_media(project_limit)
     else
       @project_media = nil
     end
