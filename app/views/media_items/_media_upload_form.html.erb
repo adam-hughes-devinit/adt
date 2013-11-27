@@ -69,12 +69,14 @@
         <h3>Download Files:</h3>
         <table border="1">
           <tr>
+            <td></td>
             <td><b>File</b></td>
             <td><b>Size</b></td>
             <td><b>Media Source</b></td>
           </tr>
           <% downloadable_media.each do |media_item| %>
               <tr>
+                <td><%= image_tag Icon.for_filename(media_item.media_file_name) %></td>
                 <td><%= link_to media_item.download_text, media_item.media.url %></td>
                 <td><%= number_to_human_size(media_item.media_file_size) %></td>
                 <td><%= media_item.media_source_type.name %></td>
