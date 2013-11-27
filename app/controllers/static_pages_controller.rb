@@ -6,8 +6,10 @@ class StaticPagesController < ApplicationController
   def home
     @home_media = get_home_media
     record_limit = 5 - @home_media.count()
-    if (record_limit < 5)
+    if (record_limit > 0)
       @project_media = get_project_media(record_limit)
+    else
+      @project_media = nil
     end
     render 'home'
   end
