@@ -16,17 +16,8 @@ class MediaItem < ActiveRecord::Base
   validates_format_of :url, :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/,
                       :message => "Must be youtube url", :if => :publish?, :allow_blank => true
 
-
-
   # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-
-  def is_youtube(youtube_url)
-    yt_regexp = /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/
-    if yt_regexp.match(youtube_url)
-      return true
-    end
-  end
 
   def youtube_embed(youtube_url,height,width)
     if youtube_url[/youtu\.be\/([^\?]*)/]
@@ -39,6 +30,5 @@ class MediaItem < ActiveRecord::Base
 
     %Q{<iframe title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen></iframe>}
   end
-
 
 end

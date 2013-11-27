@@ -9,13 +9,6 @@ class HomepageMediaItem < ActiveRecord::Base
   validates_presence_of :order, :if => :published
   validates :url, :format => { :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Must be youtube url" }, :allow_blank => true
 
-  def is_youtube(youtube_url)
-    yt_regexp = /^http:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/
-    if yt_regexp.match(youtube_url)
-      return true
-    end
-  end
-
   def youtube_embed(youtube_url,height,width)
     if youtube_url[/youtu\.be\/([^\?]*)/]
       youtube_id = $1
