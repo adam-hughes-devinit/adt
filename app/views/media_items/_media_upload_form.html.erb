@@ -1,14 +1,16 @@
 <div class='well well-small'>
   <style>
       .flexslider {
-          width: 540px;
+          width: auto;
           height: 350px;
           border: 0 !important;
           margin-bottom: 3em !important;
+
       }
       .flexslider .frame {
           text-align: center;
           width: 100%;
+          overflow:hidden;
 
       }
       .flexslider .frame  img {
@@ -38,7 +40,7 @@
           <li>
             <div class="frame">
               <% if !media_item.url.blank? %>
-                  <%= raw(media_item.youtube_embed(media_item.url, 329, 540)) %>
+                  <%= raw(media_item.youtube_embed(media_item.url, 329, 545)) %>
               <% else %>
                   <%= image_tag media_item.media.url %>
               <% end %>
