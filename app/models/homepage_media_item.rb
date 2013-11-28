@@ -18,6 +18,6 @@ class HomepageMediaItem < ActiveRecord::Base
       youtube_id = $5
     end
 
-    %Q{<iframe title="YouTube video player" id="iframe" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen>  onLoad=autoResize(iframe)</iframe>}
+    %Q{<iframe title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen></iframe>}
   end
 end
