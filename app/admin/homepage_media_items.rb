@@ -39,7 +39,7 @@ ActiveAdmin.register HomepageMediaItem do
     f.inputs "Home Media" do
       f.input :home_media, :as => :file
       f.input :url, :label => "Media Url"
-      f.input :banner_title, :hint => "Appears above other text and is larger. Not recommended for youtube videos"
+      f.input :banner_title, :hint => "Appears above other text and is larger."
       f.input :banner_text, :hint => "To add a hyperlink: <a href='http://www.youtube.com'>link text</a>"
       f.input :order
       f.input :published
