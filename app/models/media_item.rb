@@ -19,7 +19,7 @@ class MediaItem < ActiveRecord::Base
   # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  def youtube_embed(youtube_url,height,width)
+  def youtube_embed(youtube_url,height,width,iframe_id)
     if youtube_url[/youtu\.be\/([^\?]*)/]
       youtube_id = $1
     else
@@ -28,7 +28,7 @@ class MediaItem < ActiveRecord::Base
       youtube_id = $5
     end
 
-    %Q{<iframe id="project_#{ self.id }" title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen></iframe>}
+    %Q{<iframe id="slide_#{ iframe_id}" title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen="false"></iframe>}
   end
 
 end
