@@ -48,14 +48,28 @@
     .flex-caption {
         position:absolute;
         left:50;right:50;bottom:0;
-        max-height: 60px;
-        min-height: 30px;
+        max-height: 50px;
+        min-height: 20px;
         background:rgba(0, 0, 0,0.6);
         z-index:1;
-        padding:0px,10px,10px,10px;
+        padding-bottom: 5px;
+        padding-top: 5px;
         width:7.14%;
         color: #FFFFFF;
-        alink: #C0C0C0;
+    }
+
+    .textbox h2 {
+        color:#ffffff;
+        font-size: 17px;
+        margin: 0px;
+        padding: 5px;
+    }
+
+    .textbox a:link {
+        color:#3BB9FF;
+    }
+    .textbox a:visited {
+        color:#3BB9FF;
     }
 </style>
 
@@ -75,10 +89,10 @@
                     <%= image_tag(home_media_item.home_media.url) %>
                 <% end %>
                 <div class="flex-caption">
-                  <p>
-                    <h4 style="color:#ffffff"><%= home_media_item.banner_title %></h4>
-                    <b><%= home_media_item.banner_text %> <%= link_to home_media_item.banner_link_text, home_media_item.banner_link,{:style=>'color:#3BB9FF;'} %></b>
-                  </p>
+                  <div class="textbox">
+                    <h2><%= home_media_item.banner_title %></h2>
+                    <b><%= raw(home_media_item.banner_text) %></b>
+                  </div>
                 </div>
               </div>
             </li>

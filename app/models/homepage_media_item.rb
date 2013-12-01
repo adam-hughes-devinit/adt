@@ -1,5 +1,5 @@
 class HomepageMediaItem < ActiveRecord::Base
-  attr_accessible :banner_link, :banner_text, :banner_link_text, :banner_title,
+  attr_accessible :banner_text, :banner_title,
                   :order, :published, :url, :home_media
 
   has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
