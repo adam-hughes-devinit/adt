@@ -40,7 +40,7 @@
           <li>
             <div class="frame">
               <% if !media_item.url.blank? %>
-                  <%= raw(media_item.youtube_embed(media_item.url, 329, 545)) %>
+                  <%= raw(media_item.youtube_embed(media_item.url, 329, 545,'iframe')) %>
               <% else %>
                   <%= image_tag media_item.media.url %>
               <% end %>
