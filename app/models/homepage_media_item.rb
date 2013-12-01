@@ -9,7 +9,7 @@ class HomepageMediaItem < ActiveRecord::Base
   validates_presence_of :order, :if => :published
   validates :url, :format => { :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Must be youtube url" }, :allow_blank => true
 
-  def youtube_embed(youtube_url,height,width)
+  def youtube_embed(youtube_url,height,width,iframe_id)
     if youtube_url[/youtu\.be\/([^\?]*)/]
       youtube_id = $1
     else
@@ -18,6 +18,6 @@ class HomepageMediaItem < ActiveRecord::Base
       youtube_id = $5
     end
 
-    %Q{<iframe id="home_#{ self.id }" title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }?enablejsapi=1" frameborder="0" allowfullscreen></iframe>}
+    %Q{<iframe id="slide_#{ iframe_id }" title="YouTube video player" width="#{ width }" height="#{ height }" src="http://www.youtube.com/embed/#{ youtube_id }?enablejsapi=1" frameborder="0"  allowfullscreen="false"></iframe>}
   end
 end
