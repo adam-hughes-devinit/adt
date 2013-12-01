@@ -19,7 +19,7 @@ ActiveAdmin.register HomepageMediaItem do
     end
     # Makes url a hyperlink
     column "Url", :url do |home_media_item|
-      if home_media_item.is_youtube(home_media_item.url)
+      if !home_media_item.blank?
         link_to(home_media_item.url, home_media_item.url)
       end
     end
@@ -29,7 +29,7 @@ ActiveAdmin.register HomepageMediaItem do
     column :banner_text
     column :banner_link_text
     column "Banner Link", :banner_link do |home_media_item|
-      link_to(home_media_item.banner_link)
+      link_to(home_media_item.banner_link,home_media_item.banner_link)
     end
     column :home_media_file_name
     column :home_media_content_type

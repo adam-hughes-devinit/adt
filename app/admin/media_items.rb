@@ -20,7 +20,7 @@ ActiveAdmin.register MediaItem do
     end
      # Makes url a hyperlink
     column "Url", :url do |media_item|
-      if media_item.is_youtube(media_item.url)
+      if !media_item.blank?
         link_to(media_item.url, media_item.url)
       end
     end
