@@ -14,6 +14,57 @@
     });
 </script>
 
+<script>
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var slide_1, slide_2, slide_3, slide_4, slide_5;
+    function onYouTubeIframeAPIReady() {
+        slide_1 = new YT.Player('slide_1', {
+            events: {
+                'onStateChange': on_youtube_play
+            }
+        });
+        slide_2 = new YT.Player('slide_2', {
+            events: {
+                'onStateChange': on_youtube_play
+            }
+        });
+        slide_3 = new YT.Player('slide_3', {
+            events: {
+                'onStateChange': on_youtube_play
+            }
+        });
+        slide_4 = new YT.Player('slide_4', {
+            events: {
+                'onStateChange': on_youtube_play
+            }
+        });
+        slide_5 = new YT.Player('slide_5', {
+            events: {
+                'onStateChange': on_youtube_play
+            }
+        });
+
+    }
+    function on_youtube_play(event) {
+        //console.log("state Change!", event)
+        if (event.data == YT.PlayerState.PLAYING ) {
+            //console.log("Youtube playing")
+            $('.youtube-caption').slideToggle();
+
+        }
+        else if (event.data == YT.PlayerState.PAUSED) {
+            //console.log("Youtube paused"
+            $('.youtube-caption').slideToggle();
+
+        }
+    }
+
+</script>
+
 <style>
     .flexslider {
         width: 100%;
@@ -66,15 +117,17 @@
     <!--  Adds homepage items to media viewer -->
     <div class="flexslider">
       <ul class="slides">
+        <% iframe_id = 1 %>
         <% @home_media.each do |home_media_item| %>
             <li>
               <div class="frame">
                 <% if !home_media_item.url.blank? %>
-                    <%= raw(home_media_item.youtube_embed(home_media_item.url,320,570)) %>
+                    <%= raw(home_media_item.youtube_embed(home_media_item.url,320,570,iframe_id)) %>
+                    <% iframe_id = iframe_id +1 %>
                 <% else %>
                     <%= image_tag(home_media_item.home_media.url) %>
                 <% end %>
-                <div class="flex-caption">
+                <div class="flex-caption youtube-caption">
                   <p>
                     <h4 style="color:#ffffff"><%= home_media_item.banner_title %></h4>
                     <b><%= home_media_item.banner_text %> <%= link_to home_media_item.banner_link_text, home_media_item.banner_link,{:style=>'color:#3BB9FF;'} %></b>
@@ -90,7 +143,8 @@
                 <li>
                   <div class="frame">
                     <% if !media_item.url.blank? %>
-                        <%= raw(media_item.youtube_embed(media_item.url,320,570)) %>
+                        <%= raw(media_item.youtube_embed(media_item.url,320,570,iframe_id)) %>
+                        <% iframe_id = iframe_id +1 %>
                     <% else %>
                         <%= image_tag media_item.media.url %>
                     <% end %>
