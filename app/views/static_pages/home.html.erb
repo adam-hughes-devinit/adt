@@ -57,7 +57,7 @@
         //console.log("state Change!", event)
         if (event.data == YT.PlayerState.PLAYING ) {
             //console.log("Youtube playing")
-            $('.youtube-caption').slideToggle("fast");
+            $('.youtube-caption').slideToggle("slow");
 
         }
         else if (event.data == YT.PlayerState.PAUSED) {
@@ -101,18 +101,31 @@
     .flex-caption {
         position:absolute;
         left:50;right:50;bottom:0;
-        max-height: 100px;
-        min-height: 20px;
+        height:60px;
         background:rgba(0, 0, 0,0.6);
         z-index:1;
-        padding-bottom: 5px;
         width:7.14%;
         color: #FFFFFF;
+        vertical-align: middle;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+
+    .banner-text {
+        display: inline-table;
+        text-align: inherit;
+        padding-left: 10px;
+
     }
 
     .banner-text h2 {
         color:#ffffff;
         font-size: 17px;
+    }
+    .banner-text h4 {
+        color:#ffffff;
+        font-size: 15px;
+
     }
 
     .banner-text a:link {
@@ -140,10 +153,12 @@
                     <%= image_tag(home_media_item.home_media.url) %>
                 <% end %>
                 <div class="flex-caption youtube-caption" id=<%= iframe_id %>>
-                  <div class="banner-text">
-                    <h2><%= home_media_item.banner_title %></h2>
-                    <b><%= raw(home_media_item.banner_text) %></b>
-                  </div>
+                  <p>
+                      <div class="banner-text">
+                         <h2><%= home_media_item.banner_title %></h2>
+                         <h4><%= raw(home_media_item.banner_text) %></h4>
+                      </div>
+                  </p>
                 </div>
                 <% iframe_id = iframe_id +1 %>
               </div>
@@ -160,7 +175,7 @@
                     <% else %>
                         <%= image_tag media_item.media.url %>
                     <% end %>
-                    <div class="flex-caption">
+                    <div class="flex-caption" >
                       <p>Learn more about <b><%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></b></p>
                     </div>
                     <% iframe_id = iframe_id +1 %>
