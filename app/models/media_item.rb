@@ -19,7 +19,7 @@ class MediaItem < ActiveRecord::Base
   # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  def youtube_embed(youtube_url,height,width,iframe_id)
+  def youtube_embed(youtube_url,height,width)
     if youtube_url[/youtu\.be\/([^\?]*)/]
       youtube_id = $1
     else
