@@ -58,17 +58,17 @@
         color: #FFFFFF;
     }
 
-    .textbox h2 {
+    .banner-text h2 {
         color:#ffffff;
         font-size: 17px;
         margin: 0px;
         padding: 5px;
     }
 
-    .textbox a:link {
+    .banner-text a:link {
         color:#3BB9FF;
     }
-    .textbox a:visited {
+    .banner-text a:visited {
         color:#3BB9FF;
     }
 </style>
@@ -89,7 +89,7 @@
                     <%= image_tag(home_media_item.home_media.url) %>
                 <% end %>
                 <div class="flex-caption">
-                  <div class="textbox">
+                  <div class="banner-text">
                     <h2><%= home_media_item.banner_title %></h2>
                     <b><%= raw(home_media_item.banner_text) %></b>
                   </div>
