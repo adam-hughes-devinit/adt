@@ -80,6 +80,7 @@ Adt::Application.routes.draw do
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
   get '/explore', to: 'static_pages#circle_grid', as: "circle_grid"
   get '/content/:name', to: 'contents#show_by_name', as: "content_by_name"
+  get '/complex_content/:complex_name', to: 'contents#show_complex_content', as: "complex_content_by_name"
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
   get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'

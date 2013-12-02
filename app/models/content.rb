@@ -19,6 +19,100 @@ class Content < ActiveRecord::Base
 
   validates_inclusion_of :content_type, in: CONTENT_TYPES
 
+  def meet_the_team
+    fac_staff = ""
+
+    Content.find_all_by_content_type("Faculty/Staff")
+    .sort{|a,b|
+      (a.data["position"] && b.data["position"]) ? a.data["position"] <=> b.data["position"] : ( a.data["position"] ? -1 : 1 ) }
+    .each_slice(2) { |slice|
+
+      fac_staff += "<div class='row-fluid' style='margin:10px;'>"
+
+      fac_staff += slice.map { |f|
+        html = "
+      <div class='span2' >
+
+     #{image_tag "people/#{f.name.downcase.gsub(/\s/, "_")}.png", class: 'team-image'}
+
+      </div>
+      <div class='span4'>
+        <h4>
+          #{f.name}
+          <small>
+            <a href='mailto:china@aiddata.org?subject=Message for #{f.name}'>
+              E-mail
+            </a>
+          </small>
+        </h4>
+        <p class='teaser'>
+          #{f.data["description_html"]}
+        </p>
+      </div>
+    "
+        }.join
+        fac_staff += "</div>"
+
+      }
+
+      ras = ""
+
+      Content.find_all_by_content_type("Research Assistant").each_slice(3).each do |slice|
+
+        ras += "<div class='row-fluid'>"
+
+        slice.each do |f|
+          details = []
+
+          if (year = f.data["class"]) && (year.to_s =~ /[0-9]/)
+            details.push "Class of #{f.data["class"]}"
+          end
+
+          if major = f.data["major"]
+            details.push "Major: #{f.data["major"]}"
+          end
+          ras += "
+     <div class='span1'>
+
+        #{image_tag "people/#{f.name.downcase.gsub(/\s/, "_")}.png", class: 'team-image'}
+
+      </div>
+      <div class='span3'>
+        <h4>
+          #{f.name}
+        <br>
+          <small>
+            #{
+          details.join(" | ")
+          }
+          </small>
+        </h4>
+      </div>
+
+  "
+      end
+
+      ras += "</div>"
+
+    end
+
+
+    content = "
+
+  ## Faculty/Staff
+
+  #{fac_staff}
+
+  ## Research Assistants
+
+  #{ras.html_safe}
+
+
+    "
+    #Markdown.new(content).to_html
+
+  end
+
   def data
 
     begin
