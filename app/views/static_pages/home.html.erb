@@ -176,7 +176,7 @@
                     <% else %>
                         <%= image_tag media_item.media.url %>
                     <% end %>
-                    <div class="flex-caption" >
+                    <div class="flex-caption youtube-caption" id=<%= iframe_id %> >
                       <p>
                           <div class=banner-text>
                             <h2>Learn more about <%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></h2>
