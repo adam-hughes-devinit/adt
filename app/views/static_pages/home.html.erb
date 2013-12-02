@@ -176,9 +176,11 @@
                         <%= image_tag media_item.media.url %>
                     <% end %>
                     <div class="flex-caption" >
-                      <div class=banner-text>
-                        <p>Learn more about <b><%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></b></p>
-                      </div>
+                      <p>
+                          <div class=banner-text>
+                            <h4>Learn more about <%= link_to media_item.homepage_text, project_path(media_item.project_id),{:style=>'color:#3BB9FF;'} %></h4>
+                          </div>
+                      </p>
                     </div>
                     <% iframe_id = iframe_id +1 %>
                   </div>
