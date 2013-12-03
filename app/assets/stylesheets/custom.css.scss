@@ -404,8 +404,15 @@ $carousel_height: 300px;
     }
   }
 }
+.staff-image {
+  height: 175px;
+  width: auto;
+  border: 1px solid $aiddataBlue;
+  margin: 10px;
+}
+
 .team-image {
-  max-height: 200px;
+  max-height: 100px;
   border: 1px solid $aiddataBlue;
   margin: 10px;
 }

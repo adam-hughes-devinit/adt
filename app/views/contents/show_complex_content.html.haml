@@ -5,9 +5,8 @@
 .tab-content.site_content{style: "margin: auto, auto;"}
   #en.tab-pane.active
     .row-fluid
-      %h1.page-header{style: "overflow-y:auto;"}
-        .span12
-          = @complex_name.titleize
+      %h1.page-header{style: "overflow-y:h;"}
+        = @complex_name.titleize
     .row-fluid
       .span12
         //- cache("content/#{@content.complex_name}/{@content.updated_at}/en/#", expires_in: 1.minute ) do

@@ -4,8 +4,8 @@ class Person < ActiveRecord::Base
                   :position_id, :current_team_member
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" },
-                    :url => "people/:filename",
-                    :path => ":rails_root/app/assets/images/people/:filename"
+                    :url => "people/:style/:filename",
+                    :path => ":rails_root/app/assets/images/people/:style/:filename"
   validates_attachment :avatar, :content_type => { :content_type => /^image\/(png|gif|jpeg)/ },
                        :message => 'only (png/gif/jpeg) images'
 
