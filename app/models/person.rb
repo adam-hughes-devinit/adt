@@ -10,13 +10,12 @@ class Person < ActiveRecord::Base
                        :message => 'only (png/gif/jpeg) images'
 
   before_save :rename_avatar
-
+  validates_uniqueness_of :last_name, :scope => :first_name
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :avatar
-  validates_presence_of :email
   validates_presence_of :position
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
 
   def rename_avatar
     #avatar_file_name - important is the first word - avatar - depends on your column in DB table

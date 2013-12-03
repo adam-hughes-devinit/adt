@@ -1,5 +1,5 @@
 <h2>Faculty Staff</h2>
-<% Person.joins(:position).where(positions: {name: "Faculty/Staff"}).order("id asc").each_slice(2).each do |slice| %>
+<% Person.joins(:position).where(positions: {name: "Faculty/Staff"}, current_team_member: true).order("id asc").each_slice(2).each do |slice| %>
   <div class='row-fluid' style='margin:10;'>
     <% slice.each do |person| %>
           <div class='span2' >
@@ -24,31 +24,21 @@
 <% end %>
 
 <h2>Research Assistants</h2>
-<% Content.find_all_by_content_type("Research Assistant").each_slice(3).each do |slice| %>
+<% Person.joins(:position).where(positions: {name: "Research Assistant"}, current_team_member: true).order("last_name asc").each_slice(3).each do |slice| %>
     <div class='row-fluid'>
 
-      <% slice.each do |f| %>
-          <% details = [] %>
+      <% slice.each do |person| %>
           <div class='span1'>
 
-            <%= image_tag "people/#{f.name.downcase.gsub(/\s/, "_")}.png", class: 'team-image' %>
+            <%= image_tag(person.avatar.url(:medium), class: 'team-image') %>
 
           </div>
           <div class='span3'>
             <h4>
-              <%= f.name %>
+              <%= person.first_name %> <%= person.last_name %>
               <br>
               <small>
-                <% if (year = f.data["class"]) && (year.to_s =~ /[0-9]/ ) %>
-                    <% details.push "Class of #{f.data["class"]}" %>
-                <% end %>
-
-                <% if major = f.data["major"] %>
-                    <% details.push "Major: #{f.data["major"]}" %>
-                <% end %>
-
-                <%=  details.join(" | ") %>
-
+                <%= person.title %>
               </small>
             </h4>
           </div>
