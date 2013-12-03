@@ -20,6 +20,8 @@
           max-height: 100%;
           display: inline-block;
 
+
+
       }
 
       .flex-direction-nav a:before  {
@@ -141,7 +143,15 @@
     // Javascript for file viewer
     $(window).load(function() {
         $('.flexslider').flexslider({
-            animation: "slide"
+            animation: "fade",   //options:"slide" or "fade"
+            controlNav:true,
+            directionNav:true,
+            easing:"swing",
+            animationSpeed:400,
+            pauseOnAction: true,
+            pauseOnHover: true,
+            useCSS: true  // turn off for slide to work in firefox.
         });
     });
+
 </script>

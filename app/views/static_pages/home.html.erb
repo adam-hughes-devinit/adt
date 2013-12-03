@@ -7,11 +7,20 @@
 <!-- Place in the <head>, after the three links -->
 <script>
     // Can also be used with $(document).ready()
+    // Javascript for file viewer
     $(window).load(function() {
         $('.flexslider').flexslider({
-            animation: "slide"
+            animation: "fade",   //options:"slide" or "fade"
+            controlNav:true,
+            directionNav:true,
+            easing:"swing",
+            animationSpeed:400,
+            pauseOnAction: true,
+            pauseOnHover: true,
+            useCSS: true  // turn off for slide to work in firefox.
         });
     });
+
 </script>
 
 <!-- Toggles banner when youtube video is played/paused.  -->
