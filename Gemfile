@@ -39,6 +39,7 @@ gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
 gem "paperclip"  # for file uploads
 gem "flexslider" # for file viewer
+gem 'active_admin_editor' # html editor for active admin
 
 
 group :development do

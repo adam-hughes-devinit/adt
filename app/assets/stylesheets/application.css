@@ -12,4 +12,5 @@
  *= require_self
  *= require_tree .
  *= require flexslider.css
+ //= require active_admin/editor/wysiwyg
  */
