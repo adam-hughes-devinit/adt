@@ -10,8 +10,8 @@ enable_typeahead Content, value_method: :to_english
   end
 
   def show_complex_content
-    @content = Content.new
     @complex_name = params[:complex_name]
+    render @complex_name
 
   end
 
