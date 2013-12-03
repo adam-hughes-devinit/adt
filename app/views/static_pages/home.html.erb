@@ -57,6 +57,7 @@
         slide_5 = new YT.Player('slide_5', {
             events: {
                 'onStateChange': on_youtube_play
+
             }
         });
 
@@ -67,11 +68,13 @@
         if (event.data == YT.PlayerState.PLAYING ) {
             //console.log("Youtube playing")
             $('.youtube-caption').slideToggle("slow");
+            $('.flexslider').flexslider("pause"); // not working
 
         }
         else if (event.data == YT.PlayerState.PAUSED) {
             //console.log("Youtube paused"
             $('.youtube-caption').slideToggle("slow");
+            $('.flexslider').flexslider("play"); // not working
 
         }
     }
