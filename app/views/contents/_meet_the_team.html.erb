@@ -28,11 +28,11 @@
     <div class='row-fluid'>
 
       <% slice.each do |person| %>
+
           <div class='span1'>
-
             <%= image_tag(person.avatar.url(:medium), class: 'team-image') %>
-
           </div>
+
           <div class='span3'>
             <h4>
               <%= person.first_name %> <%= person.last_name %>
@@ -42,12 +42,9 @@
               </small>
             </h4>
           </div>
-
-
       <% end %>
 
   </div>
-
 <% end %>
 
 
