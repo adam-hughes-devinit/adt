@@ -21,6 +21,6 @@ class Person < ActiveRecord::Base
   def rename_avatar
     #avatar_file_name - important is the first word - avatar - depends on your column in DB table
     extension = File.extname(avatar_file_name).downcase
-    self.avatar.instance_write :file_name, (self.first_name + '_' + self.last_name + extension)
+    self.avatar.instance_write :file_name, (self.first_name.downcase + '_' + self.last_name.downcase + extension)
   end
 end
