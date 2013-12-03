@@ -1,59 +1,6 @@
 <div class='well well-small'>
-  <style>
-      .flexslider {
-          width: auto;
-          height: 350px;
-          border: 0 !important;
-          margin-bottom: 3em !important;
 
-      }
-      .flexslider .frame {
-          text-align: center;
-          width: 100%;
-          overflow:hidden;
-
-      }
-      .flexslider .frame  img {
-          width:auto;
-          height: 350px;
-          max-width: 100%;
-          max-height: 100%;
-          display: inline-block;
-
-
-
-      }
-
-      .flex-direction-nav a:before  {
-          font-family: "flexslider-icon";
-          font-size: 40px;
-          line-height: 40px;
-          display: inline-block;
-          content: '\f001';
-      }
-
-  </style>
-
-  <!-- Dynamically adds images and videos to file viewer -->
-  <div class="flexslider">
-    <ul class="slides">
-      <% if @project.get_publishable_media_items.each do |media_item| %>
-
-          <li>
-            <div class="frame">
-              <% if !media_item.url.blank? %>
-                  <%= raw(media_item.youtube_embed(media_item.url, 329, 545,'iframe')) %>
-              <% else %>
-                  <%= image_tag media_item.media.url %>
-              <% end %>
-            </div>
-          </li>
-      <!-- Default image, if no files/videos are published. -->
-      <% end.empty? %>
-         <%= image_tag('aiddata_notag.png')%>
-      <% end %>
-    </ul>
-  </div>
+  <%= render "media_items/project_media_viewer" %>
 
   <!-- Links for popup boxes -->
   <div class="row-fluid" >
@@ -137,21 +84,3 @@
   </div>
 
 </div>
-
-<script>
-    // Can also be used with $(document).ready()
-    // Javascript for file viewer
-    $(window).load(function() {
-        $('.flexslider').flexslider({
-            animation: "fade",   //options:"slide" or "fade"
-            controlNav:true,
-            directionNav:true,
-            easing:"swing",
-            animationSpeed:400,
-            pauseOnAction: true,
-            pauseOnHover: true,
-            useCSS: true  // turn off for slide to work in firefox.
-        });
-    });
-
-</script>
