@@ -11,7 +11,7 @@ enable_typeahead Content, value_method: :to_english
 
   def show_complex_content
     @complex_name = params[:complex_name]
-    render @complex_name
+    #render@complex_name
 
   end
 
