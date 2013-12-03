@@ -1,3 +1,32 @@
+<% Content.find_all_by_content_type("Faculty/Staff").sort do |a,b| %>
+    <% (a.data["position"] && b.data["position"]) ? a.data["position"] <=> b.data["position"] : ( a.data["position"] ? -1 : 1 ).each_slice(2) do |slice| %>
+        <div class='row-fluid' style='margin:10px;'>"
+          <% slice.map do |f| %>
+              <div class='span2' >
+                <%= image_tag "people/#{f.name.downcase.gsub(/\s/, "_")}.png", class: 'team-image' %>
+
+               </div>
+              <div class='span4'>
+                <h4>
+                  <%= f.name %>
+                  <small>
+                    <a href='mailto:china@aiddata.org?subject=Message for #{f.name}'>
+                      E-mail
+                    </a>
+                  </small>
+                </h4>
+                <p class='teaser'>
+                  <%= f.data["description_html"] %>
+                </p>
+              </div>
+              <%= f.join %>
+          <% end %>
+        </div>
+    <% end %>
+<% end %>
+
+
+
 <% Content.find_all_by_content_type("Research Assistant").each_slice(3).each do |slice| %>
     <div class='row-fluid'>
 
