@@ -1,34 +1,29 @@
-<table>
-  <div class='row-fluid' style='margin:10px;'>
-    <% Person.joins(:position).where(positions: {name: "Faculty/Staff"}).each do |person| %>
+<h2>Faculty Staff</h2>
+<% Person.joins(:position).where(positions: {name: "Faculty/Staff"}).order("id asc").each_slice(2).each do |slice| %>
+  <div class='row-fluid' style='margin:10;'>
+    <% slice.each do |person| %>
+          <div class='span2' >
+            <%= image_tag(person.avatar.url(:medium), class: 'staff-image') %>
+          </div>
 
-        <div class='span2' >
-                <%= image_tag(person.avatar.url(:medium), class: 'staff-image') %>
-
-              </div>
-              <div class='span4'>
-                <h4>
-                  <%= person.first_name %> <%= person.last_name %>
-                  <small>
-                    <a href='mailto:china@aiddata.org?subject=Message for #{person.name}'>
-                      E-mail
-                    </a>
-                  </small>
-                </h4>
-                <p class='teaser'>
-                  <%= raw(person.bio) %>
-                </p>
-              </div>
+          <div class='span4'>
+            <h4>
+              <%= person.first_name %> <%= person.last_name %>
+              <small>
+                <a href='mailto:china@aiddata.org?subject=Message for #{person.name}'>
+                  E-mail
+                </a>
+              </small>
+            </h4>
+            <p class='teaser'>
+              <%= raw(person.bio) %>
+            </p>
+          </div>
     <% end %>
-
-
   </div>
-</table>
+<% end %>
 
-
-
-
-
+<h2>Research Assistants</h2>
 <% Content.find_all_by_content_type("Research Assistant").each_slice(3).each do |slice| %>
     <div class='row-fluid'>
 
