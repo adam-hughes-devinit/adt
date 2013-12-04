@@ -89,9 +89,19 @@
     .banner-text a:visited {
         color:#3BB9FF;
     }
+
+    .carousel.carousel-fade .item {
+        opacity:0;
+    }
+
+    .carousel.carousel-fade .active.item {
+        opacity:1;
+    }
 </style>
 
-<div id='home_carousel' class='carousel slide xwith_shadow'>
+
+
+<div id='home_carousel' class='carousel carousel-fade xwith_shadow'>
   <ol class='carousel-indicators'>
     <li data-target='#home_carousel' data-slide-to='0' class='active'></li>
     <li data-target='#home_carousel' data-slide-to='1'></li>
