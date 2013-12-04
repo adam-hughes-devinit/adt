@@ -1,4 +1,12 @@
-<!-- Place in the <head>, after the three links -->
+<!-- Starts carousel sliding -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.carousel').carousel({
+            interval: 4000
+        })
+    });
+</script>
+
 <!-- Toggles banner when youtube video is played/paused.  -->
 <script>
     var tag = document.createElement('script');
@@ -91,14 +99,14 @@
     <li data-target='#home_carousel' data-slide-to='3'></li>
     <li data-target='#home_carousel' data-slide-to='4'></li>
   </ol>
+
   <div class='carousel-inner'>
 
-<!--  Adds homepage items to media viewer -->
-
+    <!--  Adds homepage items to media viewer -->
     <% iframe_id = 1 %>
     <% active = "active" %>
     <% @home_media.each do |home_media_item| %>
-        <div class="item <%= active %>">
+        <div class="<%= active %> item">
           <% if !home_media_item.url.blank? %>
               <%= raw(home_media_item.youtube_embed(home_media_item.url,320,570,iframe_id)) %>
           <% else %>
@@ -122,7 +130,7 @@
     <% if !@project_media.nil? %>
         <% @project_media.each do |media_item| %>
 
-            <div class="item <%= active %>">
+            <div class="<%= active %> item">
               <% if !media_item.url.blank? %>
                   <%= raw(media_item.youtube_embed(media_item.url,320,570,iframe_id)) %>
               <% else %>
