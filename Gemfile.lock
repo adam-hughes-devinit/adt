@@ -240,6 +240,7 @@ GEM
       activesupport (= 3.2.13)
       bundler (~> 1.0)
       railties (= 3.2.13)
+    rails-file-icons (0.0.1)
     railties (3.2.13)
       actionpack (= 3.2.13)
       activesupport (= 3.2.13)
@@ -370,6 +371,7 @@ DEPENDENCIES
   progress_bar
   quiet_assets
   rails (= 3.2.13)
+  rails-file-icons
   rspec-rails
   sass-rails
   selenium-webdriver

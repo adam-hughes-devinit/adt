@@ -247,6 +247,11 @@ class Project < ActiveRecord::Base
     return media_items
   end
 
+  def get_random_media_items
+    media_items = MediaItem.where(publish:true).order('random(5)')
+    return media_items
+  end
+
 
   # 1/8/13 -- restructuring flow class             ~~~~~~~~~~~~~~~~
   #

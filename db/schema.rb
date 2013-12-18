@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131123214337) do
+ActiveRecord::Schema.define(:version => 20131126191542) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -241,6 +241,22 @@ ActiveRecord::Schema.define(:version => 20131123214337) do
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
 
+  create_table "homepage_media_items", :force => true do |t|
+    t.string   "banner_text"
+    t.string   "banner_link"
+    t.string   "url"
+    t.integer  "order"
+    t.boolean  "published"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.string   "home_media_file_name"
+    t.string   "home_media_content_type"
+    t.integer  "home_media_file_size"
+    t.datetime "home_media_updated_at"
+    t.string   "banner_title"
+    t.string   "banner_link_text"
+  end
+
   create_table "intents", :force => true do |t|
     t.string   "name"
     t.integer  "code"
@@ -273,6 +289,12 @@ ActiveRecord::Schema.define(:version => 20131123214337) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "media_item_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "media_items", :force => true do |t|
     t.boolean  "publish"
     t.integer  "project_id"
@@ -285,7 +307,6 @@ ActiveRecord::Schema.define(:version => 20131123214337) do
     t.integer  "user_id"
     t.string   "url"
     t.boolean  "downloadable"
-    t.string   "media_type"
     t.boolean  "featured"
     t.string   "homepage_text"
     t.string   "download_text"
