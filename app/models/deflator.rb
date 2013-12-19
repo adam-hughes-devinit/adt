@@ -12,7 +12,7 @@ class Deflator < ActiveRecord::Base
 
    # Finds transactions that needed this deflator to calculate usd_defl
   def calculate_associated_transactions
-    transactions = Transaction.joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
+    transactions = Transaction.select("DISTINCT(transactions.project_id)").joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
     transactions.each do |transaction_record|
 
        # save project instead of transaction so cache is updated.
