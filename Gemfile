@@ -66,8 +66,8 @@ end
 # not available for dynamic compiling 
 # if they're in this group
   #gem 'sass-rails',   '3.2.5'  # old version used, updated for active admin. Leaving this in case a bug arises.
-  #gem 'bootstrap-sass', '2.3.2.0'
-  gem 'bootstrap-sass', '3.0.2.1'
+  gem 'bootstrap-sass', '2.3.2.0'
+  #gem 'bootstrap-sass', '3.0.2.1'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
   gem "jquery-rails", "< 3.0.0" # this version needed for active admin to work (unless you upgrade to rails 4.0)
