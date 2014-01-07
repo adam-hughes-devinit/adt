@@ -12,7 +12,7 @@ class MediaItem < ActiveRecord::Base
   validates_presence_of :homepage_text, :if => :on_homepage?
   validates_presence_of :download_text, :if => :downloadable?
   validates_presence_of :publish, :if => :featured?
-  validates_presence_of :media_source_type_id
+  validates_presence_of :media_source_type_id, :if => :downloadable?
   validates_format_of :url, :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/,
                       :message => "Must be youtube url", :if => :publish?, :allow_blank => true
 
