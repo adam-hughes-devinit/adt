@@ -32,17 +32,17 @@ class ProjectSweeper < ActionController::Caching::Sweeper
 
     projects.each do |project|
       # expire the to_english method
-      Rails.cache.clear "projects/#{project.id}/to_english/no_title"
-      Rails.cache.clear "projects/#{project.id}/to_english/title"
+      Rails.cache.delete("projects/#{project.id}/to_english/no_title")
+      Rails.cache.delete("projects/#{project.id}/to_english/title")
 
       # expire the Show page(s) no that it is changed
-      expire_fragment("projects/#{project.id}/signed_in/aiddata")
-      expire_fragment("projects/#{project.id}/signed_in/non_aiddata")
-      expire_fragment("projects/#{project.id}/not_signed_in/non_aiddata")
+      Rails.cache.delete("projects/#{project.id}/signed_in/aiddata")
+      Rails.cache.delete("projects/#{project.id}/signed_in/non_aiddata")
+      Rails.cache.delete("projects/#{project.id}/not_signed_in/non_aiddata")
 
       # expire the Search Results now that it is changed
-      expire_fragment("projects/#{project.id}/search_result/aiddata")
-      expire_fragment("projects/#{project.id}/search_result/non_aiddata")
+      Rails.cache.delete("projects/#{project.id}/search_result/aiddata")
+      Rails.cache.delete("projects/#{project.id}/search_result/non_aiddata")
       # Expire the index page(s) now that a project has changed
       # expire_action action: :index 
 
