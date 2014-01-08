@@ -22,6 +22,15 @@ test:
   pool: 5
   timeout: 5000
 
+staging:
+  adapter: postgresql
+  encoding: unicode
+  database: adt_staging
+  username: adt_user
+  password: aiddata
+  pool: 500
+  timeout: 5000
+
 production:
   adapter: postgresql
   encoding: unicode
