@@ -7,7 +7,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   end
  
   # If our sweeper detects that a Project was updated call this
-  def after_update(this)
+  def after_edit(this)
     expire_cache_for(this)
   end
  
