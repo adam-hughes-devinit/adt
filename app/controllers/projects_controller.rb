@@ -132,6 +132,8 @@ class ProjectsController < ApplicationController
     #keep track of who changed this project
     Rails.cache.write("last_change/#{params[:id]}", user_id.to_i)
     @project = Project.unscoped.find(params[:id])
+    expire_fragment("projects/#{@project.id}/to_english/no_title")
+    expire_fragment("projects/#{@project.id}/to_english/title")
     @loan_detail = LoanDetail.where(:project_id => @project.id)
 
     #for versioning
