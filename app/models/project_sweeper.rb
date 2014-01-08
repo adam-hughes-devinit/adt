@@ -7,7 +7,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   end
  
   # If our sweeper detects that a Project was updated call this
-  def after_edit(this)
+  def after_update(this)
     expire_cache_for(this)
   end
  
@@ -19,6 +19,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(this)
     #p "Expiring cache for #{this.inspect}"
 
+     # Gets projects from this.
     if this.respond_to? :project 
       projects = [this.project]
     elsif this.is_a? Project
@@ -31,8 +32,8 @@ class ProjectSweeper < ActionController::Caching::Sweeper
 
     projects.each do |project|
       # expire the to_english method
-      expire_fragment("projects/#{project.id}/to_english/no_title")
-      expire_fragment("projects/#{project.id}/to_english/title")
+      Rails.cache.clear "projects/#{project.id}/to_english/no_title"
+      Rails.cache.clear "projects/#{project.id}/to_english/title"
 
       # expire the Show page(s) no that it is changed
       expire_fragment("projects/#{project.id}/signed_in/aiddata")
