@@ -15,6 +15,11 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   def after_destroy(this)
     expire_cache_for(this)
   end
+
+  # If our sweeper detects that a Projects was saved, call this
+  def after_save(this)
+    expire_cache_for(this)
+  end
  
   def expire_cache_for(this)
     #p "Expiring cache for #{this.inspect}"

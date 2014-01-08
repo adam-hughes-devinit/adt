@@ -21,5 +21,4 @@ class Deflator < ActiveRecord::Base
       end
     end
   end
-
 end
