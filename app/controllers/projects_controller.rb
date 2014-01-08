@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
   #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 
-  cache_sweeper :project_sweeper # app/models/project_sweeper.rb
+  cache_sweeper :project_sweeper, :only => [:create, :update, :destroy] # app/models/project_sweeper.rb
 
   def index
     respond_to do |format|
@@ -132,8 +132,8 @@ class ProjectsController < ApplicationController
     #keep track of who changed this project
     Rails.cache.write("last_change/#{params[:id]}", user_id.to_i)
     @project = Project.unscoped.find(params[:id])
-    Rails.cache.clear "projects/#{@project.id}/to_english/title"
-    Rails.cache.clear "projects/#{@project.id}/to_english/no_title"
+    #Rails.cache.clear "projects/#{@project.id}/to_english/title"
+    #Rails.cache.clear "projects/#{@project.id}/to_english/no_title"
     @loan_detail = LoanDetail.where(:project_id => @project.id)
 
     #for versioning
