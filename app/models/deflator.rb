@@ -14,10 +14,19 @@ class Deflator < ActiveRecord::Base
   def calculate_associated_transactions
     transactions = Transaction.select("DISTINCT(transactions.project_id)").joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
     transactions.each do |transaction_record|
+      puts transaction_record.project_id
 
        # save project instead of transaction so cache is updated.
       if Project.find(transaction_record.project_id).save
         LoanDetail.find_by_project_id(transaction_record.project_id).save
+      end
+    end
+  end
+
+  def recaclulate_all_projects
+    Project.all.each do |project|
+      if project.save
+        LoanDetail.find_by_project_id(project.id).save
       end
     end
   end
