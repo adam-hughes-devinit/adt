@@ -13,7 +13,7 @@ class ExchangeRate < ActiveRecord::Base
   after_save :calculate_associated_transactions
 
   # Finds transactions that needed this exchange_rate to calculate usd_defl
-  def calculate_associated_transactions
+  def calculate_associated_transactions_break
     transactions = Transaction.joins(:project).where(projects: { year: self.year }, currency_id: self.from_currency_id )
     transactions.each do |transaction_record|
       if Transaction.find(transaction_record.id).save
@@ -23,13 +23,15 @@ class ExchangeRate < ActiveRecord::Base
   end
 
   # This should replace the method above, but for some reason it is not working.
-  def calculate_associated_transactions_break
+  def calculate_associated_transactions
     transactions = Transaction.select("DISTINCT(transactions.project_id)").joins(:project).where(projects: { year: self.year }, currency_id: self.from_currency_id )
     transactions.each do |transaction_record|
 
       # update Project instead of Transaction so cache is updated.
-      if Project.find(transaction_record.project_id).save
+      if Transaction.find_by_project_id(transaction_record.project_id).save
+        Project.find(transaction_record.project_id).save
         LoanDetail.find_by_project_id(transaction_record.project_id).save
+
       end
     end
   end

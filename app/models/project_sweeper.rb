@@ -5,12 +5,12 @@ class ProjectSweeper < ActionController::Caching::Sweeper
   def after_create(this)
     expire_cache_for(this)
   end
- 
+
   # If our sweeper detects that a Project was updated call this
   def after_update(this)
     expire_cache_for(this)
   end
- 
+
   # If our sweeper detects that a Project was deleted call this
   def after_destroy(this)
     expire_cache_for(this)
