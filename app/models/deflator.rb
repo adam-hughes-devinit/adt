@@ -8,7 +8,8 @@ class Deflator < ActiveRecord::Base
 
   validates :year, :uniqueness => {:scope => :country_id }
 
-  after_save :calculate_associated_transactions
+  #after_save :calculate_associated_transactions
+  after_save :recalculate_all_projects
 
   # Finds transactions that needed this deflator to calculate usd_defl
   def calculate_associated_transactions
@@ -34,7 +35,7 @@ class Deflator < ActiveRecord::Base
   end
   
    # This should recalculate all projects. Used for testing and does not appear to be working like the mehtod above. 
-  def recaclulate_all_projects
+  def recalculate_all_projects
     Project.all.each do |project|
       if project.save
         LoanDetail.find_by_project_id(project.id).save
