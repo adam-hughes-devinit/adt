@@ -33,7 +33,9 @@ ActiveAdmin.register MediaItem do
     column :media_source_type
     column :media_file_name
     column :media_content_type
-    column :media_file_size
+    column "Media File Size", :media_file_size do |media_item|
+      number_to_human_size(media_item.media_file_size)
+    end
     column :created_at
     column :updated_at
     default_actions
