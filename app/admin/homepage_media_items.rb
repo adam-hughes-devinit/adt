@@ -29,7 +29,9 @@ ActiveAdmin.register HomepageMediaItem do
     column :banner_text
     column :home_media_file_name
     column :home_media_content_type
-    column :home_media_file_size
+    column "Media File Size", :home_media_file_size do |home_media_item|
+      number_to_human_size(home_media_item.home_media_file_size)
+    end
     column :created_at
     column :updated_at
     default_actions
