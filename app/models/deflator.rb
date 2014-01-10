@@ -10,8 +10,18 @@ class Deflator < ActiveRecord::Base
 
   after_save :calculate_associated_transactions
 
-   # Finds transactions that needed this deflator to calculate usd_defl
+  # Finds transactions that needed this deflator to calculate usd_defl
   def calculate_associated_transactions
+    transactions = Transaction.joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
+    transactions.each do |transaction_record|
+      if Transaction.find(transaction_record.id).save
+        LoanDetail.find_by_project_id(transaction_record.project_id).save
+      end
+    end
+  end
+
+   # This should replace the method above, but for some reason it is not working.
+  def calculate_associated_transactions_break
     transactions = Transaction.select("DISTINCT(transactions.project_id)").joins(:project).where(projects: { year: self.year, donor_id: self.country_id } )
     transactions.each do |transaction_record|
       puts transaction_record.project_id
@@ -22,7 +32,8 @@ class Deflator < ActiveRecord::Base
       end
     end
   end
-
+  
+   # This should recalculate all projects. Used for testing and does not appear to be working like the mehtod above. 
   def recaclulate_all_projects
     Project.all.each do |project|
       if project.save

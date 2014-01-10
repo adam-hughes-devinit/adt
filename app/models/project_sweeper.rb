@@ -16,7 +16,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
     expire_cache_for(this)
   end
 
-  # If our sweeper detects that a Projects was saved, call this
+  # If our sweeper detects that a Project was saved call this
   def after_save(this)
     expire_cache_for(this)
   end
@@ -54,7 +54,7 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       # expire cache of Search results
       Rails.cache.delete("projects/faceted")
       # expire /recent
-      expire_fragment("recent")
+      Rails.cache.delete("recent")
       # expire the CSV text
       project.expire_csv_text
       project.expire_xml
