@@ -37,10 +37,12 @@ class Deflator < ActiveRecord::Base
   
    # This should recalculate all projects. Used for testing and does not appear to be working like the mehtod above.
   def recalculate_all_projects
-    Project.all.each do |project|
-      if project.save
+    Project.all.each do |project|    
+	if !Transaction.find_by_project_id(project.id).blank?  
+	  Transaction.find_by_project_id(project.id).save
+        end
+        Project.find(project.id).save
         LoanDetail.find_by_project_id(project.id).save
-      end
     end
   end
 
