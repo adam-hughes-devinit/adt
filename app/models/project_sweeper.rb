@@ -46,8 +46,8 @@ class ProjectSweeper < ActionController::Caching::Sweeper
       Rails.cache.delete("projects/#{project.id}/not_signed_in/non_aiddata")
 
       # expire the Search Results now that it is changed
-      Rails.cache.delete("projects/#{project.id}/search_result/aiddata")
-      Rails.cache.delete("projects/#{project.id}/search_result/non_aiddata")
+      Rails.cache.delete("views/projects/#{project.id}/search_result/aiddata")
+      Rails.cache.delete("views/projects/#{project.id}/search_result/non_aiddata")
       # Expire the index page(s) now that a project has changed
       # expire_action action: :index 
 
