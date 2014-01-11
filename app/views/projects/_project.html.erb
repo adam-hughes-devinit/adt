@@ -134,7 +134,10 @@
 
   <!--  scrollable popup for resources -->
   <div id="resources" class="modal hide fade in" style="width:700px; padding:10px;">
-    <h3>Resources:</h3>
+    <div class="modal-header" style="border:0px;">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Resources:</h3>
+    </div>
     <% if current_user_is_aiddata %>
         <%= render 'resources_for_aiddata' %>
     <% end %>
@@ -173,7 +176,10 @@
 
 <!--  scrollable popup for resources -->
 <div id="sources" class="modal hide fade in" style="width:700px; padding:10px;">
-  <h3>Sources:</h3>
+  <div class="modal-header" style="border:0px;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Sources:</h3>
+  </div>
   <div class='row-fluid'>
     <div class="scrolling_popup">
       <%= render :partial => 'project_sources', :locals => { :limit => false } %>
