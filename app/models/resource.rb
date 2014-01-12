@@ -6,6 +6,7 @@ class Resource < ActiveRecord::Base
   has_paper_trail 
   has_many :flags, as: :flaggable, dependent: :destroy
   accepts_nested_attributes_for :flags
+  belongs_to :language
 
 
   RESOURCE_TYPES = [
@@ -23,7 +24,7 @@ class Resource < ActiveRecord::Base
   attr_accessible :authors, :dont_fetch, :download_url,
   :fetched_at, :publish_date, :publisher,
   :publisher_location, :resource_type, :title, :source_url,
-  :project_ids, :projects_count
+  :project_ids, :projects_count, :language_id
 
   validates_uniqueness_of :source_url
   validates_presence_of :source_url, :title

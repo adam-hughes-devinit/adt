@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140112192232) do
+ActiveRecord::Schema.define(:version => 20140112201953) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -265,6 +265,12 @@ ActiveRecord::Schema.define(:version => 20140112192232) do
 
   add_index "intents", ["name"], :name => "index_intents_on_name"
 
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "loan_details", :force => true do |t|
     t.integer  "project_id"
     t.integer  "loan_type_id"
@@ -460,6 +466,7 @@ ActiveRecord::Schema.define(:version => 20140112192232) do
     t.datetime "updated_at",                        :null => false
     t.text     "source_url"
     t.integer  "projects_count",     :default => 0
+    t.integer  "language_id"
   end
 
   create_table "review_entries", :force => true do |t|
