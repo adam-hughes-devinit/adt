@@ -151,7 +151,7 @@
 
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span6" style="word-wrap: break-word;">
       <h4>Resources:</h4>
       <% if current_user_is_aiddata %>
           <%= render 'resources_for_aiddata' %>
@@ -175,7 +175,7 @@
 </div>
 
 
-<!--  scrollable popup for resources -->
+<!--  scrollable popup for sources -->
 <div id="sources" class="modal hide fade in" style="width:700px; padding:10px;">
   <div class="modal-header" style="border:0px;">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -189,7 +189,7 @@
 </div>
 
    <div class='row-fluid'>
-     <div class='span6'>
+     <div class='span6' style="word-wrap: break-word;">
       <% if current_user_is_aiddata %>
 
         <h4>Sources:</h4>
