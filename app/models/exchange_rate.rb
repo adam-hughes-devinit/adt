@@ -16,11 +16,13 @@ class ExchangeRate < ActiveRecord::Base
     transactions = Transaction.select("DISTINCT(transactions.project_id)").joins(:project).where(projects: { year: self.year }, currency_id: self.from_currency_id )
     transactions.each do |transaction_record|
 
-      # update Project instead of Transaction so cache is updated.
+       # Save transaction and loan detail so they are recalculated
       if Transaction.find_by_project_id(transaction_record.project_id).save
+        LoanDetail.find_by_project_id(transaction_record.project_id).save
+
+         # Delete cache for the project, so cache is updated.
         project = Project.find(transaction_record.project_id)
         delete_project_cache(project)
-        LoanDetail.find_by_project_id(transaction_record.project_id).save
 
       end
     end
