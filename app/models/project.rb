@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
 
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
-    :is_commercial, :media_id, 
+    :is_commercial, :is_ground_truthing, :media_id,
     :year_uncertain, :debt_uncertain, :line_of_credit,
     :is_cofinanced,
     # belongs_to fields
@@ -514,7 +514,7 @@ class Project < ActiveRecord::Base
 
   def as_json(options={})
     super(
-      only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
+      only: [:id,:year, :title, :active, :is_commercial, :is_ground_truthing, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain],
       methods: [:usd_2009, :donor_name, :to_english,
         :crs_sector_name, :flow_type_name, :oda_like_name, :status_name, 
         # :tied_name, 
