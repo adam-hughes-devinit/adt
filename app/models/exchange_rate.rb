@@ -18,7 +18,8 @@ class ExchangeRate < ActiveRecord::Base
 
       # update Project instead of Transaction so cache is updated.
       if Transaction.find_by_project_id(transaction_record.project_id).save
-        Project.find(transaction_record.project_id).save # Replace with project sweeper.
+        project = Project.find(transaction_record.project_id)
+        delete_project_cache(project)
         LoanDetail.find_by_project_id(transaction_record.project_id).save
 
       end

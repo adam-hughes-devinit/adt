@@ -1,4 +1,5 @@
 class Deflator < ActiveRecord::Base
+  include ProjectCache
   belongs_to :country
   attr_accessible :value, :year, :country_id
 
@@ -17,8 +18,10 @@ class Deflator < ActiveRecord::Base
 
        # save project instead of transaction so cache is updated.
       if Transaction.find_by_project_id(transaction_record.project_id).save
-        Project.find(transaction_record.project_id).save # Replace with project sweeper.
+        project = Project.find(transaction_record.project_id)
+        delete_project_cache(project)
         LoanDetail.find_by_project_id(transaction_record.project_id).save
+
       end
     end
   end
