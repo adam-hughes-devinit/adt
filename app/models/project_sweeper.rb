@@ -1,5 +1,6 @@
 class ProjectSweeper < ActionController::Caching::Sweeper
-  observe Project, Flag, Comment # This sweeper is going to keep an eye on the Project model
+  # This sweeper is going to keep an eye on the Project model
+  observe Project, Flag, Comment
  
   # If our sweeper detects that a Project was created call this
   def after_create(this)

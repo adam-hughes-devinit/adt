@@ -4,12 +4,17 @@ class HomepageMediaItem < ActiveRecord::Base
 
   has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  validates_attachment_size :home_media, :less_than => 1.megabytes, :message => "must be less than 1 MB"
+  validates_attachment :home_media,
+                       :content_type => { :content_type => ["image/jpg", "image/gif", "image/png"],
+                                          :message => "Must be an image (jpg, gif, png)" },
+                       :size => { :in => 0..1.megabytes, :message => "must be less than 1 MB"  }
 
   validates_presence_of :url, :unless => :home_media?
   validates_presence_of :home_media, :unless => :url?
   validates_presence_of :order, :if => :published
-  validates :url, :format => { :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/, :message => "Whoa there buddy. Must be a valid youtube url." }, :allow_blank => true
+  validates :url, :format => { :with =>  /^(http|https):\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]*)/,
+                               :message => "Whoa there buddy. Must be a valid youtube url." },
+            :allow_blank => true
 
 
   def youtube_embed(youtube_url,height,width,iframe_id)

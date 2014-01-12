@@ -44,6 +44,7 @@ ActiveAdmin.register MediaItem do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Media Item" do
       f.input :project, :input_html => { :disabled => true }
+      f.input :media, :as => :file, :input_html => { :disabled => true }
       f.input :media_file_name, :input_html => { :disabled => true }
       f.input :url, :input_html => { :disabled => true }
       f.input :media_source_type

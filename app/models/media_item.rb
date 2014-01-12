@@ -19,7 +19,16 @@ class MediaItem < ActiveRecord::Base
   # for paperclip
   has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
-  validates_attachment_size :media, :less_than => 20.megabytes, :message => "must be less than 20 MB"
+  validates_attachment :media,
+                       :content_type => { :content_type => ["image/jpg", "image/gif", "image/png"],
+                                          :if => :publish?,
+                                          :message => "Only images and youtube videos can be published" },
+                       :size => { :in => 0..20.megabytes, :message => "must be less than 20 MB"  }
+  validates_attachment_content_type :media,
+                                    :content_type => ["image/jpg", "image/gif", "image/png"],
+                                    :if => :on_homepage,
+                                    :message => "Only images and youtube videos can be displayed on homepage"
+
 
   def youtube_embed(youtube_url,height,width,iframe_id)
     if youtube_url[/youtu\.be\/([^\?]*)/]
