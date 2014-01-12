@@ -25,6 +25,7 @@ class Project < ActiveRecord::Base
     :flow_class_attributes,
     :loan_detail_attributes,
     :resources, :resources_attributes,
+    :user_suggestion_email,
     # for version control
     :accessories, :iteration,
     # hidden fields

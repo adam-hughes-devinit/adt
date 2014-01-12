@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140112034233) do
+ActiveRecord::Schema.define(:version => 20140112192232) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -401,23 +401,24 @@ ActiveRecord::Schema.define(:version => 20140112034233) do
     t.integer  "status_id"
     t.integer  "verified_id"
     t.integer  "donor_id"
-    t.boolean  "is_commercial",      :default => false
-    t.boolean  "active",             :default => true
+    t.boolean  "is_commercial",         :default => false
+    t.boolean  "active",                :default => true
     t.integer  "owner_id"
     t.integer  "media_id"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.integer  "crs_sector"
-    t.boolean  "debt_uncertain",     :default => false
-    t.boolean  "year_uncertain",     :default => false
-    t.boolean  "line_of_credit",     :default => false
-    t.boolean  "is_cofinanced",      :default => false
-    t.integer  "iteration",          :default => 0
+    t.boolean  "debt_uncertain",        :default => false
+    t.boolean  "year_uncertain",        :default => false
+    t.boolean  "line_of_credit",        :default => false
+    t.boolean  "is_cofinanced",         :default => false
+    t.integer  "iteration",             :default => 0
     t.integer  "intent_id"
     t.integer  "crs_sector_id"
     t.text     "last_state"
-    t.boolean  "published",          :default => true
+    t.boolean  "published",             :default => true
     t.boolean  "is_ground_truthing"
+    t.string   "user_suggestion_email"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"

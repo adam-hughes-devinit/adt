@@ -19,7 +19,9 @@
         - irrelevant.each {|x| atts.delete(x) }
         - if type == "Project"
           %th Title
+          %th Email
           %th Sources
+
         - else
           - if type == "Flag"
             %th Project
@@ -33,6 +35,7 @@
           - if type == "Project"
             %td= link_to content.id, project_path(content)
             %td= content.title
+            %td= content.user_suggestion_email
             - url_list = ""
             - content.sources.each do |src|
               %td= link_to(src.url, src.url)
