@@ -2,12 +2,15 @@
 .well.container-fluid
 	= form_tag "/resources", method: :get do
 		.row-fluid
-			.span6
+			.span4
 				= label_tag "search"
 				= search_field_tag :search, params[:search], placeholder: "Search all resources..."
-			.span6
+			.span4
 				= label_tag "resource_type"
 				=  select_tag :resource_type, Resource::RESOURCE_TYPES.map{|rt| "<option #{params[:resource_type].present? && params[:resource_type].include?(rt) ? "selected" : "" }>#{rt}</option>"}.join, multiple: true, include_blank: true
+			.span4
+				= label_tag "language"
+				= select_tag :language_id,  options_from_collection_for_select(@languages, "id", "name"), multiple: true, include_blank: true
 		.row-fluid
 			.span4
 				= submit_tag "Search", name: nil, class: "btn btn-primary"

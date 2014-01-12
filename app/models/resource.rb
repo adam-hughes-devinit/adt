@@ -8,7 +8,6 @@ class Resource < ActiveRecord::Base
   accepts_nested_attributes_for :flags
   belongs_to :language
 
-
   RESOURCE_TYPES = [
     "Government Source (Donor/Recipient)",
     "Implementing/Intermediary Agency Source",
@@ -24,7 +23,7 @@ class Resource < ActiveRecord::Base
   attr_accessible :authors, :dont_fetch, :download_url,
   :fetched_at, :publish_date, :publisher,
   :publisher_location, :resource_type, :title, :source_url,
-  :project_ids, :projects_count, :language_id
+  :project_ids, :projects_count, :language_id, :language
 
   validates_uniqueness_of :source_url
   validates_presence_of :source_url, :title

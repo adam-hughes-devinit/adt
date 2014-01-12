@@ -9,11 +9,13 @@ class ResourcesController < ApplicationController
     search = Resource.solr_search do
       fulltext params[:search] if params[:search].present?
       with :resource_type, params[:resource_type] if params[:resource_type].present? && params[:resource_type] != [""]
+      with :language_id, params[:language_id] if params[:language_id].present? && params[:language_id] != [""]
       order_by params[:order] ? params[:order].to_sym : :title, params[:dir] ? params[:dir].to_sym : :asc
       paginate page: params[:page] || 1, per_page: 30
     end
 
     @resources = search.results
+    @languages = Language.all
 
     respond_to do |format|
       format.html # index.html.erb
