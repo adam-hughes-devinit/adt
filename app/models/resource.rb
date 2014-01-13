@@ -113,7 +113,7 @@ class Resource < ActiveRecord::Base
                   #puts DetectLanguage.detect(clean_page)
               resource_language = DetectLanguage.simple_detect(clean_page)
               puts resource_language
-              #save_lang(resource_language)
+              save_lang(resource_language)
               #end
             end
           end
