@@ -31,13 +31,14 @@ class Resource < ActiveRecord::Base
 
   after_save :fetch!, if: Proc.new {|r| r.source_url_changed? }
   after_save :set_projects_count
-  after_save :update_resource_lang
+  before_save :update_resource_lang
 
   has_and_belongs_to_many :projects, uniq: true
   # I Wish. delegate :title, :description, to: :projects, prefix: true
 
-  def save_lang
-
+  def save_lang(resource_language)
+    language = Language.find_by_code(resource_language)
+    self.language_id = language.id
   end
 
   def update_resource_lang
@@ -71,6 +72,7 @@ class Resource < ActiveRecord::Base
           puts text
           resource_language = DetectLanguage.simple_detect(text)
           puts resource_language
+          save_lang(resource_language)
         else
           whole_doc = Nokogiri::HTML(file)
 
@@ -111,6 +113,7 @@ class Resource < ActiveRecord::Base
                   #puts DetectLanguage.detect(clean_page)
               resource_language = DetectLanguage.simple_detect(clean_page)
               puts resource_language
+              #save_lang(resource_language)
               #end
             end
           end
