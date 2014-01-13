@@ -27,8 +27,10 @@ class Language < ActiveRecord::Base
     DetectLanguage.configure do |config|
       config.api_key = "927256800b03882160b17f08badd5e7f"
     end
-
+    count = 0
     Resource.all.each do | resource |
+      count = count+1
+      puts ("count: %s" % count)
       #Resource.find(11819) do | resource |
       #resource = Resource.find(self.id)
       puts resource.id
