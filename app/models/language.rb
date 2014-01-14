@@ -28,7 +28,8 @@ class Language < ActiveRecord::Base
       config.api_key = "927256800b03882160b17f08badd5e7f"
     end
     count = 0
-    Resource.all.each do | resource |
+    resources = Resource.where("language_id IS NULL")
+    resources.each do | resource |
       count = count+1
       puts ("count: %s" % count)
       #Resource.find(11819) do | resource |
@@ -44,17 +45,20 @@ class Language < ActiveRecord::Base
       if (!url.nil?) and (url =~ URI::regexp)
 
         begin
-          file = open(url)#, 'User-Agent' => 'ruby')
-          #puts !!(url =~ (/\A(http:\/\/+).+(\.pdf)\z/))
+          file = open(url)
           if url =~ (/\A(http:\/\/+).+(\.pdf)\z/)
             begin
               reader = PDF::Reader.new(file)
               page = reader.page(1)
               text = page.text
               puts text
-              resource_language = DetectLanguage.simple_detect(text)
-              puts resource_language
-              save_lang(resource, resource_language)
+              begin
+                resource_language = DetectLanguage.simple_detect(text)
+                puts resource_language
+                save_lang(resource, resource_language)
+              rescue EOFError
+                puts "encountered EOFError"
+              end
             rescue PDF::Reader::MalformedPDFError => e
               if e.message
                 # handle 404 error
