@@ -60,13 +60,13 @@ class Language < ActiveRecord::Base
                 save_lang(resource, resource_language)
               rescue EOFError
                 puts "encountered EOFError"
+                resource.language_id = 0
+                resource.save
               end
-            rescue PDF::Reader::MalformedPDFError => e
-              if e.message
-                # handle 404 error
-              else
-                raise e
-              end
+            rescue PDF::Reader::MalformedPDFError
+              puts 'MalformedPDFError'
+              resource.language_id = 0
+              resource.save
             end
 
           else
@@ -88,6 +88,8 @@ class Language < ActiveRecord::Base
                   save_lang(resource, resource_language)
                 rescue ArgumentError
                   puts 'Could not sanitize. Probably due to: invalid byte sequence in UTF-8'
+                  resource.language_id = 0
+                  resource.save
                 end
                 #if !clean_page.nil?
 
@@ -125,6 +127,8 @@ class Language < ActiveRecord::Base
             #puts doc.encoding
         rescue SocketError, Errno::ETIMEDOUT, Zlib::BufError, Net::HTTPBadResponse, OpenURI::HTTPError, RuntimeError, Errno::ENOENT, Errno::EHOSTUNREACH
           puts "Socket/Http/TimedOut/Buf Error :("
+          resource.language_id = 0
+          resource.save
         end
       end
     end
