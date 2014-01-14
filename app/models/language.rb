@@ -9,14 +9,16 @@ class Language < ActiveRecord::Base
     a = ['en','fr','zh']
     if a.include?(resource_language)
 
-      language = Language.find_by_code(resource_language)
+      language = Language.find_by_code(resource_language).first(500)
       resource.language_id = language.id
       if resource.save
         puts "I saved?"
       end
 
+    else
+      resource.language_id = 0
+      resource.save
     end
-
   end
 
   def update_resource_lang
