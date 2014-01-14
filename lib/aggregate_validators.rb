@@ -34,7 +34,7 @@ module AggregateValidators
 	    	{search_constant_sym: :flow_type_name, sym: :flow_type, name: "Flow Type", options:  Proc.new { FlowType.all.map(&:name) }.call, internal_filter: "flow_types.name"},
 	    	{search_constant_sym: :oda_like_name, sym: :flow_class, name: "Flow Class", options: Proc.new { OdaLike.all.map(&:name) }.call, internal_filter: "oda_likes.name" },
 	    	{search_constant_sym: :status_name, sym: :status, name: "Status", options:  Proc.new { Status.all.map(&:name) }.call, internal_filter: "statuses.name" },
-	    	{sym: :year, name: "Year", options: ("2000".."2011").to_a.reverse! , internal_filter: "year" },
+	    	{sym: :year, name: "Year", options: ("#{Year.where(export: true).minimum("year")}".."#{Year.where(export: true).maximum("year")}").to_a.reverse! , internal_filter: "year" },
 	    	#{sym: :donor_name, name: "Donor Name", options:  Proc.new { Country.all.map(&:name) } , internal_filter: "donor.name"},
 	    ]
 	
