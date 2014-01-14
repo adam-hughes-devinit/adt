@@ -28,6 +28,7 @@ class Resource < ActiveRecord::Base
   validates_uniqueness_of :source_url
   validates_presence_of :source_url, :title
   validates_inclusion_of :resource_type, in: RESOURCE_TYPES
+  validates_format_of :source_url, :with => URI::regexp
 
   after_save :fetch!, if: Proc.new {|r| r.source_url_changed? }
   after_save :set_projects_count
