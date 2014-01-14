@@ -122,8 +122,8 @@ class Language < ActiveRecord::Base
 
 
             #puts doc.encoding
-        rescue SocketError, Errno::ETIMEDOUT, OpenURI::HTTPError
-          puts "Socket/Http/TimedOut Error :("
+        rescue SocketError, Errno::ETIMEDOUT, Zlib::BufError, OpenURI::HTTPError
+          puts "Socket/Http/TimedOut/Buf Error :("
         end
       end
     end
