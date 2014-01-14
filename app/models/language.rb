@@ -122,11 +122,8 @@ class Language < ActiveRecord::Base
 
 
             #puts doc.encoding
-        rescue OpenURI::HTTPError => e
-          if e.message == '404 Not Found' || '403 Forbidden'
-            # handle 404 error
-          else
-            raise e
+        rescue SocketError, OpenURI::HTTPError
+          puts "Socket/Http Error :("
           end
         end
       end
