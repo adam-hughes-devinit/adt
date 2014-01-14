@@ -11,7 +11,7 @@ module ProjectExporterHeaders
     end_planned recipient_count recipient_condensed recipient_cow_code
     recipient_oecd_code recipient_oecd_name recipient_iso3 recipient_iso2
     recipient_un_code recipient_imf_code 
-    debt_uncertian line_of_credit is_cofinanced loan_type interest_rate 
+    debt_uncertian line_of_credit is_cofinanced is_ground_truthing loan_type interest_rate
     maturity grace_period
     grant_element updated_at location_details contacts]
 
