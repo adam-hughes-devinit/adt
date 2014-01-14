@@ -3,7 +3,7 @@ class Language < ActiveRecord::Base
 
   has_many :resources
 
-  before_save :update_resource_lang
+  #before_save :update_resource_lang  # this should not be used normally.
 
   def save_lang(resource, resource_language)
     a = ['en','fr','zh']
