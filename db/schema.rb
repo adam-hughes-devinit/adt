@@ -294,12 +294,6 @@ ActiveRecord::Schema.define(:version => 20140113202620) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "media_item_types", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "media_items", :force => true do |t|
     t.boolean  "publish"
     t.integer  "project_id"
