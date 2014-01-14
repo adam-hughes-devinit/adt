@@ -81,13 +81,9 @@ class Language < ActiveRecord::Base
                   clean_page = clean_page.split.join(" ")
                   clean_page = clean_page.delete! '&#160;'
                   puts clean_page
-                  begin
-                    resource_language = DetectLanguage.simple_detect(clean_page)
-                    puts resource_language
-                    save_lang(resource, resource_language)
-                  rescue Net::HTTPBadResponse
-                    puts "wrong status line: <html>"
-                  end
+                  resource_language = DetectLanguage.simple_detect(clean_page)
+                  puts resource_language
+                  save_lang(resource, resource_language)
                 rescue ArgumentError
                   puts 'Could not sanitize. Probably due to: invalid byte sequence in UTF-8'
                 end
@@ -124,9 +120,8 @@ class Language < ActiveRecord::Base
             end
           end
 
-
             #puts doc.encoding
-        rescue SocketError, Errno::ETIMEDOUT, Zlib::BufError, OpenURI::HTTPError
+        rescue SocketError, Errno::ETIMEDOUT, Zlib::BufError, Net::HTTPBadResponse, OpenURI::HTTPError
           puts "Socket/Http/TimedOut/Buf Error :("
         end
       end
