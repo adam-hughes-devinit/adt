@@ -81,9 +81,13 @@ class Language < ActiveRecord::Base
                   clean_page = clean_page.split.join(" ")
                   clean_page = clean_page.delete! '&#160;'
                   puts clean_page
-                  resource_language = DetectLanguage.simple_detect(clean_page)
-                  puts resource_language
-                  save_lang(resource, resource_language)
+                  begin
+                    resource_language = DetectLanguage.simple_detect(clean_page)
+                    puts resource_language
+                    save_lang(resource, resource_language)
+                  rescue Net::HTTPBadResponse
+                    puts "wrong status line: <html>"
+                  end
                 rescue ArgumentError
                   puts 'Could not sanitize. Probably due to: invalid byte sequence in UTF-8'
                 end
