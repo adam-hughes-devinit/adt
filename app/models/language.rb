@@ -55,10 +55,11 @@ class Language < ActiveRecord::Base
           if url =~ (/\A(http:\/\/+).+(\.pdf)\z/)
             begin
               reader = PDF::Reader.new(file)
-              page = reader.page(1)
+              page = reader.page(1) # only translate first page.
               text = page.text
               puts text
               begin
+                 # Determines language.
                 resource_language = DetectLanguage.simple_detect(text)
                 puts resource_language
                 save_lang(resource, resource_language)
