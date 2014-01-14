@@ -22,7 +22,7 @@ module ResourceSearchable
 				string :title
         integer :language_id
 				integer :projects_count
-        time :fetched_at
+        date :fetched_at
 		end
 		
         # Nice idea, but I need it to show up in the search bar ~pronto~
