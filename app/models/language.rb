@@ -124,7 +124,6 @@ class Language < ActiveRecord::Base
             #puts doc.encoding
         rescue SocketError, OpenURI::HTTPError
           puts "Socket/Http Error :("
-          end
         end
       end
     end
