@@ -103,6 +103,9 @@ class Language < ActiveRecord::Base
                   resource.save
                 end
               end
+            else
+              resource.language_id = 0
+              resource.save
             end
           end
 
@@ -112,6 +115,9 @@ class Language < ActiveRecord::Base
           resource.language_id = 0
           resource.save
         end
+      else
+        resource.language_id = 0
+        resource.save
       end
     end
   end
