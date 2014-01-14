@@ -9,7 +9,7 @@ class Language < ActiveRecord::Base
     a = ['en','fr','zh']
     if a.include?(resource_language)
 
-      language = Language.find_by_code(resource_language).first(500)
+      language = Language.find_by_code(resource_language)
       resource.language_id = language.id
       if resource.save
         puts "I saved?"
@@ -30,7 +30,7 @@ class Language < ActiveRecord::Base
       config.api_key = "927256800b03882160b17f08badd5e7f"
     end
     count = 0
-    resources = Resource.where("language_id IS NULL")
+    resources = Resource.where("language_id IS NULL").first(500)
     resources.each do | resource |
       count = count+1
       puts ("count: %s" % count)
