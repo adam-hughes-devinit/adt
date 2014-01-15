@@ -31,6 +31,11 @@ class StaticPagesController < ApplicationController
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 
+  def tuff_codebook
+    pdf_data = File.open(Rails.public_path + "/methodology/AidData_TUFF_Methodology.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
   def csv_analyzer
     render 'csv_analyzer'
   end
