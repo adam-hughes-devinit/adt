@@ -463,7 +463,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.crs_sector_code!=""
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.flow_class!="Unset" && d.crs_sector_code!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
