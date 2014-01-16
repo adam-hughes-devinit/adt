@@ -6,7 +6,7 @@ class Geopolitical < ActiveRecord::Base
 
   belongs_to :recipient, class_name: "Country"
   delegate :name, :iso3, :iso2, to: :recipient, allow_nil: true, prefix: true
-  #validates_presence_of :recipient, :project_id
+  validates_presence_of :recipient
 
   def to_iati
   	%{

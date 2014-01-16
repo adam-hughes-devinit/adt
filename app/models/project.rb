@@ -439,15 +439,8 @@ class Project < ActiveRecord::Base
   # project accessories
   has_many :geopoliticals, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
-  validate :require_geopoliticals
+  validates_presence_of :geopoliticals, :message => "Must provide at least one recipient country"
 
-
-  private
-  def require_geopoliticals
-    unless self.geopoliticals.count >= 1
-      errors.add(:geopoliticals, "You must provide at least one recipient")
-    end
-  end
 
   has_many :transactions, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
