@@ -1,4 +1,8 @@
 #project-form-recipients.project-accessory-fields
+	- if !@project.errors[:geopoliticals].blank?
+		- @project.errors[:geopoliticals].each do |error|
+			%div{:class => "alert alert-danger"}
+				= error
 	%p
 		%strong
 			Recipients:

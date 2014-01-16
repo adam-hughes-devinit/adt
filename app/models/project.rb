@@ -38,6 +38,7 @@ class Project < ActiveRecord::Base
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
   before_save :log_attribute_changes
+  validates_presence_of :title
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
@@ -172,7 +173,6 @@ class Project < ActiveRecord::Base
     iteration += 1
   end
 
-
   has_and_belongs_to_many :exports
   has_and_belongs_to_many :resources, after_add: :log_association_changes
   accepts_nested_attributes_for :resources, allow_destroy: false, reject_if: proc { |r| r["title"].blank? && r["source_url"].blank? && r["authors"].blank? }
@@ -180,9 +180,7 @@ class Project < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
-
   has_paper_trail(meta: {accessories: :accessories})
-
 
   def accessories
     {transaction: transactions.each(&:attributes), 
@@ -368,7 +366,6 @@ class Project < ActiveRecord::Base
       to: :loan_detail,
       allow_nil: true
 
-
   # could I metaprogram these _band methods in a graceful way?
   def interest_rate_band
     # don't use "%" -- it screws up the search URLs
@@ -382,8 +379,6 @@ class Project < ActiveRecord::Base
       "(None)"
     end
   end
-
-
 
   def maturity_band
     if (!loan_detail.nil?) && (m = loan_detail.maturity)
@@ -435,21 +430,24 @@ class Project < ActiveRecord::Base
   #  End restructuring
   #
 
-
-
-
   belongs_to :donor, class_name: "Country"
   delegate :name, :iso3, to: :donor, allow_nil: true, prefix: true
 
   belongs_to :owner, class_name: "Organization"
   delegate :name, to: :owner, allow_nil: true, prefix: true
 
-
-
   # project accessories
   has_many :geopoliticals, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
+  validate :require_geopoliticals
 
+
+  private
+  def require_geopoliticals
+    unless self.geopoliticals.count >= 1
+      errors.add(:geopoliticals, "You must provide at least one recipient")
+    end
+  end
 
   has_many :transactions, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :transactions, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? }
@@ -475,11 +473,6 @@ class Project < ActiveRecord::Base
     comments.present? ? "Has Comments" : nil
   end
 
-
-
-
-
-
   def scopes
     scope_array = []
     Scope.all.each do |scope|
@@ -499,19 +492,6 @@ class Project < ActiveRecord::Base
   def scope_names
     scopes.map(&:name)
   end
-
-  # #test_scope should be a symbol. 
-  # def contains_scope?(test_scope)
-  #   scope_array = scope
-  #   if scope_array.include?(test_scope)
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
-
-
-
 
   def as_json(options={})
     super(
