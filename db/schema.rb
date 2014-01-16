@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140113202620) do
+ActiveRecord::Schema.define(:version => 20140116200531) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -398,7 +398,6 @@ ActiveRecord::Schema.define(:version => 20140113202620) do
     t.integer  "sector_id"
     t.string   "sector_comment"
     t.integer  "tied_id"
-    t.integer  "oda_like_id"
     t.integer  "status_id"
     t.integer  "verified_id"
     t.integer  "donor_id"

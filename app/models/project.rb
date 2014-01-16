@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
     :is_cofinanced,
     # belongs_to fields
     :status, :verified, 
-    :flow_type, :oda_like, :sector,
+    :flow_type, :sector,
     #convoluted fields
     :donor, :owner, 
     :transactions, :transactions_attributes,
@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
     # for version control
     :accessories, :iteration,
     # hidden fields
-    :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
+    :verified_id, :sector_id,  :flow_type_id, :status_id,
     :donor_id, :owner_id, :intent_id, :crs_sector_id,
     :last_state, :published
 
