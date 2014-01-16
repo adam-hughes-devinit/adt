@@ -1,11 +1,11 @@
 
 class BubbleChart
+
   constructor: (data) ->
     @data = data
-    @width = 940
+    @width = 1050
     @height = 600
     @readable = d3.format(",.0f")
-
     
     $("body").append("<div class='tooltip' id='bubbletooltip' style='position:absolute;background-color: rgb(255, 255, 255); border: 1px solid rgb(128, 128, 128); opacity: 0.9; padding: 1px 5px;'></div>");
     window.hideTooltip = () ->
@@ -67,12 +67,13 @@ class BubbleChart
       "2003": {x: 350, y: @height / 2},
       "2004": {x: 400, y: @height / 2},
       "2005": {x: 450, y: @height / 2},
-      "2006": {x: @width-450, y: @height / 2},
-      "2007": {x: @width-400, y: @height / 2},
-      "2008": {x: @width-350, y: @height / 2},
-      "2009": {x: @width-300, y: @height / 2},
-      "2010": {x: @width-250, y: @height / 2},
-      "2011": {x: @width-200, y: @height / 2},
+      "2006": {x: @width-550, y: @height / 2},
+      "2007": {x: @width-500, y: @height / 2},
+      "2008": {x: @width-450, y: @height / 2},
+      "2009": {x: @width-400, y: @height / 2},
+      "2010": {x: @width-350, y: @height / 2},
+      "2011": {x: @width-300, y: @height / 2},
+      "2012": {x: @width-250, y: @height / 2},
     }
     @flow_centers = {
       "ODA-like" : {x:300, y: @height / 2},
@@ -90,24 +91,24 @@ class BubbleChart
       "Official Investment" : {x:300, y: @height / 2}
     }
     @sector_locat = [
-      {x:220, y: @height / 3},
-      {x:270, y: @height / 3},
-      {x:320, y: @height / 3},
+      {x:250, y: @height / 3},
+      {x:310, y: @height / 3},
       {x:370, y: @height / 3},
-      {x:420, y: @height / 3},
-      {x:470, y: @height / 3},
+      {x:430, y: @height / 3},
+      {x:490, y: @height / 3},
+      {x:550, y: @height / 3},
       {x:@width-430, y: @height / 3},
       {x:@width-380, y: @height / 3},
       {x:@width-330, y: @height / 3},
       {x:@width-280, y: @height / 3},
       {x:@width-230, y: @height / 3},
       {x:@width-180, y: @height / 3},
-      {x:@width-180, y: 2*(@height / 3)},
-      {x:@width-230, y: 2*(@height / 3)},
-      {x:@width-280, y: 2*(@height / 3)},
+      {x:@width-210, y: 2*(@height / 3)},
+      {x:@width-270, y: 2*(@height / 3)},
       {x:@width-330, y: 2*(@height / 3)},
-      {x:@width-380, y: 2*(@height / 3)},
-      {x:@width-430, y: 2*(@height / 3)},
+      {x:@width-390, y: 2*(@height / 3)},
+      {x:@width-450, y: 2*(@height / 3)},
+      {x:@width-500, y: 2*(@height / 3)},
       {x:470, y: 2*(@height / 3)},
       {x:420, y: 2*(@height / 3)},
       {x:370, y: 2*(@height / 3)},
@@ -336,7 +337,7 @@ class BubbleChart
 
   # Method to display year titles
   display_years: () =>
-    years_x = {"2000":80,"2011":@width-50}
+    years_x = {"2000":80,"2012":@width-50}
     years_data = d3.keys(years_x)
     years = @vis.selectAll(".years")
       .data(years_data)
@@ -463,7 +464,7 @@ $ ->
   chart = null
 
   render_vis = (csv) ->
-    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2012 && d.usd_defl!="" && d.flow_class!="" && d.flow_class!="Unset" && d.crs_sector_code!=""
+    filteredcsv = csv.filter (d) -> d.year>1999 && d.year<2013 && d.usd_defl!="" && d.flow_class!="" && d.flow_class!="Unset" && d.crs_sector_code!=""
     chart = new BubbleChart filteredcsv
     chart.start()
     root.display_all()
