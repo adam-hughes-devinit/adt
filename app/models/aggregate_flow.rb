@@ -109,7 +109,6 @@ LEFT OUTER JOIN
 	on p.id = t.project_id
 where 
 	#{@validated_filters.join(' and ').gsub(/(\w)'(\w)/, '\1\'\'\2')}
-  AND oda_likes.export = 't'
   AND verifieds.export = 't'
   AND years.export = 't'
 group by

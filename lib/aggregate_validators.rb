@@ -30,10 +30,11 @@ module AggregateValidators
 	    	{sym: :recipient_name, name: "Recipient Name", options:   Proc.new { Country.all.select{ |c| c.projects_as_recipient.count > 0 }.map(&:name) }.call, internal_filter: "recipient_name"},
 	    	{sym: :crs_sector_name, name: "CRS Sector Name", options:  Proc.new { CrsSector.all.map(&:name) }.call , internal_filter: "crs_sectors.name"},
 	    	{sym: :intent_name, name: "Intent", options:  Proc.new { Intent.all.map(&:name) }.call , internal_filter: "intents.name"},
-	    	{search_constant_sym: :verified_name, sym: :verified, name: "Verified Status", options:  Proc.new { Verified.all.map(&:name) }.call , internal_filter: "verifieds.name"},
+	    	#{search_constant_sym: :verified_name, sym: :verified, name: "Verified Status", options:  Proc.new { Verified.where(export: true).map(&:name) }.call , internal_filter: "verifieds.name"},
 	    	{search_constant_sym: :flow_type_name, sym: :flow_type, name: "Flow Type", options:  Proc.new { FlowType.all.map(&:name) }.call, internal_filter: "flow_types.name"},
 	    	{search_constant_sym: :oda_like_name, sym: :flow_class, name: "Flow Class", options: Proc.new { OdaLike.all.map(&:name) }.call, internal_filter: "oda_likes.name" },
-	    	{search_constant_sym: :status_name, sym: :status, name: "Status", options:  Proc.new { Status.all.map(&:name) }.call, internal_filter: "statuses.name" },
+        #{search_constant_sym: :oda_like_name, sym: :flow_class, name: "Flow Class", options: Proc.new { OdaLike.where(export: true).map(&:name) }.call, internal_filter: "oda_likes.name" },
+        {search_constant_sym: :status_name, sym: :status, name: "Status", options:  Proc.new { Status.all.map(&:name) }.call, internal_filter: "statuses.name" },
 	    	{sym: :year, name: "Year", options: ("#{Year.where(export: true).minimum("year")}".."#{Year.where(export: true).maximum("year")}").to_a.reverse! , internal_filter: "year" },
 	    	#{sym: :donor_name, name: "Donor Name", options:  Proc.new { Country.all.map(&:name) } , internal_filter: "donor.name"},
 	    ]
