@@ -39,6 +39,7 @@ class Project < ActiveRecord::Base
   before_save :set_owner_to_aiddata_if_null
   before_save :log_attribute_changes
   validates_presence_of :title
+  validates_presence_of :year, unless: :year_uncertain?, message: "No year, select year uncertain"
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
@@ -176,6 +177,7 @@ class Project < ActiveRecord::Base
   has_and_belongs_to_many :exports
   has_and_belongs_to_many :resources, after_add: :log_association_changes
   accepts_nested_attributes_for :resources, allow_destroy: false, reject_if: proc { |r| r["title"].blank? && r["source_url"].blank? && r["authors"].blank? }
+  validates_presence_of :resources, message: "You must provide at least one resource."
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
@@ -193,7 +195,7 @@ class Project < ActiveRecord::Base
     }.to_json
   end
 
-  validates :donor, presence: true
+  validates :donor, :verified_id, presence: true
 
   def to_english(options={})
     exclude_title = options[:exclude_title] || false

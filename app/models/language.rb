@@ -1,6 +1,8 @@
 class Language < ActiveRecord::Base
   attr_accessible :name, :code
 
+  validates :name, :code, presence: true, uniqueness: true
+
   has_many :resources
 
   #before_save :update_resource_lang  # this should not be used normally.
