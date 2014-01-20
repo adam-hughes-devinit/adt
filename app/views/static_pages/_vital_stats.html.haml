@@ -23,7 +23,7 @@
       %a{href: "/projects?utf8=%E2%9C%93&search=&active_string%5B%5D=Active&year%5B%5D=2000&year%5B%5D=2001&year%5B%5D=2002&year%5B%5D=2003&year%5B%5D=2004&year%5B%5D=2005&year%5B%5D=2006&year%5B%5D=2007&year%5B%5D=2008&year%5B%5D=2009&year%5B%5D=2010&year%5B%5D=2011&year%5B%5D=2012&oda_like_name%5B%5D=ODA-like&oda_like_name%5B%5D=OOF-like&oda_like_name%5B%5D=Official+Investment&oda_like_name%5B%5D=Vague+%28Official+Finance%29&status_name%5B%5D=Completion&status_name%5B%5D=Implementation&status_name%5B%5D=Pipeline%3A+Commitment&status_name%5B%5D=Pipeline%3A+Pledge&verified_name%5B%5D=Checked"}><
         official finance projects, including pledges
     %span<>
-      , <%= official.min_year %>-<%= official.max_year %>:
+      , <%= official_pledge.min_year %>-<%= official_pledge.max_year %>:
     %span.official_pledge#count.text-success
       <%= official_pledge.count %>
 
@@ -80,6 +80,28 @@
 
 :coffeescript
   @vitals =
+
+  official_pledge:
+        params:
+          get: "donor"
+          # only ACTIVE by default
+          verified: "Checked"
+          flow_class: [
+            "ODA-like"
+            "Official Investment"
+            "OOF-like"
+            "Vague (Official Finance)"
+            ].join("*")
+          status: [
+            # Everything but suspended and cancelled
+            "Completion"
+            "Implementation"
+            "Pipeline: Commitment"
+            #"Pipeline/identification"
+            "Pipeline: Pledge"
+            #"Pipeline: Vague"
+          ].join("*")
+
     official:
       params:
         get: "donor"
@@ -98,27 +120,6 @@
           "Pipeline: Commitment"
           #"Pipeline/identification"
           #"Pipeline: Pledge"
-          #"Pipeline: Vague"
-        ].join("*")
-
-    official_pledge:
-      params:
-        get: "donor"
-        # only ACTIVE by default
-        verified: "Checked"
-        flow_class: [
-          "ODA-like"
-          "Official Investment"
-          "OOF-like"
-          "Vague (Official Finance)"
-          ].join("*")
-        status: [
-          # Everything but suspended and cancelled
-          "Completion"
-          "Implementation"
-          "Pipeline: Commitment"
-          #"Pipeline/identification"
-          "Pipeline: Pledge"
           #"Pipeline: Vague"
         ].join("*")
 
@@ -157,9 +158,20 @@
           "Implementation"
         ].join("*")
 
-
   returned_queries = 0
 
+  $.get '/aggregates/projects', vitals.official_pledge.params, (data) ->
+      this_set = vitals.official_pledge
+
+      data = (d for d in data when d["donor"] is "CHN")[0]
+      this_set.count = data["count"]
+      this_set.usd_2009 = data["usd_2009"]
+      props = ( prop for prop in data)
+      this_set.min_year = data["min_year"]
+      this_set.max_year = data["max_year"]
+
+      returned_queries += 1
+      fill_template_if_finished(vitals, returned_queries)
 
   $.get '/aggregates/projects', vitals.official.params, (data) ->
     this_set = vitals.official
@@ -173,12 +185,6 @@
 
     returned_queries += 1
     fill_template_if_finished(vitals, returned_queries)
-
-  $.get '/aggregates/projects', vitals.official_pledge.params, (data) ->
-      this_set = vitals.official_pledge
-
-      data = (d for d in data when d["donor"] is "CHN")[0]
-      this_set.count = data["count"]
 
   $.get '/aggregates/projects', vitals.oda_like.params, (data) ->
     this_set = vitals.oda_like
@@ -206,7 +212,7 @@
 
   fill_template_if_finished = (vitals, returned_queries) ->
     # console.log returned_queries
-    if returned_queries is 3
+    if returned_queries is 4
       vitals.implemented_or_completed.percent = Math.round((vitals.implemented_or_completed.count / vitals.official.count)*100)
       template = _.template($('#vitals-template').html(), vitals)
 
