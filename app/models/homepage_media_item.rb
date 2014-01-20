@@ -5,9 +5,9 @@ class HomepageMediaItem < ActiveRecord::Base
   has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
 
   validates_attachment :home_media,
-                       :content_type => { :content_type => ["image/jpg", "image/gif", "image/png"],
+                       :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"],
                                           :message => "Must be an image (jpg, gif, png)" },
-                       :size => { :in => 0..1.megabytes, :message => "must be less than 1 MB"  }
+                       :size => { :in => 0..20.megabytes, :message => "must be less than 20 MB"  }
 
   validates_presence_of :url, :unless => :home_media?
   validates_presence_of :home_media, :unless => :url?

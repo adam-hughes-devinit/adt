@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
   require 'will_paginate/array'
   def home
     # Gets records for the media viewer
-    max_records = 5
+    max_records = 6
     @home_media = get_home_media(max_records)
     project_limit = max_records - @home_media.count()
     if (project_limit > 0)
