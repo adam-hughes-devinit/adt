@@ -36,6 +36,11 @@ class StaticPagesController < ApplicationController
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 
+  def ground_truthing
+    pdf_data = File.open(Rails.public_path + "/methodology/AidData_UNUWIDER_Groundtruthing_Paper.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
   def csv_analyzer
     render 'csv_analyzer'
   end
