@@ -49,6 +49,8 @@ class Project < ActiveRecord::Base
   scope :past_stage_one, where("active = 't' AND verified_id != ?", ((v = Verified.find_by_name("Raw")).present? ? v.id : 0 ))
   scope :active, where("active= 't' ")
 
+  has_many :geocodes
+
   def is_stage_one # for AidData Workflow filter -- "?" wasn't allowed by sunspot!
     ((verified.nil?) ||(verified.name == 'Raw' && active == true)) ? "Is Stage One" : "Is not Stage One"
   end
