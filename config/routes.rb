@@ -85,6 +85,7 @@ Adt::Application.routes.draw do
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
   get '/TUFF_codebook', to: 'static_pages#tuff_codebook', as: "tuff_codebook"
+  get '/aid_conflict_nexus', to: 'static_pages#aid_conflict_nexus', as: "aid_conflict_nexus"
   get '/ground_truthing', to: 'static_pages#ground_truthing', as: "ground_truthing"
   get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'
 

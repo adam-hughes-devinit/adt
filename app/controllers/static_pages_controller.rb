@@ -41,6 +41,11 @@ class StaticPagesController < ApplicationController
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 
+  def aid_conflict_nexus
+    pdf_data = File.open(Rails.public_path + "/methodology/aid_conflict_nexus.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
   def csv_analyzer
     render 'csv_analyzer'
   end
