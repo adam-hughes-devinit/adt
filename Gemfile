@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.16'
 gem 'capistrano'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'faker', '1.1.2'
@@ -42,8 +42,7 @@ gem "flexslider" # for file viewer
 gem "rails-file-icons"
 gem 'detect_language'
 gem 'pdf-reader'
-
-
+gem 'activerecord-postgis-adapter' # for postgis
 
 group :development do
   gem 'quiet_assets'
