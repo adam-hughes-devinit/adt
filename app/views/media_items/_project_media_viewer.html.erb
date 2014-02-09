@@ -58,7 +58,7 @@
             <% if !media_item.url.blank? %>
                 <%= raw(media_item.youtube_embed(media_item.url, 329, 545,'iframe')) %>
             <% else %>
-                <%= image_tag media_item.media.url %>
+                <%= image_tag media_item.media.url(:project_size) %>
             <% end %>
           </div>
         </li>

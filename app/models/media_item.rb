@@ -8,7 +8,8 @@ class MediaItem < ActiveRecord::Base
                   :media_file_name, :media_content_type, :media_file_size, :media_updated_at
 
   # for paperclip
-  has_attached_file :media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  has_attached_file :media, :styles => { :project_size => "350x350>", :home_size => "320x320>", :thumb => "100x100>" }
+
 
   validates_attachment :media,
                        :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"],
@@ -22,8 +23,8 @@ class MediaItem < ActiveRecord::Base
                                     :message => "Only images and youtube videos can be displayed on homepage"
 
   # add validations for downloadable and publish based on content types
-  validates_presence_of :url, :unless => :media? # Bug: This validation prevents other styles besides original from being stored.
-  validates_presence_of :media, :unless => :url? # Bug: This validation prevents other styles besides original from being stored.
+  #validates_presence_of :url, :unless => :media? # Bug: This validation prevents other styles besides original from being stored.
+  #validates_presence_of :media, :unless => :url? # Bug: This validation prevents other styles besides original from being stored.
   validates_presence_of :homepage_text, :if => :on_homepage?
   validates_presence_of :download_text, :if => :downloadable?
   validates_presence_of :publish, :if => :featured?
