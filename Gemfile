@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.16'
+gem 'rails', '3.2.13' #most up-to-date is 3.2.16, but this may be causing issues.
 gem 'capistrano'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'faker', '1.1.2'
