@@ -20,7 +20,9 @@ module ResourceSearchable
 				string :project_ids, multiple: true
 				string :publisher
 				string :title
+        integer :language_id
 				integer :projects_count
+        date :fetched_at
 		end
 		
         # Nice idea, but I need it to show up in the search bar ~pronto~

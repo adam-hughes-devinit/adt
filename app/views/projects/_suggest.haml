@@ -28,6 +28,9 @@
         = hidden_field_tag 'suggest', 'true'
         = f.label :title, 'Title'
         = f.text_field :title, placeholder: "Suggested Project Title"
+
+        = f.label :user_suggestion_email, 'Email'
+        = f.text_field :user_suggestion_email, placeholder: "User Email (not required)"
         %br
         %a.btn.btn-small{id: "new_source"}
           %i.icon-plus

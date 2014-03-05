@@ -1,15 +1,15 @@
 source 'http://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.13' #most up-to-date is 3.2.16, but this may be causing issues.
 gem 'capistrano'
-gem 'bcrypt-ruby'
+gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'faker', '1.1.2'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'simple_form'
 gem 'paper_trail'
-gem 'sunspot_rails'
+gem 'sunspot_rails', '2.1.0'
 gem 'thin'
 gem 'dalli'
 gem 'memcachier'
@@ -34,13 +34,16 @@ gem 'aws-sdk'
 gem 'newrelic_rpm'
 gem 'exception_notification'
 gem 'unicorn'
-gem 'activeadmin'
+gem 'activeadmin', '0.6.0'
 gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
 gem "paperclip"  # for file uploads
 gem "flexslider" # for file viewer
 gem 'active_admin_editor' # html editor for active admin
-
+gem "rails-file-icons"
+gem 'detect_language'
+gem 'pdf-reader'
+gem 'activerecord-postgis-adapter' # for postgis
 
 group :development do
   gem 'quiet_assets'
@@ -50,7 +53,7 @@ group :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails'
   gem 'factory_girl_rails', :require => false
-  gem 'sunspot_solr'
+  gem 'sunspot_solr', '2.1.0'
   gem 'launchy'
   gem 'spork-rails'
   gem 'database_cleaner'
@@ -66,7 +69,8 @@ end
 # not available for dynamic compiling 
 # if they're in this group
   #gem 'sass-rails',   '3.2.5'  # old version used, updated for active admin. Leaving this in case a bug arises.
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '2.3.2.0'
+  #gem 'bootstrap-sass', '3.0.2.1'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
   gem "jquery-rails", "< 3.0.0" # this version needed for active admin to work (unless you upgrade to rails 4.0)

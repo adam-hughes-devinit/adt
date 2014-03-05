@@ -31,6 +31,11 @@
 						%strong 
 							Resource type:
 						= @resource.resource_type
+					%li
+						%strong
+							Language:
+						- if @resource.language_id?
+							= @resource.language.name
 			.span6
 				%h4 
 					Publisher:

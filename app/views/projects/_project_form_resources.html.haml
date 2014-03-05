@@ -1,6 +1,10 @@
 #project-form-resources.span12{style: "margin-bottom:10px;"}
 	
 	.row-fluid.project-accessory-fields{style: "max-height: 400px; overflow-y: auto;"}
+		- if !@project.errors[:resources].blank?
+			- @project.errors[:resources].each do |error|
+				%div{:class => "alert alert-danger"}
+					= error
 		%p#resources_header{style: "padding-bottom: 5px;border-bottom:1px solid #124"}
 			%strong
 				Resources:

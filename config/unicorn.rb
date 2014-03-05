@@ -22,25 +22,26 @@ worker_processes 4
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
 #working_directory "/path/to/app/current" # available in 0.94.0+
-working_directory "/var/www/adt" # available in 0.94.0+
+root_dir = Dir.getwd #"/var/www/adt"
+working_directory root_dir # available in 0.94.0+
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
 #listen "/path/to/.unicorn.sock", :backlog => 64
-listen "/var/www/adt/tmp/sockets/.unicorn.sock", :backlog => 64
+listen "#{root_dir}/tmp/sockets/.unicorn.sock", :backlog => 64
 listen 3000, :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout 240
 
 # feel free to point this anywhere accessible on the filesystem
-pid "/var/www/adt/tmp/pids/unicorn.pid"
+pid "#{root_dir}/tmp/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/var/www/adt/log/unicorn.stderr.log"
-stdout_path "/var/www/adt/log/unicorn.stdout.log"
+stderr_path "#{root_dir}/log/unicorn.stderr.log"
+stdout_path "#{root_dir}/log/unicorn.stdout.log"
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow

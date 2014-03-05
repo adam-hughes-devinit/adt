@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131203150313) do
+ActiveRecord::Schema.define(:version => 20140207234008) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -243,7 +243,6 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
 
   create_table "homepage_media_items", :force => true do |t|
     t.string   "banner_text"
-    t.string   "banner_link"
     t.string   "url"
     t.integer  "order"
     t.boolean  "published"
@@ -254,8 +253,6 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
     t.integer  "home_media_file_size"
     t.datetime "home_media_updated_at"
     t.string   "banner_title"
-    t.string   "banner_link_text"
-    t.text     "banner"
   end
 
   create_table "intents", :force => true do |t|
@@ -267,6 +264,13 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
   end
 
   add_index "intents", ["name"], :name => "index_intents_on_name"
+
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "code"
+  end
 
   create_table "loan_details", :force => true do |t|
     t.integer  "project_id"
@@ -288,12 +292,6 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-  end
-
-  create_table "media_item_types", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "media_items", :force => true do |t|
@@ -424,26 +422,27 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
     t.integer  "sector_id"
     t.string   "sector_comment"
     t.integer  "tied_id"
-    t.integer  "oda_like_id"
     t.integer  "status_id"
     t.integer  "verified_id"
     t.integer  "donor_id"
-    t.boolean  "is_commercial",  :default => false
-    t.boolean  "active",         :default => true
+    t.boolean  "is_commercial",         :default => false
+    t.boolean  "active",                :default => true
     t.integer  "owner_id"
     t.integer  "media_id"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.integer  "crs_sector"
-    t.boolean  "debt_uncertain", :default => false
-    t.boolean  "year_uncertain", :default => false
-    t.boolean  "line_of_credit", :default => false
-    t.boolean  "is_cofinanced",  :default => false
-    t.integer  "iteration",      :default => 0
+    t.boolean  "debt_uncertain",        :default => false
+    t.boolean  "year_uncertain",        :default => false
+    t.boolean  "line_of_credit",        :default => false
+    t.boolean  "is_cofinanced",         :default => false
+    t.integer  "iteration",             :default => 0
     t.integer  "intent_id"
     t.integer  "crs_sector_id"
     t.text     "last_state"
-    t.boolean  "published",      :default => true
+    t.boolean  "published",             :default => true
+    t.boolean  "is_ground_truthing"
+    t.string   "user_suggestion_email"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"
@@ -485,6 +484,7 @@ ActiveRecord::Schema.define(:version => 20131203150313) do
     t.datetime "updated_at",                        :null => false
     t.text     "source_url"
     t.integer  "projects_count",     :default => 0
+    t.integer  "language_id"
   end
 
   create_table "review_entries", :force => true do |t|

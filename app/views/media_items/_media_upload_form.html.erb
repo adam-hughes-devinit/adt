@@ -1,55 +1,6 @@
 <div class='well well-small'>
-  <style>
-      .flexslider {
-          width: 540px;
-          height: 350px;
-          border: 0 !important;
-          margin-bottom: 3em !important;
-      }
-      .flexslider .frame {
-          text-align: center;
-          width: 100%;
 
-      }
-      .flexslider .frame  img {
-          width:auto;
-          height: 350px;
-          max-width: 100%;
-          max-height: 100%;
-          display: inline-block;
-
-      }
-
-      .flex-direction-nav a:before  {
-          font-family: "flexslider-icon";
-          font-size: 40px;
-          line-height: 40px;
-          display: inline-block;
-          content: '\f001';
-      }
-
-  </style>
-
-  <!-- Dynamically adds images and videos to file viewer -->
-  <div class="flexslider">
-    <ul class="slides">
-      <% if @project.get_publishable_media_items.each do |media_item| %>
-
-          <li>
-            <div class="frame">
-              <% if media_item.media_type == 'youtube' %>
-                  <%= raw(media_item.youtube_embed(media_item.url)) %>
-              <% else %>
-                  <%= image_tag media_item.media.url %>
-              <% end %>
-            </div>
-          </li>
-      <!-- Default image, if no files/videos are published. -->
-      <% end.empty? %>
-         <%= image_tag('aiddata_notag.png')%>
-      <% end %>
-    </ul>
-  </div>
+  <%= render "media_items/project_media_viewer" %>
 
   <!-- Links for popup boxes -->
   <div class="row-fluid" >
@@ -63,24 +14,38 @@
 
   <!-- download file popup box -->
   <div id="download_file" class="modal hide fade in" style="text-align:center; padding:10px;">
+
       <% downloadable_media = @project.get_downloadable_media_items %>
 
       <% if !downloadable_media.empty? %>
-        <h3>Download Files:</h3>
-        <table border="1">
-          <tr>
-            <td><b>File</b></td>
-            <td><b>Size</b></td>
-            <td><b>Media Source</b></td>
-          </tr>
-          <% downloadable_media.each do |media_item| %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Download Files</h3>
+        </div>
+
+        <div class="scrolling_popup">
+          <table class="table">
+            <thead>
               <tr>
-                <td><%= link_to media_item.download_text, media_item.media.url %></td>
-                <td><%= number_to_human_size(media_item.media_file_size) %></td>
-                <td><%= media_item.media_source_type.name %></td>
+                <td></td>
+                <td><b>File</b></td>
+                <td><b>Size</b></td>
+                <td><b>Media Source</b></td>
               </tr>
-          <% end %>
-        </table>
+            </thead>
+
+            <tbody>
+              <% downloadable_media.each do |media_item| %>
+                  <tr>
+                    <td><%= image_tag Icon.for_filename(media_item.media_file_name) %></td>
+                    <td><%= link_to media_item.download_text, media_item.media.url %></td>
+                    <td><%= number_to_human_size(media_item.media_file_size) %></td>
+                    <td><%= media_item.media_source_type.name %></td>
+                  </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
           <p>
           <h4 style="text-align:center">
@@ -91,7 +56,11 @@
 
   <!-- upload file popup box -->
   <div id="upload_file" class="modal hide fade in" style="text-align:center;">
-    <h3>Upload a File</h3>
+    <div class="modal-header" style="border:0px;">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Upload a File</h3>
+    </div>
+    <div class="muted">Max File Size: 20 MB</div>
       <% if current_user %>
          <%= form_tag "#{project_path @project}/media_items", :multipart => true, onsubmit: "return confirm_terms_and_conditions(this)" do %>
             <%= file_field_tag "media" %>
@@ -114,13 +83,15 @@
 
   <!-- share video popup box -->
   <div id="share_video" class="modal hide fade in" style="text-align:center; padding:20px;">
+    <div class="modal-header"  style="border:0px">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h3>Share a Video</h3>
+    </div>
       <% if current_user %>
-          <p>Enter url here:</p>
+          <div class="muted">Enter url here:</div>
           <%= form_tag "#{project_path @project}/media_items", :multipart => true do %>
               <%= text_field_tag "url" %>
               <%= hidden_field_tag( "user_id", current_user[:id]) %>
-              <%= hidden_field_tag( "video", "youtube") %>
               <%= submit_tag 'Share', class: "btn btn-info" %>
           <% end %>
       <% else %>
@@ -132,13 +103,3 @@
   </div>
 
 </div>
-
-<script>
-    // Can also be used with $(document).ready()
-    // Javascript for file viewer
-    $(window).load(function() {
-        $('.flexslider').flexslider({
-            animation: "slide"
-        });
-    });
-</script>

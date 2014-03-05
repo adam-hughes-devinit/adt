@@ -24,6 +24,17 @@ module AggregatesHelper
     }
 
     SPREADSHEET_ICON = ICONS["xls"]
+
+  def get_home_media(max_records)
+    home_media = HomepageMediaItem.where(published: true).order('"order" asc').limit(max_records)
+    return home_media
+  end
+
+  def get_project_media(project_limit)
+    project_media = MediaItem.where(on_homepage:true).order('random()').limit(project_limit)
+    return project_media
+  end
+
     
 
 end

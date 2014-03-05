@@ -4,6 +4,15 @@ class StaticPagesController < ApplicationController
   include AggregatesHelper
   require 'will_paginate/array'
   def home
+    # Gets records for the media viewer
+    max_records = 6
+    @home_media = get_home_media(max_records)
+    project_limit = max_records - @home_media.count()
+    if (project_limit > 0)
+      @project_media = get_project_media(project_limit)
+    else
+      @project_media = nil
+    end
     render 'home'
   end
 
@@ -19,6 +28,21 @@ class StaticPagesController < ApplicationController
 
   def codebook
     pdf_data = File.open(Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
+  def tuff_codebook
+    pdf_data = File.open(Rails.public_path + "/methodology/AidData_TUFF_Methodology.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
+  def ground_truthing
+    pdf_data = File.open(Rails.public_path + "/methodology/AidData_UNUWIDER_Groundtruthing_Paper.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
+  def aid_conflict_nexus
+    pdf_data = File.open(Rails.public_path + "/methodology/aid_conflict_nexus.pdf", "r"){|io| io.read}
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 

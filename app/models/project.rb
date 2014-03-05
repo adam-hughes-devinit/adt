@@ -9,12 +9,12 @@ class Project < ActiveRecord::Base
 
   attr_accessible :title, :active, :capacity, :description, :year,
     :start_actual, :start_planned, :end_actual, :end_planned, :sector_comment,
-    :is_commercial, :media_id, 
+    :is_commercial, :is_ground_truthing, :media_id,
     :year_uncertain, :debt_uncertain, :line_of_credit,
     :is_cofinanced,
     # belongs_to fields
     :status, :verified, 
-    :flow_type, :oda_like, :sector,
+    :flow_type, :sector,
     #convoluted fields
     :donor, :owner, 
     :transactions, :transactions_attributes,
@@ -25,10 +25,11 @@ class Project < ActiveRecord::Base
     :flow_class_attributes,
     :loan_detail_attributes,
     :resources, :resources_attributes,
+    :user_suggestion_email,
     # for version control
     :accessories, :iteration,
     # hidden fields
-    :verified_id, :sector_id,  :flow_type_id, :oda_like_id, :status_id,
+    :verified_id, :sector_id,  :flow_type_id, :status_id,
     :donor_id, :owner_id, :intent_id, :crs_sector_id,
     :last_state, :published
 
@@ -37,6 +38,8 @@ class Project < ActiveRecord::Base
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null
   before_save :log_attribute_changes
+  validates_presence_of :title
+  validates_presence_of :year, unless: :year_uncertain?, message: "No year, select year uncertain"
   # after_save :remake_scope_files
   # after_destroy :remake_scope_files
 
@@ -171,17 +174,15 @@ class Project < ActiveRecord::Base
     iteration += 1
   end
 
-
   has_and_belongs_to_many :exports
   has_and_belongs_to_many :resources, after_add: :log_association_changes
   accepts_nested_attributes_for :resources, allow_destroy: false, reject_if: proc { |r| r["title"].blank? && r["source_url"].blank? && r["authors"].blank? }
+  validates_presence_of :resources, message: "You must provide at least one resource."
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true
 
-
   has_paper_trail(meta: {accessories: :accessories})
-
 
   def accessories
     {transaction: transactions.each(&:attributes), 
@@ -194,7 +195,7 @@ class Project < ActiveRecord::Base
     }.to_json
   end
 
-  validates :donor, presence: true
+  validates :donor, :verified_id, presence: true
 
   def to_english(options={})
     exclude_title = options[:exclude_title] || false
@@ -244,6 +245,11 @@ class Project < ActiveRecord::Base
 
   def get_publishable_media_items
     media_items = MediaItem.where(publish: true, project_id: id).order('featured desc')
+    return media_items
+  end
+
+  def get_random_media_items
+    media_items = MediaItem.where(publish:true).order('random(5)')
     return media_items
   end
 
@@ -362,7 +368,6 @@ class Project < ActiveRecord::Base
       to: :loan_detail,
       allow_nil: true
 
-
   # could I metaprogram these _band methods in a graceful way?
   def interest_rate_band
     # don't use "%" -- it screws up the search URLs
@@ -376,8 +381,6 @@ class Project < ActiveRecord::Base
       "(None)"
     end
   end
-
-
 
   def maturity_band
     if (!loan_detail.nil?) && (m = loan_detail.maturity)
@@ -429,20 +432,16 @@ class Project < ActiveRecord::Base
   #  End restructuring
   #
 
-
-
-
   belongs_to :donor, class_name: "Country"
   delegate :name, :iso3, to: :donor, allow_nil: true, prefix: true
 
   belongs_to :owner, class_name: "Organization"
   delegate :name, to: :owner, allow_nil: true, prefix: true
 
-
-
   # project accessories
   has_many :geopoliticals, dependent: :destroy, after_add: :log_association_changes
   accepts_nested_attributes_for :geopoliticals, allow_destroy: true, :reject_if => proc { |a| a['recipient_id'].blank? }
+  validates_presence_of :geopoliticals, :message => "Must provide at least one recipient country"
 
 
   has_many :transactions, dependent: :destroy, after_add: :log_association_changes
@@ -469,11 +468,6 @@ class Project < ActiveRecord::Base
     comments.present? ? "Has Comments" : nil
   end
 
-
-
-
-
-
   def scopes
     scope_array = []
     Scope.all.each do |scope|
@@ -494,22 +488,9 @@ class Project < ActiveRecord::Base
     scopes.map(&:name)
   end
 
-  # #test_scope should be a symbol. 
-  # def contains_scope?(test_scope)
-  #   scope_array = scope
-  #   if scope_array.include?(test_scope)
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
-
-
-
-
   def as_json(options={})
     super(
-      only: [:id,:year, :title, :active, :is_commercial, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain], 
+      only: [:id,:year, :title, :active, :is_commercial, :is_ground_truthing, :year_uncertain, :line_of_credit, :is_cofinanced, :debt_uncertain],
       methods: [:usd_2009, :donor_name, :to_english,
         :crs_sector_name, :flow_type_name, :oda_like_name, :status_name, 
         # :tied_name, 

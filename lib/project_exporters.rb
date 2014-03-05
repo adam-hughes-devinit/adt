@@ -17,7 +17,6 @@ module ProjectExporters
   end
 
   def create_csv_text
-    
 
     project_sources = {
         all: [],
@@ -120,6 +119,7 @@ module ProjectExporters
     #{debt_uncertain}
     #{line_of_credit}
     #{is_cofinanced}
+    #{is_ground_truthing}
     #{loan_type_name}
     #{interest_rate}
     #{maturity}

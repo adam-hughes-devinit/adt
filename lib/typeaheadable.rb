@@ -1,12 +1,13 @@
 module Typeaheadable
 
+   # Logic for twitter typeahead.  This is used for the site search bar.
 	def enable_typeahead(active_record_model, options={})
 		# pass facets: {facet: value, facet: value}
 		facets = options[:facets] || []
 		max = options[:max] || 15
 
 		raise NoMethodError, "Model must be searchable" unless active_record_model.respond_to?(:search)
-		
+
 		define_method "twitter_typeahead" do
       #search = active_record_model.search do
 			search = active_record_model.solr_search do
@@ -16,12 +17,11 @@ module Typeaheadable
 			end
 
       models = search.results
-			#models = solr_search.results
 
 			if models.length > 0
 				model_name = models.first.class.name
 				raise NoMethodError, "#{model_name} must respond to :to_english" unless models.first.respond_to?(:to_english)
-				
+
 
 				typeahead_array = models.map do |model|
 

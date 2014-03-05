@@ -112,6 +112,11 @@
                 %li{ style: "margin:5px;color:#f33;font-size:20px" }
                   %strong
                     DEV
+
+              - if Rails.env.staging?
+                %li{ style: "margin:5px;color:#f33;font-size:20px" }
+                  %strong
+                    Staging
               %li.pull-right
                 %input#header_search{type: "text", placeholder: "Search the site or find a project..."}
         - if current_user_is_aiddata

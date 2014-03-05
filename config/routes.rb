@@ -31,9 +31,11 @@ Adt::Application.routes.draw do
     defaults: {
                 year: ['2000', '2001', '2002', '2003', '2004', '2005', '2006',
                   '2007', '2008','2009','2010','2011','2012'],
-                oda_like_name: ['ODA-like', 'OOF-like', 'Vague (Official Finance)'],
-                scope_names: ['Official Finance'],
-                status_name: ['Completion', 'Implementation', 'Pipeline: Commitment']
+                oda_like_name: ['ODA-like', 'OOF-like', 'Vague (Official Finance)', 'Official Investment'],
+                #scope_names: ['Official Finance'],
+                status_name: ['Completion', 'Implementation', 'Pipeline: Commitment'],
+                verified_name: ['Checked'],
+                active_string: ['Active']
               }
 
   # Link from DG email
@@ -83,6 +85,9 @@ Adt::Application.routes.draw do
   get '/complex_content/:complex_name', to: 'contents#show_complex_content', as: "complex_content_by_name"
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
+  get '/TUFF_codebook', to: 'static_pages#tuff_codebook', as: "tuff_codebook"
+  get '/aid_conflict_nexus', to: 'static_pages#aid_conflict_nexus', as: "aid_conflict_nexus"
+  get '/ground_truthing', to: 'static_pages#ground_truthing', as: "ground_truthing"
   get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'
 
   get '/signup', to: 'users#new'

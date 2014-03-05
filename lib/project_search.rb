@@ -21,6 +21,7 @@ module ProjectSearch
     {sym: :year_uncertain_string, name: "Year Uncertain", description: "Year could not be determined"},
     {sym: :debt_uncertain_string, name: "Debt Relief Uncertain", description: "Unclear whether this is debt relief"},
     {sym: :is_cofinanced_string, name: "", description: "Was this project cofinanced?"}, #"Cofinance Status"
+    {sym: :is_ground_truthing_string, name: "", description: "Was this project ground truthing?"},
     {sym: :recipient_iso2, name: "", multiple: true},
     {sym: :number_of_recipients, name: "Number of Recipients"},
     {sym: :year, name: "Commitment Year", description: "Data from 2012 and 2013 is not yet comprehensive"},
@@ -103,7 +104,11 @@ module ProjectSearch
 
     def is_cofinanced_string
       is_cofinanced ? "Cofinanced" : "Not Cofinanced"
-    end   
+    end
+
+    def is_ground_truthing_string
+      is_ground_truthing ? "Ground Truthing" : "Not Ground Truthing"
+    end
 
 
 

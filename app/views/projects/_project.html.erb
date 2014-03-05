@@ -56,6 +56,7 @@
         <%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCommercial", heading: "Commercial"} %>     
         <%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "LineOfCredit", heading: "Line of Credit"} %>     
         <%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsCofinanced", heading: "Is Cofinanced"} %>
+        <%= render partial: 'project_detail', locals: {container_tag: "li", class_name: "IsGroundTruthing", heading: "Ground Truthing"} %>
       </ul>
 
     </div>
@@ -120,7 +121,7 @@
   <ul class='unstyled'>
     <%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Description", heading: ""} %>
     <%= render partial: "project_detail", locals: {container_tag: "li", class_name: "Capacity", heading: "Capacity" } %>
-    <ul>
+   </ul>
 </div>
 
 
@@ -134,7 +135,10 @@
 
   <!--  scrollable popup for resources -->
   <div id="resources" class="modal hide fade in" style="width:700px; padding:10px;">
-    <h3>Resources:</h3>
+    <div class="modal-header" style="border:0px;">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Resources:</h3>
+    </div>
     <% if current_user_is_aiddata %>
         <%= render 'resources_for_aiddata' %>
     <% end %>
@@ -147,7 +151,7 @@
 
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span6" style="word-wrap: break-word;">
       <h4>Resources:</h4>
       <% if current_user_is_aiddata %>
           <%= render 'resources_for_aiddata' %>
@@ -171,9 +175,12 @@
 </div>
 
 
-<!--  scrollable popup for resources -->
+<!--  scrollable popup for sources -->
 <div id="sources" class="modal hide fade in" style="width:700px; padding:10px;">
-  <h3>Sources:</h3>
+  <div class="modal-header" style="border:0px;">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Sources:</h3>
+  </div>
   <div class='row-fluid'>
     <div class="scrolling_popup">
       <%= render :partial => 'project_sources', :locals => { :limit => false } %>
@@ -182,7 +189,7 @@
 </div>
 
    <div class='row-fluid'>
-     <div class='span6'>
+     <div class='span6' style="word-wrap: break-word;">
       <% if current_user_is_aiddata %>
 
         <h4>Sources:</h4>
