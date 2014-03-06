@@ -1,6 +1,6 @@
 ActiveAdmin.register UniversalMediaItem do
 
-  menu :parent => "Media"
+  menu :parent => "Content"
 
   index do
     column :id
