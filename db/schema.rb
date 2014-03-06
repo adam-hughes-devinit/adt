@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140207234008) do
+ActiveRecord::Schema.define(:version => 20140306165657) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -462,6 +462,26 @@ ActiveRecord::Schema.define(:version => 20140207234008) do
     t.integer "resource_id"
   end
 
+  create_table "publication_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "publications", :force => true do |t|
+    t.integer  "publication_type_id"
+    t.string   "name"
+    t.string   "author"
+    t.string   "url"
+    t.integer  "date"
+    t.string   "type"
+    t.string   "location"
+    t.string   "publisher"
+    t.text     "description"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
   create_table "relationships", :force => true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
@@ -611,6 +631,15 @@ ActiveRecord::Schema.define(:version => 20140207234008) do
 
   add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
+
+  create_table "universal_media_items", :force => true do |t|
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "media_file_name"
+    t.string   "media_content_type"
+    t.integer  "media_file_size"
+    t.datetime "media_updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"
