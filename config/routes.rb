@@ -88,6 +88,7 @@ Adt::Application.routes.draw do
   get '/aid_conflict_nexus', to: 'static_pages#aid_conflict_nexus', as: "aid_conflict_nexus"
   get '/ground_truthing', to: 'static_pages#ground_truthing', as: "ground_truthing"
   get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'
+  #get '/:name', to: 'media#show_by_name', as: "media_by_name"
 
   get '/signup', to: 'users#new'
 

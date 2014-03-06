@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140116200531) do
+ActiveRecord::Schema.define(:version => 20140305211705) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -375,6 +375,30 @@ ActiveRecord::Schema.define(:version => 20140116200531) do
   add_index "participating_organizations", ["organization_id"], :name => "index_participating_organizations_on_organization_id"
   add_index "participating_organizations", ["project_id"], :name => "index_participating_organizations_on_project_id"
 
+  create_table "people", :force => true do |t|
+    t.integer  "position_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "title"
+    t.text     "bio"
+    t.string   "email"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.boolean  "current_team_member"
+  end
+
+  add_index "people", ["position_id"], :name => "index_people_on_position_id"
+
+  create_table "positions", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "project_association_changes", :force => true do |t|
     t.integer  "project_id"
     t.string   "association_model"
@@ -587,6 +611,15 @@ ActiveRecord::Schema.define(:version => 20140116200531) do
 
   add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
+
+  create_table "universal_media_items", :force => true do |t|
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "media_file_name"
+    t.string   "media_content_type"
+    t.integer  "media_file_size"
+    t.datetime "media_updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"
