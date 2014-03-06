@@ -6,6 +6,7 @@ ActiveAdmin.register Publication do
     column :publication_type
     column :name
     column :author
+    column :url
     column :date
     column :category
     column :location
@@ -21,6 +22,7 @@ ActiveAdmin.register Publication do
       f.input :publication_type
       f.input :name
       f.input :author
+      f.input :url
       f.input :date
       f.input :category
       f.input :location
