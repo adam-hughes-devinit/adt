@@ -1,0 +1,79 @@
+<h1>Project-Level Data</h1>
+
+<p class='lead'>
+  Get project records from the database:
+</p>
+
+
+<h2>Static Files</h2>
+
+Download the files used for the <a href='http://www.cgdev.org/publication/chinas-development-finance-africa-media-based-approach-data-collection'>working paper</a>:
+
+<%= render 'static_pages/static_datasets' %>
+
+<br>
+<h2>Dynamic Files</h2>
+
+Get a custom dataset by <a href='/projects'>searching the database</a> and exporting your results.
+
+<br><br>
+
+<h2>Aggregate data</h2>
+
+<p class='lead'>
+  Get aggregated data from the dataset:
+</p>
+
+
+<h3>Custom queries:</h3>
+
+You can make a custom dataset at the <a href="http://china.aiddata.org/aggregates/export">aggregate exporter</a> by selecting fields and choosing how to aggregate and filter the projects.
+
+
+<h3>Recommended queries:</h3>
+
+<%= image_tag(AggregatesHelper::SPREADSHEET_ICON)  %>
+<a href="http://china.aiddata.org/aggregates/projects.csv?get=recipient_iso2,recipient_iso3,recipient_name,year&multiple_recipients=merge&flow_class=ODA-like*OOF-like*Vague+%28Official+Finance%29">Official flows by recipient and year</a>
+
+<ul>
+  <li>Includes flow classes: <i>ODA-like</i>, <i>OOF-like</i> and <i>Vague (Official Finance)</i>.</li>
+  <li><b>Fields:</b> Recipient name, Recipient ISO2, Recipient ISO3, year, commitment (USD-2009), commitment (USD nominal), count of projects</li>
+  <li><b>Note:</b> If a project has multiple recipients, it is grouped as <i>Africa, regional</i></li>
+</ul>
+
+
+<%= image_tag(AggregatesHelper::SPREADSHEET_ICON)  %>  <a href="http://china.aiddata.org/aggregates/projects.csv?get=recipient_iso2,recipient_iso3,recipient_name,year&flow_class=ODA-like&multiple_recipients=merge">ODA-like flows by recipient and year</a>
+<ul>
+  <li><b>Fields:</b> Recipient name, Recipient ISO2, Recipient ISO3, year, commitment (USD-2009), commitment (USD nominal), count of projects</li>
+  <li><b>Note:</b> If a project has multiple recipients, it is grouped as <i>Africa, regional</i></li>
+</ul>
+
+<%= image_tag(AggregatesHelper::SPREADSHEET_ICON) %>  <a href="http://china.aiddata.org/aggregates/projects.csv?get=crs_sector_name,flow_class,recipient_iso2,recipient_iso3,recipient_name,year&status=Completion*Implementation*Pipeline/identification*Pipeline:%20Commitment*Pipeline:%20Pledge*Unset*Pipeline:%20Vague&verified=Checked&flow_class=ODA-like*OOF-like*Vague%20%28Official%20Finance%29*Official%20Investment&multiple_recipients=merge">Official flows by recipient, year, sector and flow class</a>
+<ul>
+  <li><b>Fields:</b> Recipient name, Recipient ISO2, Recipient ISO3, year, sector, flow class, commitment (USD-2009), commitment (USD nominal), count of projects</li>
+  <li><b>Note:</b> If a project has multiple recipients, it is grouped as <i>Africa, regional</i></li>
+</ul>
+
+<%= image_tag(AggregatesHelper::SPREADSHEET_ICON) %>  <a href="http://china.aiddata.org/aggregates/projects.csv?get=recipient_iso2,recipient_iso3,recipient_name,year,crs_sector_name&flow_class=ODA-like&multiple_recipients=merge">ODA-like flows by recipient, year, and sector</a>
+<ul>
+  <li><b>Fields:</b> Recipient name, Recipient ISO2, Recipient ISO3, year, sector, commitment (USD-2009), commitment (USD nominal), count of projects</li>
+  <li><b>Note:</b> If a project has multiple recipients, it is grouped as <i>Africa, regional</i></li>
+</ul>
+
+<h1>Supporting Data</h1>
+
+<p class='lead'>
+  The following web services are employed by the China database:
+</p>
+
+<h2>Deflators</h2>
+
+Deflators are drawn from the <a href='https://data.itpir.wm.edu/deflate/'>USD-2009 web service</a>. See the page for information about the service and API or <a href='mailto:china@aiddata.org'>contact us</a> for more info.
+
+<h2>Loan Calculations</h2>
+
+Grant element is calculated by the <strong>AidData Loan Calculator</strong>. For details see:
+<ul>
+    <li><a href="https://github.com/rmosolgo/aiddata-loan-calculator">Annotated source</a> code on Github.</li>
+    <li>An <a href="http://aiddata-loan-calculator.herokuapp.com/calculate?value=1000&interest_rate=0.025&discount_rate=0.1&maturity=10&grace_period=2.5">example query</a></li>
+</ul>
