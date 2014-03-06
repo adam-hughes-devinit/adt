@@ -22,9 +22,9 @@
     <tr>
       <td><%= link_to(publication.name, publication.url) %></td>
       <td><%= publication.author %></td>
-      <% category = publication.category ? publication.category + " - " : "" %>
-      <% publisher = publication.publisher ? publication.publisher + ", " : "" %>
-      <% location = publication.location ? publication.location + ", " : "" %>
+      <% category = publication.category? ? publication.category + " - " : "" %>
+      <% publisher = publication.publisher? ? publication.publisher + ", " : "" %>
+      <% location = publication.location? ? publication.location + ", " : "" %>
       <td><%= category + publisher + location + publication.date.to_s %></td>
     </tr>
     <% end %>
@@ -48,9 +48,9 @@
       <tr>
         <td><%= link_to(publication.name, publication.url) %></td>
         <td><%= publication.author %></td>
-        <% category = publication.category ? publication.category + " - " : "" %>
-        <% publisher = publication.publisher ? publication.publisher + ", " : "" %>
-        <% location = publication.location ? publication.location + ", " : "" %>
+        <% category = publication.category? ? publication.category + " - " : "" %>
+        <% publisher = publication.publisher? ? publication.publisher + ", " : "" %>
+        <% location = publication.location? ? publication.location + ", " : "" %>
         <td><%= category + publisher + location + publication.date.to_s %></td>
       </tr>
   <% end %>
