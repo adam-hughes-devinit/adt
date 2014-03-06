@@ -1,0 +1,29 @@
+<div class='row-fluid'>
+  <% slice.each do |a| %>
+      <div class='span6 row-fluid'>
+        <a class='span3' href= <%=a.url %> >
+          <img class='' src= <%=a.image_url %> >
+        </a>
+        <div class=' span9'>
+          <a href= <%=a.url %> >
+            <h4 class=''>
+              <%= a.name %>
+            </h4>
+          </a>
+          <h4>
+            <small>
+              <%= a.publisher %>
+              &ndash;
+              <%= a.date %>
+            </small>
+          </h4>
+          <p>
+            <%= a.teaser %>
+          </p>
+          <p>
+            <%= link_to("Read more...", a.url) %>
+          </p>
+        </div>
+      </div>
+  <% end %>
+</div>

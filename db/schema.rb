@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140306173959) do
+ActiveRecord::Schema.define(:version => 20140306194221) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -294,6 +294,18 @@ ActiveRecord::Schema.define(:version => 20140306173959) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "media", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "image_url"
+    t.string   "publisher"
+    t.date     "date"
+    t.text     "teaser"
+    t.integer  "media_type_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "media_items", :force => true do |t|
     t.boolean  "publish"
     t.integer  "project_id"
@@ -318,6 +330,12 @@ ActiveRecord::Schema.define(:version => 20140306173959) do
   add_index "media_items", ["user_id"], :name => "index_media_items_on_user_id"
 
   create_table "media_source_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "media_types", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

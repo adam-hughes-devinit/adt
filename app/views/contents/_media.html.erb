@@ -1,0 +1,30 @@
+<h2>Press</h2>
+
+If you are interested in learning more about the China in Africa project, we would be happy to provide you with some background information. For press inquiries contact <a href='mailto:info@aiddata.org?subject=Press Inquiry'>info@aiddata.org</a> with your name, contact information, and inquiry.
+
+<br>
+<br>
+<h2>Stay connected with AidData </h2>
+
+<a href="http://www.aiddata.org/">AidData</a> is committed to making international development finance data more
+accessible and actionable. Want to stay updated? Be sure to like us on <a href="https://www.facebook.com/aiddata">Facebook</a>
+and follow us on Twitter at <a href="http://www.twitter.com/aiddata/">@AidData</a>, and subscribe to our blog,
+<a href="http://blog.aiddata.org/">the First Tranche</a>.
+
+<br>
+<strong>Jump to:</strong> <a href="http://www.china.aiddata.org/#in_the_news">In the news</a> | <a href="http://www.china.aiddata.org/#blog_posts">Blog posts</a>
+
+<br>
+<a id='in_the_news'></a>
+<h2> In the news: </h2>
+
+<% Media.joins(:media_type).where(media_types: {name: "News Article"}).order("date desc").each_slice(2).each do |slice| %>
+    <%= render partial: "media_row", locals: { slice: slice } %>
+<% end %>
+
+<a id='blog_posts'></a>
+<h2>Blog posts:</h2>
+
+<% Media.joins(:media_type).where(media_types: {name: "Blog Post"}).order("date desc").each_slice(2).each do |slice| %>
+    <%= render partial: "media_row", locals: { slice: slice } %>
+<% end %>

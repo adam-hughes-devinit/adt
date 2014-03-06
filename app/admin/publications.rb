@@ -23,7 +23,7 @@ ActiveAdmin.register Publication do
       f.input :name
       f.input :author
       f.input :url, :hint => "Can use internal links as well. Use Universal Media Items to upload internal media. Appropriate link is provided in that admin page."
-      f.input :date, :hint => "Must be included for AidData and Affiliated publications"
+      f.input :date, :hint => "Must be included. Used for ordering on the page."
       f.input :category
       f.input :location
       f.input :publisher
