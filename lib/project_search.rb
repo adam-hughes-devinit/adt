@@ -33,21 +33,19 @@ module ProjectSearch
     {sym: :grant_element_band, name: "Grant Element"},
     {sym: :scope_names, name: "Scope", multiple: true, description: ""}
   ].sort! { |a,b| a[:name] <=> b[:name] }
-    
-    
-    WORKFLOW_FACETS = [
-      {sym: :donor_name, name: "Donor", multiple: true},
-      {sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
-      {sym: :flow_class_1, name: "Flow Class - 1"},
-      {sym: :flow_class_2, name: "Flow Class - 2"},
-      {sym: :flagged, name: "Flagged", multiple: true },
+
+  WORKFLOW_FACETS = [
+    {sym: :donor_name, name: "Donor", multiple: true},
+    {sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
+    {sym: :flow_class_1, name: "Flow Class - 1"},
+    {sym: :flow_class_2, name: "Flow Class - 2"},
+    {sym: :flagged, name: "Flagged", multiple: true },
     {sym: :commented, name: "Commented"},
     {sym: :verified_name, name: "Verified", description: "Is the record valid? (\"Raw\" is invisible to non-AidData)"}, #"Verified/Unverified"
     {sym: :is_stage_one, name: "Is Stage One?", description: '"Raw" & "Active"'},
     {sym: :owner_name, name: "Record Owner", description: "Who created this record?"},
-
-      # {sym: :commented, name: "Commented"},
-    ]
+    # {sym: :commented, name: "Commented"},
+  ]
 
   # Not delegating bc I need "Unset" if nil
   ACCESSORY_METHODS = [
@@ -110,7 +108,6 @@ module ProjectSearch
     def is_ground_truthing_string
       is_ground_truthing ? "Ground Truthing" : "Not Ground Truthing"
     end
-
 
 
     def search_engine_type_name
@@ -217,9 +214,8 @@ module ProjectSearch
 
     # Nice idea, but I need it to show up in the search bar ~pronto~
     # handle_asynchronously :solr_index if Rails.env.production?
-
-        def self.facet_counts
-          Rails.cache.fetch("projects/faceted") do
+    def self.facet_counts
+      Rails.cache.fetch("projects/faceted") do
         # wipe it in ProjectSweeper!
         facets = (WORKFLOW_FACETS + FACETS)
         all_projects = Project.solr_search do
