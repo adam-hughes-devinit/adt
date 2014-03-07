@@ -24,7 +24,7 @@
             .row-fluid
               = f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
               = f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
-              = f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"}           
+              = f.input :year_uncertain, label: false, inline_label: "Year uncertain", wrapper_html: { class: "span1"}
             .row-fluid
 
               = f.association :donor, wrapper_html: {class: "span3"}, label: 'Donor country'
