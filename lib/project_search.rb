@@ -35,7 +35,7 @@ module ProjectSearch
   ].sort! { |a,b| a[:name] <=> b[:name] }
 
   WORKFLOW_FACETS = [
-    {sym: :donor_name, name: "Donor", multiple: true},
+    {sym: :donor_name, name: "Donor"},
     {sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
     {sym: :flow_class_1, name: "Flow Class - 1"},
     {sym: :flow_class_2, name: "Flow Class - 2"},
