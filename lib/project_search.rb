@@ -36,6 +36,7 @@ module ProjectSearch
     
     
     WORKFLOW_FACETS = [
+      {sym: :donor_name, name: "Donor", multiple: true},
       {sym: :flow_class_arbitrated, name: "Flow Class - Arbitrated"},
       {sym: :flow_class_1, name: "Flow Class - 1"},
       {sym: :flow_class_2, name: "Flow Class - 2"},
@@ -82,7 +83,7 @@ module ProjectSearch
 
   included do
     # for filtering
-    def active_string 
+    def active_string
       active? ? 'Active' : 'Inactive'
     end
 
