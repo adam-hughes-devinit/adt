@@ -26,6 +26,10 @@ class StaticPagesController < ApplicationController
     render 'bubbles'
   end
 
+  def downloads
+    render 'downloads'
+  end
+
   def codebook
     pdf_data = File.open(Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf", "r"){|io| io.read}
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
