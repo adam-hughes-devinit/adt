@@ -9,10 +9,6 @@ enable_typeahead Content, value_method: :to_english
 		@content = Content.find_by_name(params[:name])
   end
 
-  def show_complex_content
-    @complex_name = params[:complex_name]
-  end
-
 	def search 
 		@search = Content.search do
 			fulltext params[:search]
