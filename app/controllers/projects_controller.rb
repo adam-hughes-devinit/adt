@@ -205,7 +205,7 @@ class ProjectsController < ApplicationController
       @project = Project.new(params[:project])
       @project.published = false
       @project.donor = Country.find_by_name("China")
-      if @project.save
+      if @project.save(:validate => false)
 
         AiddataAdminMailer.delay.contributor_notification(@project, @project, current_user)
 
