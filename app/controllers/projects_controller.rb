@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
 
   include SearchHelper
   extend Typeaheadable
-  enable_typeahead Project, facets: {active_string: "Active", donor_name: "China"}
+  enable_typeahead Project, facets: {active_string: "Active", donor_name: "China"} # Restrictions on search bar.
   #caches_action :show, cache_path: proc { |c| "projects/#{c.params[:id]}/#{signed_in? ? current_user.id : "not_signed_in"}/}
   #caches_action :index, expires_in: 1.hour, unless: proc { |c| current_user_is_aiddata }
 

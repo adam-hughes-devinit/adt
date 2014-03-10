@@ -1,6 +1,8 @@
 module ProjectSearch
   extend ActiveSupport::Concern
 
+  # Note: New facets may not immediately appear in the search filter.
+  # You need to save some projects to update the cache.
   FACETS = [
     {sym: :flow_type_name, name: "Flow Type"},
     {sym: :oda_like_name, name: "Flow Class"},
