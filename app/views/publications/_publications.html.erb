@@ -92,7 +92,7 @@
   <% Publication.joins(:publication_type).where(publication_types: {name: "Other"}).order("date desc").each do |publication| %>
       <tr>
         <td><%= link_to(publication.name, publication.url) %></td>
-        <td><%= publication.description %></td>
+        <td><%= publication.description.html_safe %></td>
         <td><%= publication.location %></td>
         <td><%= publication.author %></td>
         <td><%= publication.category %></td>
