@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140306194221) do
+ActiveRecord::Schema.define(:version => 20140319033616) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -241,6 +241,18 @@ ActiveRecord::Schema.define(:version => 20140306194221) do
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
 
+  create_table "health_of_records", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "completeness_score"
+    t.integer  "resource_score"
+    t.integer  "combined_score"
+    t.integer  "adjusted_score"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "health_of_records", ["project_id"], :name => "index_health_of_records_on_project_id"
+
   create_table "homepage_media_items", :force => true do |t|
     t.string   "banner_text"
     t.string   "url"
@@ -407,6 +419,7 @@ ActiveRecord::Schema.define(:version => 20140306194221) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.boolean  "current_team_member"
+    t.integer  "page_order"
   end
 
   add_index "people", ["position_id"], :name => "index_people_on_position_id"

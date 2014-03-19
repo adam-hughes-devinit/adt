@@ -20,6 +20,7 @@ ActiveAdmin.register Person do
     column :first_name
     column :last_name
     column :position
+    column :page_order
     column :title
     column :email
     column :bio
@@ -39,6 +40,7 @@ ActiveAdmin.register Person do
       f.input :first_name
       f.input :last_name
       f.input :position
+      f.input :page_order, :hint => "Only used for Faculty/Staff"
       f.input :title
       f.input :email
       f.input :bio, as: :html_editor
