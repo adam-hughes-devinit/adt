@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140319033616) do
+ActiveRecord::Schema.define(:version => 20140319171021) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -71,13 +71,13 @@ ActiveRecord::Schema.define(:version => 20140319033616) do
   add_index "contacts", ["project_id"], :name => "index_contacts_on_project_id"
 
   create_table "contents", :force => true do |t|
-    t.string   "content_type"
     t.string   "name"
     t.text     "content"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.text     "chinese_content"
     t.string   "chinese_name"
+    t.boolean  "searchable",      :default => false
   end
 
   create_table "countries", :force => true do |t|

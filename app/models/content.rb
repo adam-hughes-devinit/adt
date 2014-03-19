@@ -1,23 +1,7 @@
 class Content < ActiveRecord::Base
-  attr_accessible :content, :name, :chinese_name, :content_type, :chinese_content
+  attr_accessible :content, :name, :chinese_name, :chinese_content, :searchable
 
   has_paper_trail
-
-  CONTENT_TYPES = [
-      "Page", # Markdown content
-      "Complex Page", # Ruby content, must return HTML
-      "Internal", # Markdown content
-      # Used in building other views:
-      "Faculty/Staff",
-      "Research Assistant",
-      "AidData Publication",
-      "Affiliate Publication",
-      "Other Publication",
-      "News Article",
-      "Blog Post"
-    ]
-
-  validates_inclusion_of :content_type, in: CONTENT_TYPES
 
   def data
 
@@ -36,27 +20,13 @@ class Content < ActiveRecord::Base
   end
 
   def page_content
-    if content_type == "Complex Page" 
-      if persisted?
-        pc = Markdown.new(content).to_html
-        pc << Markdown.new(chinese_content).to_html if chinese_content
-        #require 'open-uri'
-        #app_root = Rails.env.production? ? "http://china.aiddata.org" : "http://localhost:3000" 
-        #pc = open("#{app_root}/content/#{CGI::escape(name)}"){|io| io.read}
-      else
-        pc = content
-      end
-    elsif  content_type == "Page"
-      pc = Markdown.new(content).to_html
-      pc << Markdown.new(chinese_content).to_html if chinese_content
-    else
-      pc = content
-    end
+    pc = Markdown.new(content).to_html
+    pc << Markdown.new(chinese_content).to_html if chinese_content
     pc
   end
 
-  searchable if: proc { |c| ["Page", "Complex Page"].include?(c.content_type)} do 
-    text :id, :name, :chinese_name, :page_content, :content_type
+  searchable if: :searchable? do
+    text :id, :name, :chinese_name, :page_content
   end
 
 end
