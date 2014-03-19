@@ -1,19 +1,19 @@
 
-- latest_articles = Content.find_all_by_content_type("News Article").sort {|a, b| (b.data['date'] && a.data['date']) ? b.data["date"].to_time <=> a.data["date"].to_time : ( a.data["date"] ? -1 : 1 )}[0..2]
+- latest_articles = Media.joins(:media_type).where(media_types: {name: "News Article"}).sort {|a, b| (b.date && a.date) ? b.date.to_time <=> a.date.to_time : ( a.date ? -1 : 1 )}[0..2]
 %ul.unstyled.recent_resources
 	- latest_articles.each do |a|
 		%li
 			%div
 				%strong
-					%a{ href: a.data["url"]}
+					%a{ href: a.url}
 						= a.name
 				%span.muted
-					= "&ndash; #{a.data["publisher"]}, #{time_ago_in_words(a.data["date"])} ago".html_safe
+					= "&ndash; #{a.publisher}, #{time_ago_in_words(a.date)} ago".html_safe
 				%p.teaser
-					= a.data["teaser"]
+					= a.teaser.html_safe
 					%br
-					= link_to "Read all...", a.data["url"]
+					= link_to "Read all...", a.url
 %p
 	%i
-		= link_to "See all articles &rarr;".html_safe, content_by_name_path('media')
+		= link_to "See all articles &rarr;".html_safe, media_path
 %hr
