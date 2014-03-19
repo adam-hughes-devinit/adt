@@ -1,5 +1,5 @@
 
-- latest_publications = Publication.joins(:publication_type).where(publication_types: {name: "AidData"}).sort {|a, b| (b.date && a.date) ? b.date <=> a.date : ( a.date ? -1 : 1 )}[0..5]
+- latest_publications = Publication.joins(:publication_type).where(publication_types: {name: "AidData"}).sort {|a, b| (b.date && a.date) ? b.date <=> a.date : ( a.date ? -1 : 1 )}[0..4]
 %ul.unstyled.recent_resources
 	- latest_publications.each do |a|
 		%li
