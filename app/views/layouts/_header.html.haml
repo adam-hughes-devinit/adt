@@ -91,16 +91,14 @@
                   %li 
                     = link_to "Geocoded Data", content_by_name_path("geocoding")
               %li
-                //= link_to "Publications", complex_content_by_name_path("publications")
-                = link_to "Publications", content_by_name_path("publications")
+                = link_to "Publications", publications_path
               %li.dropdown
                 %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown"}
                   Media
                   %i.caret
                 %ul.dropdown-menu
                   %li
-                    //= link_to "In the news", complex_content_by_name_path("media")
-                    = link_to "In the news", content_by_name_path("media")
+                    = link_to "In the news", media_path
                   %li
                     = link_to "Multimedia", content_by_name_path("multimedia")
               
