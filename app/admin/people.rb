@@ -6,15 +6,15 @@ ActiveAdmin.register Person do
     # Adds image thumbnails and download links.
     column "Avatar" do |image|
       if image.avatar_content_type == 'image/png'
-        link_to(image_tag(image.avatar.url, :height => '100'), admin_person_path(image))
+        link_to(image_tag(image.avatar.url(:thumb), :height => '100'), admin_person_path(image))
       elsif  image.avatar_content_type == 'image/jpeg'
-        link_to(image_tag( image.avatar.url, :height => '100'), admin_person_path(image))
+        link_to(image_tag( image.avatar.url(:thumb), :height => '100'), admin_person_path(image))
       elsif  image.avatar_content_type == 'image/gif'
-        link_to(image_tag( image.avatar.url, :height => '100'), admin_person_path(image))
+        link_to(image_tag( image.avatar.url(:thumb), :height => '100'), admin_person_path(image))
       elsif image.avatar_type_content_type.nil?
         link_to('')
       else
-        link_to( image.avatar_file_name,  image.avatar.url)
+        link_to( image.avatar_file_name,  image.avatar.url(:thumb))
       end
     end
     column :first_name
@@ -41,7 +41,7 @@ ActiveAdmin.register Person do
       f.input :last_name
       f.input :position
       f.input :page_order, :hint => "Only used for Faculty/Staff"
-      f.input :title
+      f.input :title, :hint => "Put RA major/minor here"
       f.input :email
       f.input :bio, as: :html_editor
       f.input :current_team_member
