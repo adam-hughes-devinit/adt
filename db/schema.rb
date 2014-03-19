@@ -241,18 +241,6 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
 
-  create_table "health_of_records", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "completeness_score"
-    t.integer  "resource_score"
-    t.integer  "combined_score"
-    t.integer  "adjusted_score"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "health_of_records", ["project_id"], :name => "index_health_of_records_on_project_id"
-
   create_table "homepage_media_items", :force => true do |t|
     t.string   "banner_text"
     t.string   "url"
