@@ -26,6 +26,10 @@ class StaticPagesController < ApplicationController
     render 'bubbles'
   end
 
+  def downloads
+    render 'downloads'
+  end
+
   def codebook
     pdf_data = File.open(Rails.public_path + "/methodology/AidData_MBDC_Methodology_1.0.pdf", "r"){|io| io.read}
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
@@ -38,6 +42,11 @@ class StaticPagesController < ApplicationController
 
   def ground_truthing
     pdf_data = File.open(Rails.public_path + "/methodology/AidData_UNUWIDER_Groundtruthing_Paper.pdf", "r"){|io| io.read}
+    send_data pdf_data, disposition: "inline", :type => 'application/pdf'
+  end
+
+  def aid_conflict_nexus
+    pdf_data = File.open(Rails.public_path + "/methodology/aid_conflict_nexus.pdf", "r"){|io| io.read}
     send_data pdf_data, disposition: "inline", :type => 'application/pdf'
   end
 

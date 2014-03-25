@@ -45,14 +45,16 @@ class LoanDetail < ActiveRecord::Base
 	self.time_calculated = Time.now
   end
 
-   # If grant element is above 25% flow_class is set to be ODA-LIKE automatically
+   # If grant element is above 25% and intent is Development, flow_class is set to be ODA-LIKE automatically
   def validate_flow_class
     if !self.grant_element.nil?
       if self.grant_element > 25
-        flow_class = FlowClass.find_by_project_id(self.project_id)
-        if !flow_class.oda_like_master_id.nil?
-          flow_class.oda_like_master_id = 2 # Oda-like
-          flow_class.save
+        if (Intent.find_by_id(self.project.intent_id).name == 'Development')
+          flow_class = FlowClass.find_by_project_id(self.project_id)
+          if !flow_class.oda_like_master_id.nil?
+            flow_class.oda_like_master_id = 2 # Oda-like
+            flow_class.save
+          end
         end
       end
     end

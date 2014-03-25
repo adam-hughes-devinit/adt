@@ -1,0 +1,50 @@
+<h2>Faculty Staff</h2>
+<% Person.joins(:position).where(positions: {name: "Faculty/Staff"}, current_team_member: true).order("page_order asc").each_slice(2).each do |slice| %>
+  <div class='row-fluid' style='margin:10;'>
+    <% slice.each do |person| %>
+          <div class='span2' >
+            <%= image_tag(person.avatar.url(:medium), class: 'staff-image') %>
+          </div>
+
+          <div class='span4'>
+            <h4>
+              <%= person.first_name %> <%= person.last_name %>
+              <small>
+                <a href='mailto:china@aiddata.org?subject=Message for #{person.name}'>
+                  E-mail
+                </a>
+              </small>
+            </h4>
+            <p class='teaser'>
+              <%= raw(person.bio) %>
+            </p>
+          </div>
+    <% end %>
+  </div>
+<% end %>
+
+<h2>Research Assistants</h2>
+<% Person.joins(:position).where(positions: {name: "Research Assistant"}, current_team_member: true).order("last_name asc").each_slice(3).each do |slice| %>
+    <div class='row-fluid'>
+
+      <% slice.each do |person| %>
+
+          <div class='span1'>
+            <%= image_tag(person.avatar.url(:medium), class: 'team-image') %>
+          </div>
+
+          <div class='span3'>
+            <h4>
+              <%= person.first_name %> <%= person.last_name %>
+              <br>
+              <small>
+                <%= person.title %>
+              </small>
+            </h4>
+          </div>
+      <% end %>
+
+  </div>
+<% end %>
+
+

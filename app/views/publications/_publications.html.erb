@@ -1,0 +1,102 @@
+<%= javascript_include_tag "bootstrap_sortable/index" %>
+
+<h2>What we've published</h2>
+
+<p>
+  In addition to creating and maintaining the raw data,
+  AidData creates a variety of research products and publications that rely on the data to analyze the nature,
+  scale, distribution and impact of non-DAC development finance. Most recently we have published:
+</p>
+
+<table class='table table-hover sortable'>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Author(s)</th>
+    <th>About</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    <% Publication.joins(:publication_type).where(publication_types: {name: "AidData"}).order("date desc").each do |publication| %>
+    <tr>
+      <td><%= link_to(publication.name, publication.url) %></td>
+      <td><%= publication.author %></td>
+      <% category = publication.category? ? publication.category + " - " : "" %>
+      <% publisher = publication.publisher? ? publication.publisher + ", " : "" %>
+      <% location = publication.location? ? publication.location + ", " : "" %>
+      <td><%= category + publisher + location + publication.date.to_s %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<h2>How others are using our data</h2>
+
+<table class='table table-hover sortable'>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Author(s)</th>
+    <th>About</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% Publication.joins(:publication_type).where(publication_types: {name: "Affiliate"}).order("date desc").each do |publication| %>
+      <tr>
+        <td><%= link_to(publication.name, publication.url) %></td>
+        <td><%= publication.author %></td>
+        <% category = publication.category? ? publication.category + " - " : "" %>
+        <% publisher = publication.publisher? ? publication.publisher + ", " : "" %>
+        <% location = publication.location? ? publication.location + ", " : "" %>
+        <td><%= category + publisher + location + publication.date.to_s %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+<br>
+
+
+
+<h2>What others are saying about China in Africa</h2>
+
+<p>
+  In addition, the following non-comprehensive collections of Chinese project data proved useful
+  to AidData researchers, and were often consulted during the data collection process.
+</p>
+
+<span class='muted'>
+ <em>
+   <strong>
+     Know of any additional publications
+   </strong>
+   with data on official Chinese finance? We want to see them! Why not
+   <a href=\"mailto:china@aiddata.org\">let us know</a>?
+ </em>
+</span>
+
+<table class='table table-hover sortable'>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Author</th>
+    <th>Publisher</th>
+    <th>Category</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% Publication.joins(:publication_type).where(publication_types: {name: "Other"}).order("date desc").each do |publication| %>
+      <tr>
+        <td><%= link_to(publication.name, publication.url) %></td>
+        <td><%= publication.description.html_safe %></td>
+        <td><%= publication.author %></td>
+        <td><%= publication.publisher %></td>
+        <td><%= publication.category %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -179,7 +179,7 @@ class Project < ActiveRecord::Base
   has_and_belongs_to_many :exports
   has_and_belongs_to_many :resources, after_add: :log_association_changes
   accepts_nested_attributes_for :resources, allow_destroy: false, reject_if: proc { |r| r["title"].blank? && r["source_url"].blank? && r["authors"].blank? }
-  validates_presence_of :resources, message: "You must provide at least one resource."
+  #validates_presence_of :resources, message: "You must provide at least one resource."
 
   has_many :comments, dependent: :destroy
   accepts_nested_attributes_for :comments, allow_destroy: true

@@ -7,7 +7,7 @@ enable_typeahead Content, value_method: :to_english
 
 	def show_by_name
 		@content = Content.find_by_name(params[:name])
-	end
+  end
 
 	def search 
 		@search = Content.search do

@@ -15,6 +15,10 @@ Adt::Application.routes.draw do
   get '/contents/typeahead', to: 'contents#twitter_typeahead'
   resources :contents
 
+  get '/media', to: 'media#index'
+  get '/meet_the_team', to: 'meet_the_team#index'
+  get '/publications', to: 'publications#index'
+
   get '/pending_content', to: 'pending_content#index', as: "pending_content"
   get '/pending_content/:pending_content_scope', to: 'pending_content#index', as: "scoped_pending_content"
   post '/pending_content/approve', to: 'pending_content#approve'
@@ -85,8 +89,10 @@ Adt::Application.routes.draw do
   get '/recent', to: 'static_pages#recent', as: "recent"
   get '/MBDC_codebook', to: 'static_pages#codebook', as: "codebook"
   get '/TUFF_codebook', to: 'static_pages#tuff_codebook', as: "tuff_codebook"
+  get '/aid_conflict_nexus', to: 'static_pages#aid_conflict_nexus', as: "aid_conflict_nexus"
   get '/ground_truthing', to: 'static_pages#ground_truthing', as: "ground_truthing"
   get '/recent_changes', to: 'static_pages#recent_changes', as: 'recent_changes'
+  #get '/:name', to: 'media#show_by_name', as: "media_by_name"
 
   get '/signup', to: 'users#new'
 

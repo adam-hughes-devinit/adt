@@ -2,7 +2,7 @@ class HomepageMediaItem < ActiveRecord::Base
   attr_accessible :banner_text, :banner_title,
                   :order, :published, :url, :home_media
 
-  has_attached_file :home_media, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  has_attached_file :home_media, :styles => { :home_size => "320x320>", :thumb => "100x100>" }
 
   validates_attachment :home_media,
                        :content_type => { :content_type => ["image/jpeg", "image/gif", "image/png"],

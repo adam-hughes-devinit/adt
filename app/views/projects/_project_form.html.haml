@@ -24,7 +24,7 @@
             .row-fluid
               = f.input :title, prompt: "Project Title", wrapper_html: {class: "span8"} 
               = f.input :year, label: "Com. Year", prompt: "Com. year", wrapper_html: {class: "span2"} 
-              = f.input :year_uncertain, label: false, inline_label: "Year uncertain?", wrapper_html: { class: "span1"}           
+              = f.input :year_uncertain, label: false, inline_label: "Year uncertain", wrapper_html: { class: "span1"}
             .row-fluid
 
               = f.association :donor, wrapper_html: {class: "span3"}, label: 'Donor country'
@@ -57,13 +57,13 @@
             .row-fluid
               .span4
                 .row-fluid
-                  = f.input :is_commercial, label: false, inline_label: "Commercial?", wrapper_html: {class: "span6"}
-                  =f.input :line_of_credit, label: false, wrapper_html: {class: "span6"}, inline_label: "Credit Line?"
+                  = f.input :is_commercial, label: false, inline_label: "Commercial", wrapper_html: {class: "span6"}
+                  =f.input :line_of_credit, label: false, wrapper_html: {class: "span6"}, inline_label: "Credit Line"
                 .row-fluid
-                  = f.input :is_cofinanced, label: false, inline_label: "Cofinanced?", wrapper_html: {class: "span6"}
-                  = f.input :debt_uncertain, label: false, inline_label: "Debt uncertain?", wrapper_html: {class: "span6"}
+                  = f.input :is_cofinanced, label: false, inline_label: "Cofinanced", wrapper_html: {class: "span6"}
+                  = f.input :debt_uncertain, label: false, inline_label: "Debt uncertain", wrapper_html: {class: "span6"}
                 .row-fluid
-                  = f.input :is_ground_truthing, label: false, inline_label: "Ground Truthing?", wrapper_html: {class: "span6"}
+                  = f.input :is_ground_truthing, label: false, inline_label: "Ground Truthed", wrapper_html: {class: "span6"}
               .dates-box.span8
                 .row-fluid
                   - @date_defaults = { include_blank: true, input_html: {value: ''}, use_short_month: true, start_year: 1980, end_year: 2020, wrapper_html: {class: "project-date"} }

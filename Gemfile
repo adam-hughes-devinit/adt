@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.0.0'
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.13' #most up-to-date is 3.2.16, but this may be causing issues.
 gem 'capistrano'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'faker', '1.1.2'
@@ -39,11 +39,11 @@ gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
 gem "paperclip"  # for file uploads
 gem "flexslider" # for file viewer
+gem 'active_admin_editor' # html editor for active admin
 gem "rails-file-icons"
 gem 'detect_language'
 gem 'pdf-reader'
-
-
+gem 'activerecord-postgis-adapter' # for postgis
 
 group :development do
   gem 'quiet_assets'
