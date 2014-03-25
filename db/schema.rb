@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140319171021) do
+ActiveRecord::Schema.define(:version => 20140325223021) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -45,6 +45,23 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
+
+  create_table "adms", :force => true do |t|
+    t.string   "code"
+    t.string   "name"
+    t.integer  "level"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+    t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"multi_polygon"}
+  end
+
+  create_table "adms_geocodes", :id => false, :force => true do |t|
+    t.integer "adm_id"
+    t.integer "geocode_id"
+  end
+
+  add_index "adms_geocodes", ["adm_id", "geocode_id"], :name => "index_adms_geocodes_on_adm_id_and_geocode_id"
+  add_index "adms_geocodes", ["geocode_id"], :name => "index_adms_geocodes_on_geocode_id"
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -228,6 +245,32 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
   add_index "flow_types", ["id"], :name => "index_flow_types_on_id"
   add_index "flow_types", ["name"], :name => "index_flow_types_on_name"
 
+  create_table "geo_names", :force => true do |t|
+    t.integer  "code"
+    t.string   "name"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.integer  "location_type_id"
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
+    t.spatial  "the_geom",         :limit => {:srid=>0, :type=>"point"}
+  end
+
+  add_index "geo_names", ["location_type_id"], :name => "index_geo_names_on_location_type_id"
+
+  create_table "geocodes", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "geo_name_id"
+    t.integer  "precision_id"
+    t.text     "note"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "geocodes", ["geo_name_id"], :name => "index_geocodes_on_geo_name_id"
+  add_index "geocodes", ["precision_id"], :name => "index_geocodes_on_precision_id"
+  add_index "geocodes", ["project_id"], :name => "index_geocodes_on_project_id"
+
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"
     t.integer  "region_id"
@@ -240,6 +283,8 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
 
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
+
+  add_index "health_of_records", ["project_id"], :name => "index_health_of_records_on_project_id"
 
   create_table "homepage_media_items", :force => true do |t|
     t.string   "banner_text"
@@ -290,6 +335,14 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
   create_table "loan_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "location_types", :force => true do |t|
+    t.string   "name"
+    t.string   "code"
+    t.string   "descritpion"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -416,6 +469,13 @@ ActiveRecord::Schema.define(:version => 20140319171021) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "precisions", :force => true do |t|
+    t.float    "code"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "project_association_changes", :force => true do |t|

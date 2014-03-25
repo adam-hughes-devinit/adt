@@ -2,6 +2,8 @@ class CreateLocationTypes < ActiveRecord::Migration
   def change
     create_table :location_types do |t|
       t.string :name
+      t.string :code
+      t.string :descritpion
 
       t.timestamps
     end
