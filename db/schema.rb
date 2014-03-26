@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140325223021) do
+ActiveRecord::Schema.define(:version => 20140326172104) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -258,6 +258,16 @@ ActiveRecord::Schema.define(:version => 20140325223021) do
 
   add_index "geo_names", ["location_type_id"], :name => "index_geo_names_on_location_type_id"
 
+  create_table "geo_uploads", :force => true do |t|
+    t.integer  "record_count"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.string   "csv_file_name"
+    t.string   "csv_content_type"
+    t.integer  "csv_file_size"
+    t.datetime "csv_updated_at"
+  end
+
   create_table "geocodes", :force => true do |t|
     t.integer  "project_id"
     t.integer  "geo_name_id"
@@ -283,6 +293,16 @@ ActiveRecord::Schema.define(:version => 20140325223021) do
 
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
+
+  create_table "health_of_records", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "completeness_score"
+    t.integer  "resource_score"
+    t.integer  "combined_score"
+    t.integer  "adjusted_score"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
 
   add_index "health_of_records", ["project_id"], :name => "index_health_of_records_on_project_id"
 
