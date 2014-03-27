@@ -6,7 +6,6 @@ ActiveAdmin.register GeoName do
     column :name
     column :code
     column :location_type
-    column :the_geom
     column :created_at
     column :updated_at
     default_actions

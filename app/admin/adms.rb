@@ -12,6 +12,7 @@ ActiveAdmin.register Adm do
     column :name
     column :code
     column :level
+    column :parent
     column :created_at
     column :updated_at
     default_actions
@@ -22,7 +23,7 @@ ActiveAdmin.register Adm do
       f.input :name
       f.input :code
       f.input :level
-      #f.input :the_geom
+      f.input :parent
     end
     f.buttons
   end
