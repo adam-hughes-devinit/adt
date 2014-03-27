@@ -11,7 +11,7 @@ ActiveAdmin.register GeoUpload do
 
   collection_action :import_csv, :method => :post do
     n = SmarterCSV.process(params[:dump][:file].tempfile,
-                           {:quote_char =>true,  :remove_unmapped_keys => true,
+                           { :remove_unmapped_keys => true,
                             :key_mapping => {:geo_coding_id => :geo_code, :geo_name => :geo_name, :project_id => :project_id,
                                              :precision => :precision_id, :latitude => :latitude,  :longitude => :longitude,
                                              :location_type => :location_type }}) do |chunk|
