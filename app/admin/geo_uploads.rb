@@ -11,7 +11,7 @@ ActiveAdmin.register GeoUpload do
 
   collection_action :import_csv, :method => :post do
     n = SmarterCSV.process(params[:dump][:file].tempfile,
-                           { :remove_unmapped_keys => true,
+                           {:remove_unmapped_keys => true,
                             :key_mapping => {:geo_coding_id => :geo_code, :geo_name => :geo_name, :project_id => :project_id,
                                              :precision => :precision_id, :latitude => :latitude,  :longitude => :longitude,
                                              :location_type => :location_type }}) do |chunk|
@@ -19,6 +19,7 @@ ActiveAdmin.register GeoUpload do
         geocode = {}
         geocode[:precision_id] = record[:precision_id]
         geocode[:project_id] = record[:project_id]
+        geocode[:geo_upload_id] = params[:id]
         geo_name = {}
         geo_name[:name] = record[:geo_name]
         geo_name[:code] = record[:geo_code]
@@ -30,12 +31,25 @@ ActiveAdmin.register GeoUpload do
         if !location_type.nil?
           geo_name[:location_type_id] = location_type.id
         end
-        factory = RGeo::Cartesian.factory
-        lonlat = factory.point(geo_name[:longitude], geo_name[:latitude])
-        geo_name[:the_geom] = lonlat
 
-        #record[:full_name] = [h[:first],h[:last]].join(' ')  # create a virtual attribute
-        #record.delete(:first) ; h.delete(:last)              # remove two keys
+        geometry = {}
+        factory = RGeo::Cartesian.factory
+        lonlat = factory.point(record[:longitude], record[:latitude])
+        new_geometry
+        if record[:precision_id] == 1  # its a point
+          geometry[:the_geom] = lonlat
+          new_geometry = Geometry.create ( geometry )
+        end
+
+        if record[:precision_id] == 2  # its a buffer
+          # code for creating buffer from lonlat
+          new_geometry = Geometry.create ( geometry )
+        end
+
+        #### Do more precision logic with adms
+
+
+        geocode[:geometry_id] = new_geometry.id
         new_geo_name = GeoName.create( geo_name )
         geocode[:geo_name_id] = new_geo_name.id
         Geocode.create( geocode )
