@@ -62,20 +62,18 @@ ActiveAdmin.register GeoUpload do
 
         geometry = {}
         if record[:precision_id] == 1  # its a point
-          geometry[:the_geom] = lonlat
+          geometry[:the_geom] = RGeo::Feature.cast(lonlat, RGeo::Feature::GeometryCollection)
+          new_geometry = Geometry.create ( geometry )
+          geocode[:geometry_id] = new_geometry.id
+
+        elsif record[:precision_id] == 2  # its a buffer within 25km
+          lonlat_buff = lonlat.buffer(25000)
+          geometry[:the_geom] = RGeo::Feature.cast(lonlat_buff, RGeo::Feature::GeometryCollection)
 
           new_geometry = Geometry.create ( geometry )
           geocode[:geometry_id] = new_geometry.id
-        end
 
-        if record[:precision_id] == 2  # its a buffer within 25km
-          geometry[:the_geom] = lonlat.buffer(25000)
-
-          new_geometry = Geometry.create ( geometry )
-          geocode[:geometry_id] = new_geometry.id
-        end
-
-        if record[:precision_id] == 3  # its an adm2
+        elsif record[:precision_id] == 3  # its an adm2
           adms = Adm.joins(:geometry).where(level: 2)
           adms.each do |adm|
             the_geom = adm.the_geom
@@ -84,9 +82,8 @@ ActiveAdmin.register GeoUpload do
               geocode[:adm_id] = adm.id  # make sure this is correct
             end
           end
-        end
 
-        if record[:precision_id] == 4  # its an adm1
+        elsif record[:precision_id] == 4  # its an adm1
           adms = Adm.joins(:geometry).where(level: 1)
           adms.each do |adm|
             the_geom = adm.the_geom
@@ -95,9 +92,8 @@ ActiveAdmin.register GeoUpload do
               geocode[:adm_id] = adm.id  # make sure this is correct
             end
           end
-        end
 
-        if record[:precision_id] == (6 || 8)  # its an adm0
+        elsif record[:precision_id] == (6 || 8)  # its an adm0
           adms = Adm.joins(:geometry).where(level: 0)
           adms.each do |adm|
             the_geom = adm.the_geom
