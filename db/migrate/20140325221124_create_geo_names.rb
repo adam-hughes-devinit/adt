@@ -5,7 +5,6 @@ class CreateGeoNames < ActiveRecord::Migration
       t.string :name
       t.decimal :latitude
       t.decimal :longitude
-      t.point :the_geom
       t.integer :location_type_id
 
       t.timestamps

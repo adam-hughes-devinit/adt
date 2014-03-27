@@ -28,6 +28,43 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
+  create_table "adm_0", :primary_key => "gid", :force => true do |t|
+    t.integer "adm0_code"
+    t.string  "first_adm0", :limit => 100
+    t.spatial "geom",       :limit => {:srid=>0, :type=>"multi_polygon"}
+  end
+
+  add_index "adm_0", ["geom"], :name => "adm_0_geom_gist", :spatial => true
+
+  create_table "adm_1", :primary_key => "gid", :force => true do |t|
+    t.integer "adm1_code"
+    t.integer "adm0_code"
+    t.string  "adm0_name",  :limit => 100
+    t.integer "adm1_cod_1"
+    t.string  "adm1_name",  :limit => 100
+    t.spatial "geom",       :limit => {:srid=>0, :type=>"multi_polygon"}
+  end
+
+  add_index "adm_1", ["geom"], :name => "adm_1_geom_gist", :spatial => true
+
+  create_table "adm_2", :primary_key => "gid", :force => true do |t|
+    t.integer "adm2_code"
+    t.string  "adm2_name",  :limit => 100
+    t.string  "status",     :limit => 37
+    t.string  "disp_area",  :limit => 3
+    t.integer "str_year"
+    t.integer "exp_year"
+    t.integer "adm0_code"
+    t.string  "adm0_name",  :limit => 100
+    t.integer "adm1_code"
+    t.string  "adm1_name",  :limit => 100
+    t.decimal "shape_leng"
+    t.decimal "shape_area"
+    t.spatial "geom",       :limit => {:srid=>0, :type=>"multi_polygon"}
+  end
+
+  add_index "adm_2", ["geom"], :name => "adm_2_geom_gist", :spatial => true
+
   create_table "admin_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
@@ -50,18 +87,14 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
     t.string   "code"
     t.string   "name"
     t.integer  "level"
-    t.datetime "created_at",                                               :null => false
-    t.datetime "updated_at",                                               :null => false
-    t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"multi_polygon"}
+    t.integer  "geometry_id"
+    t.integer  "parent_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
-  create_table "adms_geocodes", :id => false, :force => true do |t|
-    t.integer "adm_id"
-    t.integer "geocode_id"
-  end
-
-  add_index "adms_geocodes", ["adm_id", "geocode_id"], :name => "index_adms_geocodes_on_adm_id_and_geocode_id"
-  add_index "adms_geocodes", ["geocode_id"], :name => "index_adms_geocodes_on_geocode_id"
+  add_index "adms", ["geometry_id"], :name => "index_adms_on_geometry_id"
+  add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -251,9 +284,8 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
     t.decimal  "latitude"
     t.decimal  "longitude"
     t.integer  "location_type_id"
-    t.datetime "created_at",                                             :null => false
-    t.datetime "updated_at",                                             :null => false
-    t.spatial  "the_geom",         :limit => {:srid=>0, :type=>"point"}
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   add_index "geo_names", ["location_type_id"], :name => "index_geo_names_on_location_type_id"
@@ -272,14 +304,24 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
     t.integer  "project_id"
     t.integer  "geo_name_id"
     t.integer  "precision_id"
+    t.integer  "geometry_id"
+    t.integer  "geo_upload_id"
     t.text     "note"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "geocodes", ["geo_name_id"], :name => "index_geocodes_on_geo_name_id"
+  add_index "geocodes", ["geo_upload_id"], :name => "index_geocodes_on_geo_upload_id"
+  add_index "geocodes", ["geometry_id"], :name => "index_geocodes_on_geometry_id"
   add_index "geocodes", ["precision_id"], :name => "index_geocodes_on_precision_id"
   add_index "geocodes", ["project_id"], :name => "index_geocodes_on_project_id"
+
+  create_table "geometries", :force => true do |t|
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+    t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
+  end
 
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"

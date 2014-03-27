@@ -4,9 +4,12 @@ class CreateAdms < ActiveRecord::Migration
       t.string :code
       t.string :name
       t.integer :level
-      t.multi_polygon :the_geom
+      t.integer :geometry_id
+      t.integer :parent_id
 
       t.timestamps
     end
+    add_index :adms, :geometry_id
+    add_index :adms, :parent_id
   end
 end

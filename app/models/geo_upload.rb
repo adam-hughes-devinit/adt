@@ -6,9 +6,5 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment :csv, :presence => true,
                        :content_type => { :content_type => "text/csv" }
 
-  before_save :process_csv
-
-  def process_csv
-
-  end
+  has_many :geocodes
 end
