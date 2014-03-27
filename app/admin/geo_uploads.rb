@@ -20,21 +20,47 @@ ActiveAdmin.register GeoUpload do
         geocode[:precision_id] = record[:precision_id]
         geocode[:project_id] = record[:project_id]
         geocode[:geo_upload_id] = params[:id]
-        geo_name = {}
-        geo_name[:name] = record[:geo_name]
-        geo_name[:code] = record[:geo_code]
-        geo_name[:latitude] = record[:latitude]
-        geo_name[:longitude] = record[:longitude]
-        puts record
 
         location_type = LocationType.find_by_name(record[:location_type])
-        if !location_type.nil?
-          geo_name[:location_type_id] = location_type.id
+
+         # We don't want duplicate geo_names.
+         # We assume that new is better.
+         # So new geo_name info should replace old geo_names with the same code.
+        old_geo_name = GeoName.find_by_code(record[:geo_code])
+        if !old_geo_name.nil?
+          old_geo_name.name = record[:geo_name]
+          old_geo_name.code = record[:geo_code]
+          old_geo_name.latitude = record[:latitude]
+          old_geo_name.longitude = record[:longitude]
+
+          # Determine location type for geo_name
+          if !location_type.nil?
+            geo_name[:location_type_id] = location_type.id
+          end
+
+          geocode[:geo_name_id] = old_geo_name.id
+        else
+          geo_name = {}
+          geo_name[:name] = record[:geo_name]
+          geo_name[:code] = record[:geo_code]
+          geo_name[:latitude] = record[:latitude]
+          geo_name[:longitude] = record[:longitude]
+
+          # Determine location type for geo_name
+          if !location_type.nil?
+            geo_name[:location_type_id] = location_type.id
+          end
+
+          new_geo_name = GeoName.create( geo_name )
+          geocode[:geo_name_id] = new_geo_name.id
         end
 
-        geometry = {}
+        puts record
+
         factory = RGeo::Cartesian.factory
         lonlat = factory.point(record[:longitude], record[:latitude])
+
+        geometry = {}
         new_geometry
         if record[:precision_id] == 1  # its a point
           geometry[:the_geom] = lonlat
@@ -50,8 +76,6 @@ ActiveAdmin.register GeoUpload do
 
 
         geocode[:geometry_id] = new_geometry.id
-        new_geo_name = GeoName.create( geo_name )
-        geocode[:geo_name_id] = new_geo_name.id
         Geocode.create( geocode )
       end
       #puts chunk.inspect   # we could at this point pass the chunk to a Resque worker..
