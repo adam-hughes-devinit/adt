@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
   create_table "adms", :force => true do |t|
-    t.string   "code"
+    t.integer  "code"
     t.string   "name"
     t.integer  "level"
     t.integer  "geometry_id"

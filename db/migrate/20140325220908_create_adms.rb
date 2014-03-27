@@ -1,7 +1,7 @@
 class CreateAdms < ActiveRecord::Migration
   def change
     create_table :adms do |t|
-      t.string :code
+      t.integer :code
       t.string :name
       t.integer :level
       t.integer :geometry_id

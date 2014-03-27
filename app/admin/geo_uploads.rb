@@ -61,21 +61,53 @@ ActiveAdmin.register GeoUpload do
         lonlat = factory.point(record[:longitude], record[:latitude])
 
         geometry = {}
-        new_geometry
         if record[:precision_id] == 1  # its a point
           geometry[:the_geom] = lonlat
+
           new_geometry = Geometry.create ( geometry )
+          geocode[:geometry_id] = new_geometry.id
         end
 
-        if record[:precision_id] == 2  # its a buffer
-          # code for creating buffer from lonlat
+        if record[:precision_id] == 2  # its a buffer within 25km
+          geometry[:the_geom] = lonlat.buffer(25000)
+
           new_geometry = Geometry.create ( geometry )
+          geocode[:geometry_id] = new_geometry.id
         end
 
-        #### Do more precision logic with adms
+        if record[:precision_id] == 3  # its an adm2
+          adms = Adm.joins(:geometry).where(level: 2)
+          adms.each do |adm|
+            the_geom = adm.the_geom
+            if the_geom.contains?(lonlat)
+              geocode[:geometry_id] = adm.geometry_id
+              geocode[:adm_id] = adm.id  # make sure this is correct
+            end
+          end
+        end
 
+        if record[:precision_id] == 4  # its an adm1
+          adms = Adm.joins(:geometry).where(level: 1)
+          adms.each do |adm|
+            the_geom = adm.the_geom
+            if the_geom.contains?(lonlat)
+              geocode[:geometry_id] = adm.geometry_id
+              geocode[:adm_id] = adm.id  # make sure this is correct
+            end
+          end
+        end
 
-        geocode[:geometry_id] = new_geometry.id
+        if record[:precision_id] == (6 || 8)  # its an adm0
+          adms = Adm.joins(:geometry).where(level: 0)
+          adms.each do |adm|
+            the_geom = adm.the_geom
+            if the_geom.contains?(lonlat)
+              geocode[:geometry_id] = adm.geometry_id
+              geocode[:adm_id] = adm.id  # make sure this is correct
+            end
+          end
+        end
+
         Geocode.create( geocode )
       end
       #puts chunk.inspect   # we could at this point pass the chunk to a Resque worker..
