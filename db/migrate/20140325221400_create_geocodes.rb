@@ -6,6 +6,7 @@ class CreateGeocodes < ActiveRecord::Migration
       t.integer :precision_id
       t.integer :geometry_id
       t.integer :geo_upload_id
+      t.integer :adm_id
       t.text :note
 
       t.timestamps
@@ -15,5 +16,6 @@ class CreateGeocodes < ActiveRecord::Migration
     add_index :geocodes, :precision_id
     add_index :geocodes, :geometry_id
     add_index :geocodes, :geo_upload_id
+    add_index :geocodes, :adm_id
   end
 end

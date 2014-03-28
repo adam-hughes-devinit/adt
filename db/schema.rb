@@ -312,11 +312,13 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
     t.integer  "precision_id"
     t.integer  "geometry_id"
     t.integer  "geo_upload_id"
+    t.integer  "adm_id"
     t.text     "note"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "geocodes", ["adm_id"], :name => "index_geocodes_on_adm_id"
   add_index "geocodes", ["geo_name_id"], :name => "index_geocodes_on_geo_name_id"
   add_index "geocodes", ["geo_upload_id"], :name => "index_geocodes_on_geo_upload_id"
   add_index "geocodes", ["geometry_id"], :name => "index_geocodes_on_geometry_id"
