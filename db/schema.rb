@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140326172104) do
+ActiveRecord::Schema.define(:version => 20140328203157) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -330,6 +330,8 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
     t.datetime "updated_at",                                          :null => false
     t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
   end
+
+  add_index "geometries", ["the_geom"], :name => "index_geometries_on_the_geom", :spatial => true
 
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"
