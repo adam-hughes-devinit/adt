@@ -228,6 +228,12 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
   add_index "exports_projects", ["export_id", "project_id"], :name => "index_exports_projects_on_export_id_and_project_id"
   add_index "exports_projects", ["project_id", "export_id"], :name => "index_exports_projects_on_project_id_and_export_id"
 
+  create_table "feature_codes", :id => false, :force => true do |t|
+    t.string "code"
+    t.string "name"
+    t.string "description"
+  end
+
   create_table "flag_types", :force => true do |t|
     t.string   "name"
     t.string   "color"
@@ -404,7 +410,7 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
   create_table "location_types", :force => true do |t|
     t.string   "name"
     t.string   "code"
-    t.string   "descritpion"
+    t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -534,7 +540,7 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
   end
 
   create_table "precisions", :force => true do |t|
-    t.float    "code"
+    t.integer  "code"
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false

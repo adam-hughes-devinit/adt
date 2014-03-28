@@ -3,7 +3,7 @@ class CreateLocationTypes < ActiveRecord::Migration
     create_table :location_types do |t|
       t.string :name
       t.string :code
-      t.string :descritpion
+      t.string :description
 
       t.timestamps
     end

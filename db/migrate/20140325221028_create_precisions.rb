@@ -1,7 +1,7 @@
 class CreatePrecisions < ActiveRecord::Migration
   def change
     create_table :precisions do |t|
-      t.float :code
+      t.integer :code
       t.string :description
 
       t.timestamps
