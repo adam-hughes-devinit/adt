@@ -541,7 +541,7 @@ ActiveRecord::Schema.define(:version => 20140326172104) do
 
   create_table "precisions", :force => true do |t|
     t.integer  "code"
-    t.string   "description"
+    t.text     "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end

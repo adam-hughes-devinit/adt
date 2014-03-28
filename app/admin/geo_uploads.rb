@@ -12,7 +12,7 @@ ActiveAdmin.register GeoUpload do
   collection_action :import_csv, :method => :post do
     n = SmarterCSV.process(params[:dump][:file].tempfile,
                            {:remove_unmapped_keys => true,
-                            :key_mapping => {:geo_name_id => :geo_code, :geo_name => :geo_name, :project_id => :project_id,
+                            :key_mapping => {:geo_name_id => :geo_name_id, :geo_name => :geo_name, :project_id => :project_id,
                                              :precision => :precision_id, :latitude => :latitude,  :longitude => :longitude,
                                              :location_type => :location_type }}) do |chunk|
       chunk.each do |record|
@@ -26,10 +26,10 @@ ActiveAdmin.register GeoUpload do
          # We don't want duplicate geo_names.
          # We assume that new is better.
          # So new geo_name info should replace old geo_names with the same code.
-        old_geo_name = GeoName.find_by_code(record[:geo_code])
+        old_geo_name = GeoName.find_by_code(record[:geo_name_id])
         if !old_geo_name.nil?
           old_geo_name.name = record[:geo_name]
-          old_geo_name.code = record[:geo_code]
+          old_geo_name.code = record[:geo_name_id]
           old_geo_name.latitude = record[:latitude]
           old_geo_name.longitude = record[:longitude]
 
@@ -42,7 +42,7 @@ ActiveAdmin.register GeoUpload do
         else
           geo_name = {}
           geo_name[:name] = record[:geo_name]
-          geo_name[:code] = record[:geo_code]
+          geo_name[:code] = record[:geo_name_id]
           geo_name[:latitude] = record[:latitude]
           geo_name[:longitude] = record[:longitude]
 
