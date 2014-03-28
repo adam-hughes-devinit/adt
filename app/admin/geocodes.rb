@@ -5,7 +5,7 @@ ActiveAdmin.register Geocode do
     column :id
     column :project
     column :geo_name
-    column :precision
+    column :precision_id
     column :adm
     column :geo_upload
     column :created_at
