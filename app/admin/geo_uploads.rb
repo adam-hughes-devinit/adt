@@ -74,32 +74,35 @@ ActiveAdmin.register GeoUpload do
           geocode[:geometry_id] = new_geometry.id
 
         elsif record[:precision_id] == 3  # its an adm2
-          adms = Adm.find_all_by_level(2)
+          adms = Adm.where(level: 2).includes(:geometry)
           adms.each do |adm|
             geom = adm.geometry.the_geom
             if geom.contains?(lonlat)
               geocode[:geometry_id] = adm.geometry_id
-              geocode[:adm_id] = adm.id  # make sure this is correct
+              geocode[:adm_id] = adm.id
+              break
             end
           end
 
         elsif record[:precision_id] == 4  # its an adm1
-          adms = Adm.find_all_by_level(1)
+          adms = Adm.where(level: 1).includes(:geometry)
           adms.each do |adm|
             geom = adm.geometry.the_geom
             if geom.contains?(lonlat)
               geocode[:geometry_id] = adm.geometry_id
-              geocode[:adm_id] = adm.id  # make sure this is correct
+              geocode[:adm_id] = adm.id
+              break
             end
           end
 
         elsif record[:precision_id] == (6 || 8)  # its an adm0
-          adms = Adm.find_all_by_level(0)
+          adms = Adm.where(level: 0).includes(:geometry)
           adms.each do |adm|
             geom = adm.geometry.the_geom
             if geom.contains?(lonlat)
               geocode[:geometry_id] = adm.geometry_id
-              geocode[:adm_id] = adm.id  # make sure this is correct
+              geocode[:adm_id] = adm.id
+              break
             end
           end
         end
