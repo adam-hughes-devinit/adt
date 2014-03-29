@@ -45,6 +45,8 @@ gem 'detect_language'
 gem 'pdf-reader'
 gem 'activerecord-postgis-adapter' # for postgis
 gem 'smarter_csv' # For csv upload
+gem 'parallel'
+gem 'squeel'
 
 group :development do
   gem 'quiet_assets'
