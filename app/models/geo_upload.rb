@@ -12,7 +12,7 @@ class GeoUpload < ActiveRecord::Base
 
   def self.find_adm(lonlat, adm_level, geocode)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
-    if !adm.nil? # prevents it from crashing if it can't find a matching adm. having world adms should fix this.
+    if !adm.nil? # prevents crash if no adm match is found. Having world adms should fix this.
       geocode[:adm_id] = adm.id
       geocode[:geometry_id] = adm.geometry.id
     end
@@ -20,12 +20,11 @@ class GeoUpload < ActiveRecord::Base
     return geocode
   end
 
-
+  #TODO: handle geo_upload deletions
+  # TODO: Handle duplicate geocodes from previous uploads
   def self.csv_to_database(chunk, geo_upload)
-    #Resque.enque( ResqueWorkerClass, chunk ) # pass chunks of CSV-data to Resque workers for parallel processing
-    #Parallel.each(chunk, :in_threads => 2) do |record|
-    #ActiveRecord::Base.connection_pool.with_connection do
     chunk.each do |record|
+      geo_upload.record_count += 1
       geocode = {}
       geocode[:precision_id] = record[:precision_id]
       geocode[:project_id] = record[:project_id]
@@ -99,8 +98,7 @@ class GeoUpload < ActiveRecord::Base
       end
 
       Geocode.create( geocode )
-      #end #connection
     end
-    return geo_upload
+    return geo_upload.record_count
   end
 end

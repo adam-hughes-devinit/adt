@@ -1,14 +1,12 @@
 ActiveAdmin.register GeoUpload do
   menu :parent => "Geocoding"
 
-  action_item :only => :index do
-    link_to 'Upload CSV', :action => 'upload_csv'
+  action_item :only => :show do
+    link_to('New Geo Upload', new_admin_geo_upload_path)
   end
 
-  controller do
-    def create
-      @geo_upload = GeoUpload.new(params[:geo_upload])
-    end
+  action_item :only => :index do
+    link_to 'Upload CSV', :action => 'upload_csv'
   end
 
   collection_action :upload_csv do
@@ -16,17 +14,18 @@ ActiveAdmin.register GeoUpload do
   end
 
   collection_action :import_csv, :method => :post do
-    geo_upload = GeoUpload.new(params[:geo_upload])
-    n = SmarterCSV.process(params[:dump][:file].tempfile,
+    geo_upload = GeoUpload.create(csv: params[:dump][:file], record_count: 0)
+
+    SmarterCSV.process(params[:dump][:file].tempfile,
                            {:chunk_size => 100, :remove_unmapped_keys => true,
                             :key_mapping => {:geo_name_id => :geo_name_id, :geo_name => :geo_name, :project_id => :project_id,
                                              :precision => :precision_id, :latitude => :latitude,  :longitude => :longitude,
                                              :location_type => :location_type }}) do |chunk|
 
-      geo_upload = GeoUpload.csv_to_database(chunk, geo_upload)
-      geo_upload.save
-      #puts chunk.inspect   # we could at this point pass the chunk to a Resque worker..
+      geo_upload.record_count = GeoUpload.csv_to_database(chunk, geo_upload)
     end
+
+    geo_upload.save
     redirect_to :action => :index, :notice => "CSV imported successfully!"
   end
 
