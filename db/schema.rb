@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140328203157) do
+ActiveRecord::Schema.define(:version => 20140402184049) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -27,6 +27,24 @@ ActiveRecord::Schema.define(:version => 20140328203157) do
   add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
+
+  create_table "adm0_world", :id => false, :force => true do |t|
+    t.integer "adm0_code"
+    t.string  "adm0_name"
+    t.spatial "geom",      :limit => {:srid=>0, :type=>"geometry"}
+  end
+
+  add_index "adm0_world", ["geom"], :name => "adm0_world_geom_idx", :spatial => true
+
+  create_table "adm1_world", :id => false, :force => true do |t|
+    t.integer "adm0_code"
+    t.string  "adm0_name"
+    t.integer "adm1_code"
+    t.string  "adm1_name"
+    t.spatial "geom",      :limit => {:srid=>0, :type=>"geometry"}
+  end
+
+  add_index "adm1_world", ["geom"], :name => "adm1_world_geom_idx", :spatial => true
 
   create_table "adm_0", :primary_key => "gid", :force => true do |t|
     t.integer "adm0_code"
@@ -65,6 +83,24 @@ ActiveRecord::Schema.define(:version => 20140328203157) do
 
   add_index "adm_2", ["geom"], :name => "adm_2_geom_gist", :spatial => true
 
+  create_table "adm_world", :primary_key => "gid", :force => true do |t|
+    t.integer "adm2_code"
+    t.string  "adm2_name",  :limit => 100
+    t.string  "status",     :limit => 37
+    t.string  "disp_area",  :limit => 3
+    t.integer "str_year"
+    t.integer "exp_year"
+    t.integer "adm0_code"
+    t.string  "adm0_name",  :limit => 100
+    t.integer "adm1_code"
+    t.string  "adm1_name",  :limit => 100
+    t.decimal "shape_leng"
+    t.decimal "shape_area"
+    t.spatial "geom",       :limit => {:srid=>0, :type=>"multi_polygon"}
+  end
+
+  add_index "adm_world", ["geom"], :name => "adm_world_geom_gist", :spatial => true
+
   create_table "admin_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
@@ -87,13 +123,11 @@ ActiveRecord::Schema.define(:version => 20140328203157) do
     t.integer  "code"
     t.string   "name"
     t.integer  "level"
-    t.integer  "geometry_id"
     t.integer  "parent_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
-  add_index "adms", ["geometry_id"], :name => "index_adms_on_geometry_id"
   add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
 
   create_table "comments", :force => true do |t|
@@ -329,8 +363,10 @@ ActiveRecord::Schema.define(:version => 20140328203157) do
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
     t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
+    t.integer  "adm_code"
   end
 
+  add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"
   add_index "geometries", ["the_geom"], :name => "index_geometries_on_the_geom", :spatial => true
 
   create_table "geopoliticals", :force => true do |t|
