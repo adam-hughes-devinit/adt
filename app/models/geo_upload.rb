@@ -6,9 +6,9 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment :csv, :presence => true,
                        :content_type => { :content_type => "text/csv" }
 
-  has_many :geocodes
+  has_many :geocodes#, :dependent => :destroy
 
-  accepts_nested_attributes_for :geocodes, allow_destroy: true
+  #accepts_nested_attributes_for :geocodes, allow_destroy: true
 
   def self.find_adm(lonlat, adm_level, geocode)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
@@ -20,7 +20,6 @@ class GeoUpload < ActiveRecord::Base
     return geocode
   end
 
-  #TODO: handle geo_upload deletions
   # TODO: Handle duplicate geocodes from previous uploads
   def self.csv_to_database(chunk, geo_upload)
     chunk.each do |record|

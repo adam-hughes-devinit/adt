@@ -13,6 +13,30 @@ ActiveAdmin.register GeoUpload do
     render "admin/csv/upload_csv"
   end
 
+  controller do
+     # When a geo_upload is deleted:
+     # associated geocodes, unused geo_names, and unused geometries are deleted
+    def destroy
+      geocodes = Geocode.find_all_by_geo_upload_id(params[:id])
+      geocodes.each do |geocode|
+        geoname = GeoName.joins(:geocodes).where(id: geocode.geo_name_id)
+        if geoname.count == 1
+          GeoName.find(geocode.geo_name_id).delete
+        end
+        if !geocode.geometry_id.nil?
+          geometry = Geometry.find(geocode.geometry_id)
+          if geometry.adm_code.nil?
+            geometry.delete
+          end
+        end
+        geocode.delete
+      end
+
+      GeoUpload.find(params[:id]).delete
+
+      redirect_to :action => 'index'
+    end
+  end
   collection_action :import_csv, :method => :post do
     geo_upload = GeoUpload.create(csv: params[:dump][:file], record_count: 0)
 
