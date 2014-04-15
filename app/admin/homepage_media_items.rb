@@ -1,6 +1,10 @@
 ActiveAdmin.register HomepageMediaItem do
   menu :parent => "Media"
 
+  action_item :only => :show do
+    link_to('New Home Media Item', new_admin_home_media_item_path)
+  end
+
   index do
     column :id
     # Adds image thumbnails and download links.

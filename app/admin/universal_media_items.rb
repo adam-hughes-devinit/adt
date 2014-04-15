@@ -2,6 +2,10 @@ ActiveAdmin.register UniversalMediaItem do
 
   menu :parent => "Content"
 
+  action_item :only => :show do
+    link_to('New Universal Media Item', new_admin_universal_media_item_path)
+  end
+
   index do
     column :id
     # Adds image thumbnails and download links.
