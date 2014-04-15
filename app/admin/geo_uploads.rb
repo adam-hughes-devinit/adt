@@ -1,4 +1,5 @@
 ActiveAdmin.register GeoUpload do
+  actions :all, :except => [:new, :edit]
 
   menu :parent => "Geocoding"
 
