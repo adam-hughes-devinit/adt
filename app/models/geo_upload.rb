@@ -19,8 +19,15 @@ class GeoUpload < ActiveRecord::Base
 
     return geocode
   end
+  # TODO: Handle duplicate geocodes from previous uploads (perhaps use unique (project_id, geo_name_id))
+  # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
+  # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                            Error handling for edges cases. Include notifications for user.
+  ## Can't find adm for non-precision 1's and 2's
+  ## Non-unique (project_id, geo_name_id)
+  ## No geo_name provided (may not be necessary).
+  ## No lat/lon provided (may not be necessary).
+  ## Update Log time Watch Duplicate Copy Move Delete
 
-  # TODO: Handle duplicate geocodes from previous uploads
   def self.csv_to_database(chunk, geo_upload)
     chunk.each do |record|
       geo_upload.record_count += 1

@@ -1,4 +1,5 @@
 ActiveAdmin.register GeoUpload do
+
   menu :parent => "Geocoding"
 
   action_item :only => :show do
@@ -63,7 +64,11 @@ ActiveAdmin.register GeoUpload do
     end
     column :created_at
     column :updated_at
-    default_actions
+
+    actions defaults: false do |post|
+      link_to 'Delete', admin_geo_upload_path(post), :method => :delete,
+              :confirm => 'WARNING: Deleting this record will delete all geocodes from this upload!'
+    end
   end
 
   form :html => { :enctype => "multipart/form-data" } do |f|
