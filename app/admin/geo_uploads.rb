@@ -60,7 +60,8 @@ ActiveAdmin.register GeoUpload do
                            }
     ) do |chunk|
 
-      geo_upload.record_count, logfile = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
+      #geo_upload.record_count, logfile = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
+      geo_upload.record_count = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
     end
     #logfile.close
     logfile.read # fixes bug that prevents log file text being saved.
