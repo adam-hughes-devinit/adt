@@ -1,7 +1,8 @@
 class GeoUpload < ActiveRecord::Base
-  attr_accessible :record_count, :csv
+  attr_accessible :record_count, :csv, :log, :log_errors
 
   has_attached_file :csv
+  has_attached_file :log
 
   validates_attachment :csv, :presence => true,
                        :content_type => { :content_type => "text/csv" }
@@ -15,6 +16,9 @@ class GeoUpload < ActiveRecord::Base
     if !adm.nil? # prevents crash if no adm match is found. Having world adms should fix this.
       geocode[:adm_id] = adm.id
       geocode[:geometry_id] = adm.geometry.id
+    else
+      logfile.write("Warning: geocode_id #{geocode.id}: Could not find Adm\n")
+      geo_upload.log_errors += 1
     end
 
     return geocode
@@ -31,10 +35,10 @@ class GeoUpload < ActiveRecord::Base
   ## No lat/lon provided (may not be necessary).
   ## Update Log time Watch Duplicate Copy Move Delete
 
-  def self.csv_to_database(chunk, geo_upload)
+  def self.csv_to_database(chunk, geo_upload, logfile)
     chunk.each do |record|
       geo_upload.record_count += 1
-      geocode = {}
+      geocode = Geocode.create
       geocode[:precision_id] = record[:precision_id]
       geocode[:project_id] = record[:project_id]
       geocode[:geo_upload_id] = geo_upload.id
@@ -104,10 +108,13 @@ class GeoUpload < ActiveRecord::Base
 
       elsif record[:precision_id] == 8  # its an adm0
         geocode = GeoUpload.find_adm(lonlat, 0, geocode)
+      else
+        logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
+        geo_upload.log_errors += 1
       end
 
-      Geocode.create( geocode )
+      geocode.save
     end
-    return geo_upload.record_count
+    return geo_upload.record_count, logfile
   end
 end

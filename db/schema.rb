@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140402184049) do
+ActiveRecord::Schema.define(:version => 20140416171447) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -129,6 +129,16 @@ ActiveRecord::Schema.define(:version => 20140402184049) do
   end
 
   add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
+
+  create_table "adms_copy", :id => false, :force => true do |t|
+    t.integer  "id",         :null => false
+    t.integer  "code"
+    t.string   "name"
+    t.integer  "level"
+    t.integer  "parent_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -338,6 +348,11 @@ ActiveRecord::Schema.define(:version => 20140402184049) do
     t.string   "csv_content_type"
     t.integer  "csv_file_size"
     t.datetime "csv_updated_at"
+    t.string   "log_file_name"
+    t.string   "log_content_type"
+    t.integer  "log_file_size"
+    t.datetime "log_updated_at"
+    t.integer  "log_errors"
   end
 
   create_table "geocodes", :force => true do |t|
@@ -368,6 +383,14 @@ ActiveRecord::Schema.define(:version => 20140402184049) do
 
   add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"
   add_index "geometries", ["the_geom"], :name => "index_geometries_on_the_geom", :spatial => true
+
+  create_table "geometries_copy", :id => false, :force => true do |t|
+    t.integer  "id",                                                  :null => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+    t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
+    t.integer  "adm_code"
+  end
 
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"

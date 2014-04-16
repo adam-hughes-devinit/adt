@@ -38,7 +38,14 @@ ActiveAdmin.register GeoUpload do
 
    # Import csv
   collection_action :import_csv, :method => :post do
-    geo_upload = GeoUpload.create(csv: params[:dump][:file], record_count: 0)
+    geo_upload = GeoUpload.create(csv: params[:dump][:file], record_count: 0, log_errors: 0)
+    log_path = Rails.root.join('tmp')
+    logfile = Tempfile.new('geo_upload.log', log_path)
+    logfile.write("Logfile\n")
+    #puts logfile.read
+    #logger = Logger.new(logfile)
+    #geo_upload.log_file_name = log_path
+
 
     SmarterCSV.process(params[:dump][:file].tempfile,
                            {:chunk_size => 100,
@@ -53,9 +60,11 @@ ActiveAdmin.register GeoUpload do
                            }
     ) do |chunk|
 
-      geo_upload.record_count = GeoUpload.csv_to_database(chunk, geo_upload)
+      geo_upload.record_count, logfile = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
     end
-
+    logfile.close
+    #logfile.read # fixes bug that prevents log file text being saved.
+    geo_upload.log = logfile
     geo_upload.save
     redirect_to :action => :index, :notice => "CSV imported successfully!"
   end
@@ -63,11 +72,17 @@ ActiveAdmin.register GeoUpload do
   index do
     column :id
     column :record_count
-    column :csv_file_name
+    column "CSV File", :csv_file_name do |csv|
+      link_to(csv.csv_file_name, csv.csv.url)
+    end
     column :csv_content_type
     column "CSV File Size", :csv_file_size do |csv|
       number_to_human_size(csv.csv_file_size)
     end
+    column "Log File", :log_file_name do |log|
+      link_to(log.log_file_name, log.log.url)
+    end
+    column :log_errors
     column :created_at
     column :updated_at
 
