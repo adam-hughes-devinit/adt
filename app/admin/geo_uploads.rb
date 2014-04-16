@@ -62,8 +62,8 @@ ActiveAdmin.register GeoUpload do
 
       geo_upload.record_count, logfile = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
     end
-    logfile.close
-    #logfile.read # fixes bug that prevents log file text being saved.
+    #logfile.close
+    logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
     geo_upload.save
     redirect_to :action => :index, :notice => "CSV imported successfully!"

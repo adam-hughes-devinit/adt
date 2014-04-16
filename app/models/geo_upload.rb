@@ -24,6 +24,24 @@ class GeoUpload < ActiveRecord::Base
     return geocode
   end
 
+  def self.update_geo_name(geocode, record, location_type, geo_name)
+    geo_name[:name] = record[:geo_name]
+    geo_name[:code] = record[:geo_name_id]
+    geo_name[:latitude] = record[:latitude]
+    geo_name[:longitude] = record[:longitude]
+
+    # Determine location type for geo_name
+    if !location_type.nil?
+      geo_name[:location_type_id] = location_type.id
+    end
+
+    geo_name.save
+    geocode[:geo_name_id] = geo_name.id
+
+    return geocode
+
+  end
+
   # TODO: Handle duplicate geocodes from previous uploads (perhaps use unique (project_id, geo_name_id))
   # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
   # TODO: Create log file associated with geo_upload. Include notification that has number of errors with geo_upload
@@ -50,33 +68,10 @@ class GeoUpload < ActiveRecord::Base
       # So new geo_name info should replace old geo_names with the same code.
       old_geo_name = GeoName.find_by_code(record[:geo_name_id])
       if !old_geo_name.nil?
-        old_geo_name.name = record[:geo_name]
-        old_geo_name.code = record[:geo_name_id]
-        old_geo_name.latitude = record[:latitude]
-        old_geo_name.longitude = record[:longitude]
-
-        # Determine location type for geo_name
-        if !location_type.nil?
-          old_geo_name.location_type_id = location_type.id
-        end
-        old_geo_name.save
-        geocode[:geo_name_id] = old_geo_name.id
+        geocode = GeoUpload.update_geo_name(geocode, record, location_type, old_geo_name)
       else
-        # could make this and old_geo_name better if I create a new empty geoname and then update it.
-        # Code would be much cleaner.
-        geo_name = {}
-        geo_name[:name] = record[:geo_name]
-        geo_name[:code] = record[:geo_name_id]
-        geo_name[:latitude] = record[:latitude]
-        geo_name[:longitude] = record[:longitude]
-
-        # Determine location type for geo_name
-        if !location_type.nil?
-          geo_name[:location_type_id] = location_type.id
-        end
-
-        new_geo_name = GeoName.create( geo_name )
-        geocode[:geo_name_id] = new_geo_name.id
+        geo_name = GeoName.create
+        geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
       end
 
       puts record
