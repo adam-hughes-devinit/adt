@@ -19,8 +19,11 @@ class GeoUpload < ActiveRecord::Base
 
     return geocode
   end
+
   # TODO: Handle duplicate geocodes from previous uploads (perhaps use unique (project_id, geo_name_id))
   # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
+  # TODO: Create log file associated with geo_upload. Include notification that has number of errors with geo_upload
+  # TODO: Add publish variable to geo upload for all geocodes.
   # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                            Error handling for edges cases. Include notifications for user.
   ## Can't find adm for non-precision 1's and 2's
   ## Non-unique (project_id, geo_name_id)
