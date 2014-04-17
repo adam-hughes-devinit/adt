@@ -4,7 +4,7 @@ class Geocode < ActiveRecord::Base
   belongs_to :geo_name
   belongs_to :precision
   belongs_to :project
-  belongs_to :geometry#, :reject_if => , :dependent => :destroy,
+  belongs_to :geometry
   belongs_to :geo_upload
   belongs_to :adm
 

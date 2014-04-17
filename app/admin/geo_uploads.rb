@@ -42,10 +42,6 @@ ActiveAdmin.register GeoUpload do
     log_path = Rails.root.join('tmp')
     logfile = Tempfile.new('geo_upload.log', log_path)
     logfile.write("Logfile\n")
-    #puts logfile.read
-    #logger = Logger.new(logfile)
-    #geo_upload.log_file_name = log_path
-
 
     SmarterCSV.process(params[:dump][:file].tempfile,
                            {:chunk_size => 100,
@@ -60,10 +56,9 @@ ActiveAdmin.register GeoUpload do
                            }
     ) do |chunk|
 
-      #geo_upload.record_count, logfile = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
       geo_upload.record_count = GeoUpload.csv_to_database(chunk, geo_upload, logfile)
     end
-    #logfile.close
+
     logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
     geo_upload.save

@@ -7,9 +7,7 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment :csv, :presence => true,
                        :content_type => { :content_type => "text/csv" }
 
-  has_many :geocodes#, :dependent => :destroy
-
-  #accepts_nested_attributes_for :geocodes, allow_destroy: true
+  has_many :geocodes
 
   def self.find_adm(lonlat, adm_level, logfile,  geocode, geo_upload)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
@@ -117,7 +115,7 @@ class GeoUpload < ActiveRecord::Base
         geo_upload.log_errors += 1
       end
     end
-    #return geo_upload.record_count, logfile
+
     return geo_upload.record_count
   end
 end
