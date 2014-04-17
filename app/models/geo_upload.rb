@@ -33,8 +33,10 @@ class GeoUpload < ActiveRecord::Base
       geo_name[:location_type_id] = location_type.id
     end
 
+    # Did saves this way to prevent lost records if an error occurs.
     geo_name.save
     geocode[:geo_name_id] = geo_name.id
+    geocode.save
 
     return geocode
   end
@@ -55,11 +57,9 @@ class GeoUpload < ActiveRecord::Base
       existing_geocode = Geocode.joins(:geo_name).where(project_id: record[:project_id], geo_name: {code: record[:geo_name_id]} ).first
       if existing_geocode.nil?
         record_stats["uploaded_record_count"] += 1
-        geocode = Geocode.create
-
-        geocode[:precision_id] = record[:precision_id].round
-        geocode[:project_id] = record[:project_id]
-        geocode[:geo_upload_id] = geo_upload.id
+        geocode = Geocode.create(project_id: record[:project_id],
+                                 precision_id: record[:precision_id].round,
+                                 geo_upload_id: geo_upload.id)
 
         location_type = LocationType.find_by_name(record[:location_type])
 
@@ -70,7 +70,7 @@ class GeoUpload < ActiveRecord::Base
         if !old_geo_name.nil?
           geocode = GeoUpload.update_geo_name(geocode, record, location_type, old_geo_name)
         else
-          geo_name = GeoName.create
+          geo_name = GeoName.new
           geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
         end
 
