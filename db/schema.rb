@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140416171447) do
+ActiveRecord::Schema.define(:version => 20140417191612) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -342,8 +342,8 @@ ActiveRecord::Schema.define(:version => 20140416171447) do
 
   create_table "geo_uploads", :force => true do |t|
     t.integer  "record_count"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "csv_file_name"
     t.string   "csv_content_type"
     t.integer  "csv_file_size"
@@ -353,6 +353,8 @@ ActiveRecord::Schema.define(:version => 20140416171447) do
     t.integer  "log_file_size"
     t.datetime "log_updated_at"
     t.integer  "log_errors"
+    t.integer  "critical_errors"
+    t.boolean  "active",           :default => false
   end
 
   create_table "geocodes", :force => true do |t|

@@ -1,5 +1,5 @@
 class GeoUpload < ActiveRecord::Base
-  attr_accessible :record_count, :csv, :log, :log_errors
+  attr_accessible :record_count, :csv, :log, :log_errors, :critical_errors, :active
 
   has_attached_file :csv
   has_attached_file :log
@@ -7,7 +7,18 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment :csv, :presence => true,
                        :content_type => { :content_type => "text/csv" }
 
+  validates :active,
+            :inclusion => {
+                :in => [false],
+                message: "Can't activate Upload with Critical Errors!  Resolve the issue in the CSV (or contact site admin), then delete this record and re-upload the CSV."
+            },
+            if: :has_errors?
+
   has_many :geocodes
+
+  def has_errors?
+    self.critical_errors > 0
+  end
 
   def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
