@@ -11,7 +11,7 @@ class GeoUpload < ActiveRecord::Base
 
   #accepts_nested_attributes_for :geocodes, allow_destroy: true
 
-  def self.find_adm(lonlat, adm_level, geocode)
+  def self.find_adm(lonlat, adm_level, logfile,  geocode, geo_upload)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
     if !adm.nil? # prevents crash if no adm match is found. Having world adms should fix this.
       geocode[:adm_id] = adm.id
@@ -42,16 +42,14 @@ class GeoUpload < ActiveRecord::Base
 
   end
 
-  # TODO: Handle duplicate geocodes from previous uploads (perhaps use unique (project_id, geo_name_id))
   # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
-  # TODO: Create log file associated with geo_upload. Include notification that has number of errors with geo_upload
   # TODO: Add publish variable to geo upload for all geocodes.
-  # TODO: Handle precision codes (5, 7 , 9)
   # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                            Error handling for edges cases. Include notifications for user.
   ## Can't find adm for non-precision 1's and 2's
   ## Non-unique (project_id, geo_name_id)
-  ## No geo_name provided (may not be necessary).
-  ## No lat/lon provided (may not be necessary).
+  ## No geo_name provided (may not be necessary). Currently no nulls.
+  ## No lat/lon provided (may not be necessary). Currently no nulls.
+  ## No precision code, location_type, etc. Currently no nulls.
   ## Update Log time Watch Duplicate Copy Move Delete
 
   def self.csv_to_database(chunk, geo_upload, logfile)
@@ -97,17 +95,18 @@ class GeoUpload < ActiveRecord::Base
           geocode[:geometry_id] = new_geometry.id
 
         elsif record[:precision_id] == 3  # its an adm2
-          geocode = GeoUpload.find_adm(lonlat, 2, geocode)
+          geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, geo_upload)
 
         elsif record[:precision_id] == 4  # its an adm1
-          geocode = GeoUpload.find_adm(lonlat, 1, geocode)
+          geocode = GeoUpload.find_adm(lonlat, 1, logfile, geocode, geo_upload)
 
         elsif record[:precision_id] == 6 # its an adm0
-          geocode = GeoUpload.find_adm(lonlat, 0, geocode)
+          geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, geo_upload)
 
         elsif record[:precision_id] == 8  # its an adm0
-          geocode = GeoUpload.find_adm(lonlat, 0, geocode)
+          geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, geo_upload)
         else
+           # It's a [5,7,9] precision code. Put it in the database, but doesn't get a geometry.
           logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
           geo_upload.log_errors += 1
         end
