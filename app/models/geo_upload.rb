@@ -43,7 +43,7 @@ class GeoUpload < ActiveRecord::Base
 
   # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
   # TODO: Add publish variable to geo upload for all geocodes.
-  # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                            Error handling for edges cases. Include notifications for user.
+  # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                       Error handling for edges cases. Include notifications for user.
   ## Can't find adm for non-precision 1's and 2's
   ## Non-unique (project_id, geo_name_id)
   ## No geo_name provided (may not be necessary). Currently no nulls.

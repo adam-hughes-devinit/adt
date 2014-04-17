@@ -66,10 +66,13 @@ ActiveAdmin.register GeoUpload do
     geo_upload.record_count = record_stats["uploaded_record_count"]
     geo_upload.log_errors = record_stats["missing_adms"] + record_stats["deprecated_precisions"] + record_stats["duplicate_geocodes"]
 
+    if geo_upload.log_erros == 0
+      logfile.write("No errors found. Nice!\n")
+    end
     logfile.write("\nSummary Statistics:\n")
     logfile.write("#{geo_upload.record_count} out of #{record_stats["record_total"]} records added to the database.\n")
-    logfile.write("#{record_stats["missing_adms"]} record has appropriate precision code, but no adm found. This should always be 0.\n")
-    logfile.write("#{record_stats["deprecated_precisions"]} records have a deprecated precision code. As a result, no geometry was created.\n")
+    logfile.write("#{record_stats["missing_adms"]} record has appropriate precision code, but no adm found. Records were uploaded, but this should always be 0.\n")
+    logfile.write("#{record_stats["deprecated_precisions"]} records have a deprecated precision code. Record uploaded, but no geometry was created.\n")
     logfile.write("#{record_stats["duplicate_geocodes"]} records have the same project_id and geo_name_id as existing records. These records were not uploaded.\n")
     logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
