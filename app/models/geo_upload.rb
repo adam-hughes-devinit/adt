@@ -29,7 +29,6 @@ class GeoUpload < ActiveRecord::Base
        # Sometimes point doesn't reside inside an adm (usually because its in water).
        # This finds the nearest adm to the point.
       closest_adm = Adm.where{level == adm_level}.joins{geometry}.select{[st_distance(st_collectionextract(geometries.the_geom,3), lonlat).as('distance'), id, geometries.id.as('geometry_id')]}.order('distance').first
-      #closest_adm = Adm.find(chosen_adm.adm_id)
       if !closest_adm.nil? # prevents crash if no adm match is found.
         geocode[:adm_id] = closest_adm.id
         geocode[:geometry_id] = closest_adm.geometry_id
@@ -117,7 +116,7 @@ class GeoUpload < ActiveRecord::Base
         elsif record[:precision_id] == 8  # its an adm0
           geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
         else
-           # It's a [5,7,9] precision code. Put it in the database, but doesn't get a geometry.
+           # It's a [5,7,9] precision code. Put it in the database, but it doesn't get a geometry.
           logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
           record_stats["deprecated_precisions"] += 1
         end
