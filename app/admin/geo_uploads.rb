@@ -53,7 +53,9 @@ ActiveAdmin.register GeoUpload do
                     "missing_adms" => 0,
                     "deprecated_precisions" => 0,
                     "duplicate_geocodes" => 0,
-                    "created_adm" => 0}
+                    "created_adm" => 0,
+                    "missing_fields" => 0
+    }
 
     SmarterCSV.process(params[:dump][:file].tempfile,
                            {:chunk_size => 100,
@@ -75,9 +77,12 @@ ActiveAdmin.register GeoUpload do
         (record_stats["missing_adms"] +
             record_stats["deprecated_precisions"] +
             record_stats["duplicate_geocodes"] +
-            record_stats["created_adm"]
+            record_stats["created_adm"] +
+            record_stats["missing_fields"]
         )
-    geo_upload.critical_errors = record_stats["missing_adms"]
+     # Any error that could result in corrupted data should be added here.
+     # Any critical errors will prevent the user from activating this geo upload.
+    geo_upload.critical_errors = record_stats["missing_adms"] + record_stats["missing_fields"]
 
     if geo_upload.log_errors == 0
       logfile.write("No errors found. Nice!\n")
@@ -88,6 +93,7 @@ ActiveAdmin.register GeoUpload do
     logfile.write("#{record_stats["deprecated_precisions"]} records have a deprecated precision code. Record uploaded, but no geometry was created.\n")
     logfile.write("#{record_stats["duplicate_geocodes"]} records have the same project_id and geo_name_id as existing records. These records were not uploaded.\n")
     logfile.write("#{record_stats["created_adm"]} records did not have adms that should. Used closest adm instead.\n")
+    logfile.write("#{record_stats["missing_fields"]} records are missing a required field. The records were not added. Correct them and re-upload. This error may occur if a required field name has changed.\n")
     logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
 

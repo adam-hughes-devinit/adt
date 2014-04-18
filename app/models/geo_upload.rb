@@ -65,66 +65,77 @@ class GeoUpload < ActiveRecord::Base
 
   def self.csv_to_database(chunk, geo_upload, logfile, record_stats)
     chunk.each do |record|
-      record_stats["record_total"] += 1
-      existing_geocode = Geocode.joins(:geo_name).where(project_id: record[:project_id], geo_name: {code: record[:geo_name_id]} ).first
-      if existing_geocode.nil?
-        record_stats["uploaded_record_count"] += 1
-        geocode = Geocode.create(project_id: record[:project_id],
-                                 precision_id: record[:precision_id].round,
-                                 geo_upload_id: geo_upload.id)
+      if !(record[:geo_name_id] and
+          record[:project_id] and
+          record[:precision_id] and
+          record[:longitude] and
+          record[:latitude] and
+          record[:location_type]).nil?
 
-        location_type = LocationType.find_by_name(record[:location_type])
+        record_stats["record_total"] += 1
+        existing_geocode = Geocode.joins(:geo_name).where(project_id: record[:project_id], geo_name: {code: record[:geo_name_id]} ).first
+        if existing_geocode.nil?
+          record_stats["uploaded_record_count"] += 1
+          geocode = Geocode.create(project_id: record[:project_id],
+                                   precision_id: record[:precision_id].round,
+                                   geo_upload_id: geo_upload.id)
 
-        # We don't want duplicate geo_names.
-        # We assume that new is better.
-        # So new geo_name info should replace old geo_names with the same code.
-        old_geo_name = GeoName.find_by_code(record[:geo_name_id])
-        if !old_geo_name.nil?
-          geocode = GeoUpload.update_geo_name(geocode, record, location_type, old_geo_name)
+          location_type = LocationType.find_by_name(record[:location_type])
+
+          # We don't want duplicate geo_names.
+          # We assume that new is better.
+          # So new geo_name info should replace old geo_names with the same code.
+          old_geo_name = GeoName.find_by_code(record[:geo_name_id])
+          if !old_geo_name.nil?
+            geocode = GeoUpload.update_geo_name(geocode, record, location_type, old_geo_name)
+          else
+            geo_name = GeoName.new
+            geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
+          end
+
+          puts record
+
+          factory = RGeo::Cartesian.factory
+          lonlat = factory.point(record[:longitude], record[:latitude])
+
+          geometry_map = {}
+          if record[:precision_id] == 1  # its a point
+            geometry_map[:the_geom] = RGeo::Feature.cast(lonlat, RGeo::Feature::GeometryCollection)
+            new_geometry = Geometry.create ( geometry_map )
+            geocode[:geometry_id] = new_geometry.id
+
+          elsif record[:precision_id] == 2  # its a buffer within 25km
+            lonlat_buff = lonlat.buffer(25000)
+            geometry_map[:the_geom] = RGeo::Feature.cast(lonlat_buff, RGeo::Feature::GeometryCollection)
+
+            new_geometry = Geometry.create ( geometry_map )
+            geocode[:geometry_id] = new_geometry.id
+
+          elsif record[:precision_id] == 3  # its an adm2
+            geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats)
+
+          elsif record[:precision_id] == 4  # its an adm1
+            geocode = GeoUpload.find_adm(lonlat, 1, logfile, geocode, record_stats)
+
+          elsif record[:precision_id] == 6 # its an adm0
+            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
+
+          elsif record[:precision_id] == 8  # its an adm0
+            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
+          else
+             # It's a [5,7,9] precision code. Put it in the database, but it doesn't get a geometry.
+            logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
+            record_stats["deprecated_precisions"] += 1
+          end
+
+          geocode.save
         else
-          geo_name = GeoName.new
-          geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
+          logfile.write("Info: geocode_id #{existing_geocode.id}: This geocode already exists\n")
+          record_stats["duplicate_geocodes"] += 1
         end
-
-        puts record
-
-        factory = RGeo::Cartesian.factory
-        lonlat = factory.point(record[:longitude], record[:latitude])
-
-        geometry_map = {}
-        if record[:precision_id] == 1  # its a point
-          geometry_map[:the_geom] = RGeo::Feature.cast(lonlat, RGeo::Feature::GeometryCollection)
-          new_geometry = Geometry.create ( geometry_map )
-          geocode[:geometry_id] = new_geometry.id
-
-        elsif record[:precision_id] == 2  # its a buffer within 25km
-          lonlat_buff = lonlat.buffer(25000)
-          geometry_map[:the_geom] = RGeo::Feature.cast(lonlat_buff, RGeo::Feature::GeometryCollection)
-
-          new_geometry = Geometry.create ( geometry_map )
-          geocode[:geometry_id] = new_geometry.id
-
-        elsif record[:precision_id] == 3  # its an adm2
-          geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats)
-
-        elsif record[:precision_id] == 4  # its an adm1
-          geocode = GeoUpload.find_adm(lonlat, 1, logfile, geocode, record_stats)
-
-        elsif record[:precision_id] == 6 # its an adm0
-          geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
-
-        elsif record[:precision_id] == 8  # its an adm0
-          geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
-        else
-           # It's a [5,7,9] precision code. Put it in the database, but it doesn't get a geometry.
-          logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
-          record_stats["deprecated_precisions"] += 1
-        end
-
-        geocode.save
       else
-        logfile.write("Info: geocode_id #{existing_geocode.id}: This geocode already exists\n")
-        record_stats["duplicate_geocodes"] += 1
+        logfile.write("Warning: A record is missing required fields. \n")
+        record_stats["missing_fields"] += 1
       end
     end
 
