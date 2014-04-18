@@ -1,4 +1,31 @@
+%style
+  :sass
+    #alert-box
+      color: #555
+      border-radius: 10px
+      font-family: Tahoma,Geneva,Arial,sans-serif
+      font-size: 11px
+      padding: 10px 10px 10px 36px
+      margin: 10px
+
+
+    #alert-box.notice
+      background: #fff8c4 no-repeat 10px 50%
+      border: 2px solid #f2c779
+      padding: 5px
+      text-align: center
+
+    #alert-box.span
+      font-weight: bold
+
+
 = form_for :dump, :url=>{:action=>"import_csv"}, :html => { :multipart => true } do |f|
+  .span#alert-box.notice
+    %h2 Message from the Administrator:
+    Any CSV uploaded must contain the following fields with the exact same spelling (letter case doesn't matter):
+    %br
+      geo_name_id, geo_name, project_id, precision, latitude, longitude, location_type.
+  %br
   %table
     %tr
       %td
