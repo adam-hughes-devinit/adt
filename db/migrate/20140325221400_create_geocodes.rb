@@ -7,7 +7,6 @@ class CreateGeocodes < ActiveRecord::Migration
       t.integer :geometry_id
       t.integer :geo_upload_id
       t.integer :adm_id
-      t.text :note
 
       t.timestamps
     end

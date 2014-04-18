@@ -22,12 +22,24 @@ class GeoUpload < ActiveRecord::Base
 
   def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
-    if !adm.nil? # prevents crash if no adm match is found. Having world adms should fix this.
+    if !adm.nil? # prevents crash if no adm match is found.
       geocode[:adm_id] = adm.id
       geocode[:geometry_id] = adm.geometry.id
     else
-      logfile.write("Warning: geocode_id #{geocode.id}: Could not find Adm\n")
-      record_stats["missing_adms"] += 1
+       # Sometimes point doesn't reside inside an adm (usually because its in water).
+       # This finds the nearest adm to the point.
+      closest_adm = Adm.where{level == adm_level}.joins{geometry}.select{[st_distance(st_collectionextract(geometries.the_geom,3), lonlat).as('distance'), id, geometries.id.as('geometry_id')]}.order('distance').first
+      #closest_adm = Adm.find(chosen_adm.adm_id)
+      if !closest_adm.nil? # prevents crash if no adm match is found.
+        geocode[:adm_id] = closest_adm.id
+        geocode[:geometry_id] = closest_adm.geometry_id
+
+        logfile.write("Info: geocode_id #{geocode.id}: Could not find Adm, so we used the closest one.\n")
+        record_stats["created_adm"] += 1
+      else
+        logfile.write("Warning: geocode_id #{geocode.id}: Could not find Adm\n")
+        record_stats["missing_adms"] += 1
+      end
     end
 
     return geocode
@@ -51,16 +63,6 @@ class GeoUpload < ActiveRecord::Base
 
     return geocode
   end
-
-  # TODO: If geocodes have no adms for non-precision 1's and 2's, find nearest adm and use that.
-  # TODO: Add publish variable to geo upload for all geocodes.
-  # TODO: Error handling for edges cases. Include notifications for user.                                                                                                                                                                                       Error handling for edges cases. Include notifications for user.
-  ## Can't find adm for non-precision 1's and 2's
-  ## Non-unique (project_id, geo_name_id)
-  ## No geo_name provided (may not be necessary). Currently no nulls.
-  ## No lat/lon provided (may not be necessary). Currently no nulls.
-  ## No precision code, location_type, etc. Currently no nulls.
-  ## Update Log time Watch Duplicate Copy Move Delete
 
   def self.csv_to_database(chunk, geo_upload, logfile, record_stats)
     chunk.each do |record|

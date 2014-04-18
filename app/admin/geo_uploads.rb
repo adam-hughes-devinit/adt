@@ -52,7 +52,8 @@ ActiveAdmin.register GeoUpload do
                     "uploaded_record_count" => 0,
                     "missing_adms" => 0,
                     "deprecated_precisions" => 0,
-                    "duplicate_geocodes" => 0}
+                    "duplicate_geocodes" => 0,
+                    "created_adm" => 0}
 
     SmarterCSV.process(params[:dump][:file].tempfile,
                            {:chunk_size => 100,
@@ -70,7 +71,12 @@ ActiveAdmin.register GeoUpload do
       record_stats = GeoUpload.csv_to_database(chunk, geo_upload, logfile, record_stats)
     end
     geo_upload.record_count = record_stats["uploaded_record_count"]
-    geo_upload.log_errors = record_stats["missing_adms"] + record_stats["deprecated_precisions"] + record_stats["duplicate_geocodes"]
+    geo_upload.log_errors =
+        (record_stats["missing_adms"] +
+            record_stats["deprecated_precisions"] +
+            record_stats["duplicate_geocodes"] +
+            record_stats["created_adm"]
+        )
     geo_upload.critical_errors = record_stats["missing_adms"]
 
     if geo_upload.log_errors == 0
@@ -81,6 +87,7 @@ ActiveAdmin.register GeoUpload do
     logfile.write("#{record_stats["missing_adms"]} record has appropriate precision code, but no adm found. Warning: If this is not 0, these Geo Uploads should NOT be active.\n")
     logfile.write("#{record_stats["deprecated_precisions"]} records have a deprecated precision code. Record uploaded, but no geometry was created.\n")
     logfile.write("#{record_stats["duplicate_geocodes"]} records have the same project_id and geo_name_id as existing records. These records were not uploaded.\n")
+    logfile.write("#{record_stats["created_adm"]} records did not have adms that should. Used closest adm instead.\n")
     logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
 
@@ -101,8 +108,6 @@ ActiveAdmin.register GeoUpload do
     column "CSV File", :csv_file_name do |csv|
       link_to(csv.csv_file_name, csv.csv.url)
     end
-
-    column :csv_content_type
 
     column "CSV File Size", :csv_file_size do |csv|
       number_to_human_size(csv.csv_file_size)
