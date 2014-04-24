@@ -95,7 +95,7 @@ class GeoUpload < ActiveRecord::Base
 
           puts record
 
-          factory = RGeo::Cartesian.factory
+          factory = RGeo::Cartesian.factory(:srid => 4326)
           lonlat = factory.point(record[:longitude], record[:latitude])
 
           geometry_map = {}
