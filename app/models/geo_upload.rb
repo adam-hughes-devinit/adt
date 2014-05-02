@@ -93,7 +93,7 @@ class GeoUpload < ActiveRecord::Base
             geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
           end
 
-          puts record
+          #puts record
 
           factory = RGeo::Cartesian.factory(:srid => 4326)
           lonlat = factory.point(record[:longitude], record[:latitude])
