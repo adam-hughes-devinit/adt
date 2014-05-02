@@ -9,7 +9,7 @@ class GeoUpload < ActiveRecord::Base
                            :content_type => ['text/csv','text/comma-separated-values','text/plain','application/csv',
                                 'application/excel','application/vnd.ms-excel','application/vnd.msexcel'] }
 
-  validates_attachment :presence => false,
+  validates_attachment :log, :presence => false,
                        :content_type => { :content_type => "text/plain" }
 
 
