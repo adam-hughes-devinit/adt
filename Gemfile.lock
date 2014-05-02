@@ -221,7 +221,7 @@ GEM
     paper_trail (2.7.2)
       activerecord (~> 3.0)
       railties (~> 3.0)
-    paperclip (4.1.1)
+    paperclip (3.5.4)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.3)
@@ -399,7 +399,7 @@ DEPENDENCIES
   omniauth-twitter
   omniauth-weibo-oauth2
   paper_trail
-  paperclip
+  paperclip (~> 3.5.3)
   pdf-reader
   pg
   progress_bar

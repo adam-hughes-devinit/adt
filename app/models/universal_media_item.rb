@@ -3,6 +3,6 @@ class UniversalMediaItem < ActiveRecord::Base
 
   has_attached_file :media, :styles => { :large => "500x500>", :medium => "320x320>", :thumb => "100x100>" }
 
-  do_not_validate_attachment_file_type :media
+  #do_not_validate_attachment_file_type :media  #uncomment if upgrade paperclip to 4.1
 
 end

@@ -37,7 +37,7 @@ gem 'unicorn'
 gem 'activeadmin', '0.6.0'
 gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
-gem "paperclip"  # for file uploads
+gem "paperclip", "~> 3.5.3"  #note: if upgrade to 4.1, all paperclip models need content type validation.
 gem "flexslider" # for file viewer
 gem 'active_admin_editor' # html editor for active admin
 gem "rails-file-icons"
