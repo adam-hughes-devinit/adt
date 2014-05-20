@@ -17,7 +17,7 @@
 			<%= @unset_data %>
 		<% elsif class_name == "Scope" %>
 			<%= current_object
-					.map{|s| link_to(s.to_s.humanize, Scope.find_by_symbol(s)) }
+					.map{|s| link_to(s.to_s.humanize, Scope.find_by_symbol(s.to_s)) }
 					.join(', ')
 					.html_safe %>
 		<% elsif class_name == "VisibleFlowClass" && current_object.class == Array %>
