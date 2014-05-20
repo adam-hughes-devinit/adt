@@ -1,0 +1,17 @@
+<ul class='unstyled'>
+  <% if limit == true %>
+      <% @project.geocodes[0..0].each do |g| %>
+          <%= render partial: 'project_geocode', locals: {g: g} %>
+      <% end %>
+  <% else %>
+      <% @project.geocodes.each do |g| %>
+          <%= render partial: 'project_geocode', locals: {g: g} %>
+      <% end %>
+
+  <% end %>
+  <% if @project.geocodes.blank? %>
+      <li>
+        <span class='unset-data'>No geocodes yet</span>
+      </li>
+  <% end %>
+</ul>

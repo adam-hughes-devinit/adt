@@ -1,0 +1,38 @@
+<ul class='unstyled container-fluid'>
+
+		<li class="flaggable row-fluid row-no-margin" flaggable_type='Geocode' flaggable_id=<%= g.id %>>
+			<% if g.present? %>
+				<span class='span6'>
+                    <% if g.geo_name.present? %>
+                      <b><%= g.geo_name.name.blank? ? "Geo Name"+unset_data : "Geo Name: #{g.geo_name.name}" %></b></br>
+
+                      <% if g.geo_name.location_type.present? %>
+                        <%= g.geo_name.location_type.blank? ? '' : "Location Type: #{g.geo_name.location_type.name}" %></b></br>
+                      <% end %>
+
+                        <%= g.geo_name.latitude.blank? ? '' : "Latitude: #{g.geo_name.latitude}" %></b><br>
+                        <%= g.geo_name.longitude.blank? ? '' : "Longitude: #{g.geo_name.longitude}" %></b></br>
+                    <% end %>
+
+                    <%= g.precision_id.blank? ? '' : "Precision Code: #{g.precision_id}" %></b></br>
+
+				</span>
+
+                <span class='span6'>
+                  <% if g.adm.present? %>
+                    <% ancestors = g.adm.get_ancestors(true) %>
+                    <% ancestors.each do |a| %>
+                      <%= a.blank? ? '' : "Adm #{a.level}: #{a.name}" %></b></br>
+                    <% end %>
+                  <% end %>
+                </span>
+
+			<% end %>
+			<span class='span1'>
+				<% g.flags.each do |flag| %>
+						<%= render partial: 'flag_superscript', locals: { flag: flag} %>
+				<% end %>
+			</span>
+		</li>
+
+</ul>

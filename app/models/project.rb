@@ -503,7 +503,9 @@ class Project < ActiveRecord::Base
         {transactions: {include: [{currency: {only: [:name, :iso3]}}], only: [:value, :usd_defl, :usd_current, :deflated_at, :deflator, :exchange_rate]}},
         {contacts: {only: [:name, :position], include: [organization: {only: [:name, :organization_type]}]}},
         {sources: {only: [:url, :date], include: [{source_type: {only: [:name]}}, {document_type: {only:[:name]}}]}},
-        {participating_organizations: {only: [], include: [{origin: {only: [:name]}}, {organization: {only: [:name, :organization_type]}}, {role: {only: [:name]}}]}}
+        {participating_organizations: {only: [], include: [{origin: {only: [:name]}}, {organization: {only: [:name, :organization_type]}}, {role: {only: [:name]}}]}},
+        {geocodes: {only: [:precision_id], include: [{geo_name: {only: [:name]}}, {adm: {only: [:name, :level]}}]}}
+
     ]) 
   end
 
@@ -515,6 +517,7 @@ class Project < ActiveRecord::Base
       self.contacts.map(&:flags) +
       self.participating_organizations.map(&:flags) +
       self.resources.map(&:flags) +
+      self.geocodes.map(&:flags) +
       self.flags
     ].flatten
   end

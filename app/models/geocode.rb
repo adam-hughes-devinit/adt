@@ -8,4 +8,7 @@ class Geocode < ActiveRecord::Base
   belongs_to :geo_upload
   belongs_to :adm
 
+  has_many :flags, as: :flaggable, dependent: :destroy
+  accepts_nested_attributes_for :flags
+
 end
