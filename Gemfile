@@ -33,7 +33,6 @@ gem 'hashie'
 gem 'aws-sdk'
 gem 'newrelic_rpm'
 gem 'exception_notification'
-gem 'unicorn'
 gem 'activeadmin', '0.6.0'
 gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
@@ -45,7 +44,11 @@ gem 'detect_language'
 gem 'pdf-reader'
 gem 'activerecord-postgis-adapter' # for postgis
 gem 'smarter_csv' # For csv upload
-gem 'squeel'
+gem 'squeel' # Allows for better postgis db queries.
+
+group :production do
+  gem 'unicorn'
+end
 
 group :development do
   gem 'quiet_assets'
