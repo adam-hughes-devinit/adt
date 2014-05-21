@@ -277,6 +277,8 @@ GEM
       activerecord (>= 3.0.3)
       arel (>= 2.0.6)
       rgeo (>= 0.3.20)
+    rgeo-geojson (0.2.3)
+      rgeo (>= 0.3.7)
     rsolr (1.0.9)
       builder (>= 2.1.2)
     rspec-core (2.13.1)
@@ -406,6 +408,8 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.13)
   rails-file-icons
+  rgeo
+  rgeo-geojson
   rspec-rails
   sass-rails
   selenium-webdriver

@@ -45,6 +45,8 @@ gem 'pdf-reader'
 gem 'activerecord-postgis-adapter' # for postgis
 gem 'smarter_csv' # For csv upload
 gem 'squeel' # Allows for better postgis db queries.
+gem 'rgeo'
+gem 'rgeo-geojson' # converts hash to geojson for dashboard
 
 group :production do
   gem 'unicorn'
