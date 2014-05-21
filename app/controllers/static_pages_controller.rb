@@ -66,6 +66,11 @@ class StaticPagesController < ApplicationController
     render 'map'
   end
 
+  def humanity_dashboard
+    @geocodes = Geocode.includes(:geometry, :adm, :geo_name)
+    render 'humanity_dashboard'
+  end
+
   def new_map
     render file: '/static_pages/new_map'
   end
