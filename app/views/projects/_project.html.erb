@@ -177,26 +177,24 @@
     </div>
 
     <div class="span6">
-    <h4> Geocodes:</h4>
-    <%= render :partial => 'project_geocodes', :locals => { :limit => true } %>
-    <div style="text-align:center">
-        <%= link_to  "<h5>View All Geocodes</h5>".html_safe, '#geocodes', { 'data-toggle' => 'modal', 'data-target' => "#geocodes"}%>
-    </div>
-
+        <h4> Geocodes:</h4>
+        <%= render :partial => 'project_geocodes', :locals => { :limit => true } %>
+        <div style="text-align:center">
+            <%= link_to  "<h5>View All Geocodes</h5>".html_safe, '#geocodes', { 'data-toggle' => 'modal', 'data-target' => "#geocodes"}%>
+        </div>
     </div>
 
     <div class="span6">
-    <h4>Participating Organizations:</h4>
+        <h4>Participating Organizations:</h4>
         <%= render 'project_participating_organizations' %>
     </div>
 
     <div class="span6">
-    <h4> Contacts:</h4>
+        <h4> Contacts:</h4>
         <%= render 'project_contacts' %>
     </div>
 
 </div>
-
 
 <!--  scrollable popup for sources -->
 <div id="sources" class="modal hide fade in" style="width:700px; padding:10px;">
@@ -228,6 +226,7 @@
         <%= render('project_flow_class_rounds') %>
     </div>
 </br>
+
 <div class='row-fluid'>
     <div class='span9 well'>
         <h2>Comments</h2>
@@ -237,7 +236,6 @@
       </div>
     </div>
 </div>
-
 
 </div>
 <%= render('project_flaggable')  %>
