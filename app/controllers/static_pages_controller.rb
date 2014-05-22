@@ -67,11 +67,11 @@ class StaticPagesController < ApplicationController
   end
 
   def humanity_dashboard
-    feature_collection = Rails.cache.fetch("dashboard_geojson")
+    @feature_collection = Rails.cache.fetch("dashboard_geojson")
 
     respond_to do |format|
       format.html { render 'humanity_dashboard' }
-      format.geojson { render json: feature_collection }
+      format.geojson { render json: @feature_collection }
     end
   end
 
