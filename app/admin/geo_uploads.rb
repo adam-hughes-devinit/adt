@@ -98,6 +98,28 @@ ActiveAdmin.register GeoUpload do
     geo_upload.log = logfile
 
     geo_upload.save
+
+     # Creates geojson for all existing projects and caches it.
+     # Cached data is consumed by to humanity united dashboard.
+    @geocodes = Geocode.includes(:adm, :geo_name)
+    features = []
+    factory = RGeo::GeoJSON::EntityFactory.instance
+    @geocodes.each do |g|
+      factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
+      lonlat = factory_cartesian.point(g.geo_name.longitude, g.geo_name.latitude)
+
+      features.append(factory.feature(lonlat, nil, {
+          precision_code: g.precision_id,
+          adm_code: g.adm_id.nil? ? nil : g.adm.code,
+          adm_name: g.adm_id.nil? ? nil : g.adm.name,
+          adm_level: g.adm_id.nil? ? nil : g.adm.level,
+          geo_name: g.geo_name.name,
+          location_type: g.geo_name.location_type.name
+      }))
+    end
+    feature_collection = RGeo::GeoJSON.encode(factory.feature_collection(features))
+    Rails.cache.fetch("dashboard_geojson") {feature_collection}
+
     redirect_to :action => :index, :notice => "CSV imported successfully!"
   end
 

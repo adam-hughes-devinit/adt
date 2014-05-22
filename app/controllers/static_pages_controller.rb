@@ -67,20 +67,11 @@ class StaticPagesController < ApplicationController
   end
 
   def humanity_dashboard
-    @geocodes = Geocode.includes(:geometry, :adm, :geo_name).where{ geometry_id != nil }
-    #puts "###################"
-    features = []
-    #puts @geocodes.to_json
-    @geocodes.each do |g|
-      puts "##############"
-      puts g.geometry.the_geom
-      factory = RGeo::GeoJSON::EntityFactory.instance
-      features.append(factory.feature(g.geometry.the_geom, nil, { desc: g.precision_id }))
-    feature_collection = factory.feature_collection(features)
-    end
+    feature_collection = Rails.cache.fetch("dashboard_geojson")
+
     respond_to do |format|
       format.html { render 'humanity_dashboard' }
-      format.geojson { render json: (RGeo::GeoJSON.encode(feature_collection)) }
+      format.geojson { render json: feature_collection }
     end
   end
 

@@ -144,7 +144,6 @@ class GeoUpload < ActiveRecord::Base
         record_stats["missing_fields"] += 1
       end
     end
-
     return record_stats
   end
 end
