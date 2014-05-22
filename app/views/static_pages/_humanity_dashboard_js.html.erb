@@ -26,7 +26,7 @@
     <div id="left">
         <div id="layercontrol">
           <h4>Base Layer</h4>
-          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Social conflict", "Mineral deposits" ], "No base layer")%>
+          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Population density", "Mineral deposits" ], "No base layer")%>
         </div>
         <div id="filtercontrol">
           <h4>Filter</h4>
@@ -45,7 +45,7 @@
                 detectRetina: true
             }),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9'),
-            heat = L.mapbox.tileLayer('miranda-lv.nyyi7ldi'),
+            popheat = L.mapbox.tileLayer('miranda-lv.nyyi7ldi'),
             usgs = L.tileLayer.wms("http://mrdata.usgs.gov/services/mrds", {
                 version: '1.1.1',
                 service: 'WMS',
@@ -62,7 +62,7 @@
             none_val = "No base layer",
             pov_val = "Poverty",
             acled_val = "Armed conflict",
-            scad_val = "Social conflict",
+            pop_val = "Population density",
             usgs_val = "Mineral deposits";
     $(document).ready(function(){
         $('#base_layer').change(function(){
@@ -71,27 +71,32 @@
             if(selected_layer==none_val){
                 map.removeLayer(acled)
                 map.removeLayer(poverty)
-                map.removeLayer(heat)
+                map.removeLayer(popheat)
+                map.removeLayer(usgs)
             }
             if(selected_layer==pov_val){
                 map.removeLayer(acled)
-                map.removeLayer(heat)
+                map.removeLayer(popheat)
+                map.removeLayer(usgs)
                 map.addLayer(poverty)
             }
             if(selected_layer==acled_val){
                 map.removeLayer(poverty)
-                map.removeLayer(heat)
+                map.removeLayer(popheat)
+                map.removeLayer(usgs)
                 map.addLayer(acled)
             }
-            if(selected_layer==scad_val){
+            if(selected_layer==pop_val){
                 map.removeLayer(acled)
                 map.removeLayer(poverty)
-                map.addLayer(heat)
+                map.removeLayer(usgs)
+                map.addLayer(popheat)
             }
             if(selected_layer==usgs_val){
                 map.removeLayer(acled)
                 map.removeLayer(poverty)
-                map.removeLayer(heat)
+                map.removeLayer(popheat)
+                map.addLayer(usgs)
             }
         })
     })
