@@ -36,6 +36,7 @@
       <h4>Results</h4>
     </div>
 </div>
+<%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
 <script>
     var tiles = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -54,7 +55,7 @@
                 format: 'image/png',
                 STYLE: 'default',
                 transparent: 'true',
-                attribution: "United States Geological Survey @ http://tin.er.usgs.gov/mrds/"
+                attribution: "United States Geological Survey MRDS @ http://tin.er.usgs.gov/mrds/"
             }),
             map = L.map('map')
                     .setView([6.964039, 19.533678], 3)
@@ -63,7 +64,22 @@
             pov_val = "Poverty",
             acled_val = "Armed conflict",
             pop_val = "Population density",
-            usgs_val = "Mineral deposits";
+            usgs_val = "Mineral deposits",
+            featurelen = feature_collection.features.length,
+            i=0
+            MarkerOptions = {
+            radius: 4,
+            fillColor: "#9FE5F8",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.5};
+    for(i=0;i<featurelen;i++){
+        if(feature_collection.features[i].geometry.coordinates.length==2){L.geoJson(feature_collection.features[i], {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, MarkerOptions);
+            }
+        }).addTo(map);}};
     $(document).ready(function(){
         $('#base_layer').change(function(){
             var selected_layer = $("#base_layer option:selected").val();
