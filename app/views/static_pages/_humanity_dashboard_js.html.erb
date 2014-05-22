@@ -9,30 +9,80 @@
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #layercontrol {float:left;position:relative;top:-31px;border:solid black 1px;height:298px;width:100%;}
-    #filtercontrol {float:left;border:solid black 1px;height:298px;width:100%;}
-    #searchresults {float:right;position:relative;right:20px; top:-31px;border:solid black 1px;height:629px;width:18%;}
+    #layercontrol {float:left;position:relative;top:-31px;border:solid #1c273b 1px;height:80px;width:100%;}
+    #filtercontrol {float:left;position:relative;top:-10px;border:solid #1c273b 1px;height:526px;width:100%;}
+    #searchresults {float:right;position:relative;right:20px; top:-31px;border:solid #1c273b 1px;height:629px;width:18%;}
     h4 {margin-left:5px;}
+    #base_layer {margin-left: 4%;margin-right: 4%;width: 90%;}
 </style>
 <div id="vis">
-<div id="searchbar">
-  <%= form_tag "/projects", method: :get do %>
-        <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by keyword...', class:'vissearch' %>
-  <% end %>
-</div>
-<div id='map'></div>
-<div id="left">
-    <div id="layercontrol"><h4>Base Layers</h4></div>
-    <div id="filtercontrol"><h4>Filters</h4></div>
-</div>
-<div id="searchresults"><h4>Results</h4></div>
+    <div id="searchbar">
+      <%= form_tag "/humanity_dashboard", method: :get do %>
+            <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by keyword...', class:'vissearch' %>
+      <% end %>
+    </div>
+    <div id='map'>
+    </div>
+    <div id="left">
+        <div id="layercontrol">
+          <h4>Base Layer</h4>
+          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Social conflict", "Mineral deposits" ], "No base layer")%>
+        </div>
+        <div id="filtercontrol">
+          <h4>Filter</h4>
+        </div>
+    </div>
+    <div id="searchresults">
+      <h4>Results</h4>
+    </div>
 </div>
 <script>
     var tiles = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234'
             }),
+            acled = L.mapbox.tileLayer('miranda-lv.qz9nqaor', {
+                detectRetina: true
+            }),
+            poverty = L.mapbox.tileLayer('miranda-lv.di996bt9'),
+            heat = L.mapbox.tileLayer('miranda-lv.nyyi7ldi'),
             map = L.map('map')
-                    .setView([6.964039, 19.533678], 4)
-                    .addLayer(tiles); //follow: true
+                    .setView([6.964039, 19.533678], 3)
+                    .addLayer(tiles), //follow: true
+            none_val = "No base layer",
+            pov_val = "Poverty",
+            acled_val = "Armed conflict",
+            scad_val = "Social conflict",
+            usgs_val = "Mineral deposits";
+    $(document).ready(function(){
+        $('#base_layer').change(function(){
+            var selected_layer = $("#base_layer option:selected").val();
+            console.log("Layer: "+selected_layer);
+            if(selected_layer==none_val){
+                map.removeLayer(acled)
+                map.removeLayer(poverty)
+                map.removeLayer(heat)
+            }
+            if(selected_layer==pov_val){
+                map.removeLayer(acled)
+                map.removeLayer(heat)
+                map.addLayer(poverty)
+            }
+            if(selected_layer==acled_val){
+                map.removeLayer(poverty)
+                map.removeLayer(heat)
+                map.addLayer(acled)
+            }
+            if(selected_layer==scad_val){
+                map.removeLayer(acled)
+                map.removeLayer(poverty)
+                map.addLayer(heat)
+            }
+            if(selected_layer==usgs_val){
+                map.removeLayer(acled)
+                map.removeLayer(poverty)
+                map.removeLayer(heat)
+            }
+        })
+    })
 </script>
