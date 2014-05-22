@@ -1,0 +1,38 @@
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+<style>
+    .container {width:100% !important;padding:10px !important;}
+    #vis { width:100%; height:630px; margin-right:auto; margin-left:auto;}
+    #map { position:absolute; right:20%; height:600px; width:60%; margin-right:auto;margin-left:auto; }
+    #searchbar {width:60%;position:relative;left:20%; right:10px;}
+    #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
+    #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
+    #left {float:left;width:18%}
+    #layercontrol {float:left;position:relative;top:-31px;border:solid black 1px;height:298px;width:100%;}
+    #filtercontrol {float:left;border:solid black 1px;height:298px;width:100%;}
+    #searchresults {float:right;position:relative;right:20px; top:-31px;border:solid black 1px;height:629px;width:18%;}
+    h4 {margin-left:5px;}
+</style>
+<div id="vis">
+<div id="searchbar">
+  <%= form_tag "/projects", method: :get do %>
+        <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by keyword...', class:'vissearch' %>
+  <% end %>
+</div>
+<div id='map'></div>
+<div id="left">
+    <div id="layercontrol"><h4>Base Layers</h4></div>
+    <div id="filtercontrol"><h4>Filters</h4></div>
+</div>
+<div id="searchresults"><h4>Results</h4></div>
+</div>
+<script>
+    var tiles = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
+                attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+                subdomains: '1234'
+            }),
+            map = L.map('map')
+                    .setView([6.964039, 19.533678], 4)
+                    .addLayer(tiles); //follow: true
+</script>
