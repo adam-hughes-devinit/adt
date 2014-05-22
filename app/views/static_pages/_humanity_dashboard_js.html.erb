@@ -46,6 +46,16 @@
             }),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9'),
             heat = L.mapbox.tileLayer('miranda-lv.nyyi7ldi'),
+            usgs = L.tileLayer.wms("http://mrdata.usgs.gov/services/mrds", {
+                version: '1.1.1',
+                service: 'WMS',
+                request: 'GetMap',
+                layers: 'mrds',
+                format: 'image/png',
+                STYLE: 'default',
+                transparent: 'true',
+                attribution: "United States Geological Survey @ http://tin.er.usgs.gov/mrds/"
+            }),
             map = L.map('map')
                     .setView([6.964039, 19.533678], 3)
                     .addLayer(tiles), //follow: true
