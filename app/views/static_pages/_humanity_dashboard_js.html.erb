@@ -1,6 +1,6 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+<%= javascript_include_tag   "humanity_united/mapbox" %>
+<%= stylesheet_link_tag "humanity_united/mapbox" %>
 <style>
     .container {width:100% !important;padding:10px !important;}
     #vis { width:100%; height:630px; margin-right:auto; margin-left:auto;}
@@ -53,9 +53,11 @@
                 request: 'GetMap',
                 layers: 'mrds',
                 format: 'image/png',
+                BBOX: '-34.91600946474834188,-38.30268242782449306,76.58592204818674531,40.01734898427328346',
+                SRS: 'EPSG:4326',
                 STYLE: 'default',
                 transparent: 'true',
-                attribution: "United States Geological Survey MRDS @ http://tin.er.usgs.gov/mrds/"
+                attribution: "USGS MRDS @ http://tin.er.usgs.gov/mrds/"
             }),
             map = L.map('map')
                     .setView([6.964039, 19.533678], 3)
