@@ -65,8 +65,8 @@
             acled_val = "Armed conflict",
             pop_val = "Population density",
             usgs_val = "Mineral deposits",
-            featurelen = feature_collection.features.length,
-            i=0
+            featurelen = feature_collection===null?[]:feature_collection.features.length,
+            i = 0,
             MarkerOptions = {
             radius: 4,
             fillColor: "#9FE5F8",
