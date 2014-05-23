@@ -9,14 +9,12 @@
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #layercontrol {float:left;position:relative;top:-31px;border:solid #1c273b 1px;height:auto;width:100%;}
-    #filtercontrol {float:left;position:relative;top:-10px;border:solid #1c273b 1px;height:532px;width:100%;}
-    #searchresults {float:right;position:relative;right:20px; top:-31px;border:solid #1c273b 1px;height:629px;width:18%;}
+    #layercontrol {display:none;float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:auto;width:100%;padding:1px;margin-bottom:1px;}
+    #filtercontrol {float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:626px;width:100%;padding:1px;}
+    #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
     h4 {margin-left:5px;}
-    #base_layer {margin-left: 4%;margin-right: 4%; margin-bottom: 13px;width: 90%;}
-    #layercontrol {padding:1px;}
-    #layercontrol {padding:1px;}
     #layercontrol img{display:none;}
+    form.leaflet-control-layers-list{margin:0px !important;}
 </style>
 <div id="vis">
     <div id="searchbar">
@@ -28,8 +26,7 @@
     </div>
     <div id="left">
         <div id="layercontrol">
-          <h4>Base Layer</h4>
-          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Mineral deposits" ], "No base layer")%>
+          <h4>No base layer</h4>
           <%= image_tag("humanity_united/poverty_legend.png", class: 'poverty') %>
           <%= image_tag("humanity_united/placeholder_legend.jpg", class: 'placeholder') %>
           <%= image_tag("humanity_united/mrds_legend.png", class: 'usgs') %>
@@ -49,6 +46,7 @@
                 subdomains: '1234',
                 noWrap:true
             }),
+            none = L.geoJson(),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true
             }),
@@ -75,11 +73,12 @@
                 maxZoom:14,
                 layers:MapQuest
             }),
-            none_val = "No base layer",
-            pov_val = "Poverty",
-            acled_val = "Armed conflict",
-            usgs_val = "Mineral deposits",
-            featurelen = feature_collection===null?[]:feature_collection.features.length,
+            baseMaps ={
+                "None": none,
+                "Poverty": poverty,
+                "Armed Conflict": acled,
+                "Minerals and Mines": usgs
+            },
             MarkerOptions = {
             radius: 4,
             fillColor: "#9FE5F8",
@@ -87,50 +86,47 @@
             weight: 1,
             opacity: 1,
             fillOpacity: 0.5};
+    L.control.layers(baseMaps).addTo(map);
     L.geoJson(feature_collection.features, {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, MarkerOptions);
         }
     }).addTo(map);
     $(document).ready(function(){
-        $('#base_layer').change(function(){
-            var selected_layer = $("#base_layer option:selected").val();
-            console.log("Layer: "+selected_layer);
-            if(selected_layer==none_val){
+        map.on("baselayerchange", function(layer){
+            var selected_layer = layer;
+            console.log("Layer: "+selected_layer.name);
+            if(selected_layer.name=="None"){
+                $('#layercontrol').hide()
                 $('#layercontrol img.poverty').hide()
                 $('#layercontrol img.placeholder').hide()
                 $('#layercontrol img.usgs').hide()
-                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
-                map.removeLayer(acled)
-                map.removeLayer(poverty)
-                map.removeLayer(usgs)
+                $('#layercontrol h4').text("No base layer")
+                $('#filtercontrol').height(662 - $('#layercontrol').height() + "px")
             }
-            if(selected_layer==pov_val){
+            if(selected_layer.name=="Poverty"){
+                $('#layercontrol').show()
                 $('#layercontrol img.placeholder').hide()
                 $('#layercontrol img.usgs').hide()
                 $('#layercontrol img.poverty').show()
-                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
-                map.removeLayer(acled)
-                map.removeLayer(usgs)
-                map.addLayer(poverty)
+                $('#layercontrol h4').text("Poverty")
+                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
             }
-            if(selected_layer==acled_val){
+            if(selected_layer.name=="Armed Conflict"){
+                $('#layercontrol').show()
                 $('#layercontrol img.poverty').hide()
                 $('#layercontrol img.usgs').hide()
                 $('#layercontrol img.placeholder').show()
-                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
-                map.addLayer(acled)
-                map.removeLayer(poverty)
-                map.removeLayer(usgs)
+                $('#layercontrol h4').text("Armed Conflict")
+                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
             }
-            if(selected_layer==usgs_val){
+            if(selected_layer.name=="Minerals and Mines"){
+                $('#layercontrol').show()
                 $('#layercontrol img.poverty').hide()
                 $('#layercontrol img.placeholder').hide()
                 $('#layercontrol img.usgs').show()
-                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
-                map.removeLayer(acled)
-                map.removeLayer(poverty)
-                map.addLayer(usgs)
+                $('#layercontrol h4').text("Minerals and Mines")
+                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
             }
         })
     })
