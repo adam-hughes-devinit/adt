@@ -9,11 +9,12 @@
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #layercontrol {float:left;position:relative;top:-31px;border:solid #1c273b 1px;height:80px;width:100%;}
-    #filtercontrol {float:left;position:relative;top:-10px;border:solid #1c273b 1px;height:526px;width:100%;}
+    #layercontrol {float:left;position:relative;top:-31px;border:solid #1c273b 1px;height:auto;width:100%;}
+    #filtercontrol {float:left;position:relative;top:-10px;border:solid #1c273b 1px;height:532px;width:100%;}
     #searchresults {float:right;position:relative;right:20px; top:-31px;border:solid #1c273b 1px;height:629px;width:18%;}
     h4 {margin-left:5px;}
-    #base_layer {margin-left: 4%;margin-right: 4%;width: 90%;}
+    #base_layer {margin-left: 4%;margin-right: 4%; margin-bottom: 13px;width: 90%;}
+    #layercontrol img{display:none;}
 </style>
 <div id="vis">
     <div id="searchbar">
@@ -26,7 +27,10 @@
     <div id="left">
         <div id="layercontrol">
           <h4>Base Layer</h4>
-          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Population density", "Mineral deposits" ], "No base layer")%>
+          <%= select_tag "base_layer", options_for_select([ "No base layer", "Poverty", "Armed conflict", "Mineral deposits" ], "No base layer")%>
+          <%= image_tag("humanity_united/poverty_legend.png", class: 'poverty') %>
+          <%= image_tag("humanity_united/placeholder_legend.jpg", class: 'placeholder') %>
+          <%= image_tag("humanity_united/mrds_legend.png", class: 'usgs') %>
         </div>
         <div id="filtercontrol">
           <h4>Filter</h4>
@@ -43,15 +47,12 @@
                 subdomains: '1234',
                 noWrap:true
             }),
-            acled = L.mapbox.tileLayer('miranda-lv.qz9nqaor', {
-                detectRetina: true,
-                noWrap:true
-            }),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true
             }),
-            popheat = L.mapbox.tileLayer('miranda-lv.nyyi7ldi', {
-                noWrap:true
+            acled = L.mapbox.tileLayer('miranda-lv.nyyi7ldi', {
+                noWrap:true,
+                opacity:0.75
             }),
             usgs = L.tileLayer.wms("http://mrdata.usgs.gov/services/mrds", {
                 version: '1.1.1',
@@ -75,7 +76,6 @@
             none_val = "No base layer",
             pov_val = "Poverty",
             acled_val = "Armed conflict",
-            pop_val = "Population density",
             usgs_val = "Mineral deposits",
             featurelen = feature_collection===null?[]:feature_collection.features.length,
             MarkerOptions = {
@@ -95,33 +95,39 @@
             var selected_layer = $("#base_layer option:selected").val();
             console.log("Layer: "+selected_layer);
             if(selected_layer==none_val){
+                $('#layercontrol img.poverty').hide()
+                $('#layercontrol img.placeholder').hide()
+                $('#layercontrol img.usgs').hide()
+                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
                 map.removeLayer(acled)
                 map.removeLayer(poverty)
-                map.removeLayer(popheat)
                 map.removeLayer(usgs)
             }
             if(selected_layer==pov_val){
+                $('#layercontrol img.placeholder').hide()
+                $('#layercontrol img.usgs').hide()
+                $('#layercontrol img.poverty').show()
+                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
                 map.removeLayer(acled)
-                map.removeLayer(popheat)
                 map.removeLayer(usgs)
                 map.addLayer(poverty)
             }
             if(selected_layer==acled_val){
-                map.removeLayer(poverty)
-                map.removeLayer(popheat)
-                map.removeLayer(usgs)
+                $('#layercontrol img.poverty').hide()
+                $('#layercontrol img.usgs').hide()
+                $('#layercontrol img.placeholder').show()
+                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
                 map.addLayer(acled)
-            }
-            if(selected_layer==pop_val){
-                map.removeLayer(acled)
                 map.removeLayer(poverty)
                 map.removeLayer(usgs)
-                map.addLayer(popheat)
             }
             if(selected_layer==usgs_val){
+                $('#layercontrol img.poverty').hide()
+                $('#layercontrol img.placeholder').hide()
+                $('#layercontrol img.usgs').show()
+                $('#filtercontrol').height(606 - $('#layercontrol').height() + "px")
                 map.removeLayer(acled)
                 map.removeLayer(poverty)
-                map.removeLayer(popheat)
                 map.addLayer(usgs)
             }
         })
