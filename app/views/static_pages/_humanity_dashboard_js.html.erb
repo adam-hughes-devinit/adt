@@ -93,7 +93,7 @@
         }
     }
     if (feature_collection === null){
-        console.log("Feature collection error")
+        throw "Feature collection error"
         feature_collection = {};
         feature_collection.features=[];}
     var geoJson = L.geoJson(feature_collection.features, {
@@ -118,7 +118,6 @@
     $(document).ready(function(){
         map.on("baselayerchange", function(layer){
             var selected_layer = layer;
-            console.log("Layer: "+selected_layer.name);
             if(selected_layer.name=="None"){
                 $('#layercontrol').hide()
                 $('#layercontrol img.poverty').hide()
