@@ -93,15 +93,28 @@
         }
     }
     if (feature_collection === null){
-        console.log("Feature collection error.")
+        console.log("Feature collection error")
         feature_collection = {};
         feature_collection.features=[];}
-    L.geoJson(feature_collection.features, {
+    var geoJson = L.geoJson(feature_collection.features, {
         onEachFeature: onEachFeature,
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, MarkerOptions);
         }
-    }).addTo(map);
+    });
+    map.addLayer(geoJson);
+    function filterGeoJson(attribute, value){
+        if(attribute===undefined && value===undefined){
+            geoJson.options.filter = undefined;
+        }
+        else{
+            geoJson.options.filter = function(feature,layer){
+                return feature.properties[attribute] == value;
+            };
+        }
+        geoJson.clearLayers()
+        geoJson.addData(feature_collection.features)
+    };
     $(document).ready(function(){
         map.on("baselayerchange", function(layer){
             var selected_layer = layer;
