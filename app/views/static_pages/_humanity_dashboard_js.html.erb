@@ -33,6 +33,39 @@
         </div>
         <div id="filtercontrol">
           <h4>Filter</h4>
+          <div id="project-facets">
+          <div class="pull-left">
+            <ol>
+              <div class="search-facet">
+                <b class="facet-header">
+                  <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
+                </b>
+              <span class="check_count active_string"></span>
+              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('year'); return false;" style="display: none;">Select all</a>
+              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('year'); return false;" style="display: none;">Unselect all</a>
+              <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
+                <script>
+                    for(var i=0;i<14;i++){
+                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='year' value='"+(2013-i)+"' class='search_check boolean active_string'>"+(2013-i)+"</label></li>")
+                }</script>
+              </div>
+              <div class="search-facet">
+                <b class="facet-header">
+                  <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Location</a>
+                </b>
+                <span class="check_count active_string"></span>
+                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('location'); return false;" style="display: none;">Select all</a>
+                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('location'); return false;" style="display: none;">Unselect all</a>
+                <ul id="locationfilter" class="unstyled facet-list" style="display: none;"></ul>
+                <script>
+                    var countries = ["Algeria", "Angola", "Benin", "Botswana", "Brazil", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Ghana", "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Portugal", "Rwanda", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Timor-Leste", "Togo", "Tunisia", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe"];
+                    for(var i=0;i<countries.length;i++){
+                    $('ul#locationfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='location' value='"+countries[i]+"' class='search_check boolean active_string'>"+countries[i]+"</label></li>")
+                }</script>
+              </div>
+            </ol>
+          </div>
+        </div>
         </div>
     </div>
     <div id="searchresults">
@@ -48,7 +81,8 @@
             }),
             none = L.geoJson(),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
-                noWrap:true
+                noWrap:true,
+                opacity:0.85
             }),
             acled = L.mapbox.tileLayer('miranda-lv.nyyi7ldi', {
                 noWrap:true,
