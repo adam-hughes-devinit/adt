@@ -10,7 +10,7 @@
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
     #layercontrol {display:none;float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:auto;width:100%;padding:1px;margin-bottom:1px;}
-    #filtercontrol {float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:626px;width:100%;padding:1px;}
+    #filtercontrol {float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:626px;width:100%;padding:1px;overflow-y:scroll;}
     #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
     h4 {margin-left:5px;}
     #layercontrol img{display:none;}
@@ -103,19 +103,23 @@
         }
     });
     map.addLayer(geoJson);
-    function filterGeoJson(attributes, values){
-        if(attributes===undefined && values===undefined){
+    function filterGeoJson(filterObject){
+        if(filterObject===undefined){
             geoJson.options.filter = undefined;
         }
         else{
             geoJson.options.filter = function(feature,layer){
-                var filterBoolean = 1,
-                        attrlen = attributes.length,
-                        i=0;
-                for(i=0;i<attrlen;i++){
-                    filterBoolean = filterBoolean && feature.properties[attributes[i]] == values[i]
+                var metaFilterBoolean = true;
+                for(var filter in filterObject){
+                    var values = filterObject[filter],
+                            valueLen = values.length,
+                            filterBoolean = false;
+                    for(var i=0;i<valueLen;i++){
+                        filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                    };
+                    metaFilterBoolean = metaFilterBoolean && filterBoolean
                 };
-                return filterBoolean;
+                return metaFilterBoolean;
             };
         }
         geoJson.clearLayers()
