@@ -87,10 +87,17 @@
             opacity: 1,
             fillOpacity: 0.5};
     L.control.layers(baseMaps).addTo(map);
+    function onEachFeature(feature,layer){
+        if(feature.properties && feature.properties.geo_name){
+            layer.bindPopup(feature.properties.geo_name);
+        }
+    }
     if (feature_collection === null){
+        console.log("Feature collection error.")
         feature_collection = {};
         feature_collection.features=[];}
     L.geoJson(feature_collection.features, {
+        onEachFeature: onEachFeature,
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, MarkerOptions);
         }
