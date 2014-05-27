@@ -87,6 +87,9 @@
             opacity: 1,
             fillOpacity: 0.5};
     L.control.layers(baseMaps).addTo(map);
+    if (feature_collection === null){
+        feature_collection = {};
+        feature_collection.features=[];}
     L.geoJson(feature_collection.features, {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, MarkerOptions);
