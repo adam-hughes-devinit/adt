@@ -175,6 +175,10 @@ function highlightProject(e) {
     }
     geoJsonSubset.addData(feature_collection.features);
     var bounds = geoJsonSubset.getBounds();
+    zoomToFeature(bounds);
+    e.target.openPopup();
+};
+function zoomToFeature(bounds){
     if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
         var extendPoint1 = new L.LatLng(bounds.getNorthEast().lat + 0.01, bounds.getNorthEast().lng + 0.01);
         var extendPoint2 = new L.LatLng(bounds.getNorthEast().lat - 0.01, bounds.getNorthEast().lng - 0.01);
@@ -182,7 +186,6 @@ function highlightProject(e) {
         bounds.extend(extendPoint2);
     }
     map.fitBounds(bounds,{maxZoom:9});
-    e.target.openPopup();
 };
 function onEachFeature(feature,layer){
     layer.on({
