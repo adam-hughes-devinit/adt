@@ -123,8 +123,8 @@
             fillOpacity: 0.5};
     L.control.layers(baseMaps).addTo(map);
     function onEachFeature(feature,layer){
-        if(feature.properties && feature.properties.geo_name){
-            layer.bindPopup(feature.properties.geo_name);
+        if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
+            layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
         }
     }
     if (feature_collection === null){

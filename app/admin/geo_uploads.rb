@@ -109,6 +109,9 @@ ActiveAdmin.register GeoUpload do
       lonlat = factory_cartesian.point(g.geo_name.longitude, g.geo_name.latitude)
 
       features.append(factory.feature(lonlat, nil, {
+          geo_code_id: g.id,
+          project_id: g.project_id,
+          project_year: g.project.year,
           precision_code: g.precision_id,
           adm_code: g.adm_id.nil? ? nil : g.adm.code,
           adm_name: g.adm_id.nil? ? nil : g.adm.name,
