@@ -41,28 +41,48 @@
                 <b class="facet-header">
                   <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
                 </b>
-              <span class="check_count active_string"></span>
-              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('year'); return false;" style="display: none;">Select all</a>
-              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('year'); return false;" style="display: none;">Unselect all</a>
+              <span class="check_count project_year"></span>
+              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
+              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
               <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
                 <script>
+//Update check-box count
+                    function update_check_counter_for(this_facet) {
+                        checked_boxes = $(".search_check."+this_facet+":checked")
+                        check_count = checked_boxes.length
+                        counter = $('.check_count.'+this_facet)
+                        counter_text = check_count > 0 ? "("+check_count+")" : ""
+                        counter.text(counter_text)
+
+                    }
+//Draw checkboxes for year
                     for(var i=0;i<14;i++){
-                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='year' value='"+(2013-i)+"' class='search_check boolean active_string'>"+(2013-i)+"</label></li>")
-                }</script>
+                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2013-i)+"' class='search_check boolean project_year'>"+(2013-i)+"</label></li>")
+                }
+                update_check_counter_for('project_year')
+                </script>
               </div>
               <div class="search-facet">
                 <b class="facet-header">
                   <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Location</a>
                 </b>
-                <span class="check_count active_string"></span>
-                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('location'); return false;" style="display: none;">Select all</a>
-                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('location'); return false;" style="display: none;">Unselect all</a>
+                <span class="check_count location_string"></span>
+                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('location_string'); return false;" style="display: none;">Select all</a>
+                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('location_string'); return false;" style="display: none;">Unselect all</a>
                 <ul id="locationfilter" class="unstyled facet-list" style="display: none;"></ul>
                 <script>
+//Draw checkboxes for location
                     var countries = ["Algeria", "Angola", "Benin", "Botswana", "Brazil", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Ghana", "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Portugal", "Rwanda", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Timor-Leste", "Togo", "Tunisia", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe"];
                     for(var i=0;i<countries.length;i++){
-                    $('ul#locationfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='location' value='"+countries[i]+"' class='search_check boolean active_string'>"+countries[i]+"</label></li>")
-                }</script>
+                    $('ul#locationfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='location_string' value='"+countries[i]+"' class='search_check boolean location_string'>"+countries[i]+"</label></li>")
+                }
+                    update_check_counter_for('location_string')
+//Checkbox updater
+                    $('.facet-list-item').click(function() {
+                        this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                        update_check_counter_for(this_facet)
+                    })
+                </script>
               </div>
             </ol>
           </div>
@@ -75,6 +95,7 @@
 </div>
 <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
 <script>
+//Set-up layers
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
@@ -100,6 +121,7 @@
                 attribution: "USGS MRDS @ http://tin.er.usgs.gov/mrds/",
                 noWrap:true
             }),
+//Set-up map
             map = L.map('map', {
                 maxBounds: [[51.17934297928927,67.1484375],[-41.50857729743933,-28.125]],
                 center: [6.964039, 19.533678],
@@ -114,6 +136,7 @@
                 "Armed Conflict": acled,
                 "Minerals and Mines": usgs
             },
+//Set-up GeoJson
             MarkerOptions = {
             radius: 4,
             fillColor: "#9FE5F8",
@@ -138,6 +161,7 @@
         }
     });
     map.addLayer(geoJson);
+//Filter function
     function filterGeoJson(filterObject){
         if(filterObject===undefined){
             geoJson.options.filter = undefined;
@@ -160,6 +184,25 @@
         geoJson.clearLayers()
         geoJson.addData(feature_collection.features)
     };
+    var filterObject = {"project_year":["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]};
+    $("input[name='project_year']").change(function(){
+       var changedBox = this,
+               attribute = $(changedBox).attr("name"),
+               value = $(changedBox).attr("value"),
+               onOff = $("input:checked[name="+attribute+"][value="+value+"]").length;
+        console.log(attribute+": "+value+" "+onOff)
+        if(onOff==1){
+            filterObject[attribute].push(value)
+        }
+        else{
+            var index = filterObject[attribute].indexOf(value);
+            if(index>-1){
+                filterObject[attribute].splice(index,1);
+            }
+        }
+        filterGeoJson(filterObject);
+    });
+//Legend show/hide and div height control
     $(document).ready(function(){
         map.on("baselayerchange", function(layer){
             var selected_layer = layer;
