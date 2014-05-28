@@ -146,110 +146,154 @@
             opacity: 1,
             fillOpacity: 0.5};
     L.control.layers(baseMaps).addTo(map);
-    function onEachFeature(feature,layer){
-        if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
-            layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
-        }
-    }
-    if (feature_collection === null){
-        throw "Feature collection error"
-        feature_collection = {};
-        feature_collection.features=[];}
-    var geoJson = L.geoJson(feature_collection.features, {
-        onEachFeature: onEachFeature,
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, MarkerOptions);
-        }
+function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({
+        weight: 3
     });
-    map.addLayer(geoJson);
-//Filter function
-    function filterGeoJson(filterObject){
-        if(filterObject===undefined){
-            geoJson.options.filter = undefined;
-        }
-        else{
-            geoJson.options.filter = function(feature,layer){
-                var metaFilterBoolean = true;
-                for(var filter in filterObject){
-                    var values = filterObject[filter],
-                            valueLen = values.length,
-                            filterBoolean = false;
-                    for(var i=0;i<valueLen;i++){
-                        filterBoolean = filterBoolean || feature.properties[filter] == values[i]
-                    };
-                    metaFilterBoolean = metaFilterBoolean && filterBoolean
-                };
-                return metaFilterBoolean;
+}
+function resetHighlight(e) {
+    var layer = e.target;
+    layer.setStyle({
+        weight: 1
+    });
+}
+function highlightProject(e) {
+    geoJson.setStyle(MarkerOptions)
+    var project = e.target.feature.properties.project_id;
+    geoJson.setStyle(function(feature){
+        switch (feature.properties.project_id){
+            case project: return {
+                fillColor:"#f8a39f",
+                radius:8
             };
         }
-        geoJson.clearLayers()
-        geoJson.addData(feature_collection.features)
-    };
-    var filterObject = {"project_year":project_years};
-    //This can be changed to [type='checkbox'] when both fields are active
-    $("input[name='project_year']").change(function(){
-       var changedBox = this,
-               attribute = $(changedBox).attr("name"),
-               value = $(changedBox).attr("value"),
-               onOff = $("input:checked[name="+attribute+"][value="+value+"]").length,
-               index = filterObject[attribute].indexOf(value);
-        if(onOff==1){
-            if(index==-1){
-                filterObject[attribute].push(value);
-            }
-        }
-        else{
-            if(index>-1){
-                filterObject[attribute].splice(index,1);
-            }
-        }
-        filterGeoJson(filterObject);
     });
-    $("a.facet-controller#project_years_on").click(function(){
-        var project_years = ["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
-        filterObject.project_year = project_years;
-        filterGeoJson(filterObject);
-    });
-    $("a.facet-controller#project_years_off").click(function(){
-        filterObject.project_year = [];
-        filterGeoJson(filterObject);
-    });
-//Legend show/hide and div height control
-    $(document).ready(function(){
-        map.on("baselayerchange", function(layer){
-            var selected_layer = layer;
-            if(selected_layer.name=="None"){
-                $('#layercontrol').hide()
-                $('#layercontrol img.poverty').hide()
-                $('#layercontrol img.placeholder').hide()
-                $('#layercontrol img.usgs').hide()
-                $('#layercontrol h4').text("No base layer")
-                $('#filtercontrol').height(662 - $('#layercontrol').height() + "px")
-            }
-            if(selected_layer.name=="Poverty"){
-                $('#layercontrol').show()
-                $('#layercontrol img.placeholder').hide()
-                $('#layercontrol img.usgs').hide()
-                $('#layercontrol img.poverty').show()
-                $('#layercontrol h4').text("Poverty")
-                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
-            }
-            if(selected_layer.name=="Armed Conflict"){
-                $('#layercontrol').show()
-                $('#layercontrol img.poverty').hide()
-                $('#layercontrol img.usgs').hide()
-                $('#layercontrol img.placeholder').show()
-                $('#layercontrol h4').text("Armed Conflict")
-                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
-            }
-            if(selected_layer.name=="Minerals and Mines"){
-                $('#layercontrol').show()
-                $('#layercontrol img.poverty').hide()
-                $('#layercontrol img.placeholder').hide()
-                $('#layercontrol img.usgs').show()
-                $('#layercontrol h4').text("Minerals and Mines")
-                $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
-            }
-        })
+    geoJsonSubset.clearLayers();
+    geoJsonSubset.options.filter = function(feature,layer){
+        return feature.properties.project_id==project
+    }
+    geoJsonSubset.addData(feature_collection.features);
+    var bounds = geoJsonSubset.getBounds();
+    if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+        var extendPoint1 = new L.LatLng(bounds.getNorthEast().lat + 0.01, bounds.getNorthEast().lng + 0.01);
+        var extendPoint2 = new L.LatLng(bounds.getNorthEast().lat - 0.01, bounds.getNorthEast().lng - 0.01);
+        bounds.extend(extendPoint1);
+        bounds.extend(extendPoint2);
+    }
+    map.fitBounds(bounds,{maxZoom:9});
+    e.target.openPopup();
+};
+function onEachFeature(feature,layer){
+    layer.on({
+        mouseover:highlightFeature,
+        mouseout:resetHighlight,
+        click: highlightProject
     })
+    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
+        layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
+    }
+    }
+if (feature_collection === null){
+    throw "Feature collection error"
+    feature_collection = {};
+    feature_collection.features=[];}
+var geoJsonSubset = L.geoJson(),
+    geoJson = L.geoJson(feature_collection.features, {
+    onEachFeature: onEachFeature,
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, MarkerOptions);
+    }
+});
+map.addLayer(geoJson);
+//Filter function
+function filterGeoJson(filterObject){
+    if(filterObject===undefined){
+        geoJson.options.filter = undefined;
+    }
+    else{
+        geoJson.options.filter = function(feature,layer){
+            var metaFilterBoolean = true;
+            for(var filter in filterObject){
+                var values = filterObject[filter],
+                        valueLen = values.length,
+                        filterBoolean = false;
+                for(var i=0;i<valueLen;i++){
+                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                };
+                metaFilterBoolean = metaFilterBoolean && filterBoolean
+            };
+            return metaFilterBoolean;
+        };
+    }
+    geoJson.clearLayers()
+    geoJson.addData(feature_collection.features)
+};
+var filterObject = {"project_year":project_years};
+//This can be changed to [type='checkbox'] when both fields are active
+$("input[name='project_year']").change(function(){
+   var changedBox = this,
+           attribute = $(changedBox).attr("name"),
+           value = $(changedBox).attr("value"),
+           onOff = $("input:checked[name="+attribute+"][value="+value+"]").length,
+           index = filterObject[attribute].indexOf(value);
+    if(onOff==1){
+        if(index==-1){
+            filterObject[attribute].push(value);
+        }
+    }
+    else{
+        if(index>-1){
+            filterObject[attribute].splice(index,1);
+        }
+    }
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_years_on").click(function(){
+    var project_years = ["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
+    filterObject.project_year = project_years;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_years_off").click(function(){
+    filterObject.project_year = [];
+    filterGeoJson(filterObject);
+});
+//Legend show/hide and div height control
+$(document).ready(function(){
+    map.on("baselayerchange", function(layer){
+        var selected_layer = layer;
+        if(selected_layer.name=="None"){
+            $('#layercontrol').hide()
+            $('#layercontrol img.poverty').hide()
+            $('#layercontrol img.placeholder').hide()
+            $('#layercontrol img.usgs').hide()
+            $('#layercontrol h4').text("No base layer")
+            $('#filtercontrol').height(662 - $('#layercontrol').height() + "px")
+        }
+        if(selected_layer.name=="Poverty"){
+            $('#layercontrol').show()
+            $('#layercontrol img.placeholder').hide()
+            $('#layercontrol img.usgs').hide()
+            $('#layercontrol img.poverty').show()
+            $('#layercontrol h4').text("Poverty")
+            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+        }
+        if(selected_layer.name=="Armed Conflict"){
+            $('#layercontrol').show()
+            $('#layercontrol img.poverty').hide()
+            $('#layercontrol img.usgs').hide()
+            $('#layercontrol img.placeholder').show()
+            $('#layercontrol h4').text("Armed Conflict")
+            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+        }
+        if(selected_layer.name=="Minerals and Mines"){
+            $('#layercontrol').show()
+            $('#layercontrol img.poverty').hide()
+            $('#layercontrol img.placeholder').hide()
+            $('#layercontrol img.usgs').show()
+            $('#layercontrol h4').text("Minerals and Mines")
+            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+        }
+    })
+})
 </script>
