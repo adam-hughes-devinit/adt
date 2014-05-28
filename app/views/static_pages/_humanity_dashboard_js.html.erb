@@ -42,8 +42,8 @@
                   <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
                 </b>
               <span class="check_count project_year"></span>
-              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
-              <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
+              <a class="facet-controller" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
+              <a class="facet-controller" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
               <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
                 <script>
 //Update check-box count
@@ -56,6 +56,7 @@
 
                     }
 //Draw checkboxes for year
+                    var project_years = ["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
                     for(var i=0;i<14;i++){
                     $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2013-i)+"' class='search_check boolean project_year'>"+(2013-i)+"</label></li>")
                 }
@@ -184,22 +185,32 @@
         geoJson.clearLayers()
         geoJson.addData(feature_collection.features)
     };
-    var filterObject = {"project_year":["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]};
+    var filterObject = {"project_year":project_years};
+    //This can be changed to [type='checkbox'] when both fields are active
     $("input[name='project_year']").change(function(){
        var changedBox = this,
                attribute = $(changedBox).attr("name"),
                value = $(changedBox).attr("value"),
-               onOff = $("input:checked[name="+attribute+"][value="+value+"]").length;
-        console.log(attribute+": "+value+" "+onOff)
+               onOff = $("input:checked[name="+attribute+"][value="+value+"]").length,
+               index = filterObject[attribute].indexOf(value);
         if(onOff==1){
-            filterObject[attribute].push(value)
+            if(index==-1){
+                filterObject[attribute].push(value);
+            }
         }
         else{
-            var index = filterObject[attribute].indexOf(value);
             if(index>-1){
                 filterObject[attribute].splice(index,1);
             }
         }
+        filterGeoJson(filterObject);
+    });
+    $("a.facet-controller#project_years_on").click(function(){
+        filterObject.project_year = project_years;
+        filterGeoJson(filterObject);
+    });
+    $("a.facet-controller#project_years_off").click(function(){
+        filterObject.project_year = [];
         filterGeoJson(filterObject);
     });
 //Legend show/hide and div height control
