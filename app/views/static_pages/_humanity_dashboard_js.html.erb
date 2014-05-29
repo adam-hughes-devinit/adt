@@ -179,7 +179,11 @@ function highlightFeature(e) {
         $('div#hoverInfo').html("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
     }
 }
+function delayHighlight(e){
+    thisTimeout = setTimeout(function(){highlightFeature(e)},100)
+}
 function resetHighlight(e) {
+    clearTimeout(thisTimeout)
     var layer = e.target;
     layer.setStyle({
         weight: 1
@@ -219,7 +223,7 @@ function zoomToFeature(bounds){
 };
 function onEachFeature(feature,layer){
         layer.on({
-            mouseover:highlightFeature,
+            mouseover:delayHighlight,
             mouseout:resetHighlight,
             click: highlightProject
         })
