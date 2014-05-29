@@ -9,13 +9,11 @@
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #layercontrol {display:none;float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:auto;width:100%;padding:1px;margin-bottom:1px;}
     #filtercontrol {float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:626px;width:100%;padding:1px;overflow-y:scroll;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
     h4 {margin-left:5px;}
     #searchresults #hoverInfo{margin:0 0 10px 10px;}
-    #layercontrol img{display:none;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: white;background: rgba(255,255,255,0.8);box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
     .info h4 {margin: 0 0 5px;color: #777;}
@@ -31,12 +29,6 @@
     <div id='map'>
     </div>
     <div id="left">
-        <div id="layercontrol">
-          <h4>No base layer</h4>
-          <%= image_tag("humanity_united/poverty_legend.png", class: 'poverty') %>
-          <%= image_tag("humanity_united/placeholder_legend.jpg", class: 'placeholder') %>
-          <%= image_tag("humanity_united/mrds_legend.png", class: 'usgs') %>
-        </div>
         <div id="filtercontrol">
           <h4>Filter</h4>
           <div id="project-facets">
@@ -152,7 +144,10 @@
             opacity: 1,
             fillOpacity: 0.5};
 //Set-up Leaflet Controls
-    L.control.layers(baseMaps).addTo(map);
+    map.addLayer(none);
+    var layerControl = L.control.layers(baseMaps);
+    layerControl.options.collapsed = false;
+    layerControl.addTo(map);
     function getColor(d) {
         return d > 1000 ? '#800026' :
                         d > 500  ? '#BD0026' :
@@ -179,7 +174,6 @@
         div.innerHTML = labels.join('<br>');
         return div;
     };
-    legend.addTo(map);
 //GeoJson Functions
 function highlightFeature(e) {
     var layer = e.target,
@@ -305,36 +299,28 @@ $(document).ready(function(){
     map.on("baselayerchange", function(layer){
         var selected_layer = layer;
         if(selected_layer.name=="None"){
-            $('#layercontrol').hide()
-            $('#layercontrol img.poverty').hide()
-            $('#layercontrol img.placeholder').hide()
-            $('#layercontrol img.usgs').hide()
-            $('#layercontrol h4').text("No base layer")
-            $('#filtercontrol').height(662 - $('#layercontrol').height() + "px")
+            console.log("Selected layer: None")
+            if (legend._map!=null){
+                map.removeControl(legend);
+            }
         }
         if(selected_layer.name=="Poverty"){
-            $('#layercontrol').show()
-            $('#layercontrol img.placeholder').hide()
-            $('#layercontrol img.usgs').hide()
-            $('#layercontrol img.poverty').show()
-            $('#layercontrol h4').text("Poverty")
-            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+            console.log("Selected layer: Poverty")
+            if (legend._map==null){
+                map.addControl(legend);
+            }
         }
         if(selected_layer.name=="Armed Conflict"){
-            $('#layercontrol').show()
-            $('#layercontrol img.poverty').hide()
-            $('#layercontrol img.usgs').hide()
-            $('#layercontrol img.placeholder').show()
-            $('#layercontrol h4').text("Armed Conflict")
-            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+            console.log("Selected layer: Armed Conflict")
+            if (legend._map==null){
+                map.addControl(legend);
+            }
         }
         if(selected_layer.name=="Minerals and Mines"){
-            $('#layercontrol').show()
-            $('#layercontrol img.poverty').hide()
-            $('#layercontrol img.placeholder').hide()
-            $('#layercontrol img.usgs').show()
-            $('#layercontrol h4').text("Minerals and Mines")
-            $('#filtercontrol').height(621 - $('#layercontrol').height() + "px")
+            console.log("Selected layer: Minerals and Mines")
+            if (legend._map==null){
+                map.addControl(legend);
+            }
         }
     })
 })
