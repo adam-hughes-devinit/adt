@@ -345,8 +345,13 @@ $(document).ready(function(){
         if(selected_layer.name=="Minerals and Mines"){
             console.log("Selected layer: Minerals and Mines")
             legend.onAdd = function(map){
-                var div = L.DomUtil.create('div', 'info legend');
-                div.innerHTML = "Minerals and Mines"
+                var div = L.DomUtil.create('div', 'info legend')
+                        labels = [];
+                labels.push('<i style="background:#A10202"></i>' + "Mine, past or present");
+                labels.push('<i style="background:#ffffff;border:solid #02A102 2px;"></i>' + "Prospective mine");
+                labels.push('<i style="background:#0202A1"></i>' + "Processing plant");
+                labels.push('<i style="background:#ffffff;border:solid black 2px;"></i>' + "Unknown");
+                div.innerHTML = labels.join('<br>');
                 return div;
             }
             if (legend._map!=null){
