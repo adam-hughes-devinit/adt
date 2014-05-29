@@ -14,8 +14,13 @@
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
     h4 {margin-left:5px;}
+    #searchresults #hoverInfo{margin:0 0 10px 10px;}
     #layercontrol img{display:none;}
     form.leaflet-control-layers-list{margin:0px !important;}
+    .info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: white;background: rgba(255,255,255,0.8);box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
+    .info h4 {margin: 0 0 5px;color: #777;}
+    .legend {text-align: left;line-height: 18px;color: #555;}
+    .legend i {width: 18px;height: 18px;float: left; margin-right: 8px;opacity: 0.7;}
 </style>
 <div id="vis">
     <div id="searchbar">
@@ -92,6 +97,7 @@
     </div>
     <div id="searchresults">
       <h4>Results</h4>
+      <div id="hoverInfo"></div>
     </div>
 </div>
 <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
@@ -147,12 +153,43 @@
             fillOpacity: 0.5};
 //Set-up Leaflet Controls
     L.control.layers(baseMaps).addTo(map);
+    function getColor(d) {
+        return d > 1000 ? '#800026' :
+                        d > 500  ? '#BD0026' :
+                        d > 200  ? '#E31A1C' :
+                        d > 100  ? '#FC4E2A' :
+                        d > 50   ? '#FD8D3C' :
+                        d > 20   ? '#FEB24C' :
+                        d > 10   ? '#FED976' :
+                '#FFEDA0';
+    }
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend'),
+                grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+                labels = [],
+                from, to;
+        for (var i = 0; i < grades.length; i++) {
+            from = grades[i];
+            to = grades[i + 1];
+            labels.push(
+                            '<i style="background:' + getColor(from + 1) + '"></i> ' +
+                            from + (to ? '&ndash;' + to : '+'));
+        }
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+    legend.addTo(map);
 //GeoJson Functions
 function highlightFeature(e) {
-    var layer = e.target;
+    var layer = e.target,
+        feature = layer.feature;
     layer.setStyle({
         weight: 3
     });
+    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
+        $('div#hoverInfo').html("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
+    }
 }
 function resetHighlight(e) {
     var layer = e.target;
@@ -162,9 +199,12 @@ function resetHighlight(e) {
 }
 function highlightProject(e) {
     geoJson.setStyle(MarkerOptions)
-    var project = e.target.feature.properties.project_id;
+    var project = e.target.feature.properties.project_id,
+        projectCount = 0;
     geoJson.setStyle(function(feature){
-        switch (feature.properties.project_id){
+        var thisProject = feature.properties.project_id;
+        projectCount+=thisProject==project?1:0
+        switch (thisProject){
             case project: return {
                 fillColor:"#f8a39f",
                 radius:8
@@ -178,7 +218,7 @@ function highlightProject(e) {
     geoJsonSubset.addData(feature_collection.features);
     var bounds = geoJsonSubset.getBounds();
     zoomToFeature(bounds);
-    e.target.openPopup();
+    $('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
 };
 function zoomToFeature(bounds){
     if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
@@ -190,17 +230,14 @@ function zoomToFeature(bounds){
     map.fitBounds(bounds,{maxZoom:9});
 };
 function onEachFeature(feature,layer){
-    layer.on({
-        mouseover:highlightFeature,
-        mouseout:resetHighlight,
-        click: highlightProject
-    })
-    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
-        layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
-    }
+        layer.on({
+            mouseover:highlightFeature,
+            mouseout:resetHighlight,
+            click: highlightProject
+        })
     }
 if (feature_collection === null){
-    throw "Feature collection error"
+    console.log("Feature collection error.")
     feature_collection = {};
     feature_collection.features=[];}
 var geoJsonSubset = L.geoJson(),
