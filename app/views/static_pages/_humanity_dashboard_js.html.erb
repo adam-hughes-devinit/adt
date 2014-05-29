@@ -103,11 +103,11 @@
             none = L.geoJson(),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true,
-                opacity:0.85
+                opacity:0.7
             }),
             acled = L.mapbox.tileLayer('miranda-lv.nyyi7ldi', {
                 noWrap:true,
-                opacity:0.75
+                opacity:0.7
             }),
             usgs = L.tileLayer.wms("http://mrdata.usgs.gov/services/mrds", {
                 version: '1.1.1',
@@ -160,6 +160,12 @@
                         d > 39.9   ? '#F78282' :
                         d > 19.9   ? '#F5AAAA' :
                 '#F6CECE';
+    }
+    function getColorConflict(d) {
+        return d == "High"  ? '#D03F3B' :
+                        d == "Medium"   ? '#F1F3BC' :
+                        d == "Low"   ? '#7CA6CC' :
+                '#3064C0';
     }
     var legend = L.control({position: 'bottomright'});
 //GeoJson Functions
@@ -317,7 +323,18 @@ $(document).ready(function(){
         if(selected_layer.name=="Armed Conflict"){
             console.log("Selected layer: Armed Conflict")
             legend.onAdd = function(map){
-                var div = L.DomUtil.create('div', 'info legend');
+                var div = L.DomUtil.create('div', 'info legend'),
+                        grades = ["None", "Low", "Medium", "High"],
+                        labels = [],
+                        from, to;
+                for (var i = 0; i < grades.length; i++) {
+                    from = grades[i];
+                    to = grades[i + 1];
+                    labels.push(
+                                    '<i style="background:' + getColorConflict(from) + '"></i> ' +
+                                    from + (to ? '&ndash;' + to : '+'));
+                }
+                div.innerHTML = labels.join('<br>');
                 return div;
             }
             if (legend._map!=null){
@@ -329,6 +346,7 @@ $(document).ready(function(){
             console.log("Selected layer: Minerals and Mines")
             legend.onAdd = function(map){
                 var div = L.DomUtil.create('div', 'info legend');
+                div.innerHTML = "Minerals and Mines"
                 return div;
             }
             if (legend._map!=null){
