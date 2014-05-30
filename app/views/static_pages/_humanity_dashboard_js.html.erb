@@ -107,11 +107,12 @@
             }),
 //./scripts/tilestache-server. -c dashboard.cfg
             acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
+                attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7
             }),
             usgs = L.tileLayer('http://localhost:8080/usgs/{z}/{x}/{y}.png',{
-                attribution: "Base layer from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
+                attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true
             }),
 //Set-up map
