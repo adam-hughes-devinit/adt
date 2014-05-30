@@ -105,18 +105,12 @@
                 noWrap:true,
                 opacity:0.7
             }),
-            acled = L.mapbox.tileLayer('miranda-lv.nyyi7ldi', {
+//./scripts/tilestache-server. -c dashboard.cfg
+            acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
                 noWrap:true,
                 opacity:0.7
             }),
-            usgs = L.tileLayer.wms("http://mrdata.usgs.gov/services/mrds", {
-                version: '1.1.1',
-                service: 'WMS',
-                request: 'GetMap',
-                layers: 'mrds',
-                format: 'image/png',
-                STYLE: 'default',
-                transparent: 'true',
+            usgs = L.tileLayer('http://localhost:8080/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true
             }),
@@ -162,10 +156,10 @@
                 '#F6CECE';
     }
     function getColorConflict(d) {
-        return d == "High"  ? '#D03F3B' :
-                        d == "Medium"   ? '#F1F3BC' :
-                        d == "Low"   ? '#7CA6CC' :
-                '#3064C0';
+        return d == "High"  ? '#BD0228' :
+                        d == "Medium"   ? '#F4582B' :
+                        d == "Low"   ? '#FDB853' :
+                '#FFFFB3';
     }
     var legend = L.control({position: 'bottomright'});
 //GeoJson Functions
