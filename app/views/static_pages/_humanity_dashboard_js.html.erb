@@ -102,11 +102,13 @@
             noWrap:true,
             opacity:0.7
         });
-        if(level!==undefined && code!==undefined) {
+        console.log('adm'+level+'_'+code)
+        if(level!==undefined && code!==undefined && level!="0") {
+            console.log("Fetching adms...")
             return layer;
         }
         else{
-            return L.geojson();
+            return L.geoJson();
         }
     }
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
@@ -119,8 +121,10 @@
                 noWrap:true,
                 opacity:0.7
             }),
-//./scripts/tilestache-server.py -c adm.cfg
-            acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
+//./scripts/tilestache-server.py -c dashboard.cfg
+//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -l usgs -b -42 -29 52 68 -x 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -l acled -b -42 -29 52 68 -x 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+        acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7
@@ -242,6 +246,7 @@ function highlightProject(e) {
     var adms = L.featureGroup(highlightedAdms);
     map.removeLayer(adms);
     adms.addTo(map);
+    console.log(adms)
 };
 function zoomToFeature(bounds){
     if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
