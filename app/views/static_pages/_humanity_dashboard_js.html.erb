@@ -121,9 +121,9 @@
                 noWrap:true,
                 opacity:0.7
             }),
-//./scripts/tilestache-server.py -c dashboard.cfg
-//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -l usgs -b -42 -29 52 68 -x 0 1 2 3 4 5 6 7 8 9 10 11 12 13
-//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -l acled -b -42 -29 52 68 -x 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+//./scripts/tilestache-server.py -c adm2.cfg
+//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l acled 0 1 2 3 4 5 6 7 8 9 10 11 12 13
         acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
@@ -243,9 +243,11 @@ function highlightProject(e) {
                 adm_code = typeof(layer_code)=="number"?layer_code:undefined;
         highlightedAdms.push(getAdm(adm_level,adm_code))
     }
-    var adms = L.featureGroup(highlightedAdms);
-    map.removeLayer(adms);
-    adms.addTo(map);
+    if(typeof(adms)=="object"){map.removeLayer(adms)}
+    adms = L.featureGroup(highlightedAdms);
+    if(highlightedAdms[0].options.shp=="adm1_147331") {
+        adms.addTo(map);
+    }
     console.log(adms)
 };
 function zoomToFeature(bounds){
@@ -255,7 +257,7 @@ function zoomToFeature(bounds){
         bounds.extend(extendPoint1);
         bounds.extend(extendPoint2);
     }
-    map.fitBounds(bounds,{maxZoom:9});
+    map.fitBounds(bounds,{maxZoom:6});
 };
 function onEachFeature(feature,layer){
         layer.on({
