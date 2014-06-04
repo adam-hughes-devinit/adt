@@ -104,7 +104,7 @@
         });
         console.log('adm'+level+'_'+code)
         if(level!==undefined && code!==undefined && level!="0") {
-            console.log("Fetching adms...")
+            console.log("Fetching adm...")
             return layer;
         }
         else{
@@ -121,7 +121,7 @@
                 noWrap:true,
                 opacity:0.7
             }),
-//./scripts/tilestache-server.py -c adm2.cfg
+//sudo ./scripts/tilestache-server.py -c adm2.cfg
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l acled 0 1 2 3 4 5 6 7 8 9 10 11 12 13
         acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
@@ -235,19 +235,27 @@ function highlightProject(e) {
     var bounds = geoJsonSubset.getBounds();
     zoomToFeature(bounds);
     $('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
-    var highlightedAdms = [];
+    var highlightedAdms = [],
+            duplicateAdms = {},
+            uniqueAdms = [];
     for(var layer in geoJsonSubset._layers){
         var layer_level = geoJsonSubset._layers[layer].feature.properties.adm_level
                 layer_code = geoJsonSubset._layers[layer].feature.properties.adm_code,
-                adm_level = typeof(layer_level)=="number"?layer_level:undefined,
-                adm_code = typeof(layer_code)=="number"?layer_code:undefined;
+                layer_precision = geoJsonSubset._layers[layer].feature.properties.precision_code,
+                adm_level = typeof(layer_level)=="number"&&layer_precision>1?layer_level:undefined,
+                adm_code = typeof(layer_code)=="number"&&layer_precision>1?layer_code:undefined;
         highlightedAdms.push(getAdm(adm_level,adm_code))
     }
+    $.each(highlightedAdms, function(i, el) {
+        if (!duplicateAdms[el.options.shp]) {
+            duplicateAdms[el.options.shp] = true;
+            uniqueAdms.push(el);
+        }
+    });
+    console.log(highlightedAdms.length-uniqueAdms.length+" duplicate adms dropped")
     if(typeof(adms)=="object"){map.removeLayer(adms)}
-    adms = L.featureGroup(highlightedAdms);
-    if(highlightedAdms[0].options.shp=="adm1_147331" || highlightedAdms[1].options.shp=="adm2_21883") {
-        adms.addTo(map);
-    }
+    adms = L.featureGroup(uniqueAdms);
+    adms.addTo(map);
     console.log(adms)
 };
 function zoomToFeature(bounds){
@@ -257,7 +265,7 @@ function zoomToFeature(bounds){
         bounds.extend(extendPoint1);
         bounds.extend(extendPoint2);
     }
-    map.fitBounds(bounds,{maxZoom:6});
+    map.fitBounds(bounds,{maxZoom:9});
 };
 function onEachFeature(feature,layer){
         layer.on({
