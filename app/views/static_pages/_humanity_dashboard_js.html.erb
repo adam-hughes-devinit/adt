@@ -245,7 +245,7 @@ function highlightProject(e) {
     }
     if(typeof(adms)=="object"){map.removeLayer(adms)}
     adms = L.featureGroup(highlightedAdms);
-    if(highlightedAdms[0].options.shp=="adm1_147331") {
+    if(highlightedAdms[0].options.shp=="adm1_147331" || highlightedAdms[1].options.shp=="adm2_21883") {
         adms.addTo(map);
     }
     console.log(adms)
