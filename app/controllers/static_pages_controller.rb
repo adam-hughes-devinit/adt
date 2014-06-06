@@ -70,7 +70,7 @@ class StaticPagesController < ApplicationController
   end
 
   def geospatial_dashboard
-    @full_result_ids = custom_search(paginate: false).map(&:id)
+    @full_result_ids = custom_search({paginate: false, default_to_official_finance: true}).map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
     @i = 0
     while @i < @feature_collection["features"].length do
