@@ -72,17 +72,19 @@ class StaticPagesController < ApplicationController
   def geospatial_dashboard
     @full_result_ids = custom_search({paginate: false, default_to_official_finance: true}).map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
-    @i = 0
-    while @i < @feature_collection["features"].length do
-      unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
-        @feature_collection["features"].delete_at(@i)
-      else
-        @i += 1
+    unless @feature_collection.nil?
+      @i = 0
+      while @i < @feature_collection["features"].length do
+        unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
+          @feature_collection["features"].delete_at(@i)
+        else
+          @i += 1
+        end
       end
-    end
-    respond_to do |format|
-      format.html { render 'geospatial_dashboard' }
-      format.geojson { render json: @feature_collection }
+      respond_to do |format|
+        format.html { render 'geospatial_dashboard' }
+        format.geojson { render json: @feature_collection }
+      end
     end
   end
 
