@@ -1,8 +1,11 @@
 class StaticPagesController < ApplicationController
-  skip_before_filter :signed_in_user
+  skip_before_filter :signed_in_user, only: [:suggest, :to_english]
   include SearchHelper
   include AggregatesHelper
   require 'will_paginate/array'
+  extend Typeaheadable
+  enable_typeahead Project, facets: {active_string: "Active", donor_name: "China"} # Restrictions on search bar.
+
   def home
     # Gets records for the media viewer
     max_records = 6
@@ -67,11 +70,13 @@ class StaticPagesController < ApplicationController
   end
 
   def geospatial_dashboard
+    @full_result_ids = custom_search(paginate: false).map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
 
     respond_to do |format|
       format.html { render 'geospatial_dashboard' }
       format.geojson { render json: @feature_collection }
+      format.json {render json: @full_result_ids}
     end
   end
 

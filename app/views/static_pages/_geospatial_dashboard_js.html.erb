@@ -23,7 +23,7 @@
 </style>
 <div id="vis">
     <div id="searchbar">
-      <%= form_tag "/humanity_dashboard", method: :get do %>
+      <%= form_tag "/geospatial_dashboard", method: :get do %>
             <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by keyword...', class:'vissearch' %>
       <% end %>
     </div>
@@ -94,6 +94,8 @@
     </div>
 </div>
 <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
+<%= javascript_tag "var search_results=#{@full_result_ids.to_json}"%>
+
 <script>
 //Set-up layers
     function getAdm(level,code){
