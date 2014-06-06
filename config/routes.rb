@@ -83,7 +83,7 @@ Adt::Application.routes.draw do
   get '/dashboard', to: 'static_pages#dashboard', as: "dashboard"
   get '/csv_analyzer', to: 'static_pages#csv_analyzer', as: "csv_analyzer"
   get '/map', to: 'static_pages#map', as: "map"
-  get '/humanity_dashboard', to: 'static_pages#humanity_dashboard', as: "humanity_dashboard"
+  get '/geospatial_dashboard', to: 'static_pages#geospatial_dashboard', as: "geospatial_dashboard"
   get '/new_map', to: 'static_pages#new_map', as: "new_map"
   get '/explore', to: 'static_pages#circle_grid', as: "circle_grid"
   get '/content/:name', to: 'contents#show_by_name', as: "content_by_name"
