@@ -97,7 +97,7 @@
 <script>
 //Set-up layers
     function getAdm(level,code){
-        var layer = L.tileLayer('http://localhost:8080/{shp}/{z}/{x}/{y}.png', {
+        var layer = L.tileLayer('http://china-tilestache.aiddata.org/{shp}/{z}/{x}/{y}.png', {
             shp: 'adm'+level+'_'+code,
             noWrap:true,
             opacity:0.7
