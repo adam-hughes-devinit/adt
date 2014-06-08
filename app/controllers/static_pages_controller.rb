@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  skip_before_filter :signed_in_user, only: [:suggest, :to_english]
+  skip_before_filter :signed_in_user
   include SearchHelper
   include AggregatesHelper
   require 'will_paginate/array'
