@@ -20,10 +20,9 @@ module SearchHelper
     options.reverse_merge! paginate: true
     options.reverse_merge! default_to_official_finance: true
     
-    #@search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions).search do
     @search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions).solr_search do
+
       # if not aiddata, don't let 'em see stage one projects
-      
       params[:is_stage_one] = "Is not Stage One" unless current_user_is_aiddata
       params[:active_string] = 'Active' if options[:active]
       

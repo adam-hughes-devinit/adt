@@ -26,6 +26,7 @@ class GeoUpload < ActiveRecord::Base
     self.critical_errors > 0
   end
 
+  #TODO: Make sure it finds nearest adm, within the correct country. Right now it's just the nearest adm.
   def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
     if !adm.nil? # prevents crash if no adm match is found.

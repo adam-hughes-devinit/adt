@@ -97,7 +97,7 @@
 <script>
 //Set-up layers
     function getAdm(level,code){
-        var layer = L.tileLayer('http://localhost:8080/{shp}/{z}/{x}/{y}.png', {
+        var layer = L.tileLayer('http://china-tilestache.aiddata.org/{shp}/{z}/{x}/{y}.png', {
             shp: 'adm'+level+'_'+code,
             noWrap:true,
             opacity:0.7
@@ -124,12 +124,12 @@
 //sudo ./scripts/tilestache-server.py -c adm.cfg
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l acled 0 1 2 3 4 5 6 7 8 9 10 11 12 13
-        acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
+        acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7
             }),
-            usgs = L.tileLayer('http://localhost:8080/usgs/{z}/{x}/{y}.png',{
+            usgs = L.tileLayer('http://china-tilestache.aiddata.org/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true
             }),
