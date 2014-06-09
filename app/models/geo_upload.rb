@@ -27,6 +27,9 @@ class GeoUpload < ActiveRecord::Base
   end
 
   #TODO: Make sure it finds nearest adm, within the correct country. Right now it's just the nearest adm.
+    # First add adm_code field to countries table. Then populate it with correct adm0's.
+    # Then use a projects recipient country to match up with correct adm0.
+    # THen find nearest adm, within the select adm0.
   def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
     if !adm.nil? # prevents crash if no adm match is found.
