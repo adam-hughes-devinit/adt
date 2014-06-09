@@ -113,6 +113,9 @@ Adt::Application.routes.draw do
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
 
+  #Autocomplete
+  match '/queries/json_completion', to: 'static_pages#json_completion', as: 'json_completion'
+
 
 
   #404

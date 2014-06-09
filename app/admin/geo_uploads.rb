@@ -121,7 +121,7 @@ ActiveAdmin.register GeoUpload do
       }))
     end
     feature_collection = RGeo::GeoJSON.encode(factory.feature_collection(features))
-    Rails.cache.fetch("dashboard_geojson", expires_in: 0) {feature_collection}
+    Rails.cache.fetch("dashboard_geojson", expires_in: 48.hours) {feature_collection}
 
     redirect_to :action => :index, :notice => "CSV imported successfully!"
   end

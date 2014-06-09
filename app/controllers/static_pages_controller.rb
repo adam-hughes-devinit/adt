@@ -88,6 +88,16 @@ class StaticPagesController < ApplicationController
     end
   end
 
+  def json_completion
+    @search = Sunspot.search(Project) do
+     keywords(params["keywords"])
+      facet :title
+    end
+    @bucket = []
+    @bucket << @search.facet(:title).rows.first(5).map{|x| x.value}
+    render :json => @bucket.flatten
+  end
+
   def new_map
     render file: '/static_pages/new_map'
   end
