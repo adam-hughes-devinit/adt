@@ -89,12 +89,16 @@ class StaticPagesController < ApplicationController
   end
 
   def json_completion
-    @search = Sunspot.search(Project) do
-     keywords(params["keywords"])
-      facet :title
+    @search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions, :geocodes).solr_search do
+      keywords params["keywords"] do
+        fields(:description, :title => 2.0)
+      end
+      #facet :geocode
+      with :active_string, 'Active'
     end
     @bucket = []
-    @bucket << @search.facet(:title).rows.first(5).map{|x| x.value}
+    #@bucket << @search.facet(:geocode).rows.first(5).map{|x| x.value}
+    @bucket << @search.results.map(&:title).first(5)
     render :json => @bucket.flatten
   end
 
