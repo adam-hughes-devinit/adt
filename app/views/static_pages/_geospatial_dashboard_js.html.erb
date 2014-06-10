@@ -26,11 +26,16 @@
 </style>
 <div id="vis">
     <div id="searchbar" class="ui-widget">
-      <%= form_tag "/geospatial_dashboard", method: :get do %>
-            <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by keyword...', class:'vissearch' %>
+      <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
+            <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by location...', class:'vissearch' %>
       <% end %>
     </div>
   <script>
+      $('#geospatial_search').bind("ajax:success",function(xhr,data,status){
+          feature_collection = data
+          geoJson.clearLayers()
+          geoJson.addData(feature_collection.features)
+      })
       $(document).ready(function(){
           $( "#search" ).autocomplete({
               source: get_keywords,
@@ -70,33 +75,15 @@
 
                     }
 //Draw checkboxes for year
-                    var project_years = ["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
-                    for(var i=0;i<14;i++){
-                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2013-i)+"' class='search_check boolean project_year'>"+(2013-i)+"</label></li>")
+                    var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
+                    for(var i=0;i<13;i++){
+                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2012-i)+"' class='search_check boolean project_year'>"+(2012-i)+"</label></li>")
                 }
                 update_check_counter_for('project_year')
-                </script>
-              </div>
-              <div class="search-facet">
-                <b class="facet-header">
-                  <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Location</a>
-                </b>
-                <span class="check_count location_string"></span>
-                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('location_string'); return false;" style="display: none;">Select all</a>
-                <a class="facet-controller" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('location_string'); return false;" style="display: none;">Unselect all</a>
-                <ul id="locationfilter" class="unstyled facet-list" style="display: none;"></ul>
-                <script>
-//Draw checkboxes for location
-                    var countries = ["Algeria", "Angola", "Benin", "Botswana", "Brazil", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Ethiopia", "Gabon", "Ghana", "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Portugal", "Rwanda", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Timor-Leste", "Togo", "Tunisia", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe"];
-                    for(var i=0;i<countries.length;i++){
-                    $('ul#locationfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='location_string' value='"+countries[i]+"' class='search_check boolean location_string'>"+countries[i]+"</label></li>")
-                }
-                    update_check_counter_for('location_string')
-//Checkbox updater
-                    $('.facet-list-item').click(function() {
-                        this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                        update_check_counter_for(this_facet)
-                    })
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
+                })
                 </script>
               </div>
             </ol>
@@ -351,7 +338,7 @@ $("input[name='project_year']").change(function(){
     filterGeoJson(filterObject);
 });
 $("a.facet-controller#project_years_on").click(function(){
-    var project_years = ["2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
+    var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
     filterObject.project_year = project_years;
     filterGeoJson(filterObject);
 });

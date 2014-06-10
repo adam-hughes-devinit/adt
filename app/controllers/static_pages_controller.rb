@@ -67,21 +67,10 @@ class StaticPagesController < ApplicationController
   end
 
   def geospatial_dashboard
-    @full_result_ids = custom_search({paginate: false, default_to_official_finance: true}).map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
-    unless @feature_collection.nil?
-      @i = 0
-      while @i < @feature_collection["features"].length do
-        unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
-          @feature_collection["features"].delete_at(@i)
-        else
-          @i += 1
-        end
-      end
-      respond_to do |format|
-        format.html { render 'geospatial_dashboard' }
-        format.geojson { render json: @feature_collection }
-      end
+    respond_to do |format|
+      format.html { render 'geospatial_dashboard' }
+      format.geojson { render json: @feature_collection }
     end
   end
 
@@ -91,7 +80,7 @@ class StaticPagesController < ApplicationController
         fields(:geopoliticals, :geocodes => 2.0)
       end
       with :active_string, 'Active'
-      paginate :page => params[:page] || 1, :per_page => params[:max] || 50
+      paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
     end
     @full_result_ids = @search.results.map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
