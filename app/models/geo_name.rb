@@ -3,4 +3,9 @@ class GeoName < ActiveRecord::Base
 
   has_many :geocodes
   belongs_to :location_type
+
+  searchable do
+    text :name
+    string :name
+  end
 end

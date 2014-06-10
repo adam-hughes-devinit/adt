@@ -113,8 +113,9 @@ Adt::Application.routes.draw do
   #openauth
   match "/auth/:provider/callback", to: "sessions#create"
 
-  #Autocomplete
+  #Geospatial dashboard
   match '/queries/json_completion', to: 'static_pages#json_completion', as: 'json_completion'
+  match '/queries/geospatial_search', to: 'static_pages#geospatial_search', as: 'geospatial_search'
 
 
 

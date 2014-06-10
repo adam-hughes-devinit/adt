@@ -3,9 +3,6 @@ class StaticPagesController < ApplicationController
   include SearchHelper
   include AggregatesHelper
   require 'will_paginate/array'
-  extend Typeaheadable
-  enable_typeahead Project, facets: {active_string: "Active", donor_name: "China"} # Restrictions on search bar.
-
   def home
     # Gets records for the media viewer
     max_records = 6
@@ -88,17 +85,38 @@ class StaticPagesController < ApplicationController
     end
   end
 
-  def json_completion
-    @search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions, :geocodes).solr_search do
-      keywords params["keywords"] do
-        fields(:description, :title => 2.0)
+  def geospatial_search
+    @search = Project.solr_search do
+      keywords params["search"] do
+        fields(:geopoliticals, :geocodes => 2.0)
       end
-      #facet :geocode
       with :active_string, 'Active'
+      paginate :page => params[:page] || 1, :per_page => params[:max] || 50
+    end
+    @full_result_ids = @search.results.map(&:id)
+    @feature_collection = Rails.cache.fetch("dashboard_geojson")
+    unless @feature_collection.nil?
+      @i = 0
+      while @i < @feature_collection["features"].length do
+        unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
+          @feature_collection["features"].delete_at(@i)
+        else
+          @i += 1
+        end
+      end
+      render :json => @feature_collection
+    end
+  end
+
+  def json_completion
+    @search = GeoName.solr_search do
+      keywords params["keywords"] do
+        fields(:name)
+      end
+      facet :name
     end
     @bucket = []
-    #@bucket << @search.facet(:geocode).rows.first(5).map{|x| x.value}
-    @bucket << @search.results.map(&:title).first(5)
+    @bucket << @search.facet(:name).rows.first(5).map{|x| x.value}
     render :json => @bucket.flatten
   end
 
