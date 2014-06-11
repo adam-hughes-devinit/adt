@@ -76,7 +76,7 @@ class StaticPagesController < ApplicationController
 
   def geospatial_search
     @search = Project.solr_search do
-      keywords params["search"] do
+      keywords params["search"].split(/(?:\(.*?\))+/) do
         fields(:geopoliticals, :geocodes => 2.0)
       end
       with :active_string, 'Active'
@@ -102,10 +102,14 @@ class StaticPagesController < ApplicationController
       keywords params["keywords"] do
         fields(:name)
       end
-      facet :name
     end
+    @i = 0
+    @len = @search.results.first(5).length
     @bucket = []
-    @bucket << @search.facet(:name).rows.first(5).map{|x| x.value}
+    while @i < @len
+      @bucket << @search.results[@i]["name"] + " (" + [@search.results[@i]].map(&:location_type)[0]["name"] + ")"
+      @i += 1
+    end
     render :json => @bucket.flatten
   end
 
