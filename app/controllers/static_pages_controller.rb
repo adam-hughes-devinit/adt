@@ -103,7 +103,7 @@ class StaticPagesController < ApplicationController
 
   def json_completion
     @search = GeoName.solr_search do
-      keywords params["keywords"] do
+      keywords params["keywords"]+"*" do
         fields(:name)
       end
     end
