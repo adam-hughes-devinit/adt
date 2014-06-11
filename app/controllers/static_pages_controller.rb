@@ -75,24 +75,28 @@ class StaticPagesController < ApplicationController
   end
 
   def geospatial_search
-    @search = Project.solr_search do
-      keywords params["search"].split(/(?:\(.*?\))+/) do
-        fields(:geopoliticals, :geocodes => 2.0)
-      end
-      with :active_string, 'Active'
-      paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
-    end
-    @full_result_ids = @search.results.map(&:id)
     @feature_collection = Rails.cache.fetch("dashboard_geojson")
-    unless @feature_collection.nil?
-      @i = 0
-      while @i < @feature_collection["features"].length do
-        unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
-          @feature_collection["features"].delete_at(@i)
-        else
-          @i += 1
+    if params["search"]!=""
+      @search = Project.solr_search do
+        keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+          fields(:geopoliticals, :geocodes => 2.0)
         end
+        with :active_string, 'Active'
+        paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
       end
+      @full_result_ids = @search.results.map(&:id)
+      unless @feature_collection.nil?
+        @i = 0
+        while @i < @feature_collection["features"].length do
+          unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
+            @feature_collection["features"].delete_at(@i)
+          else
+            @i += 1
+          end
+        end
+        render :json => @feature_collection
+      end
+    else
       render :json => @feature_collection
     end
   end

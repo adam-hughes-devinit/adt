@@ -9,10 +9,5 @@ class GeoName < ActiveRecord::Base
     text :location_type do
       location_type.name
     end
-    string :location_type do
-      location_type.name
-    end
-    string :name
-    string :location_type_id
   end
 end
