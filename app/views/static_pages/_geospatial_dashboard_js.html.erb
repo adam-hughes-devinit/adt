@@ -41,6 +41,10 @@
               feature_collection = data
               geoJson.clearLayers()
               geoJson.addData(feature_collection.features)
+              if(feature_collection.features.length>0){
+                  var bounds = geoJson.getBounds()
+                  zoomToFeature(bounds)
+              }
               })
       $(document).ready(function(){
           $( "#search" ).autocomplete({
