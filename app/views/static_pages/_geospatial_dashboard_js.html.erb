@@ -105,9 +105,7 @@
             noWrap:true,
             opacity:0.7
         });
-        console.log('adm'+level+'_'+code)
         if(level!==undefined && code!==undefined && level!="0") {
-            console.log("Fetching adm...")
             return layer;
         }
         else{
@@ -255,11 +253,9 @@ function highlightProject(e) {
             uniqueAdms.push(el);
         }
     });
-    console.log(highlightedAdms.length-uniqueAdms.length+" duplicate adms dropped")
     if(typeof(adms)=="object"){map.removeLayer(adms)}
     adms = L.featureGroup(uniqueAdms);
-    adms.addTo(map);
-    console.log(adms)
+    //adms.addTo(map);
 };
 function zoomToFeature(bounds){
     if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
