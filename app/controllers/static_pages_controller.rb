@@ -67,15 +67,18 @@ class StaticPagesController < ApplicationController
   end
 
   def geospatial_dashboard
-    @feature_collection = Rails.cache.fetch("dashboard_geojson")
+    @file = File.read("public/dashboard_geojson.json")
+    $feature_collection = JSON.parse(@file)
+    puts $feature_collection
+    #@feature_collection = Rails.cache.fetch("dashboard_geojson")
     respond_to do |format|
       format.html { render 'geospatial_dashboard' }
-      format.geojson { render json: @feature_collection }
+      format.geojson { render json: $feature_collection }
     end
   end
 
   def geospatial_search
-    @feature_collection = Rails.cache.fetch("dashboard_geojson")
+    @feature_collection = $feature_collection
     if params["search"]!=""
       @search = Project.solr_search do
         keywords params["search"].split(/(?:\(.*?\))+/)[0] do
