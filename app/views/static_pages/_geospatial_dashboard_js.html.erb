@@ -44,8 +44,12 @@
               if(feature_collection.features.length>0){
                   var bounds = geoJson.getBounds()
                   zoomToFeature(bounds)
+                  $('#hoverInfo').html("<strong>"+feature_collection.features.length+" results:</strong>")
               }
-                  else{map.setZoom(3)}
+                  else{
+                  map.setZoom(3)
+                  $('#hoverInfo').html("<strong>No search results.</strong>")
+              }
               })
       $(document).ready(function(){
           $( "#search" ).autocomplete({
