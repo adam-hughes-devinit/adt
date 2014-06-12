@@ -19,4 +19,7 @@ class Adm < ActiveRecord::Base
     result = result.sort_by {|u| u.level}.reverse
     result
   end
+  searchable do
+    text :name
+  end
 end

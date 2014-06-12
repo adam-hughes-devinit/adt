@@ -80,18 +80,20 @@ class StaticPagesController < ApplicationController
     @file = File.read("public/dashboard_geojson.json")
     @feature_collection = JSON.parse(@file)
     if params["search"]!=""
-      @search = Project.solr_search do
+      @search = Adm.solr_search do
         keywords params["search"].split(/(?:\(.*?\))+/)[0] do
-          fields(:geopoliticals, :geocodes => 2.0)
+          fields(:name)
         end
-        with :active_string, 'Active'
         paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
       end
-      @full_result_ids = @search.results.map(&:id)
+      @geocodes = []
+      @geocodes.concat(@search.results.map(&:geocodes).flatten.map(&:id))
+      @geocodes.concat(@search.results.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
+      @geocodes.concat(@search.results.map(&:children).flatten.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
       unless @feature_collection.nil?
         @i = 0
         while @i < @feature_collection["features"].length do
-          unless @full_result_ids.include? @feature_collection["features"][@i]["properties"]["project_id"]
+          unless @geocodes.include? @feature_collection["features"][@i]["properties"]["geo_code_id"]
             @feature_collection["features"].delete_at(@i)
           else
             @i += 1
@@ -105,8 +107,8 @@ class StaticPagesController < ApplicationController
   end
 
   def json_completion
-    @search = GeoName.solr_search do
-      keywords params["keywords"]+" OR "+params["keywords"].rstrip.lstrip+"*" do
+    @search = Adm.solr_search do
+      keywords params['keywords'].nil??nil:params['keywords']+' OR '+params['keywords']+'*' do
         fields(:name)
       end
     end
@@ -114,7 +116,8 @@ class StaticPagesController < ApplicationController
     @len = @search.results.first(5).length
     @bucket = []
     while @i < @len
-      @bucket << @search.results[@i]["name"] + " (" + [@search.results[@i]].map(&:location_type)[0]["name"] + ")"
+      #@bucket << [@search.results[@i]].map(&:children)
+      @bucket << @search.results[@i]["name"] + " (Administrative Level " + @search.results[@i]["level"].to_s + ")"
       @i += 1
     end
     render :json => @bucket.flatten

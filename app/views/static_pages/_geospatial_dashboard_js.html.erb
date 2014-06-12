@@ -22,20 +22,26 @@
     .legend {text-align: left;line-height: 18px;color: #555;}
     .legend i {width: 18px;height: 18px;float: left; margin-right: 8px;opacity: 0.7;}
     .leaflet-disabled{background-color:lightgrey;}
-    .ui-widget{z-index:9999 !important;}
+    .ui-widget{z-index:9998 !important;}
+    #loading{z-index:9999;display:none;position:absolute;top:8px;right:15px;}
 </style>
 <div id="vis">
     <div id="searchbar" class="ui-widget">
       <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
             <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by location...', class:'vissearch' %>
       <% end %>
+      <img id="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
     </div>
   <script>
-      $('#geospatial_search').bind("ajax:success",function(xhr,data,status){
-          feature_collection = data
-          geoJson.clearLayers()
-          geoJson.addData(feature_collection.features)
-      })
+    var toggleLoading = function(){$("#loading").toggle()};
+      $('#geospatial_search')
+              .bind("ajax:beforeSend", toggleLoading)
+              .bind("ajax:complete", toggleLoading)
+              .bind("ajax:success",function(xhr,data,status){
+              feature_collection = data
+              geoJson.clearLayers()
+              geoJson.addData(feature_collection.features)
+              })
       $(document).ready(function(){
           $( "#search" ).autocomplete({
               source: get_keywords,
@@ -96,7 +102,7 @@
       <div id="hoverInfo"></div>
     </div>
 </div>
-<%= javascript_tag "var feature_collection=#{$feature_collection.to_json}"%>
+<%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
 <script>
 //Set-up layers
     function getAdm(level,code){
