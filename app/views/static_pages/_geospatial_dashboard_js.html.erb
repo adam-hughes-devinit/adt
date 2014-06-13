@@ -42,8 +42,10 @@
               geoJson.clearLayers()
               geoJson.addData(feature_collection.features)
               if(feature_collection.features.length>0){
-                  var bounds = geoJson.getBounds()
-                  zoomToFeature(bounds)
+                  if(Object.keys(geoJson._layers).length>0){
+                      var bounds = geoJson.getBounds()
+                      zoomToFeature(bounds)
+                  }
                   $('#hoverInfo').html("<strong>"+feature_collection.features.length+" results:</strong>")
               }
                   else{
@@ -248,8 +250,10 @@ function highlightProject(e) {
         return feature.properties.project_id==project
     }
     geoJsonSubset.addData(feature_collection.features);
-    var bounds = geoJsonSubset.getBounds();
-    zoomToFeature(bounds);
+    if(Object.keys(geoJsonSubset._layers).length>0){
+        var bounds = geoJsonSubset.getBounds()
+        zoomToFeature(bounds)
+    }
     $('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
     var highlightedAdms = [],
             duplicateAdms = {},
