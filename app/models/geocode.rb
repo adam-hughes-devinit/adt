@@ -11,4 +11,9 @@ class Geocode < ActiveRecord::Base
   has_many :flags, as: :flaggable, dependent: :destroy
   accepts_nested_attributes_for :flags
 
+  searchable do
+    text :geo_name do
+      geo_name.name
+    end
+  end
 end

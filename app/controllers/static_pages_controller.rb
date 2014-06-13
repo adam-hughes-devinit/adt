@@ -84,12 +84,20 @@ class StaticPagesController < ApplicationController
         keywords params["search"].split(/(?:\(.*?\))+/)[0] do
           fields(:name)
         end
-        paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
+        paginate :page => 1, :per_page => 10000
+        #paginate :page => params[:page] || 1, :per_page => params[:max] || 10000
+      end
+      @searchGeoName = Geocode.solr_search do
+        keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+          fields(:geo_name)
+        end
+        paginate :page => 1, :per_page => 10000
       end
       @geocodes = []
       @geocodes.concat(@search.results.map(&:geocodes).flatten.map(&:id))
       @geocodes.concat(@search.results.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
       @geocodes.concat(@search.results.map(&:children).flatten.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
+      @geocodes.concat(@searchGeoName.results.map(&:id))
       unless @feature_collection.nil?
         @i = 0
         while @i < @feature_collection["features"].length do
@@ -116,7 +124,6 @@ class StaticPagesController < ApplicationController
     @len = @search.results.first(5).length
     @bucket = []
     while @i < @len
-      #@bucket << [@search.results[@i]].map(&:children)
       @bucket << @search.results[@i]["name"] + " (Administrative Level " + @search.results[@i]["level"].to_s + ")"
       @i += 1
     end
