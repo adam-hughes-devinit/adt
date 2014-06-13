@@ -16,24 +16,27 @@
     #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
     h4 {margin-left:5px;}
     #searchresults #hoverInfo{margin:0 0 10px 10px;}
+    #searchresults #results{margin:0 10px 10px 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: white;background: rgba(255,255,255,0.8);box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
     .info h4 {margin: 0 0 5px;color: #777;}
     .legend {text-align: left;line-height: 18px;color: #555;}
     .legend i {width: 18px;height: 18px;float: left; margin-right: 8px;opacity: 0.7;}
     .leaflet-disabled{background-color:lightgrey;}
-    .ui-widget{z-index:9998 !important;}
-    #loading{z-index:9999;display:none;position:absolute;top:8px;right:15px;}
+    .ui-widget{z-index:9997 !important;}
+    img.loading{z-index:9998;display:none;position:absolute;top:288px;right:50%;}
+    div.loading{z-index:9999;display:none;background-color:grey;width:-moz-calc(100% - 20px);width:-webkit-calc(100% - 20px);width:-o-calc(100% - 20px);width:calc(100% - 20px);height:633px;position:absolute;opacity:0.2;}
 </style>
+<div class="loading"></div>
 <div id="vis">
     <div id="searchbar" class="ui-widget">
       <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
             <%= text_field_tag :search, params[:search], placeholder: 'Search for projects and locations by keyword...', class:'vissearch' %>
       <% end %>
-      <img id="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
+      <img class="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
     </div>
   <script>
-    var toggleLoading = function(){$("#loading").toggle()};
+    var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
       $('#geospatial_search')
               .bind("ajax:beforeSend", toggleLoading)
               .bind("ajax:complete", toggleLoading)
@@ -46,11 +49,13 @@
                       var bounds = geoJson.getBounds()
                       zoomToFeature(bounds)
                   }
-                  $('#hoverInfo').html("<strong>"+feature_collection.features.length+" results:</strong>")
+                  $('#results').html("<strong>"+feature_collection.features.length+" geocodes:</strong>")
+                  $('#hoverInfo').html("")
               }
                   else{
                   map.setZoom(3)
-                  $('#hoverInfo').html("<strong>No search results.</strong>")
+                  $('#results').html("<strong>No search results.</strong>")
+                  $('#hoverInfo').html("")
               }
               })
       $(document).ready(function(){
@@ -110,6 +115,7 @@
     </div>
     <div id="searchresults">
       <h4>Results</h4>
+      <div id="results"></div>
       <div id="hoverInfo"></div>
     </div>
 </div>
