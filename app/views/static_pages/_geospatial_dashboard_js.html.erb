@@ -159,7 +159,7 @@
             }),
 //Set-up map
             map = L.map('map', {
-                maxBounds: [[52,68],[-42,-29]],
+                maxBounds: [[180,180],[-180,-180]],
                 center: [6.964039, 19.533678],
                 zoom:3,
                 minZoom:3,
@@ -200,6 +200,7 @@
 function fullExtent(event){
     event.preventDefault();
     map.setZoom(3);
+    map.fitBounds([[52,68],[-42,-29]])
     return false;
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
