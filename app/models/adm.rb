@@ -21,5 +21,6 @@ class Adm < ActiveRecord::Base
   end
   searchable do
     text :name
+    integer :level
   end
 end

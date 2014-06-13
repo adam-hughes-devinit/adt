@@ -28,7 +28,7 @@
 <div id="vis">
     <div id="searchbar" class="ui-widget">
       <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
-            <%= text_field_tag :search, params[:search], placeholder: 'Search for projects by location...', class:'vissearch' %>
+            <%= text_field_tag :search, params[:search], placeholder: 'Search for projects and locations by keyword...', class:'vissearch' %>
       <% end %>
       <img id="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
     </div>
