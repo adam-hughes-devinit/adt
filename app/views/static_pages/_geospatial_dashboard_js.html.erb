@@ -148,6 +148,10 @@
                 subdomains: '1234',
                 noWrap:true
             }),
+            OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                noWrap:true
+            });
             none = L.geoJson(),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true,
