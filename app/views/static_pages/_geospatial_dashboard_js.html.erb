@@ -8,36 +8,37 @@
     #vis { width:100%; height:100%; margin-right:auto; margin-left:auto;}
     #map { position:absolute; height:100%; width:100%; margin-right:auto;margin-left:auto; }
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
-    #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
+    #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #searchresults {float:left;position:relative;top:35px;border:solid #1c273b 1px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;}
+    #searchresults {float:left;position:relative;top:35px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;max-height:600px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px; left:2px;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
-    #filtercontrol {float:right;position:relative;right:2px;top:3px;border:solid #1c273b 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;}
+    #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
     h4 {margin-left:5px;}
     #searchresults #hoverInfo{margin:0 0 10px 10px;}
     #searchresults #results{margin:0 10px 10px 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
-    .info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: white;background: rgba(255,255,255,0.8);box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
+    .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
     .info h4 {margin: 0 0 5px;color: #777;}
     .legend {text-align: left;line-height: 18px;color: #555;}
     .legend i {width: 18px;height: 18px;float: left; margin-right: 8px;opacity: 0.7;}
     .leaflet-disabled{background-color:lightgrey;}
     .ui-widget{z-index:9997 !important;}
-    img.loading{z-index:9998;display:none;position:absolute;top:288px;right:50%;}
-    div.loading{z-index:9999;display:none;background-color:grey;width:-moz-calc(100% - 20px);width:-webkit-calc(100% - 20px);width:-o-calc(100% - 20px);width:calc(100% - 20px);height:633px;position:absolute;opacity:0.2;}
-    div.leaflet-control-zoom {left:0px !important;top:25px !important;}
+    img.loading{z-index:9999;display:none;position:absolute;top:50%;right:50%;}
+    div.loading{z-index:9998;display:none;background-color:grey;position:absolute;opacity:0.4;height:100%;width:100%;overflow:hidden;}
+    div.leaflet-control-zoom {left:0px !important;top:25px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     div.leaflet-left {margin-left:18% !important}
-    div.leaflet-control-layers {right:3px !important;top:0px !important;margin-top:2px !important;margin-right:18%}
+    div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:18%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     div.leaflet-right.leaflet-top {margin-right:18% !important}
+    #watermark{position:absolute;bottom:0px;left:0px;}
 </style>
 <div class="loading"></div>
 <div id="vis">
+  <img class="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
     <div id="searchbar" class="ui-widget">
       <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
             <%= text_field_tag :search, params[:search], placeholder: 'Search for projects and locations by keyword...', class:'vissearch' %>
       <% end %>
-      <img class="loading" src='/assets/humanity_united/loading.gif' alt='loading'>
     </div>
   <script>
     var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
@@ -57,7 +58,7 @@
                   $('#hoverInfo').html("")
               }
                   else{
-                  map.setZoom(3)
+                  map.fitBounds([[52,68],[-42,-29]])
                   $('#results').html("<strong>No search results.</strong>")
                   $('#hoverInfo').html("")
               }
@@ -121,6 +122,9 @@
         </ol>
       </div>
     </div>
+  </div>
+  <div id="watermark">
+    <a href="/"><%= image_tag("open_adt_small.png", width: "300") %></a>
   </div>
 </div>
 <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
@@ -196,7 +200,6 @@
     }
 function fullExtent(event){
     event.preventDefault();
-    map.setZoom(3);
     map.fitBounds([[52,68],[-42,-29]])
     return false;
 }
