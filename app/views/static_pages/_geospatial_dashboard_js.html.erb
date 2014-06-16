@@ -4,16 +4,16 @@
 <%= stylesheet_link_tag "humanity_united/mapbox" %>
 <%= stylesheet_link_tag "humanity_united/ui-lightness/jquery-ui-1.10.4.custom.min" %>
 <style>
-    .container {width:100% !important;padding:10px !important;}
-    #vis { width:100%; height:630px; margin-right:auto; margin-left:auto;}
-    #map { position:absolute; right:20%; height:600px; width:60%; margin-right:auto;margin-left:auto; }
-    #searchbar {width:60%;position:relative;left:20%; right:10px;}
+    .container {width:100% !important;padding:0px !important;}
+    #vis { width:100%; height:100%; margin-right:auto; margin-left:auto;}
+    #map { position:absolute; height:100%; width:100%; margin-right:auto;margin-left:auto; }
+    #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #filtercontrol {float:left;position:relative;top:-30px;border:solid #1c273b 1px;height:626px;width:100%;padding:1px;overflow-y:scroll;}
+    #searchresults {float:left;position:relative;top:35px;border:solid #1c273b 1px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
-    #searchresults {float:right;position:relative;right:20px; top:-30px;border:solid #1c273b 1px;height:626px;width:18%;padding:1px;}
+    #filtercontrol {float:right;position:relative;right:2px;top:3px;border:solid #1c273b 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;}
     h4 {margin-left:5px;}
     #searchresults #hoverInfo{margin:0 0 10px 10px;}
     #searchresults #results{margin:0 10px 10px 10px;}
@@ -26,6 +26,10 @@
     .ui-widget{z-index:9997 !important;}
     img.loading{z-index:9998;display:none;position:absolute;top:288px;right:50%;}
     div.loading{z-index:9999;display:none;background-color:grey;width:-moz-calc(100% - 20px);width:-webkit-calc(100% - 20px);width:-o-calc(100% - 20px);width:calc(100% - 20px);height:633px;position:absolute;opacity:0.2;}
+    div.leaflet-control-zoom {left:0px !important;top:25px !important;}
+    div.leaflet-left {margin-left:18% !important}
+    div.leaflet-control-layers {right:3px !important;top:0px !important;margin-top:2px !important;margin-right:18%}
+    div.leaflet-right.leaflet-top {margin-right:18% !important}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -73,32 +77,38 @@
     <div id='map'>
     </div>
     <div id="left">
-        <div id="filtercontrol">
-          <h4>Filter</h4>
-          <div id="project-facets">
-          <div class="pull-left">
-            <ol>
-              <div class="search-facet">
-                <b class="facet-header">
-                  <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
-                </b>
-              <span class="check_count project_year"></span>
-              <a class="facet-controller" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
-              <a class="facet-controller" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
-              <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
-                <script>
-//Update check-box count
-                    function update_check_counter_for(this_facet) {
-                        checked_boxes = $(".search_check."+this_facet+":checked")
-                        check_count = checked_boxes.length
-                        counter = $('.check_count.'+this_facet)
-                        counter_text = check_count > 0 ? "("+check_count+")" : ""
-                        counter.text(counter_text)
+      <div id="searchresults">
+        <h4>Results</h4>
+        <div id="results"></div>
+        <div id="hoverInfo"></div>
+      </div>
+    </div>
+  <div id="filtercontrol">
+    <h4>Filter</h4>
+    <div id="project-facets">
+      <div class="pull-left">
+        <ol>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
+            </b>
+            <span class="check_count project_year"></span>
+            <a class="facet-controller" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
+            <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Update check-box count
+                function update_check_counter_for(this_facet) {
+                    checked_boxes = $(".search_check."+this_facet+":checked")
+                    check_count = checked_boxes.length
+                    counter = $('.check_count.'+this_facet)
+                    counter_text = check_count > 0 ? "("+check_count+")" : ""
+                    counter.text(counter_text)
 
-                    }
-//Draw checkboxes for year
-                    var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
-                    for(var i=0;i<13;i++){
+                }
+                //Draw checkboxes for year
+                var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
+                for(var i=0;i<13;i++){
                     $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2012-i)+"' class='search_check boolean project_year'>"+(2012-i)+"</label></li>")
                 }
                 update_check_counter_for('project_year')
@@ -106,18 +116,12 @@
                     this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
                     update_check_counter_for(this_facet)
                 })
-                </script>
-              </div>
-            </ol>
+            </script>
           </div>
-        </div>
-        </div>
+        </ol>
+      </div>
     </div>
-    <div id="searchresults">
-      <h4>Results</h4>
-      <div id="results"></div>
-      <div id="hoverInfo"></div>
-    </div>
+  </div>
 </div>
 <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
 <script>
@@ -189,14 +193,7 @@
         layerControl.removeFrom(map);
         layerControl.options.collapsed = true;
         layerControl.addTo(map);
-        $('.leaflet-control-layers-base').prepend("<span style='float:right;cursor:pointer;' onClick='layerControl.pin()'><img src='/assets/humanity_united/pin.gif' alt='pin' style='height:12px;'/></span>")
     }
-    layerControl.pin = function(){
-        layerControl.removeFrom(map);
-        layerControl.options.collapsed = false;
-        layerControl.addTo(map);
-        $('.leaflet-control-layers-base').prepend("<span style='float:right;cursor:pointer;' onClick='layerControl.collapse()'><strong>X</strong></span>")
-    };
 function fullExtent(event){
     event.preventDefault();
     map.setZoom(3);
