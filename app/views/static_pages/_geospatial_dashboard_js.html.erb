@@ -15,7 +15,7 @@
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
     h4 {margin-left:5px;}
-    #searchresults #results{margin:0 10px 10px 10px;}
+    #searchresults #results, #resultcount{margin:0 10px 10px 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
     .info h4 {margin: 0 0 5px;color: #777;}
@@ -34,6 +34,8 @@
     div.leaflet-popup-content{opacity:0.9;}
     div.leaflet-popup-tip-container{width:44px;height:25px;}
     div.leaflet-popup-tip{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:20px;opacity:0.9;height:10px;width:30px;}
+    #page_select{text-align:center;margin-left:auto;margin-right:auto;}
+    #page{text-align:center;margin-left:auto;margin-right:auto;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -57,11 +59,11 @@
                       var bounds = geoJson.getBounds()
                       zoomToFeature(bounds)
                   }
-                  $('#results').html("<strong>"+feature_collection.features.length+" projects:</strong>")
+                  $('#resultcount').html("<strong>"+feature_collection.features.length+" projects:</strong>")
               }
                   else{
                   map.fitBounds([[52,68],[-42,-29]])
-                  $('#results').html("<strong>No search results.</strong>")
+                  $('#resultcount').html("<strong>No search results.</strong>")
               }
               })
       $(document).ready(function(){
@@ -81,8 +83,29 @@
     <div id="left">
       <div id="searchresults">
         <h4>Results</h4>
+        <div id="resultcount"></div>
         <div id="results"></div>
+        <div id="page"><strong>Page _ of _</strong></div>
+        <div id="page_select">&lt;first &lt;prev <a href="#">next&gt; </a><a href="#">last&gt;</a></div>
       </div>
+      <%= javascript_tag "var results=#{@first_page.to_json}"%>
+      <script>
+        drawResults = function(results){
+            $('#resultcount').html("<strong>"+results.entries+" projects:</strong>")
+            $('#page strong').text("Page "+results.current+" of "+results.pages)
+            $('#results').html("")
+            var i = 0,
+                    resultlen = results.data.length;
+            for(i=0;i<resultlen;i++){
+                var project = results.data[i]
+                $('#results').append("<p>"+project.title+"</p>")
+                if(i+1<resultlen){
+                    $('#results').append("<hr>")
+                }
+            }
+        }
+        drawResults(results)
+      </script>
     </div>
   <div id="filtercontrol">
     <h4>Filter</h4>
@@ -295,7 +318,7 @@ function zoomToFeature(bounds){
 };
 function onEachFeature(feature,layer){
     if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
-        layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
+        layer.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ feature.properties.project_id + "'>"+feature.properties.project_id+"</a><br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
     }
         layer.on({
             mouseover:highlightFeature,
