@@ -15,7 +15,6 @@
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
     h4 {margin-left:5px;}
-    #searchresults #hoverInfo{margin:0 0 10px 10px;}
     #searchresults #results{margin:0 10px 10px 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
@@ -31,6 +30,10 @@
     div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:18%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     div.leaflet-right.leaflet-top {margin-right:18% !important}
     #watermark{position:absolute;bottom:0px;left:0px;}
+    div.leaflet-popup-content-wrapper{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:5px;opacity:0.9;}
+    div.leaflet-popup-content{opacity:0.9;}
+    div.leaflet-popup-tip-container{width:44px;height:25px;}
+    div.leaflet-popup-tip{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:20px;opacity:0.9;height:10px;width:30px;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -54,13 +57,11 @@
                       var bounds = geoJson.getBounds()
                       zoomToFeature(bounds)
                   }
-                  $('#results').html("<strong>"+feature_collection.features.length+" geocodes:</strong>")
-                  $('#hoverInfo').html("")
+                  $('#results').html("<strong>"+feature_collection.features.length+" projects:</strong>")
               }
                   else{
                   map.fitBounds([[52,68],[-42,-29]])
                   $('#results').html("<strong>No search results.</strong>")
-                  $('#hoverInfo').html("")
               }
               })
       $(document).ready(function(){
@@ -81,7 +82,6 @@
       <div id="searchresults">
         <h4>Results</h4>
         <div id="results"></div>
-        <div id="hoverInfo"></div>
       </div>
     </div>
   <div id="filtercontrol">
@@ -230,9 +230,6 @@ function highlightFeature(e) {
     layer.setStyle({
         weight: 3
     });
-    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
-        $('div#hoverInfo').html("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
-    }
 }
 function resetHighlight(e) {
     var layer = e.target;
@@ -242,6 +239,8 @@ function resetHighlight(e) {
 }
 function highlightProject(e) {
 //Change style and count geocodes with same project
+    var popup = e.target._popup
+    popup.setLatLng(e.target.getLatLng())
     geoJson.setStyle(MarkerOptions)
     var project = e.target.feature.properties.project_id,
         projectCount = 0;
@@ -265,7 +264,7 @@ function highlightProject(e) {
         var bounds = geoJsonSubset.getBounds()
         zoomToFeature(bounds)
     }
-    $('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
+    //$('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
     var highlightedAdms = [],
             duplicateAdms = {},
             uniqueAdms = [];
@@ -288,15 +287,16 @@ function highlightProject(e) {
     //adms.addTo(map);
 };
 function zoomToFeature(bounds){
-    if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-        var extendPoint1 = new L.LatLng(bounds.getNorthEast().lat + 0.01, bounds.getNorthEast().lng + 0.01);
-        var extendPoint2 = new L.LatLng(bounds.getNorthEast().lat - 0.01, bounds.getNorthEast().lng - 0.01);
-        bounds.extend(extendPoint1);
-        bounds.extend(extendPoint2);
-    }
+    var extendPoint1 = new L.LatLng(bounds.getNorthEast().lat + 1, bounds.getNorthEast().lng + 1);
+    var extendPoint2 = new L.LatLng(bounds.getNorthEast().lat - 1, bounds.getNorthEast().lng - 1);
+    bounds.extend(extendPoint1);
+    bounds.extend(extendPoint2);
     map.fitBounds(bounds,{maxZoom:9});
 };
 function onEachFeature(feature,layer){
+    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
+        layer.bindPopup("<strong>Project ID: </strong>"+ feature.properties.project_id + "<br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
+    }
         layer.on({
             mouseover:highlightFeature,
             mouseout:resetHighlight,
