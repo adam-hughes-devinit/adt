@@ -37,6 +37,7 @@
     #page_select{text-align:center;margin-left:auto;margin-right:auto;}
     #page{text-align:center;margin-left:auto;margin-right:auto;}
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
+    .project{cursor:pointer;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -103,7 +104,7 @@
                     resultlen = results.data.length;
             for(i=0;i<resultlen;i++){
                 var project = results.data[i]
-                $('#results').append("<p onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")'>"+project.title+"</p>")
+                $('#results').append("<p class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>"+project.title+"</p>")
                 //if(i+1<resultlen){
                     $('#results').append("<hr>")
                 //}
@@ -306,8 +307,10 @@ function highlightProjectHover(project){
         var thisProject = feature.properties.project_id;
         switch (thisProject){
             case project: return {
-                fillColor:"#f8a39f",
-                radius:8
+                color: "#f1f89f",
+                weight: 20,
+                opacity: 0.9,
+                fillOpacity: 0
             };
         }
     });
@@ -317,12 +320,17 @@ function resetHighlightProjectHover(project){
         var thisProject = feature.properties.project_id;
         switch (thisProject){
             case project: return {
-                radius: 4,
-                fillColor: "#9FE5F8"
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.5
             };
         }
     });
 }
+function clickHighlightProject(project) {
+
+};
 function highlightProject(e) {
 //Change style and count geocodes with same project
     var popup = e.target._popup
