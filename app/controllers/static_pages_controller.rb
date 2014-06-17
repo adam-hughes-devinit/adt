@@ -77,11 +77,18 @@ class StaticPagesController < ApplicationController
       paginate :page => 1, :per_page => 5
       order_by(:title,:asc)
     end
+    searchTotal = Project.solr_search do
+      with :active_string, 'Active'
+      with(:geocodes).greater_than(0)
+      paginate :page=>1, :per_page =>10000
+      order_by(:title,:asc)
+    end
     @first_page = {}
     @first_page["data"] = search.results
     @first_page["current"] = search.results.current_page
     @first_page["entries"] = search.results.total_entries
     @first_page["pages"] = search.results.total_pages
+    @first_page["ids"] = searchTotal.results.map(&:id)
     respond_to do |format|
       format.html { render 'geospatial_dashboard' }
       format.geojson { render json: @feature_collection }
@@ -95,6 +102,10 @@ class StaticPagesController < ApplicationController
 
   def json_completion
     json_completion_ajax
+  end
+
+  def geo_paginated_search
+    geo_paginated_search_ajax
   end
 
   def new_map

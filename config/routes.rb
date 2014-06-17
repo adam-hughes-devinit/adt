@@ -116,7 +116,7 @@ Adt::Application.routes.draw do
   #Geospatial dashboard
   match '/queries/json_completion', to: 'static_pages#json_completion', as: 'json_completion'
   match '/queries/geospatial_search', to: 'static_pages#geospatial_search', as: 'geospatial_search'
-
+  match '/queries/geo_page', to: 'static_pages#geo_paginated_search', as: 'geo_paginated_search'
 
 
   #404

@@ -103,7 +103,7 @@
                     resultlen = results.data.length;
             for(i=0;i<resultlen;i++){
                 var project = results.data[i]
-                $('#results').append("<p>"+project.title+"</p>")
+                $('#results').append("<p onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")'>"+project.title+"</p>")
                 //if(i+1<resultlen){
                     $('#results').append("<hr>")
                 //}
@@ -123,16 +123,28 @@
             }
         }
         pageFirst = function(){
-
+            var params = {'ids[]': results.ids, page:1};
+            $.post("/queries/geo_page", params, function(data){
+                results = data
+                drawResults(results); }, "json");
         }
         pagePrev = function(){
-
+            var params = {'ids[]': results.ids, page: results.current - 1};
+            $.post("/queries/geo_page", params, function(data){
+                results = data
+                drawResults(results); }, "json");
         }
         pageNext = function(){
-
+            var params = {'ids[]': results.ids, page: results.current + 1};
+            $.post("/queries/geo_page", params, function(data){
+                results = data
+                drawResults(results); }, "json");
         }
         pageLast = function(){
-
+            var params = {'ids[]': results.ids, page: results.pages};
+            $.post("/queries/geo_page", params, function(data){
+                results = data
+                drawResults(results); }, "json");
         }
         drawResults(results)
       </script>
@@ -287,6 +299,28 @@ function resetHighlight(e) {
     var layer = e.target;
     layer.setStyle({
         weight: 1
+    });
+}
+function highlightProjectHover(project){
+    geoJson.setStyle(function(feature){
+        var thisProject = feature.properties.project_id;
+        switch (thisProject){
+            case project: return {
+                fillColor:"#f8a39f",
+                radius:8
+            };
+        }
+    });
+}
+function resetHighlightProjectHover(project){
+    geoJson.setStyle(function(feature){
+        var thisProject = feature.properties.project_id;
+        switch (thisProject){
+            case project: return {
+                radius: 4,
+                fillColor: "#9FE5F8"
+            };
+        }
     });
 }
 function highlightProject(e) {
