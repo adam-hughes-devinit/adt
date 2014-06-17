@@ -50,11 +50,13 @@
       <% end %>
     </div>
   <script>
+//AJAX loading screen
     var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
       $('#geospatial_search')
               .bind("ajax:beforeSend", toggleLoading)
               .bind("ajax:complete", toggleLoading)
               .bind("ajax:success",function(xhr,data,status){
+//Take AJAX data and draw it, zoom to it
               feature_collection = data.features
               geoJson.clearLayers()
               geoJson.addData(feature_collection.features)
@@ -71,6 +73,7 @@
                   $('#resultcount').html("<strong>No search results.</strong>")
               }
               })
+//Autocomplete function
       $(document).ready(function(){
           $( "#search" ).autocomplete({
               source: get_keywords,
@@ -96,6 +99,7 @@
       <%= javascript_tag "var results=#{@first_page.to_json}"%>
       <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
       <script>
+//Function to draw results in the panel
         drawResults = function(results){
             $('#resultcount').html("<strong>"+results.entries+" projects -</strong>")
             $('#resultcount').append("<br>with "+feature_collection.features.length+" geocodes:<hr>")
@@ -111,10 +115,9 @@
                     geoCount += e.properties.project_id==project.id?1:0
                 })
                 $('#results').append("<div class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>ID: <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>"+truncTitle+"<br>Geocodes: "+geoCount+"/"+project.geocodes.length+"</div>")
-                //if(i+1<resultlen){
-                    $('#results').append("<hr>")
-                //}
+                $('#results').append("<hr>")
             }
+//Draw page buttons
             $('div#page_select').html("")
             if(results.current<=1){
                 $('div#page_select').append("&lt;first &lt;prev ")
@@ -129,6 +132,7 @@
                 $('div#page_select').append("<a href='#' onclick='pageNext()'>next&gt; </a><a href='#' onclick='pageLast()'>last&gt;</a>")
             }
         }
+//Functions to control page movement
         pageFirst = function(){
             var params = {'ids[]': results.ids, page:1};
             $.post("/queries/geo_page", params, function(data){
@@ -364,7 +368,6 @@ function highlightProject(e) {
         var bounds = geoJsonSubset.getBounds()
         zoomToFeature(bounds)
     }
-    //$('div#hoverInfo').append("<br/><strong>Common geocodes: </strong>"+projectCount)
     var highlightedAdms = [],
             duplicateAdms = {},
             uniqueAdms = [];
