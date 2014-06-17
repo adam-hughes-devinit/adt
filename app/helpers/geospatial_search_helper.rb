@@ -12,6 +12,7 @@ module GeospatialSearchHelper
           end
           with :active_string, 'Active'
           with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
         end
         full_result_ids = search.results.map(&:id)
         unless @feature_collection.nil?
@@ -23,7 +24,21 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          render :json => @feature_collection
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params[:page] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
         search = Adm.solr_search do
@@ -34,9 +49,11 @@ module GeospatialSearchHelper
           with :level, params["search"].scan(/(?:\(.*?\))+/)[0].split(/(\d+)/)[1] || [0,1,2]
         end
         geocodes = []
-        geocodes.concat(search.results.map(&:geocodes).flatten.map(&:id))
-        geocodes.concat(search.results.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
-        geocodes.concat(search.results.map(&:children).flatten.map(&:children).flatten.map(&:geocodes).flatten.map(&:id))
+        geocodes.concat(search.results.map(&:geocodes).flatten)
+        geocodes.concat(search.results.map(&:children).flatten.map(&:geocodes).flatten)
+        geocodes.concat(search.results.map(&:children).flatten.map(&:children).flatten.map(&:geocodes).flatten)
+        full_result_ids = geocodes.map(&:project_id)
+        geocodes = geocodes.map(&:id)
         unless @feature_collection.nil?
           i = 0
           while i < @feature_collection["features"].length do
@@ -46,7 +63,21 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          render :json => @feature_collection
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params[:page] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(GEO")
         searchGeoName = Geocode.solr_search do
@@ -56,7 +87,9 @@ module GeospatialSearchHelper
           paginate :page => 1, :per_page => 10000
         end
         geocodes = []
-        geocodes.concat(searchGeoName.results.map(&:id))
+        geocodes.concat(searchGeoName.results)
+        full_result_ids = geocodes.map(&:project_id)
+        geocodes = geocodes.map(&:id)
         unless @feature_collection.nil?
           i = 0
           while i < @feature_collection["features"].length do
@@ -66,7 +99,21 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          render :json => @feature_collection
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params[:page] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          render :json => @page
         end
       else
         search = Project.solr_search do
@@ -75,6 +122,7 @@ module GeospatialSearchHelper
           end
           with :active_string, 'Active'
           with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
         end
         full_result_ids = search.results.map(&:id)
         unless @feature_collection.nil?
@@ -86,11 +134,37 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          render :json => @feature_collection
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params[:page] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          render :json => @page
         end
       end
     else
-      render :json => @feature_collection
+      paginatedSearch = Project.solr_search do
+        with :active_string, 'Active'
+        with(:geocodes).greater_than(0)
+        paginate :page => params[:page] || 1, :per_page => 5
+        order_by(:title,:asc)
+      end
+      @page = {}
+      @page["data"] = paginatedSearch.results
+      @page["current"] = paginatedSearch.results.current_page
+      @page["entries"] = paginatedSearch.results.total_entries
+      @page["pages"] = paginatedSearch.results.total_pages
+      @page["features"] = @feature_collection
+      render :json => @page
     end
   end
 

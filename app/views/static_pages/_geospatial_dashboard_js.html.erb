@@ -9,7 +9,7 @@
     #map { position:absolute; height:100%; width:100%; margin-right:auto;margin-left:auto; }
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
-    #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
+    #searchbar form {position:relative; right:10px; margin-bottom: 1px;height:32px;}
     #left {float:left;width:18%}
     #searchresults {float:left;position:relative;top:35px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;max-height:600px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px; left:2px;z-index:1;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
@@ -53,15 +53,15 @@
               .bind("ajax:beforeSend", toggleLoading)
               .bind("ajax:complete", toggleLoading)
               .bind("ajax:success",function(xhr,data,status){
-              feature_collection = data
+              feature_collection = data.features
               geoJson.clearLayers()
               geoJson.addData(feature_collection.features)
+              drawResults(data)
               if(feature_collection.features.length>0){
                   if(Object.keys(geoJson._layers).length>0){
                       var bounds = geoJson.getBounds()
                       zoomToFeature(bounds)
                   }
-                  $('#resultcount').html("<strong>"+feature_collection.features.length+" projects:</strong>")
               }
                   else{
                   map.fitBounds([[52,68],[-42,-29]])
@@ -91,9 +91,11 @@
         <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
       </div>
       <%= javascript_tag "var results=#{@first_page.to_json}"%>
+      <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
       <script>
         drawResults = function(results){
-            $('#resultcount').html("<strong>"+results.entries+" projects:</strong>")
+            $('#resultcount').html("<strong>"+results.entries+" projects -</strong>")
+            $('#resultcount').append("<br>with "+feature_collection.features.length+" geocodes:<hr>")
             $('#page strong').text("Page "+results.current+" of "+results.pages)
             $('#results').html("")
             var i = 0,
@@ -101,9 +103,9 @@
             for(i=0;i<resultlen;i++){
                 var project = results.data[i]
                 $('#results').append("<p>"+project.title+"</p>")
-                if(i+1<resultlen){
+                //if(i+1<resultlen){
                     $('#results').append("<hr>")
-                }
+                //}
             }
             $('div#page_select').html("")
             if(results.current<=1){
@@ -177,7 +179,6 @@
     <a href="/"><%= image_tag("open_adt_small.png", width: "300") %></a>
   </div>
 </div>
-<%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
 <script>
 //Set-up layers
     function getAdm(level,code){

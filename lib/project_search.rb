@@ -172,13 +172,6 @@ module ProjectSearch
         end
         end
       end
-      text :geocodes do
-        geocodes.map do |g|
-        if g
-          ["#{g.geo_name.name}"]
-        end
-        end
-      end
       integer :geocodes do
         i=0
         geocodes.map do |g|
