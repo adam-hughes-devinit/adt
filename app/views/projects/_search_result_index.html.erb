@@ -1,0 +1,29 @@
+<tr>
+  <td><%= search_result.id %> </td>
+  <td><%= search_result.donor ? search_result.donor.name : '—' %> </td>
+  <td><%= link_to active_or_inactive(search_result), search_result %></td>
+  <td><%= search_result.year ? search_result.year : '—' %></td>
+  <td><%= search_result.country_name.length>0 ? search_result.country_name.join(', ') : '—' %></td>
+  <td><%= search_result.usd_2009 ? "$#{number_with_precision(search_result.usd_2009, :precision => 2, :delimiter => ',')}" : '—' %></td>
+
+
+  <td> <%= current_user_is_aiddata ? search_result.updated_at : "" %></td>
+
+
+  <% if current_user && current_user.owner %>
+      <td>
+        <% if search_result.owner %>
+            <% if search_result.owner == current_user.owner %>
+                <%= link_to "Edit", edit_project_path(search_result) %>
+            <% else %>
+                Owner: <%= link_to search_result.owner.name, search_result.owner %>
+            <% end %>
+        <% else %>
+            No owner
+        <% end %>
+
+      </td>
+  <% else %>
+      <td></td>
+  <% end %>
+</tr>
