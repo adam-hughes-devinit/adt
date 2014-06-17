@@ -11,7 +11,7 @@
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;}
     #left {float:left;width:18%}
-    #searchresults {float:left;position:relative;top:35px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;max-height:600px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px; left:2px;}
+    #searchresults {float:left;position:relative;top:35px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;max-height:600px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px; left:2px;z-index:1;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
     h4 {margin-left:5px;}
@@ -29,13 +29,14 @@
     div.leaflet-left {margin-left:18% !important}
     div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:18%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     div.leaflet-right.leaflet-top {margin-right:18% !important}
-    #watermark{position:absolute;bottom:0px;left:0px;}
+    #watermark{position:absolute;bottom:0px;left:0px;z-index:0;}
     div.leaflet-popup-content-wrapper{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:5px;opacity:0.9;}
     div.leaflet-popup-content{opacity:0.9;}
     div.leaflet-popup-tip-container{width:44px;height:25px;}
     div.leaflet-popup-tip{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:20px;opacity:0.9;height:10px;width:30px;}
     #page_select{text-align:center;margin-left:auto;margin-right:auto;}
     #page{text-align:center;margin-left:auto;margin-right:auto;}
+    .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -43,6 +44,7 @@
     <div id="searchbar" class="ui-widget">
       <%= form_tag "/queries/geospatial_search", id: "geospatial_search", method: :get, remote: true do %>
             <%= text_field_tag :search, params[:search], placeholder: 'Search for projects and locations by keyword...', class:'vissearch' %>
+            <%= submit_tag "Search", name: nil, class: "btn btn-primary span2" %>
       <% end %>
     </div>
   <script>
@@ -86,7 +88,7 @@
         <div id="resultcount"></div>
         <div id="results"></div>
         <div id="page"><strong>Page _ of _</strong></div>
-        <div id="page_select">&lt;first &lt;prev <a href="#">next&gt; </a><a href="#">last&gt;</a></div>
+        <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
       </div>
       <%= javascript_tag "var results=#{@first_page.to_json}"%>
       <script>
@@ -103,6 +105,31 @@
                     $('#results').append("<hr>")
                 }
             }
+            $('div#page_select').html("")
+            if(results.current<=1){
+                $('div#page_select').append("&lt;first &lt;prev ")
+            }
+            else{
+                $('div#page_select').append("<a href='#' onclick='pageFirst()'>&lt;first</a> <a href='#' onclick='pagePrev()'>&lt;prev</a> ")
+            }
+            if(results.current>=results.pages){
+                $('div#page_select').append("next&gt; last&gt;")
+            }
+            else{
+                $('div#page_select').append("<a href='#' onclick='pageNext()'>next&gt; </a><a href='#' onclick='pageLast()'>last&gt;</a>")
+            }
+        }
+        pageFirst = function(){
+
+        }
+        pagePrev = function(){
+
+        }
+        pageNext = function(){
+
+        }
+        pageLast = function(){
+
         }
         drawResults(results)
       </script>

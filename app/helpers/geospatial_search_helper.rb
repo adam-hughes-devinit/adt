@@ -11,6 +11,7 @@ module GeospatialSearchHelper
             fields(:description, :title => 2.0)
           end
           with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
         end
         full_result_ids = search.results.map(&:id)
         unless @feature_collection.nil?
@@ -73,6 +74,7 @@ module GeospatialSearchHelper
             fields(:description, :title => 2.0)
           end
           with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
         end
         full_result_ids = search.results.map(&:id)
         unless @feature_collection.nil?

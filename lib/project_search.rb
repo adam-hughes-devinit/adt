@@ -179,6 +179,15 @@ module ProjectSearch
         end
         end
       end
+      integer :geocodes do
+        i=0
+        geocodes.map do |g|
+          if g
+            i+=1
+          end
+        end
+        i
+      end
 
       text :participating_organizations do
         participating_organizations.map do |o| 

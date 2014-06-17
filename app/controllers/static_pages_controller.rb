@@ -73,6 +73,7 @@ class StaticPagesController < ApplicationController
     #@feature_collection = Rails.cache.fetch("dashboard_geojson")
     search = Project.solr_search do
       with :active_string, 'Active'
+      with(:geocodes).greater_than(0)
       paginate :page => 1, :per_page => 5
       order_by(:title,:asc)
     end
