@@ -39,6 +39,7 @@
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
     .project{cursor:pointer;}
     hr{margin:5px !important;}
+    #resultsBtn{font-weight:bold;position:relative;top:-26px;left:80%;border:solid #1c273b 1px;width:18px;border-radius:4px;text-align:center;cursor:pointer;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -90,11 +91,13 @@
     </div>
     <div id="left">
       <div id="searchresults">
-        <h4>Results</h4>
+        <h4>Results</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();">-/+</div>
         <div id="resultcount"></div>
+       <div id="resultSlider">
         <div id="results"></div>
         <div id="page"><strong>Page _ of _</strong></div>
         <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
+       </div>
       </div>
       <%= javascript_tag "var results=#{@first_page.to_json}"%>
       <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
