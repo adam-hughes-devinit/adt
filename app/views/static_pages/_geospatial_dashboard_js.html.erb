@@ -57,6 +57,7 @@
               geoJson.clearLayers()
               geoJson.addData(feature_collection.features)
               drawResults(data)
+              results = data
               if(feature_collection.features.length>0){
                   if(Object.keys(geoJson._layers).length>0){
                       var bounds = geoJson.getBounds()

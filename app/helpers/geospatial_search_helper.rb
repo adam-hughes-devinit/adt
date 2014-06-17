@@ -38,6 +38,7 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
@@ -77,6 +78,7 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(GEO")
@@ -113,6 +115,7 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
           render :json => @page
         end
       else
@@ -148,6 +151,7 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
           render :json => @page
         end
       end
@@ -164,6 +168,7 @@ module GeospatialSearchHelper
       @page["entries"] = paginatedSearch.results.total_entries
       @page["pages"] = paginatedSearch.results.total_pages
       @page["features"] = @feature_collection
+      @page["ids"] = full_result_ids
       render :json => @page
     end
   end
