@@ -38,6 +38,7 @@
     #page{text-align:center;margin-left:auto;margin-right:auto;}
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
     .project{cursor:pointer;}
+    hr{margin:5px !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -103,8 +104,13 @@
             var i = 0,
                     resultlen = results.data.length;
             for(i=0;i<resultlen;i++){
-                var project = results.data[i]
-                $('#results').append("<p class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>"+project.title+"</p>")
+                var project = results.data[i],
+                        geoCount = 0,
+                        truncTitle = project.title.split(' ').length>5?project.title.split(' ').slice(0,6).join(' ')+'...':project.title;
+                feature_collection.features.forEach(function(e){
+                    geoCount += e.properties.project_id==project.id?1:0
+                })
+                $('#results').append("<div class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>ID: <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>"+truncTitle+"<br>Geocodes: "+geoCount+"/"+project.geocodes.length+"</div>")
                 //if(i+1<resultlen){
                     $('#results').append("<hr>")
                 //}
