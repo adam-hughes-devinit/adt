@@ -14,8 +14,8 @@
     #searchresults {float:left;position:relative;top:35px;height:auto;width:100%;padding:1px;overflow-y:scroll;background-color:#FFF;opacity:0.9;max-height:600px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px; left:2px;z-index:1;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
-    h4 {margin-left:5px;}
-    #searchresults #results, #resultcount{margin:0 10px 10px 10px;}
+    h4 {margin-left:5px;float:left;}
+    #searchresults #results, #resultcount{margin:0 10px 0 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
     .info h4 {margin: 0 0 5px;color: #777;}
@@ -39,8 +39,14 @@
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
     .project{cursor:pointer;}
     hr{margin:5px !important;}
-    #resultsBtn{position:relative;top:-30px;left:80%;text-align:center;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -26px;background-repeat:no-repeat;width:26px;height:26px;}
+    #resultsBtn, #filterBtn{text-align:center;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -52px;background-repeat:no-repeat;width:26px;height:26px;float:right;}
     .plus{background-position:0px 0px !important;}
+    .leaflet-control-layers-expanded{padding:5px !important;}
+    #layerBtn{float:right;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -54px;background-repeat:no-repeat;width:26px;height:23px;}
+    .layerCollapse{background-position:0px -106px !important;}
+    #layerSlider{float:left;}
+    .header{width:100%;float:left;}
+    .leaflet-bar a{border-radius:0px !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -92,8 +98,10 @@
     </div>
     <div id="left">
       <div id="searchresults">
+        <div class="header">
         <h4>Results</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();$('#resultsBtn').toggleClass('plus')"></div>
-        <div id="resultcount"></div>
+        </div>
+          <div id="resultcount"></div>
        <div id="resultSlider">
         <div id="results"></div>
         <div id="page"><strong>Page _ of _</strong></div>
@@ -165,7 +173,8 @@
       </script>
     </div>
   <div id="filtercontrol">
-    <h4>Filter</h4>
+    <div class="header"><h4>Filter</h4><div id="filterBtn" onclick="$('#filterSlider').slideToggle();$('#filterBtn').toggleClass('plus')"></div></div>
+    <div id="filterSlider">
     <div id="project-facets">
       <div class="pull-left">
         <ol>
@@ -201,6 +210,7 @@
           </div>
         </ol>
       </div>
+    </div>
     </div>
   </div>
   <div id="watermark">
@@ -277,9 +287,8 @@
     layerControl.options.collapsed = false;
     layerControl.addTo(map);
     layerControl.collapse = function(){
-        layerControl.removeFrom(map);
-        layerControl.options.collapsed = true;
-        layerControl.addTo(map);
+        $('#layerSlider').slideToggle()
+        $('#layerBtn').toggleClass('layerCollapse')
     }
 function fullExtent(event){
     event.preventDefault();
@@ -287,7 +296,11 @@ function fullExtent(event){
     return false;
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
-    $('.leaflet-control-layers-base').prepend("<span style='float:right;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -56px;background-repeat:no-repeat;width:26px;height:26px;' onClick='layerControl.collapse()'></span>")
+var layerControlHtml = $('.leaflet-control-layers-base').html();
+$('.leaflet-control-layers-base').html("")
+$('.leaflet-control-layers-base').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
+$('.leaflet-control-layers-base').append("<div id='layerSlider'></div>")
+$('#layerSlider').html(layerControlHtml)
     function getColorPoverty(d) {
         return d > 79.9  ? '#FF0202' :
                         d > 59.9   ? '#FA5A5A' :
