@@ -48,9 +48,11 @@ class ProjectsController < ApplicationController
 
         csv_data = Project.csv_header + "\n"
 
-        projects.each do |p| 
-          csv_data << p.csv_text 
-          csv_data << "\n"
+        projects.each do |p|
+          if (p.donor.name == 'China' ) # temporary fix. Non china donors need to be removed earlier.
+            csv_data << p.csv_text
+            csv_data << "\n"
+          end
         end
 
         send_data csv_data,
