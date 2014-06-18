@@ -44,7 +44,7 @@
     .leaflet-control-layers-expanded{padding:5px !important;}
     #layerBtn{float:right;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -54px;background-repeat:no-repeat;width:26px;height:28px;}
     .layerCollapse{background-position:0px -104px !important;}
-    #layerSlider{float:left;}
+    div.leaflet-control-layers-base{float:left;}
     .header{width:100%;float:left;}
     .leaflet-bar a{border-radius:0px !important;}
 </style>
@@ -288,7 +288,7 @@
     layerControl.options.collapsed = false;
     layerControl.addTo(map);
     layerControl.collapse = function(){
-        $('#layerSlider').slideToggle()
+        $('div.leaflet-control-layers-base label').slideToggle()
         $('#layerBtn').toggleClass('layerCollapse')
     }
 function fullExtent(event){
@@ -297,11 +297,7 @@ function fullExtent(event){
     return false;
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
-var layerControlHtml = $('.leaflet-control-layers-base').html();
-$('.leaflet-control-layers-base').html("")
-$('.leaflet-control-layers-base').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
-$('.leaflet-control-layers-base').append("<div id='layerSlider'></div>")
-$('#layerSlider').html(layerControlHtml)
+$('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
     function getColorPoverty(d) {
         return d > 79.9  ? '#FF0202' :
                         d > 59.9   ? '#FA5A5A' :
