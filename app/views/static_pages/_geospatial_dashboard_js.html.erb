@@ -25,7 +25,7 @@
     .ui-widget{z-index:9997 !important;}
     img.loading{z-index:9999;display:none;position:absolute;top:50%;right:50%;}
     div.loading{z-index:9998;display:none;background-color:grey;position:absolute;opacity:0.4;height:100%;width:100%;overflow:hidden;}
-    div.leaflet-control-zoom {left:0px !important;top:25px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
+    div.leaflet-control-zoom {left:0px !important;top:25px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px !important;}
     div.leaflet-left {margin-left:18% !important}
     div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:18%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     div.leaflet-right.leaflet-top {margin-right:18% !important}
@@ -39,7 +39,8 @@
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
     .project{cursor:pointer;}
     hr{margin:5px !important;}
-    #resultsBtn{font-weight:bold;position:relative;top:-26px;left:80%;border:solid #1c273b 1px;width:18px;border-radius:4px;text-align:center;cursor:pointer;}
+    #resultsBtn{font-weight:400;position:relative;top:-30px;left:80%;width:18px;text-align:center;cursor:pointer;font-size:20px;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -26px;background-repeat:no-repeat;width:26px;height:26px;}
+    .plus{background-position:0px 0px !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -91,7 +92,7 @@
     </div>
     <div id="left">
       <div id="searchresults">
-        <h4>Results</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();">-/+</div>
+        <h4>Results</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();$('#resultsBtn').toggleClass('plus')"></div>
         <div id="resultcount"></div>
        <div id="resultSlider">
         <div id="results"></div>
