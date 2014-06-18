@@ -108,6 +108,10 @@ class StaticPagesController < ApplicationController
     geo_paginated_search_ajax
   end
 
+  def micro_project_page
+    micro_project_page_ajax
+  end
+
   def new_map
     render file: '/static_pages/new_map'
   end

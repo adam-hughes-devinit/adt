@@ -222,4 +222,45 @@ module GeospatialSearchHelper
     render :json => @page
   end
 
+  def micro_project_page_ajax
+    searchProject = Project.solr_search do
+      with(:id).equal_to(params[:id] || "a")
+      with(:geocodes).greater_than(0)
+      paginate :page => 1, :per_page => 1
+    end
+    adms = searchProject.results.map(&:geocodes).flatten.map(&:adm)
+    geocodes = searchProject.results.map(&:geocodes).flatten
+    geonames = searchProject.results.map(&:geocodes).flatten.map(&:geo_name)
+    i = 0
+    len = geocodes.length
+    @bucket = []
+    while i < len do
+      obj = {}
+      unless adms[i].nil?
+        obj["adm_level"] = adms[i]["level"]
+        if adms[i]["level"]==0
+          obj["geoTree"] = [adms[i]["name"]]
+        elsif adms[i]["level"]==1
+          obj["geoTree"] = [[adms[i]].map(&:parent)[0]["name"],adms[i]["name"]]
+        elsif adms[i]["level"]==2
+          obj["geoTree"] = [[adms[i]].map(&:parent).flatten.map(&:parent)[0]["name"],[adms[i]].map(&:parent)[0]["name"],adms[i]["name"]]
+        else
+          obj["geoTree"] = [adms[i]["name"]]
+        end
+      else
+        obj["adm_level"] = nil
+        obj["geoTree"] = nil
+      end
+      obj["project"] = searchProject.results.first
+      obj["precision_id"] = geocodes[i]["precision_id"]
+      obj["precision_desc"] = [geocodes[i]].map(&:precision)[0]["description"]
+      obj["geoname"] = geonames[i]["name"]
+      obj["lat"] = geonames[i]["latitude"]
+      obj["lon"] = geonames[i]["longitude"]
+      obj["location_type"] = [geonames[i]].map(&:location_type)[0]["name"]
+      @bucket << obj
+      i += 1
+    end
+    render :json => @bucket
+  end
 end
