@@ -288,7 +288,7 @@
     layerControl.options.collapsed = false;
     layerControl.addTo(map);
     layerControl.collapse = function(){
-        $('div.leaflet-control-layers-base label').slideToggle()
+        $('div.leaflet-control-layers-base').slideToggle()
         $('#layerBtn').toggleClass('layerCollapse')
     }
 function fullExtent(event){
