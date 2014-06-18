@@ -1,9 +1,11 @@
 <%# encoding: utf-8 %>
-<% cache "projects/#{search_result.id}/search_result/#{current_user_is_aiddata ? "aiddata" : "non_aiddata" }" do %>
-  <% if (search_result.donor.name == 'China') && !(current_user_is_aiddata)  %>
-        <%= render partial: "projects/search_result_index", locals: {search_result: search_result} %>
+<% if (search_result.donor.name == 'China') %>
+    <% cache "projects/#{search_result.id}/search_result/#{current_user_is_aiddata ? "aiddata" : "non_aiddata" }" do %>
+        <% if (search_result.donor.name == 'China') && !(current_user_is_aiddata)  %>
+            <%= render partial: "projects/search_result_index", locals: {search_result: search_result} %>
 
-  <% elsif current_user_is_aiddata   %>
-        <%= render partial: "projects/search_result_index", locals: {search_result: search_result} %>
-  <% end %>
+        <% elsif current_user_is_aiddata   %>
+            <%= render partial: "projects/search_result_index", locals: {search_result: search_result} %>
+        <% end %>
+    <% end %>
 <% end %>
