@@ -47,6 +47,8 @@
     div.leaflet-control-layers-base{float:left;}
     .header{width:100%;float:left;}
     .leaflet-bar a{border-radius:0px !important;}
+    #resultLeft{overflow:hidden;max-height:600px;position:relative;left:0;}
+    #resultRight{overflow:hidden;max-height:600px;position:relative;left:100%;display:none;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -103,9 +105,26 @@
         </div>
           <div id="resultcount"></div>
        <div id="resultSlider">
+        <div id="resultLeft">
         <div id="results"></div>
         <div id="page"><strong>Page _ of _</strong></div>
         <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
+        </div>
+        <div id="resultRight">
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+          Project Page<br>
+        </div>
        </div>
       </div>
       <%= javascript_tag "var results=#{@first_page.to_json}"%>
@@ -353,20 +372,64 @@ function resetHighlightProjectHover(project){
     });
 }
 function clickHighlightProject(project) {
-    console.log(project)
-    //feature_collection = data.features
-    //geoJson.clearLayers()
-    //geoJson.addData(feature_collection.features)
-    //if(feature_collection.features.length>0){
-    //    if(Object.keys(geoJson._layers).length>0){
-    //        var bounds = geoJson.getBounds()
-    //        zoomToFeature(bounds)
-    //    }
-   // }
-    //else{
-    //    map.fitBounds([[52,68],[-42,-29]])
-   // }
+    var params = {'id': project};
+    $.post("/queries/micro_project", params, function(data){
+        miniProjectData = data
+        drawProject(miniProjectData);}, "json");
 };
+function drawProject(miniProjectData){
+//Build Feature Collection
+    var features = [];
+    miniProjectData.forEach(function(geocode){
+        var featureObj = {};
+        featureObj.type = "Feature"
+        featureObj.geometry = {}
+        featureObj.geometry.coordinates = [parseFloat(geocode.lon),parseFloat(geocode.lat)]
+        featureObj.geometry.type = "Point"
+        featureObj.properties = {}
+        featureObj.properties.adm_code = geocode.adm_code
+        featureObj.properties.adm_level = geocode.adm_level
+        featureObj.properties.adm_name = geocode.adm_name
+        featureObj.properties.geo_code_id = geocode.geo_code_id
+        featureObj.properties.geo_name = geocode.geo_name
+        featureObj.properties.location_type = geocode.location_type
+        featureObj.properties.precision_code = geocode.precision_id
+        featureObj.properties.project_id = geocode.project.id
+        featureObj.properties.project_year = geocode.project.year
+        features.push(featureObj)
+    })
+    feature_collection.features = features
+//Redraw map and zoom
+    geoJson.clearLayers()
+    geoJson.addData(feature_collection.features)
+    if(feature_collection.features.length>0){
+        if(Object.keys(geoJson._layers).length>0){
+            var bounds = geoJson.getBounds()
+            zoomToFeature(bounds)
+        }
+    }
+    else{
+        map.fitBounds([[52,68],[-42,-29]])
+    }
+//Slide Results Panel
+    slideResults()
+};
+function slideResults(){
+    var $lefty = $('#resultLeft'),
+            $righty = $('#resultRight');
+    $lefty.toggle()
+    $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
+    $righty.animate({left: parseInt($righty.css('left'),10) == 0 ?$lefty.outerWidth():0})
+    $righty.toggle()
+};
+function unslideResults(){
+    var $lefty = $('#resultLeft'),
+            $righty = $('#resultRight');
+    $lefty.slideToggle()
+    $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
+    $righty.slideToggle()
+    $righty.animate({left: parseInt($righty.css('left'),10) == 0 ?$lefty.outerWidth():0})
+}
 function highlightProject(e) {
 //Change style and count geocodes with same project
     var popup = e.target._popup

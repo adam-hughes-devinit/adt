@@ -238,6 +238,8 @@ module GeospatialSearchHelper
       obj = {}
       unless adms[i].nil?
         obj["adm_level"] = adms[i]["level"]
+        obj["adm_code"] = adms[i]["code"]
+        obj["adm_name"] = adms[i]["name"]
         if adms[i]["level"]==0
           obj["geoTree"] = [adms[i]["name"]]
         elsif adms[i]["level"]==1
@@ -250,11 +252,14 @@ module GeospatialSearchHelper
       else
         obj["adm_level"] = nil
         obj["geoTree"] = nil
+        obj["adm_code"] = nil
+        obj["adm_name"] = nil
       end
+      obj["geo_code_id"] = geocodes[i]["id"]
       obj["project"] = searchProject.results.first
       obj["precision_id"] = geocodes[i]["precision_id"]
       obj["precision_desc"] = [geocodes[i]].map(&:precision)[0]["description"]
-      obj["geoname"] = geonames[i]["name"]
+      obj["geo_name"] = geonames[i]["name"]
       obj["lat"] = geonames[i]["latitude"]
       obj["lon"] = geonames[i]["longitude"]
       obj["location_type"] = [geonames[i]].map(&:location_type)[0]["name"]
