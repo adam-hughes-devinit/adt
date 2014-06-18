@@ -197,9 +197,10 @@
 
                 }
                 //Draw checkboxes for year
-                var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
-                for(var i=0;i<13;i++){
-                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(2012-i)+"' class='search_check boolean project_year'>"+(2012-i)+"</label></li>")
+                var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],
+                        project_years_len = project_years.length;
+                for(var i=0;i<project_years_len;i++){
+                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(project_years[i])+"' class='search_check boolean project_year'>"+(project_years[i])+"</label></li>")
                 }
                 update_check_counter_for('project_year')
                 $('.facet-list-item').click(function() {
@@ -465,7 +466,7 @@ function filterGeoJson(filterObject){
 };
 var filterObject = {"project_year":project_years};
 //This can be changed to [type='checkbox'] when both fields are active
-$("input[name='project_year']").change(function(){
+$("input[type='checkbox']").change(function(){
    var changedBox = this,
            attribute = $(changedBox).attr("name"),
            value = $(changedBox).attr("value"),
