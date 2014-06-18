@@ -39,7 +39,7 @@
     .btn{opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;position:relative;top:-32px;left:100%;}
     .project{cursor:pointer;}
     hr{margin:5px !important;}
-    #resultsBtn{font-weight:400;position:relative;top:-30px;left:80%;width:18px;text-align:center;cursor:pointer;font-size:20px;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -26px;background-repeat:no-repeat;width:26px;height:26px;}
+    #resultsBtn{position:relative;top:-30px;left:80%;text-align:center;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -26px;background-repeat:no-repeat;width:26px;height:26px;}
     .plus{background-position:0px 0px !important;}
 </style>
 <div class="loading"></div>
@@ -287,7 +287,7 @@ function fullExtent(event){
     return false;
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
-    $('.leaflet-control-layers-base').prepend("<span style='float:right;cursor:pointer;' onClick='layerControl.collapse()'><strong>X</strong></span>")
+    $('.leaflet-control-layers-base').prepend("<span style='float:right;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -56px;background-repeat:no-repeat;width:26px;height:26px;' onClick='layerControl.collapse()'></span>")
     function getColorPoverty(d) {
         return d > 79.9  ? '#FF0202' :
                         d > 59.9   ? '#FA5A5A' :
