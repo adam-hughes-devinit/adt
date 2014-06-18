@@ -24,8 +24,7 @@ class ProjectAssociationChange < ActiveRecord::Base
   def cache_change
     @project = Project.find_by_id(project_id)
     if !@project.nil?  # prevents issue where @project was returning null, if the project hadn't been approved yet.
-      if @project.is_stage_one == "Is not Stage One" && @project.active == true && attribute_name != 'active'
-
+      if @project.is_stage_one == "Is not Stage One" && @project.active == true && attribute_name != 'active' && @project.donor.name == 'China'
 
         first = Rails.cache.fetch("recent/first")
 
