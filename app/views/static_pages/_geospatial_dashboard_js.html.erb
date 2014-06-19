@@ -486,7 +486,7 @@ function drawProject(microProjectData){
 function slideResults(){
     var $lefty = $('#resultLeft'),
             $righty = $('#resultRight'),
-            resulthtml =  $('#resultcount').text().length>12?"<b>Project Page</b><hr>":"<strong>"+results.entries+" projects -</strong><br>with "+feature_collection.features.length+" geocodes:<hr>";
+            resulthtml =  $('#resultcount').text().length>12?"<b style='line-height:28px;'>Project Page</b><hr>":"<strong>"+results.entries+" projects -</strong><br>with "+feature_collection.features.length+" geocodes:<hr>";
     $lefty.slideToggle()
     $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
     $righty.slideToggle()
