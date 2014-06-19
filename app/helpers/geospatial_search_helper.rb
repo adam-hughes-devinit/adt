@@ -118,6 +118,40 @@ module GeospatialSearchHelper
           @page["ids"] = full_result_ids
           render :json => @page
         end
+      elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
+        search = Project.solr_search do
+          with(:id).equal_to(params["search"].split(/(?:\(.*?\))+/)[0])
+          with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
+        end
+        full_result_ids = search.results.map(&:id)
+        unless @feature_collection.nil?
+          i = 0
+          while i < @feature_collection["features"].length do
+            unless full_result_ids.include? @feature_collection["features"][i]["properties"]["project_id"]
+              @feature_collection["features"].delete_at(i)
+            else
+              i += 1
+            end
+          end
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params[:page] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
+          render :json => @page
+        end
       else
         search = Project.solr_search do
           keywords params["search"].split(/(?:\(.*?\))+/)[0] do
