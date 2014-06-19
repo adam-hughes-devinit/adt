@@ -68,7 +68,9 @@
               .bind("ajax:success",function(xhr,data,status){
 //If Results page is currently on projects, slide toggle it
               if($('#resultLeft').css("display")=="none"){
-                  slideResults()
+                  $('#resultSlider').slideToggle();
+                  $('#resultsBtn').toggleClass('plus');
+                  slideResults();
               }
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
