@@ -78,7 +78,7 @@
               feature_collection = data.features
 //Clustering
               map.removeLayer(markers);
-              markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+              markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
               for (var i = 0; i < feature_collection.features.length; i++) {
                   var a = feature_collection.features[i],
                           properties = feature_collection.features[i].properties;
@@ -402,7 +402,7 @@ function drawProject(microProjectData){
     feature_collection.features = features
 //Redraw map with clustering and zoom
     map.removeLayer(markers);
-    markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
     for (var i = 0; i < feature_collection.features.length; i++) {
         var a = feature_collection.features[i],
                 properties = feature_collection.features[i].properties;
@@ -468,7 +468,7 @@ function backToResults(){
     feature_collection.features = oldFeatures
     //Redraw map with clustering and zoom
     map.removeLayer(markers);
-    markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
     for (var i = 0; i < feature_collection.features.length; i++) {
         var a = feature_collection.features[i],
                 properties = feature_collection.features[i].properties;
@@ -499,7 +499,7 @@ if (feature_collection === null){
     feature_collection = {};
     feature_collection.features=[];}
 //Clustering
-var markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+var markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
 for (var i = 0; i < feature_collection.features.length; i++) {
     var a = feature_collection.features[i],
             properties = feature_collection.features[i].properties;
