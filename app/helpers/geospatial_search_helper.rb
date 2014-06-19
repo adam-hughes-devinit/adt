@@ -258,7 +258,6 @@ module GeospatialSearchHelper
       obj["geo_code_id"] = geocodes[i]["id"]
       obj["project"] = searchProject.results.first
       obj["precision_id"] = geocodes[i]["precision_id"]
-      obj["precision_desc"] = [geocodes[i]].map(&:precision)[0]["description"]
       obj["geo_name"] = geonames[i]["name"]
       obj["lat"] = geonames[i]["latitude"]
       obj["lon"] = geonames[i]["longitude"]

@@ -15,7 +15,7 @@
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:relative;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height:600px;}
     h4 {margin-left:5px;float:left;}
-    #searchresults #results, #resultcount{margin:0 10px 0 10px;}
+    #searchresults #results, #resultcount, #resultRight{margin:0 10px 0 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
     .info h4 {margin: 0 0 5px;color: #777;}
@@ -47,8 +47,8 @@
     div.leaflet-control-layers-base{float:left;}
     .header{width:100%;float:left;}
     .leaflet-bar a{border-radius:0px !important;}
-    #resultLeft{overflow:hidden;max-height:600px;position:relative;left:0;}
-    #resultRight{overflow:hidden;max-height:600px;position:relative;left:100%;display:none;}
+    #resultLeft{overflow:hidden;position:relative;left:0;}
+    #resultRight{overflow:hidden;position:relative;left:100%;display:none;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -111,6 +111,9 @@
         <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
         </div>
         <div id="resultRight">
+          <a href='#' onclick='backToResults();'>&lt;Back to results</a>
+          <hr>
+          <div id="projectPage">
           Project Page<br>
           Project Page<br>
           Project Page<br>
@@ -124,6 +127,7 @@
           Project Page<br>
           Project Page<br>
           Project Page<br>
+          </div>
         </div>
        </div>
       </div>
@@ -338,13 +342,13 @@ function highlightFeature(e) {
     layer.setStyle({
         weight: 3
     });
-}
+};
 function resetHighlight(e) {
     var layer = e.target;
     layer.setStyle({
         weight: 1
     });
-}
+};
 function highlightProjectHover(project){
     geoJson.setStyle(function(feature){
         var thisProject = feature.properties.project_id;
@@ -357,7 +361,7 @@ function highlightProjectHover(project){
             };
         }
     });
-}
+};
 function resetHighlightProjectHover(project){
     geoJson.setStyle(function(feature){
         var thisProject = feature.properties.project_id;
@@ -370,17 +374,48 @@ function resetHighlightProjectHover(project){
             };
         }
     });
-}
+};
 function clickHighlightProject(project) {
     var params = {'id': project};
     $.post("/queries/micro_project", params, function(data){
-        miniProjectData = data
-        drawProject(miniProjectData);}, "json");
+        microProjectData = data
+        drawProject(microProjectData);}, "json");
 };
-function drawProject(miniProjectData){
+function highlightGeocode(geocode){
+    geoJson.setStyle(function(feature){
+        var thisGeocode = feature.properties.geo_code_id;
+        switch (thisGeocode){
+            case geocode: return {
+                color: "#f1f89f",
+                weight: 20,
+                opacity: 0.9,
+                fillOpacity: 0
+            };
+        }
+    });
+};
+function resetHighlightGeocode(geocode){
+    geoJson.setStyle(function(feature){
+        var thisGeocode = feature.properties.geo_code_id;
+        switch (thisGeocode){
+            case geocode: return {
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.5
+            };
+        }
+    });
+};
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+function drawProject(microProjectData){
 //Build Feature Collection
-    var features = [];
-    miniProjectData.forEach(function(geocode){
+    var features = [],
+            project = microProjectData[0].project;
+    oldFeatures = feature_collection.features;
+    microProjectData.forEach(function(geocode){
         var featureObj = {};
         featureObj.type = "Feature"
         featureObj.geometry = {}
@@ -411,24 +446,69 @@ function drawProject(miniProjectData){
     else{
         map.fitBounds([[52,68],[-42,-29]])
     }
+//Draw Project Page
+    $('#projectPage').html("")
+    $('#projectPage').append("<span style='text-decoration:underline;'>"+project.title+"</span><br><br>")
+    $('#projectPage').append("<b>ID:</b> <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>")
+    $('#projectPage').append("<b>Year:</b> "+project.year+"<br>")
+    for(var i=0;i<project.geopoliticals.length;i++){
+        $('#projectPage').append("<b>Recipient:</b> "+project.geopoliticals[i].recipient.name+" - "+project.geopoliticals[i].percent+"%<br>")
+    }
+    $('#projectPage').append("<b>Amount (USD 2009):</b> $"+numberWithCommas(Math.ceil(project.usd_2009))+"<br>")
+    $('#projectPage').append("<b>Status:</b> "+project.status_name+"<br>")
+    $('#projectPage').append("<b>Scope:</b> "+project.oda_like_name+"<br>")
+    $('#projectPage').append("<b>Sector:</b> "+project.crs_sector_name+"<br><hr>")
+    for(var i=0;i<microProjectData.length;i++){
+        var geocode = microProjectData[i],
+                geoTreelen = geocode.geoTree===null?0:geocode.geoTree.length,
+                geocodeHTML = "";
+        geocodeHTML += ("<b>Geocode "+(i+1)+":</b> "+"<br>")
+        for(var j=0;j<geoTreelen;j++){
+            if(j==0){
+                geocodeHTML += ("<span>"+geocode.geoTree[j]+"</span><br>")
+            }else if(j==1){
+                geocodeHTML += ("<span><img src='assets/humanity_united/arrow.gif'/>"+geocode.geoTree[j]+"</span><br>")
+            }else{
+                geocodeHTML += ("<span style='margin-left:13px'><img src='assets/humanity_united/arrow.gif'/>"+geocode.geoTree[j]+"</span><br>")
+            }
+        }
+        geocodeHTML += ("<em>Geoname: </em>"+geocode.geo_name+"<br>")
+        geocodeHTML += ("<em>Precision: </em>"+geocode.precision_id+"<br>")
+        $('#projectPage').append("<div onmouseover='highlightGeocode("+geocode.geo_code_id+")' onmouseout='resetHighlightGeocode("+geocode.geo_code_id+")'>"+geocodeHTML+"</div>")
+        if(i+1<microProjectData.length){
+            $('#projectPage').append("<hr>")
+        }
+    }
+    console.log(microProjectData)
 //Slide Results Panel
     slideResults()
 };
 function slideResults(){
     var $lefty = $('#resultLeft'),
-            $righty = $('#resultRight');
-    $lefty.toggle()
-    $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
-    $righty.animate({left: parseInt($righty.css('left'),10) == 0 ?$lefty.outerWidth():0})
-    $righty.toggle()
-};
-function unslideResults(){
-    var $lefty = $('#resultLeft'),
-            $righty = $('#resultRight');
+            $righty = $('#resultRight'),
+            resulthtml =  $('#resultcount').text().length>12?"<b>Project Page</b><hr>":"<strong>"+results.entries+" projects -</strong><br>with "+feature_collection.features.length+" geocodes:<hr>";
     $lefty.slideToggle()
     $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
     $righty.slideToggle()
     $righty.animate({left: parseInt($righty.css('left'),10) == 0 ?$lefty.outerWidth():0})
+    $('#resultcount').html(resulthtml)
+};
+function backToResults(){
+    feature_collection.features = oldFeatures
+    //Redraw map and zoom
+    geoJson.clearLayers()
+    geoJson.addData(feature_collection.features)
+    if(feature_collection.features.length>0){
+        if(Object.keys(geoJson._layers).length>0){
+            var bounds = geoJson.getBounds()
+            zoomToFeature(bounds)
+        }
+    }
+    else{
+        map.fitBounds([[52,68],[-42,-29]])
+    }
+//Slide Results Panel
+    slideResults()
 }
 function highlightProject(e) {
 //Change style and count geocodes with same project
