@@ -511,9 +511,46 @@ for (var i = 0; i < feature_collection.features.length; i++) {
 map.addLayer(markers);
 
 //Filter function
-function filterGeoJson(filterObject){};
+filteredLayers = L.featureGroup();
+function filterGeoJson(filterObject){
+    if(filterObject===undefined){
+        geoJson.options.filter = undefined;
+    }else{
+        markers.eachLayer(function(feature){
+            var metaFilterBoolean = true;
+            for(var filter in filterObject){
+                var values = filterObject[filter],
+                        valueLen = values.length,
+                        filterBoolean = false;
+                for(var i=0;i<valueLen;i++){
+                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                };
+                metaFilterBoolean = metaFilterBoolean && filterBoolean
+            };
+            if(!metaFilterBoolean){
+                filteredLayers.addLayer(feature)
+                markers.removeLayer(feature)
+            }
+        })
+        filteredLayers.eachLayer(function(feature){
+            var metaFilterBoolean = true;
+            for(var filter in filterObject){
+                var values = filterObject[filter],
+                        valueLen = values.length,
+                        filterBoolean = false;
+                for(var i=0;i<valueLen;i++){
+                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                };
+                metaFilterBoolean = metaFilterBoolean && filterBoolean
+            };
+            if(metaFilterBoolean){
+                markers.addLayer(feature)
+                filteredLayers.removeLayer(feature)
+            }
+        })
+    }
+};
 var filterObject = {"project_year":project_years};
-//This can be changed to [type='checkbox'] when both fields are active
 $("input[type='checkbox']").change(function(){
    var changedBox = this,
            attribute = $(changedBox).attr("name"),
@@ -530,16 +567,16 @@ $("input[type='checkbox']").change(function(){
             filterObject[attribute].splice(index,1);
         }
     }
-//filterGeoJson(filterObject);
+filterGeoJson(filterObject);
 });
 $("a.facet-controller#project_years_on").click(function(){
     var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
     filterObject.project_year = project_years;
-    //filterGeoJson(filterObject);
+    filterGeoJson(filterObject);
 });
 $("a.facet-controller#project_years_off").click(function(){
     filterObject.project_year = [];
-    //filterGeoJson(filterObject);
+    filterGeoJson(filterObject);
 });
 //Legend show/hide and div height control
 $(document).ready(function(){
