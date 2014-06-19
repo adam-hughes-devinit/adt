@@ -66,6 +66,10 @@
               .bind("ajax:beforeSend", toggleLoading)
               .bind("ajax:complete", toggleLoading)
               .bind("ajax:success",function(xhr,data,status){
+//If Results page is currently on projects, slide toggle it
+              if($('#resultLeft').css("display")=="none"){
+                  slideResults()
+              }
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
               geoJson.clearLayers()
