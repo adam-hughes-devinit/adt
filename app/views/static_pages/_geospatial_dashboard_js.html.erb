@@ -1,8 +1,10 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
 <%= javascript_include_tag   "humanity_united/mapbox" %>
 <%= javascript_include_tag   "humanity_united/jquery-ui-1.10.4.custom.min" %>
+<%= javascript_include_tag   "humanity_united/leaflet.markercluster-src" %>
 <%= stylesheet_link_tag "humanity_united/mapbox" %>
 <%= stylesheet_link_tag "humanity_united/ui-lightness/jquery-ui-1.10.4.custom.min" %>
+<%= stylesheet_link_tag "humanity_united/MarkerCluster.Default" %>
 <style>
     .container {width:100% !important;padding:0px !important;}
     #vis { width:100%; height:100%; margin-right:auto; margin-left:auto;}
@@ -74,13 +76,23 @@
               }
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
-              geoJson.clearLayers()
-              geoJson.addData(feature_collection.features)
+//Clustering
+              map.removeLayer(markers);
+              markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+              for (var i = 0; i < feature_collection.features.length; i++) {
+                  var a = feature_collection.features[i],
+                          properties = feature_collection.features[i].properties;
+                  var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+                  marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+                  marker.properties = properties
+                  markers.addLayer(marker);
+              }
+              map.addLayer(markers);
               drawResults(data)
               results = data
               if(feature_collection.features.length>0){
-                  if(Object.keys(geoJson._layers).length>0){
-                      var bounds = geoJson.getBounds()
+                  if(Object.keys(markers._featureGroup._layers).length>0){
+                      var bounds = markers.getBounds()
                       zoomToFeature(bounds)
                   }
               }
@@ -249,19 +261,6 @@
 </div>
 <script>
 //Set-up layers
-    function getAdm(level,code){
-        var layer = L.tileLayer('http://china-tilestache.aiddata.org/{shp}/{z}/{x}/{y}.png', {
-            shp: 'adm'+level+'_'+code,
-            noWrap:true,
-            opacity:0.7
-        });
-        if(level!==undefined && code!==undefined && level!="0") {
-            return layer;
-        }
-        else{
-            return L.geoJson();
-        }
-    }
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
@@ -305,7 +304,7 @@
             },
 //Set-up GeoJson
             MarkerOptions = {
-            radius: 4,
+            radius: 7,
             fillColor: "#9FE5F8",
             color: "#000",
             weight: 1,
@@ -341,77 +340,38 @@ $('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerCont
                 '#FFFFB3';
     }
     var legend = L.control({position: 'bottomright'});
-//GeoJson Functions
-function highlightFeature(e) {
-    var layer = e.target,
-        feature = layer.feature;
-    layer.setStyle({
-        weight: 3
-    });
-};
-function resetHighlight(e) {
-    var layer = e.target;
-    layer.setStyle({
-        weight: 1
-    });
-};
+var highlightOptions = {
+    radius: 20,
+    fillColor: "#f1f89f",
+    color: "#000",
+    weight: 1,
+    opacity: 0,
+    fillOpacity: 0.9};
 function highlightProjectHover(project){
-    geoJson.setStyle(function(feature){
-        var thisProject = feature.properties.project_id;
-        switch (thisProject){
-            case project: return {
-                color: "#f1f89f",
-                weight: 20,
-                opacity: 0.9,
-                fillOpacity: 0
-            };
+    highlightGroup = L.layerGroup();
+    markers.eachLayer(function(layer){
+        if(layer.properties.project_id==project){
+            highlightMarker = L.circleMarker(layer._latlng,highlightOptions)
+            highlightGroup.addLayer(highlightMarker)
         }
-    });
+    })
+    map.addLayer(highlightGroup)
 };
 function resetHighlightProjectHover(project){
-    geoJson.setStyle(function(feature){
-        var thisProject = feature.properties.project_id;
-        switch (thisProject){
-            case project: return {
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.5
-            };
+    map.removeLayer(highlightGroup)
+};
+function highlightGeocode(geocode){
+    markers.eachLayer(function(layer){
+        if(layer.properties.geo_code_id==geocode){
+            markers.zoomToShowLayer(layer)
         }
-    });
+    })
 };
 function clickHighlightProject(project) {
     var params = {'id': project};
     $.post("/queries/micro_project", params, function(data){
         microProjectData = data
         drawProject(microProjectData);}, "json");
-};
-function highlightGeocode(geocode){
-    geoJson.setStyle(function(feature){
-        var thisGeocode = feature.properties.geo_code_id;
-        switch (thisGeocode){
-            case geocode: return {
-                color: "#f1f89f",
-                weight: 20,
-                opacity: 0.9,
-                fillOpacity: 0
-            };
-        }
-    });
-};
-function resetHighlightGeocode(geocode){
-    geoJson.setStyle(function(feature){
-        var thisGeocode = feature.properties.geo_code_id;
-        switch (thisGeocode){
-            case geocode: return {
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.5
-            };
-        }
-    });
 };
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -440,16 +400,22 @@ function drawProject(microProjectData){
         features.push(featureObj)
     })
     feature_collection.features = features
-//Redraw map and zoom
-    geoJson.clearLayers()
-    geoJson.addData(feature_collection.features)
-    if(feature_collection.features.length>0){
-        if(Object.keys(geoJson._layers).length>0){
-            var bounds = geoJson.getBounds()
-            zoomToFeature(bounds)
-        }
+//Redraw map with clustering and zoom
+    map.removeLayer(markers);
+    markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+    for (var i = 0; i < feature_collection.features.length; i++) {
+        var a = feature_collection.features[i],
+                properties = feature_collection.features[i].properties;
+        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+        marker.properties = properties
+        markers.addLayer(marker);
     }
-    else{
+    map.addLayer(markers);
+    if(Object.keys(markers._featureGroup._layers).length>0){
+        var bounds = markers.getBounds()
+        zoomToFeature(bounds)
+    }else{
         map.fitBounds([[52,68],[-42,-29]])
     }
 //Draw Project Page
@@ -480,12 +446,11 @@ function drawProject(microProjectData){
         }
         geocodeHTML += ("<em>Geoname: </em>"+geocode.geo_name+"<br>")
         geocodeHTML += ("<em>Precision: </em>"+geocode.precision_id+"<br>")
-        $('#projectPage').append("<div onmouseover='highlightGeocode("+geocode.geo_code_id+")' onmouseout='resetHighlightGeocode("+geocode.geo_code_id+")'>"+geocodeHTML+"</div>")
+        $('#projectPage').append("<div onclick='highlightGeocode("+geocode.geo_code_id+")' style='cursor:pointer'>"+geocodeHTML+"</div>")
         if(i+1<microProjectData.length){
             $('#projectPage').append("<hr>")
-        }
+        }else{$('#projectPage').append("<br>")}
     }
-    console.log(microProjectData)
 //Slide Results Panel
     slideResults()
 };
@@ -501,68 +466,26 @@ function slideResults(){
 };
 function backToResults(){
     feature_collection.features = oldFeatures
-    //Redraw map and zoom
-    geoJson.clearLayers()
-    geoJson.addData(feature_collection.features)
-    if(feature_collection.features.length>0){
-        if(Object.keys(geoJson._layers).length>0){
-            var bounds = geoJson.getBounds()
-            zoomToFeature(bounds)
-        }
+    //Redraw map with clustering and zoom
+    map.removeLayer(markers);
+    markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+    for (var i = 0; i < feature_collection.features.length; i++) {
+        var a = feature_collection.features[i],
+                properties = feature_collection.features[i].properties;
+        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+        marker.properties = properties
+        markers.addLayer(marker);
     }
-    else{
-        map.fitBounds([[52,68],[-42,-29]])
+    map.addLayer(markers);
+    if(Object.keys(markers._featureGroup._layers).length>0){
+        var bounds = markers.getBounds()
+        zoomToFeature(bounds)
+    }else{
+    map.fitBounds([[52,68],[-42,-29]])
     }
 //Slide Results Panel
     slideResults()
-}
-function highlightProject(e) {
-//Change style and count geocodes with same project
-    var popup = e.target._popup
-    popup.setLatLng(e.target.getLatLng())
-    geoJson.setStyle(MarkerOptions)
-    var project = e.target.feature.properties.project_id,
-        projectCount = 0;
-    geoJson.setStyle(function(feature){
-        var thisProject = feature.properties.project_id;
-        projectCount+=thisProject==project?1:0
-        switch (thisProject){
-            case project: return {
-                fillColor:"#f8a39f",
-                radius:8
-            };
-        }
-    });
-//Establish subset for bounds and adm gathering
-    geoJsonSubset.clearLayers();
-    geoJsonSubset.options.filter = function(feature,layer){
-        return feature.properties.project_id==project
-    }
-    geoJsonSubset.addData(feature_collection.features);
-    if(Object.keys(geoJsonSubset._layers).length>0){
-        var bounds = geoJsonSubset.getBounds()
-        zoomToFeature(bounds)
-    }
-    var highlightedAdms = [],
-            duplicateAdms = {},
-            uniqueAdms = [];
-    for(var layer in geoJsonSubset._layers){
-        var layer_level = geoJsonSubset._layers[layer].feature.properties.adm_level
-                layer_code = geoJsonSubset._layers[layer].feature.properties.adm_code,
-                layer_precision = geoJsonSubset._layers[layer].feature.properties.precision_code,
-                adm_level = typeof(layer_level)=="number"&&layer_precision>1?layer_level:undefined,
-                adm_code = typeof(layer_code)=="number"&&layer_precision>1?layer_code:undefined;
-        highlightedAdms.push(getAdm(adm_level,adm_code))
-    }
-    $.each(highlightedAdms, function(i, el) {
-        if (!duplicateAdms[el.options.shp]) {
-            duplicateAdms[el.options.shp] = true;
-            uniqueAdms.push(el);
-        }
-    });
-    if(typeof(adms)=="object"){map.removeLayer(adms)}
-    adms = L.featureGroup(uniqueAdms);
-    //adms.addTo(map);
 };
 function zoomToFeature(bounds){
     var extendPoint1 = new L.LatLng(bounds.getNorthEast().lat + 1, bounds.getNorthEast().lng + 1);
@@ -571,56 +494,24 @@ function zoomToFeature(bounds){
     bounds.extend(extendPoint2);
     map.fitBounds(bounds,{maxZoom:9});
 };
-function onEachFeature(feature,layer){
-    if(feature.properties && feature.properties.project_id && feature.properties.project_year && feature.properties.geo_name && feature.properties.precision_code){
-        layer.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ feature.properties.project_id + "'>"+feature.properties.project_id+"</a><br/><strong>Year: </strong>" + feature.properties.project_year + "<br/><strong>Location: </strong>" + feature.properties.geo_name + "<br/><strong>Precision: </strong>" + feature.properties.precision_code);
-    }
-        layer.on({
-            mouseover:highlightFeature,
-            mouseout:resetHighlight,
-            click: highlightProject
-        })
-    }
 if (feature_collection === null){
     console.log("Feature collection error.")
     feature_collection = {};
     feature_collection.features=[];}
-var geoJson = L.geoJson(feature_collection.features, {
-    onEachFeature: onEachFeature,
-    pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, MarkerOptions);
-    }
-}),
-    geoJsonSubset = L.geoJson(feature_collection.features, {
-        onEachFeature: onEachFeature,
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, MarkerOptions);
-        }
-    });
-map.addLayer(geoJson);
+//Clustering
+var markers = L.markerClusterGroup({maxClusterRadius:70,spiderfyDistanceMultiplier:2});
+for (var i = 0; i < feature_collection.features.length; i++) {
+    var a = feature_collection.features[i],
+            properties = feature_collection.features[i].properties;
+    var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+    marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+    marker.properties = properties
+    markers.addLayer(marker);
+}
+map.addLayer(markers);
+
 //Filter function
-function filterGeoJson(filterObject){
-    if(filterObject===undefined){
-        geoJson.options.filter = undefined;
-    }
-    else{
-        geoJson.options.filter = function(feature,layer){
-            var metaFilterBoolean = true;
-            for(var filter in filterObject){
-                var values = filterObject[filter],
-                        valueLen = values.length,
-                        filterBoolean = false;
-                for(var i=0;i<valueLen;i++){
-                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
-                };
-                metaFilterBoolean = metaFilterBoolean && filterBoolean
-            };
-            return metaFilterBoolean;
-        };
-    }
-    geoJson.clearLayers()
-    geoJson.addData(feature_collection.features)
-};
+function filterGeoJson(filterObject){};
 var filterObject = {"project_year":project_years};
 //This can be changed to [type='checkbox'] when both fields are active
 $("input[type='checkbox']").change(function(){
@@ -639,16 +530,16 @@ $("input[type='checkbox']").change(function(){
             filterObject[attribute].splice(index,1);
         }
     }
-    filterGeoJson(filterObject);
+//filterGeoJson(filterObject);
 });
 $("a.facet-controller#project_years_on").click(function(){
     var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
     filterObject.project_year = project_years;
-    filterGeoJson(filterObject);
+    //filterGeoJson(filterObject);
 });
 $("a.facet-controller#project_years_off").click(function(){
     filterObject.project_year = [];
-    filterGeoJson(filterObject);
+    //filterGeoJson(filterObject);
 });
 //Legend show/hide and div height control
 $(document).ready(function(){
