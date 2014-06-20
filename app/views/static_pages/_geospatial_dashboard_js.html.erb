@@ -180,27 +180,35 @@
 //Functions to control page movement
         pageFirst = function(){
             var params = {'ids[]': results.ids, page:1};
+            $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
                 results = data
-                drawResults(results); }, "json");
+                drawResults(results); }, "json")
+                    .always(function(){$('.loading').toggle()});
         }
         pagePrev = function(){
             var params = {'ids[]': results.ids, page: results.current - 1};
+            $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
                 results = data
-                drawResults(results); }, "json");
+                drawResults(results); }, "json")
+                    .always(function(){$('.loading').toggle()});
         }
         pageNext = function(){
             var params = {'ids[]': results.ids, page: results.current + 1};
+            $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
                 results = data
-                drawResults(results); }, "json");
+                drawResults(results); }, "json")
+                    .always(function(){$('.loading').toggle()});
         }
         pageLast = function(){
             var params = {'ids[]': results.ids, page: results.pages};
+            $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
                 results = data
-                drawResults(results); }, "json");
+                drawResults(results); }, "json")
+                    .always(function(){$('.loading').toggle()});
         }
         drawResults(results)
       </script>
@@ -369,9 +377,11 @@ function highlightGeocode(geocode){
 };
 function clickHighlightProject(project) {
     var params = {'id': project};
+    $('.loading').toggle()
     $.post("/queries/micro_project", params, function(data){
         microProjectData = data
-        drawProject(microProjectData);}, "json");
+        drawProject(microProjectData);}, "json")
+            .always(function(){$('.loading').toggle()});
 };
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -419,7 +429,7 @@ function drawProject(microProjectData){
     }
     $('#projectPage').append("<b>Amount (USD 2009):</b> $"+numberWithCommas(Math.ceil(project.usd_2009))+"<br>")
     $('#projectPage').append("<b>Status:</b> "+project.status_name+"<br>")
-    $('#projectPage').append("<b>Scope:</b> "+project.oda_like_name+"<br>")
+    $('#projectPage').append("<b>Flow Class:</b> "+project.oda_like_name+"<br>")
     $('#projectPage').append("<b>Sector:</b> "+project.crs_sector_name+"<br><hr>")
     for(var i=0;i<microProjectData.length;i++){
         var geocode = microProjectData[i],
