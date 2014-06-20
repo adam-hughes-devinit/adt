@@ -349,7 +349,7 @@ var highlightOptions = {
     opacity: 0,
     fillOpacity: 1};
 function highlightProjectHover(project){
-    highlightGroup = L.layerGroup();
+    highlightGroup = L.featureGroup();
     markers.eachLayer(function(layer){
         if(layer.properties.project_id==project){
             var parentLayer = markers.getVisibleParent(layer)
@@ -364,6 +364,7 @@ function highlightProjectHover(project){
         }
     })
     map.addLayer(highlightGroup)
+    highlightGroup.bringToBack();
 };
 function resetHighlightProjectHover(project){
     map.removeLayer(highlightGroup)
@@ -492,7 +493,7 @@ if (feature_collection === null){
     feature_collection.features=[];}
 //Clustering
 function drawClusters(){
-    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, iconCreateFunction:function(cluster){
+    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
         var count = cluster.getChildCount()
         return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
     }});
@@ -509,7 +510,7 @@ function drawClusters(){
 function setRadiusByZoom(){
     map.removeLayer(markers);
     var clusterRadius = map.getZoom()>5?1:40;
-    markers = L.markerClusterGroup({maxClusterRadius:clusterRadius,spiderfyDistanceMultiplier:2, iconCreateFunction:function(cluster){
+    markers = L.markerClusterGroup({maxClusterRadius:clusterRadius,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
         var count = cluster.getChildCount()
         return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
     }});
