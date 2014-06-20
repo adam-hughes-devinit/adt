@@ -313,6 +313,7 @@
     }
 function fullExtent(event){
     event.preventDefault();
+    map.setZoom(3)
     map.fitBounds([[52,68],[-42,-29]])
     return false;
 }
@@ -494,8 +495,26 @@ function drawClusters(){
         markers.addLayer(marker);
     }
     map.addLayer(markers);
+};
+function setRadiusByZoom(){
+    map.removeLayer(markers);
+    var clusterRadius = map.getZoom()>5?1:40;
+    markers = L.markerClusterGroup({maxClusterRadius:clusterRadius,spiderfyDistanceMultiplier:2, iconCreateFunction:function(cluster){
+        var count = cluster.getChildCount()
+        return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
+    }});
+    for (var i = 0; i < feature_collection.features.length; i++) {
+        var a = feature_collection.features[i],
+                properties = feature_collection.features[i].properties;
+        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+        marker.properties = properties
+        markers.addLayer(marker);
+    }
+    map.addLayer(markers);
 }
 drawClusters();
+map.on('zoomend',setRadiusByZoom)
 //Filter function
 filteredLayers = L.featureGroup();
 function filterGeoJson(filterObject){
