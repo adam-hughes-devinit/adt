@@ -4,7 +4,6 @@
 <%= javascript_include_tag   "humanity_united/leaflet.markercluster-src" %>
 <%= stylesheet_link_tag "humanity_united/mapbox" %>
 <%= stylesheet_link_tag "humanity_united/ui-lightness/jquery-ui-1.10.4.custom.min" %>
-<%= stylesheet_link_tag "humanity_united/MarkerCluster.Default" %>
 <style>
     .container {width:100% !important;padding:0px !important;}
     #vis { width:100%; height:100%; margin-right:auto; margin-left:auto;}
@@ -51,6 +50,8 @@
     .leaflet-bar a{border-radius:0px !important;}
     #resultLeft{overflow:hidden;position:relative;left:0;}
     #resultRight{overflow:hidden;position:relative;left:100%;display:none;}
+    .geocode-cluster{background: #9FE5F8;background:rgba(159, 229, 248, 0.5);border:1px solid black;border:1px solid rgba(0, 0, 0, 0.5);border-radius:50%;}
+    .geocode-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -78,16 +79,7 @@
               feature_collection = data.features
 //Clustering
               map.removeLayer(markers);
-              markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
-              for (var i = 0; i < feature_collection.features.length; i++) {
-                  var a = feature_collection.features[i],
-                          properties = feature_collection.features[i].properties;
-                  var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-                  marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-                  marker.properties = properties
-                  markers.addLayer(marker);
-              }
-              map.addLayer(markers);
+              drawClusters()
               drawResults(data)
               results = data
               if(feature_collection.features.length>0){
@@ -346,13 +338,20 @@ var highlightOptions = {
     color: "#000",
     weight: 1,
     opacity: 0,
-    fillOpacity: 0.9};
+    fillOpacity: 1};
 function highlightProjectHover(project){
     highlightGroup = L.layerGroup();
     markers.eachLayer(function(layer){
         if(layer.properties.project_id==project){
-            highlightMarker = L.circleMarker(layer._latlng,highlightOptions)
-            highlightGroup.addLayer(highlightMarker)
+            var parentLayer = markers.getVisibleParent(layer)
+            if(parentLayer !==null){
+                var latlng = parentLayer._latlng
+                highlightMarker = L.circleMarker(latlng,highlightOptions)
+                highlightGroup.addLayer(highlightMarker)
+            }else{
+                highlightMarker = L.circleMarker(layer._latlng,highlightOptions)
+                highlightGroup.addLayer(highlightMarker)
+            }
         }
     })
     map.addLayer(highlightGroup)
@@ -402,16 +401,7 @@ function drawProject(microProjectData){
     feature_collection.features = features
 //Redraw map with clustering and zoom
     map.removeLayer(markers);
-    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
-    for (var i = 0; i < feature_collection.features.length; i++) {
-        var a = feature_collection.features[i],
-                properties = feature_collection.features[i].properties;
-        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-        marker.properties = properties
-        markers.addLayer(marker);
-    }
-    map.addLayer(markers);
+    drawClusters();
     if(Object.keys(markers._featureGroup._layers).length>0){
         var bounds = markers.getBounds()
         zoomToFeature(bounds)
@@ -468,16 +458,7 @@ function backToResults(){
     feature_collection.features = oldFeatures
     //Redraw map with clustering and zoom
     map.removeLayer(markers);
-    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
-    for (var i = 0; i < feature_collection.features.length; i++) {
-        var a = feature_collection.features[i],
-                properties = feature_collection.features[i].properties;
-        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-        marker.properties = properties
-        markers.addLayer(marker);
-    }
-    map.addLayer(markers);
+    drawClusters();
     if(Object.keys(markers._featureGroup._layers).length>0){
         var bounds = markers.getBounds()
         zoomToFeature(bounds)
@@ -499,17 +480,22 @@ if (feature_collection === null){
     feature_collection = {};
     feature_collection.features=[];}
 //Clustering
-var markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
-for (var i = 0; i < feature_collection.features.length; i++) {
-    var a = feature_collection.features[i],
-            properties = feature_collection.features[i].properties;
-    var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-    marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-    marker.properties = properties
-    markers.addLayer(marker);
+function drawClusters(){
+    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, iconCreateFunction:function(cluster){
+        var count = cluster.getChildCount()
+        return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
+    }});
+    for (var i = 0; i < feature_collection.features.length; i++) {
+        var a = feature_collection.features[i],
+                properties = feature_collection.features[i].properties;
+        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
+        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+        marker.properties = properties
+        markers.addLayer(marker);
+    }
+    map.addLayer(markers);
 }
-map.addLayer(markers);
-
+drawClusters();
 //Filter function
 filteredLayers = L.featureGroup();
 function filterGeoJson(filterObject){
