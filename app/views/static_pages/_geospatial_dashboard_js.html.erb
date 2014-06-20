@@ -373,6 +373,7 @@ function highlightGeocode(geocode){
     markers.eachLayer(function(layer){
         if(layer.properties.geo_code_id==geocode){
             markers.zoomToShowLayer(layer)
+            layer.openPopup()
         }
     })
 };
@@ -387,6 +388,7 @@ function clickHighlightProject(project) {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+function toggleGeocode(){$("#geocodeslider").slideToggle();$("#geocodeBtn").html($("#geocodeBtn").html()[0]=="S"?"Hide geocodes":"Show geocodes")};
 function drawProject(microProjectData){
 //Build Feature Collection
     var features = [],
@@ -432,6 +434,8 @@ function drawProject(microProjectData){
     $('#projectPage').append("<b>Status:</b> "+project.status_name+"<br>")
     $('#projectPage').append("<b>Flow Class:</b> "+project.oda_like_name+"<br>")
     $('#projectPage').append("<b>Sector:</b> "+project.crs_sector_name+"<br><hr>")
+    $('#projectPage').append("<a id='geocodeBtn' href='#' onclick='toggleGeocode()'>Show geocodes</a>")
+    $('#projectPage').append("<div id='geocodeslider' style='display:none;'></div>")
     for(var i=0;i<microProjectData.length;i++){
         var geocode = microProjectData[i],
                 geoTreelen = geocode.geoTree===null?0:geocode.geoTree.length,
@@ -448,11 +452,14 @@ function drawProject(microProjectData){
         }
         geocodeHTML += ("<em>Geoname: </em>"+geocode.geo_name+"<br>")
         geocodeHTML += ("<em>Precision: </em>"+geocode.precision_id+"<br>")
-        $('#projectPage').append("<div onclick='highlightGeocode("+geocode.geo_code_id+")' style='cursor:pointer'>"+geocodeHTML+"</div>")
+        $('#geocodeslider').append("<div onclick='highlightGeocode("+geocode.geo_code_id+")' style='cursor:pointer'>"+geocodeHTML+"</div>")
         if(i+1<microProjectData.length){
-            $('#projectPage').append("<hr>")
-        }else{$('#projectPage').append("<br>")}
+            $('#geocodeslider').append("<hr>")
+        }
     }
+    $('#projectPage').append("<hr>")
+    //$('#projectPage').append("<b>Comment</b>")
+    //$('#projectPage').append(< #render 'projects/comment_form' >)
 //Slide Results Panel
     slideResults()
 };
