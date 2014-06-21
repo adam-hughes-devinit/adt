@@ -13,7 +13,9 @@ class Geocode < ActiveRecord::Base
 
   searchable do
     text :geo_name do
-      geo_name.name
+      if !geo_name.nil?
+        geo_name.name
+      end
     end
   end
 end

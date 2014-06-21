@@ -30,18 +30,22 @@ class GeoUpload < ActiveRecord::Base
     # First add adm_code field to countries table. Then populate it with correct adm0's.
     # Then use a projects recipient country to match up with correct adm0.
     # THen find nearest adm, within the select adm0.
-  def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats)
+  def self.find_adm(lonlat, adm_level, logfile, geocode, record_stats, include_geometry)
     adm = Adm.where{level == adm_level}.joins{geometry}.where{st_contains(st_collectionextract(geometries.the_geom,3), lonlat)}.first
     if !adm.nil? # prevents crash if no adm match is found.
       geocode[:adm_id] = adm.id
-      geocode[:geometry_id] = adm.geometry.id
+      if include_geometry
+        geocode[:geometry_id] = adm.geometry.id
+      end
     else
        # Sometimes point doesn't reside inside an adm (usually because its in water).
        # This finds the nearest adm to the point.
       closest_adm = Adm.where{level == adm_level}.joins{geometry}.select{[st_distance(st_collectionextract(geometries.the_geom,3), lonlat).as('distance'), id, geometries.id.as('geometry_id')]}.order('distance').first
       if !closest_adm.nil? # prevents crash if no adm match is found.
         geocode[:adm_id] = closest_adm.id
-        geocode[:geometry_id] = closest_adm.geometry_id
+        if include_geometry
+          geocode[:geometry_id] = closest_adm.geometry_id
+        end
 
         logfile.write("Info: geocode_id #{geocode.id}: Could not find Adm, so we used the closest one.\n")
         record_stats["created_adm"] += 1
@@ -110,11 +114,15 @@ class GeoUpload < ActiveRecord::Base
 
           geometry_map = {}
           if record[:precision_id] == 1  # its a point
+            geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats, false)
+
             geometry_map[:the_geom] = RGeo::Feature.cast(lonlat, RGeo::Feature::GeometryCollection)
             new_geometry = Geometry.create ( geometry_map )
             geocode[:geometry_id] = new_geometry.id
 
           elsif record[:precision_id] == 2  # its a buffer within 25km
+            geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats, false)
+
             lonlat_buff = lonlat.buffer(25000)
             geometry_map[:the_geom] = RGeo::Feature.cast(lonlat_buff, RGeo::Feature::GeometryCollection)
 
@@ -122,16 +130,16 @@ class GeoUpload < ActiveRecord::Base
             geocode[:geometry_id] = new_geometry.id
 
           elsif record[:precision_id] == 3  # its an adm2
-            geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats)
+            geocode = GeoUpload.find_adm(lonlat, 2, logfile, geocode, record_stats, true)
 
           elsif record[:precision_id] == 4  # its an adm1
-            geocode = GeoUpload.find_adm(lonlat, 1, logfile, geocode, record_stats)
+            geocode = GeoUpload.find_adm(lonlat, 1, logfile, geocode, record_stats, true)
 
           elsif record[:precision_id] == 6 # its an adm0
-            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
+            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats, true)
 
           elsif record[:precision_id] == 8  # its an adm0
-            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats)
+            geocode = GeoUpload.find_adm(lonlat, 0, logfile, geocode, record_stats, true)
           else
              # It's a [5,7,9] precision code. Put it in the database, but it doesn't get a geometry.
             logfile.write("Info: geocode_id #{geocode.id}: Deprecated precision code\n")
