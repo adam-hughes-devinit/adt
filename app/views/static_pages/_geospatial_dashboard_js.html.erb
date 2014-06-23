@@ -510,6 +510,8 @@ function drawClusters(){
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties
+        //marker.options.fillColor = marker.properties.precision_code<2?"#f8b99f":
+        //                marker.properties.precision_code<5?"#9ff8b2":"#a79ff8"
         markers.addLayer(marker);
     }
     map.addLayer(markers);
@@ -527,6 +529,8 @@ function setRadiusByZoom(){
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties
+        //marker.options.fillColor = marker.properties.precision_code<2?"#f8b99f":
+        //                marker.properties.precision_code<5?"#9ff8b2":"#a79ff8"
         markers.addLayer(marker);
     }
     map.addLayer(markers);
