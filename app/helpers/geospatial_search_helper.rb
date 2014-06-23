@@ -43,7 +43,7 @@ module GeospatialSearchHelper
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
         search = Adm.solr_search do
-          keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+          keywords params["search"].split(/(?:\(.*?\))+/)[0].split(/\A[*]+/) do
             fields(:name)
           end
           paginate :page => 1, :per_page => 10000
@@ -82,8 +82,9 @@ module GeospatialSearchHelper
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(GEO")
+        puts "GEO search...................."
         searchGeoName = Geocode.solr_search do
-          keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+          keywords params["search"].split(/(?:\(.*?\))+/)[0].split(/\A[*]+/) do
             fields(:geo_name)
           end
           paginate :page => 1, :per_page => 10000
