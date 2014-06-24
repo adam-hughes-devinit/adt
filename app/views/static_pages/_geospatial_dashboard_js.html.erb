@@ -600,7 +600,7 @@ function openRightClickMap(e){
     });
 };
 function openRightClickMarkers(e){
-    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>Load project page for this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment to this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>Load project page for this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment on this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
     dropdown.addTo(map);
     if($('#resultLeft').css("display")=="none"){
