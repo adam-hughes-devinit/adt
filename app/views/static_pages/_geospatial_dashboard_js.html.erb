@@ -52,6 +52,7 @@
     #resultRight{overflow:hidden;position:relative;left:100%;display:none;}
     .geocode-cluster{background: #9FE5F8;background:rgba(159, 229, 248, 0.5);border:1px solid black;border:1px solid rgba(0, 0, 0, 0.5);border-radius:50%;}
     .geocode-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
+    .project.highlight, .geocode.highlight{background-color:lightgoldenrodyellow;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -159,7 +160,7 @@
                 feature_collection.features.forEach(function(e){
                     geoCount += e.properties.project_id==project.id?1:0
                 })
-                $('#results').append("<div class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>ID: <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>"+truncTitle+"<br>Geocodes: "+geoCount+"/"+project.geocodes.length+"</div>")
+                $('#results').append("<div id='"+project.id+"' class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>ID: <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>"+truncTitle+"<br>Geocodes: "+geoCount+"/"+project.geocodes.length+"</div>")
                 $('#results').append("<hr>")
             }
 //Draw page buttons
@@ -452,7 +453,7 @@ function drawProject(microProjectData){
         }
         geocodeHTML += ("<em>Geoname: </em>"+geocode.geo_name+"<br>")
         geocodeHTML += ("<em>Precision: </em>"+geocode.precision_id+"<br>")
-        $('#geocodeslider').append("<div onclick='highlightGeocode("+geocode.geo_code_id+")' style='cursor:pointer'>"+geocodeHTML+"</div>")
+        $('#geocodeslider').append("<div class='geocode' id='"+geocode.geo_code_id+"' onclick='highlightGeocode("+geocode.geo_code_id+")' style='cursor:pointer'>"+geocodeHTML+"</div>")
         if(i+1<microProjectData.length){
             $('#geocodeslider').append("<hr>")
         }
@@ -515,6 +516,8 @@ function drawClusters(){
         markers.addLayer(marker);
     }
     map.addLayer(markers);
+    markers.on('mouseover',highlightProjectDiv)
+    markers.on('mouseout',highlightProjectDiv)
 };
 function setRadiusByZoom(){
     map.removeLayer(markers);
@@ -534,6 +537,14 @@ function setRadiusByZoom(){
         markers.addLayer(marker);
     }
     map.addLayer(markers);
+    markers.on('mouseover',highlightProjectDiv)
+    markers.on('mouseout',highlightProjectDiv)
+};
+function highlightProjectDiv(e){
+    var project = e.layer.properties.project_id,
+            geocode = e.layer.properties.geo_code_id;
+    $('div.project#'+project).toggleClass('highlight')
+    $('div.geocode#'+geocode).toggleClass('highlight')
 }
 drawClusters();
 map.on('zoomend',setRadiusByZoom)
