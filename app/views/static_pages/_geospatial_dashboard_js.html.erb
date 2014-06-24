@@ -332,6 +332,18 @@ function fullExtent(event){
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
 $('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
+$("#commentOverlay").change(function(){
+    var changedBox = this,
+            attribute = $(changedBox).attr("name"),
+            value = $(changedBox).attr("value"),
+            onOff = $("input#commentOverlay:checked").length;
+    if(onOff==1){
+        map.addLayer(comments)
+    }else{
+        map.removeLayer(comments)
+    }
+});
     function getColorPoverty(d) {
         return d > 79.9  ? '#FF0202' :
                         d > 59.9   ? '#FA5A5A' :
@@ -554,6 +566,7 @@ function highlightProjectDiv(e){
 };
 drawClusters();
 //Map Event listeners
+comments = L.featureGroup();
 map.on('contextmenu',openRightClickMap)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
@@ -578,6 +591,12 @@ function openRightClickMap(e){
     });
     $('div.rightClick#comment').hover(function(){
         $('div.rightClick#comment').toggleClass('highlight')
+    });
+    $('div.rightClick#comment').click(function(){
+        map.removeLayer(dropdown);
+        comments.addLayer(L.marker(e.latlng))
+        comments.addTo(map);
+        $("input#commentOverlay").prop('checked',true)
     });
 };
 function openRightClickMarkers(e){
@@ -611,8 +630,20 @@ function openRightClickMarkers(e){
     $('div.rightClick#commentGeocode').hover(function(){
         $('div.rightClick#commentGeocode').toggleClass('highlight')
     });
+    $('div.rightClick#commentGeocode').click(function(){
+        map.removeLayer(dropdown);
+        comments.addLayer(L.marker(e.latlng))
+        comments.addTo(map);
+        $("input#commentOverlay").prop('checked',true)
+    });
     $('div.rightClick#comment').hover(function(){
         $('div.rightClick#comment').toggleClass('highlight')
+    });
+    $('div.rightClick#comment').click(function(){
+        map.removeLayer(dropdown);
+        comments.addLayer(L.marker(e.latlng))
+        comments.addTo(map);
+        $("input#commentOverlay").prop('checked',true)
     });
 };
 map.on('zoomend',setRadiusByZoom)
@@ -657,7 +688,7 @@ function filterGeoJson(filterObject){
     }
 };
 var filterObject = {"project_year":project_years};
-$("input[type='checkbox']").change(function(){
+$("div#filtercontrol input[type='checkbox']").change(function(){
    var changedBox = this,
            attribute = $(changedBox).attr("name"),
            value = $(changedBox).attr("value"),
