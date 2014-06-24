@@ -557,6 +557,13 @@ map.on('contextmenu',openRightClickMap)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
+    map.eachLayer(function(e){
+        if(e._icon!=null){
+            if(e._icon.className.indexOf("rightclick")!=-1){
+                map.removeLayer(e)
+            }
+        }
+    })
     dropdown.addTo(map);
     $('div.rightclick-dropdown').mouseleave(function(){
         map.removeLayer(dropdown);
