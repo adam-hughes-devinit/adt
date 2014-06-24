@@ -53,7 +53,7 @@
     .geocode-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
     .highlight{background-color:lightgoldenrodyellow;}
     .rightclick-dropdown{padding:3px;background: #FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;width:auto !important;height:auto !important;z-index:9999 !important;}
-    .rightclick-dropdown div{width:171px !important;}
+    .rightclick-dropdown div{width:189px !important;}
 
 </style>
 <div class="loading"></div>
@@ -73,10 +73,12 @@
               .bind("ajax:complete", toggleLoading)
               .bind("ajax:success",function(xhr,data,status){
 //If Results page is currently on projects, slide toggle it
-              if($('#resultLeft').css("display")=="none"){
+              if($('#resultSlider').css("display")=="none"){
                   $('#resultSlider').slideToggle();
                   $('#resultsBtn').toggleClass('plus');
-                  slideResults();
+              }
+              if($('#resultLeft').css("display")=="none"){
+              slideResults();
               }
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
@@ -579,9 +581,12 @@ function openRightClickMap(e){
     });
 };
 function openRightClickMarkers(e){
-    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment to this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this geocode</div><div class='rightClick' id='project'>Load project page for this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment to this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
     dropdown.addTo(map);
+    if($('#resultLeft').css("display")=="none"){
+        $('div.rightClick#project').hide()
+    }
     $('div.rightclick-dropdown').mouseleave(function(){
         map.removeLayer(dropdown);
     });
@@ -591,6 +596,17 @@ function openRightClickMarkers(e){
     $('div.rightClick#zoom').click(function(){
         map.removeLayer(dropdown);
         map.fitBounds(e.layer.getBounds());
+    });
+    $('div.rightClick#project').hover(function(){
+        $('div.rightClick#project').toggleClass('highlight')
+    });
+    $('div.rightClick#project').click(function(){
+        map.removeLayer(dropdown);
+        if($('#resultSlider').css("display")=="none"){
+            $('#resultSlider').slideToggle();
+            $('#resultsBtn').toggleClass('plus');
+        }
+        clickHighlightProject(e.layer.properties.project_id);
     });
     $('div.rightClick#commentGeocode').hover(function(){
         $('div.rightClick#commentGeocode').toggleClass('highlight')
