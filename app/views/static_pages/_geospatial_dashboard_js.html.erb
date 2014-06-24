@@ -567,7 +567,7 @@ function highlightProjectDiv(e){
 };
 drawClusters();
 //Map Event listeners
-comments = L.markerClusterGroup();
+comments = L.markerClusterGroup({showCoverageOnHover:false});
 map.on('contextmenu',openRightClickMap)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
@@ -633,7 +633,7 @@ function openRightClickMarkers(e){
     });
     $('div.rightClick#commentGeocode').click(function(){
         map.removeLayer(dropdown);
-        comments.addLayer(L.marker(e.latlng))
+        comments.addLayer(L.marker(e.layer._latlng))
         comments.addTo(map);
         $("input#commentOverlay").prop('checked',true)
     });
