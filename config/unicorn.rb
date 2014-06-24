@@ -29,10 +29,10 @@ working_directory root_dir # available in 0.94.0+
 # we use a shorter backlog for quicker failover when busy
 #listen "/path/to/.unicorn.sock", :backlog => 64
 listen "#{root_dir}/tmp/sockets/.unicorn.sock", :backlog => 64
-listen 3000, :tcp_nopush => true
+listen 3001, :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
-timeout 240
+timeout 960
 
 # feel free to point this anywhere accessible on the filesystem
 pid "#{root_dir}/tmp/pids/unicorn.pid"
