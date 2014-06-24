@@ -552,7 +552,7 @@ function highlightProjectDiv(e){
 };
 drawClusters();
 //Map Event listeners
-//map.on('contextmenu',openRightClickMap)
+map.on('contextmenu',openRightClickMap)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
