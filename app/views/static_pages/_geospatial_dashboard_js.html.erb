@@ -55,7 +55,12 @@
     .highlight{background-color:lightgoldenrodyellow;}
     .rightclick-dropdown{padding:3px;background: #FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;width:auto !important;height:auto !important;z-index:9999 !important;}
     .rightclick-dropdown div{width:195px !important;}
-
+    .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+        -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+        -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+        -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+    }
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -633,6 +638,7 @@ function openRightClickMarkers(e){
     });
     $('div.rightClick#commentGeocode').click(function(){
         map.removeLayer(dropdown);
+        geocodelayer = e
         comments.addLayer(L.marker(e.layer._latlng))
         comments.addTo(map);
         $("input#commentOverlay").prop('checked',true)
