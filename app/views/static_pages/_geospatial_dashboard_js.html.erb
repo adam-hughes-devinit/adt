@@ -638,7 +638,6 @@ function openRightClickMarkers(e){
     });
     $('div.rightClick#commentGeocode').click(function(){
         map.removeLayer(dropdown);
-        geocodelayer = e
         comments.addLayer(L.marker(e.layer._latlng))
         comments.addTo(map);
         $("input#commentOverlay").prop('checked',true)
