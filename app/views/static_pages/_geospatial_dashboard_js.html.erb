@@ -52,7 +52,10 @@
     #resultRight{overflow:hidden;position:relative;left:100%;display:none;}
     .geocode-cluster{background: #9FE5F8;background:rgba(159, 229, 248, 0.5);border:1px solid black;border:1px solid rgba(0, 0, 0, 0.5);border-radius:50%;}
     .geocode-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
-    .project.highlight, .geocode.highlight{background-color:lightgoldenrodyellow;}
+    .highlight{background-color:lightgoldenrodyellow;}
+    .rightclick-dropdown{padding:3px;background: #FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;width:auto !important;height:auto !important;z-index:9999 !important;}
+    .rightclick-dropdown div{width:171px !important;}
+
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -518,6 +521,7 @@ function drawClusters(){
     map.addLayer(markers);
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
+    markers.on('contextmenu',openRightClickMarkers)
 };
 function setRadiusByZoom(){
     map.removeLayer(markers);
@@ -539,14 +543,56 @@ function setRadiusByZoom(){
     map.addLayer(markers);
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
+    markers.on('contextmenu',openRightClickMarkers)
 };
 function highlightProjectDiv(e){
     var project = e.layer.properties.project_id,
             geocode = e.layer.properties.geo_code_id;
     $('div.project#'+project).toggleClass('highlight')
     $('div.geocode#'+geocode).toggleClass('highlight')
-}
+};
 drawClusters();
+//Map Event listeners
+map.on('contextmenu',openRightClickMap)
+function openRightClickMap(e){
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    dropdown = L.marker(e.latlng,{icon:dropdownIcon})
+    dropdown.addTo(map);
+    $('div.rightclick-dropdown').mouseleave(function(){
+        map.removeLayer(dropdown);
+    });
+    $('div.rightClick#zoom').hover(function(){
+        $('div.rightClick#zoom').toggleClass('highlight')
+    });
+    $('div.rightClick#zoom').click(function(){
+        map.removeLayer(dropdown);
+        map.setView(e.latlng,13);
+    });
+    $('div.rightClick#comment').hover(function(){
+        $('div.rightClick#comment').toggleClass('highlight')
+    });
+};
+function openRightClickMarkers(e){
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom in to this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment to this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    dropdown = L.marker(e.latlng,{icon:dropdownIcon})
+    dropdown.addTo(map);
+    $('div.rightclick-dropdown').mouseleave(function(){
+        map.removeLayer(dropdown);
+    });
+    $('div.rightClick#zoom').hover(function(){
+        $('div.rightClick#zoom').toggleClass('highlight')
+    });
+    $('div.rightClick#zoom').click(function(){
+        map.removeLayer(dropdown);
+        map.fitBounds(e.layer.getBounds());
+    });
+    $('div.rightClick#commentGeocode').hover(function(){
+        $('div.rightClick#commentGeocode').toggleClass('highlight')
+    });
+    $('div.rightClick#comment').hover(function(){
+        $('div.rightClick#comment').toggleClass('highlight')
+    });
+};
 map.on('zoomend',setRadiusByZoom)
 //Filter function
 filteredLayers = L.featureGroup();
