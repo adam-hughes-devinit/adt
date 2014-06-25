@@ -82,7 +82,6 @@ module GeospatialSearchHelper
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(GEO")
-        puts "GEO search...................."
         searchGeoName = Geocode.solr_search do
           keywords params["search"].split(/(?:\(.*?\))+/)[0].split(/\A[*]+/) do
             fields(:geo_name)
