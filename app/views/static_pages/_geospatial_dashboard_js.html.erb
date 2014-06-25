@@ -52,9 +52,11 @@
     #resultRight{overflow:hidden;position:relative;left:100%;display:none;}
     .geocode-cluster{background: #9FE5F8;background:rgba(159, 229, 248, 0.5);border:1px solid black;border:1px solid rgba(0, 0, 0, 0.5);border-radius:50%;}
     .geocode-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
+    .suggestion-cluster{background: #a79ff8;background:rgba(167, 159, 248, 0.5);border:1px solid black;border:1px solid rgba(0, 0, 0, 0.5);border-radius:50%;}
+    .suggestion-cluster div{text-align:center;line-height:0%;position:relative;top:50%;}
     .highlight{background-color:lightgoldenrodyellow;}
     .rightclick-dropdown{padding:3px;background: #FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;width:auto !important;height:auto !important;z-index:9999 !important;}
-    .rightclick-dropdown div{width:195px !important;}
+    .rightclick-dropdown div{width:205px !important;}
     .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
         -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
         -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
@@ -320,6 +322,13 @@
             color: "#000",
             weight: 1,
             opacity: 1,
+            fillOpacity: 0.5},
+            suggestionOptions = {
+            radius: 7,
+            fillColor: "#a79ff8",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
             fillOpacity: 0.5};
 //Set-up Leaflet Controls
     map.addLayer(none);
@@ -338,16 +347,22 @@ function fullExtent(event){
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
 $('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='suggestionOverlay'><span> Suggested Projects</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
 $("#commentOverlay").change(function(){
-    var changedBox = this,
-            attribute = $(changedBox).attr("name"),
-            value = $(changedBox).attr("value"),
-            onOff = $("input#commentOverlay:checked").length;
+    var onOff = $("input#commentOverlay:checked").length;
     if(onOff==1){
         map.addLayer(comments)
     }else{
         map.removeLayer(comments)
+    }
+});
+$("#suggestionOverlay").change(function(){
+    var onOff = $("input#suggestionOverlay:checked").length;
+    if(onOff==1){
+        map.addLayer(suggestions)
+    }else{
+        map.removeLayer(suggestions)
     }
 });
     function getColorPoverty(d) {
@@ -533,8 +548,6 @@ function drawClusters(){
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties
-        //marker.options.fillColor = marker.properties.precision_code<2?"#f8b99f":
-        //                marker.properties.precision_code<5?"#9ff8b2":"#a79ff8"
         markers.addLayer(marker);
     }
     map.addLayer(markers);
@@ -555,8 +568,6 @@ function setRadiusByZoom(){
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties
-        //marker.options.fillColor = marker.properties.precision_code<2?"#f8b99f":
-        //                marker.properties.precision_code<5?"#9ff8b2":"#a79ff8"
         markers.addLayer(marker);
     }
     map.addLayer(markers);
@@ -573,9 +584,13 @@ function highlightProjectDiv(e){
 drawClusters();
 //Map Event listeners
 comments = L.markerClusterGroup({showCoverageOnHover:false});
+suggestions = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
+    var count = cluster.getChildCount()
+    return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"suggestion-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
+}});
 map.on('contextmenu',openRightClickMap)
 function openRightClickMap(e){
-    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
     map.eachLayer(function(e){
         if(e._icon!=null){
@@ -595,18 +610,20 @@ function openRightClickMap(e){
         map.removeLayer(dropdown);
         map.setView(e.latlng,13);
     });
-    $('div.rightClick#comment').hover(function(){
-        $('div.rightClick#comment').toggleClass('highlight')
+    $('div.rightClick#suggest').hover(function(){
+        $('div.rightClick#suggest').toggleClass('highlight')
     });
-    $('div.rightClick#comment').click(function(){
+    $('div.rightClick#suggest').click(function(){
         map.removeLayer(dropdown);
-        comments.addLayer(L.marker(e.latlng))
-        comments.addTo(map);
-        $("input#commentOverlay").prop('checked',true)
+        var suggestion = L.circleMarker(e.latlng,suggestionOptions);
+        suggestion.bindPopup("Suggested comment")
+        suggestions.addLayer(suggestion);
+        suggestions.addTo(map);
+        $("input#suggestionOverlay").prop('checked',true)
     });
 };
 function openRightClickMarkers(e){
-    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>Load project page for this geocode</div><div class='rightClick' id='commentGeocode'>Add a comment on this geocode</div><div class='rightClick' id='comment'>Add a comment to this location</div>",className:"rightclick-dropdown"});
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>View project page</div><div class='rightClick' id='commentGeocode'>Comment on this geocode</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
     dropdown.addTo(map);
     if($('#resultLeft').css("display")=="none"){
@@ -642,14 +659,16 @@ function openRightClickMarkers(e){
         comments.addTo(map);
         $("input#commentOverlay").prop('checked',true)
     });
-    $('div.rightClick#comment').hover(function(){
-        $('div.rightClick#comment').toggleClass('highlight')
+    $('div.rightClick#suggest').hover(function(){
+        $('div.rightClick#suggest').toggleClass('highlight')
     });
-    $('div.rightClick#comment').click(function(){
+    $('div.rightClick#suggest').click(function(){
         map.removeLayer(dropdown);
-        comments.addLayer(L.marker(e.latlng))
-        comments.addTo(map);
-        $("input#commentOverlay").prop('checked',true)
+        var suggestion = L.circleMarker(e.latlng,suggestionOptions);
+        suggestion.bindPopup("Suggested comment")
+        suggestions.addLayer(suggestion);
+        suggestions.addTo(map);
+        $("input#suggestionOverlay").prop('checked',true)
     });
 };
 map.on('zoomend',setRadiusByZoom)
