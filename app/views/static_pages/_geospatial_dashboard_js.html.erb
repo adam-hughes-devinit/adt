@@ -277,16 +277,24 @@
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
-                noWrap:true
+                noWrap:true,
+                zIndex:0
+            }),
+            MapQuestSat = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpeg', {
+                attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+                subdomains: '1234',
+                noWrap:true,
+                zIndex:0
             }),
             OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                noWrap:true
+                noWrap:true,
+                zIndex:0
             });
-            none = L.geoJson(),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true,
-                opacity:0.7
+                opacity:0.7,
+                zIndex:4
             }),
 //sudo ./scripts/tilestache-server.py -c adm.cfg
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
@@ -294,11 +302,13 @@
         acled = L.tileLayer('http://localhost:8080/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
-                opacity:0.7
+                opacity:0.7,
+                zIndex:4
             }),
             usgs = L.tileLayer('http://china-tilestache.aiddata.org/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
-                noWrap:true
+                noWrap:true,
+                zIndex:4
             }),
 //Set-up map
             map = L.map('map', {
@@ -310,10 +320,9 @@
                 layers:MapQuest
             }),
             baseMaps ={
-                "None": none,
-                "Poverty": poverty,
-                "Armed Conflict": acled,
-                "Minerals and Mines": usgs
+                "Map": MapQuest,
+                "Satellite": MapQuestSat,
+                "Open Street Map": OSM
             },
 //Set-up GeoJson
             MarkerOptions = {
@@ -331,7 +340,6 @@
             opacity: 1,
             fillOpacity: 0.5};
 //Set-up Leaflet Controls
-    map.addLayer(none);
     var layerControl = L.control.layers(baseMaps);
     layerControl.options.collapsed = false;
     layerControl.addTo(map);
@@ -347,8 +355,126 @@ function fullExtent(event){
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
 $('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='suggestionOverlay'><span> Suggested Projects</span></label>")
+$('.leaflet-control-layers-base').append("<hr>")
+$('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>")
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>")
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>")
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>")
+$('.leaflet-control-layers-base').append("<hr>")
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>")
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='suggestionOverlay'><span> Suggested Geocodes</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
+$("#noBase").change(function(){
+    var onOff = $("input#noBase:checked").length;
+    if(onOff==1){
+        $("input#povertyBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        console.log("Selected layer: None")
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+    }
+});
+$("#povertyBase").change(function(){
+    var onOff = $("input#povertyBase:checked").length;
+    if(onOff==1){
+        $("input#noBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        if(poverty._map==null){map.addLayer(poverty)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        console.log("Selected layer: Poverty")
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                    grades = [0, 20, 40, 60, 80],
+                    labels = [],
+                    from, to;
+            for (var i = 0; i < grades.length; i++) {
+                from = grades[i];
+                to = grades[i + 1];
+                labels.push(
+                                '<i style="background:' + getColorPoverty(from) + '"></i> ' +
+                                from + (to ? '&ndash;' + to + '%' : '%+'));
+            }
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
+$("#acledBase").change(function(){
+    var onOff = $("input#acledBase:checked").length;
+    if(onOff==1){
+        $("input#povertyBase").prop('checked',false)
+        $("input#noBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(acled._map==null){map.addLayer(acled)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        console.log("Selected layer: Armed Conflict")
+        legend.onAdd = function(map){
+            var div = L.DomUtil.create('div', 'info legend'),
+                    grades = ["None", "Low", "Medium", "High"],
+                    labels = [],
+                    from, to;
+            for (var i = 0; i < grades.length; i++) {
+                from = grades[i];
+                to = grades[i + 1];
+                labels.push(
+                                '<i style="background:' + getColorConflict(from) + '"></i> ' +
+                                from + (to ? '&ndash;' + to : '+'));
+            }
+            div.innerHTML = labels.join('<br>');
+            return div;
+        }
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
+$("#usgsBase").change(function(){
+    var onOff = $("input#usgsBase:checked").length;
+    if(onOff==1){
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(usgs._map==null){map.addLayer(usgs)}
+        $("input#povertyBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#noBase").prop('checked',false)
+        console.log("Selected layer: Minerals and Mines")
+        legend.onAdd = function(map){
+            var div = L.DomUtil.create('div', 'info legend')
+            labels = [];
+            labels.push('<i style="background:#A10202"></i>' + "Mine, past or present");
+            labels.push('<i style="background:#ffffff;border:solid #02A102 2px;"></i>' + "Prospective mine");
+            labels.push('<i style="background:#0202A1"></i>' + "Processing plant");
+            labels.push('<i style="background:#ffffff;border:solid black 2px;"></i>' + "Unknown");
+            div.innerHTML = labels.join('<br>');
+            return div;
+        }
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
+$("#projectOverlay").change(function(){
+    var onOff = $("input#projectOverlay:checked").length;
+    if(onOff==1){
+        map.addLayer(markers)
+    }else{
+        map.removeLayer(markers)
+    }
+});
 $("#commentOverlay").change(function(){
     var onOff = $("input#commentOverlay:checked").length;
     if(onOff==1){
@@ -589,6 +715,8 @@ suggestions = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultipli
     return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"suggestion-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
 }});
 map.on('contextmenu',openRightClickMap)
+comments.on('contextmenu', openRightClickMap)
+suggestions.on('contextmenu', openRightClickMap)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
@@ -616,7 +744,7 @@ function openRightClickMap(e){
     $('div.rightClick#suggest').click(function(){
         map.removeLayer(dropdown);
         var suggestion = L.circleMarker(e.latlng,suggestionOptions);
-        suggestion.bindPopup("Suggested comment")
+        suggestion.bindPopup("Suggested project")
         suggestions.addLayer(suggestion);
         suggestions.addTo(map);
         $("input#suggestionOverlay").prop('checked',true)
@@ -655,7 +783,7 @@ function openRightClickMarkers(e){
     });
     $('div.rightClick#commentGeocode').click(function(){
         map.removeLayer(dropdown);
-        comments.addLayer(L.marker(e.layer._latlng))
+        comments.addLayer(L.marker(e.layer._latlng).bindPopup("Comment on geocode ID:"+ e.layer.properties.geo_code_id))
         comments.addTo(map);
         $("input#commentOverlay").prop('checked',true)
     });
@@ -665,7 +793,7 @@ function openRightClickMarkers(e){
     $('div.rightClick#suggest').click(function(){
         map.removeLayer(dropdown);
         var suggestion = L.circleMarker(e.latlng,suggestionOptions);
-        suggestion.bindPopup("Suggested comment")
+        suggestion.bindPopup("Suggested project")
         suggestions.addLayer(suggestion);
         suggestions.addTo(map);
         $("input#suggestionOverlay").prop('checked',true)
@@ -740,77 +868,4 @@ $("a.facet-controller#project_years_off").click(function(){
     filterObject.project_year = [];
     filterGeoJson(filterObject);
 });
-//Legend show/hide and div height control
-$(document).ready(function(){
-    map.on("baselayerchange", function(layer){
-        var selected_layer = layer;
-        if(selected_layer.name=="None"){
-            console.log("Selected layer: None")
-            if (legend._map!=null){
-                map.removeControl(legend);
-            }
-        }
-        if(selected_layer.name=="Poverty"){
-            console.log("Selected layer: Poverty")
-            legend.onAdd = function (map) {
-                var div = L.DomUtil.create('div', 'info legend'),
-                        grades = [0, 20, 40, 60, 80],
-                        labels = [],
-                        from, to;
-                for (var i = 0; i < grades.length; i++) {
-                    from = grades[i];
-                    to = grades[i + 1];
-                    labels.push(
-                                    '<i style="background:' + getColorPoverty(from) + '"></i> ' +
-                                    from + (to ? '&ndash;' + to + '%' : '%+'));
-                }
-                div.innerHTML = labels.join('<br>');
-                return div;
-            };
-            if (legend._map!=null){
-                map.removeControl(legend);
-            }
-            map.addControl(legend);
-        }
-        if(selected_layer.name=="Armed Conflict"){
-            console.log("Selected layer: Armed Conflict")
-            legend.onAdd = function(map){
-                var div = L.DomUtil.create('div', 'info legend'),
-                        grades = ["None", "Low", "Medium", "High"],
-                        labels = [],
-                        from, to;
-                for (var i = 0; i < grades.length; i++) {
-                    from = grades[i];
-                    to = grades[i + 1];
-                    labels.push(
-                                    '<i style="background:' + getColorConflict(from) + '"></i> ' +
-                                    from + (to ? '&ndash;' + to : '+'));
-                }
-                div.innerHTML = labels.join('<br>');
-                return div;
-            }
-            if (legend._map!=null){
-                map.removeControl(legend);
-            }
-            map.addControl(legend);
-        }
-        if(selected_layer.name=="Minerals and Mines"){
-            console.log("Selected layer: Minerals and Mines")
-            legend.onAdd = function(map){
-                var div = L.DomUtil.create('div', 'info legend')
-                        labels = [];
-                labels.push('<i style="background:#A10202"></i>' + "Mine, past or present");
-                labels.push('<i style="background:#ffffff;border:solid #02A102 2px;"></i>' + "Prospective mine");
-                labels.push('<i style="background:#0202A1"></i>' + "Processing plant");
-                labels.push('<i style="background:#ffffff;border:solid black 2px;"></i>' + "Unknown");
-                div.innerHTML = labels.join('<br>');
-                return div;
-            }
-            if (legend._map!=null){
-                map.removeControl(legend);
-            }
-            map.addControl(legend);
-        }
-    })
-})
 </script>
