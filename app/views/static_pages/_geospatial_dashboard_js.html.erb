@@ -676,6 +676,7 @@ function drawClusters(){
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
     markers.on('contextmenu',openRightClickMarkers)
+    markers.on('clustercontextmenu', openRightClickCluster)
 };
 function setRadiusByZoom(){
     map.removeLayer(markers);
@@ -693,7 +694,7 @@ function setRadiusByZoom(){
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
     markers.on('contextmenu',openRightClickMarkers)
-
+    markers.on('clustercontextmenu', openRightClickCluster)
 };
 function highlightProjectDiv(e){
     var project = e.layer.properties.project_id,
@@ -728,14 +729,14 @@ function openRightClickMap(e){
     $('div.rightClick#zoom').hover(function(){
         $('div.rightClick#zoom').toggleClass('highlight')
     });
-    $('div.rightClick#zoom').click(function(){
+    $('div.rightClick#zoom').mousedown(function(){
         map.removeLayer(dropdown);
         map.setView(e.latlng,13);
     });
     $('div.rightClick#suggest').hover(function(){
         $('div.rightClick#suggest').toggleClass('highlight')
     });
-    $('div.rightClick#suggest').click(function(){
+    $('div.rightClick#suggest').mousedown(function(){
         map.removeLayer(dropdown);
         var suggestion = L.circleMarker(e.latlng,suggestionOptions);
         suggestion.bindPopup("Suggested project")
@@ -757,14 +758,14 @@ function openRightClickMarkers(e){
     $('div.rightClick#zoom').hover(function(){
         $('div.rightClick#zoom').toggleClass('highlight')
     });
-    $('div.rightClick#zoom').click(function(){
+    $('div.rightClick#zoom').mousedown(function(){
         map.removeLayer(dropdown);
         map.fitBounds(e.layer.getBounds());
     });
     $('div.rightClick#project').hover(function(){
         $('div.rightClick#project').toggleClass('highlight')
     });
-    $('div.rightClick#project').click(function(){
+    $('div.rightClick#project').mousedown(function(){
         map.removeLayer(dropdown);
         if($('#resultSlider').css("display")=="none"){
             $('#resultSlider').slideToggle();
@@ -775,7 +776,7 @@ function openRightClickMarkers(e){
     $('div.rightClick#commentGeocode').hover(function(){
         $('div.rightClick#commentGeocode').toggleClass('highlight')
     });
-    $('div.rightClick#commentGeocode').click(function(){
+    $('div.rightClick#commentGeocode').mousedown(function(){
         map.removeLayer(dropdown);
         comments.addLayer(L.marker(e.layer._latlng).bindPopup("Comment on geocode ID:"+ e.layer.properties.geo_code_id))
         comments.addTo(map);
@@ -784,7 +785,7 @@ function openRightClickMarkers(e){
     $('div.rightClick#suggest').hover(function(){
         $('div.rightClick#suggest').toggleClass('highlight')
     });
-    $('div.rightClick#suggest').click(function(){
+    $('div.rightClick#suggest').mousedown(function(){
         map.removeLayer(dropdown);
         var suggestion = L.circleMarker(e.latlng,suggestionOptions);
         suggestion.bindPopup("Suggested project")
@@ -792,6 +793,11 @@ function openRightClickMarkers(e){
         suggestions.addTo(map);
         $("input#suggestionOverlay").prop('checked',true)
     });
+};
+function openRightClickCluster(e){
+    var clusterEvent = e;
+    clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
+    map.fireEvent('contextmenu', clusterEvent)
 };
 map.on('zoomend',setRadiusByZoom)
 //Filter function
