@@ -624,75 +624,104 @@ function drawProject(microProjectData){
 //Slide Results Panel
     slideResults()
 };
+newComment = L.geoJson();
 function getLatLon(){
     map.once('click',function(e){
         var lat = e.latlng.lat,
                 lng = e.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     markers.once('click',function(e){
         var lat = e.latlng.lat,
                 lng = e.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(e.layer.properties.geo_code_id)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     markers.once('clusterclick',function(e){
         var clusterEvent = e;
         clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
         var lat = clusterEvent.latlng.lat,
                 lng = clusterEvent.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     suggestions.once('click',function(e){
         var lat = e.latlng.lat,
                 lng = e.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     suggestions.once('clusterclick',function(e){
         var clusterEvent = e;
         clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
         var lat = clusterEvent.latlng.lat,
                 lng = clusterEvent.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     comments.once('click',function(e){
         var lat = e.latlng.lat,
                 lng = e.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
     comments.once('clusterclick',function(e){
         var clusterEvent = e;
         clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
         var lat = clusterEvent.latlng.lat,
                 lng = clusterEvent.latlng.lng;
-        console.log(e)
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
         $("input[name = 'geocode']").val(undefined)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
     })
 }
 function slideResults(){
