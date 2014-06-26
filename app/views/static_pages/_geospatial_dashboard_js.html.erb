@@ -137,19 +137,6 @@
           <a href='#' onclick='backToResults();'>&lt;Back to results</a>
           <hr>
           <div id="projectPage">
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
-          Project Page<br>
           </div>
         </div>
        </div>
@@ -284,13 +271,20 @@
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
                 noWrap:true,
-                zIndex:0
+                zIndex:0,
+                maxZoom:11
             }),
             OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 noWrap:true,
                 zIndex:0
-            });
+            }),
+            DGSat = L.tileLayer('http://{s}.tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/{z}/{x}/{y}.png', {
+                attribution: 'Tiles by <a href="http://www.digitalglobe.com/">Digital Globe</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+                noWrap:true,
+                zIndex:0,
+                subdomains:'abc'
+            }),
             poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
                 noWrap:true,
                 opacity:0.7,
@@ -321,7 +315,7 @@
             }),
             baseMaps ={
                 "Map": MapQuest,
-                "Satellite": MapQuestSat,
+                "Satellite": DGSat,
                 "Open Street Map": OSM
             },
 //Set-up GeoJson
@@ -623,7 +617,8 @@ function drawProject(microProjectData){
         }
     }
     $('#projectPage').append("<hr>")
-    //$('#projectPage').append("<b>Comment</b>")
+    $('#projectPage').append("<b>Comment</b>")
+    $('#projectPage').append("<form accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'></div><input id='post_comment' name='name' placeholder='Name' type='text' style='float:left;'><br><input class='btn btn-primary span2' style='float:left !important;' type='submit' value='Submit'></form>")
     //$('#projectPage').append(< #render 'projects/comment_form' >)
 //Slide Results Panel
     slideResults()
@@ -677,7 +672,7 @@ function drawClusters(){
         marker.properties = properties
         markers.addLayer(marker);
     }
-    map.addLayer(markers);
+    if($("input#projectOverlay:checked").length==1){map.addLayer(markers);}
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
     markers.on('contextmenu',openRightClickMarkers)
@@ -697,10 +692,11 @@ function setRadiusByZoom(){
         marker.properties = properties
         markers.addLayer(marker);
     }
-    map.addLayer(markers);
+    if($("input#projectOverlay:checked").length==1){map.addLayer(markers);}
     markers.on('mouseover',highlightProjectDiv)
     markers.on('mouseout',highlightProjectDiv)
     markers.on('contextmenu',openRightClickMarkers)
+
 };
 function highlightProjectDiv(e){
     var project = e.layer.properties.project_id,
