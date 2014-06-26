@@ -63,6 +63,7 @@
         -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
         transition: transform 0.3s ease-out, opacity 0.3s ease-in;
     }
+   input.post_comment{margin-bottom:2px !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -618,11 +619,82 @@ function drawProject(microProjectData){
     }
     $('#projectPage').append("<hr>")
     $('#projectPage').append("<b>Comment</b>")
-    $('#projectPage').append("<form accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'></div><input id='post_comment' name='name' placeholder='Name' type='text' style='float:left;'><br><input class='btn btn-primary span2' style='float:left !important;' type='submit' value='Submit'></form>")
+    $('#projectPage').append("<form accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden'><input name='verboselng' type='hidden'><input name='geocode' type='hidden'></div><input class='post_comment' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_comment' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_comment' name='latlng' placeholder='Lat, Long' type='text' style='float:left;width:66%;'><button type='button' onclick='getLatLon()' style='float:left;width:33%;padding:0px !important;line-height:1 !important;position:relative;top:2px;'>Get from map</button><textarea class='post_comment' name='content' placeholder='*Type your comment here...' style='float:left;width:100%;'></textarea></form>")
     //$('#projectPage').append(< #render 'projects/comment_form' >)
 //Slide Results Panel
     slideResults()
 };
+function getLatLon(){
+    map.once('click',function(e){
+        var lat = e.latlng.lat,
+                lng = e.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+    markers.once('click',function(e){
+        var lat = e.latlng.lat,
+                lng = e.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(e.layer.properties.geo_code_id)
+    })
+    markers.once('clusterclick',function(e){
+        var clusterEvent = e;
+        clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
+        var lat = clusterEvent.latlng.lat,
+                lng = clusterEvent.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+    suggestions.once('click',function(e){
+        var lat = e.latlng.lat,
+                lng = e.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+    suggestions.once('clusterclick',function(e){
+        var clusterEvent = e;
+        clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
+        var lat = clusterEvent.latlng.lat,
+                lng = clusterEvent.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+    comments.once('click',function(e){
+        var lat = e.latlng.lat,
+                lng = e.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+    comments.once('clusterclick',function(e){
+        var clusterEvent = e;
+        clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
+        var lat = clusterEvent.latlng.lat,
+                lng = clusterEvent.latlng.lng;
+        console.log(e)
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(undefined)
+    })
+}
 function slideResults(){
     var $lefty = $('#resultLeft'),
             $righty = $('#resultRight'),
