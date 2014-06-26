@@ -710,8 +710,10 @@ suggestions = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultipli
     return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"suggestion-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
 }});
 map.on('contextmenu',openRightClickMap)
-comments.on('contextmenu', openRightClickMap)
+comments.on('contextmenu', openRightClickCluster)
 suggestions.on('contextmenu', openRightClickMap)
+comments.on('clustercontextmenu', openRightClickCluster)
+suggestions.on('clustercontextmenu', openRightClickCluster)
 function openRightClickMap(e){
     var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this location</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
