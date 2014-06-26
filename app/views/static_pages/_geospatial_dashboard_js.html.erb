@@ -679,18 +679,15 @@ function drawClusters(){
 };
 function setRadiusByZoom(){
     map.removeLayer(markers);
-    var clusterRadius = map.getZoom()>5?1:40;
+    var clusterRadius = map.getZoom()>5?1:40,
+    markerArr = [];
+    markers.eachLayer(function(e){markerArr.push(e)})
     markers = L.markerClusterGroup({maxClusterRadius:clusterRadius,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
         var count = cluster.getChildCount()
         return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
     }});
-    for (var i = 0; i < feature_collection.features.length; i++) {
-        var a = feature_collection.features[i],
-                properties = feature_collection.features[i].properties;
-        var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-        marker.properties = properties
-        markers.addLayer(marker);
+    for (var i = 0; i < markerArr.length; i++) {
+        markers.addLayer(markerArr[i])
     }
     if($("input#projectOverlay:checked").length==1){map.addLayer(markers);}
     markers.on('mouseover',highlightProjectDiv)
