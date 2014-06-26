@@ -354,7 +354,8 @@ function fullExtent(event){
     return false;
 }
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
-$('.leaflet-control-layers-list').prepend("<div id='layerBtn' onClick='layerControl.collapse()'></div>")
+$('.leaflet-control-layers-list').prepend("<div id='layerBtn' class='layerCollapse' onClick='layerControl.collapse()'></div>")
+$('.leaflet-control-layers-base').toggle()
 $('.leaflet-control-layers-base').append("<hr>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>")
