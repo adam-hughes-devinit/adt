@@ -961,7 +961,7 @@ function openRightClickCluster(e){
     map.fireEvent('contextmenu', clusterEvent)
 };
 function cancelSuggestion(){
-    if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
+    if(map.hasLayer(newSuggestion)){newSuggestion.closePopup();map.removeLayer(newSuggestion);}
 };
 function submitSuggestion(){
     $("form#post_suggestion").trigger("submit")
