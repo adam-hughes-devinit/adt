@@ -63,7 +63,7 @@
         -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
         transition: transform 0.3s ease-out, opacity 0.3s ease-in;
     }
-   input.post_comment{margin-bottom:2px !important;}
+   input.post_comment, input.post_suggestion{margin-bottom:2px !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -539,18 +539,20 @@ function highlightGeocode(geocode){
     })
 };
 function clickHighlightProject(project) {
+    var r = $.Deferred();
     var params = {'id': project};
     $('.loading').toggle()
     $.post("/queries/micro_project", params, function(data){
         microProjectData = data
-        drawProject(microProjectData);}, "json")
+        drawProject(microProjectData, r);}, "json")
             .always(function(){$('.loading').toggle()});
+    return r;
 };
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 function toggleGeocode(){$("#geocodeslider").slideToggle();$("#geocodeBtn").html($("#geocodeBtn").html()[0]=="S"?"Hide geocodes":"Show geocodes")};
-function drawProject(microProjectData){
+function drawProject(microProjectData, r){
 //Build Feature Collection
     var features = [],
             project = microProjectData[0].project;
@@ -620,10 +622,12 @@ function drawProject(microProjectData){
     }
     $('#projectPage').append("<hr>")
     $('#projectPage').append("<b>Comment</b>")
-    $('#projectPage').append("<form accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden'><input name='verboselng' type='hidden'><input name='geocode' type='hidden'></div><input class='post_comment' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_comment' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_comment' name='latlng' placeholder='Lat, Long' type='text' style='float:left;width:66%;'><button type='button' onclick='getLatLon()' style='float:left;width:33%;padding:0px !important;line-height:1 !important;position:relative;top:2px;'>Get from map</button><textarea class='post_comment' name='content' placeholder='*Type your comment here...' style='float:left;width:100%;'></textarea></form>")
+    $('#projectPage').append("<form accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden'><input name='verboselng' type='hidden'><input name='geocode' type='hidden'></div><input class='post_comment' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_comment' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_comment' name='latlng' placeholder='Lat, Long' type='text' style='float:left;width:66%;'><button type='button' onclick='getLatLon()' style='float:left;width:33%;padding:0px !important;line-height:1 !important;position:relative;top:2px;'>Get from map</button><textarea class='post_comment' name='content' placeholder='*Type your comment here...' style='float:left;width:100%;'></textarea><input class='post_comment' style='float:left;width:6%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:60%;'>I accept the <a href='http://www.aiddata.org/content/index/about/terms-conditions' target='_blank'>terms and conditions</a>.</label><button type='button' style='float:right;width:33%;' onclick='submitComment()'>Submit</button></form>")
     //$('#projectPage').append(< #render 'projects/comment_form' >)
 //Slide Results Panel
     slideResults()
+    r.resolve();
+    return r;
 };
 newComment = L.geoJson();
 function getLatLon(){
@@ -641,8 +645,8 @@ function getLatLon(){
         newComment.addTo(map)
     })
     markers.once('click',function(e){
-        var lat = e.latlng.lat,
-                lng = e.latlng.lng;
+        var lat = e.layer._latlng.lat,
+                lng = e.layer._latlng.lng;
         $("input[name = 'verboselat']").val(lat)
         $("input[name = 'verboselng']").val(lng)
         $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
@@ -843,19 +847,21 @@ function openRightClickMap(e){
     });
     $('div.rightClick#suggest').mousedown(function(){
         map.removeLayer(dropdown);
-        var suggestion = L.circleMarker(e.latlng,suggestionOptions);
-        suggestion.bindPopup("Suggested project")
-        suggestions.addLayer(suggestion);
-        suggestions.addTo(map);
-        $("input#suggestionOverlay").prop('checked',true)
+        newSuggestion = L.circleMarker(e.latlng,suggestionOptions);
+        newSuggestion.bindPopup("<form style='width:200px;height:150px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'></div><input class='post_suggestion' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' placeholder='Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' placeholder='*Suggest a project title' style='float:left;width:100%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://www.aiddata.org/content/index/about/terms-conditions' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
+        newSuggestion.addTo(map)
+        newSuggestion.once('popupclose',cancelSuggestion)
+        newSuggestion.openPopup()
     });
 };
 function openRightClickMarkers(e){
-    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>View project page</div><div class='rightClick' id='commentGeocode'>Comment on this geocode</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
+    var dropdownIcon = new L.DivIcon({html:"<div class='rightClick' id='zoom'>Zoom to this geocode</div><div class='rightClick' id='project'>View project page</div><div class='rightClick' id='commentGeocode'>Comment on this geocode</div><div class='rightClick' style='display:none;' id='commentGeocodeProject'>Comment on this geocode</div><div class='rightClick' id='suggest'>Suggest a new project at this location</div>",className:"rightclick-dropdown"});
     dropdown = L.marker(e.latlng,{icon:dropdownIcon})
     dropdown.addTo(map);
     if($('#resultLeft').css("display")=="none"){
         $('div.rightClick#project').hide()
+        $('div.rightClick#commentGeocode').hide()
+        $('div.rightClick#commentGeocodeProject').show()
     }
     $('div.rightclick-dropdown').mouseleave(function(){
         map.removeLayer(dropdown);
@@ -883,26 +889,88 @@ function openRightClickMarkers(e){
     });
     $('div.rightClick#commentGeocode').mousedown(function(){
         map.removeLayer(dropdown);
-        comments.addLayer(L.marker(e.layer._latlng).bindPopup("Comment on geocode ID:"+ e.layer.properties.geo_code_id))
-        comments.addTo(map);
-        $("input#commentOverlay").prop('checked',true)
+        clickHighlightProject(e.layer.properties.project_id).done(
+                function(){
+                    var lat = e.layer._latlng.lat,
+                            lng = e.layer._latlng.lng;
+                    $("input[name = 'verboselat']").val(lat)
+                    $("input[name = 'verboselng']").val(lng)
+                    $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+                    $("input[name = 'geocode']").val(e.layer.properties.geo_code_id)
+                    if(map.hasLayer(newComment)){
+                        map.removeLayer(newComment)
+                    }
+                    newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+                    newComment.addTo(map)
+                }
+        );
+    });
+    $('div.rightClick#commentGeocodeProject').hover(function(){
+        $('div.rightClick#commentGeocodeProject').toggleClass('highlight')
+    });
+    $('div.rightClick#commentGeocodeProject').mousedown(function(){
+        map.removeLayer(dropdown);
+        var lat = e.layer._latlng.lat,
+                lng = e.layer._latlng.lng;
+        $("input[name = 'verboselat']").val(lat)
+        $("input[name = 'verboselng']").val(lng)
+        $("input[name = 'latlng']").val(lat.toFixed(4)+", "+lng.toFixed(4))
+        $("input[name = 'geocode']").val(e.layer.properties.geo_code_id)
+        if(map.hasLayer(newComment)){
+            map.removeLayer(newComment)
+        }
+        newComment = L.marker([lat,lng]).bindPopup(lat.toFixed(4)+", "+lng.toFixed(4))
+        newComment.addTo(map)
+        $("#post_comment input[name='name']").focus()
     });
     $('div.rightClick#suggest').hover(function(){
         $('div.rightClick#suggest').toggleClass('highlight')
     });
     $('div.rightClick#suggest').mousedown(function(){
         map.removeLayer(dropdown);
-        var suggestion = L.circleMarker(e.latlng,suggestionOptions);
-        suggestion.bindPopup("Suggested project")
-        suggestions.addLayer(suggestion);
-        suggestions.addTo(map);
-        $("input#suggestionOverlay").prop('checked',true)
+        newSuggestion = L.circleMarker(e.latlng,suggestionOptions);
+        newSuggestion.bindPopup("<form style='width:200px;height:100px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'></div><input class='post_suggestion' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' placeholder='Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' placeholder='*Suggest a project title' style='float:left;width:100%;'><button type='button' style='width:50%;float:left;' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
+        newSuggestion.addTo(map)
+        newSuggestion.once('popupclose',cancelSuggestion)
+        newSuggestion.openPopup()
     });
 };
 function openRightClickCluster(e){
     var clusterEvent = e;
     clusterEvent.latlng = map.mouseEventToLatLng(e.originalEvent)
     map.fireEvent('contextmenu', clusterEvent)
+};
+function cancelSuggestion(){
+    if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
+};
+function submitSuggestion(){
+    var title=$("form#post_suggestion input[name ='title']").val(),
+            name = $("form#post_suggestion input[name ='name']").val(),
+            source = $("form#post_suggestion input[name ='source']").val();
+    if(source.indexOf("http")!=0){source = "http://".concat(source)}
+    newSuggestion.closePopup()
+    newSuggestion.bindPopup("<b>"+title+"</b><br><a href='"+source+"' target='_blank'>Source</a><br>Submitted by "+name)
+    suggestions.addLayer(newSuggestion)
+    if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
+    if(map.hasLayer(suggestions)){map.removeLayer(suggestions)}
+    suggestions.addTo(map)
+    newSuggestion = L.marker()
+    $("input#suggestionOverlay").prop('checked',true)
+    window.alert("Thank you for suggesting a project. Your project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+};
+function submitComment(){
+    var content=$("form#post_comment input[name ='content']").val(),
+            name = $("form#post_comment input[name ='name']").val();
+    newComment.closePopup()
+    newComment.bindPopup(content+"<br>Submitted by "+name)
+    comments.addLayer(newComment)
+    if(map.hasLayer(newComment)){map.removeLayer(newComment)}
+    if(map.hasLayer(comments)){map.removeLayer(comments)}
+    comments.addTo(map)
+    newComment = L.marker()
+    $("input#commentOverlay").prop('checked',true)
+    $("form#post_comment input").val("")
+    window.alert("Thank you for submitting a comment. Your comment will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
 };
 map.on('zoomend',setRadiusByZoom)
 //Filter function
