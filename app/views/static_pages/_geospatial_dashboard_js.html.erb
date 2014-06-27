@@ -89,6 +89,7 @@
               if($('#resultLeft').css("display")=="none"){
               slideResults();
               }
+              if(map.hasLayer(newComment)){map.removeLayer(newComment)}
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
 //Clustering
@@ -735,6 +736,7 @@ function slideResults(){
     $('#resultcount').html(resulthtml)
 };
 function backToResults(){
+    if(map.hasLayer(newComment)){map.removeLayer(newComment)}
     feature_collection.features = oldFeatures
     //Redraw map with clustering and zoom
     map.removeLayer(markers);
