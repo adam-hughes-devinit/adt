@@ -60,4 +60,4 @@ custom_plan.rb
 /*.sql
 
 #Ignore twitter with sensitive info
-/app/helpers/twitter_helper.rb
+app/helpers/twitter_helper.rb
