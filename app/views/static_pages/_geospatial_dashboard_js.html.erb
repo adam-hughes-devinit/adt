@@ -656,7 +656,7 @@ function mapLatLon(){
     if(latlng.length==2){
         var lat=parseFloat(latlng[0]),
                 lng = parseFloat(latlng[1]);
-        if(typeof(lat)=="number" && typeof(lng)=="number" && lat>=-90 && lat<=90 && lng>=0 && lng<=180) {
+        if(typeof(lat)=="number" && typeof(lng)=="number" && lat>=-90 && lat<=90 && lng>=-180 && lng<=180) {
             $("input[name = 'verboselat']").val(lat)
             $("input[name = 'verboselng']").val(lng)
             $("input[name = 'geocode']").val(undefined)
