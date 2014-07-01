@@ -49,10 +49,8 @@ class ProjectsController < ApplicationController
         csv_data = Project.csv_header + "\n"
 
         projects.each do |p|
-          if (p.donor.name == 'China' ) # temporary fix. Non china donors need to be removed earlier.
-            csv_data << p.csv_text
-            csv_data << "\n"
-          end
+          csv_data << p.csv_text
+          csv_data << "\n"
         end
 
         send_data csv_data,
@@ -65,7 +63,14 @@ class ProjectsController < ApplicationController
 
   def show
 
-    @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
+    @project = Project.unscoped.includes(:participating_organizations,
+                                         :geopoliticals,
+                                         :transactions,
+                                         :contacts,
+                                         :sources,
+                                         :resources,
+                                         :loan_detail
+    ).find(params[:id])
     @comment = Comment.new
     @flags = @project.all_flags
     @flag = Flag.new
@@ -100,7 +105,14 @@ class ProjectsController < ApplicationController
   # GET /Projects/1/edit
   def edit
 
-    @project = Project.unscoped.includes(:participating_organizations, :geopoliticals, :transactions, :contacts, :sources, :resources, :loan_detail).find(params[:id])
+    @project = Project.unscoped.includes(:participating_organizations,
+                                         :geopoliticals,
+                                         :transactions,
+                                         :contacts,
+                                         :sources,
+                                         :resources,
+                                         :loan_detail
+    ).find(params[:id])
     @project.resources.build if @project.resources.empty?
 
     @flow_class = FlowClass.find_or_create_by_project_id(@project.id)
@@ -157,12 +169,10 @@ class ProjectsController < ApplicationController
       end
     end
 
-    undo_link = view_context.link_to(
-                                     "Undo", revert_version_path(@project.versions.scoped.last
-                                                                ),
-                                                                  #"Undo", "/versions/#{@object.versions.last.id}/revert",
-                                                                  method: :post)
-                                                                flash[:success] = "Project updated. #{undo_link}"
+    undo_link = view_context.link_to("Undo",
+                                     revert_version_path(@project.versions.scoped.last),
+                                     method: :post)
+    flash[:success] = "Project updated. #{undo_link}"
 
 
   end
@@ -195,11 +205,10 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
 
-    undo_link = view_context.link_to( 
-                                     "Undo", revert_version_path(@project.versions.scoped.last
-                                                                ),
-                                                                  method: :post)
-                                                                flash[:notice] = "Project deleted! #{undo_link}"
+    undo_link = view_context.link_to("Undo",
+                                     revert_version_path(@project.versions.scoped.last),
+                                     method: :post)
+    flash[:notice] = "Project deleted! #{undo_link}"
   end
 
   def suggest
