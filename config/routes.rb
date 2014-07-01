@@ -118,6 +118,7 @@ Adt::Application.routes.draw do
   match '/queries/geospatial_search', to: 'static_pages#geospatial_search', as: 'geospatial_search'
   match '/queries/geo_page', to: 'static_pages#geo_paginated_search', as: 'geo_paginated_search'
   match '/queries/micro_project', to: 'static_pages#micro_project_page', as: 'micro_project_page'
+  match '/queries/twitter', to: 'static_pages#search_twitter', as: 'search_twitter'
   #404
   unless Rails.application.config.consider_all_requests_local
     match '*not_found', to: 'errors#error_404'

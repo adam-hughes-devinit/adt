@@ -3,6 +3,7 @@ class StaticPagesController < ApplicationController
   include SearchHelper
   include GeospatialSearchHelper
   include AggregatesHelper
+  include TwitterHelper
   require 'will_paginate/array'
   def home
     # Gets records for the media viewer
@@ -110,6 +111,10 @@ class StaticPagesController < ApplicationController
 
   def micro_project_page
     micro_project_page_ajax
+  end
+
+  def search_twitter
+    search_twitter_ajax
   end
 
   def new_map

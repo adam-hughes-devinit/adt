@@ -47,6 +47,7 @@ gem 'smarter_csv' # For csv upload
 gem 'squeel' # Allows for better postgis db queries.
 gem 'rgeo'
 gem 'rgeo-geojson' # converts hash to geojson for dashboard
+gem 'twitter' #For access to Twitter API
 
 group :production do
   gem 'unicorn'
