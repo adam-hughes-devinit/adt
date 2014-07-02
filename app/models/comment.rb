@@ -10,6 +10,7 @@ class Comment < ActiveRecord::Base
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: {with: EMAIL_REGEX}
   validates :content, presence: true
+  validates :name, presence: true
 
   belongs_to :project
 
