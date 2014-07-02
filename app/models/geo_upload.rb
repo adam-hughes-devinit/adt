@@ -158,4 +158,89 @@ class GeoUpload < ActiveRecord::Base
     end
     return record_stats
   end
+
+  def process_csv
+    geo_upload = self
+    log_path = Rails.root.join('tmp')
+    logfile = Tempfile.new('geo_upload.log', log_path)
+    logfile.write("Geo Uploads Logfile:\n")
+    record_stats = {"record_total" => 0,
+                    "uploaded_record_count" => 0,
+                    "missing_adms" => 0,
+                    "deprecated_precisions" => 0,
+                    "duplicate_geocodes" => 0,
+                    "created_adm" => 0,
+                    "missing_fields" => 0
+    }
+
+    SmarterCSV.process(geo_upload.csv.path,
+                       {:chunk_size => 100,
+                        :remove_unmapped_keys => true,
+                        :key_mapping => {:geo_name_id => :geo_name_id,
+                                         :geo_name => :geo_name,
+                                         :project_id => :project_id,
+                                         :precision => :precision_id,
+                                         :latitude => :latitude,
+                                         :longitude => :longitude,
+                                         :location_type => :location_type }
+                       }
+    ) do |chunk|
+      # perhaps refactor to work on geo_upload object
+      record_stats = GeoUpload.csv_to_database(chunk, geo_upload, logfile, record_stats)
+    end
+    geo_upload.record_count = record_stats["uploaded_record_count"]
+    geo_upload.log_errors =
+        (record_stats["missing_adms"] +
+            record_stats["deprecated_precisions"] +
+            record_stats["duplicate_geocodes"] +
+            record_stats["created_adm"] +
+            record_stats["missing_fields"]
+        )
+    # Any error that could result in corrupted data should be added here.
+    # Any critical errors will prevent the user from activating this geo upload.
+    geo_upload.critical_errors = record_stats["missing_adms"] + record_stats["missing_fields"]
+
+    if geo_upload.log_errors == 0
+      logfile.write("No errors found. Nice!\n")
+    end
+    logfile.write("\nSummary Statistics:\n")
+    logfile.write("#{geo_upload.record_count} out of #{record_stats["record_total"]} records added to the database.\n")
+    logfile.write("#{record_stats["missing_adms"]} record has appropriate precision code, but no adm found. Warning: If this is not 0, these Geo Uploads should NOT be active.\n")
+    logfile.write("#{record_stats["deprecated_precisions"]} records have a deprecated precision code. Record uploaded, but no geometry was created.\n")
+    logfile.write("#{record_stats["duplicate_geocodes"]} records have the same project_id and geo_name_id as existing records. These records were not uploaded.\n")
+    logfile.write("#{record_stats["created_adm"]} records did not have adms that should. Used closest adm instead.\n")
+    logfile.write("#{record_stats["missing_fields"]} records are missing a required field. The records were not added. Correct them and re-upload. This error may occur if a required field name has changed.\n")
+    logfile.read # fixes bug that prevents log file text being saved.
+    geo_upload.log = logfile
+
+    geo_upload.save
+
+    # Creates geojson for all existing projects and caches it.
+    # Cached data is consumed by to humanity united dashboard.
+    @geocodes = Geocode.includes(:adm, :geo_name)
+    features = []
+    factory = RGeo::GeoJSON::EntityFactory.instance
+    @geocodes.each do |g|
+      factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
+      lonlat = factory_cartesian.point(g.geo_name.longitude, g.geo_name.latitude)
+
+      features.append(factory.feature(lonlat, nil, {
+          geo_code_id: g.id,
+          project_id: g.project_id,
+          project_year: g.project.year,
+          precision_code: g.precision_id,
+          adm_code: g.adm_id.nil? ? nil : g.adm.code,
+          adm_name: g.adm_id.nil? ? nil : g.adm.name,
+          adm_level: g.adm_id.nil? ? nil : g.adm.level,
+          geo_name: g.geo_name.name,
+          location_type: g.geo_name.location_type.name
+      }))
+    end
+    feature_collection = RGeo::GeoJSON.encode(factory.feature_collection(features))
+    #Rails.cache.fetch("dashboard_geojson", expires_in: 48.hours) {feature_collection}
+    File.open("public/dashboard_geojson.json","w") do |f|
+      f.write(feature_collection.to_json)
+    end
+  end
+  #handle_asynchronously :process_csv
 end
