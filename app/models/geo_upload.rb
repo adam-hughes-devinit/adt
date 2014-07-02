@@ -242,5 +242,5 @@ class GeoUpload < ActiveRecord::Base
       f.write(feature_collection.to_json)
     end
   end
-  #handle_asynchronously :process_csv
+  handle_asynchronously :process_csv
 end
