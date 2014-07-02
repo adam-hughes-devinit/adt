@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if auth
       auth["uid"] = auth["uid"].to_s
       user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
-      sign_in user
+      sign_in_ user
       redirect_back_or root_url
     else
       user = User.find_by_email(params[:session][:email].downcase)
