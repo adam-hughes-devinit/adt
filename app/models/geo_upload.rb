@@ -12,10 +12,12 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment_content_type :log, :content_type => "text/plain"
   #do_not_validate_attachment_file_type :log #uncomment if upgrade paperclip to 4.1
 
-
-  validates :active,
+  #TODO: Prevent deletion during processing
+  #TODO: Prevent active unless pending
+  #TODO: Replace integers on submission page with readable dropdown or checkbox.
+  validates :status,
             :inclusion => {
-                :in => [false],
+                :in => [3],
                 message: "Can't activate Upload with Critical Errors!  Resolve the issue in the CSV (or contact site admin), then delete this record and re-upload the CSV."
             },
             if: :has_errors?
