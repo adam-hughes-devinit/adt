@@ -1,5 +1,5 @@
 class GeoUpload < ActiveRecord::Base
-  attr_accessible :record_count, :csv, :log, :log_errors, :critical_errors, :active
+  attr_accessible :record_count, :csv, :log, :log_errors, :critical_errors, :status
 
   has_attached_file :csv
   has_attached_file :log
@@ -77,7 +77,8 @@ class GeoUpload < ActiveRecord::Base
     return geocode
   end
 
-  def self.csv_to_database(chunk, geo_upload, logfile, record_stats)
+  def csv_to_database(chunk, logfile, record_stats)
+    geo_upload = self
     chunk.each do |record|
       if !(record[:geo_name_id] and
           record[:project_id] and
@@ -186,7 +187,7 @@ class GeoUpload < ActiveRecord::Base
                        }
     ) do |chunk|
       # perhaps refactor to work on geo_upload object
-      record_stats = GeoUpload.csv_to_database(chunk, geo_upload, logfile, record_stats)
+      record_stats = geo_upload.csv_to_database(chunk, logfile, record_stats)
     end
     geo_upload.record_count = record_stats["uploaded_record_count"]
     geo_upload.log_errors =
@@ -213,7 +214,15 @@ class GeoUpload < ActiveRecord::Base
     logfile.read # fixes bug that prevents log file text being saved.
     geo_upload.log = logfile
 
+    if geo_upload.critical_errors > 0
+      geo_upload.status = 3 # has errors
+    else
+      geo_upload.status = 1 # pending
+    end
+
+
     geo_upload.save
+
 
     # Creates geojson for all existing projects and caches it.
     # Cached data is consumed by to humanity united dashboard.

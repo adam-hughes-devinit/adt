@@ -18,6 +18,9 @@
 //      .status_tag { background: #6090DB; }
 //   }
 //
+body.active_admin {
+  .status_tag.blue { background: #63B8FF; }
+}
 // Notice that Active Admin CSS rules are nested within a
 // 'body.active_admin' selector to prevent conflicts with
 // other pages in the app. It is best to wrap your changes in a 

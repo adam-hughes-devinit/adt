@@ -42,7 +42,7 @@ ActiveAdmin.register GeoUpload do
                                   record_count: 0,
                                   log_errors: 0,
                                   critical_errors: 0,
-                                  active: false # Status: pending
+                                  status: 0
     )
     geo_upload.process_csv
 
@@ -53,8 +53,17 @@ ActiveAdmin.register GeoUpload do
     id_column
     selectable_column
 
-    column "Active", :sortable => :active do |upload|
-      status_tag((upload.active ? "Active" : "Pending" ), (upload.active ? :ok : :warning))
+    column "Status", :sortable => :status do |upload|
+      if upload.status == 0
+        status_tag("Processing", :blue)
+      elsif upload.status == 1
+        status_tag("Pending", :warning)
+      elsif upload.status == 2
+        status_tag("Active", :ok)
+      else upload.status == 3
+        status_tag("Error", :error)
+      end
+
     end
 
     column :record_count
@@ -88,7 +97,7 @@ ActiveAdmin.register GeoUpload do
 
   form do |f|
     f.inputs "Set Geocodes to Active" do
-     f.input :active, hint: "Activating will make all geocodes from this Geo Upload viewable to the public. "
+     f.input :status, hint: "Activating will make all geocodes from this Geo Upload viewable to the public. "
     end
     f.actions
   end
