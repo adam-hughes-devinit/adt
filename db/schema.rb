@@ -64,23 +64,6 @@ ActiveRecord::Schema.define(:version => 20140703001839) do
 
   add_index "adm_world", ["geom"], :name => "adm_world_geom_gist", :spatial => true
 
-  create_table "adm_world_copy", :id => false, :force => true do |t|
-    t.integer "gid",                                                      :null => false
-    t.integer "adm2_code"
-    t.string  "adm2_name",  :limit => 100
-    t.string  "status",     :limit => 37
-    t.string  "disp_area",  :limit => 3
-    t.integer "str_year"
-    t.integer "exp_year"
-    t.integer "adm0_code"
-    t.string  "adm0_name",  :limit => 100
-    t.integer "adm1_code"
-    t.string  "adm1_name",  :limit => 100
-    t.decimal "shape_leng"
-    t.decimal "shape_area"
-    t.spatial "geom",       :limit => {:srid=>0, :type=>"multi_polygon"}
-  end
-
   create_table "admin_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
@@ -109,16 +92,6 @@ ActiveRecord::Schema.define(:version => 20140703001839) do
   end
 
   add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
-
-  create_table "adms_copy", :id => false, :force => true do |t|
-    t.integer  "id",         :null => false
-    t.integer  "code"
-    t.string   "name"
-    t.integer  "level"
-    t.integer  "parent_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "comments", :force => true do |t|
     t.text     "content"
@@ -344,46 +317,26 @@ ActiveRecord::Schema.define(:version => 20140703001839) do
     t.integer  "geometry_id"
     t.integer  "geo_upload_id"
     t.integer  "adm_id"
-    t.datetime "created_at",                                             :null => false
-    t.datetime "updated_at",                                             :null => false
-    t.spatial  "point",         :limit => {:srid=>4326, :type=>"point"}
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "geocodes", ["adm_id"], :name => "index_geocodes_on_adm_id"
   add_index "geocodes", ["geo_name_id"], :name => "index_geocodes_on_geo_name_id"
   add_index "geocodes", ["geo_upload_id"], :name => "index_geocodes_on_geo_upload_id"
   add_index "geocodes", ["geometry_id"], :name => "index_geocodes_on_geometry_id"
-  add_index "geocodes", ["point"], :name => "geocodes_point_idx", :spatial => true
   add_index "geocodes", ["precision_id"], :name => "index_geocodes_on_precision_id"
   add_index "geocodes", ["project_id"], :name => "index_geocodes_on_project_id"
 
   create_table "geometries", :force => true do |t|
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
-    t.spatial  "the_geom",    :limit => {:srid=>4326, :type=>"geometry"}
-    t.integer  "adm_code"
-    t.spatial  "geom_simple", :limit => {:srid=>4326, :type=>"multi_polygon"}
-  end
-
-  add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"
-  add_index "geometries", ["geom_simple"], :name => "geometries_geom_simple_idx", :spatial => true
-  add_index "geometries", ["the_geom"], :name => "index_geometries_on_the_geom", :spatial => true
-
-  create_table "geometries_copy", :id => false, :force => true do |t|
-    t.integer  "id",                                                  :null => false
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
-    t.spatial  "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
-    t.integer  "adm_code"
-  end
-
-  create_table "geometries_copy2", :id => false, :force => true do |t|
-    t.integer  "id",                                                     :null => false
     t.datetime "created_at",                                             :null => false
     t.datetime "updated_at",                                             :null => false
     t.spatial  "the_geom",   :limit => {:srid=>4326, :type=>"geometry"}
     t.integer  "adm_code"
   end
+
+  add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"
+  add_index "geometries", ["the_geom"], :name => "index_geometries_on_the_geom", :spatial => true
 
   create_table "geopoliticals", :force => true do |t|
     t.integer  "recipient_id"
@@ -397,18 +350,6 @@ ActiveRecord::Schema.define(:version => 20140703001839) do
 
   add_index "geopoliticals", ["project_id"], :name => "index_geopoliticals_on_project_id"
   add_index "geopoliticals", ["recipient_id"], :name => "index_geopoliticals_on_recipient_id"
-
-  create_table "health_of_records", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "completeness_score"
-    t.integer  "resource_score"
-    t.integer  "combined_score"
-    t.integer  "adjusted_score"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
-  end
-
-  add_index "health_of_records", ["project_id"], :name => "index_health_of_records_on_project_id"
 
   create_table "homepage_media_items", :force => true do |t|
     t.string   "banner_text"
@@ -808,13 +749,6 @@ ActiveRecord::Schema.define(:version => 20140703001839) do
 
   add_index "statuses", ["id"], :name => "index_statuses_on_id"
   add_index "statuses", ["name"], :name => "index_statuses_on_name"
-
-  create_table "test_geometry", :id => false, :force => true do |t|
-    t.integer "adm_code"
-    t.spatial "geom",     :limit => {:srid=>4326, :type=>"geometry"}
-  end
-
-  add_index "test_geometry", ["geom"], :name => "test_geometry_geom_idx", :spatial => true
 
   create_table "tieds", :force => true do |t|
     t.string   "name"
