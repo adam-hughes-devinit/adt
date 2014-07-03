@@ -225,7 +225,7 @@ class GeoUpload < ActiveRecord::Base
 
     geo_upload.save
 
-
+    #TODO: This should be called when a csv is made active. Not during the upload.
     # Creates geojson for all existing projects and caches it.
     # Cached data is consumed by to humanity united dashboard.
     @geocodes = Geocode.includes(:adm, :geo_name)
