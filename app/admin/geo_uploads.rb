@@ -31,9 +31,10 @@ ActiveAdmin.register GeoUpload do
           end
           geocode.delete
         end
-
         geo_upload.delete
       end
+
+      GeoUpload.generate_geojson
 
       redirect_to :action => 'index'
     end
@@ -100,7 +101,11 @@ ActiveAdmin.register GeoUpload do
 
   form do |f|
     f.inputs "Set Geocodes to Active" do
-     f.input :status, :as => :select, :collection => GeoUpload.find(params[:id]).get_status_collection, :include_blank => false,  hint: "Activating will make all geocodes from this Geo Upload viewable to the public. "
+     f.input :status,
+             :as => :select,
+             :collection => GeoUpload.find(params[:id]).get_status_collection,
+             :include_blank => false,
+             hint: "Activating will make all geocodes from this Geo Upload viewable to the public."
     end
     f.actions
   end

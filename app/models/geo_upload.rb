@@ -14,6 +14,9 @@ class GeoUpload < ActiveRecord::Base
 
   has_many :geocodes
 
+  after_update :active_change?
+
+   # Determines status options available to user.
   def get_status_collection
     geo_upload = self
     status = geo_upload.status
@@ -28,6 +31,45 @@ class GeoUpload < ActiveRecord::Base
       collection = [['Error', 3]]
     end
     collection
+  end
+
+  #TODO: This should be called when a csv is made active. Not during the upload.
+  #TODO: This should be called when an upload is deleted or made inactive.
+  # Creates geojson for all existing projects and caches it.
+  # Cached data is consumed by to humanity united dashboard.
+  class << self
+    def generate_geojson
+      @geocodes = Geocode.joins(:geo_upload).where(geo_upload: { status: 2}).includes(:adm, :geo_name)
+      features = []
+      factory = RGeo::GeoJSON::EntityFactory.instance
+      @geocodes.each do |g|
+        factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
+        lonlat = factory_cartesian.point(g.geo_name.longitude, g.geo_name.latitude)
+
+        features.append(factory.feature(lonlat, nil, {
+            geo_code_id: g.id,
+            project_id: g.project_id,
+            project_year: g.project.year,
+            precision_code: g.precision_id,
+            adm_code: g.adm_id.nil? ? nil : g.adm.code,
+            adm_name: g.adm_id.nil? ? nil : g.adm.name,
+            adm_level: g.adm_id.nil? ? nil : g.adm.level,
+            geo_name: g.geo_name.name,
+            location_type: g.geo_name.location_type.name
+        }))
+      end
+      feature_collection = RGeo::GeoJSON.encode(factory.feature_collection(features))
+      File.open("public/dashboard_geojson.json","w") do |f|
+        f.write(feature_collection.to_json)
+      end
+    end
+    handle_asynchronously :generate_geojson
+  end
+
+  def active_change?
+    if (self.status == 2) or (self.status == 1)
+      GeoUpload.generate_geojson
+    end
   end
 
   #TODO: Make sure it finds nearest adm, within the correct country. Right now it's just the nearest adm.
@@ -111,8 +153,6 @@ class GeoUpload < ActiveRecord::Base
             geo_name = GeoName.new
             geocode = GeoUpload.update_geo_name(geocode, record, location_type, geo_name)
           end
-
-          #puts record
 
           factory = RGeo::Cartesian.factory(:srid => 4326)
           lonlat = factory.point(record[:longitude], record[:latitude])
@@ -225,35 +265,6 @@ class GeoUpload < ActiveRecord::Base
     end
 
     geo_upload.save
-
-    #TODO: This should be called when a csv is made active. Not during the upload.
-    #TODO: This should be called when an upload is deleted or made inactive.
-    # Creates geojson for all existing projects and caches it.
-    # Cached data is consumed by to humanity united dashboard.
-    @geocodes = Geocode.includes(:adm, :geo_name)
-    features = []
-    factory = RGeo::GeoJSON::EntityFactory.instance
-    @geocodes.each do |g|
-      factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
-      lonlat = factory_cartesian.point(g.geo_name.longitude, g.geo_name.latitude)
-
-      features.append(factory.feature(lonlat, nil, {
-          geo_code_id: g.id,
-          project_id: g.project_id,
-          project_year: g.project.year,
-          precision_code: g.precision_id,
-          adm_code: g.adm_id.nil? ? nil : g.adm.code,
-          adm_name: g.adm_id.nil? ? nil : g.adm.name,
-          adm_level: g.adm_id.nil? ? nil : g.adm.level,
-          geo_name: g.geo_name.name,
-          location_type: g.geo_name.location_type.name
-      }))
-    end
-    feature_collection = RGeo::GeoJSON.encode(factory.feature_collection(features))
-    #Rails.cache.fetch("dashboard_geojson", expires_in: 48.hours) {feature_collection}
-    File.open("public/dashboard_geojson.json","w") do |f|
-      f.write(feature_collection.to_json)
-    end
   end
   handle_asynchronously :process_csv
 end
