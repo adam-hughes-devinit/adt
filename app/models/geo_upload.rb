@@ -1,8 +1,6 @@
 class GeoUpload < ActiveRecord::Base
   attr_accessible :record_count, :csv, :log, :log_errors, :critical_errors, :status
 
-  before_destroy :check_if_processing
-
   has_attached_file :csv
   has_attached_file :log
 
@@ -15,13 +13,6 @@ class GeoUpload < ActiveRecord::Base
   #do_not_validate_attachment_file_type :log #uncomment if upgrade paperclip to 4.1
 
   has_many :geocodes
-
-  def check_if_processing
-    if self.status == 0
-      errors.add_to_base("cannot delete upload while processing!")
-      return false
-    end
-  end
 
   def get_status_collection
     geo_upload = self
