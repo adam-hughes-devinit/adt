@@ -15,6 +15,9 @@
 #Ignore file storage
 public/system/
 
+#Ignore geojson
+public/dashboard_geojson.json
+
 # Ignore people images
 app/assets/images/people
 

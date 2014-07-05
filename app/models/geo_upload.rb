@@ -1,6 +1,8 @@
 class GeoUpload < ActiveRecord::Base
   attr_accessible :record_count, :csv, :log, :log_errors, :critical_errors, :status
 
+  before_destroy :check_if_processing
+
   has_attached_file :csv
   has_attached_file :log
 
@@ -12,20 +14,29 @@ class GeoUpload < ActiveRecord::Base
   validates_attachment_content_type :log, :content_type => "text/plain"
   #do_not_validate_attachment_file_type :log #uncomment if upgrade paperclip to 4.1
 
-  #TODO: Prevent deletion during processing
-  #TODO: Prevent active unless pending
-  #TODO: Replace integers on submission page with readable dropdown or checkbox.
-  validates :status,
-            :inclusion => {
-                :in => [3],
-                message: "Can't activate Upload with Critical Errors!  Resolve the issue in the CSV (or contact site admin), then delete this record and re-upload the CSV."
-            },
-            if: :has_errors?
-
   has_many :geocodes
 
-  def has_errors?
-    self.critical_errors > 0
+  def check_if_processing
+    if self.status == 0
+      errors.add_to_base("cannot delete upload while processing!")
+      return false
+    end
+  end
+
+  def get_status_collection
+    geo_upload = self
+    status = geo_upload.status
+    collection = nil
+    if status == 0
+      collection = [['Processing', 0]]
+    elsif status == 1
+      collection = [['Pending', 1], ['Active', 2]]
+    elsif status == 2
+      collection = [['Pending', 1], ['Active', 2]]
+    elsif status == 3
+      collection = [['Error', 3]]
+    end
+    collection
   end
 
   #TODO: Make sure it finds nearest adm, within the correct country. Right now it's just the nearest adm.
@@ -222,10 +233,10 @@ class GeoUpload < ActiveRecord::Base
       geo_upload.status = 1 # pending
     end
 
-
     geo_upload.save
 
     #TODO: This should be called when a csv is made active. Not during the upload.
+    #TODO: This should be called when an upload is deleted or made inactive.
     # Creates geojson for all existing projects and caches it.
     # Cached data is consumed by to humanity united dashboard.
     @geocodes = Geocode.includes(:adm, :geo_name)

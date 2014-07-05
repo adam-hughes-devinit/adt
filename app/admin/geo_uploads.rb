@@ -15,22 +15,25 @@ ActiveAdmin.register GeoUpload do
      # When a geo_upload is deleted:
      # associated geocodes, unused geo_names, and unused geometries are deleted
     def destroy
-      geocodes = Geocode.find_all_by_geo_upload_id(params[:id])
-      geocodes.each do |geocode|
-        geoname = GeoName.joins(:geocodes).where(id: geocode.geo_name_id)
-        if geoname.count == 1
-          GeoName.find(geocode.geo_name_id).delete
-        end
-        if !geocode.geometry_id.nil?
-          geometry = Geometry.find(geocode.geometry_id)
-          if geometry.adm_code.nil?
-            geometry.delete
+      geo_upload = GeoUpload.find(params[:id])
+      if geo_upload.status != 0
+        geocodes = Geocode.find_all_by_geo_upload_id(params[:id])
+        geocodes.each do |geocode|
+          geoname = GeoName.joins(:geocodes).where(id: geocode.geo_name_id)
+          if geoname.count == 1
+            GeoName.find(geocode.geo_name_id).delete
           end
+          if !geocode.geometry_id.nil?
+            geometry = Geometry.find(geocode.geometry_id)
+            if geometry.adm_code.nil?
+              geometry.delete
+            end
+          end
+          geocode.delete
         end
-        geocode.delete
-      end
 
-      GeoUpload.find(params[:id]).delete
+        geo_upload.delete
+      end
 
       redirect_to :action => 'index'
     end
@@ -97,10 +100,8 @@ ActiveAdmin.register GeoUpload do
 
   form do |f|
     f.inputs "Set Geocodes to Active" do
-     f.input :status, hint: "Activating will make all geocodes from this Geo Upload viewable to the public. "
+     f.input :status, :as => :select, :collection => GeoUpload.find(params[:id]).get_status_collection, :include_blank => false,  hint: "Activating will make all geocodes from this Geo Upload viewable to the public. "
     end
     f.actions
   end
-
-
 end
