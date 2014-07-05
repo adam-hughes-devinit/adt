@@ -24,9 +24,9 @@ class GeoUpload < ActiveRecord::Base
     if status == 0
       collection = [['Processing', 0]]
     elsif status == 1
-      collection = [['Pending', 1], ['Active', 2]]
+      collection = [['Inactive', 1], ['Active', 2]]
     elsif status == 2
-      collection = [['Pending', 1], ['Active', 2]]
+      collection = [['Inactive', 1], ['Active', 2]]
     elsif status == 3
       collection = [['Error', 3]]
     end
@@ -261,7 +261,7 @@ class GeoUpload < ActiveRecord::Base
     if geo_upload.critical_errors > 0
       geo_upload.status = 3 # has errors
     else
-      geo_upload.status = 1 # pending
+      geo_upload.status = 1 # inactive
     end
 
     geo_upload.save

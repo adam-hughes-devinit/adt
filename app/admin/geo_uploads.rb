@@ -61,7 +61,7 @@ ActiveAdmin.register GeoUpload do
       if upload.status == 0
         status_tag("Processing", :blue)
       elsif upload.status == 1
-        status_tag("Pending", :warning)
+        status_tag("Inactive", :warning)
       elsif upload.status == 2
         status_tag("Active", :ok)
       else upload.status == 3
