@@ -19,8 +19,16 @@ class Adm < ActiveRecord::Base
     result = result.sort_by {|u| u.level}.reverse
     result
   end
+
   searchable do
     text :name
     integer :level
   end
+  handle_asynchronously :solr_index, queue: 'indexing', priority: 50
+  handle_asynchronously :solr_index!, queue: 'indexing', priority: 50
+
+  def remove_from_index_with_delayed
+    Delayed::Job.enqueue RemoveIndexJob.new(record_class: self.class.to_s, attributes: self.attributes), queue: 'indexing', priority: 50
+  end
+  alias_method_chain :remove_from_index, :delayed
 end

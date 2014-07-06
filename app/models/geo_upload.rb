@@ -33,8 +33,6 @@ class GeoUpload < ActiveRecord::Base
     collection
   end
 
-  #TODO: This should be called when a csv is made active. Not during the upload.
-  #TODO: This should be called when an upload is deleted or made inactive.
   # Creates geojson for all existing projects and caches it.
   # Cached data is consumed by to humanity united dashboard.
   class << self
@@ -123,6 +121,7 @@ class GeoUpload < ActiveRecord::Base
     return geocode
   end
 
+   # Processes a chunk of records from the csv uploaded.
   def csv_to_database(chunk, logfile, record_stats)
     geo_upload = self
     chunk.each do |record|

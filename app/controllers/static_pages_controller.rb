@@ -70,25 +70,28 @@ class StaticPagesController < ApplicationController
   def geospatial_dashboard
     file = File.read("public/dashboard_geojson.json")
     @feature_collection = JSON.parse(file)
-    #@feature_collection = Rails.cache.fetch("dashboard_geojson")
+
     search = Project.solr_search do
       with :active_string, 'Active'
       with(:geocodes).greater_than(0)
       paginate :page => 1, :per_page => 5
       order_by(:title,:asc)
     end
+
     searchTotal = Project.solr_search do
       with :active_string, 'Active'
       with(:geocodes).greater_than(0)
       paginate :page=>1, :per_page =>10000
       order_by(:title,:asc)
     end
+
     @first_page = {}
     @first_page["data"] = search.results
     @first_page["current"] = search.results.current_page
     @first_page["entries"] = search.results.total_entries
     @first_page["pages"] = search.results.total_pages
     @first_page["ids"] = searchTotal.results.map(&:id)
+
     respond_to do |format|
       format.html { render 'geospatial_dashboard' }
       format.geojson { render json: @feature_collection }
