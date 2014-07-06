@@ -12,7 +12,17 @@ module SearchHelper
   # Constants in an initializer
 
   def custom_search(options = {})
-    get_search_results(options).results
+    search_results = get_search_results(options).results
+    search_results.each do |project|
+      if (!current_user_is_aiddata) && (project.donor.name != 'China')
+        project.delete
+      end
+    end
+
+    puts "!$!"
+    puts search_results.count
+    search_results
+
   end
 
 
@@ -20,10 +30,9 @@ module SearchHelper
     options.reverse_merge! paginate: true
     options.reverse_merge! default_to_official_finance: true
     
-    #@search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions).search do
     @search = Project.includes(:owner, :donor, {geopoliticals: [:country]}, :transactions).solr_search do
       # if not aiddata, don't let 'em see stage one projects
-      
+
       params[:is_stage_one] = "Is not Stage One" unless current_user_is_aiddata
       params[:active_string] = 'Active' if options[:active]
       
@@ -82,7 +91,6 @@ module SearchHelper
       end
 
     end
-    
     @search
   end
 
