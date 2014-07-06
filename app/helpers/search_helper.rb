@@ -19,10 +19,7 @@ module SearchHelper
       end
     end
 
-    puts "!$!"
-    puts search_results.count
     search_results
-
   end
 
 
