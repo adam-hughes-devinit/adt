@@ -33,6 +33,7 @@ module GeospatialSearchHelper
             order_by(:title,:asc)
           end
           @page = {}
+          @page["query"] = params["search"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page
           @page["entries"] = paginatedSearch.results.total_entries
@@ -73,6 +74,7 @@ module GeospatialSearchHelper
             order_by(:title,:asc)
           end
           @page = {}
+          @page["query"] = params["search"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page
           @page["entries"] = paginatedSearch.results.total_entries
@@ -107,6 +109,7 @@ module GeospatialSearchHelper
             order_by(:title,:asc)
           end
           @page = {}
+          @page["query"] = params["search"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page
           @page["entries"] = paginatedSearch.results.total_entries
@@ -143,6 +146,7 @@ module GeospatialSearchHelper
             order_by(:title,:asc)
           end
           @page = {}
+          @page["query"] = params["search"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page
           @page["entries"] = paginatedSearch.results.total_entries
@@ -166,6 +170,7 @@ module GeospatialSearchHelper
         order_by(:title,:asc)
       end
       @page = {}
+      @page["query"] = params["search"]
       @page["data"] = paginatedSearch.results
       @page["current"] = paginatedSearch.results.current_page
       @page["entries"] = paginatedSearch.results.total_entries

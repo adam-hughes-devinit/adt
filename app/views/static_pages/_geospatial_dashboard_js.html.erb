@@ -120,6 +120,9 @@ function setParams(params){
               getLatLonEventsOff();
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
+//Change static URL query and page
+              var params = {"q":data.query,"p":data.current};
+              setParams(params);
 //Clustering
               map.removeLayer(markers);
               drawClusters()
@@ -209,6 +212,10 @@ function setParams(params){
         }
 //Functions to control page movement
         pageFirst = function(){
+            //Keep query, set page
+            var query = getParams().q==undefined?"":getParams().q
+            var pageParams = {"q":query,"p":1};
+            setParams(pageParams);
             var params = {'ids[]': results.ids, page:1};
             $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
@@ -217,6 +224,10 @@ function setParams(params){
                     .always(function(){$('.loading').toggle()});
         }
         pagePrev = function(){
+            //Keep query, set page
+            var query = getParams().q==undefined?"":getParams().q
+            var pageParams = {"q":query,"p":results.current - 1};
+            setParams(pageParams);
             var params = {'ids[]': results.ids, page: results.current - 1};
             $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
@@ -225,6 +236,10 @@ function setParams(params){
                     .always(function(){$('.loading').toggle()});
         }
         pageNext = function(){
+            //Keep query, set page
+            var query = getParams().q==undefined?"":getParams().q
+            var pageParams = {"q":query,"p":results.current + 1};
+            setParams(pageParams);
             var params = {'ids[]': results.ids, page: results.current + 1};
             $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){
@@ -233,6 +248,10 @@ function setParams(params){
                     .always(function(){$('.loading').toggle()});
         }
         pageLast = function(){
+            //Keep query, set page
+            var query = getParams().q==undefined?"":getParams().q
+            var pageParams = {"q":query,"p":results.pages};
+            setParams(pageParams);
             var params = {'ids[]': results.ids, page: results.pages};
             $('.loading').toggle()
             $.post("/queries/geo_page", params, function(data){

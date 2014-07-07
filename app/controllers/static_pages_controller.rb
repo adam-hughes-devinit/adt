@@ -86,6 +86,7 @@ class StaticPagesController < ApplicationController
     end
 
     @first_page = {}
+    @first_page["query"] = params["search"]
     @first_page["data"] = search.results
     @first_page["current"] = search.results.current_page
     @first_page["entries"] = search.results.total_entries
