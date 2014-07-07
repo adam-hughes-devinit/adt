@@ -88,7 +88,6 @@ function getParams(){
 };
 function setParams(params){
     if(params===undefined){params={}}
-    window.history.pushState({},"", "/geospatial_dashboard");
     var i = 1,
             locationSearch = "",
             len = Object.keys(params).length;
@@ -100,7 +99,7 @@ function setParams(params){
         if(i<len){locationSearch+="&"}
         i+=1
     };
-    window.history.pushState({},"", document.documentURI+locationSearch);
+    window.history.pushState({},"", "/geospatial_dashboard"+locationSearch);
 };
 
 //AJAX loading screen
