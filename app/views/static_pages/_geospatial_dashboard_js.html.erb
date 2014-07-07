@@ -174,8 +174,8 @@ function setParams(params){
         </div>
        </div>
       </div>
-      <%= javascript_tag "var results=#{@first_page.to_json}"%>
-      <%= javascript_tag "var feature_collection=#{@feature_collection.to_json}"%>
+      <%= javascript_tag "var results=#{@page.to_json}"%>
+      <%= javascript_tag "var feature_collection=#{@page["features"].to_json}"%>
       <script>
 //Function to draw results in the panel
         drawResults = function(results){
@@ -1116,5 +1116,19 @@ $("a.facet-controller#project_years_on").click(function(){
 $("a.facet-controller#project_years_off").click(function(){
     filterObject.project_year = [];
     filterGeoJson(filterObject);
+});
+$(document).ready(function(){
+    //If query, set zoom
+    if(getParams().q!=undefined){
+        if(feature_collection.features.length>0){
+            if(Object.keys(markers._featureGroup._layers).length>0){
+                var bounds = markers.getBounds()
+                zoomToFeature(bounds)
+            }
+        }else{
+            map.fitBounds([[52,68],[-42,-29]])
+            $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+        }
+    }
 });
 </script>

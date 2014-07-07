@@ -70,33 +70,180 @@ class StaticPagesController < ApplicationController
   def geospatial_dashboard
     file = File.read("public/dashboard_geojson.json")
     @feature_collection = JSON.parse(file)
-
-    search = Project.solr_search do
-      with :active_string, 'Active'
-      with(:geocodes).greater_than(0)
-      paginate :page => 1, :per_page => 5
-      order_by(:title,:asc)
+    if params["q"]!=""
+      if params["q"].scan(/(?:\(.*?\))+/)[0].nil? || params["q"].scan(/(?:\(.*?\))+/)[0] =="(keyword)"
+        search = Project.solr_search do
+          keywords params["q"].split(/(?:\(.*?\))+/)[0] do
+            fields(:description, :title => 2.0)
+          end
+          with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
+        end
+        full_result_ids = search.results.map(&:id)
+        unless @feature_collection.nil?
+          i = 0
+          while i < @feature_collection["features"].length do
+            unless full_result_ids.include? @feature_collection["features"][i]["properties"]["project_id"]
+              @feature_collection["features"].delete_at(i)
+            else
+              i += 1
+            end
+          end
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params["p"] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["query"] = params["q"]
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
+        end
+      elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
+        search = Adm.solr_search do
+          keywords params["q"].split(/(?:\(.*?\))+/)[0].split(/\A[*]+/) do
+            fields(:name)
+          end
+          paginate :page => 1, :per_page => 10000
+          with :level, params["q"].scan(/(?:\(.*?\))+/)[0].split(/(\d+)/)[1] || [0,1,2]
+        end
+        geocodes = []
+        geocodes.concat(search.results.map(&:geocodes).flatten)
+        geocodes.concat(search.results.map(&:children).flatten.map(&:geocodes).flatten)
+        geocodes.concat(search.results.map(&:children).flatten.map(&:children).flatten.map(&:geocodes).flatten)
+        full_result_ids = geocodes.map(&:project_id)
+        geocodes = geocodes.map(&:id)
+        unless @feature_collection.nil?
+          i = 0
+          while i < @feature_collection["features"].length do
+            unless geocodes.include? @feature_collection["features"][i]["properties"]["geo_code_id"]
+              @feature_collection["features"].delete_at(i)
+            else
+              i += 1
+            end
+          end
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params["p"] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["query"] = params["q"]
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
+        end
+      elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
+        search = Project.solr_search do
+          with(:id).equal_to(params["q"].split(/(?:\(.*?\))+/)[0])
+          with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
+        end
+        full_result_ids = search.results.map(&:id)
+        unless @feature_collection.nil?
+          i = 0
+          while i < @feature_collection["features"].length do
+            unless full_result_ids.include? @feature_collection["features"][i]["properties"]["project_id"]
+              @feature_collection["features"].delete_at(i)
+            else
+              i += 1
+            end
+          end
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params["p"] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["query"] = params["q"]
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
+        end
+      else
+        search = Project.solr_search do
+          keywords params["q"].split(/(?:\(.*?\))+/)[0] do
+            fields(:description, :title => 2.0)
+          end
+          with :active_string, 'Active'
+          with(:geocodes).greater_than(0)
+          paginate :page => 1, :per_page => 10000
+        end
+        full_result_ids = search.results.map(&:id)
+        unless @feature_collection.nil?
+          i = 0
+          while i < @feature_collection["features"].length do
+            unless full_result_ids.include? @feature_collection["features"][i]["properties"]["project_id"]
+              @feature_collection["features"].delete_at(i)
+            else
+              i += 1
+            end
+          end
+          if full_result_ids.length==0
+            full_result_ids = ["a"]
+          end
+          paginatedSearch = Project.solr_search do
+            with(:id).any_of(full_result_ids)
+            paginate :page => params["p"] || 1, :per_page => 5
+            order_by(:title,:asc)
+          end
+          @page = {}
+          @page["query"] = params["q"]
+          @page["data"] = paginatedSearch.results
+          @page["current"] = paginatedSearch.results.current_page
+          @page["entries"] = paginatedSearch.results.total_entries
+          @page["pages"] = paginatedSearch.results.total_pages
+          @page["features"] = @feature_collection
+          @page["ids"] = full_result_ids
+        end
+      end
+    else
+      paginatedSearch = Project.solr_search do
+        with :active_string, 'Active'
+        with(:geocodes).greater_than(0)
+        paginate :page => params["p"] || 1, :per_page => 5
+        order_by(:title,:asc)
+      end
+      searchTotal = Project.solr_search do
+        with :active_string, 'Active'
+        with(:geocodes).greater_than(0)
+        paginate :page=>1, :per_page =>10000
+        order_by(:title,:asc)
+      end
+      @page = {}
+      @page["query"] = params["q"]
+      @page["data"] = paginatedSearch.results
+      @page["current"] = paginatedSearch.results.current_page
+      @page["entries"] = paginatedSearch.results.total_entries
+      @page["pages"] = paginatedSearch.results.total_pages
+      @page["features"] = @feature_collection
+      @page["ids"] = searchTotal.results.map(&:id)
     end
-
-    searchTotal = Project.solr_search do
-      with :active_string, 'Active'
-      with(:geocodes).greater_than(0)
-      paginate :page=>1, :per_page =>10000
-      order_by(:title,:asc)
-    end
-
-    @first_page = {}
-    @first_page["query"] = params["search"]
-    @first_page["data"] = search.results
-    @first_page["current"] = search.results.current_page
-    @first_page["entries"] = search.results.total_entries
-    @first_page["pages"] = search.results.total_pages
-    @first_page["ids"] = searchTotal.results.map(&:id)
 
     respond_to do |format|
       format.html { render 'geospatial_dashboard' }
-      format.geojson { render json: @feature_collection }
-      format.json {render json: @first_page}
+      format.json { render json: @page}
     end
   end
 
