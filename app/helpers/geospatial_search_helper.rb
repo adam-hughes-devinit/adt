@@ -50,6 +50,11 @@ module GeospatialSearchHelper
           paginate :page => 1, :per_page => 10000
           with :level, params["search"].scan(/(?:\(.*?\))+/)[0].split(/(\d+)/)[1] || [0,1,2]
         end
+        adm_id = search.results.map(&:id)[0]
+        boundingBox = Adm.where{id == adm_id}.joins{geometry}.select('st_astext(st_envelope(st_collectionextract(geometries.the_geom,3)))')
+        southWest = boundingBox.map(&:st_astext)[0].scan(/\(+([^)]+)\)/).flatten[0].split(",")[0].split(" ").reverse()
+        northEast = boundingBox.map(&:st_astext)[0].scan(/\(+([^)]+)\)/).flatten[0].split(",")[2].split(" ").reverse()
+        bounds = [southWest,northEast]
         geocodes = []
         geocodes.concat(search.results.map(&:geocodes).flatten)
         geocodes.concat(search.results.map(&:children).flatten.map(&:geocodes).flatten)
@@ -74,6 +79,7 @@ module GeospatialSearchHelper
             order_by(:title,:asc)
           end
           @page = {}
+          @page["bounds"] = bounds
           @page["query"] = params["search"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page
@@ -189,7 +195,7 @@ module GeospatialSearchHelper
     end
     @bucket = []
     i = 0
-    len = search.results.first(5).length
+    len = search.results.first(4).length
     while i < len
       levelHuman = search.results[i]["level"]==0?"Country-level":search.results[i]["level"]==1?"State-level":"District-level"
       @bucket << search.results[i]["name"] + " (ADM" + search.results[i]["level"].to_s + ": " + levelHuman + ")"

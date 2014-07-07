@@ -115,6 +115,11 @@ class StaticPagesController < ApplicationController
           paginate :page => 1, :per_page => 10000
           with :level, params["q"].scan(/(?:\(.*?\))+/)[0].split(/(\d+)/)[1] || [0,1,2]
         end
+        adm_id = search.results.map(&:id)[0]
+        boundingBox = Adm.where{id == adm_id}.joins{geometry}.select('st_astext(st_envelope(st_collectionextract(geometries.the_geom,3)))')
+        southWest = boundingBox.map(&:st_astext)[0].scan(/\(+([^)]+)\)/).flatten[0].split(",")[0].split(" ").reverse()
+        northEast = boundingBox.map(&:st_astext)[0].scan(/\(+([^)]+)\)/).flatten[0].split(",")[2].split(" ").reverse()
+        bounds = [southWest,northEast]
         geocodes = []
         geocodes.concat(search.results.map(&:geocodes).flatten)
         geocodes.concat(search.results.map(&:children).flatten.map(&:geocodes).flatten)
@@ -139,6 +144,7 @@ class StaticPagesController < ApplicationController
             order_by(:title,:asc)
           end
           @page = {}
+          @page["bounds"] = bounds
           @page["query"] = params["q"]
           @page["data"] = paginatedSearch.results
           @page["current"] = paginatedSearch.results.current_page

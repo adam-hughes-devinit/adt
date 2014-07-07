@@ -128,13 +128,15 @@ function setParams(params){
               drawClusters()
               drawResults(data)
               results = data
-              if(feature_collection.features.length>0){
-                  if(Object.keys(markers._featureGroup._layers).length>0){
-                      var bounds = markers.getBounds()
-                      zoomToFeature(bounds)
-                  }
-              }
-                  else{
+              if(results.bounds!=undefined && feature_collection.features.length>0){
+                  map.fitBounds(results.bounds)
+              }else if(results.bounds!=undefined && feature_collection.features.length<=0){
+                  map.fitBounds(results.bounds)
+                  $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+              }else if(feature_collection.features.length>0){
+                  var bounds = markers.getBounds()
+                  zoomToFeature(bounds)
+              }else{
                   map.fitBounds([[52,68],[-42,-29]])
                   $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
               }
@@ -1121,11 +1123,14 @@ $(document).ready(function(){
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)
     if(getParams().q!=undefined){
-        if(feature_collection.features.length>0){
-            if(Object.keys(markers._featureGroup._layers).length>0){
-                var bounds = markers.getBounds()
-                zoomToFeature(bounds)
-            }
+        if(results.bounds!=undefined && feature_collection.features.length>0){
+            map.fitBounds(results.bounds)
+        }else if(results.bounds!=undefined && feature_collection.features.length<=0){
+            map.fitBounds(results.bounds)
+            $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+        }else if(feature_collection.features.length>0){
+            var bounds = markers.getBounds()
+            zoomToFeature(bounds)
         }else{
             map.fitBounds([[52,68],[-42,-29]])
             $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
