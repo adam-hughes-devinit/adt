@@ -70,7 +70,7 @@ class StaticPagesController < ApplicationController
   def geospatial_dashboard
     file = File.read("public/dashboard_geojson.json")
     @feature_collection = JSON.parse(file)
-    if params["q"]!=""
+    if params["q"]!="" && !params["q"].nil?
       if params["q"].scan(/(?:\(.*?\))+/)[0].nil? || params["q"].scan(/(?:\(.*?\))+/)[0] =="(keyword)"
         search = Project.solr_search do
           keywords params["q"].split(/(?:\(.*?\))+/)[0] do
