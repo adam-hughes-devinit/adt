@@ -77,6 +77,32 @@
       <% end %>
     </div>
   <script>
+//Get and Set Params
+function getParams(){
+    var paramArr = window.location.search.substr(1).split("&")[0]==""?[]:window.location.search.substr(1).split("&");
+    var params = {};
+    for(var i=0;i<paramArr.length;i++){
+        var param=paramArr[i];params[param.split("=")[0]]=param.split("=")[1]
+    };
+    return params
+};
+function setParams(params){
+    if(params===undefined){params={}}
+    window.history.pushState({},"", "/geospatial_dashboard");
+    var i = 1,
+            locationSearch = "",
+            len = Object.keys(params).length;
+    for(var param in params){
+        if(i==1){locationSearch+="?"}
+        locationSearch+=param
+        locationSearch+="="
+        locationSearch+=params[param]
+        if(i<len){locationSearch+="&"}
+        i+=1
+    };
+    window.history.pushState({},"", document.documentURI+locationSearch);
+};
+
 //AJAX loading screen
     var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
       $('#geospatial_search')

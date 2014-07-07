@@ -81,43 +81,6 @@ module GeospatialSearchHelper
           @page["ids"] = full_result_ids
           render :json => @page
         end
-      elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(GEO")
-        searchGeoName = Geocode.solr_search do
-          keywords params["search"].split(/(?:\(.*?\))+/)[0].split(/\A[*]+/) do
-            fields(:geo_name)
-          end
-          paginate :page => 1, :per_page => 10000
-        end
-        geocodes = []
-        geocodes.concat(searchGeoName.results)
-        full_result_ids = geocodes.map(&:project_id)
-        geocodes = geocodes.map(&:id)
-        unless @feature_collection.nil?
-          i = 0
-          while i < @feature_collection["features"].length do
-            unless geocodes.include? @feature_collection["features"][i]["properties"]["geo_code_id"]
-              @feature_collection["features"].delete_at(i)
-            else
-              i += 1
-            end
-          end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
-            paginate :page => params[:page] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
-          @page = {}
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
-          @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
-          render :json => @page
-        end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
         search = Project.solr_search do
           with(:id).equal_to(params["search"].split(/(?:\(.*?\))+/)[0])
@@ -219,25 +182,15 @@ module GeospatialSearchHelper
         fields(:name)
       end
     end
-    searchGeoName = GeoName.solr_search do
-      keywords params['keywords'].nil??nil:params['keywords']+' OR '+params['keywords']+'*' do
-        fields(:name)
-      end
-    end
-    i = 0
-    len = searchGeoName.results.first(4).length
     @bucket = []
-    @bucket << params['keywords'] + " (keyword)"
-    while i < len
-      @bucket << searchGeoName.results[i]["name"] + " (GEO: " + [searchGeoName.results[i]].map(&:location_type)[0]["name"] + ")"
-      i += 1
-    end
     i = 0
     len = search.results.first(5).length
     while i < len
-      @bucket << search.results[i]["name"] + " (ADM" + search.results[i]["level"].to_s + ")"
+      levelHuman = search.results[i]["level"]==0?"Country-level":search.results[i]["level"]==1?"State-level":"District-level"
+      @bucket << search.results[i]["name"] + " (ADM" + search.results[i]["level"].to_s + ": " + levelHuman + ")"
       i += 1
     end
+    @bucket << params['keywords'] + " (keyword)"
     render :json => @bucket.flatten
   end
 
