@@ -181,6 +181,14 @@ module ProjectSearch
         end
         i
       end
+      text :geocodes do
+        geocodes.map do |g|
+          if g
+            ["#{g.geo_name.name}",
+             "#{g.geo_name.location_type.name }"]
+          end
+        end
+      end
 
       text :participating_organizations do
         participating_organizations.map do |o| 
