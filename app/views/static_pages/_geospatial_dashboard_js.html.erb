@@ -118,6 +118,8 @@ function setParams(params){
               }
               if(map.hasLayer(newComment)){map.removeLayer(newComment)}
               getLatLonEventsOff();
+//If facets are off, turn them all on
+              $('.facet-controller.on').trigger('click')
 //Take AJAX data and draw it, zoom to it
               feature_collection = data.features
 //Change static URL query and page
@@ -275,8 +277,8 @@ function setParams(params){
               <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
             </b>
             <span class="check_count project_year"></span>
-            <a class="facet-controller" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
+            <a class="facet-controller on" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
             <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
             <script>
                 //Update check-box count
