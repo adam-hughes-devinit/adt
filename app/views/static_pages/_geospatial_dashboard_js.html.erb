@@ -607,6 +607,7 @@ function drawProject(microProjectData, r){
 //Build Feature Collection
     var features = [],
             project = microProjectData[0].project;
+    $('.facet-controller.on').trigger('click')
     oldFeatures = feature_collection.features;
     microProjectData.forEach(function(geocode){
         var featureObj = {};
