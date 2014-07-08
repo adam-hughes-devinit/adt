@@ -88,6 +88,14 @@ class StaticPagesController < ApplicationController
     geo_paginated_search_ajax
   end
 
+  def post_comment
+    post_comment_ajax
+  end
+
+  def post_suggestion
+    post_suggestion_ajax
+  end
+
   def micro_project_page
     micro_project_page_ajax
   end
