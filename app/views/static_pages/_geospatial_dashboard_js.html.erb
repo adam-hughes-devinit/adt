@@ -805,6 +805,7 @@ function slideResults(){
 };
 function backToResults(){
     getLatLonEventsOff();
+    $('.facet-controller.on').trigger('click')
     if(map.hasLayer(newComment)){map.removeLayer(newComment)}
     feature_collection.features = oldFeatures
     //Redraw map with clustering and zoom
