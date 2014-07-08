@@ -421,7 +421,6 @@ $("#noBase").change(function(){
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
-        console.log("Selected layer: None")
         if (legend._map!=null){
             map.removeControl(legend);
         }
@@ -436,7 +435,6 @@ $("#povertyBase").change(function(){
         if(poverty._map==null){map.addLayer(poverty)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
-        console.log("Selected layer: Poverty")
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend'),
                     grades = [0, 20, 40, 60, 80],
@@ -467,7 +465,6 @@ $("#acledBase").change(function(){
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(acled._map==null){map.addLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
-        console.log("Selected layer: Armed Conflict")
         legend.onAdd = function(map){
             var div = L.DomUtil.create('div', 'info legend'),
                     grades = ["None", "Low", "Medium", "High"],
@@ -498,7 +495,6 @@ $("#usgsBase").change(function(){
         $("input#povertyBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
         $("input#noBase").prop('checked',false)
-        console.log("Selected layer: Minerals and Mines")
         legend.onAdd = function(map){
             var div = L.DomUtil.create('div', 'info legend')
             labels = [];
@@ -674,7 +670,23 @@ function drawProject(microProjectData, r){
     }
     $('#projectPage').append("<hr>")
     $('#projectPage').append("<b>Comment</b>")
-    $('#projectPage').append("<form onchange='validate(this)' accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden'><input name='verboselng' type='hidden'><input name='geocode' type='hidden'></div><input class='post_comment' name='name' required='true' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_comment' name='email' required='true' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_comment' name='latlng' onchange='mapLatLon()' placeholder='Lat, Long' type='text' style='float:left;width:66%;'><button type='button' onclick='getLatLon()' style='float:left;width:33%;padding:0px !important;line-height:1 !important;min-height:30px;position:relative;top:2px;'>Get from map</button><textarea rows=3 class='post_comment' name='content' required='true' placeholder='*Type your comment here...' style='float:left;width:100%;'></textarea><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_comment' name='media' id='mediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_comment' style='float:left;width:6%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:60%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' id='submit' disabled='disabled' style='float:right;width:33%;height:30px;' onclick='submitComment()'>Submit</button></form>")
+    $('#projectPage').append("<form onchange='validate(this)' accept-charset='UTF-8' action='/queries/post_comment' data-remote='true' id='post_comment' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden'><input name='verboselng' type='hidden'><input name='geocode' type='hidden'><input name='filename' type='hidden'><input name='filedata' type='hidden'></div><input class='post_comment' name='name' required='true' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_comment' name='email' required='true' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_comment' name='latlng' onchange='mapLatLon()' placeholder='Lat, Long' type='text' style='float:left;width:66%;'><button type='button' onclick='getLatLon()' style='float:left;width:33%;padding:0px !important;line-height:1 !important;min-height:30px;position:relative;top:2px;'>Get from map</button><textarea rows=3 class='post_comment' name='content' required='true' placeholder='*Type your comment here...' style='float:left;width:100%;'></textarea><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_comment' name='media' id='commentmediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_comment' style='float:left;width:6%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:60%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' id='submit' disabled='disabled' style='float:right;width:33%;height:30px;' onclick='submitComment()'>Submit</button></form>")
+//Event Listener for file change
+    commentFiles = [];
+    $("#post_comment input[type=file]").change(function(event) {
+        $.each(event.target.files, function(index, file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                object = {};
+                object.filename = file.name;
+                object.size = file.size;
+                object.type = file.type;
+                object.data = event.target.result;
+                commentFiles.push(object);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
 //Slide Results Panel
     slideResults()
     r.resolve();
@@ -917,10 +929,26 @@ function openRightClickMap(e){
         newSuggestion.closePopup();
         map.removeLayer(dropdown);
         newSuggestion = L.circleMarker(e.latlng,suggestionOptions);
-        newSuggestion.bindPopup("<form onchange='validate(this)' style='width:200px;height:185px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'></div><input class='post_suggestion' name='name' required='true' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' required='true' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' required='true' placeholder='*Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' required='true' placeholder='*Suggest a project title' style='float:left;width:100%;'><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_suggestion' name='media' id='mediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' id='submit' disabled='disabled' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
+        newSuggestion.bindPopup("<form onchange='validate(this)' style='width:200px;height:185px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'><input name='filename' type='hidden'><input name='filedata' type='hidden'></div><input class='post_suggestion' name='name' required='true' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' required='true' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' required='true' placeholder='*Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' required='true' placeholder='*Suggest a project title' style='float:left;width:100%;'><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_suggestion' name='media' id='suggestionmediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' id='submit' disabled='disabled' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
         newSuggestion.addTo(map)
         newSuggestion.once('popupclose',cancelSuggestion)
         newSuggestion.openPopup()
+        //Event Listener for file change
+        suggestionFiles = [];
+        $("#post_suggestion input[type=file]").change(function(event) {
+            $.each(event.target.files, function(index, file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    object = {};
+                    object.filename = file.name;
+                    object.size = file.size;
+                    object.type = file.type;
+                    object.data = event.target.result;
+                    suggestionFiles.push(object);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
     });
 };
 function openRightClickMarkers(e){
@@ -1014,46 +1042,74 @@ function cancelSuggestion(){
     if(map.hasLayer(newSuggestion)){newSuggestion.closePopup();map.removeLayer(newSuggestion);}
 };
 function submitSuggestion(){
-    $("form#post_suggestion").trigger("submit")
-    var title=$("form#post_suggestion input[name ='title']").val(),
-            name = $("form#post_suggestion input[name ='name']").val(),
-            source = $("form#post_suggestion input[name ='source']").val();
-    if(source.indexOf("http")==0){source = "<a href='"+source+"' target='_blank'>Link</a>"}
-    if(source.indexOf("www")==0){source = "<a href='http://"+source+"' target='_blank'>Link</a>"}
-    newSuggestion.closePopup()
-    newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
-    suggestions.addLayer(newSuggestion)
-    if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
-    if(map.hasLayer(suggestions)){map.removeLayer(suggestions)}
-    suggestions.addTo(map)
-    newSuggestion = L.marker()
-    $("input#suggestionOverlay").prop('checked',true)
-    window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+    var uploadSuccess = true;
+    $.each(suggestionFiles, function(index, file) {
+        if(file.size<10000000 && file.type=="image/png" || file.type=="image/gif" || file.type=="image/jpeg" || file.type=="video/avi" || file.type=="video/mpeg" || file.type=="video/mp4" || file.type=="video/quicktime" || file.type=="video/webm"){
+            $("#post_suggestion input[type = 'file']").val("")
+            $("#post_suggestion input[name = 'filename']").val(file.filename)
+            $("#post_suggestion input[name = 'filedata']").val(file.data)
+        }else{
+            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            uploadSuccess = false;
+        }
+    });
+    suggestionFiles = [];
+    if(uploadSuccess){
+        $("form#post_suggestion").trigger("submit")
+        var title=$("form#post_suggestion input[name ='title']").val(),
+                name = $("form#post_suggestion input[name ='name']").val(),
+                source = $("form#post_suggestion input[name ='source']").val();
+        if(source.indexOf("http")==0){source = "<a href='"+source+"' target='_blank'>Link</a>"}
+        if(source.indexOf("www")==0){source = "<a href='http://"+source+"' target='_blank'>Link</a>"}
+        newSuggestion.closePopup()
+        newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+        suggestions.addLayer(newSuggestion)
+        if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
+        if(map.hasLayer(suggestions)){map.removeLayer(suggestions)}
+        suggestions.addTo(map)
+        newSuggestion = L.marker()
+        $("input#suggestionOverlay").prop('checked',true)
+        window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+    };
 };
 function submitComment(){
-    $("form#post_comment").trigger("submit")
-    var content=$("form#post_comment textarea[name ='content']").val(),
-            name = $("form#post_comment input[name ='name']").val(),
-            latlng = $("form#post_comment input[name ='latlng']").val().split(',');
-    if(map.hasLayer(newComment)) {
-        newComment.closePopup()
-        newComment.bindPopup(content + "<br>-" + name)
-        comments.addLayer(newComment)
-        if (map.hasLayer(newComment)) {
-            map.removeLayer(newComment)
+    var uploadSuccess = true;
+    $.each(commentFiles, function(index, file) {
+        if(file.size<10000000 && file.type=="image/png" || file.type=="image/gif" || file.type=="image/jpeg" || file.type=="video/avi" || file.type=="video/mpeg" || file.type=="video/mp4" || file.type=="video/quicktime" || file.type=="video/webm"){
+            $("#post_comment input[type = 'file']").val("")
+            $("#post_comment input[name = 'filename']").val(file.filename)
+            $("#post_comment input[name = 'filedata']").val(file.data)
+        }else{
+            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            uploadSuccess = false;
         }
-        if (map.hasLayer(comments)) {
-            map.removeLayer(comments)
+    });
+    commentFiles = [];
+    if(uploadSuccess){
+        $("form#post_comment").trigger("submit")
+        var content=$("form#post_comment textarea[name ='content']").val(),
+                name = $("form#post_comment input[name ='name']").val(),
+                latlng = $("form#post_comment input[name ='latlng']").val().split(',');
+        if(map.hasLayer(newComment)) {
+            newComment.closePopup()
+            newComment.bindPopup(content + "<br>-" + name)
+            comments.addLayer(newComment)
+            if (map.hasLayer(newComment)) {
+                map.removeLayer(newComment)
+            }
+            if (map.hasLayer(comments)) {
+                map.removeLayer(comments)
+            }
+            comments.addTo(map)
+            newComment = L.marker()
+            $("input#commentOverlay").prop('checked', true)
         }
-        comments.addTo(map)
-        newComment = L.marker()
-        $("input#commentOverlay").prop('checked', true)
-    }
-    $("form#post_comment input").val("")
-    $("form#post_comment textarea").val("")
-    $("form#post_comment input[type='checkbox']").prop("checked", false)
-    validate($("form#post_comment"))
-    window.alert("Thank you for submitting a comment.\n\nIf you opted to geo-tag your comment, it will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+        $("form#post_comment input").val("")
+        $("form#post_comment textarea").val("")
+        $("form#post_comment input[type='checkbox']").prop("checked", false)
+        validate($("form#post_comment"))
+        window.alert("Thank you for submitting a comment.\n\nIf you opted to geo-tag your comment, it will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+    };
 };
 map.on('zoomend',setRadiusByZoom)
 //Filter function
