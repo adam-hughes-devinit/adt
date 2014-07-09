@@ -1070,7 +1070,7 @@ function submitSuggestion(){
                 var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
             }else if(media.type=="video/webm"){
                 var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-            }else if(window.navigator.userAgent.indexOf("Mobile")>-1) {
+            }else if(window.navigator.userAgent.indexOf("Mobile")==-1) {
                 var video = "<a href='"+media.data+"'>Download video.</a>";
             }else{
                 var video = "<b>Videos are disabled on mobile platforms. Please revisit this suggested project on a desktop computer to view the attached media.</b>";
@@ -1121,7 +1121,7 @@ function submitComment(){
                     var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
                 }else if(media.type=="video/webm"){
                     var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-                }else if(window.navigator.userAgent.indexOf("Mobile")>-1) {
+                }else if(window.navigator.userAgent.indexOf("Mobile")==-1) {
                     var video = "<a href='"+media.data+"'>Download video.</a>";
                 }else{
                     var video = "<b>Videos are disabled on mobile platforms. Please revisit this comment on a desktop computer to view the attached media.</b>";
