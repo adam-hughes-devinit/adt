@@ -447,6 +447,7 @@ module GeospatialSearchHelper
   end
 
   def post_comment_ajax
+    puts params["projectid"]
     puts params["verboselat"]
     puts params["verboselng"]
     puts params["geocode"]
