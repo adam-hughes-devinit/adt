@@ -1117,6 +1117,7 @@ function submitComment(){
             if(media.type==undefined){
                 newComment.bindPopup(content + "<br>-" + name)
             }else if(media.type.substr(0,5)=="video"){
+                window.alert(window.navigator.userAgent)
                 if(media.type=="video/mp4"){
                     var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
                 }else if(media.type=="video/webm"){
