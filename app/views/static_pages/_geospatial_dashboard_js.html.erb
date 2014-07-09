@@ -1066,18 +1066,14 @@ function submitSuggestion(){
         if(media.type==undefined){
             newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
         }else if(media.type.substr(0,5)=="video"){
-            if(media.type=="video/x-msvideo"){
-                var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-            }else if(media.type=="video/mpeg"){
-                var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-            }else if(media.type=="video/mp4"){
-                var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-            }else if(media.type=="video/quicktime"){
+            if(media.type=="video/mp4"){
                 var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
             }else if(media.type=="video/webm"){
                 var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
+            }else if(media.type=="video/quicktime" && window.navigator.userAgent.indexOf("Chrome")==-1){
+                var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
             }else {
-                var video = "<a href='"+media.data+"'>Download video</a>";
+                var video = "<a href='"+media.data+"'>Download video.</a>";
             };
             newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>"+video+"<br>Submitted by "+name)
         }else if(media.type.substr(0,5)=="image"){
@@ -1121,18 +1117,14 @@ function submitComment(){
             if(media.type==undefined){
                 newComment.bindPopup(content + "<br>-" + name)
             }else if(media.type.substr(0,5)=="video"){
-                if(media.type=="video/x-msvideo"){
-                    var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-                }else if(media.type=="video/mpeg"){
-                    var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-                }else if(media.type=="video/mp4"){
-                    var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
-                }else if(media.type=="video/quicktime"){
+                if(media.type=="video/mp4"){
                     var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
                 }else if(media.type=="video/webm"){
                     var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
+                }else if(media.type=="video/quicktime" && window.navigator.userAgent.indexOf("Chrome")==-1){
+                    var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
                 }else {
-                    var video = "<a href='"+media.data+"'>Download video</a>";
+                    var video = "<a href='"+media.data+"'>Download video.</a>";
                 };
                 newComment.bindPopup(content + "<br>"+video+"<br>-" + name)
             }else if(media.type.substr(0,5)=="image"){
