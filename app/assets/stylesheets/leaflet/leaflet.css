@@ -33,7 +33,7 @@
 	display: block;
 	}
 /* map is broken in FF if you have max-width: 100% on tiles */
-.leaflet-container img {
+.leaflet-container img:not(.constrained) {
 	max-width: none !important;
 	}
 /* stupid Android 2 doesn't understand "max-width: none" properly */
@@ -57,7 +57,7 @@
 .leaflet-overlay-pane { z-index: 4; }
 .leaflet-shadow-pane  { z-index: 5; }
 .leaflet-marker-pane  { z-index: 6; }
-.leaflet-popup-pane   { z-index: 7; }
+.leaflet-popup-pane   { z-index: 7;overflow-wrap:break-word; }
 
 
 /* control positioning */
