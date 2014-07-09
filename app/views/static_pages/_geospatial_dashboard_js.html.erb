@@ -1053,22 +1053,31 @@ function submitSuggestion(){
             uploadSuccess = false;
         }
     });
-    suggestionFiles = [];
     if(uploadSuccess){
         $("form#post_suggestion").trigger("submit")
         var title=$("form#post_suggestion input[name ='title']").val(),
                 name = $("form#post_suggestion input[name ='name']").val(),
-                source = $("form#post_suggestion input[name ='source']").val();
+                source = $("form#post_suggestion input[name ='source']").val(),
+                media = suggestionFiles[0];
         if(source.indexOf("http")==0){source = "<a href='"+source+"' target='_blank'>Link</a>"}
         if(source.indexOf("www")==0){source = "<a href='http://"+source+"' target='_blank'>Link</a>"}
         newSuggestion.closePopup()
-        newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+        if(media.type==undefined){
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+        }else if(media.type.substr(0,5)=="video"){
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br><video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video><br>Submitted by "+name)
+        }else if(media.type.substr(0,5)=="image"){
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br><img src='"+media.data+"' style='max-width:280px !important;'/><br>Submitted by "+name)
+        }else{
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+        }
         suggestions.addLayer(newSuggestion)
         if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
         if(map.hasLayer(suggestions)){map.removeLayer(suggestions)}
         suggestions.addTo(map)
         newSuggestion = L.marker()
         $("input#suggestionOverlay").prop('checked',true)
+        suggestionFiles = [];
         window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
     };
 };
@@ -1084,15 +1093,23 @@ function submitComment(){
             uploadSuccess = false;
         }
     });
-    commentFiles = [];
     if(uploadSuccess){
         $("form#post_comment").trigger("submit")
         var content=$("form#post_comment textarea[name ='content']").val(),
                 name = $("form#post_comment input[name ='name']").val(),
-                latlng = $("form#post_comment input[name ='latlng']").val().split(',');
+                latlng = $("form#post_comment input[name ='latlng']").val().split(','),
+                media = commentFiles[0];
         if(map.hasLayer(newComment)) {
             newComment.closePopup()
-            newComment.bindPopup(content + "<br>-" + name)
+            if(media.type==undefined){
+                newComment.bindPopup(content + "<br>-" + name)
+            }else if(media.type.substr(0,5)=="video"){
+                newComment.bindPopup(content + "<br><video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video><br>-" + name)
+            }else if(media.type.substr(0,5)=="image"){
+                newComment.bindPopup(content + "<br><img src='"+media.data+"' style='max-width:280px !important;'/><br>-" + name)
+            }else{
+                newComment.bindPopup(content + "<br>-" + name)
+            }
             comments.addLayer(newComment)
             if (map.hasLayer(newComment)) {
                 map.removeLayer(newComment)
@@ -1107,6 +1124,7 @@ function submitComment(){
         $("form#post_comment input").val("")
         $("form#post_comment textarea").val("")
         $("form#post_comment input[type='checkbox']").prop("checked", false)
+        commentFiles = [];
         validate($("form#post_comment"))
         window.alert("Thank you for submitting a comment.\n\nIf you opted to geo-tag your comment, it will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
     };
