@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
       @comment = Comment.new(params[:comment])
       if params[:base64_media_item][:media_data] && params[:base64_media_item][:content_type] && params[:base64_media_item][:original_filename]
         mediabase64 = params[:base64_media_item][:media_data]
-        base64 = mediabase64[mediabase64.index('base64')+8,mediabase64.length]
+        base64 = mediabase64[mediabase64.index('base64')+7,mediabase64.length]
         decoded_data = Base64.decode64(base64)
         data = StringIO.new(decoded_data)
         data.class_eval do

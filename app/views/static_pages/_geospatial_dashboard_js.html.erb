@@ -1145,7 +1145,7 @@ function submitComment(){
             newComment = L.marker()
             $("input#commentOverlay").prop('checked', true)
         }
-        $("form#post_comment input:not([name='[comment]project_id'])").val("")
+        $("form#post_comment input:not([name='[comment]project_id']):not([name='definitely_came_from_web_form'])").val("")
         $("form#post_comment textarea").val("")
         $("form#post_comment input[type='checkbox']").prop("checked", false)
         commentFiles = [];
