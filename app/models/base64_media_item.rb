@@ -9,6 +9,9 @@ class Base64MediaItem < ActiveRecord::Base
         :medium => "320x320>",
         :thumb => "100x100>"
     })
+
+  has_one :comment
+
   protected
   def decode_base64_media
     if media_data && content_type && original_filename

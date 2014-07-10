@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     unless params[:definitely_came_from_web_form] && !params[:comment][:content].is_spam_content?
       flash[:error] = "Sorry -- that looks like spam! Don't include HTML in your comment."
     else
-
+      puts params[:comment]
       @comment = Comment.new(params[:comment])
       if (not current_user)
         @comment.published = false
