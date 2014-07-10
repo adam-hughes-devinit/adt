@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140710150632) do
+ActiveRecord::Schema.define(:version => 20140710172512) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -93,6 +93,16 @@ ActiveRecord::Schema.define(:version => 20140710150632) do
 
   add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
 
+  create_table "base64_media_items", :force => true do |t|
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "comment_id"
+    t.string   "media_file_name"
+    t.string   "media_content_type"
+    t.integer  "media_file_size"
+    t.datetime "media_updated_at"
+  end
+
   create_table "comments", :force => true do |t|
     t.text     "content"
     t.integer  "project_id"
@@ -103,7 +113,6 @@ ActiveRecord::Schema.define(:version => 20140710150632) do
     t.boolean  "published",            :default => true
     t.integer  "geocode_id"
     t.integer  "base64_media_item_id"
-    t.integer  "code"
   end
 
   add_index "comments", ["project_id"], :name => "index_comments_on_project_id"
@@ -336,8 +345,6 @@ ActiveRecord::Schema.define(:version => 20140710150632) do
     t.datetime "updated_at",                                             :null => false
     t.spatial  "the_geom",   :limit => {:srid=>4326, :type=>"geometry"}
     t.integer  "adm_code"
-    t.decimal  "latitude"
-    t.decimal  "longitude"
   end
 
   add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"

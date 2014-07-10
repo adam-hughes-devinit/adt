@@ -1,5 +1,5 @@
 class Geometry < ActiveRecord::Base
-  attr_accessible :the_geom, :adm_code, :latitude, :longitude
+  attr_accessible :the_geom, :adm_code, :comment_id
 
   has_many :geocodes
   belongs_to :adms, :foreign_key => :adm_code, :primary_key => :code

@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base
   attr_accessible :content, :email, :name, :project_id, :created_at, :published,
-                  :geometry, :geocode, :geocode_id, :base64_media_item
+                  :geometry, :geocode, :geocode_id, :base64_media_item, :geometry_id,
+                  :base64_media_item_id
   has_paper_trail
 
   default_scope where(published: true)
