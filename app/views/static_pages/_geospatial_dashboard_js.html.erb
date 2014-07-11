@@ -689,6 +689,10 @@ function drawProject(microProjectData, r){
             reader.readAsDataURL(file);
         });
     });
+//Event listener for ajax success
+    $('form#post_comment')
+            .bind("ajax:beforeSend", toggleLoading)
+            .bind("ajax:complete", function(){toggleLoading();window.alert("Thank you for submitting a comment.\n\nIf you opted to geo-tag your comment, it will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.");})
 //Slide Results Panel
     slideResults()
     r.resolve();
@@ -1185,7 +1189,6 @@ function submitComment(){
         $("form#post_comment input[type='checkbox']").prop("checked", false)
         commentFiles = [];
         validate($("form#post_comment"))
-        window.alert("Thank you for submitting a comment.\n\nIf you opted to geo-tag your comment, it will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
     };
 };
 map.on('zoomend',setRadiusByZoom)
