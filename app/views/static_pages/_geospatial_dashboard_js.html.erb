@@ -695,6 +695,7 @@ function drawProject(microProjectData, r){
 };
 function validate(e){
     var requiredInputs = $(e).find('[required=true]'),
+            email = $(e).find("[placeholder='*Email']").val(),
             len = requiredInputs.length,
             $button = $(e).find('button#submit'),
             val = true;
@@ -1107,6 +1108,12 @@ function submitComment(){
             uploadSuccess = false;
         }
     });
+    var emailRegex = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}",
+            email = $("form#post_comment input[name='[comment]email']").val();
+    if(email.match(emailRegex)===null){
+        uploadSuccess = false;
+        window.alert("Please enter a valid email address.")
+    }
     if(uploadSuccess){
         $("#post_comment input[name = 'latlng']").val("")
         $("form#post_comment").trigger("submit")

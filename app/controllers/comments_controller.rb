@@ -11,7 +11,8 @@ class CommentsController < ApplicationController
       puts params[:comment]
       puts params[:geometry]
       puts params[:base64_media_item]
-      if params[:base64_media_item][:media_data]!="" && params[:base64_media_item][:content_type]!="" && params[:base64_media_item][:original_filename]!=""
+      @comment = Comment.new(params[:comment])
+      if params[:base64_media_item][:media_data].present? && params[:base64_media_item][:content_type].present? && params[:base64_media_item][:original_filename].present?
         mediabase64 = params[:base64_media_item][:media_data]
         base64 = mediabase64[mediabase64.index('base64')+7,mediabase64.length]
         decoded_data = Base64.decode64(base64)
@@ -23,21 +24,18 @@ class CommentsController < ApplicationController
         data.original_filename = File.basename(params[:base64_media_item][:original_filename])
         @base64_media_item = Base64MediaItem.new(:media=>data)
         @base64_media_item.save
-        puts "base64_media_item"
-        puts @base64_media_item.to_yaml
-        puts "comment"
-        puts @comment.to_yaml
+        @comment.base64_media_item_id = @base64_media_item.id
       end
-      #if(params[:geometry][:latitude]!="" && params[:geometry][:longitude]!="")
+      #if(params[:geometry][:latitude].present? && params[:geometry][:longitude].present?)
         #point = RGeo::Feature::Factory.point(params[:geometry][:longitude],params[:geometry][:latitude])
         #puts point.to_yaml
       #end
-      @comment = Comment.new(params[:comment])
       if (not current_user)
         @comment.published = false
       end
 
       if @comment.save
+        puts @comment.to_yaml
         AiddataAdminMailer.delay.comment_notification(@comment)
         if current_user
           AiddataAdminMailer.delay.contributor_notification(@comment, @comment.project, current_user)

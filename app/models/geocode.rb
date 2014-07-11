@@ -1,5 +1,5 @@
 class Geocode < ActiveRecord::Base
-  attr_accessible :geo_name_id, :precision_id, :project_id, :geometry_id, :geo_upload_id, :adm_id, :comment_id
+  attr_accessible :geo_name_id, :precision_id, :project_id, :geometry_id, :geo_upload_id, :adm_id
 
   belongs_to :geo_name
   belongs_to :precision
