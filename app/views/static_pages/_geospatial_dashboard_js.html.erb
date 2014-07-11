@@ -1074,12 +1074,12 @@ function cancelSuggestion(){
 function submitSuggestion(){
     var uploadSuccess = true;
     $.each(suggestionFiles, function(index, file) {
-        if(file.size<10000000 && file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video"){
+        if(file.size<2000000 && file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video"){
             $("#post_suggestion input[type = 'file']").val("")
             $("#post_suggestion input[name = 'filename']").val(file.filename)
             $("#post_suggestion input[name = 'filedata']").val(file.data)
         }else{
-            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            window.alert("Please limit your upload to 2MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
             uploadSuccess = false;
         }
     });
@@ -1126,13 +1126,13 @@ function enlarge(image){
 function submitComment(){
     var uploadSuccess = true;
     $.each(commentFiles, function(index, file) {
-        if(file.size<10000000 && file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video"){
+        if(file.size<2000000 && file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video"){
             $("#post_comment input[type = 'file']").val("")
             $("#post_comment input[name = '[base64_media_item]content_type']").val(file.type)
             $("#post_comment input[name = '[base64_media_item]original_filename']").val(file.filename)
             $("#post_comment input[name = '[base64_media_item]media_data']").val(file.data)
         }else{
-            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            window.alert("Please limit your upload to 2MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
             uploadSuccess = false;
         }
     });
