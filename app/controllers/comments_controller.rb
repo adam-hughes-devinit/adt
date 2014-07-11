@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
 
   def create
 
-    unless params[:definitely_came_from_web_form]==true && !params[:comment][:content].is_spam_content?
+    unless params[:definitely_came_from_web_form] && !params[:comment][:content].is_spam_content?
       flash[:error] = "Sorry -- that looks like spam! Don't include HTML in your comment."
     else
       puts params[:comment]
@@ -23,13 +23,19 @@ class CommentsController < ApplicationController
         data.content_type = params[:base64_media_item][:content_type]
         data.original_filename = File.basename(params[:base64_media_item][:original_filename])
         @base64_media_item = Base64MediaItem.new(:media=>data)
-        @base64_media_item.save
-        @comment.base64_media_item_id = @base64_media_item.id
+        if @base64_media_item.save
+          @comment.base64_media_item_id = @base64_media_item.id
+        end
       end
-      #if(params[:geometry][:latitude].present? && params[:geometry][:longitude].present?)
-        #point = RGeo::Feature::Factory.point(params[:geometry][:longitude],params[:geometry][:latitude])
-        #puts point.to_yaml
-      #end
+      if(params[:geometry][:latitude].present? && params[:geometry][:longitude].present?)
+        factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
+        point = factory_cartesian.point(params[:geometry][:longitude],params[:geometry][:latitude])
+        geometryCollection = RGeo::Feature.cast(point, RGeo::Feature::GeometryCollection)
+        @geometry = Geometry.new(:the_geom => geometryCollection)
+        if @geometry.save
+          @comment.geometry_id = @geometry.id
+        end
+      end
       if (not current_user)
         @comment.published = false
       end

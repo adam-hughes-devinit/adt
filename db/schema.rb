@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140711134412) do
+ActiveRecord::Schema.define(:version => 20140711160423) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20140711134412) do
     t.boolean  "published",            :default => true
     t.integer  "geocode_id"
     t.integer  "base64_media_item_id"
+    t.integer  "geometry_id"
   end
 
   add_index "comments", ["project_id"], :name => "index_comments_on_project_id"
