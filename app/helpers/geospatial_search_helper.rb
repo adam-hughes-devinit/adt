@@ -179,6 +179,16 @@ module GeospatialSearchHelper
       @page["features"] = @feature_collection
       @page["ids"] = searchTotal.results.map(&:id)
     end
+    @comments = Comment
+    .where("published=true and geometry_id is NOT NULL")
+    .select("content, created_at,geocode_id, geometry_id, name, project_id, base64_media_item_id")
+    .each{|f|
+      f["geom"] = f.geometry.the_geom;
+      if(f.base64_media_item)
+        f["media"] = f.base64_media_item;
+        f["media"]["media_url"]= f.base64_media_item.media_url;
+      end
+    }
   end
 
   def geospatial_search_ajax
