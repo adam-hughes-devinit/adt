@@ -205,6 +205,34 @@ class ProjectsController < ApplicationController
       @project = Project.new(params[:project])
       @project.published = false
       @project.donor = Country.find_by_name("China")
+      if params[:base64_media_item].present?
+        if params[:base64_media_item][:media_data].present? && params[:base64_media_item][:content_type].present? && params[:base64_media_item][:original_filename].present?
+          mediabase64 = params[:base64_media_item][:media_data]
+          base64 = mediabase64[mediabase64.index('base64')+7,mediabase64.length]
+          decoded_data = Base64.decode64(base64)
+          data = StringIO.new(decoded_data)
+          data.class_eval do
+            attr_accessor :content_type, :original_filename
+          end
+          data.content_type = params[:base64_media_item][:content_type]
+          data.original_filename = File.basename(params[:base64_media_item][:original_filename])
+          @base64_media_item = Base64MediaItem.new(:media=>data)
+          if @base64_media_item.save
+            @project.base64_media_item_id = @base64_media_item.id
+          end
+        end
+      end
+      if params[:geometry].present?
+        if(params[:geometry][:latitude].present? && params[:geometry][:longitude].present?)
+          factory_cartesian = RGeo::Cartesian.factory(:srid => 4326)
+          point = factory_cartesian.point(params[:geometry][:longitude],params[:geometry][:latitude])
+          geometryCollection = RGeo::Feature.cast(point, RGeo::Feature::GeometryCollection)
+          @geometry = Geometry.new(:the_geom => geometryCollection)
+          if @geometry.save
+            @project.geometry_id = @geometry.id
+          end
+        end
+      end
       if @project.save(:validate => false)
 
         AiddataAdminMailer.delay.contributor_notification(@project, @project, current_user)

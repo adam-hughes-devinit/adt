@@ -455,29 +455,4 @@ module GeospatialSearchHelper
     end
     render :json => @bucket
   end
-
-  def post_comment_ajax
-    puts params["projectid"]
-    puts params["verboselat"]
-    puts params["verboselng"]
-    puts params["geocode"]
-    puts params["filename"]
-    puts params["filedata"]
-    puts params["name"]
-    puts params["email"]
-    puts params["content"]
-    render :json => []
-  end
-
-  def post_suggestion_ajax
-    puts params["verboselat"]
-    puts params["verboselng"]
-    puts params["filename"]
-    puts params["filedata"]
-    puts params["name"]
-    puts params["email"]
-    puts params["source"]
-    puts params["title"]
-    render :json => []
-  end
 end

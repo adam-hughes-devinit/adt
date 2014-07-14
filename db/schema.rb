@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140711160423) do
+ActiveRecord::Schema.define(:version => 20140714194938) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -599,6 +599,8 @@ ActiveRecord::Schema.define(:version => 20140711160423) do
     t.boolean  "published",             :default => true
     t.boolean  "is_ground_truthing"
     t.string   "user_suggestion_email"
+    t.integer  "base64_media_item_id"
+    t.integer  "geometry_id"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"

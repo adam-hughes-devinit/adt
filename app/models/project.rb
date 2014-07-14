@@ -34,6 +34,8 @@ class Project < ActiveRecord::Base
     :last_state, :published
 
   has_many :media_items
+  belongs_to :base64_media_item
+  belongs_to :geometry
 
   before_save :set_verified_to_raw_if_null
   before_save :set_owner_to_aiddata_if_null

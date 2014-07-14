@@ -412,7 +412,6 @@ $('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBa
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>")
 $('.leaflet-control-layers-base').append("<hr>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='suggestionOverlay'><span> Suggested Geocodes</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
 $("#noBase").change(function(){
     var onOff = $("input#noBase:checked").length;
@@ -527,14 +526,6 @@ $("#commentOverlay").change(function(){
         map.addLayer(comments)
     }else{
         map.removeLayer(comments)
-    }
-});
-$("#suggestionOverlay").change(function(){
-    var onOff = $("input#suggestionOverlay:checked").length;
-    if(onOff==1){
-        map.addLayer(suggestions)
-    }else{
-        map.removeLayer(suggestions)
     }
 });
     function getColorPoverty(d) {
@@ -676,6 +667,7 @@ function drawProject(microProjectData, r){
 //Event Listener for file change
     commentFiles = [];
     $("#post_comment input[type=file]").change(function(event) {
+        commentFiles = [];
         $.each(event.target.files, function(index, file) {
             var reader = new FileReader();
             reader.onload = function(event) {
@@ -964,13 +956,14 @@ function openRightClickMap(e){
         newSuggestion.closePopup();
         map.removeLayer(dropdown);
         newSuggestion = L.circleMarker(e.latlng,suggestionOptions);
-        newSuggestion.bindPopup("<form onchange='validate(this)' style='width:200px;height:185px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'><input name='filename' type='hidden'><input name='filedata' type='hidden'></div><input class='post_suggestion' name='name' required='true' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' required='true' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' required='true' placeholder='*Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' required='true' placeholder='*Suggest a project title' style='float:left;width:100%;'><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_suggestion' name='media' id='suggestionmediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' id='submit' disabled='disabled' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
+        newSuggestion.bindPopup("<form onchange='validate(this)' style='width:200px;height:185px;' accept-charset='UTF-8' action='/projects/suggest' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='suggest' type='hidden' value='true'><input name='utf8' type='hidden' value='✓'><input name='[geometry]latitude' type='hidden' value='"+ e.latlng.lat+"'><input name='[geometry]longitude' type='hidden' value='"+ e.latlng.lng+"'><input name='filename' type='hidden'><input name='[base64_media_item]media_data' type='hidden'><input name='[base64_media_item]content_type' type='hidden'><input name='[base64_media_item]original_filename' type='hidden'></div><input type='text' class='post_suggestion' name='project[title]' required='true' placeholder='*Suggest a project title' style='float:left;width:100%;'><input class='post_suggestion' name='project[user_suggestion_email]' placeholder='*Email' required='true' type='text' style='float:left;width:100%'><input class='post_suggestion' name='project[sources_attributes][][url]' required='true' placeholder='*Source URL' type='text' style='float:left;width:100%;'><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_suggestion' name='media' id='suggestionmediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' id='submit' disabled='disabled' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
         newSuggestion.addTo(map)
         newSuggestion.once('popupclose',cancelSuggestion)
         newSuggestion.openPopup()
         //Event Listener for file change
         suggestionFiles = [];
         $("#post_suggestion input[type=file]").change(function(event) {
+            suggestionFiles = [];
             $.each(event.target.files, function(index, file) {
                 var reader = new FileReader();
                 reader.onload = function(event) {
@@ -984,6 +977,11 @@ function openRightClickMap(e){
                 reader.readAsDataURL(file);
             });
         });
+        //Event listener for ajax success
+        $('form#post_suggestion')
+                .bind("ajax:beforeSend", toggleLoading)
+                .bind("ajax:success", function(){toggleLoading();window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")})
+                .bind("ajax:failure", function(){toggleLoading();window.alert("Sorry, something went wrong. Please try again later.")})
     });
 };
 function openRightClickMarkers(e){
@@ -1062,10 +1060,32 @@ function openRightClickMarkers(e){
         newSuggestion.closePopup();
         map.removeLayer(dropdown);
         newSuggestion = L.circleMarker(e.latlng,suggestionOptions);
-        newSuggestion.bindPopup("<form style='width:200px;height:100px;' accept-charset='UTF-8' action='/queries/post_suggestion' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='utf8' type='hidden' value='✓'><input name='verboselat' type='hidden' value='"+ e.latlng.lat+"'><input name='verboselng' type='hidden' value='"+ e.latlng.lng+"'></div><input class='post_suggestion' name='name' placeholder='*Name' type='text' style='float:left;width:50%'><input class='post_suggestion' name='email' placeholder='*Email' type='text' style='float:left;width:50%'><input class='post_suggestion' name='source' placeholder='Source' type='text' style='float:left;width:100%;'><input type='text' class='post_suggestion' name='title' placeholder='*Suggest a project title' style='float:left;width:100%;'><button type='button' style='width:50%;float:left;' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
+        newSuggestion.bindPopup("<form onchange='validate(this)' style='width:200px;height:185px;' accept-charset='UTF-8' action='/projects/suggest' data-remote='true' id='post_suggestion' method='post'><div style='margin:0;padding:0;display:inline'><input name='suggest' type='hidden' value='true'><input name='utf8' type='hidden' value='✓'><input name='[geometry]latitude' type='hidden' value='"+ e.latlng.lat+"'><input name='[geometry]longitude' type='hidden' value='"+ e.latlng.lng+"'><input name='filename' type='hidden'><input name='[base64_media_item]media_data' type='hidden'><input name='[base64_media_item]content_type' type='hidden'><input name='[base64_media_item]original_filename' type='hidden'></div><input type='text' class='post_suggestion' name='project[title]' required='true' placeholder='*Suggest a project title' style='float:left;width:100%;'><input class='post_suggestion' name='project[user_suggestion_email]' placeholder='*Email' required='true' type='text' style='float:left;width:100%'><input class='post_suggestion' name='project[sources_attributes][][url]' required='true' placeholder='*Source URL' type='text' style='float:left;width:100%;'><div style='height:36px;float:left;width:30%;line-height:36px;'><span style='font-weight:bold;vertical-align:middle;display:inline-block;line-height:1;'>Attach media:</span></div><input class='post_suggestion' name='media' id='suggestionmediaupload' type='file' accept='image/*,video/*' style='float:left;width:70%;'><input class='post_suggestion' style='float:left;width:10%;' type='checkbox' required='true' id='terms_and_conditions'><label style='float:left;width:90%;'>I accept the <a href='http://aiddata.org/disclaimer-and-license' target='_blank'>terms and conditions</a>.</label><button type='button' style='width:50%;float:left;' id='submit' disabled='disabled' onclick='submitSuggestion()'>Submit</button><button type='button' style='width:50%;float:left;' onclick='cancelSuggestion()'>Cancel</button></form>")
         newSuggestion.addTo(map)
         newSuggestion.once('popupclose',cancelSuggestion)
         newSuggestion.openPopup()
+        //Event Listener for file change
+        suggestionFiles = [];
+        $("#post_suggestion input[type=file]").change(function(event) {
+            suggestionFiles = [];
+            $.each(event.target.files, function(index, file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    object = {};
+                    object.filename = file.name;
+                    object.size = file.size;
+                    object.type = file.type;
+                    object.data = event.target.result;
+                    suggestionFiles.push(object);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+        //Event listener for ajax success
+        $('form#post_suggestion')
+                .bind("ajax:beforeSend", toggleLoading)
+                .bind("ajax:success", function(){toggleLoading();window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")})
+                .bind("ajax:failure", function(){toggleLoading();window.alert("Sorry, something went wrong. Please try again later.")})
     });
 };
 function openRightClickCluster(e){
@@ -1079,25 +1099,39 @@ function cancelSuggestion(){
 function submitSuggestion(){
     var uploadSuccess = true;
     $.each(suggestionFiles, function(index, file) {
-        if(file.size<2000000 && (file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video")){            $("#post_suggestion input[type = 'file']").val("")
-            $("#post_suggestion input[name = 'filename']").val(file.filename)
-            $("#post_suggestion input[name = 'filedata']").val(file.data)
+        if(file.size<10000000 && (file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video")){
+            $("#post_suggestion input[type = 'file']").val("")
+            $("#post_suggestion input[name = '[base64_media_item]content_type']").val(file.type)
+            $("#post_suggestion input[name = '[base64_media_item]original_filename']").val(file.filename)
+            $("#post_suggestion input[name = '[base64_media_item]media_data']").val(file.data)
         }else{
-            window.alert("Please limit your upload to 2MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
             uploadSuccess = false;
+            suggestionFiles = [];
         }
     });
+    var emailRegex = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}",
+            email = $("form#post_suggestion input[name='project[user_suggestion_email]']").val(),
+            URLRegex = "^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$",
+            source =  $("form#post_suggestion input[name ='project[sources_attributes][][url]']").val();
+    if(email.match(emailRegex)===null){
+        uploadSuccess = false;
+        window.alert("Please enter a valid email address.")
+    }
+    if(source.match(URLRegex)===null){
+        uploadSuccess = false;
+        window.alert("Please enter a valid source URL.")
+    }
     if(uploadSuccess){
         $("form#post_suggestion").trigger("submit")
-        var title=$("form#post_suggestion input[name ='title']").val(),
-                name = $("form#post_suggestion input[name ='name']").val(),
-                source = $("form#post_suggestion input[name ='source']").val(),
+        var title=$("form#post_suggestion input[name ='project[title]']").val(),
+                source = $("form#post_suggestion input[name ='project[sources_attributes][][url]']").val(),
                 media = suggestionFiles[0];
-        if(source.indexOf("http")==0){source = "<a href='"+source+"' target='_blank'>Link</a>"}
-        if(source.indexOf("www")==0){source = "<a href='http://"+source+"' target='_blank'>Link</a>"}
+        if(source.indexOf("http")==0){source = "<a href='"+source+"' target='_blank'>Link</a>"
+        }else{source = "<a href='http://"+source+"' target='_blank'>Link</a>"}
         newSuggestion.closePopup()
         if(media==undefined){
-            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source)
         }else if(media.type.substr(0,5)=="video"){
             if(media.type=="video/mp4"){
                 var video = "<video width='280' height='210' controls><source type='"+media.type+"' src='"+media.data+"'></video>";
@@ -1108,20 +1142,19 @@ function submitSuggestion(){
             }else{
                 var video = "<b>Videos are disabled on mobile platforms. Please revisit this suggested project on a desktop computer to view the attached media.</b>";
             };
-            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>"+video+"<br>Submitted by "+name)
+            newSuggestion.bindPopup("<b>"+title+"</b><br>"+video+"<br>Source: "+source)
         }else if(media.type.substr(0,5)=="image"){
-            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br><img class='constrained' src='"+media.data+"' style='cursor:pointer;max-width:100%;max-height:100%;' onclick='enlarge(this)'/><br>Submitted by "+name)
+            newSuggestion.bindPopup("<b>"+title+"</b><br><img class='constrained' src='"+media.data+"' style='cursor:pointer;max-width:100%;max-height:100%;' onclick='enlarge(this)'/><br>Source: "+source)
         }else{
-            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source+"<br>Submitted by "+name)
+            newSuggestion.bindPopup("<b>"+title+"</b><br>Source: "+source)
         }
         suggestions.addLayer(newSuggestion)
         if(map.hasLayer(newSuggestion)){map.removeLayer(newSuggestion)}
         if(map.hasLayer(suggestions)){map.removeLayer(suggestions)}
         suggestions.addTo(map)
         newSuggestion = L.marker()
-        $("input#suggestionOverlay").prop('checked',true)
         suggestionFiles = [];
-        window.alert("Thank you for suggesting a project.\n\nYour project will appear on your map during your current session, but will not be visible to other users until it is approved by an AidData staff member.")
+        validate($("form#post_suggestion"))
     };
 };
 function enlarge(image){
@@ -1130,14 +1163,15 @@ function enlarge(image){
 function submitComment(){
     var uploadSuccess = true;
     $.each(commentFiles, function(index, file) {
-        if(file.size<2000000 && (file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video")){
+        if(file.size<10000000 && (file.type.substr(0,5)=="image" || file.type.substr(0,5)=="video")){
             $("#post_comment input[type = 'file']").val("")
             $("#post_comment input[name = '[base64_media_item]content_type']").val(file.type)
             $("#post_comment input[name = '[base64_media_item]original_filename']").val(file.filename)
             $("#post_comment input[name = '[base64_media_item]media_data']").val(file.data)
         }else{
-            window.alert("Please limit your upload to 2MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
+            window.alert("Please limit your upload to 10MB and one of the following file types:\n\nImages: .png, .gif, .jpeg, or .jpg\n\nVideos: .avi, .mpeg, .mp4, quicktime, or .webm");
             uploadSuccess = false;
+            commentFiles = [];
         }
     });
     var emailRegex = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}",
