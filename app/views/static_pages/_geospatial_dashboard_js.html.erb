@@ -317,11 +317,12 @@ function setParams(params){
 </div>
 <script>
 //Set-up layers
-    var LERN =  L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2});
+    var LERN =  L.markerClusterGroup();
     for (var i = 0; i < LERNdata.features.length; i++) {
         var a = LERNdata.features[i];
         var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]));
-        marker.bindPopup(LERNdata.features[i].properties.name);
+        var popupText = a.properties.name.substr(0, a.properties.name.indexOf("'>")+1) + " target='_blank'"+a.properties.name.substr(a.properties.name.indexOf("'>")+1, a.properties.name.length-(a.properties.name.indexOf("'>")+1))
+        marker.bindPopup(popupText);
         LERN.addLayer(marker);
     };
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
