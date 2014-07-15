@@ -2,7 +2,6 @@
 <%= javascript_include_tag   "humanity_united/mapbox" %>
 <%= javascript_include_tag   "humanity_united/jquery-ui-1.10.4.custom.min" %>
 <%= javascript_include_tag   "humanity_united/leaflet.markercluster-src" %>
-<%= javascript_include_tag   "humanity_united/lern" %>
 <%= stylesheet_link_tag "humanity_united/mapbox" %>
 <%= stylesheet_link_tag "humanity_united/ui-lightness/jquery-ui-1.10.4.custom.min" %>
 <%= stylesheet_link_tag "humanity_united/MarkerCluster.Default" %>
@@ -317,14 +316,6 @@ function setParams(params){
 </div>
 <script>
 //Set-up layers
-    var LERN =  L.markerClusterGroup();
-    for (var i = 0; i < LERNdata.features.length; i++) {
-        var a = LERNdata.features[i];
-        var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]));
-        var popupText = a.properties.name.substr(0, a.properties.name.indexOf("'>")+1) + " target='_blank'"+a.properties.name.substr(a.properties.name.indexOf("'>")+1, a.properties.name.length-(a.properties.name.indexOf("'>")+1))
-        marker.bindPopup(popupText);
-        LERN.addLayer(marker);
-    };
     var MapQuest = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
@@ -421,7 +412,6 @@ $('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBa
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>")
 $('.leaflet-control-layers-base').append("<hr>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='LERNOverlay'><span> LERN</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
 $("#noBase").change(function(){
     var onOff = $("input#noBase:checked").length;
@@ -528,14 +518,6 @@ $("#projectOverlay").change(function(){
         map.addLayer(markers)
     }else{
         map.removeLayer(markers)
-    }
-});
-$("#LERNOverlay").change(function(){
-    var onOff = $("input#LERNOverlay:checked").length;
-    if(onOff==1){
-        map.addLayer(LERN)
-    }else{
-        map.removeLayer(LERN)
     }
 });
 $("#commentOverlay").change(function(){
