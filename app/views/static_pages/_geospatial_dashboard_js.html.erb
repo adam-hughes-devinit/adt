@@ -323,7 +323,7 @@ function setParams(params){
             var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]));
             var catStr = "";
             for(var j = 0;j< a.properties.categories.length;j++){catStr+= a.properties.categories[j]+"; ";};
-            var popupText = "<b>Title: </b>"+ a.properties.title+"<br><b>Date: </b>"+ new Date(Date.parse(a.properties.date)).toDateString()+"<br><b>Location: </b>"+ a.properties.geoname+"<br><b>Categories: </b>"+ catStr+"<br><br><b>Description: </b>"+ a.properties.description
+            var popupText = "<b>Title: </b>"+ a.properties.title+"<br><b>Date: </b>"+ new Date(Date.parse(a.properties.date)).toLocaleString()+"<br><b>Location: </b>"+ a.properties.geoname+"<br><b>Categories: </b>"+ catStr+"<br><br><b>Description: </b>"+ a.properties.description
             marker.bindPopup(popupText);
             LERN.addLayer(marker);
     };
