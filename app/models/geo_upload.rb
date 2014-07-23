@@ -47,7 +47,13 @@ class GeoUpload < ActiveRecord::Base
         features.append(factory.feature(lonlat, nil, {
             geo_code_id: g.id,
             project_id: g.project_id,
+            project_title: g.project.title,
             project_year: g.project.year,
+            project_sector: g.project.crs_sector_id,
+            project_flow_type: g.project.flow_type_id,
+            project_flow_class: g.project.oda_like_name,
+            project_intent: g.project.intent_id,
+            project_status: g.project.status_id,
             precision_code: g.precision_id,
             adm_code: g.adm_id.nil? ? nil : g.adm.code,
             adm_name: g.adm_id.nil? ? nil : g.adm.name,

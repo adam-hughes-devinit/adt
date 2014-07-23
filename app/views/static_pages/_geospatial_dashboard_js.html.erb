@@ -79,6 +79,70 @@
       <% end %>
     </div>
   <script>
+    var flow_types = {
+        1: "Monetary Grant (excluding debt forgiveness)",
+        2: "Loan (excluding debt rescheduling)",
+        3: "Debt forgiveness",
+        4: "Debt rescheduling",
+        5: "Foreign direct investment",
+        6: "Export credits",
+        7: "Joint venture with recipient",
+        8: "In-kind Grant (Goods or Services)",
+        9: "Free-standing technical assistance",
+        10: "Scholarships/training in the donor country",
+        11: "Loan Guarantee",
+        12: "Strategic/Supplier Credit",
+        13: "Vague-TBD",
+        14: "Grant (Vague)",
+        15: "",
+        16: "Grant"
+    },
+    intents = {
+        1: "Development",
+        2: "Commercial",
+        3: "Representational",
+        4: "Mixed",
+        5: "Mixed (Some Development)",
+        6: "Mixed (No Development)"
+    },
+    sectors = {
+        1: "Education",
+        2: "Health",
+        3: "Population Policies / Programmes and Reproductive Health",
+        4: "Water Supply and Sanitation",
+        5: "Government and Civil Society",
+        6: "Other Social infrastructure and services",
+        7: "Transport and Storage",
+        8: "Communications",
+        9: "Energy Generation and Supply",
+        10: "Banking and Financial Services",
+        11: "Business and Other Services",
+        12: "Agriculture, Forestry and Fishing",
+        13: "Industry, Mining, Construction",
+        14: "Trade and Tourism",
+        15: "General Environmental Protection",
+        16: "Women in Development",
+        17: "Other Multisector",
+        18: "General Budget Support",
+        19: "Developmental Food Aid/Food Security Assistance",
+        20: "Non-food commodity assistance",
+        21: "Action Relating to Debt",
+        22: "Emergency Response",
+        23: "Administrative Costs of Donors",
+        24: "Support to Non-governmental Organizations (NGOs) and Government Organizations",
+        25: "Unallocated / Unspecified",
+        26: "Education"
+    },
+    statuses = {
+        1: "Pipeline/identification",
+        2: "Implementation",
+        3: "Completion",
+        4: "Cancelled",
+        5: "Suspended",
+        6: "Pipeline: Commitment",
+        7: "Pipeline: Pledge",
+        8: "Pipeline: Vague"
+    };
 //Get and Set Params
 function getParams(){
     var paramArr = window.location.search.substr(1).split("&")[0]==""?[]:window.location.search.substr(1).split("&");
@@ -359,8 +423,14 @@ function setParams(params){
 //sudo ./scripts/tilestache-server.py -c adm.cfg
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
 //sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l acled 0 1 2 3 4 5 6 7 8 9 10 11 12 13
-        acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
+            acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
+                noWrap:true,
+                opacity:0.7,
+                zIndex:4
+            }),
+            wp = L.tileLayer('http://127.0.0.1:8080/wp/{z}/{x}/{y}.png', {
+                attribution: "Base layer data from <a href='http://www.worldpop.org.uk/'>World Pop</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
