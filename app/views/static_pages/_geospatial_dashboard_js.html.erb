@@ -944,7 +944,7 @@ function drawClusters(){
         var a = feature_collection.features[i],
                 properties = feature_collection.features[i].properties;
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
-        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a><br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
+        marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a>"+"<br/><strong>Title: </strong>" + properties.project_title +"<br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties
         markers.addLayer(marker);
     }
