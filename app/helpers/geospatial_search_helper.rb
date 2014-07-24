@@ -23,11 +23,12 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
           paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
+            keywords params["q"].split(/(?:\(.*?\))+/)[0] do
+              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
+            end
+            with :active_string, 'Active'
+            with(:geocodes).greater_than(0)
             paginate :page => params["p"] || 1, :per_page => 5
             order_by(:title,:asc)
           end
@@ -136,11 +137,12 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
           paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
+            keywords params["q"].split(/(?:\(.*?\))+/)[0] do
+              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
+            end
+            with :active_string, 'Active'
+            with(:geocodes).greater_than(0)
             paginate :page => params["p"] || 1, :per_page => 5
             order_by(:title,:asc)
           end
@@ -160,12 +162,6 @@ module GeospatialSearchHelper
         paginate :page => params["p"] || 1, :per_page => 5
         order_by(:title,:asc)
       end
-      searchTotal = Project.solr_search do
-        with :active_string, 'Active'
-        with(:geocodes).greater_than(0)
-        paginate :page=>1, :per_page =>10000
-        order_by(:title,:asc)
-      end
       @page = {}
       @page["query"] = params["q"]
       @page["data"] = paginatedSearch.results
@@ -173,7 +169,6 @@ module GeospatialSearchHelper
       @page["entries"] = paginatedSearch.results.total_entries
       @page["pages"] = paginatedSearch.results.total_pages
       @page["features"] = @feature_collection
-      @page["ids"] = searchTotal.results.map(&:id)
     end
     @comments = Comment
     .where("published=true and geometry_id is NOT NULL")
@@ -214,7 +209,11 @@ module GeospatialSearchHelper
             full_result_ids = ["a"]
           end
           paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
+            keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
+            end
+            with :active_string, 'Active'
+            with(:geocodes).greater_than(0)
             paginate :page => params[:page] || 1, :per_page => 5
             order_by(:title,:asc)
           end
@@ -330,7 +329,11 @@ module GeospatialSearchHelper
             full_result_ids = ["a"]
           end
           paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
+            keywords params["search"].split(/(?:\(.*?\))+/)[0] do
+              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
+            end
+            with :active_string, 'Active'
+            with(:geocodes).greater_than(0)
             paginate :page => params[:page] || 1, :per_page => 5
             order_by(:title,:asc)
           end
@@ -351,12 +354,6 @@ module GeospatialSearchHelper
         paginate :page => params[:page] || 1, :per_page => 5
         order_by(:title,:asc)
       end
-      searchTotal = Project.solr_search do
-        with :active_string, 'Active'
-        with(:geocodes).greater_than(0)
-        paginate :page=>1, :per_page =>10000
-        order_by(:title,:asc)
-      end
       @page = {}
       @page["query"] = params["search"]
       @page["data"] = paginatedSearch.results
@@ -364,7 +361,6 @@ module GeospatialSearchHelper
       @page["entries"] = paginatedSearch.results.total_entries
       @page["pages"] = paginatedSearch.results.total_pages
       @page["features"] = @feature_collection
-      @page["ids"] = searchTotal.results.map(&:id)
       render :json => @page
     end
   end
