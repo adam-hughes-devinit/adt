@@ -94,8 +94,9 @@
         12: "Strategic/Supplier Credit",
         13: "Vague-TBD",
         14: "Grant (Vague)",
-        15: "",
-        16: "Grant"
+        16: "Grant",
+        15: "Unspecified",
+        999: "Unset"
     },
     intents = {
         1: "Development",
@@ -142,6 +143,23 @@
         6: "Pipeline: Commitment",
         7: "Pipeline: Pledge",
         8: "Pipeline: Vague"
+    },
+    oda_likes = {
+        1: "Unset",
+        2: "ODA-like",
+        3: "OOF-like",
+        4: "Military",
+        5: "Vague (Official Finance)",
+        6: "NGO Aid",
+        7: "CA +Gov",
+        8: "CA -Gov",
+        9: "FDI +Gov",
+        10: "FDI -Gov",
+        11: "JV +Gov",
+        12: "JV -Gov",
+        13: "Vague (Com)",
+        14: "Official Investment",
+        15: "OOF-Like"
     };
 //Get and Set Params
 function getParams(){
@@ -367,6 +385,120 @@ function setParams(params){
                 $('.facet-list-item').click(function() {
                     this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
                     update_check_counter_for(this_facet)
+                });
+            </script>
+          </div>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Status</a>
+            </b>
+            <span class="check_count project_status"></span>
+            <a class="facet-controller on" id="project_statuses_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_status'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_statuses_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_status'); return false;" style="display: none;">Unselect all</a>
+            <ul id="statusfilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Draw checkboxes for status
+                var project_statuses = [],
+                        project_status_values = [];
+                for(var status in statuses){project_statuses.push(statuses[status]);project_status_values.push(status);};
+                for(var i=0;i<project_statuses.length;i++){
+                    $('ul#statusfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_status' value='"+(project_status_values[i])+"' class='search_check boolean project_status'>"+(project_statuses[i])+"</label></li>")
+                }
+                update_check_counter_for('project_status')
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
+                })
+            </script>
+          </div>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Flow Class</a>
+            </b>
+            <span class="check_count project_flow_class"></span>
+            <a class="facet-controller on" id="project_flow_classes_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_flow_class'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_flow_classes_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_flow_class'); return false;" style="display: none;">Unselect all</a>
+            <ul id="flow_classfilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Draw checkboxes for flow class
+                var project_flow_classes = [];
+                for(var flow_class in oda_likes){project_flow_classes.push(oda_likes[flow_class]);};
+                for(var i=0;i<project_flow_classes.length;i++){
+                    $('ul#flow_classfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_flow_class' value='"+(project_flow_classes[i])+"' class='search_check boolean project_flow_class'>"+(project_flow_classes[i])+"</label></li>")
+                }
+                update_check_counter_for('project_flow_class')
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
+                })
+            </script>
+          </div>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Flow Type</a>
+            </b>
+            <span class="check_count project_flow_type"></span>
+            <a class="facet-controller on" id="project_flow_types_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_flow_type'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_flow_types_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_flow_type'); return false;" style="display: none;">Unselect all</a>
+            <ul id="flow_typefilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Draw checkboxes for flow_type
+                var project_flow_types = [],
+                        project_flow_type_values = [];
+                for(var flow_type in flow_types){project_flow_types.push(flow_types[flow_type]);project_flow_type_values.push(flow_type);};
+                for(var i=0;i<project_flow_types.length;i++){
+                    $('ul#flow_typefilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_flow_type' value='"+(project_flow_type_values[i])+"' class='search_check boolean project_flow_type'>"+(project_flow_types[i])+"</label></li>")
+                }
+                update_check_counter_for('project_flow_type')
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
+                })
+            </script>
+          </div>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Intent</a>
+            </b>
+            <span class="check_count project_intent"></span>
+            <a class="facet-controller on" id="project_intents_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_intent'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_intents_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_intent'); return false;" style="display: none;">Unselect all</a>
+            <ul id="intentfilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Draw checkboxes for intent
+                var project_intents = [],
+                        project_intent_values = [];
+                for(var intent in intents){project_intents.push(intents[intent]);project_intent_values.push(intent);};
+                for(var i=0;i<project_intents.length;i++){
+                    $('ul#intentfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_intent' value='"+(project_intent_values[i])+"' class='search_check boolean project_intent'>"+(project_intents[i])+"</label></li>")
+                }
+                update_check_counter_for('project_intent')
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
+                })
+            </script>
+          </div>
+          <div class="search-facet">
+            <b class="facet-header">
+              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Sector</a>
+            </b>
+            <span class="check_count project_sector"></span>
+            <a class="facet-controller on" id="project_sectors_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_sector'); return false;" style="display: none;">Select all</a>
+            <a class="facet-controller off" id="project_sectors_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_sector'); return false;" style="display: none;">Unselect all</a>
+            <ul id="sectorfilter" class="unstyled facet-list" style="display: none;"></ul>
+            <script>
+                //Draw checkboxes for sector
+                var project_sectors = [],
+                        project_sector_values = [];
+                for(var sector in sectors){project_sectors.push(sectors[sector]);project_sector_values.push(sector);};
+                for(var i=0;i<project_sectors.length;i++){
+                    $('ul#sectorfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_sector' value='"+(project_sector_values[i])+"' class='search_check boolean project_sector'>"+(project_sectors[i])+"</label></li>")
+                }
+                update_check_counter_for('project_sector')
+                $('.facet-list-item').click(function() {
+                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+                    update_check_counter_for(this_facet)
                 })
             </script>
           </div>
@@ -430,6 +562,7 @@ function setParams(params){
                 zIndex:4
             }),
             wp = L.tileLayer('http://127.0.0.1:8080/wp/{z}/{x}/{y}.png', {
+                tms: true,
                 attribution: "Base layer data from <a href='http://www.worldpop.org.uk/'>World Pop</a>",
                 noWrap:true,
                 opacity:0.7,
@@ -702,7 +835,13 @@ function drawProject(microProjectData, r){
         featureObj.properties.geo_name = geocode.geo_name
         featureObj.properties.location_type = geocode.location_type
         featureObj.properties.precision_code = geocode.precision_id
+        featureObj.properties.project_flow_class = geocode.flow_class!=null?geocode.flow_class.name:999
+        featureObj.properties.project_flow_type = geocode.flow_type!=null?geocode.flow_type.id:999
         featureObj.properties.project_id = geocode.project.id
+        featureObj.properties.project_intent = geocode.intent!=null?geocode.intent.id:999
+        featureObj.properties.project_sector = geocode.sector!=null?geocode.sector.id:999
+        featureObj.properties.project_status = geocode.status!=null?geocode.status.id:999
+        featureObj.properties.project_title = geocode.project.title
         featureObj.properties.project_year = geocode.project.year
         features.push(featureObj)
     })
@@ -945,7 +1084,7 @@ function drawClusters(){
                 properties = feature_collection.features[i].properties;
         var marker = L.circleMarker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]),MarkerOptions,{properties: properties});
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a>"+"<br/><strong>Title: </strong>" + properties.project_title +"<br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
-        marker.properties = properties
+        marker.properties = properties;
         markers.addLayer(marker);
     }
     if($("input#projectOverlay:checked").length==1){map.addLayer(markers);}
@@ -1321,7 +1460,6 @@ map.on('zoomend',setRadiusByZoom)
 filteredLayers = L.featureGroup();
 function filterGeoJson(filterObject){
     if(filterObject===undefined){
-        geoJson.options.filter = undefined;
     }else{
         markers.eachLayer(function(feature){
             var metaFilterBoolean = true;
@@ -1357,7 +1495,7 @@ function filterGeoJson(filterObject){
         })
     }
 };
-var filterObject = {"project_year":project_years};
+var filterObject = {"project_year":project_years,"project_status":project_status_values,"project_flow_class":project_flow_classes, "project_flow_type":project_flow_type_values, "project_intent":project_intent_values, "project_sector": project_sector_values};
 $("div#filtercontrol input[type='checkbox']").change(function(){
    var changedBox = this,
            attribute = $(changedBox).attr("name"),
@@ -1385,6 +1523,57 @@ $("a.facet-controller#project_years_off").click(function(){
     filterObject.project_year = [];
     filterGeoJson(filterObject);
 });
+$("a.facet-controller#project_statuses_on").click(function(){
+    var project_status_values = [];
+    for(var status in statuses){project_status_values.push(status);};
+    filterObject.project_status = project_status_values;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_statuses_off").click(function(){
+    filterObject.project_status = [];
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_flow_classes_on").click(function(){
+    var project_flow_classes = [];
+    for(var flow_class in oda_likes){project_flow_classes.push(oda_likes[flow_class]);};
+    filterObject.project_flow_class = project_flow_classes;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_flow_classes_off").click(function(){
+    filterObject.project_flow_class = [];
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_flow_types_on").click(function(){
+    var project_flow_type_values = [];
+    for(var flow_type in flow_types){project_flow_type_values.push(flow_type);};
+    filterObject.project_flow_type = project_flow_type_values;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_flow_types_off").click(function(){
+    filterObject.project_flow_type = [];
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_intents_on").click(function(){
+    var project_intent_values = [];
+    for(var intent in intents){project_intent_values.push(intent);};
+    filterObject.project_intent = project_intent_values;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_intents_off").click(function(){
+    filterObject.project_intent = [];
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_sectors_on").click(function(){
+    var project_sector_values = [];
+    for(var sector in sectors){project_sector_values.push(sector);};
+    filterObject.project_sector = project_sector_values;
+    filterGeoJson(filterObject);
+});
+$("a.facet-controller#project_sectors_off").click(function(){
+    filterObject.project_sector = [];
+    filterGeoJson(filterObject);
+});
+
 $(document).ready(function(){
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)

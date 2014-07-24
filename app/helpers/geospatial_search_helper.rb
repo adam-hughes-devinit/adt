@@ -445,6 +445,11 @@ module GeospatialSearchHelper
       end
       obj["geo_code_id"] = geocodes[i]["id"]
       obj["project"] = searchProject.results.first
+      obj["flow_class"] = searchProject.results.map(&:oda_like).first
+      obj["flow_type"] = searchProject.results.map(&:flow_type).first
+      obj["intent"] = searchProject.results.map(&:intent).first
+      obj["sector"] = searchProject.results.map(&:crs_sector).first
+      obj["status"] = searchProject.results.map(&:status).first
       obj["precision_id"] = geocodes[i]["precision_id"]
       obj["geo_name"] = geonames[i]["name"]
       obj["lat"] = geonames[i]["latitude"]
