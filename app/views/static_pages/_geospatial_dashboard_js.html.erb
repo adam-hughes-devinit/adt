@@ -305,9 +305,9 @@ function setParams(params){
             var query = getParams().q==undefined?"":getParams().q
             var pageParams = {"q":query,"p":1};
             setParams(pageParams);
-            var params = {'ids[]': results.ids, page:1};
+            var params = {"search":query, page:1};
             $('.loading').toggle()
-            $.post("/queries/geo_page", params, function(data){
+            $.post("/queries/geospatial_search", params, function(data){
                 results = data
                 drawResults(results); }, "json")
                     .always(function(){$('.loading').toggle()});
@@ -317,9 +317,9 @@ function setParams(params){
             var query = getParams().q==undefined?"":getParams().q
             var pageParams = {"q":query,"p":results.current - 1};
             setParams(pageParams);
-            var params = {'ids[]': results.ids, page: results.current - 1};
+            var params = {"search":query, page: results.current - 1};
             $('.loading').toggle()
-            $.post("/queries/geo_page", params, function(data){
+            $.post("/queries/geospatial_search", params, function(data){
                 results = data
                 drawResults(results); }, "json")
                     .always(function(){$('.loading').toggle()});
@@ -329,9 +329,9 @@ function setParams(params){
             var query = getParams().q==undefined?"":getParams().q
             var pageParams = {"q":query,"p":results.current + 1};
             setParams(pageParams);
-            var params = {'ids[]': results.ids, page: results.current + 1};
+            var params = {"search":query, page: results.current + 1};
             $('.loading').toggle()
-            $.post("/queries/geo_page", params, function(data){
+            $.post("/queries/geospatial_search", params, function(data){
                 results = data
                 drawResults(results); }, "json")
                     .always(function(){$('.loading').toggle()});
@@ -341,9 +341,9 @@ function setParams(params){
             var query = getParams().q==undefined?"":getParams().q
             var pageParams = {"q":query,"p":results.pages};
             setParams(pageParams);
-            var params = {'ids[]': results.ids, page: results.pages};
+            var params = {"search":query, page: results.pages};
             $('.loading').toggle()
-            $.post("/queries/geo_page", params, function(data){
+            $.post("/queries/geospatial_search", params, function(data){
                 results = data
                 drawResults(results); }, "json")
                     .always(function(){$('.loading').toggle()});

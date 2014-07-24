@@ -38,7 +38,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
         end
       elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
         search = Adm.solr_search do
@@ -84,7 +83,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
         end
       elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
         search = Project.solr_search do
@@ -118,7 +116,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
         end
       else
         search = Project.solr_search do
@@ -154,7 +151,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
         end
       end
     else
@@ -229,7 +225,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
@@ -276,7 +271,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
           render :json => @page
         end
       elsif params["search"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
@@ -311,7 +305,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
           render :json => @page
         end
       else
@@ -348,7 +341,6 @@ module GeospatialSearchHelper
           @page["entries"] = paginatedSearch.results.total_entries
           @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
-          @page["ids"] = full_result_ids
           render :json => @page
         end
       end
@@ -393,21 +385,6 @@ module GeospatialSearchHelper
     end
     @bucket << params['keywords'] + " (keyword)"
     render :json => @bucket.flatten
-  end
-
-  def geo_paginated_search_ajax
-    paginatedSearch = Project.solr_search do
-      with(:id).any_of(params[:ids] || ["a"])
-      paginate :page => params[:page] || 1, :per_page => 5
-      order_by(:title,:asc)
-    end
-    @page = {}
-    @page["data"] = paginatedSearch.results
-    @page["current"] = paginatedSearch.results.current_page
-    @page["entries"] = paginatedSearch.results.total_entries
-    @page["pages"] = paginatedSearch.results.total_pages
-    @page["ids"] = params[:ids] || ["a"]
-    render :json => @page
   end
 
   def micro_project_page_ajax
