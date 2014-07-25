@@ -540,8 +540,8 @@ function setParams(params){
                 noWrap:true,
                 zIndex:0
             }),
-            DGSat = L.tileLayer('http://{s}.tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/{z}/{x}/{y}.png', {
-                attribution: 'Tiles by <a href="http://www.digitalglobe.com/">Digital Globe</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            DGSat = L.tileLayer('http://{s}.tiles.mapbox.com/v3/brunosan.map-cyglrrfu/{z}/{x}/{y}.png', {
+                attribution: 'Tiles by Mapbox Satellite and <a href="http://www.digitalglobe.com/">Digital Globe</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 noWrap:true,
                 zIndex:0,
                 subdomains:'abc'
@@ -560,7 +560,7 @@ function setParams(params){
                 opacity:0.7,
                 zIndex:4
             }),
-            wp = L.tileLayer('http://127.0.0.1:8080/wp/{z}/{x}/{y}.png', {
+            wp = L.tileLayer('http://china-tilestache.aiddata.org/wp/{z}/{x}/{y}.png', {
                 tms: true,
                 attribution: "Base layer data from <a href='http://www.worldpop.org.uk/'>World Pop</a>",
                 noWrap:true,
@@ -621,6 +621,7 @@ $('.leaflet-control-layers-base').toggle()
 $('.leaflet-control-layers-base').append("<hr>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>")
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='popBase'><span> Population per sq. km</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>")
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>")
 $('.leaflet-control-layers-base').append("<hr>")
@@ -631,9 +632,11 @@ $("#noBase").change(function(){
     var onOff = $("input#noBase:checked").length;
     if(onOff==1){
         $("input#povertyBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         if (legend._map!=null){
@@ -645,9 +648,11 @@ $("#povertyBase").change(function(){
     var onOff = $("input#povertyBase:checked").length;
     if(onOff==1){
         $("input#noBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map==null){map.addLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function (map) {
@@ -671,13 +676,47 @@ $("#povertyBase").change(function(){
         map.addControl(legend);
     }
 });
+$("#popBase").change(function(){
+    var onOff = $("input#popBase:checked").length;
+    if(onOff==1){
+        $("input#noBase").prop('checked',false)
+        $("input#povertyBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map==null){map.addLayer(wp)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                    grades = [0, 30, 66, 102, 138, 174],
+                    labels = [],
+                    from, to;
+            for (var i = 0; i < grades.length; i++) {
+                from = grades[i];
+                to = grades[i + 1];
+                labels.push(
+                                '<i style="background:' + getColorPop(from) + '"></i> ' +
+                                from + (to ? '&ndash;' + to + '' : '+'));
+            }
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
 $("#acledBase").change(function(){
     var onOff = $("input#acledBase:checked").length;
     if(onOff==1){
         $("input#povertyBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
         $("input#noBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map==null){map.addLayer(acled)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function(map){
@@ -705,9 +744,11 @@ $("#usgsBase").change(function(){
     var onOff = $("input#usgsBase:checked").length;
     if(onOff==1){
         if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(usgs._map==null){map.addLayer(usgs)}
         $("input#povertyBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
         $("input#noBase").prop('checked',false)
         legend.onAdd = function(map){
@@ -756,13 +797,21 @@ $("#commentOverlay").change(function(){
                         d > 39.9   ? '#F78282' :
                         d > 19.9   ? '#F5AAAA' :
                 '#F6CECE';
-    }
+    };
+    function getColorPop(d) {
+        return d >= 174  ? '#020280' :
+                        d >= 138   ? '#026A4C' :
+                        d >= 102   ? '#02D317' :
+                        d >= 66   ? '#3FFF20' :
+                        d >= 30   ? '#A8FF55' :
+                '#FFFF80';
+    };
     function getColorConflict(d) {
         return d == "High"  ? '#BD0228' :
                         d == "Medium"   ? '#F4582B' :
                         d == "Low"   ? '#FDB853' :
                 '#FFFFB3';
-    }
+    };
     var legend = L.control({position: 'bottomright'});
 var highlightOptions = {
     radius: 20,
