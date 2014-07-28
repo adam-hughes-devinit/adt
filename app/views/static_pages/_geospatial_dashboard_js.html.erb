@@ -104,7 +104,8 @@
         3: "Representational",
         4: "Mixed",
         5: "Mixed (Some Development)",
-        6: "Mixed (No Development)"
+        6: "Mixed (No Development)",
+        999: "Unset"
     },
     sectors = {
         1: "Education",
@@ -1507,6 +1508,7 @@ function filterGeoJson(filterObject){
                         valueLen = values.length,
                         filterBoolean = false;
                 for(var i=0;i<valueLen;i++){
+                    if(feature.properties[filter]==null){feature.properties[filter]=999}
                     filterBoolean = filterBoolean || feature.properties[filter] == values[i]
                 };
                 metaFilterBoolean = metaFilterBoolean && filterBoolean
@@ -1523,6 +1525,7 @@ function filterGeoJson(filterObject){
                         valueLen = values.length,
                         filterBoolean = false;
                 for(var i=0;i<valueLen;i++){
+                    if(feature.properties[filter]==null){feature.properties[filter]=999}
                     filterBoolean = filterBoolean || feature.properties[filter] == values[i]
                 };
                 metaFilterBoolean = metaFilterBoolean && filterBoolean
