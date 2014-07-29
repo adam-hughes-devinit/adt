@@ -13,10 +13,10 @@
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;height:32px;}
-    #left {float:left;width:25%;position:absolute;top:35px;left:2px;height:auto;max-height: -webkit-calc(100% - 110px); max-height: -moz-calc(100% - 110px); max-height: -ms-calc(100% - 110px); max-height: -o-calc(100% - 110px);  max-height: calc(100% - 110px);overflow:scroll;}
-    #searchresults {float:left;position:relative;height:auto;width:100%;background-color:#FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;z-index:1;max-height:100%;}
+    #left {float:left;width:25%;position:absolute;top:35px;left:2px;height: -webkit-calc(100% - 35px); height: -moz-calc(100% - 35px); height: -ms-calc(100% - 35px); height: -o-calc(100% - 35px); height: calc(100% - 35px);}
+    #searchresults {float:left;position:absolute;height:auto;width:100%;background-color:#FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;z-index:1;max-height: -webkit-calc(100% - 80px); max-height: -moz-calc(100% - 80px); max-height: -ms-calc(100% - 80px); max-height: -o-calc(100% - 80px);  max-height: calc(100% - 80px);overflow:scroll;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
-    #filtercontrol {float:right;position:absolute;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:18%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 30px); max-height: -moz-calc(100% - 175px); max-height: -ms-calc(100% - 175px); max-height: -o-calc(100% - 175px);  max-height: calc(100% - 175px);}
+    #filtercontrol {float:right;position:absolute;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:25%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 30px); max-height: -moz-calc(100% - 175px); max-height: -ms-calc(100% - 175px); max-height: -o-calc(100% - 175px);  max-height: calc(100% - 175px);}
     h4 {margin-left:5px;float:left;}
     #searchresults #results, #resultcount, #resultRight{margin:0 10px 0 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
@@ -29,8 +29,8 @@
     div.loading{z-index:9998;display:none;background-color:grey;position:absolute;opacity:0.4;height:100%;width:100%;overflow:hidden;}
     div.leaflet-control-zoom {left:0px !important;top:25px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px !important;}
     div.leaflet-left {margin-left:25% !important}
-    div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:18%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
-    div.leaflet-right.leaflet-top {margin-right:18% !important}
+    div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:25%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
+    div.leaflet-right.leaflet-top {margin-right:25% !important;max-width: -webkit-calc(25% - 16px); max-width: -moz-calc(25% - 16px); max-width: -ms-calc(25% - 16px); max-width: -o-calc(25% - 16px);  max-width: calc(25% - 16px);height: -webkit-calc(100% - 35px); height: -moz-calc(100% - 35px); height: -ms-calc(100% - 35px); height: -o-calc(100% - 35px); height: calc(100% - 35px);}
     #watermark{position:absolute;bottom:0px;left:0px;z-index:0;}
     div.leaflet-popup-content-wrapper{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:5px;opacity:0.9;}
     div.leaflet-popup-content{opacity:0.9;}
@@ -43,9 +43,10 @@
     hr{margin:5px !important;}
     #resultsBtn, #filterBtn{text-align:center;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0 -52px;background-repeat:no-repeat;width:26px;height:26px;float:right;}
     .plus{background-position:0px 0px !important;}
-    .leaflet-control-layers-expanded{padding:5px !important;}
-    #layerBtn{float:right;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -54px;background-repeat:no-repeat;width:26px;height:28px;}
-    .layerCollapse{background-position:0px -104px !important;}
+    .leaflet-control-layers-expanded{padding:5px !important;max-width:100%;max-height:100%;overflow:hidden;}
+    #layerBtn{position:absolute;right:0;cursor:pointer;background-image:url(/assets/humanity_united/icons-000000.png);background-position:0px -54px;background-repeat:no-repeat;width:26px;height:28px;}
+    .layerCollapse{background-position:0px -104px !important;position:relative !important;float:right;}
+    .expanded{overflow:scroll;}
     div.leaflet-control-layers-base{float:left;}
     .header{width:100%;float:left;}
     .leaflet-bar a{border-radius:0px !important;}
@@ -68,6 +69,7 @@
    .crosshair{cursor:crosshair !important;}
    #post_comment textarea{resize:vertical;}
    .big{max-height:300% !important;max-width:300% !important;}
+   a.block{display:block !important;}
 </style>
 <div class="loading"></div>
 <div id="vis">
@@ -79,80 +81,7 @@
       <% end %>
     </div>
   <script>
-    var flow_types = {
-        1: "Monetary Grant (excluding debt forgiveness)",
-        2: "Loan (excluding debt rescheduling)",
-        3: "Debt forgiveness",
-        4: "Debt rescheduling",
-        5: "Foreign direct investment",
-        6: "Export credits",
-        7: "Joint venture with recipient",
-        8: "In-kind Grant (Goods or Services)",
-        9: "Free-standing technical assistance",
-        10: "Scholarships/training in the donor country",
-        11: "Loan Guarantee",
-        12: "Strategic/Supplier Credit",
-        13: "Vague-TBD",
-        14: "Grant (Vague)",
-        16: "Grant",
-        15: "Unspecified",
-        999: "Unset"
-    },
-    intents = {
-        1: "Development",
-        2: "Commercial",
-        3: "Representational",
-        4: "Mixed",
-        5: "Mixed (Some Development)",
-        6: "Mixed (No Development)",
-        999: "Unset"
-    },
-    sectors = {
-        1: "Education",
-        2: "Health",
-        3: "Population Policies / Programmes and Reproductive Health",
-        4: "Water Supply and Sanitation",
-        5: "Government and Civil Society",
-        6: "Other Social infrastructure and services",
-        7: "Transport and Storage",
-        8: "Communications",
-        9: "Energy Generation and Supply",
-        10: "Banking and Financial Services",
-        11: "Business and Other Services",
-        12: "Agriculture, Forestry and Fishing",
-        13: "Industry, Mining, Construction",
-        14: "Trade and Tourism",
-        15: "General Environmental Protection",
-        16: "Women in Development",
-        17: "Other Multisector",
-        18: "General Budget Support",
-        19: "Developmental Food Aid/Food Security Assistance",
-        20: "Non-food commodity assistance",
-        21: "Action Relating to Debt",
-        22: "Emergency Response",
-        23: "Administrative Costs of Donors",
-        24: "Support to Non-governmental Organizations (NGOs) and Government Organizations",
-        25: "Unallocated / Unspecified"
-    },
-    statuses = {
-        1: "Pipeline/identification",
-        2: "Implementation",
-        3: "Completion",
-        4: "Cancelled",
-        5: "Suspended",
-        6: "Pipeline: Commitment",
-        7: "Pipeline: Pledge",
-        8: "Pipeline: Vague"
-    },
-    oda_likes = {
-        1: "Unset",
-        2: "ODA-like",
-        3: "OOF-like",
-        5: "Vague (Official Finance)",
-        13: "Vague (Com)",
-        14: "Official Investment"
-    };
-//Get and Set Params
+//Get and Set Params functions
 function getParams(){
     var paramArr = window.location.search.substr(1).split("&")[0]==""?[]:window.location.search.substr(1).split("&");
     var params = {};
@@ -178,58 +107,61 @@ function setParams(params){
 };
 
 //AJAX loading screen
-    var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
-      $('#geospatial_search')
-              .bind("ajax:beforeSend", toggleLoading)
-              .bind("ajax:complete", toggleLoading)
-              .bind("ajax:success",function(xhr,data,status){
-//If Results page is currently on projects, slide toggle it
-              if($('#resultSlider').css("display")=="none"){
-                  $('#resultSlider').slideToggle();
-                  $('#resultsBtn').toggleClass('plus');
-              }
-              if($('#resultLeft').css("display")=="none"){
-              slideResults();
-              }
-              if(map.hasLayer(newComment)){map.removeLayer(newComment)}
-              getLatLonEventsOff();
-//If facets are off, turn them all on
-              $('.facet-controller.on').trigger('click')
-//Take AJAX data and draw it, zoom to it
-              feature_collection = data.features
-//Change static URL query and page
-              var params = {"q":data.query,"p":data.current};
-              setParams(params);
-//Clustering
-              map.removeLayer(markers);
-              drawClusters()
-              drawResults(data)
-              results = data
-              if(results.bounds!=undefined && feature_collection.features.length>0){
-                  map.fitBounds(results.bounds)
-              }else if(results.bounds!=undefined && feature_collection.features.length<=0){
-                  map.fitBounds(results.bounds)
-                  $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
-              }else if(feature_collection.features.length>0){
-                  var bounds = markers.getBounds()
-                  zoomToFeature(bounds)
-              }else{
-                  map.fitBounds([[52,68],[-42,-29]])
-                  $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
-              }
-              })
+var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplete("close");};
+//Reset some options for when new data is loaded
+var resetMap = function(){
+    //If Results page is currently on projects, slide toggle it
+    if($('#resultSlider').css("display")=="none"){
+        $('#resultSlider').slideToggle();
+        $('#resultsBtn').toggleClass('plus');
+    }
+    if($('#resultLeft').css("display")=="none"){
+        slideResults();
+    }
+    if(map.hasLayer(newComment)){map.removeLayer(newComment)}
+    getLatLonEventsOff();
+    //If facets are off, turn them all on
+    $('.facet-controller.on').trigger('click')
+};
+var resetClusters = function(data){
+    map.removeLayer(markers);
+    drawClusters()
+    drawResults(data)
+    results = data
+    if(results.bounds!=undefined && feature_collection.features.length>0){
+        map.fitBounds(results.bounds)
+    }else if(results.bounds!=undefined && feature_collection.features.length<=0){
+        map.fitBounds(results.bounds)
+        $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+    }else if(feature_collection.features.length>0){
+        var bounds = markers.getBounds()
+        zoomToFeature(bounds)
+    }else{
+        map.fitBounds([[52,68],[-42,-29]])
+        $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+    }
+};
+//Callback for the search bar
+$('#geospatial_search')
+  .bind("ajax:beforeSend", toggleLoading)
+  .bind("ajax:complete", toggleLoading)
+  .bind("ajax:success",function(xhr,data,status){
+      //Reset options
+      resetMap();
+      //Make data global
+      feature_collection = data.features
+      //Change static URL query and page
+      var params = {"q":data.query,"p":data.current};
+      setParams(params);
+      //Reset Clusters with new data, zoom to it
+      resetClusters(data);
+});
 //Autocomplete function
-      $(document).ready(function(){
-          $( "#search" ).autocomplete({
-              source: get_keywords,
-              minLength: 1
-          });
-      });
-      function get_keywords(request, response){
-          var params = {keywords: request.term.split(/(?:\(.*?\))+/)[0]};
-          $.get("/queries/json_completion", params, function(data){
-              response(data); }, "json");
-      }
+function get_keywords(request, response){
+  var params = {keywords: request.term.split(/(?:\(.*?\))+/)[0]};
+  $.get("/queries/json_completion", params, function(data){
+      response(data); }, "json");
+};
   </script>
     <div id='map'>
     </div>
@@ -348,151 +280,6 @@ function setParams(params){
     <div id="project-facets">
       <div class="pull-left">
         <ol>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Year</a>
-            </b>
-            <span class="check_count project_year"></span>
-            <a class="facet-controller on" id="project_years_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_year'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_years_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_year'); return false;" style="display: none;">Unselect all</a>
-            <ul id="yearfilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Update check-box count
-                function update_check_counter_for(this_facet) {
-                    checked_boxes = $(".search_check."+this_facet+":checked")
-                    check_count = checked_boxes.length
-                    counter = $('.check_count.'+this_facet)
-                    counter_text = check_count > 0 ? "("+check_count+")" : ""
-                    counter.text(counter_text)
-
-                }
-                //Draw checkboxes for year
-                var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],
-                        project_years_len = project_years.length;
-                for(var i=0;i<project_years_len;i++){
-                    $('ul#yearfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_year' value='"+(project_years[i])+"' class='search_check boolean project_year'>"+(project_years[i])+"</label></li>")
-                }
-                update_check_counter_for('project_year')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                });
-            </script>
-          </div>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Status</a>
-            </b>
-            <span class="check_count project_status"></span>
-            <a class="facet-controller on" id="project_statuses_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_status'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_statuses_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_status'); return false;" style="display: none;">Unselect all</a>
-            <ul id="statusfilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Draw checkboxes for status
-                var project_statuses = [],
-                        project_status_values = [];
-                for(var status in statuses){project_statuses.push(statuses[status]);project_status_values.push(status);};
-                for(var i=0;i<project_statuses.length;i++){
-                    $('ul#statusfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_status' value='"+(project_status_values[i])+"' class='search_check boolean project_status'>"+(project_statuses[i])+"</label></li>")
-                }
-                update_check_counter_for('project_status')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                })
-            </script>
-          </div>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Flow Class</a>
-            </b>
-            <span class="check_count project_flow_class"></span>
-            <a class="facet-controller on" id="project_flow_classes_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_flow_class'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_flow_classes_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_flow_class'); return false;" style="display: none;">Unselect all</a>
-            <ul id="flow_classfilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Draw checkboxes for flow class
-                var project_flow_classes = [];
-                for(var flow_class in oda_likes){project_flow_classes.push(oda_likes[flow_class]);};
-                for(var i=0;i<project_flow_classes.length;i++){
-                    $('ul#flow_classfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_flow_class' value='"+(project_flow_classes[i])+"' class='search_check boolean project_flow_class'>"+(project_flow_classes[i])+"</label></li>")
-                }
-                update_check_counter_for('project_flow_class')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                })
-            </script>
-          </div>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Flow Type</a>
-            </b>
-            <span class="check_count project_flow_type"></span>
-            <a class="facet-controller on" id="project_flow_types_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_flow_type'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_flow_types_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_flow_type'); return false;" style="display: none;">Unselect all</a>
-            <ul id="flow_typefilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Draw checkboxes for flow_type
-                var project_flow_types = [],
-                        project_flow_type_values = [];
-                for(var flow_type in flow_types){project_flow_types.push(flow_types[flow_type]);project_flow_type_values.push(flow_type);};
-                for(var i=0;i<project_flow_types.length;i++){
-                    $('ul#flow_typefilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_flow_type' value='"+(project_flow_type_values[i])+"' class='search_check boolean project_flow_type'>"+(project_flow_types[i])+"</label></li>")
-                }
-                update_check_counter_for('project_flow_type')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                })
-            </script>
-          </div>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Intent</a>
-            </b>
-            <span class="check_count project_intent"></span>
-            <a class="facet-controller on" id="project_intents_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_intent'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_intents_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_intent'); return false;" style="display: none;">Unselect all</a>
-            <ul id="intentfilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Draw checkboxes for intent
-                var project_intents = [],
-                        project_intent_values = [];
-                for(var intent in intents){project_intents.push(intents[intent]);project_intent_values.push(intent);};
-                for(var i=0;i<project_intents.length;i++){
-                    $('ul#intentfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_intent' value='"+(project_intent_values[i])+"' class='search_check boolean project_intent'>"+(project_intents[i])+"</label></li>")
-                }
-                update_check_counter_for('project_intent')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                })
-            </script>
-          </div>
-          <div class="search-facet">
-            <b class="facet-header">
-              <a href="#" onclick="$(this).parent().siblings('ul').slideToggle(); $(this).parent().siblings('.facet-controller').slideToggle(); return false;">Sector</a>
-            </b>
-            <span class="check_count project_sector"></span>
-            <a class="facet-controller on" id="project_sectors_on" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', 'true');update_check_counter_for('project_sector'); return false;" style="display: none;">Select all</a>
-            <a class="facet-controller off" id="project_sectors_off" href="#" onclick="$(this).siblings('ul').find('input').prop('checked', false);update_check_counter_for('project_sector'); return false;" style="display: none;">Unselect all</a>
-            <ul id="sectorfilter" class="unstyled facet-list" style="display: none;"></ul>
-            <script>
-                //Draw checkboxes for sector
-                var project_sectors = [],
-                        project_sector_values = [];
-                for(var sector in sectors){project_sectors.push(sectors[sector]);project_sector_values.push(sector);};
-                for(var i=0;i<project_sectors.length;i++){
-                    $('ul#sectorfilter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='project_sector' value='"+(project_sector_values[i])+"' class='search_check boolean project_sector'>"+(project_sectors[i])+"</label></li>")
-                }
-                update_check_counter_for('project_sector')
-                $('.facet-list-item').click(function() {
-                    this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
-                    update_check_counter_for(this_facet)
-                })
-            </script>
-          </div>
         </ol>
       </div>
     </div>
@@ -503,6 +290,235 @@ function setParams(params){
   </div>
 </div>
 <script>
+//Classifiers for filters
+    var filters = {
+        year : {
+            data: {
+                1:"2012",
+                2:"2011",
+                3:"2010",
+                4:"2009",
+                5:"2008",
+                6:"2007",
+                7:"2006",
+                8:"2005",
+                9:"2004",
+                10:"2003",
+                11:"2002",
+                12:"2001",
+                13:"2000"
+            },
+            name: "Year",
+            literal:true
+        },
+        intent : {
+            data: {
+            1: "Development",
+            2: "Commercial",
+            3: "Representational",
+            4: "Mixed",
+            5: "Mixed (Some Development)",
+            6: "Mixed (No Development)",
+            999: "Unset"
+            },
+            name: "Intent"
+        },
+        status : {
+            data: {
+                1: "Pipeline/identification",
+                2: "Implementation",
+                3: "Completion",
+                4: "Cancelled",
+                5: "Suspended",
+                6: "Pipeline: Commitment",
+                7: "Pipeline: Pledge",
+                8: "Pipeline: Vague"
+            },
+            name: "Status"
+        },
+        sector : {
+            data: {
+            1: "Education",
+            2: "Health",
+            3: "Population Policies / Programmes and Reproductive Health",
+            4: "Water Supply and Sanitation",
+            5: "Government and Civil Society",
+            6: "Other Social infrastructure and services",
+            7: "Transport and Storage",
+            8: "Communications",
+            9: "Energy Generation and Supply",
+            10: "Banking and Financial Services",
+            11: "Business and Other Services",
+            12: "Agriculture, Forestry and Fishing",
+            13: "Industry, Mining, Construction",
+            14: "Trade and Tourism",
+            15: "General Environmental Protection",
+            16: "Women in Development",
+            17: "Other Multisector",
+            18: "General Budget Support",
+            19: "Developmental Food Aid/Food Security Assistance",
+            20: "Non-food commodity assistance",
+            21: "Action Relating to Debt",
+            22: "Emergency Response",
+            23: "Administrative Costs of Donors",
+            24: "Support to Non-governmental Organizations (NGOs) and Government Organizations",
+            25: "Unallocated / Unspecified"
+            },
+            name: "Sector"
+        },
+        flow_class : {
+            data: {
+            1: "Unset",
+            2: "ODA-like",
+            3: "OOF-like",
+            5: "Vague (Official Finance)",
+            13: "Vague (Com)",
+            14: "Official Investment"
+            },
+            name: "Flow Class",
+            //Marked literal because the marker properties will literally feature these values, instead of needing translation through the keys
+            literal:true
+        },
+        flow_type: {
+            data: {
+                1: "Monetary Grant (excluding debt forgiveness)",
+                2: "Loan (excluding debt rescheduling)",
+                3: "Debt forgiveness",
+                4: "Debt rescheduling",
+                5: "Foreign direct investment",
+                6: "Export credits",
+                7: "Joint venture with recipient",
+                8: "In-kind Grant (Goods or Services)",
+                9: "Free-standing technical assistance",
+                10: "Scholarships/training in the donor country",
+                11: "Loan Guarantee",
+                12: "Strategic/Supplier Credit",
+                13: "Vague-TBD",
+                14: "Grant (Vague)",
+                16: "Grant",
+                15: "Unspecified",
+                999: "Unset"
+            },
+            name: "Flow Type"
+        }
+        };
+//Function to update check-box count
+  function update_check_counter_for(this_facet) {
+    checked_boxes = $(".search_check."+this_facet+":checked")
+    check_count = checked_boxes.length
+    counter = $('.check_count.'+this_facet)
+    counter_text = "("+check_count+")"
+    counter.text(counter_text)
+  };
+//Draw checkboxes
+  function slideParent(e){
+      var varname = $(e).attr("id");
+      $(e).parent().siblings('ul').slideToggle();
+      $(e).parent().siblings('.facet-controller').toggleClass('block');
+      return false;
+  };
+  function toggleAllFilters(e,onoff){
+    var varname = $(e).attr("id");
+    $(e).siblings('ul').find('input').prop('checked', onoff);
+    update_check_counter_for(varname);
+    if(onoff){
+        filterObject[varname] = filterList[varname].slice(0);
+        filterGeoJson(filterObject);
+    }else{
+        filterObject[varname] = [];
+        filterGeoJson(filterObject);
+    };
+    return false;
+  };
+  var filterObject = {},
+          filterList = {};
+  for(var filter in filters){
+      var plural = filter.substr(-1) == "s"? filter+"es":filter+"s",
+              varname = "project_"+filter,
+              plural_varname = "project_"+plural;
+      filterObject[varname] = [];
+      filterList[varname] = [];
+      $('div#project-facets ol').append("<div class='search-facet' id='"+filter+"'></div>");
+      $('div.search-facet#'+filter).append("<b class='facet-header' id='"+filter+"'></b>");
+      $('b.facet-header#'+filter).append("<a href='#' id='"+varname+"' onclick='slideParent(this)'>"+filters[filter].name+"</a>");
+      $('div.search-facet#'+filter).append("<span class='check_count "+varname+"'></span>");
+      $('div.search-facet#'+filter).append("<a class='facet-controller on' id='"+varname+"' href='#' onclick='toggleAllFilters(this,true)' style='display:none;margin-left:32px;'>Select All</a>");
+      $('div.search-facet#'+filter).append("<a class='facet-controller off' id='"+varname+"' href='#' onclick='toggleAllFilters(this,false)' style='display:none;margin-left:32px;'>Unselect All</a>");
+      $('div.search-facet#'+filter).append("<ul id='"+filter+"filter' class='unstyled facet-list' style='display:none;'></ul>");
+      for(var key in filters[filter].data){
+          var value = filters[filter].data[key],
+                  name=filters[filter].literal?value:key;
+          filterObject[varname].push(name);
+          filterList[varname].push(name);
+          $('ul#'+filter+'filter').append("<li class='facet-list-item'><label class='checkbox'><input type='checkbox' checked='true' name='"+varname+"' value='"+name+"' class='search_check boolean "+varname+"'>"+value+"</label></li>");
+      };
+      update_check_counter_for(varname)
+  };
+  $('.facet-list-item').click(function() {
+      this_facet = $(this).find('.search_check').attr("name").replace(/\[\]/g, '')
+      update_check_counter_for(this_facet)
+  });
+//Filter function
+  filteredLayers = L.featureGroup();
+  function filterGeoJson(filterObject){
+      if(filterObject===undefined){
+      }else{
+          markers.eachLayer(function(feature){
+              var metaFilterBoolean = true;
+              for(var filter in filterObject){
+                  var values = filterObject[filter],
+                          valueLen = values.length,
+                          filterBoolean = false;
+                  for(var i=0;i<valueLen;i++){
+                      if(feature.properties[filter]==null){feature.properties[filter]=999}
+                      filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                  };
+                  metaFilterBoolean = metaFilterBoolean && filterBoolean
+              };
+              if(!metaFilterBoolean){
+                  filteredLayers.addLayer(feature)
+                  markers.removeLayer(feature)
+              };
+          });
+          filteredLayers.eachLayer(function(feature){
+              var metaFilterBoolean = true;
+              for(var filter in filterObject){
+                  var values = filterObject[filter],
+                          valueLen = values.length,
+                          filterBoolean = false;
+                  for(var i=0;i<valueLen;i++){
+                      if(feature.properties[filter]==null){feature.properties[filter]=999}
+                      filterBoolean = filterBoolean || feature.properties[filter] == values[i]
+                  };
+                  metaFilterBoolean = metaFilterBoolean && filterBoolean
+              };
+              if(metaFilterBoolean){
+                  markers.addLayer(feature)
+                  filteredLayers.removeLayer(feature)
+              };
+          });
+      };
+  };
+//Event listener for checkbox change
+  $("div#filtercontrol input[type='checkbox']").change(function(){
+      var changedBox = this,
+              attribute = $(changedBox).attr("name"),
+              value = $(changedBox).attr("value"),
+              onOff = $("input:checked[name="+attribute+"][value="+value+"]").length,
+              index = filterObject[attribute].indexOf(value);
+      if(onOff==1){
+          if(index==-1){
+              filterObject[attribute].push(value);
+          }
+      }
+      else{
+          if(index>-1){
+              filterObject[attribute].splice(index,1);
+          }
+      }
+      filterGeoJson(filterObject);
+  });
+
 //Set-up layers
     var LERN =  L.markerClusterGroup();
     for (var i = 0; i < LERNdata.features.length; i++) {
@@ -543,9 +559,6 @@ function setParams(params){
                 opacity:0.7,
                 zIndex:4
             }),
-//sudo ./scripts/tilestache-server.py -c adm.cfg
-//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l usgs 0 1 2 3 4 5 6 7 8 9 10 11 12 13
-//sudo python ./scripts/tilestache-seed.py -c dashboard.cfg -b -42 -29 52 68 -l acled 0 1 2 3 4 5 6 7 8 9 10 11 12 13
             acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
                 noWrap:true,
@@ -600,26 +613,27 @@ function setParams(params){
     layerControl.collapse = function(){
         $('div.leaflet-control-layers-base').slideToggle()
         $('#layerBtn').toggleClass('layerCollapse')
-    }
+        $('.leaflet-control-layers-expanded').toggleClass('expanded')
+    };
 function fullExtent(event){
     event.preventDefault();
     map.setZoom(3)
     map.fitBounds([[52,68],[-42,-29]])
     return false;
-}
+};
 $('.leaflet-control-zoom').prepend("<a href='#' style='font-weight:bold;text-align:center;' onclick='fullExtent(event)'><span style='position:relative;top:3px;'>Full</span></a>");
-$('.leaflet-control-layers-list').prepend("<div id='layerBtn' class='layerCollapse' onClick='layerControl.collapse()'></div>")
-$('.leaflet-control-layers-base').toggle()
-$('.leaflet-control-layers-base').append("<hr>")
-$('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='popBase'><span> Population per sq. km</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>")
-$('.leaflet-control-layers-base').append("<hr>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='LERNOverlay'><span> LERN</span></label>")
-$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>")
+$('.leaflet-control-layers-list').prepend("<div id='layerBtn' class='layerCollapse' onClick='layerControl.collapse()'></div>");
+$('.leaflet-control-layers-base').toggle();
+$('.leaflet-control-layers-base').append("<hr>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='popBase'><span> Population per sq. km</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>");
+$('.leaflet-control-layers-base').append("<hr>");
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='LERNOverlay'><span> LERN</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='checkbox' id='commentOverlay'><span> Comments</span></label>");
 $("#noBase").change(function(){
     var onOff = $("input#noBase:checked").length;
     if(onOff==1){
@@ -1019,7 +1033,7 @@ function getLatLonEventsOff(){
     suggestions.off('clusterclick',clusterEventFunc)
     comments.off('click',singleEventFunc)
     comments.off('clusterclick',clusterEventFunc)
-}
+};
 singleEventFunc = function(e){
     var lat = e.latlng.lat,
             lng = e.latlng.lng;
@@ -1496,127 +1510,13 @@ function submitComment(){
     };
 };
 map.on('zoomend',setRadiusByZoom)
-//Filter function
-filteredLayers = L.featureGroup();
-function filterGeoJson(filterObject){
-    if(filterObject===undefined){
-    }else{
-        markers.eachLayer(function(feature){
-            var metaFilterBoolean = true;
-            for(var filter in filterObject){
-                var values = filterObject[filter],
-                        valueLen = values.length,
-                        filterBoolean = false;
-                for(var i=0;i<valueLen;i++){
-                    if(feature.properties[filter]==null){feature.properties[filter]=999}
-                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
-                };
-                metaFilterBoolean = metaFilterBoolean && filterBoolean
-            };
-            if(!metaFilterBoolean){
-                filteredLayers.addLayer(feature)
-                markers.removeLayer(feature)
-            }
-        })
-        filteredLayers.eachLayer(function(feature){
-            var metaFilterBoolean = true;
-            for(var filter in filterObject){
-                var values = filterObject[filter],
-                        valueLen = values.length,
-                        filterBoolean = false;
-                for(var i=0;i<valueLen;i++){
-                    if(feature.properties[filter]==null){feature.properties[filter]=999}
-                    filterBoolean = filterBoolean || feature.properties[filter] == values[i]
-                };
-                metaFilterBoolean = metaFilterBoolean && filterBoolean
-            };
-            if(metaFilterBoolean){
-                markers.addLayer(feature)
-                filteredLayers.removeLayer(feature)
-            }
-        })
-    }
-};
-var filterObject = {"project_year":project_years,"project_status":project_status_values,"project_flow_class":project_flow_classes, "project_flow_type":project_flow_type_values, "project_intent":project_intent_values, "project_sector": project_sector_values};
-$("div#filtercontrol input[type='checkbox']").change(function(){
-   var changedBox = this,
-           attribute = $(changedBox).attr("name"),
-           value = $(changedBox).attr("value"),
-           onOff = $("input:checked[name="+attribute+"][value="+value+"]").length,
-           index = filterObject[attribute].indexOf(value);
-    if(onOff==1){
-        if(index==-1){
-            filterObject[attribute].push(value);
-        }
-    }
-    else{
-        if(index>-1){
-            filterObject[attribute].splice(index,1);
-        }
-    }
-filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_years_on").click(function(){
-    var project_years = ["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"]
-    filterObject.project_year = project_years;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_years_off").click(function(){
-    filterObject.project_year = [];
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_statuses_on").click(function(){
-    var project_status_values = [];
-    for(var status in statuses){project_status_values.push(status);};
-    filterObject.project_status = project_status_values;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_statuses_off").click(function(){
-    filterObject.project_status = [];
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_flow_classes_on").click(function(){
-    var project_flow_classes = [];
-    for(var flow_class in oda_likes){project_flow_classes.push(oda_likes[flow_class]);};
-    filterObject.project_flow_class = project_flow_classes;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_flow_classes_off").click(function(){
-    filterObject.project_flow_class = [];
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_flow_types_on").click(function(){
-    var project_flow_type_values = [];
-    for(var flow_type in flow_types){project_flow_type_values.push(flow_type);};
-    filterObject.project_flow_type = project_flow_type_values;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_flow_types_off").click(function(){
-    filterObject.project_flow_type = [];
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_intents_on").click(function(){
-    var project_intent_values = [];
-    for(var intent in intents){project_intent_values.push(intent);};
-    filterObject.project_intent = project_intent_values;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_intents_off").click(function(){
-    filterObject.project_intent = [];
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_sectors_on").click(function(){
-    var project_sector_values = [];
-    for(var sector in sectors){project_sector_values.push(sector);};
-    filterObject.project_sector = project_sector_values;
-    filterGeoJson(filterObject);
-});
-$("a.facet-controller#project_sectors_off").click(function(){
-    filterObject.project_sector = [];
-    filterGeoJson(filterObject);
-});
 
 $(document).ready(function(){
+    //Initialize autocomplete
+    $( "#search" ).autocomplete({
+        source: get_keywords,
+        minLength: 1
+    });
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)
     if(getParams().q!=undefined){
