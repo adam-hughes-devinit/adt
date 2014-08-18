@@ -13,8 +13,8 @@
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;height:32px;}
-    #left {float:left;width:25%;position:absolute;top:35px;left:2px;height: -webkit-calc(100% - 35px); height: -moz-calc(100% - 35px); height: -ms-calc(100% - 35px); height: -o-calc(100% - 35px); height: calc(100% - 35px);}
-    #searchresults {float:left;position:absolute;height:auto;width:100%;background-color:#FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;z-index:1;max-height: -webkit-calc(100% - 80px); max-height: -moz-calc(100% - 80px); max-height: -ms-calc(100% - 80px); max-height: -o-calc(100% - 80px);  max-height: calc(100% - 80px);overflow:scroll;}
+    #left {float:left;width:25%;position:absolute;top:35px;left:2px;height:auto;max-height: -webkit-calc(100% - 35px); max-height: -moz-calc(100% - 35px); max-height: -ms-calc(100% - 35px); max-height: -o-calc(100% - 35px); max-height: calc(100% - 35px);}
+    #searchresults {float:left;height:auto;width:100%;background-color:#FFF;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;z-index:1;max-height: -webkit-calc(100% - 80px); max-height: -moz-calc(100% - 80px); max-height: -ms-calc(100% - 80px); max-height: -o-calc(100% - 80px);  max-height: calc(100% - 80px);overflow:scroll;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {float:right;position:absolute;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:25%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 30px); max-height: -moz-calc(100% - 175px); max-height: -ms-calc(100% - 175px); max-height: -o-calc(100% - 175px);  max-height: calc(100% - 175px);}
     h4 {margin-left:5px;float:left;}
@@ -535,35 +535,55 @@ function get_keywords(request, response){
                 subdomains: '1234',
                 noWrap:true,
                 zIndex:0
+                ,maxNativeZoom:15
             }),
             MapQuestSat = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpeg', {
                 attribution: 'Tiles by <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 subdomains: '1234',
                 noWrap:true,
-                zIndex:0,
-                maxZoom:11
+                zIndex:0
+                ,maxNativeZoom:11
             }),
             OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 noWrap:true,
                 zIndex:0
+                ,maxNativeZoom:18
             }),
             DGSat = L.tileLayer('http://{s}.tiles.mapbox.com/v3/brunosan.map-cyglrrfu/{z}/{x}/{y}.png', {
                 attribution: 'Tiles by Mapbox Satellite and <a href="http://www.digitalglobe.com/">Digital Globe</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
                 noWrap:true,
                 zIndex:0,
                 subdomains:'abc'
+                ,maxNativeZoom:16
             }),
-            poverty = L.mapbox.tileLayer('miranda-lv.di996bt9', {
+            poverty = L.tileLayer('http://china-tilestache.aiddata.org/nightlights/{z}/{x}/{y}.png', {
+                attribution: "Base layer data from <a href='http://ngdc.noaa.gov/eog/dmsp/download_nldi.html'>NOAA's NLDI</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
+                ,maxNativeZoom:9
             }),
             acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
-                attribution: "Base layer data from <a href='http://www.acleddata.com/'>ACLED</a>",
+                attribution: "Base layer data from <a href='https://www.strausscenter.org/scad.html'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
+                ,maxNativeZoom:9
+            }),
+            scad = L.tileLayer('http://china-tilestache.aiddata.org/scad/{z}/{x}/{y}.png', {
+                attribution: "Base layer data from <a href='http://www.acleddata.com/'>SCAD</a>",
+                noWrap:true,
+                opacity:0.7,
+                zIndex:4
+                ,maxNativeZoom:9
+            }),
+            roads = L.tileLayer('http://china-tilestache.aiddata.org/roads/{z}/{x}/{y}.png', {
+                attribution: "Base layer data from <a href='http://sedac.ciesin.columbia.edu/data/set/groads-global-roads-open-access-v1'>SEDAC's gROADS</a>",
+                noWrap:true,
+                opacity:0.7,
+                zIndex:4
+                ,maxNativeZoom:9
             }),
             wp = L.tileLayer('http://china-tilestache.aiddata.org/wp/{z}/{x}/{y}.png', {
                 tms: true,
@@ -571,20 +591,21 @@ function get_keywords(request, response){
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
+                ,maxNativeZoom:13
             }),
             usgs = L.tileLayer('http://china-tilestache.aiddata.org/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true,
                 zIndex:4
+                ,maxNativeZoom:13
             }),
 //Set-up map
             map = L.map('map', {
                 maxBounds: [[180,180],[-180,-180]],
                 center: [6.964039, 19.533678],
                 zoom:3,
-                minZoom:3,
-                maxZoom:13,
-                layers:MapQuest
+                layers:MapQuest,
+                maxZoom:18
             }),
             baseMaps ={
                 "Map": MapQuest,
@@ -626,9 +647,11 @@ $('.leaflet-control-layers-list').prepend("<div id='layerBtn' class='layerCollap
 $('.leaflet-control-layers-base').toggle();
 $('.leaflet-control-layers-base').append("<hr>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' checked='true' id='noBase'><span> No Overlay</span></label>");
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Poverty</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='povertyBase'><span> Night Lights GDP</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='popBase'><span> Population per sq. km</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='scadBase'><span> Social Conflict</span></label>");
+$('.leaflet-control-layers-base').append("<label><input type='radio' id='roadsBase'><span> Roads</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>");
 $('.leaflet-control-layers-base').append("<hr>");
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>");
@@ -640,10 +663,14 @@ $("#noBase").change(function(){
         $("input#povertyBase").prop('checked',false)
         $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        //if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         if (legend._map!=null){
             map.removeControl(legend);
@@ -656,22 +683,26 @@ $("#povertyBase").change(function(){
         $("input#noBase").prop('checked',false)
         $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map==null){map.addLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend'),
-                    grades = [0, 20, 40, 60, 80],
+                    grades = ["None", "Low", "Medium", "High"],
                     labels = [],
                     from, to;
             for (var i = 0; i < grades.length; i++) {
                 from = grades[i];
                 to = grades[i + 1];
                 labels.push(
-                                '<i style="background:' + getColorPoverty(from) + '"></i> ' +
-                                from + (to ? '&ndash;' + to + '%' : '%+'));
+                                '<i style="border:solid black 1px;background:' + getColorPoverty(from) + '"></i> ' +
+                                from + (to ? '&ndash;' + to : ' Activity'));
             }
             div.innerHTML = labels.join('<br>');
             return div;
@@ -688,10 +719,14 @@ $("#popBase").change(function(){
         $("input#noBase").prop('checked',false)
         $("input#povertyBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map==null){map.addLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend'),
@@ -720,10 +755,14 @@ $("#acledBase").change(function(){
         $("input#povertyBase").prop('checked',false)
         $("input#popBase").prop('checked',false)
         $("input#noBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map==null){map.addLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function(map){
             var div = L.DomUtil.create('div', 'info legend'),
@@ -734,9 +773,76 @@ $("#acledBase").change(function(){
                 from = grades[i];
                 to = grades[i + 1];
                 labels.push(
-                                '<i style="background:' + getColorConflict(from) + '"></i> ' +
+                                '<i style="border:solid red 1px;background:' + getColorConflict(from) + '"></i> ' +
                                 from + (to ? '&ndash;' + to : '+'));
             }
+            div.innerHTML = labels.join('<br>');
+            return div;
+        }
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
+$("#scadBase").change(function(){
+    var onOff = $("input#scadBase:checked").length;
+    if(onOff==1){
+        $("input#povertyBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
+        $("input#noBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map==null){map.addLayer(scad)}
+        if(roads._map!=null){map.removeLayer(roads)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        legend.onAdd = function(map){
+            var div = L.DomUtil.create('div', 'info legend'),
+                    grades = ["None", "Low", "Medium", "High"],
+                    labels = [],
+                    from, to;
+            for (var i = 0; i < grades.length; i++) {
+                from = grades[i];
+                to = grades[i + 1];
+                labels.push(
+                                '<i style="border:solid blue 1px;background:' + getColorSCAD(from) + '"></i> ' +
+                                from + (to ? '&ndash;' + to : '+'));
+            }
+            div.innerHTML = labels.join('<br>');
+            return div;
+        }
+        if (legend._map!=null){
+            map.removeControl(legend);
+        }
+        map.addControl(legend);
+    }
+});
+$("#roadsBase").change(function(){
+    var onOff = $("input#roadsBase:checked").length;
+    if(onOff==1){
+        if(poverty._map!=null){map.removeLayer(poverty)}
+        if(wp._map!=null){map.removeLayer(wp)}
+        if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        if(roads._map==null){map.addLayer(roads)}
+        if(usgs._map!=null){map.removeLayer(usgs)}
+        $("input#povertyBase").prop('checked',false)
+        $("input#popBase").prop('checked',false)
+        $("input#acledBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#usgsBase").prop('checked',false)
+        $("input#noBase").prop('checked',false)
+        legend.onAdd = function(map){
+            var div = L.DomUtil.create('div', 'info legend')
+            labels = [];
+            labels.push('<i style="background:#FF0000;border:solid grey 1px;height:3px;position:relative;top:9px;"></i>' + "Highway / Primary");
+            labels.push('<i style="background:#FFAA00;border:solid grey 1px;height:3px;position:relative;top:9px;"></i>' + "Secondary / Tertiary");
+            labels.push('<i style="background:#FFFF00;border:solid grey 1px;height:3px;position:relative;top:9px;"></i>' + "Local / Urban");
+            labels.push('<i style="background:black;border:solid grey 1px;height:3px;position:relative;top:9px;"></i>' + "Trail / Unspecified");
             div.innerHTML = labels.join('<br>');
             return div;
         }
@@ -752,10 +858,14 @@ $("#usgsBase").change(function(){
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
+        if(scad._map!=null){map.removeLayer(scad)}
+        if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map==null){map.addLayer(usgs)}
         $("input#povertyBase").prop('checked',false)
         $("input#popBase").prop('checked',false)
         $("input#acledBase").prop('checked',false)
+        $("input#scadBase").prop('checked',false)
+        $("input#roadsBase").prop('checked',false)
         $("input#noBase").prop('checked',false)
         legend.onAdd = function(map){
             var div = L.DomUtil.create('div', 'info legend')
@@ -798,11 +908,10 @@ $("#commentOverlay").change(function(){
     }
 });
     function getColorPoverty(d) {
-        return d > 79.9  ? '#FF0202' :
-                        d > 59.9   ? '#FA5A5A' :
-                        d > 39.9   ? '#F78282' :
-                        d > 19.9   ? '#F5AAAA' :
-                '#F6CECE';
+        return d == "High"  ? '#FFFFFF' :
+                        d == "Medium"   ? '#AAAAAA' :
+                        d == "Low"   ? '#555555' :
+                '#000000';
     };
     function getColorPop(d) {
         return d >= 174  ? '#020280' :
@@ -813,10 +922,16 @@ $("#commentOverlay").change(function(){
                 '#FFFF80';
     };
     function getColorConflict(d) {
-        return d == "High"  ? '#BD0228' :
-                        d == "Medium"   ? '#F4582B' :
-                        d == "Low"   ? '#FDB853' :
-                '#FFFFB3';
+        return d == "High"  ? '#FF0000' :
+                        d == "Medium"   ? '#FF5555' :
+                        d == "Low"   ? '#FFAAAA' :
+                '#FFFFFF';
+    };
+    function getColorSCAD(d) {
+        return d == "High"  ? '#0000FF' :
+                        d == "Medium"   ? '#5555FF' :
+                        d == "Low"   ? '#AAAAFF' :
+                '#FFFFFF';
     };
     var legend = L.control({position: 'bottomright'});
 var highlightOptions = {
