@@ -651,7 +651,7 @@ $('.leaflet-control-layers-base').append("<label><input type='radio' id='poverty
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='popBase'><span> Population per sq. km</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='acledBase'><span> Armed Conflict</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='scadBase'><span> Social Conflict</span></label>");
-$('.leaflet-control-layers-base').append("<label><input type='radio' id='roadsBase'><span> Roads</span></label>");
+//$('.leaflet-control-layers-base').append("<label><input type='radio' id='roadsBase'><span> Roads</span></label>");
 $('.leaflet-control-layers-base').append("<label><input type='radio' id='usgsBase'><span> Minerals and Mines</span></label>");
 $('.leaflet-control-layers-base').append("<hr>");
 $('.leaflet-control-layers-base').append("<label><input type='checkbox' checked='true' id='projectOverlay'><span> Project Geocodes</span></label>");
@@ -670,7 +670,7 @@ $("#noBase").change(function(){
         if(wp._map!=null){map.removeLayer(wp)}
         if(acled._map!=null){map.removeLayer(acled)}
         if(scad._map!=null){map.removeLayer(scad)}
-        //if(roads._map!=null){map.removeLayer(roads)}
+        if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         if (legend._map!=null){
             map.removeControl(legend);
