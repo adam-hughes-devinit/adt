@@ -76,7 +76,7 @@ Adt::Application.configure do
     }
 
   config.action_mailer.default_url_options = {
-    :host => "china.aiddata.org"
+    :host => "china.adstg.org"
   }
 end
 
