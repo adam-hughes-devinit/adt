@@ -758,7 +758,7 @@ $("#popBase").change(function(){
 });
 ACLEDgrid.on('mouseover',function(e){
     if(e.data){
-        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Fatalities:</b> ~'+ numberWithCommas(parseInt(e.data.SumAttr)));
+        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Fatalities:</b> '+ numberWithCommas(parseInt(e.data.SumAttr)));
     }else{
         $("div.hover").html("<b>No data</b>")
     };
@@ -802,7 +802,7 @@ $("#acledBase").change(function(){
 });
 SCADgrid.on('mouseover',function(e){
     if(e.data){
-        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Participants:</b> ~'+ numberWithCommas(parseInt(e.data.SumAttr)));
+        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Participants:</b> '+ numberWithCommas(parseInt(e.data.SumAttr)));
     }else{
         $("div.hover").html("<b>No data</b>")
     };
