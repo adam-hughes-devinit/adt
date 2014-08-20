@@ -28,42 +28,6 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
-  create_table "adm0_world", :id => false, :force => true do |t|
-    t.integer "adm0_code"
-    t.string  "adm0_name"
-    t.spatial "geom",      :limit => {:srid=>4326, :type=>"geometry"}
-  end
-
-  add_index "adm0_world", ["geom"], :name => "adm0_world_geom_idx", :spatial => true
-
-  create_table "adm1_world", :id => false, :force => true do |t|
-    t.integer "adm0_code"
-    t.string  "adm0_name"
-    t.integer "adm1_code"
-    t.string  "adm1_name"
-    t.spatial "geom",      :limit => {:srid=>4326, :type=>"geometry"}
-  end
-
-  add_index "adm1_world", ["geom"], :name => "adm1_world_geom_idx", :spatial => true
-
-  create_table "adm_world", :primary_key => "gid", :force => true do |t|
-    t.integer "adm2_code"
-    t.string  "adm2_name",  :limit => 100
-    t.string  "status",     :limit => 37
-    t.string  "disp_area",  :limit => 3
-    t.integer "str_year"
-    t.integer "exp_year"
-    t.integer "adm0_code"
-    t.string  "adm0_name",  :limit => 100
-    t.integer "adm1_code"
-    t.string  "adm1_name",  :limit => 100
-    t.decimal "shape_leng"
-    t.decimal "shape_area"
-    t.spatial "geom",       :limit => {:srid=>4326, :type=>"multi_polygon"}
-  end
-
-  add_index "adm_world", ["geom"], :name => "adm_world_geom_gist", :spatial => true
-
   create_table "admin_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
@@ -83,12 +47,12 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
   create_table "adms", :force => true do |t|
-    t.integer  "code"
-    t.string   "name"
-    t.integer  "level"
-    t.integer  "parent_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer   "code"
+    t.string    "name"
+    t.integer   "level"
+    t.integer   "parent_id"
+    t.timestamp "created_at", :limit => 6, :null => false
+    t.timestamp "updated_at", :limit => 6, :null => false
   end
 
   add_index "adms", ["parent_id"], :name => "index_adms_on_parent_id"
@@ -237,12 +201,6 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   add_index "exports_projects", ["export_id", "project_id"], :name => "index_exports_projects_on_export_id_and_project_id"
   add_index "exports_projects", ["project_id", "export_id"], :name => "index_exports_projects_on_project_id_and_export_id"
 
-  create_table "feature_codes", :id => false, :force => true do |t|
-    t.string "code"
-    t.string "name"
-    t.string "description"
-  end
-
   create_table "flag_types", :force => true do |t|
     t.string   "name"
     t.string   "color"
@@ -341,10 +299,10 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   add_index "geocodes", ["project_id"], :name => "index_geocodes_on_project_id"
 
   create_table "geometries", :force => true do |t|
-    t.datetime "created_at",                                             :null => false
-    t.datetime "updated_at",                                             :null => false
-    t.spatial  "the_geom",   :limit => {:srid=>4326, :type=>"geometry"}
-    t.integer  "adm_code"
+    t.timestamp "created_at", :limit => 6,                             :null => false
+    t.timestamp "updated_at", :limit => 6,                             :null => false
+    t.spatial   "the_geom",   :limit => {:srid=>0, :type=>"geometry"}
+    t.integer   "adm_code"
   end
 
   add_index "geometries", ["adm_code"], :name => "index_geometries_on_adm_code"
@@ -417,11 +375,11 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   end
 
   create_table "location_types", :force => true do |t|
-    t.string   "name"
-    t.string   "code"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.string    "name"
+    t.string    "code"
+    t.string    "description"
+    t.timestamp "created_at",  :limit => 6, :null => false
+    t.timestamp "updated_at",  :limit => 6, :null => false
   end
 
   create_table "media", :force => true do |t|
@@ -549,10 +507,10 @@ ActiveRecord::Schema.define(:version => 20140714194938) do
   end
 
   create_table "precisions", :force => true do |t|
-    t.integer  "code"
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer   "code"
+    t.text      "description"
+    t.timestamp "created_at",  :limit => 6, :null => false
+    t.timestamp "updated_at",  :limit => 6, :null => false
   end
 
   create_table "project_association_changes", :force => true do |t|
