@@ -2,6 +2,7 @@
 <%= javascript_include_tag   "humanity_united/mapbox" %>
 <%= javascript_include_tag   "humanity_united/jquery-ui-1.10.4.custom.min" %>
 <%= javascript_include_tag   "humanity_united/leaflet.markercluster-src" %>
+<%= javascript_include_tag   "humanity_united/leaflet.utfgrid" %>
 <%= javascript_include_tag   "humanity_united/geoLERN" %>
 <%= stylesheet_link_tag "humanity_united/mapbox" %>
 <%= stylesheet_link_tag "humanity_united/ui-lightness/jquery-ui-1.10.4.custom.min" %>
@@ -571,12 +572,18 @@ function get_keywords(request, response){
                 zIndex:4
                 ,maxNativeZoom:9
             }),
+            ACLEDgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
+                resolution:1
+            }),
             scad = L.tileLayer('http://china-tilestache.aiddata.org/scad/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>SCAD</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
+            }),
+            SCADgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
+                resolution:1
             }),
             roads = L.tileLayer('http://china-tilestache.aiddata.org/roads/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://sedac.ciesin.columbia.edu/data/set/groads-global-roads-open-access-v1'>SEDAC's gROADS</a>",
@@ -668,8 +675,8 @@ $("#noBase").change(function(){
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         if (legend._map!=null){
@@ -688,8 +695,8 @@ $("#povertyBase").change(function(){
         $("input#usgsBase").prop('checked',false)
         if(poverty._map==null){map.addLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function (map) {
@@ -724,8 +731,8 @@ $("#popBase").change(function(){
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map==null){map.addLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function (map) {
@@ -749,6 +756,13 @@ $("#popBase").change(function(){
         map.addControl(legend);
     }
 });
+ACLEDgrid.on('mouseover',function(e){
+    if(e.data){
+        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Fatalities:</b> ~'+ numberWithCommas(parseInt(e.data.SumAttr)));
+    }else{
+        $("div.hover").html("<b>No data</b>")
+    };
+});
 $("#acledBase").change(function(){
     var onOff = $("input#acledBase:checked").length;
     if(onOff==1){
@@ -760,8 +774,8 @@ $("#acledBase").change(function(){
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map==null){map.addLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map==null){map.addLayer(acled);map.addLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function(map){
@@ -777,6 +791,7 @@ $("#acledBase").change(function(){
                                 from + (to ? '&ndash;' + to : '+'));
             }
             div.innerHTML = labels.join('<br>');
+            $(div).prepend("<div class='hover'></div>")
             return div;
         }
         if (legend._map!=null){
@@ -784,6 +799,13 @@ $("#acledBase").change(function(){
         }
         map.addControl(legend);
     }
+});
+SCADgrid.on('mouseover',function(e){
+    if(e.data){
+        $("div.hover").html('<b>District:</b> '+ e.data.ADM2_NAME+'</br><b>Participants:</b> ~'+ numberWithCommas(parseInt(e.data.SumAttr)));
+    }else{
+        $("div.hover").html("<b>No data</b>")
+    };
 });
 $("#scadBase").change(function(){
     var onOff = $("input#scadBase:checked").length;
@@ -796,8 +818,8 @@ $("#scadBase").change(function(){
         $("input#usgsBase").prop('checked',false)
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map==null){map.addLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map==null){map.addLayer(scad);map.addLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         legend.onAdd = function(map){
@@ -813,6 +835,7 @@ $("#scadBase").change(function(){
                                 from + (to ? '&ndash;' + to : '+'));
             }
             div.innerHTML = labels.join('<br>');
+            $(div).prepend("<div class='hover'></div>")
             return div;
         }
         if (legend._map!=null){
@@ -826,8 +849,8 @@ $("#roadsBase").change(function(){
     if(onOff==1){
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map==null){map.addLayer(roads)}
         if(usgs._map!=null){map.removeLayer(usgs)}
         $("input#povertyBase").prop('checked',false)
@@ -857,8 +880,8 @@ $("#usgsBase").change(function(){
     if(onOff==1){
         if(poverty._map!=null){map.removeLayer(poverty)}
         if(wp._map!=null){map.removeLayer(wp)}
-        if(acled._map!=null){map.removeLayer(acled)}
-        if(scad._map!=null){map.removeLayer(scad)}
+        if(acled._map!=null){map.removeLayer(acled);map.removeLayer(ACLEDgrid);}
+        if(scad._map!=null){map.removeLayer(scad);map.removeLayer(SCADgrid);}
         if(roads._map!=null){map.removeLayer(roads)}
         if(usgs._map==null){map.addLayer(usgs)}
         $("input#povertyBase").prop('checked',false)
@@ -1625,7 +1648,17 @@ function submitComment(){
     };
 };
 map.on('zoomend',setRadiusByZoom)
-
+function centerZoom(){
+    var center = map.getCenter(),
+            centerLat = center.lat,
+            centerLng = center.lng,
+            zoom = map.getZoom(),
+            query = getParams().q==undefined?"":getParams().q,
+            page = getParams().p==undefined?1:getParams().p,
+            locatParams={"q":query,"p":page,"l":centerLat+","+centerLng+","+zoom};
+    setParams(locatParams);
+};
+map.on('moveend',centerZoom)
 $(document).ready(function(){
     //Initialize autocomplete
     $( "#search" ).autocomplete({
@@ -1634,19 +1667,26 @@ $(document).ready(function(){
     });
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)
+    if(getParams().l!=undefined){
+        map.setView(L.latLng(getParams().l.split(",").slice(0,2)),getParams().l.split(",").slice(2,3));
+    };
     if(getParams().q!=undefined){
-        if(results.bounds!=undefined && feature_collection.features.length>0){
-            map.fitBounds(results.bounds)
-        }else if(results.bounds!=undefined && feature_collection.features.length<=0){
-            map.fitBounds(results.bounds)
+        if(getParams().l==undefined){
+            if(results.bounds!=undefined && feature_collection.features.length>0){
+                map.fitBounds(results.bounds)
+            }else if(results.bounds!=undefined && feature_collection.features.length<=0){
+                map.fitBounds(results.bounds)
+                $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+            }else if(feature_collection.features.length>0){
+                var bounds = markers.getBounds()
+                zoomToFeature(bounds)
+            }else{
+                map.fitBounds([[52,68],[-42,-29]])
+                $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+            };
+        }else if(feature_collection.features.length<=0){
             $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
-        }else if(feature_collection.features.length>0){
-            var bounds = markers.getBounds()
-            zoomToFeature(bounds)
-        }else{
-            map.fitBounds([[52,68],[-42,-29]])
-            $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
-        }
-    }
+        };
+    };
 });
 </script>
