@@ -573,7 +573,8 @@ function get_keywords(request, response){
                 ,maxNativeZoom:9
             }),
             ACLEDgrid = new L.UtfGrid('<%= Configuration.tile_server %>/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
-                resolution:1
+                resolution:1,
+                pointerCursor:false
             }),
             scad = L.tileLayer('<%= Configuration.tile_server %>/scad/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>SCAD</a>",
@@ -583,7 +584,8 @@ function get_keywords(request, response){
                 ,maxNativeZoom:9
             }),
             SCADgrid = new L.UtfGrid('<%= Configuration.tile_server %>/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
-                resolution:1
+                resolution:1,
+                pointerCursor:false
             }),
             roads = L.tileLayer('<%= Configuration.tile_server %>/roads/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://sedac.ciesin.columbia.edu/data/set/groads-global-roads-open-access-v1'>SEDAC's gROADS</a>",
