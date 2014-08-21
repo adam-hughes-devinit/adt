@@ -1199,7 +1199,7 @@ if (feature_collection === null){
 //Clustering
 function drawClusters(){
     visibleMarkers = []
-    markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
+    markers = L.markerClusterGroup({maxClusterRadius:20,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
         var count = cluster.getChildCount()
         return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
     }});
@@ -1580,7 +1580,7 @@ function submitComment(){
         validate($("form#post_comment"))
     };
 };
-map.on('zoomend',setRadiusByZoom)
+//map.on('zoomend',setRadiusByZoom)
 function mapMove(){
     var center = map.getCenter(),
             centerLat = center.lat,
