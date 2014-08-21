@@ -23,21 +23,8 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          paginatedSearch = Project.solr_search do
-            keywords params["q"].split(/(?:\(.*?\))+/)[0] do
-              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
-            end
-            with :active_string, 'Active'
-            with(:geocodes).greater_than(0)
-            paginate :page => params["p"] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["q"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
         end
       elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ADM")
@@ -68,21 +55,9 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
-            paginate :page => params["p"] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["bounds"] = bounds
           @page["query"] = params["q"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
         end
       elsif params["q"].scan(/(?:\(.*?\))+/)[0].start_with?("(ID")
@@ -102,20 +77,8 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
-            paginate :page => params["p"] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["q"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
         end
       else
@@ -137,37 +100,14 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          paginatedSearch = Project.solr_search do
-            keywords params["q"].split(/(?:\(.*?\))+/)[0] do
-              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
-            end
-            with :active_string, 'Active'
-            with(:geocodes).greater_than(0)
-            paginate :page => params["p"] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["q"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
         end
       end
     else
-      paginatedSearch = Project.solr_search do
-        with :active_string, 'Active'
-        with(:geocodes).greater_than(0)
-        paginate :page => params["p"] || 1, :per_page => 5
-        order_by(:title,:asc)
-      end
       @page = {}
       @page["query"] = params["q"]
-      @page["data"] = paginatedSearch.results
-      @page["current"] = paginatedSearch.results.current_page
-      @page["entries"] = paginatedSearch.results.total_entries
-      @page["pages"] = paginatedSearch.results.total_pages
       @page["features"] = @feature_collection
     end
     @comments = Comment
@@ -205,24 +145,8 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            keywords params["search"].split(/(?:\(.*?\))+/)[0] do
-              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
-            end
-            with :active_string, 'Active'
-            with(:geocodes).greater_than(0)
-            paginate :page => params[:page] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["search"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
           render :json => @page
         end
@@ -257,18 +181,9 @@ module GeospatialSearchHelper
           if full_result_ids.length==0
             full_result_ids = ["a"]
           end
-          paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
-            paginate :page => params[:page] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["bounds"] = bounds
           @page["query"] = params["search"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
           render :json => @page
         end
@@ -289,20 +204,8 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            with(:id).any_of(full_result_ids)
-            paginate :page => params[:page] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["search"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
           render :json => @page
         end
@@ -325,41 +228,15 @@ module GeospatialSearchHelper
               i += 1
             end
           end
-          if full_result_ids.length==0
-            full_result_ids = ["a"]
-          end
-          paginatedSearch = Project.solr_search do
-            keywords params["search"].split(/(?:\(.*?\))+/)[0] do
-              fields(:description,:participating_organizations, :geocodes, :geopoliticals, :title => 2.0)
-            end
-            with :active_string, 'Active'
-            with(:geocodes).greater_than(0)
-            paginate :page => params[:page] || 1, :per_page => 5
-            order_by(:title,:asc)
-          end
           @page = {}
           @page["query"] = params["search"]
-          @page["data"] = paginatedSearch.results
-          @page["current"] = paginatedSearch.results.current_page
-          @page["entries"] = paginatedSearch.results.total_entries
-          @page["pages"] = paginatedSearch.results.total_pages
           @page["features"] = @feature_collection
           render :json => @page
         end
       end
     else
-      paginatedSearch = Project.solr_search do
-        with :active_string, 'Active'
-        with(:geocodes).greater_than(0)
-        paginate :page => params[:page] || 1, :per_page => 5
-        order_by(:title,:asc)
-      end
       @page = {}
       @page["query"] = params["search"]
-      @page["data"] = paginatedSearch.results
-      @page["current"] = paginatedSearch.results.current_page
-      @page["entries"] = paginatedSearch.results.total_entries
-      @page["pages"] = paginatedSearch.results.total_pages
       @page["features"] = @feature_collection
       render :json => @page
     end

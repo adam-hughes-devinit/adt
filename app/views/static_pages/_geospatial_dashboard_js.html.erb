@@ -127,19 +127,17 @@ var resetMap = function(){
 var resetClusters = function(data){
     map.removeLayer(markers);
     drawClusters()
-    drawResults(data)
+    mapMove()
     results = data
     if(results.bounds!=undefined && feature_collection.features.length>0){
         map.fitBounds(results.bounds)
     }else if(results.bounds!=undefined && feature_collection.features.length<=0){
         map.fitBounds(results.bounds)
-        $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
     }else if(feature_collection.features.length>0){
         var bounds = markers.getBounds()
         zoomToFeature(bounds)
     }else{
         map.fitBounds([[52,68],[-42,-29]])
-        $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
     }
 };
 //Callback for the search bar
@@ -152,7 +150,7 @@ $('#geospatial_search')
       //Make data global
       feature_collection = data.features
       //Change static URL query and page
-      var params = {"q":data.query,"p":data.current};
+      var params = {"q":data.query};
       setParams(params);
       //Reset Clusters with new data, zoom to it
       resetClusters(data);
@@ -169,14 +167,12 @@ function get_keywords(request, response){
     <div id="left">
       <div id="searchresults">
         <div class="header">
-        <h4>Results</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();$('#resultsBtn').toggleClass('plus')"></div>
+        <h4>Current View</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();$('#resultsBtn').toggleClass('plus')"></div>
         </div>
           <div id="resultcount"></div>
        <div id="resultSlider">
         <div id="resultLeft">
         <div id="results"></div>
-        <div id="page"><strong>Page _ of _</strong></div>
-        <div id="page_select">&lt;first &lt;prev <a href='#'>next&gt; </a><a href='#'>last&gt;</a></div>
         </div>
         <div id="resultRight">
           <a href='#' onclick='backToResults();'>&lt;Back to results</a>
@@ -191,88 +187,20 @@ function get_keywords(request, response){
       <%= javascript_tag "var commentsData=#{@comments.to_json}"%>
       <script>
 //Function to draw results in the panel
-        drawResults = function(results){
-            $('#resultcount').html("<strong>"+results.entries+" projects -</strong>")
-            $('#resultcount').append("<br>with "+feature_collection.features.length+" geocodes:<hr>")
-            $('#page strong').text("Page "+results.current+" of "+results.pages)
+        drawResults = function(visMarks){
+            var res = _.chain(visMarks).pluck("properties").groupBy(function(d){return d.project_id}).value()
+            $('#resultcount').html("<strong>"+Object.keys(res).length+" projects -</strong>")
+            $('#resultcount').append("<br>with "+visMarks.length+" geocodes:<hr>")
             $('#results').html("")
-            var i = 0,
-                    resultlen = results.data.length;
-            for(i=0;i<resultlen;i++){
-                var project = results.data[i],
-                        geoCount = 0,
-                        truncTitle = project.title.split(' ').length>5?project.title.split(' ').slice(0,6).join(' ')+'...':project.title;
-                feature_collection.features.forEach(function(e){
-                    geoCount += e.properties.project_id==project.id?1:0
-                })
-                $('#results').append("<div id='"+project.id+"' class='project' onmouseover='highlightProjectHover("+project.id+")' onmouseout='resetHighlightProjectHover("+project.id+")' onclick='clickHighlightProject("+project.id+")'>ID: <a target='_blank' href='/projects/"+ project.id + "'>"+project.id+"</a><br>"+truncTitle+"<br>Geocodes: "+geoCount+"/"+project.geocodes.length+"</div>")
+            for(var id in res){
+                var projects = res[id],
+                        project = projects[0],
+                        geoCount = Object.keys(projects).length,
+                        truncTitle = project.project_title.split(' ').length>5?project.project_title.split(' ').slice(0,6).join(' ')+'...':project.project_title;
+                $('#results').append("<div id='"+id+"' class='project' onmouseover='highlightProjectHover("+id+")' onmouseout='resetHighlightProjectHover("+id+")' onclick='clickHighlightProject("+id+")'>ID: <a target='_blank' href='/projects/"+ id + "'>"+id+"</a><br>"+truncTitle+"<br>Visible geocodes: "+geoCount+"</div>")
                 $('#results').append("<hr>")
             }
-//Draw page buttons
-            $('div#page_select').html("")
-            if(results.current<=1){
-                $('div#page_select').append("&lt;first &lt;prev ")
-            }
-            else{
-                $('div#page_select').append("<a href='#' onclick='pageFirst()'>&lt;first</a> <a href='#' onclick='pagePrev()'>&lt;prev</a> ")
-            }
-            if(results.current>=results.pages){
-                $('div#page_select').append("next&gt; last&gt;")
-            }
-            else{
-                $('div#page_select').append("<a href='#' onclick='pageNext()'>next&gt; </a><a href='#' onclick='pageLast()'>last&gt;</a>")
-            }
         }
-//Functions to control page movement
-        pageFirst = function(){
-            //Keep query, set page
-            var query = getParams().q==undefined?"":getParams().q
-            var pageParams = {"q":query,"p":1};
-            setParams(pageParams);
-            var params = {"search":results.query, page:1};
-            $('.loading').toggle()
-            $.post("/queries/geospatial_search", params, function(data){
-                results = data
-                drawResults(results); }, "json")
-                    .always(function(){$('.loading').toggle()});
-        }
-        pagePrev = function(){
-            //Keep query, set page
-            var query = getParams().q==undefined?"":getParams().q
-            var pageParams = {"q":query,"p":results.current - 1};
-            setParams(pageParams);
-            var params = {"search":results.query, page: results.current - 1};
-            $('.loading').toggle()
-            $.post("/queries/geospatial_search", params, function(data){
-                results = data
-                drawResults(results); }, "json")
-                    .always(function(){$('.loading').toggle()});
-        }
-        pageNext = function(){
-            //Keep query, set page
-            var query = getParams().q==undefined?"":getParams().q
-            var pageParams = {"q":query,"p":results.current + 1};
-            setParams(pageParams);
-            var params = {"search":results.query, page: results.current + 1};
-            $('.loading').toggle()
-            $.post("/queries/geospatial_search", params, function(data){
-                results = data
-                drawResults(results); }, "json")
-                    .always(function(){$('.loading').toggle()});
-        }
-        pageLast = function(){
-            //Keep query, set page
-            var query = getParams().q==undefined?"":getParams().q
-            var pageParams = {"q":query,"p":results.pages};
-            setParams(pageParams);
-            var params = {"search":results.query, page: results.pages};
-            $('.loading').toggle()
-            $.post("/queries/geospatial_search", params, function(data){
-                results = data
-                drawResults(results); }, "json")
-                    .always(function(){$('.loading').toggle()});
-        }
-        drawResults(results)
       </script>
     </div>
   <div id="filtercontrol">
@@ -499,6 +427,7 @@ function get_keywords(request, response){
               };
           });
       };
+      mapMove();
   };
 //Event listener for checkbox change
   $("div#filtercontrol input[type='checkbox']").change(function(){
@@ -911,9 +840,11 @@ $("#usgsBase").change(function(){
 $("#projectOverlay").change(function(){
     var onOff = $("input#projectOverlay:checked").length;
     if(onOff==1){
-        map.addLayer(markers)
+        drawClusters();
+        mapMove();
     }else{
-        map.removeLayer(markers)
+        markers.clearLayers();
+        mapMove();
     }
 });
 $("#LERNOverlay").change(function(){
@@ -1231,13 +1162,11 @@ function getLatLon(){
 };
 function slideResults(){
     var $lefty = $('#resultLeft'),
-            $righty = $('#resultRight'),
-            resulthtml =  $('#resultcount').text().length>12?"<b style='line-height:28px;'>Project Page</b><hr>":"<strong>"+results.entries+" projects -</strong><br>with "+feature_collection.features.length+" geocodes:<hr>";
+            $righty = $('#resultRight');
     $lefty.slideToggle()
     $lefty.animate({left: parseInt($lefty.css('left'),10) == 0 ?-$lefty.outerWidth():0})
     $righty.slideToggle()
     $righty.animate({left: parseInt($righty.css('left'),10) == 0 ?$lefty.outerWidth():0})
-    $('#resultcount').html(resulthtml)
 };
 function backToResults(){
     getLatLonEventsOff();
@@ -1269,6 +1198,7 @@ if (feature_collection === null){
     feature_collection.features=[];}
 //Clustering
 function drawClusters(){
+    visibleMarkers = []
     markers = L.markerClusterGroup({maxClusterRadius:40,spiderfyDistanceMultiplier:2, showCoverageOnHover:false, iconCreateFunction:function(cluster){
         var count = cluster.getChildCount()
         return new L.DivIcon({html:'<div><b>' + count + '</b></div>',className:"geocode-cluster",iconSize: L.point(Math.sqrt((count+8)*20),Math.sqrt((count+8)*20))})
@@ -1280,6 +1210,7 @@ function drawClusters(){
         marker.bindPopup("<strong>Project ID: </strong><a target='_blank' href='/projects/"+ properties.project_id + "'>"+properties.project_id+"</a>"+"<br/><strong>Title: </strong>" + properties.project_title +"<br/><strong>Year: </strong>" + properties.project_year + "<br/><strong>Location: </strong>" + properties.geo_name + "<br/><strong>Precision: </strong>" + properties.precision_code);
         marker.properties = properties;
         markers.addLayer(marker);
+        visibleMarkers.push(marker);
     }
     if($("input#projectOverlay:checked").length==1){map.addLayer(markers);}
     markers.on('mouseover',highlightProjectDiv)
@@ -1650,23 +1581,28 @@ function submitComment(){
     };
 };
 map.on('zoomend',setRadiusByZoom)
-function centerZoom(){
+function mapMove(){
     var center = map.getCenter(),
             centerLat = center.lat,
             centerLng = center.lng,
             zoom = map.getZoom(),
             query = getParams().q==undefined?"":getParams().q,
             page = getParams().p==undefined?1:getParams().p,
-            locatParams={"q":query,"p":page,"l":centerLat+","+centerLng+","+zoom};
+            locatParams={"q":query,"l":centerLat+","+centerLng+","+zoom};
     setParams(locatParams);
+    visibleMarkers=[]
+    markers.eachLayer(function(e){if(map.getBounds().contains(e._latlng)){visibleMarkers.push(e)}})
+    setTimeout(function(){drawResults(visibleMarkers)},0);
 };
-map.on('moveend',centerZoom)
+map.on('moveend',mapMove)
 $(document).ready(function(){
     //Initialize autocomplete
     $( "#search" ).autocomplete({
         source: get_keywords,
         minLength: 1
     });
+    //Draw Visible Markers
+    drawResults(visibleMarkers);
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)
     if(getParams().l!=undefined){
@@ -1678,16 +1614,16 @@ $(document).ready(function(){
                 map.fitBounds(results.bounds)
             }else if(results.bounds!=undefined && feature_collection.features.length<=0){
                 map.fitBounds(results.bounds)
-                $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+                mapMove();
             }else if(feature_collection.features.length>0){
                 var bounds = markers.getBounds()
                 zoomToFeature(bounds)
             }else{
                 map.fitBounds([[52,68],[-42,-29]])
-                $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+                mapMove();
             };
         }else if(feature_collection.features.length<=0){
-            $('#resultcount').html("<strong style='line-height:28px;'>No search results.</strong><hr>")
+            mapMove();
         };
     };
 });
