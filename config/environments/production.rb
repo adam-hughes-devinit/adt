@@ -78,6 +78,12 @@ Adt::Application.configure do
   config.action_mailer.default_url_options = {
     :host => "china.aiddata.org"
   }
+
+  #### Environment specific attributes ########
+  # Add accessor in initializers/configuration.rb
+  config.after_initialize do
+    Configuration.tile_server = 'http://china-tilestache.aiddata.org'
+  end
 end
 
 # Mailer Settings removed

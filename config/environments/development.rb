@@ -47,6 +47,12 @@ Adt::Application.configure do
 
   #logger
   require "debug_log"
+
+  #### Environment specific attributes ########
+  # Add accessor in initializers/configuration.rb
+  config.after_initialize do
+    Configuration.tile_server = 'http://china-tilestache.adstg.org'
+  end
 end
 
 # Mailer settings removed

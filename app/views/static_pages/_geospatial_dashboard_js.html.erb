@@ -558,41 +558,41 @@ function get_keywords(request, response){
                 subdomains:'abc'
                 ,maxNativeZoom:16
             }),
-            poverty = L.tileLayer('http://china-tilestache.aiddata.org/nightlights/{z}/{x}/{y}.png', {
+            poverty = L.tileLayer('<%= Configuration.tile_server %>/nightlights/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://ngdc.noaa.gov/eog/dmsp/download_nldi.html'>NOAA's NLDI</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
+            acled = L.tileLayer('<%= Configuration.tile_server %>/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='https://www.strausscenter.org/scad.html'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            ACLEDgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
+            ACLEDgrid = new L.UtfGrid('<%= Configuration.tile_server %>/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
                 resolution:1
             }),
-            scad = L.tileLayer('http://china-tilestache.aiddata.org/scad/{z}/{x}/{y}.png', {
+            scad = L.tileLayer('<%= Configuration.tile_server %>/scad/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>SCAD</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            SCADgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
+            SCADgrid = new L.UtfGrid('<%= Configuration.tile_server %>/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
                 resolution:1
             }),
-            roads = L.tileLayer('http://china-tilestache.aiddata.org/roads/{z}/{x}/{y}.png', {
+            roads = L.tileLayer('<%= Configuration.tile_server %>/roads/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://sedac.ciesin.columbia.edu/data/set/groads-global-roads-open-access-v1'>SEDAC's gROADS</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            wp = L.tileLayer('http://china-tilestache.aiddata.org/wp/{z}/{x}/{y}.png', {
+            wp = L.tileLayer('<%= Configuration.tile_server %>/wp/{z}/{x}/{y}.png', {
                 tms: true,
                 attribution: "Base layer data from <a href='http://www.worldpop.org.uk/'>World Pop</a>",
                 noWrap:true,
@@ -600,7 +600,7 @@ function get_keywords(request, response){
                 zIndex:4
                 ,maxNativeZoom:13
             }),
-            usgs = L.tileLayer('http://china-tilestache.aiddata.org/usgs/{z}/{x}/{y}.png',{
+            usgs = L.tileLayer('<%= Configuration.tile_server %>/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true,
                 zIndex:4
