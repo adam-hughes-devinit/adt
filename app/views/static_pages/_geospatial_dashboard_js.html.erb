@@ -9,15 +9,16 @@
 <%= stylesheet_link_tag "humanity_united/MarkerCluster.Default" %>
 <style>
     .container {width:100% !important;padding:0px !important;}
-    #vis { width:100%; height:100%; margin-right:auto; margin-left:auto;}
+    #vis { position:absolute; overflow:hidden; width:100%; height:100%; margin-right:auto; margin-left:auto;}
     #map { position:absolute; height:100%; width:100%; margin-right:auto;margin-left:auto; }
+    #wrapper{visibility:hidden;width:25%;position:absolute;top:35px;left:2px;height: -webkit-calc(100% - 105px); height: -moz-calc(100% - 105px); height: -ms-calc(100% - 105px); height: -o-calc(100% - 105px); height: calc(100% - 105px);}
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;height:32px;}
-    #left {float:left;width:25%;position:absolute;top:35px;left:2px;height:auto;opacity:0.9;background-color:#FFF;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;max-height: -webkit-calc(100% - 115px); max-height: -moz-calc(100% - 115px); max-height: -ms-calc(100% - 115px); max-height: -o-calc(100% - 115px); max-height: calc(100% - 115px);overflow-y:scroll;}
+    #left {visibility:visible;float:left;width:100%;height:auto;opacity:0.9;background-color:#FFF;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;max-height: -webkit-calc(100% - 40px); max-height: -moz-calc(100% - 40px); max-height: -ms-calc(100% - 40px); max-height: -o-calc(100% - 40px); max-height: calc(100% - 40px);overflow-y:scroll;}
     #searchresults {float:left;height:auto;width:100%;z-index:1;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
-    #filtercontrol {float:right;position:absolute;right:2px;top:3px;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:25%;padding:1px;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 175px); max-height: -moz-calc(100% - 175px); max-height: -ms-calc(100% - 175px); max-height: -o-calc(100% - 175px);  max-height: calc(100% - 175px);}
+    #filtercontrol {visibility:visible;float:left;box-shadow:0 7px 7px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:100%;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 82px); max-height: -moz-calc(100% - 82px); max-height: -ms-calc(100% - 82px); max-height: -o-calc(100% - 82px);  max-height: calc(100% - 82px);}
     h4 {margin-left:5px;float:left;}
     #searchresults #results, #resultcount, #resultRight{margin:0 10px 0 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
@@ -31,7 +32,7 @@
     div.leaflet-control-zoom {left:0px !important;top:25px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px !important;}
     div.leaflet-left {margin-left:25% !important}
     div.leaflet-control-layers {right:3px !important;top:1px !important;margin-top:2px !important;margin-right:25%;opacity:0.9;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
-    div.leaflet-right.leaflet-top {margin-right:25% !important;max-width: -webkit-calc(25% - 16px); max-width: -moz-calc(25% - 16px); max-width: -ms-calc(25% - 16px); max-width: -o-calc(25% - 16px);  max-width: calc(25% - 16px);height: -webkit-calc(100% - 35px); height: -moz-calc(100% - 35px); height: -ms-calc(100% - 35px); height: -o-calc(100% - 35px); height: calc(100% - 35px);}
+    div.leaflet-right.leaflet-top {max-width: 25%;height: -webkit-calc(100% - 175px); height: -moz-calc(100% - 175px); height: -ms-calc(100% - 175px); height: -o-calc(100% - 175px); height: calc(100% - 175px);}
     #watermark{position:absolute;bottom:0px;left:0px;z-index:0;}
     div.leaflet-popup-content-wrapper{box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:5px;opacity:0.9;}
     div.leaflet-popup-content{opacity:0.9;}
@@ -113,8 +114,7 @@ var toggleLoading = function(){$(".loading").toggle();$( "#search" ).autocomplet
 var resetMap = function(){
     //If Results page is currently on projects, slide toggle it
     if($('#resultSlider').css("display")=="none"){
-        $('#resultSlider').slideToggle();
-        $('#resultsBtn').toggleClass('plus');
+        toggleResults();
     }
     if($('#resultLeft').css("display")=="none"){
         slideResults();
@@ -164,13 +164,14 @@ function get_keywords(request, response){
   </script>
     <div id='map'>
     </div>
+  <div id="wrapper">
     <div id="left">
       <div id="searchresults">
         <div class="header">
-        <h4>Current View</h4><div id="resultsBtn" onclick="$('#resultSlider').slideToggle();$('#resultsBtn').toggleClass('plus')"></div>
+        <h4>Current View</h4><div id="resultsBtn" class="plus" onclick="toggleResults()"></div>
         </div>
           <div id="resultcount"></div>
-       <div id="resultSlider">
+       <div id="resultSlider" style="display:none;">
         <div id="resultLeft">
         <div id="results"></div>
         </div>
@@ -186,6 +187,45 @@ function get_keywords(request, response){
       <%= javascript_tag "var feature_collection=#{@page["features"].to_json}"%>
       <%= javascript_tag "var commentsData=#{@comments.to_json}"%>
       <script>
+      //UI togglers
+        toggleResults = function(){
+            if($('#resultSlider').css("display")=="none" && $('#filterSlider').css("display")=="none"){
+                $('#resultSlider').slideToggle();
+                $('#resultsBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")!="none" && $('#filterSlider').css("display")=="none"){
+                $('#resultSlider').slideToggle();
+                $('#resultsBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")=="none" && $('#filterSlider').css("display")!="none"){
+                $('#filterSlider').toggle();
+                $('#filterBtn').toggleClass('plus');
+                $('#resultSlider').slideToggle();
+                $('#resultsBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")!="none" && $('#filterSlider').css("display")!="none"){
+                $('#filterSlider').toggle();
+                $('#filterBtn').toggleClass('plus');
+                $('#resultSlider').toggle();
+                $('#resultsBtn').toggleClass('plus');
+            };
+        };
+        toggleFilter = function(){
+            if($('#resultSlider').css("display")=="none" && $('#filterSlider').css("display")=="none"){
+                $('#filterSlider').slideToggle();
+                $('#filterBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")!="none" && $('#filterSlider').css("display")=="none"){
+                $('#resultSlider').toggle();
+                $('#resultsBtn').toggleClass('plus');
+                $('#filterSlider').slideToggle();
+                $('#filterBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")=="none" && $('#filterSlider').css("display")!="none"){
+                $('#filterSlider').slideToggle();
+                $('#filterBtn').toggleClass('plus');
+            }else if($('#resultSlider').css("display")!="none" && $('#filterSlider').css("display")!="none"){
+                $('#filterSlider').toggle();
+                $('#filterBtn').toggleClass('plus');
+                $('#resultSlider').toggle();
+                $('#resultsBtn').toggleClass('plus');
+            };
+        };
 //Function to draw results in the panel
         drawResults = function(visMarks){
             var res = _.chain(visMarks).pluck("properties").groupBy(function(d){return d.project_id}).value()
@@ -204,8 +244,8 @@ function get_keywords(request, response){
       </script>
     </div>
   <div id="filtercontrol">
-    <div class="header"><h4>Filter</h4><div id="filterBtn" onclick="$('#filterSlider').slideToggle();$('#filterBtn').toggleClass('plus')"></div></div>
-    <div id="filterSlider">
+    <div class="header"><h4>Filter</h4><div id="filterBtn" class="plus" onclick="toggleFilter()"></div></div>
+    <div id="filterSlider" style="display:none;">
     <div id="project-facets">
       <div class="pull-left">
         <ol>
@@ -213,6 +253,7 @@ function get_keywords(request, response){
       </div>
     </div>
     </div>
+  </div>
   </div>
   <div id="watermark">
     <a href="/"><%= image_tag("open_adt_small.png", width: "300") %></a>
@@ -487,43 +528,43 @@ function get_keywords(request, response){
                 subdomains:'abc'
                 ,maxNativeZoom:16
             }),
-            poverty = L.tileLayer('<%= Configuration.tile_server %>/nightlights/{z}/{x}/{y}.png', {
+            poverty = L.tileLayer('http://china-tilestache.aiddata.org/nightlights/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://ngdc.noaa.gov/eog/dmsp/download_nldi.html'>NOAA's NLDI</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            acled = L.tileLayer('<%= Configuration.tile_server %>/acled/{z}/{x}/{y}.png', {
+            acled = L.tileLayer('http://china-tilestache.aiddata.org/acled/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='https://www.strausscenter.org/scad.html'>ACLED</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            ACLEDgrid = new L.UtfGrid('<%= Configuration.tile_server %>/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
+            ACLEDgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/acled_grid/{z}/{x}/{y}.json?callback={cb}',{
                 resolution:1,
                 pointerCursor:false
             }),
-            scad = L.tileLayer('<%= Configuration.tile_server %>/scad/{z}/{x}/{y}.png', {
+            scad = L.tileLayer('http://china-tilestache.aiddata.org/scad/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://www.acleddata.com/'>SCAD</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            SCADgrid = new L.UtfGrid('<%= Configuration.tile_server %>/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
+            SCADgrid = new L.UtfGrid('http://china-tilestache.aiddata.org/scad_grid/{z}/{x}/{y}.json?callback={cb}',{
                 resolution:1,
                 pointerCursor:false
             }),
-            roads = L.tileLayer('<%= Configuration.tile_server %>/roads/{z}/{x}/{y}.png', {
+            roads = L.tileLayer('http://china-tilestache.aiddata.org/roads/{z}/{x}/{y}.png', {
                 attribution: "Base layer data from <a href='http://sedac.ciesin.columbia.edu/data/set/groads-global-roads-open-access-v1'>SEDAC's gROADS</a>",
                 noWrap:true,
                 opacity:0.7,
                 zIndex:4
                 ,maxNativeZoom:9
             }),
-            wp = L.tileLayer('<%= Configuration.tile_server %>/wp/{z}/{x}/{y}.png', {
+            wp = L.tileLayer('http://china-tilestache.aiddata.org/wp/{z}/{x}/{y}.png', {
                 tms: true,
                 attribution: "Base layer data from <a href='http://www.worldpop.org.uk/'>World Pop</a>",
                 noWrap:true,
@@ -531,7 +572,7 @@ function get_keywords(request, response){
                 zIndex:4
                 ,maxNativeZoom:13
             }),
-            usgs = L.tileLayer('<%= Configuration.tile_server %>/usgs/{z}/{x}/{y}.png',{
+            usgs = L.tileLayer('http://china-tilestache.aiddata.org/usgs/{z}/{x}/{y}.png',{
                 attribution: "Base layer data from <a href='http://tin.er.usgs.gov/mrds/'>USGS MRDS</a>",
                 noWrap:true,
                 zIndex:4
@@ -1363,8 +1404,7 @@ function openRightClickMarkers(e){
     $('div.rightClick#project').mousedown(function(){
         map.removeLayer(dropdown);
         if($('#resultSlider').css("display")=="none"){
-            $('#resultSlider').slideToggle();
-            $('#resultsBtn').toggleClass('plus');
+            toggleResults();
         }
         clickHighlightProject(e.layer.properties.project_id);
     });
@@ -1592,7 +1632,7 @@ function mapMove(){
     setParams(locatParams);
     visibleMarkers=[]
     markers.eachLayer(function(e){if(map.getBounds().contains(e._latlng)){visibleMarkers.push(e)}})
-    setTimeout(function(){drawResults(visibleMarkers)},0);
+    setTimeout(function(){drawResults(visibleMarkers);},0);
 };
 map.on('moveend',mapMove)
 $(document).ready(function(){
