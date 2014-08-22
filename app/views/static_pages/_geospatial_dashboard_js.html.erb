@@ -11,16 +11,16 @@
     .container {width:100% !important;padding:0px !important;}
     #vis { position:absolute; overflow:hidden; width:100%; height:100%; margin-right:auto; margin-left:auto;}
     #map { position:absolute; height:100%; width:100%; margin-right:auto;margin-left:auto; }
-    #wrapper{visibility:hidden;width:25%;position:absolute;top:35px;left:2px;height: -webkit-calc(100% - 105px); height: -moz-calc(100% - 105px); height: -ms-calc(100% - 105px); height: -o-calc(100% - 105px); height: calc(100% - 105px);}
+    #wrapper{z-index:1;visibility:hidden;width:25%;position:absolute;top:35px;left:2px;height: -webkit-calc(100% - 105px); height: -moz-calc(100% - 105px); height: -ms-calc(100% - 105px); height: -o-calc(100% - 105px); height: calc(100% - 105px);}
     #searchbar {width:40%;position:absolute;left:10px;opacity:0.9;padding-left:2px;}
     #searchbar .vissearch {width:100%;margin-bottom:0px !important;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;border-radius:0px;}
     #searchbar form {position:relative; right:10px; margin-bottom: 1px;height:32px;}
-    #left {visibility:visible;float:left;width:100%;height:auto;opacity:0.9;background-color:#FFF;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;max-height: -webkit-calc(100% - 40px); max-height: -moz-calc(100% - 40px); max-height: -ms-calc(100% - 40px); max-height: -o-calc(100% - 40px); max-height: calc(100% - 40px);overflow-y:scroll;}
+    #left {visibility:visible;float:left;width:100%;height:auto;opacity:0.9;background-color:#FFF;box-shadow:0 0 15px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;max-height: -webkit-calc(100% - 100px); max-height: -moz-calc(100% - 100px); max-height: -ms-calc(100% - 100px); max-height: -o-calc(100% - 100px); max-height: calc(100% - 100px);overflow-y:scroll;}
     #searchresults {float:left;height:auto;width:100%;z-index:1;}
     #filtercontrol ol, #filtercontrol ul {margin:0 0 10px 10px;}
     #filtercontrol {visibility:visible;float:left;box-shadow:0 7px 7px rgba(0,0,0,0.2);border: solid rgba(0,0,0,0.2) 1px;height:auto;width:100%;background-color:#FFF;opacity:0.9;overflow-y:scroll;max-height: -webkit-calc(100% - 82px); max-height: -moz-calc(100% - 82px); max-height: -ms-calc(100% - 82px); max-height: -o-calc(100% - 82px);  max-height: calc(100% - 82px);}
     h4 {margin-left:5px;float:left;}
-    #searchresults #results, #resultcount, #resultRight{margin:0 10px 0 10px;}
+    #searchresults #results, #resultcount, #resultRight, #filterNotif{margin:0 10px 0 10px;}
     form.leaflet-control-layers-list{margin:0px !important;}
     .info {padding: 6px 8px;background: rgba(255,255,255,0.9);box-shadow: 0 0 15px rgba(0,0,0,0.2);}
     .info h4 {margin: 0 0 5px;color: #777;}
@@ -149,12 +149,23 @@ $('#geospatial_search')
       resetMap();
       //Make data global
       feature_collection = data.features
+      //Alert user of current filter
+      if(data.query!=""&&data.query!=null){
+          $('#filterNotif').html("<b>Current search:</b> <i>"+data.query+"</i> <a href='#' onclick='clearSearch()'>Clear</a><hr>");
+      }else{
+          $('#filterNotif').html("<b>Current search:</b> <i>None</i><hr>");
+      };
       //Change static URL query and page
       var params = {"q":data.query};
       setParams(params);
       //Reset Clusters with new data, zoom to it
       resetClusters(data);
 });
+//Clear search function
+function clearSearch(){
+    $('#search').val("");
+    $('#search').trigger("submit");
+};
 //Autocomplete function
 function get_keywords(request, response){
   var params = {keywords: request.term.split(/(?:\(.*?\))+/)[0]};
@@ -245,6 +256,7 @@ function get_keywords(request, response){
     </div>
   <div id="filtercontrol">
     <div class="header"><h4>Filter</h4><div id="filterBtn" class="plus" onclick="toggleFilter()"></div></div>
+    <div id="filterNotif"><b>Current search:</b> <i>None</i><hr></div>
     <div id="filterSlider" style="display:none;">
     <div id="project-facets">
       <div class="pull-left">
@@ -1645,6 +1657,10 @@ $(document).ready(function(){
     drawResults(visibleMarkers);
     //If query, set zoom and fill in search bar
     $('#search').val(results.query)
+    //Alert user of current filter
+    if(results.query!=""&&results.query!=null){
+        $('#filterNotif').html("<b>Current search:</b> <i>"+results.query+"</i> <a href='#' onclick='clearSearch()'>Clear</a><hr>");
+    };
     if(getParams().l!=undefined){
         map.setView(L.latLng(getParams().l.split(",").slice(0,2)),getParams().l.split(",").slice(2,3));
     };
